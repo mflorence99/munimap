@@ -1,0 +1,83 @@
+{
+  "cli": {
+    "analytics": "e1797a63-90dc-4047-b3ed-706096956513"
+  },
+  "defaultProject": "map",
+  "newProjectRoot": "projects",
+  "projects": {
+    "map": {
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "maximumError": "10mb",
+                  "maximumWarning": "5mb",
+                  "type": "initial"
+                },
+                {
+                  "maximumError": "10kb",
+                  "maximumWarning": "6kb",
+                  "type": "anyComponentStyle"
+                }
+              ],
+              "buildOptimizer": true,
+              "extractLicenses": true,
+              "namedChunks": false,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "vendorChunk": false
+            }
+          },
+          "options": {
+            "allowedCommonJsDependencies": [ ],
+            "assets": ["src/assets"],
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "outputPath": "dist",
+            "polyfills": "src/polyfills.ts",
+            "styles": ["src/styles.scss"],
+            "tsConfig": "src/tsconfig.json",
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "defaultConfiguration": ""
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "map:build"
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "map:build:production"
+            }
+          },
+          "options": {
+            "browserTarget": "map:build"
+          }
+        }
+      },
+      "prefix": "app",
+      "projectType": "application",
+      "root": "",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "sourceRoot": "src"
+    }
+  },
+  "version": 1
+}

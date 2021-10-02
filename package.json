@@ -1,0 +1,67 @@
+{
+  "name": "munimap",
+  "version": "0.0.0",
+  "description": "Create town and village maps in the style of washington-app",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mflorence99/munimap.git"
+  },
+  "author": "Mark Florence",
+  "scripts": {
+    "clean:deps": "rm -rf node_modules && rm package-lock.json && npm install",
+    "ng": "ng",
+    "postinstall": "ngcc",
+    "prettier": "prettier --write .",
+    "serve": "ng serve"
+  },
+  "dependencies": {
+    "@angular/common": "^12",
+    "@angular/core": "^12",
+    "@angular/forms": "^12",
+    "@angular/platform-browser": "^12",
+    "@angular/platform-browser-dynamic": "^12",
+    "@angular/router": "^12",
+    "@ngxs/storage-plugin": "^3",
+    "@ngxs/store": "^3",
+    "@sentry/angular": "^6",
+    "@sentry/tracing": "^6",
+    "rxjs": "^7",
+    "tslib": "^2",
+    "ua-parser-js": "^0.7.28",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^12",
+    "@angular-eslint/builder": "^12",
+    "@angular-eslint/eslint-plugin": "^12",
+    "@angular-eslint/eslint-plugin-template": "^12",
+    "@angular-eslint/template-parser": "^12",
+    "@angular/cli": "^12",
+    "@angular/compiler": "^12",
+    "@angular/compiler-cli": "^12",
+    "@angular/language-service": "^12",
+    "@types/ua-parser-js": "^0.7.36",
+    "@typescript-eslint/eslint-plugin": "^4",
+    "@typescript-eslint/parser": "^4",
+    "eslint": "^7",
+    "eslint-config-mflorence99": "^1",
+    "eslint-config-prettier": "^8",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-import-splitnsort": "^1",
+    "eslint-plugin-jsdoc": "^36",
+    "eslint-plugin-prefer-arrow": "^1",
+    "prettier": "^2",
+    "prettier-plugin-package": "^1",
+    "rimraf": "^3",
+    "stylelint": "^13",
+    "stylelint-config-standard": "^22",
+    "stylelint-order": "^4",
+    "stylelint-scss": "^3",
+    "ts-node": "^10",
+    "typescript": "^4"
+  },
+  "build": {
+    "appId": "map"
+  }
+}
