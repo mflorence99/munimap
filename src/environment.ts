@@ -8,6 +8,15 @@ export const environment = {
     id: BUILD.id,
     date: BUILD.date
   },
+  firebase: {
+    apiKey: 'AIzaSyAKCbc2W6oaaSuRqMgHneFAy3eoRmmwHZI',
+    authDomain: 'washington-app-319514.firebaseapp.com',
+    projectId: 'washington-app-319514',
+    storageBucket: 'washington-app-319514.appspot.com',
+    messagingSenderId: '943285729018',
+    appId: '1:943285729018:web:7d01b14f96a3d0c8497b43',
+    measurementId: 'G-NZNZ5E4EV7'
+  },
   localhost: ['localhost', '127.0.0.1'].includes(location.hostname),
   package: {
     author: PACKAGE.author,

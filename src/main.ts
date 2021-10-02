@@ -12,6 +12,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 console.table(environment.package);
 console.table(environment.build);
 console.table(environment.ua);
+console.table(environment.firebase);
 
 Sentry.init({
   dsn: 'https://c4cd041a16584464b8c0f6b2c984b516@o918490.ingest.sentry.io/5861734',
