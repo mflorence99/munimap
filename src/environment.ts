@@ -1,5 +1,5 @@
-import BUILD from '../assets/build.json';
-import PACKAGE from '../../package.json';
+import BUILD from './assets/build.json';
+import PACKAGE from '../package.json';
 
 import { UAParser } from 'ua-parser-js';
 

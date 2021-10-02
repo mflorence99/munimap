@@ -33,13 +33,13 @@
             }
           },
           "options": {
-            "allowedCommonJsDependencies": [ ],
+            "allowedCommonJsDependencies": [],
             "assets": ["src/assets"],
             "index": "src/index.html",
             "main": "src/main.ts",
             "outputPath": "dist",
             "polyfills": "src/polyfills.ts",
-            "styles": ["src/styles.scss"],
+            "styles": ["src/globals.scss"],
             "tsConfig": "src/tsconfig.json",
             "vendorChunk": true,
             "extractLicenses": false,

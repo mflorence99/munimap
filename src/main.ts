@@ -1,6 +1,6 @@
 import { RootModule } from './app/module';
 
-import { environment } from './environments/environment';
+import { environment } from './environment';
 
 import * as Sentry from '@sentry/angular';
 

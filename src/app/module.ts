@@ -1,7 +1,7 @@
 import { LogRocketPluginModule } from './state/plugins/logrocket';
 import { RootPage } from './root';
 
-import { environment } from '../environments/environment';
+import { environment } from '../environment';
 
 import * as Sentry from '@sentry/angular';
 
