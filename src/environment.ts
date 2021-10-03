@@ -3,7 +3,26 @@ import PACKAGE from '../package.json';
 
 import { UAParser } from 'ua-parser-js';
 
+import { firebase } from 'firebaseui-angular';
+import { firebaseui } from 'firebaseui-angular';
+
 export const environment = {
+  auth: {
+    credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+    signInFlow: 'popup',
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      {
+        scopes: ['public_profile', 'email', 'user_likes', 'user_friends'],
+        provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+      },
+      firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+      {
+        requireDisplayName: true,
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+      }
+    ]
+  },
   build: {
     id: BUILD.id,
     date: BUILD.date

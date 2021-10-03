@@ -1,0 +1,12 @@
+:root {
+  display: block;
+}
+
+.card {
+  min-width: 240px;
+}
+
+.form {
+  display: grid;
+  grid-template-rows: auto auto;
+}

@@ -1,0 +1,52 @@
+import { Action } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { Selector } from '@ngxs/store';
+import { State } from '@ngxs/store';
+import { StateContext } from '@ngxs/store';
+
+import firebase from 'firebase/app';
+
+export class SetUser {
+  static readonly type = '[Auth] SetUser';
+  constructor(public user: firebase.User | null) {}
+}
+
+export interface User {
+  displayName: string;
+  email: string;
+  photoURL: string;
+}
+
+export interface AuthStateModel {
+  user: User;
+}
+
+@State<AuthStateModel>({
+  name: 'auth',
+  defaults: {
+    user: null
+  }
+})
+@Injectable()
+export class AuthState {
+  @Selector() static user(state: AuthStateModel): User {
+    return state.user;
+  }
+
+  @Action(SetUser) setUser(
+    ctx: StateContext<AuthStateModel>,
+    action: SetUser
+  ): void {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      user: action.user
+        ? {
+            displayName: action.user.displayName,
+            email: action.user.email,
+            photoURL: action.user.photoURL
+          }
+        : null
+    });
+  }
+}

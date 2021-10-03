@@ -34,20 +34,14 @@
           },
           "options": {
             "allowedCommonJsDependencies": [],
-            "assets": [
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "node_modules/ngx-auth-firebaseui/assets/",
-                "output": "./assets/"
-              }
-            ],
+            "assets": ["src/assets"],
             "index": "src/index.html",
             "main": "src/main.ts",
             "outputPath": "dist",
             "polyfills": "src/polyfills.ts",
             "styles": [
               "src/globals.scss",
+              "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/material-design-icons/iconfont/material-icons.css"
             ],
             "tsConfig": "src/tsconfig.json",

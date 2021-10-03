@@ -1,0 +1,39 @@
+<main class="page">
+  <mat-toolbar class="toolbar">
+    <button (click)="drawer.toggle()" mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1>MuniMap</h1>
+    <div class="filler"></div>
+    <ng-container *ngIf="user$ | async as user">
+      <ngx-avatar
+        #trigger="cdkOverlayOrigin"
+        (clickOnAvatar)="openUserProfile = !openUserProfile"
+        [initialsSize]="2"
+        [name]="user.displayName"
+        [round]="true"
+        [size]="48"
+        [src]="user.photoURL"
+        cdkOverlayOrigin
+        class="avatar"
+      ></ngx-avatar>
+
+      <ng-template
+        cdkConnectedOverlay
+        (backdropClick)="openUserProfile = false"
+        [cdkConnectedOverlayHasBackdrop]="true"
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="openUserProfile"
+      >
+        <app-user-profile (done)="openUserProfile = false"></app-user-profile>
+      </ng-template>
+    </ng-container>
+  </mat-toolbar>
+
+  <mat-drawer-container>
+    <mat-drawer #drawer class="sidebar" mode="over"> </mat-drawer>
+    <mat-drawer-content>
+      <firebase-ui></firebase-ui>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</main>

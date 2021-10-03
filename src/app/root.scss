@@ -1,3 +1,25 @@
 :root {
   display: block;
 }
+
+.page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  width: 100%;
+
+  .avatar {
+    cursor: pointer;
+  }
+
+  .sidebar {
+    height: 100%;
+    min-width: 320px;
+  }
+
+  .toolbar {
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: auto auto 1fr auto;
+  }
+}
