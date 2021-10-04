@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-dummy1',
-  template: '<p>Dummy page #1</p>'
+  selector: 'app-maps',
+  styleUrls: ['./maps.scss'],
+  templateUrl: './maps.html'
 })
-export class Dummy1Page {}
+export class MapsPage {}

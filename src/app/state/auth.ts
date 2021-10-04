@@ -1,6 +1,7 @@
 import { Action } from '@ngxs/store';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
+import { Navigate } from '@ngxs/router-plugin';
 import { NgxsOnInit } from '@ngxs/store';
 import { Selector } from '@ngxs/store';
 import { State } from '@ngxs/store';
@@ -52,7 +53,10 @@ export class AuthState implements NgxsOnInit {
   }
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
-    this.fireauth.user.subscribe((user) => ctx.dispatch(new SetUser(user)));
+    this.fireauth.user.subscribe((user) => {
+      ctx.dispatch(new SetUser(user));
+      ctx.dispatch(new Navigate([user ? '/maps' : '/login']));
+    });
   }
 
   @Action(SetUser) setUser(

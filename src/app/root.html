@@ -30,10 +30,10 @@
     </ng-container>
   </mat-toolbar>
 
-  <mat-drawer-container>
+  <mat-drawer-container class="container">
     <mat-drawer #drawer class="sidebar" mode="over"> </mat-drawer>
-    <mat-drawer-content>
-      <firebase-ui></firebase-ui>
+    <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">
+      <router-outlet></router-outlet>
     </mat-drawer-content>
   </mat-drawer-container>
 </main>

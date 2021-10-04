@@ -41,6 +41,7 @@
     "material-design-icons": "^3",
     "ngx-avatar": "^4",
     "ngx-pipes": "^2.7.5",
+    "ngx-router-animations": "^11.0.0",
     "rxfire": "^6",
     "rxjs": "^7",
     "tslib": "^2",

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-404',
-  template: '<p>404</p>'
+  styleUrls: ['./404.scss'],
+  templateUrl: './404.html'
 })
 export class FourOFourPage {}

@@ -1,15 +1,37 @@
-:root {
+:host {
+  // 👉 this just is -- need a better way
+  --munimap-cy-toolbar: 64px;
+
   display: block;
+  height: 100%;
+  width: 100%;
 }
 
 .page {
-  display: grid;
-  grid-template-rows: auto 1fr;
   height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
   width: 100%;
 
   .avatar {
     cursor: pointer;
+  }
+
+  .container {
+    height: calc(100% - var(--munimap-cy-toolbar));
+    left: 0;
+    position: absolute;
+    top: var(--munimap-cy-toolbar);
+    width: 100%;
+  }
+
+  .content {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
   }
 
   .sidebar {
@@ -21,5 +43,10 @@
     display: grid;
     grid-gap: 8px;
     grid-template-columns: auto auto 1fr auto;
+    height: var(--munimap-cy-toolbar);
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
   }
 }

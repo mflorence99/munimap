@@ -1,7 +1,7 @@
 import { AuthState } from './state/auth';
-import { Dummy1Page } from './pages/dummy1';
-import { Dummy2Page } from './pages/dummy2';
 import { FourOFourPage } from './pages/404';
+import { LoginPage } from './pages/login';
+import { MapsPage } from './pages/maps';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
 
@@ -9,8 +9,10 @@ import { environment } from '../environment';
 
 import * as Sentry from '@sentry/angular';
 
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
+import { AuthPipe } from '@angular/fire/auth-guard';
 import { AvatarModule } from 'ngx-avatar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
@@ -39,15 +41,33 @@ import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 
+import { redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+
 const COMPONENTS = [UserProfileComponent];
 
-const PAGES = [Dummy1Page, Dummy2Page, FourOFourPage, RootPage];
+const PAGES = [LoginPage, MapsPage, FourOFourPage, RootPage];
+
+const redirectUnauthorizedToLogin = (): AuthPipe =>
+  redirectUnauthorizedTo(['login']);
+const redirectLoggedInToMaps = (): AuthPipe => redirectLoggedInTo(['maps']);
 
 const ROUTES = [
-  { path: 'dummy1', component: Dummy1Page },
-  { path: 'dummy2', component: Dummy2Page },
-  { path: '', redirectTo: '/dummy1', pathMatch: 'full' },
-  { path: '**', component: FourOFourPage }
+  { path: '404', component: FourOFourPage, data: { state: '404' } },
+  {
+    path: 'login',
+    component: LoginPage,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectLoggedInToMaps, state: 'login' }
+  },
+  {
+    path: 'maps',
+    component: MapsPage,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'maps' }
+  },
+  { path: '', redirectTo: '/maps', pathMatch: 'full' },
+  { path: '**', component: FourOFourPage, data: { state: '404' } }
 ];
 
 const STATES = [AuthState];

@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-dummy2',
-  template: '<p>Dummy page #2</p>'
+  selector: 'app-login',
+  styleUrls: ['./login.scss'],
+  templateUrl: './login.html'
 })
-export class Dummy2Page {}
+export class LoginPage {}
