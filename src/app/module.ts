@@ -1,4 +1,7 @@
 import { AuthState } from './state/auth';
+import { Dummy1Page } from './pages/dummy1';
+import { Dummy2Page } from './pages/dummy2';
+import { FourOFourPage } from './pages/404';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
 
@@ -33,16 +36,22 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { RouterState } from '@ngxs/router-plugin';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 
 const COMPONENTS = [UserProfileComponent];
 
-const PAGES = [RootPage];
+const PAGES = [Dummy1Page, Dummy2Page, FourOFourPage, RootPage];
 
-const ROUTES = [];
+const ROUTES = [
+  { path: 'dummy1', component: Dummy1Page },
+  { path: 'dummy2', component: Dummy2Page },
+  { path: '', redirectTo: '/dummy1', pathMatch: 'full' },
+  { path: '**', component: FourOFourPage }
+];
 
 const STATES = [AuthState];
-const STATES_SAVED = [];
+const STATES_SAVED = [RouterState];
 
 @NgModule({
   bootstrap: [RootPage],
