@@ -1,14 +1,25 @@
 import { Action } from '@ngxs/store';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
+import { NgxsOnInit } from '@ngxs/store';
 import { Selector } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 
 import firebase from 'firebase/app';
 
+export class Logout {
+  static readonly type = '[Auth] Logout';
+}
+
 export class SetUser {
   static readonly type = '[Auth] SetUser';
-  constructor(public user: firebase.User | null) {}
+  constructor(public user: firebase.User | User | null) {}
+}
+
+export class UpdateUser {
+  static readonly type = '[Auth] UpdateUser';
+  constructor(public user: UpdateUser) {}
 }
 
 export interface User {
@@ -28,9 +39,20 @@ export interface AuthStateModel {
   }
 })
 @Injectable()
-export class AuthState {
+export class AuthState implements NgxsOnInit {
+  constructor(private fireauth: AngularFireAuth) {}
+
   @Selector() static user(state: AuthStateModel): User {
     return state.user;
+  }
+
+  @Action(Logout) logout(): void {
+    this.fireauth.signOut();
+    // 👉 side-effect triggers subscribe in ngxsOnInit
+  }
+
+  ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
+    this.fireauth.user.subscribe((user) => ctx.dispatch(new SetUser(user)));
   }
 
   @Action(SetUser) setUser(
@@ -47,6 +69,16 @@ export class AuthState {
             photoURL: action.user.photoURL
           }
         : null
+    });
+  }
+
+  @Action(UpdateUser) updateUser(
+    ctx: StateContext<AuthStateModel>,
+    action: SetUser
+  ): void {
+    this.fireauth.currentUser.then((user) => {
+      user.updateProfile(action.user);
+      ctx.dispatch(new SetUser(action.user));
     });
   }
 }

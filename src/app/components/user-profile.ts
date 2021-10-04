@@ -1,8 +1,8 @@
 import { AuthState } from '../state/auth';
-import { SetUser } from '../state/auth';
+import { Logout } from '../state/auth';
+import { UpdateUser } from '../state/auth';
 import { User } from '../state/auth';
 
-import { AngularFireAuth } from '@angular/fire/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
@@ -26,18 +26,15 @@ export class UserProfileComponent {
 
   @Select(AuthState.user) user$: Observable<User>;
 
-  constructor(private firebase: AngularFireAuth, private store: Store) {}
+  constructor(private store: Store) {}
 
   logout(): void {
-    this.firebase.signOut();
+    this.store.dispatch(new Logout());
     this.done.emit();
   }
 
   update(changes: any): void {
-    this.firebase.currentUser.then((user) => {
-      user.updateProfile(changes);
-      this.store.dispatch(new SetUser(changes));
-      this.done.emit();
-    });
+    this.store.dispatch(new UpdateUser(changes));
+    this.done.emit();
   }
 }
