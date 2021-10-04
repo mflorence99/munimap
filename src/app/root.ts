@@ -32,7 +32,6 @@ export class RootPage {
   @Select(AuthState.user) user$: Observable<User>;
 
   getState(): any {
-    console.log({ state: this.outlet?.activatedRouteData });
     return this.outlet?.activatedRouteData?.state;
   }
 }

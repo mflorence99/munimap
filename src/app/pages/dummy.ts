@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-404',
-  styleUrls: ['./404.scss'],
-  templateUrl: './404.html'
+  selector: 'app-dummy',
+  styleUrls: ['./dummy.scss'],
+  templateUrl: './dummy.html'
 })
-export class FourOFourPage {}
+export class DummyPage {}

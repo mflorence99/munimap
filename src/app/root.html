@@ -1,6 +1,10 @@
 <main class="page">
   <mat-toolbar class="toolbar">
-    <button (click)="drawer.toggle()" mat-icon-button>
+    <button
+      (click)="drawer.toggle()"
+      [disabled]="!(user$ | async)"
+      mat-icon-button
+    >
       <mat-icon>menu</mat-icon>
     </button>
     <h1>MuniMap</h1>
@@ -31,7 +35,11 @@
   </mat-toolbar>
 
   <mat-drawer-container class="container">
-    <mat-drawer #drawer class="sidebar" mode="over"> </mat-drawer>
+    <mat-drawer #drawer class="sidebar" mode="over">
+      <a (click)="drawer.close()" routerLink="/dummy">link to dummy</a>
+      <br />
+      <a (click)="drawer.close()" routerLink="/maps">link to maps</a>
+    </mat-drawer>
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">
       <router-outlet></router-outlet>
     </mat-drawer-content>
