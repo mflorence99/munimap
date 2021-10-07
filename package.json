@@ -71,7 +71,6 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-import-splitnsort": "^1",
     "eslint-plugin-jest": "^24",
-    "eslint-plugin-jsdoc": "^36",
     "eslint-plugin-prefer-arrow": "^1",
     "jest": "^27",
     "jest-extended": "^0.11.5",
@@ -84,6 +83,7 @@
     "stylelint-config-standard": "^22",
     "stylelint-order": "^4",
     "stylelint-scss": "^3",
+    "ts-jest": "^27",
     "ts-node": "^10",
     "typescript": "^4"
   },
