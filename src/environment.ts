@@ -8,14 +8,12 @@ import { firebaseui } from 'firebaseui-angular';
 
 export const environment = {
   auth: {
-    credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+    credentialHelper: firebaseui.auth.CredentialHelper.NONE,
     signInFlow: 'popup',
     signInOptions: [
+      // TODO: properly configure these in Firebase
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      {
-        scopes: ['public_profile', 'email', 'user_likes', 'user_friends'],
-        provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
-      },
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
       firebase.auth.TwitterAuthProvider.PROVIDER_ID,
       {
         requireDisplayName: true,

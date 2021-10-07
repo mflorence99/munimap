@@ -42,6 +42,7 @@
             "styles": [
               "src/globals.scss",
               "node_modules/firebaseui/dist/firebaseui.css",
+              "node_modules/leaflet/dist/leaflet.css",
               "node_modules/material-design-icons/iconfont/material-icons.css"
             ],
             "tsConfig": "src/tsconfig.json",

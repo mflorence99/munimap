@@ -13,6 +13,7 @@
       <ngx-avatar
         #trigger="cdkOverlayOrigin"
         (clickOnAvatar)="openUserProfile = !openUserProfile"
+        [gravatarId]="user.photoURL ? null : user.email"
         [initialsSize]="2"
         [name]="user.displayName"
         [round]="true"
@@ -39,7 +40,10 @@
       <a (click)="drawer.close()" routerLink="/dummy">link to dummy</a>
       <br />
       <a (click)="drawer.close()" routerLink="/maps">link to maps</a>
+      <br />
+      <a (click)="drawer.close()" routerLink="/map">link to map</a>
     </mat-drawer>
+
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">
       <router-outlet></router-outlet>
     </mat-drawer-content>

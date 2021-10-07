@@ -1,6 +1,7 @@
 import { AuthState } from './state/auth';
 import { DummyPage } from './pages/dummy';
 import { LoginPage } from './pages/login';
+import { MapPage } from './pages/map';
 import { MapsPage } from './pages/maps';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
@@ -21,6 +22,7 @@ import { ErrorHandler } from '@angular/core';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -46,7 +48,7 @@ import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [UserProfileComponent];
 
-const PAGES = [LoginPage, MapsPage, DummyPage, RootPage];
+const PAGES = [LoginPage, MapPage, MapsPage, DummyPage, RootPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -59,6 +61,12 @@ const ROUTES = [
     component: LoginPage,
     canActivate: [AngularFireAuthGuard],
     data: { authGuardPipe: redirectLoggedInToMaps, state: 'login' }
+  },
+  {
+    path: 'map',
+    component: MapPage,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'map' }
   },
   {
     path: 'maps',
@@ -90,6 +98,7 @@ const STATES_SAVED = [RouterState];
     FirebaseUIModule.forRoot(environment.auth),
     FormsModule,
     HttpClientModule,
+    LeafletModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
