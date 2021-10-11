@@ -1,18 +1,25 @@
 import { AuthState } from './state/auth';
+import { BoundaryResolver } from './resolvers/boundary';
 import { DummyPage } from './pages/dummy';
+import { HttpCache } from './services/http-cache';
+import { IndexResolver } from './resolvers/index';
+import { InitializerService } from './services/initializer';
 import { LoginPage } from './pages/login';
 import { MapPage } from './pages/map';
 import { MapsPage } from './pages/maps';
+import { OLMapComponent } from './components/ol-map';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
 
 import { environment } from '../environment';
+import { initializeAppProvider } from './services/initializer';
 
 import * as Sentry from '@sentry/angular';
 
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
+import { APP_INITIALIZER } from '@angular/core';
 import { AuthPipe } from '@angular/fire/auth-guard';
 import { AvatarModule } from 'ngx-avatar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,13 +28,14 @@ import { CommonModule } from '@angular/common';
 import { ErrorHandler } from '@angular/core';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
@@ -46,7 +54,7 @@ import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
-const COMPONENTS = [UserProfileComponent];
+const COMPONENTS = [OLMapComponent, UserProfileComponent];
 
 const PAGES = [LoginPage, MapPage, MapsPage, DummyPage, RootPage];
 
@@ -63,18 +71,29 @@ const ROUTES = [
     data: { authGuardPipe: redirectLoggedInToMaps, state: 'login' }
   },
   {
-    path: 'map',
-    component: MapPage,
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'map' }
+    path: '',
+    resolve: {
+      index: IndexResolver
+    },
+    children: [
+      {
+        path: 'map',
+        component: MapPage,
+        canActivate: [AngularFireAuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'map' },
+        resolve: {
+          boundary: BoundaryResolver
+        }
+      },
+      {
+        path: 'maps',
+        component: MapsPage,
+        canActivate: [AngularFireAuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'maps' }
+      },
+      { path: '', redirectTo: '/login', pathMatch: 'full' }
+    ]
   },
-  {
-    path: 'maps',
-    component: MapsPage,
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'maps' }
-  },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
@@ -98,12 +117,12 @@ const STATES_SAVED = [RouterState];
     FirebaseUIModule.forRoot(environment.auth),
     FormsModule,
     HttpClientModule,
-    LeafletModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatProgressBarModule,
     MatSidenavModule,
     MatToolbarModule,
     NgObjectPipesModule,
@@ -125,11 +144,22 @@ const STATES_SAVED = [RouterState];
 
   providers: [
     {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAppProvider,
+      deps: [InitializerService],
+      multi: true
+    },
+    {
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({
         logErrors: true,
         showDialog: true
       })
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCache,
+      multi: true
     },
     {
       provide: USE_AUTH_EMULATOR,
