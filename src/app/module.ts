@@ -135,6 +135,12 @@ const STATES_SAVED = [RouterState];
     }),
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({
+      beforeSerialize: (obj, key) => {
+        // 👉 we ONLY want to save the URL
+        //    problem: we staore large amounts of data in "data"
+        if (key === 'router') obj = { state: { url: obj.state.url } };
+        return obj;
+      },
       key: STATES_SAVED
     }),
     OverlayModule,

@@ -29,7 +29,7 @@ import View from 'ol/View';
   styleUrls: ['./ol-map.scss']
 })
 export class OLMapComponent implements AfterViewInit {
-  @Input() boundary: GeoJSON.FeatureCollection;
+  @Input() boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
   index: Index = this.route.parent.snapshot.data.index;
   map: Map;
   projection = 'EPSG:3857';
@@ -44,9 +44,18 @@ export class OLMapComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const bbox = this.boundary.features[0].bbox;
-    const projection = this.boundary.features[0].properties.projection;
+    // 👉 TODO: ambient typings missing this
+    const projection = this.boundary['crs'].properties.name;
     const zoom = this.boundary.features[0].properties.zoom;
     const [minX, minY, maxX, maxY] = bbox;
+
+    const view = new View({
+      center: fromLonLat([minX + (maxX - minX) / 2, minY + (maxY - minY) / 2]),
+      extent: transformExtent(bbox, projection, this.projection),
+      maxZoom: zoom,
+      minZoom: zoom,
+      zoom: zoom
+    });
 
     const bg = new TileLayer({
       source: new OSM()
@@ -65,7 +74,7 @@ export class OLMapComponent implements AfterViewInit {
       source: new OSM()
     });
 
-    const coords = copy(this.boundary.features[0].geometry['coordinates']);
+    const coords = copy(this.boundary.features[0].geometry.coordinates);
     const feature = new Feature(new Polygon(coords));
     feature.getGeometry().transform(projection, this.projection);
     const crop = new Crop({
@@ -76,17 +85,18 @@ export class OLMapComponent implements AfterViewInit {
     // 👇 he's monkey-patched addFilter
     base['addFilter'](crop);
 
-    const view = new View({
-      center: fromLonLat([minX + (maxX - minX) / 2, minY + (maxY - minY) / 2]),
-      extent: transformExtent(bbox, projection, this.projection),
-      maxZoom: zoom,
-      minZoom: zoom,
-      zoom: zoom
+    const outline = new VectorLayer({
+      source: new VectorSource({
+        features: new GeoJSON().readFeatures(this.boundary, {
+          featureProjection: this.projection
+        })
+      })
     });
 
     this.map = new Map({
+      controls: [],
       view: view,
-      layers: [bg, base],
+      layers: [bg, base, outline],
       target: this.host.nativeElement
     });
 
@@ -94,7 +104,7 @@ export class OLMapComponent implements AfterViewInit {
       const outline = new VectorLayer({
         source: new VectorSource({
           features: new GeoJSON().readFeatures(towns, {
-            featureProjection: projection
+            featureProjection: this.projection
           })
         })
       });
