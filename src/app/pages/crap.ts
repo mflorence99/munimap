@@ -34,11 +34,11 @@ import XYZ from 'ol/source/XYZ';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-dummy',
-  styleUrls: ['./dummy.scss'],
-  templateUrl: './dummy.html'
+  selector: 'app-crap',
+  styleUrls: ['./crap.scss'],
+  templateUrl: './crap.html'
 })
-export class DummyPage implements AfterViewInit {
+export class CrapPage implements AfterViewInit {
   index: Index = this.route.parent.snapshot.data.index;
   projection = 'EPSG:3857';
 
@@ -51,7 +51,7 @@ export class DummyPage implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.geoJSON
-      .load(this.index['NEW HAMPSHIRE'].layers.boundary.url)
+      .load(this.index['NEW HAMPSHIRE']['BELKNAP'].layers.boundary.url)
       .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
         const bbox = boundary.features[0].bbox;
         // 👉 TODO: ambient typings missing this
@@ -64,7 +64,8 @@ export class DummyPage implements AfterViewInit {
             minY + (maxY - minY) / 2
           ]),
           // extent: transformExtent(bbox, projection, this.projection),
-          zoom: 7
+          smoothExtentConstraint: false,
+          zoom: 8
         });
 
         const bg = new TileLayer({
@@ -84,7 +85,7 @@ export class DummyPage implements AfterViewInit {
           source: new OSM()
         });
 
-        const coords = copy(boundary.features[0].geometry.coordinates);
+        const coords: any = copy(boundary.features[0].geometry.coordinates);
         const feature = new Feature(new Polygon(coords));
         feature.getGeometry().transform(projection, this.projection);
         const crop = new Crop({
@@ -127,7 +128,7 @@ export class DummyPage implements AfterViewInit {
         select.on('select', console.log);
 
         this.geoJSON
-          .load(this.index['NEW HAMPSHIRE'].layers.towns.url)
+          .load(this.index['NEW HAMPSHIRE']['BELKNAP'].layers.towns.url)
           .subscribe((towns) => {
             const outline = new VectorLayer({
               source: new VectorSource({
@@ -140,7 +141,7 @@ export class DummyPage implements AfterViewInit {
                 stroke: new Stroke({ color: 'red ' })
               })
             });
-            map.addLayer(outline);
+            // map.addLayer(outline);
           });
       });
   }

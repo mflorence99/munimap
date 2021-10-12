@@ -1,6 +1,7 @@
 import { AuthState } from './state/auth';
-import { BoundaryResolver } from './resolvers/boundary';
+import { CrapPage } from './pages/crap';
 import { DummyPage } from './pages/dummy';
+import { FakePage } from './pages/fake';
 import { HttpCache } from './services/http-cache';
 import { IndexResolver } from './resolvers/index';
 import { InitializerService } from './services/initializer';
@@ -56,14 +57,21 @@ import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [OLMapComponent, UserProfileComponent];
 
-const PAGES = [LoginPage, MapPage, MapsPage, DummyPage, RootPage];
+const PAGES = [
+  CrapPage,
+  DummyPage,
+  FakePage,
+  LoginPage,
+  MapPage,
+  MapsPage,
+  RootPage
+];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
 const redirectLoggedInToMaps = (): AuthPipe => redirectLoggedInTo(['maps']);
 
 const ROUTES = [
-  { path: 'dummy', component: DummyPage, data: { state: '404' } },
   {
     path: 'login',
     component: LoginPage,
@@ -76,14 +84,14 @@ const ROUTES = [
       index: IndexResolver
     },
     children: [
+      { path: 'county', component: CrapPage, data: { state: 'crap' } },
+      { path: 'state', component: DummyPage, data: { state: 'dummy' } },
+      { path: 'town', component: FakePage, data: { state: 'fake' } },
       {
         path: 'map',
         component: MapPage,
         canActivate: [AngularFireAuthGuard],
-        data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'map' },
-        resolve: {
-          boundary: BoundaryResolver
-        }
+        data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'map' }
       },
       {
         path: 'maps',

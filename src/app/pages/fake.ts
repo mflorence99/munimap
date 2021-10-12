@@ -9,7 +9,6 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
-import { pointerMove } from 'ol/events/condition';
 import { transformExtent } from 'ol/proj';
 
 import Colorize from 'ol-ext/filter/Colorize';
@@ -21,7 +20,6 @@ import GeoJSON from 'ol/format/GeoJSON';
 import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';
 import Polygon from 'ol/geom/Polygon';
-import Select from 'ol/interaction/Select';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import TileLayer from 'ol/layer/Tile';
@@ -34,11 +32,11 @@ import XYZ from 'ol/source/XYZ';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-dummy',
-  styleUrls: ['./dummy.scss'],
-  templateUrl: './dummy.html'
+  selector: 'app-fake',
+  styleUrls: ['./fake.scss'],
+  templateUrl: './fake.html'
 })
-export class DummyPage implements AfterViewInit {
+export class FakePage implements AfterViewInit {
   index: Index = this.route.parent.snapshot.data.index;
   projection = 'EPSG:3857';
 
@@ -51,7 +49,10 @@ export class DummyPage implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.geoJSON
-      .load(this.index['NEW HAMPSHIRE'].layers.boundary.url)
+      .load(
+        this.index['NEW HAMPSHIRE']['MERRIMACK']['CHICHESTER'].layers.boundary
+          .url
+      )
       .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
         const bbox = boundary.features[0].bbox;
         // 👉 TODO: ambient typings missing this
@@ -64,7 +65,8 @@ export class DummyPage implements AfterViewInit {
             minY + (maxY - minY) / 2
           ]),
           // extent: transformExtent(bbox, projection, this.projection),
-          zoom: 7
+          smoothExtentConstraint: false,
+          zoom: 9
         });
 
         const bg = new TileLayer({
@@ -114,34 +116,11 @@ export class DummyPage implements AfterViewInit {
           })
         });
 
-        const map = new Map({
+        new Map({
           view: view,
           layers: [bg, base, hillshade, outline],
           target: this.host.nativeElement
         });
-
-        const select = new Select({
-          condition: pointerMove
-        });
-        map.addInteraction(select);
-        select.on('select', console.log);
-
-        this.geoJSON
-          .load(this.index['NEW HAMPSHIRE'].layers.towns.url)
-          .subscribe((towns) => {
-            const outline = new VectorLayer({
-              source: new VectorSource({
-                features: new GeoJSON().readFeatures(towns, {
-                  featureProjection: this.projection
-                })
-              }),
-              style: new Style({
-                fill: new Fill({ color: [0, 0, 0, 0] }),
-                stroke: new Stroke({ color: 'red ' })
-              })
-            });
-            map.addLayer(outline);
-          });
       });
   }
 }

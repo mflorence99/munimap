@@ -44,9 +44,10 @@
     "material-design-icons": "^3",
     "ngx-avatar": "^4",
     "ngx-pipes": "^2.7.5",
-    "ngx-router-animations": "^11.0.0",
+    "ngx-router-animations": "^11",
     "ol": "^6",
-    "ol-ext": "^3.2.10",
+    "ol-ext": "^3",
+    "ol-mapbox-style": "^6",
     "proj4": "^2",
     "rxfire": "^6",
     "rxjs": "^7",
@@ -90,7 +91,7 @@
     "stylelint-scss": "^3",
     "ts-jest": "^27",
     "ts-node": "^10",
-    "types-ol-ext": "^1.0.5",
+    "types-ol-ext": "^1",
     "typescript": "^4"
   },
   "build": {
