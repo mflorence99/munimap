@@ -57,7 +57,12 @@ export class OLMapComponent implements AfterContentInit {
     private route: ActivatedRoute,
     private store: Store
   ) {
-    this.olMap = new OLMap({});
+    this.olMap = new OLMap({
+      controls: [],
+      layers: undefined,
+      target: undefined,
+      view: undefined
+    });
   }
 
   #createView(): void {
@@ -70,7 +75,7 @@ export class OLMapComponent implements AfterContentInit {
       zoom: this.view.zoom ?? MapState.defaultZoom(this.view.path)
     });
     this.olMap.setView(this.olView);
-    //
+    // 👉 handle events
     this.olView.on('change', () => {
       this.store.dispatch(
         new UpdateView({

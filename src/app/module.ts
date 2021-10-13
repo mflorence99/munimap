@@ -9,12 +9,17 @@ import { LoginPage } from './pages/login';
 import { MapPage } from './pages/map';
 import { MapsPage } from './pages/maps';
 import { MapState } from './state/map';
+import { OLControlAttributionComponent } from './ol/ol-control-attribution';
+import { OLControlZoomComponent } from './ol/ol-control-zoom';
+import { OLControlZoomToExtentComponent } from './ol/ol-control-zoom2extent';
 import { OLFilterCropComponent } from './ol/ol-filter-crop';
 import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
 import { OLLayerTileComponent } from './ol/ol-layer-tile';
+import { OLLayerVectorComponent } from './ol/ol-layer-vector';
 import { OLMapComponent } from './ol/ol-map';
+import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { RootPage } from './root';
@@ -64,12 +69,17 @@ import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [
+  OLControlAttributionComponent,
+  OLControlZoomComponent,
+  OLControlZoomToExtentComponent,
   OLFilterCropComponent,
   OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
   OLLayerTileComponent,
+  OLLayerVectorComponent,
   OLMapComponent,
+  OLSourceBoundaryComponent,
   OLSourceOSMComponent,
   OLSourceXYZComponent,
   UserProfileComponent

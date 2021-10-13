@@ -19,7 +19,7 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   src: url('assets/RobotoMono.ttf') format('truetype');
 }
 
-// Bridge from Angular Material variables to CSS variables
+// bridge from Angular Material variables to CSS variables
 
 :root {
   --primary-color: var(--mat-blue-500);
@@ -30,6 +30,8 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --disabled-color: var(--mat-grey-500);
   --background-color: var(--mat-grey-900);
 }
+
+// base styles
 
 * {
   box-sizing: border-box;
@@ -98,3 +100,11 @@ ol,
 ul {
   list-style-type: none;
 }
+
+// Firebase styles
+
+.firebase-emulator-warning {
+  display: none !important;
+}
+
+// OpenLayers styles
