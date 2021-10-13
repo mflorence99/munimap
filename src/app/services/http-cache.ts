@@ -21,7 +21,7 @@ export class HttpCache implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     if (req.method !== 'GET') return next.handle(req);
-    if (!req.headers.get('cache')) this.cache.delete(req.url);
+    if (req.headers.get('cache') !== 'true') this.cache.delete(req.url);
     const cachedResponse: HttpResponse<any> = this.cache.get(req.url);
     if (cachedResponse) return of(cachedResponse.clone());
     else {

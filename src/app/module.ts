@@ -8,7 +8,8 @@ import { InitializerService } from './services/initializer';
 import { LoginPage } from './pages/login';
 import { MapPage } from './pages/map';
 import { MapsPage } from './pages/maps';
-import { OLMapComponent } from './components/ol-map';
+import { MapState } from './state/map';
+import { OLMapComponent } from './ol/ol-map';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
 
@@ -80,6 +81,8 @@ const ROUTES = [
   },
   {
     path: '',
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
     resolve: {
       index: IndexResolver
     },
@@ -87,26 +90,16 @@ const ROUTES = [
       { path: 'county', component: CrapPage, data: { state: 'crap' } },
       { path: 'state', component: DummyPage, data: { state: 'dummy' } },
       { path: 'town', component: FakePage, data: { state: 'fake' } },
-      {
-        path: 'map',
-        component: MapPage,
-        canActivate: [AngularFireAuthGuard],
-        data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'map' }
-      },
-      {
-        path: 'maps',
-        component: MapsPage,
-        canActivate: [AngularFireAuthGuard],
-        data: { authGuardPipe: redirectUnauthorizedToLogin, state: 'maps' }
-      },
+      { path: 'map', component: MapPage, data: { state: 'map' } },
+      { path: 'maps', component: MapsPage, data: { state: 'maps' } },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
     ]
   },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState];
-const STATES_SAVED = [RouterState];
+const STATES = [AuthState, MapState];
+const STATES_SAVED = [MapState, RouterState];
 
 @NgModule({
   bootstrap: [RootPage],

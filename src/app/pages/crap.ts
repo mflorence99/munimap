@@ -1,6 +1,4 @@
 import { GeoJSONService } from '../services/geojson';
-import { Index } from '../services/geojson';
-import { Params } from '../services/params';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit } from '@angular/core';
@@ -10,7 +8,6 @@ import { ElementRef } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
 import { pointerMove } from 'ol/events/condition';
-import { transformExtent } from 'ol/proj';
 
 import Colorize from 'ol-ext/filter/Colorize';
 import copy from 'fast-copy';
@@ -39,19 +36,19 @@ import XYZ from 'ol/source/XYZ';
   templateUrl: './crap.html'
 })
 export class CrapPage implements AfterViewInit {
-  index: Index = this.route.parent.snapshot.data.index;
   projection = 'EPSG:3857';
 
   constructor(
     private geoJSON: GeoJSONService,
     private host: ElementRef,
-    private params: Params,
     private route: ActivatedRoute
   ) {}
 
   ngAfterViewInit(): void {
+    const county = 'BELKNAP';
+
     this.geoJSON
-      .load(this.index['NEW HAMPSHIRE']['BELKNAP'].layers.boundary.url)
+      .loadByIndex(this.route, `NEW HAMPSHIRE:${county}`, 'boundary')
       .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
         const bbox = boundary.features[0].bbox;
         // 👉 TODO: ambient typings missing this
@@ -65,7 +62,7 @@ export class CrapPage implements AfterViewInit {
           ]),
           // extent: transformExtent(bbox, projection, this.projection),
           smoothExtentConstraint: false,
-          zoom: 8
+          zoom: 11
         });
 
         const bg = new TileLayer({
@@ -128,7 +125,7 @@ export class CrapPage implements AfterViewInit {
         select.on('select', console.log);
 
         this.geoJSON
-          .load(this.index['NEW HAMPSHIRE']['BELKNAP'].layers.towns.url)
+          .loadByIndex(this.route, `NEW HAMPSHIRE:${county}`, 'towns')
           .subscribe((towns) => {
             const outline = new VectorLayer({
               source: new VectorSource({
@@ -141,7 +138,7 @@ export class CrapPage implements AfterViewInit {
                 stroke: new Stroke({ color: 'red ' })
               })
             });
-            // map.addLayer(outline);
+            map.addLayer(outline);
           });
       });
   }

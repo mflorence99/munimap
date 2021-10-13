@@ -1,6 +1,4 @@
 import { GeoJSONService } from '../services/geojson';
-import { Index } from '../services/geojson';
-import { Params } from '../services/params';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit } from '@angular/core';
@@ -9,7 +7,6 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
-import { transformExtent } from 'ol/proj';
 
 import Colorize from 'ol-ext/filter/Colorize';
 import copy from 'fast-copy';
@@ -37,22 +34,20 @@ import XYZ from 'ol/source/XYZ';
   templateUrl: './fake.html'
 })
 export class FakePage implements AfterViewInit {
-  index: Index = this.route.parent.snapshot.data.index;
   projection = 'EPSG:3857';
 
   constructor(
     private geoJSON: GeoJSONService,
     private host: ElementRef,
-    private params: Params,
     private route: ActivatedRoute
   ) {}
 
   ngAfterViewInit(): void {
+    const county = 'COOS';
+    const town = 'MILAN';
+
     this.geoJSON
-      .load(
-        this.index['NEW HAMPSHIRE']['MERRIMACK']['CHICHESTER'].layers.boundary
-          .url
-      )
+      .loadByIndex(this.route, `NEW HAMPSHIRE:${county}:${town}`, 'boundary')
       .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
         const bbox = boundary.features[0].bbox;
         // 👉 TODO: ambient typings missing this
@@ -66,7 +61,7 @@ export class FakePage implements AfterViewInit {
           ]),
           // extent: transformExtent(bbox, projection, this.projection),
           smoothExtentConstraint: false,
-          zoom: 9
+          zoom: 13
         });
 
         const bg = new TileLayer({

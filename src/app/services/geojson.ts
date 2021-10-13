@@ -1,22 +1,26 @@
+import { MapState } from '../state/map';
 import { Params } from './params';
+import { Path } from '../state/map';
 
+import { environment } from '../../environment';
+
+import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface CountyIndex {
-  boundary: string;
-  towns: Record<string, TownIndex>;
+  [town: string]: TownIndex | Record<string, Layer>;
+  layers: {
+    boundary: Layer;
+    towns: Layer;
+  };
 }
 
 export interface Index {
-  boundary: string;
-  counties: Record<string, CountyIndex>;
-  layers: {
-    railroads: Layer;
-  };
-  towns: string;
+  [state: string]: StateIndex | Record<string, Layer>;
+  layers: {};
 }
 
 export interface Layer {
@@ -25,9 +29,19 @@ export interface Layer {
 }
 
 export interface TownIndex {
-  boundary: string;
   layers: {
+    boundary: Layer;
     roads: Layer;
+  };
+}
+
+export interface StateIndex {
+  [county: string]: CountyIndex | Record<string, Layer>;
+  layers: {
+    boundary: Layer;
+    counties: Layer;
+    railroads: Layer;
+    towns: Layer;
   };
 }
 
@@ -35,15 +49,54 @@ export interface TownIndex {
 export class GeoJSONService {
   constructor(private http: HttpClient, private params: Params) {}
 
+  #findIndex(route: ActivatedRoute): Index {
+    let index;
+    do {
+      index = route.snapshot.data.index;
+      route = route.parent;
+    } while (!index);
+    return index;
+  }
+
+  #indexFromPath(
+    base: Index,
+    path: Path
+  ): StateIndex | CountyIndex | TownIndex {
+    const parts = MapState.splitPath(path);
+    let index: any = base;
+    parts.forEach((part) => (index = index[part]));
+    return index;
+  }
+
   load(path: string): Observable<GeoJSON.FeatureCollection> {
-    const headers = new HttpHeaders({ cache: 'true' });
-    const url = `${this.params.geoJSON.host}${path}`;
-    return this.http.get<GeoJSON.FeatureCollection>(url, { headers });
+    return this.http.get<GeoJSON.FeatureCollection>(
+      `${this.params.geoJSON.host}${path}`,
+      { headers: new HttpHeaders({ cache: String(environment.production) }) }
+    );
+  }
+
+  loadByIndex(
+    route: ActivatedRoute,
+    path: string,
+    layer: string
+  ): Observable<GeoJSON.FeatureCollection> {
+    const base = this.#findIndex(route);
+    return this.loadFromIndex(base, path, layer);
+  }
+
+  loadFromIndex(
+    base: Index,
+    path: string,
+    layer: string
+  ): Observable<GeoJSON.FeatureCollection> {
+    const index = this.#indexFromPath(base, path);
+    const url = index.layers[layer].url;
+    return this.load(url);
   }
 
   loadIndex(): Observable<Index> {
-    const headers = new HttpHeaders({ cache: 'true' });
-    const url = `${this.params.geoJSON.host}/index.json`;
-    return this.http.get<Index>(url, { headers });
+    return this.http.get<Index>(`${this.params.geoJSON.host}/index.json`, {
+      headers: new HttpHeaders({ cache: String(environment.production) })
+    });
   }
 }

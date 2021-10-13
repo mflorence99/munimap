@@ -1,6 +1,4 @@
 import { GeoJSONService } from '../services/geojson';
-import { Index } from '../services/geojson';
-import { Params } from '../services/params';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit } from '@angular/core';
@@ -10,7 +8,6 @@ import { ElementRef } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
 import { pointerMove } from 'ol/events/condition';
-import { transformExtent } from 'ol/proj';
 
 import Colorize from 'ol-ext/filter/Colorize';
 import copy from 'fast-copy';
@@ -39,19 +36,17 @@ import XYZ from 'ol/source/XYZ';
   templateUrl: './dummy.html'
 })
 export class DummyPage implements AfterViewInit {
-  index: Index = this.route.parent.snapshot.data.index;
   projection = 'EPSG:3857';
 
   constructor(
     private geoJSON: GeoJSONService,
     private host: ElementRef,
-    private params: Params,
     private route: ActivatedRoute
   ) {}
 
   ngAfterViewInit(): void {
     this.geoJSON
-      .load(this.index['NEW HAMPSHIRE'].layers.boundary.url)
+      .loadByIndex(this.route, 'NEW HAMPSHIRE', 'boundary')
       .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
         const bbox = boundary.features[0].bbox;
         // 👉 TODO: ambient typings missing this
@@ -64,7 +59,7 @@ export class DummyPage implements AfterViewInit {
             minY + (maxY - minY) / 2
           ]),
           // extent: transformExtent(bbox, projection, this.projection),
-          zoom: 7
+          zoom: 10
         });
 
         const bg = new TileLayer({
@@ -115,10 +110,16 @@ export class DummyPage implements AfterViewInit {
         });
 
         const map = new Map({
-          view: view,
-          layers: [bg, base, hillshade, outline],
+          // view: view,
+          // layers: [bg, base, hillshade, outline],
           target: this.host.nativeElement
         });
+
+        map.setView(view);
+        map.addLayer(bg);
+        map.addLayer(base);
+        map.addLayer(hillshade);
+        map.addLayer(outline);
 
         const select = new Select({
           condition: pointerMove
@@ -127,7 +128,7 @@ export class DummyPage implements AfterViewInit {
         select.on('select', console.log);
 
         this.geoJSON
-          .load(this.index['NEW HAMPSHIRE'].layers.towns.url)
+          .loadByIndex(this.route, 'NEW HAMPSHIRE', 'towns')
           .subscribe((towns) => {
             const outline = new VectorLayer({
               source: new VectorSource({
