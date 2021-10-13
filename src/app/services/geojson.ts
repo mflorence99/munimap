@@ -68,8 +68,8 @@ export class GeoJSONService {
     return index;
   }
 
-  load(path: string): Observable<GeoJSON.FeatureCollection> {
-    return this.http.get<GeoJSON.FeatureCollection>(
+  load(path: string): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
+    return this.http.get<GeoJSON.FeatureCollection<GeoJSON.Polygon>>(
       `${this.params.geoJSON.host}${path}`,
       { headers: new HttpHeaders({ cache: String(environment.production) }) }
     );
@@ -79,7 +79,7 @@ export class GeoJSONService {
     route: ActivatedRoute,
     path: string,
     layer: string
-  ): Observable<GeoJSON.FeatureCollection> {
+  ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const base = this.#findIndex(route);
     return this.loadFromIndex(base, path, layer);
   }
@@ -88,7 +88,7 @@ export class GeoJSONService {
     base: Index,
     path: string,
     layer: string
-  ): Observable<GeoJSON.FeatureCollection> {
+  ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const index = this.#indexFromPath(base, path);
     const url = index.layers[layer].url;
     return this.load(url);

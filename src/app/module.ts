@@ -9,7 +9,14 @@ import { LoginPage } from './pages/login';
 import { MapPage } from './pages/map';
 import { MapsPage } from './pages/maps';
 import { MapState } from './state/map';
+import { OLFilterCropComponent } from './ol/ol-filter-crop';
+import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
+import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
+import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
+import { OLLayerTileComponent } from './ol/ol-layer-tile';
 import { OLMapComponent } from './ol/ol-map';
+import { OLSourceOSMComponent } from './ol/ol-source-osm';
+import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
 
@@ -56,7 +63,17 @@ import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
-const COMPONENTS = [OLMapComponent, UserProfileComponent];
+const COMPONENTS = [
+  OLFilterCropComponent,
+  OLFilterEnhanceComponent,
+  OLFilterGrayscaleComponent,
+  OLFilterPencilComponent,
+  OLLayerTileComponent,
+  OLMapComponent,
+  OLSourceOSMComponent,
+  OLSourceXYZComponent,
+  UserProfileComponent
+];
 
 const PAGES = [
   CrapPage,

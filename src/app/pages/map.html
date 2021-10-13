@@ -1,1 +1,23 @@
-<app-ol-map [view]="view"></app-ol-map>
+<app-ol-map #map [view]="view$ | async">
+  <ng-container *ngIf="map.initialized">
+    <!-- BG LAYER -->
+    <app-ol-layer-tile>
+      <app-ol-source-osm></app-ol-source-osm>
+      <app-ol-filter-pencil></app-ol-filter-pencil>
+    </app-ol-layer-tile>
+
+    <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
+    <app-ol-layer-tile>
+      <app-ol-source-osm></app-ol-source-osm>
+      <app-ol-filter-crop></app-ol-filter-crop>
+      <app-ol-filter-enhance [value]="0.25"></app-ol-filter-enhance>
+    </app-ol-layer-tile>
+
+    <!-- HILLSHADE LAYER -->
+    <app-ol-layer-tile [opacity]="0.33">
+      <app-ol-source-xyz
+        [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+      ></app-ol-source-xyz>
+    </app-ol-layer-tile>
+  </ng-container>
+</app-ol-map>

@@ -1,7 +1,10 @@
+import { MapState } from '../state/map';
 import { View } from '../state/map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Select } from '@ngxs/store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -10,9 +13,5 @@ import { Component } from '@angular/core';
   templateUrl: './map.html'
 })
 export class MapPage {
-  view: View = {
-    center: [0, 0],
-    path: 'NEW HAMPSHIRE',
-    zoom: 10
-  };
+  @Select(MapState.view) view$: Observable<View>;
 }
