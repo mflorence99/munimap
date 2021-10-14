@@ -1,9 +1,12 @@
+import { OLAttributionComponent } from './ol-attribution';
 import { OLLayerTileComponent } from './ol-layer-tile';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ContentChildren } from '@angular/core';
 import { Input } from '@angular/core';
+import { QueryList } from '@angular/core';
 
 import OLXYZ from 'ol/source/XYZ';
 
@@ -11,9 +14,11 @@ import OLXYZ from 'ol/source/XYZ';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-source-xyz',
   template: '<ng-content></ng-content>',
-  styles: []
+  styles: [':host { display: none }']
 })
 export class OLSourceXYZComponent implements AfterContentInit {
+  @ContentChildren(OLAttributionComponent)
+  attributions: QueryList<OLAttributionComponent>;
   olXYZ: OLXYZ;
 
   @Input() set url(url: string) {
@@ -25,6 +30,9 @@ export class OLSourceXYZComponent implements AfterContentInit {
   }
 
   ngAfterContentInit(): void {
+    this.olXYZ.setAttributions(
+      this.attributions.map((attribution) => attribution.getAttribution())
+    );
     this.layer.olLayer.setSource(this.olXYZ);
   }
 }

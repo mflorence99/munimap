@@ -4,22 +4,22 @@ import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
-import OLAttribution from 'ol/control/Attribution';
+import OLVectorTile from 'ol/layer/VectorTile';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-control-attribution',
+  selector: 'app-ol-layer-vectortile',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLControlAttributionComponent implements AfterContentInit {
-  olControl: OLAttribution;
+export class OLLayerVectorTileComponent implements AfterContentInit {
+  olLayer: OLVectorTile;
 
   constructor(private map: OLMapComponent) {
-    this.olControl = new OLAttribution();
+    this.olLayer = new OLVectorTile({ source: undefined, style: undefined });
   }
 
   ngAfterContentInit(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.map.olMap.addLayer(this.olLayer);
   }
 }

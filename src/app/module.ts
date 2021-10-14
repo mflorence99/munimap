@@ -9,6 +9,7 @@ import { LoginPage } from './pages/login';
 import { MapPage } from './pages/map';
 import { MapsPage } from './pages/maps';
 import { MapState } from './state/map';
+import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from './ol/ol-control-zoom2extent';
@@ -16,12 +17,15 @@ import { OLFilterCropComponent } from './ol/ol-filter-crop';
 import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
+import { OLLayerMapboxComponent } from './ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol/ol-layer-tile';
 import { OLLayerVectorComponent } from './ol/ol-layer-vector';
+import { OLLayerVectorTileComponent } from './ol/ol-layer-vectortile';
 import { OLMapComponent } from './ol/ol-map';
 import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
+import { OLStyleComponent } from './ol/ol-style';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
 
@@ -69,6 +73,7 @@ import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [
+  OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
@@ -76,12 +81,15 @@ const COMPONENTS = [
   OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
+  OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
+  OLLayerVectorTileComponent,
   OLMapComponent,
   OLSourceBoundaryComponent,
   OLSourceOSMComponent,
   OLSourceXYZComponent,
+  OLStyleComponent,
   UserProfileComponent
 ];
 

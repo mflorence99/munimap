@@ -11,7 +11,7 @@ import OLTile from 'ol/layer/Tile';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-layer-tile',
   template: '<ng-content></ng-content>',
-  styles: []
+  styles: [':host { display: none }']
 })
 export class OLLayerTileComponent implements AfterContentInit {
   olLayer: OLTile<any>;

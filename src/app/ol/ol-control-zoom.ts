@@ -10,7 +10,7 @@ import OLZoom from 'ol/control/Zoom';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-zoom',
   template: '<ng-content></ng-content>',
-  styles: []
+  styles: [':host { display: none }']
 })
 export class OLControlZoomComponent implements AfterContentInit {
   olControl: OLZoom;

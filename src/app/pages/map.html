@@ -5,28 +5,63 @@
     <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
 
     <!-- BG LAYER -->
-    <app-ol-layer-tile>
+
+    <!-- <app-ol-layer-tile>
       <app-ol-source-osm></app-ol-source-osm>
       <app-ol-filter-pencil></app-ol-filter-pencil>
-    </app-ol-layer-tile>
+    </app-ol-layer-tile> -->
+
+    <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/light-v9">
+      <app-ol-filter-crop></app-ol-filter-crop>
+    </app-ol-layer-mapbox>
 
     <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
-    <app-ol-layer-tile>
+
+    <!-- <app-ol-layer-tile>
       <app-ol-source-osm></app-ol-source-osm>
       <app-ol-filter-crop></app-ol-filter-crop>
       <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance>
-    </app-ol-layer-tile>
+    </app-ol-layer-tile> -->
+
+    <!-- <app-ol-layer-tile>
+      <app-ol-source-xyz
+        [url]="'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'"
+        ><app-ol-attribution>© Google</app-ol-attribution></app-ol-source-xyz
+      >
+      <app-ol-filter-crop></app-ol-filter-crop>
+      <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance>
+    </app-ol-layer-tile> -->
+
+    <!-- <app-ol-layer-tile>
+      <app-ol-source-xyz
+        [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
+        ><app-ol-attribution
+          >Powered by Esri</app-ol-attribution
+        ></app-ol-source-xyz
+      >
+      <app-ol-filter-crop></app-ol-filter-crop>
+      <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance>
+    </app-ol-layer-tile> -->
+
+    <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/streets-v11">
+      <app-ol-filter-crop></app-ol-filter-crop>
+    </app-ol-layer-mapbox>
 
     <!-- HILLSHADE LAYER -->
+
     <app-ol-layer-tile [opacity]="0.33">
       <app-ol-source-xyz
         [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
-      ></app-ol-source-xyz>
+      >
+        <app-ol-attribution>Powered by Esri</app-ol-attribution>
+      </app-ol-source-xyz>
     </app-ol-layer-tile>
 
     <!-- OUTLINE LAYER -->
+
     <app-ol-layer-vector>
       <app-ol-source-boundary></app-ol-source-boundary>
+      <app-ol-style [stroke]="'green'"></app-ol-style>
     </app-ol-layer-vector>
   </ng-container>
 </app-ol-map>

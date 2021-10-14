@@ -25,7 +25,7 @@ import OLView from 'ol/View';
   styles: [
     `
       :host {
-        background: url('/assets/halftone.svg');
+        background: white;
         display: block;
         height: 100%;
         width: 100%;
@@ -46,8 +46,7 @@ export class OLMapComponent implements AfterContentInit {
     return this.#view;
   }
   set view(view: View) {
-    this.#view = view;
-    if (!this.olView) this.#initializeView();
+    this.#view = this.#initializeView(view);
   }
 
   constructor(
@@ -65,37 +64,57 @@ export class OLMapComponent implements AfterContentInit {
     });
   }
 
-  #createView(): void {
-    const bbox = this.boundary.features[0].bbox;
+  #cleanView(): void {
+    this.olMap
+      .getControls()
+      .forEach((control) => this.olMap.removeControl(control));
+    this.olMap.getLayers().forEach((layer) => this.olMap.removeLayer(layer));
+    this.olView = null;
+  }
+
+  #createView(
+    view: View,
+    boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>
+  ): void {
+    const bbox = boundary.features[0].bbox;
     const [minX, minY, maxX, maxY] = bbox;
     this.olView = new OLView({
       center: fromLonLat(
-        this.view.center ?? [minX + (maxX - minX) / 2, minY + (maxY - minY) / 2]
+        view.center ?? [minX + (maxX - minX) / 2, minY + (maxY - minY) / 2]
       ),
-      zoom: this.view.zoom ?? MapState.defaultZoom(this.view.path)
+      zoom: view.zoom ?? MapState.defaultZoom(view.path)
     });
     this.olMap.setView(this.olView);
+    this.boundary = boundary;
     // 👉 handle events
     this.olView.on('change', () => {
       this.store.dispatch(
         new UpdateView({
           center: toLonLat(this.olView.getCenter()),
-          path: this.view.path,
+          path: view.path,
           zoom: this.olView.getZoom()
         })
       );
     });
   }
 
-  #initializeView(): void {
-    this.geoJSON
-      .loadByIndex(this.route, this.view.path, 'boundary')
-      .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-        this.boundary = boundary;
-        this.#createView();
-        this.initialized = true;
-        this.cdf.markForCheck();
-      });
+  #initializeView(view: View): View {
+    // 👉 if the path has changed, clean out the old map
+    if (view.path !== this.#view?.path) {
+      this.initialized = false;
+      this.#cleanView();
+    }
+    // 👉 now create the new
+    if (!this.olView) {
+      this.geoJSON
+        .loadByIndex(this.route, view.path, 'boundary')
+        .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+          this.#createView(view, boundary);
+          this.initialized = true;
+          this.cdf.markForCheck();
+        });
+    }
+    return view;
   }
 
   ngAfterContentInit(): void {

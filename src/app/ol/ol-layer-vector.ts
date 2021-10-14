@@ -10,7 +10,7 @@ import OLVector from 'ol/layer/Vector';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-layer-vector',
   template: '<ng-content></ng-content>',
-  styles: []
+  styles: [':host { display: none }']
 })
 export class OLLayerVectorComponent implements AfterContentInit {
   olLayer: OLVector<any>;

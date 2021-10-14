@@ -12,23 +12,21 @@ import OLZoomToExtent from 'ol/control/ZoomToExtent';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-zoom2extent',
   template: '<ng-content></ng-content>',
-  styles: []
+  styles: [':host { display: none }']
 })
 export class OLControlZoomToExtentComponent implements AfterContentInit {
   olControl: OLZoomToExtent;
 
   constructor(private map: OLMapComponent) {
-    // 👉 can't follow his pattern as no setExtent() API
-    // this.olControl = new OLZoomToExtent();
-  }
-
-  ngAfterContentInit(): void {
     const bbox = this.map.boundary.features[0].bbox;
     // 👉 TODO: ambient typings missing this
     const featureProjection = this.map.boundary['crs'].properties.name;
     this.olControl = new OLZoomToExtent({
       extent: transformExtent(bbox, featureProjection, this.map.projection)
     });
+  }
+
+  ngAfterContentInit(): void {
     this.map.olMap.addControl(this.olControl);
   }
 }

@@ -1,9 +1,11 @@
+import { OLLayerMapboxComponent } from './ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLMapComponent } from './ol-map';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Optional } from '@angular/core';
 
 import copy from 'fast-copy';
 import Crop from 'ol-ext/filter/Crop';
@@ -14,15 +16,21 @@ import Polygon from 'ol/geom/Polygon';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-filter-crop',
   template: '<ng-content></ng-content>',
-  styles: []
+  styles: [':host { display: none }']
 })
 export class OLFilterCropComponent implements AfterContentInit {
+  #layer: any;
+
   olFilter: typeof Crop;
 
   constructor(
-    private layer: OLLayerTileComponent,
+    @Optional() layer1: OLLayerMapboxComponent,
+    @Optional() layer2: OLLayerTileComponent,
     private map: OLMapComponent
   ) {
+    // 👇 choose which layer parent
+    this.#layer = layer1 ?? layer2;
+    // 👇 build the filter
     const coords: any = copy(
       this.map.boundary.features[0].geometry.coordinates
     );
@@ -39,6 +47,6 @@ export class OLFilterCropComponent implements AfterContentInit {
 
   ngAfterContentInit(): void {
     // 👇 ol-ext has monkey-patched addFilter
-    this.layer.olLayer['addFilter'](this.olFilter);
+    this.#layer.olLayer['addFilter'](this.olFilter);
   }
 }

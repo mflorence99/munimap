@@ -12,7 +12,7 @@ import OLVector from 'ol/source/Vector';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-source-boundary',
   template: '<ng-content></ng-content>',
-  styles: []
+  styles: [':host { display: none }']
 })
 export class OLSourceBoundaryComponent implements AfterContentInit {
   olVector: OLVector<any>;
