@@ -1,7 +1,4 @@
 import { AuthState } from './state/auth';
-import { CrapPage } from './pages/crap';
-import { DummyPage } from './pages/dummy';
-import { FakePage } from './pages/fake';
 import { HttpCache } from './services/http-cache';
 import { IndexResolver } from './resolvers/index';
 import { InitializerService } from './services/initializer';
@@ -101,15 +98,7 @@ const COMPONENTS = [
   UserProfileComponent
 ];
 
-const PAGES = [
-  CrapPage,
-  DummyPage,
-  FakePage,
-  LoginPage,
-  MapPage,
-  MapsPage,
-  RootPage
-];
+const PAGES = [LoginPage, MapPage, MapsPage, RootPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -130,9 +119,6 @@ const ROUTES = [
       index: IndexResolver
     },
     children: [
-      { path: 'county', component: CrapPage, data: { state: 'crap' } },
-      { path: 'state', component: DummyPage, data: { state: 'dummy' } },
-      { path: 'town', component: FakePage, data: { state: 'fake' } },
       { path: 'map', component: MapPage, data: { state: 'map' } },
       { path: 'maps', component: MapsPage, data: { state: 'maps' } },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
