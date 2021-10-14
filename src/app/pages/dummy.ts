@@ -136,10 +136,11 @@ export class DummyPage implements AfterViewInit {
                   featureProjection: this.projection
                 })
               }),
-              style: new Style({
-                fill: new Fill({ color: [0, 0, 0, 0] }),
-                stroke: new Stroke({ color: 'red ' })
-              })
+              style: (): Style =>
+                new Style({
+                  fill: new Fill({ color: [0, 0, 0, 0] }),
+                  stroke: new Stroke({ color: 'red ' })
+                })
             });
             map.addLayer(outline);
           });

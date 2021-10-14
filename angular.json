@@ -33,7 +33,7 @@
             }
           },
           "options": {
-            "allowedCommonJsDependencies": [],
+            "allowedCommonJsDependencies": ["pbf"],
             "assets": ["src/assets"],
             "index": "src/index.html",
             "main": "src/main.ts",

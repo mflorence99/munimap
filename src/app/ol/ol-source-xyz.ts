@@ -26,7 +26,7 @@ export class OLSourceXYZComponent implements AfterContentInit {
   }
 
   constructor(private layer: OLLayerTileComponent) {
-    this.olXYZ = new OLXYZ({ url: undefined });
+    this.olXYZ = new OLXYZ({ url: null });
   }
 
   ngAfterContentInit(): void {

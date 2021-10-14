@@ -17,15 +17,19 @@ import { OLFilterCropComponent } from './ol/ol-filter-crop';
 import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
+import { OLInteractionSelectComponent } from './ol/ol-interaction-select';
 import { OLLayerMapboxComponent } from './ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol/ol-layer-tile';
 import { OLLayerVectorComponent } from './ol/ol-layer-vector';
 import { OLLayerVectorTileComponent } from './ol/ol-layer-vectortile';
 import { OLMapComponent } from './ol/ol-map';
 import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
+import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleComponent } from './ol/ol-style';
+import { OLStyleFillComponent } from './ol/ol-style-fill';
+import { OLStyleStrokeComponent } from './ol/ol-style-stroke';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
 
@@ -81,15 +85,19 @@ const COMPONENTS = [
   OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
+  OLInteractionSelectComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLLayerVectorTileComponent,
   OLMapComponent,
   OLSourceBoundaryComponent,
+  OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
   OLSourceXYZComponent,
   OLStyleComponent,
+  OLStyleFillComponent,
+  OLStyleStrokeComponent,
   UserProfileComponent
 ];
 
@@ -205,7 +213,7 @@ const STATES_SAVED = [MapState, RouterState];
     },
     {
       provide: USE_AUTH_EMULATOR,
-      useValue: !environment.production ? ['localhost', 9099] : undefined
+      useValue: !environment.production ? ['localhost', 9099] : null
     }
   ]
 })

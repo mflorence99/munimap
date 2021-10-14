@@ -10,6 +10,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { fromLonLat } from 'ol/proj';
@@ -33,7 +34,7 @@ import OLView from 'ol/View';
     `
   ]
 })
-export class OLMapComponent implements AfterContentInit {
+export class OLMapComponent implements AfterContentInit, OnDestroy {
   #view: View;
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
   initialized = false;
@@ -58,9 +59,9 @@ export class OLMapComponent implements AfterContentInit {
   ) {
     this.olMap = new OLMap({
       controls: [],
-      layers: undefined,
-      target: undefined,
-      view: undefined
+      layers: null,
+      target: null,
+      view: null
     });
   }
 
@@ -87,15 +88,7 @@ export class OLMapComponent implements AfterContentInit {
     this.olMap.setView(this.olView);
     this.boundary = boundary;
     // 👉 handle events
-    this.olView.on('change', () => {
-      this.store.dispatch(
-        new UpdateView({
-          center: toLonLat(this.olView.getCenter()),
-          path: view.path,
-          zoom: this.olView.getZoom()
-        })
-      );
-    });
+    this.olView.on('change', this.#onChange.bind(this));
   }
 
   #initializeView(view: View): View {
@@ -117,7 +110,21 @@ export class OLMapComponent implements AfterContentInit {
     return view;
   }
 
+  #onChange(): void {
+    this.store.dispatch(
+      new UpdateView({
+        center: toLonLat(this.olView.getCenter()),
+        path: this.view.path,
+        zoom: this.olView.getZoom()
+      })
+    );
+  }
+
   ngAfterContentInit(): void {
     this.olMap.setTarget(this.host.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.olView.un('change', this.#onChange.bind(this));
   }
 }

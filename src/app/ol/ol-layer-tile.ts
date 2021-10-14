@@ -21,7 +21,7 @@ export class OLLayerTileComponent implements AfterContentInit {
   }
 
   constructor(private map: OLMapComponent) {
-    this.olLayer = new OLTile({ source: undefined });
+    this.olLayer = new OLTile({ source: null });
   }
 
   ngAfterContentInit(): void {

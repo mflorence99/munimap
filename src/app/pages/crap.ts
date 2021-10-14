@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
-import { pointerMove } from 'ol/events/condition';
 
 import Colorize from 'ol-ext/filter/Colorize';
 import copy from 'fast-copy';
@@ -118,12 +117,6 @@ export class CrapPage implements AfterViewInit {
           target: this.host.nativeElement
         });
 
-        const select = new Select({
-          condition: pointerMove
-        });
-        map.addInteraction(select);
-        select.on('select', console.log);
-
         this.geoJSON
           .loadByIndex(this.route, `NEW HAMPSHIRE:${county}`, 'towns')
           .subscribe((towns) => {
@@ -138,6 +131,19 @@ export class CrapPage implements AfterViewInit {
                 stroke: new Stroke({ color: 'red ' })
               })
             });
+
+            const select = new Select({
+              condition: (event): any => event.type === 'pointermove',
+              layers: [outline],
+              style: (): Style =>
+                new Style({
+                  fill: new Fill({ color: [0, 0, 0, 0] }),
+                  stroke: new Stroke({ color: 'green', width: 3 })
+                })
+            });
+            map.addInteraction(select);
+            select.on('select', console.log);
+
             map.addLayer(outline);
           });
       });

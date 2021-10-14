@@ -21,7 +21,7 @@ export class OLSourceBoundaryComponent implements AfterContentInit {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
-    this.olVector = new OLVector({ features: undefined });
+    this.olVector = new OLVector({ features: null });
   }
 
   ngAfterContentInit(): void {

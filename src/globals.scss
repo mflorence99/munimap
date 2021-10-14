@@ -13,6 +13,20 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
 @include angular-material-theme($custom-theme);
 
 @font-face {
+  font-family: 'Bentham Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: url('assets/Bentham Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Carnevalee Freakshow';
+  font-style: normal;
+  font-weight: normal;
+  src: url('assets/Carnevalee Freakshow.ttf') format('truetype');
+}
+
+@font-face {
   font-family: 'Roboto Mono';
   font-style: normal;
   font-weight: 400;

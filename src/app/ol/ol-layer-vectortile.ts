@@ -16,7 +16,7 @@ export class OLLayerVectorTileComponent implements AfterContentInit {
   olLayer: OLVectorTile;
 
   constructor(private map: OLMapComponent) {
-    this.olLayer = new OLVectorTile({ source: undefined, style: undefined });
+    this.olLayer = new OLVectorTile({ source: null, style: null });
   }
 
   ngAfterContentInit(): void {

@@ -14,13 +14,13 @@ export interface CountyIndex {
   [town: string]: TownIndex | Record<string, Layer>;
   layers: {
     boundary: Layer;
+    selectables: Layer;
     towns: Layer;
   };
 }
 
 export interface Index {
-  [state: string]: StateIndex | Record<string, Layer>;
-  layers: {};
+  [state: string]: StateIndex;
 }
 
 export interface Layer {
@@ -31,7 +31,9 @@ export interface Layer {
 export interface TownIndex {
   layers: {
     boundary: Layer;
+    parcels: Layer;
     roads: Layer;
+    selectables: Layer;
   };
 }
 
@@ -41,6 +43,7 @@ export interface StateIndex {
     boundary: Layer;
     counties: Layer;
     railroads: Layer;
+    selectables: Layer;
     towns: Layer;
   };
 }

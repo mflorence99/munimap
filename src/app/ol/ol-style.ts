@@ -1,12 +1,11 @@
+import { OLInteractionSelectComponent } from './ol-interaction-select';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
+import { Optional } from '@angular/core';
 
-import OLFill from 'ol/style/Fill';
-import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 
 @Component({
@@ -16,21 +15,21 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleComponent implements AfterContentInit {
+  #styleable: any;
+
   olStyle: OLStyle;
 
-  @Input() set fill(color: any) {
-    this.olStyle.setFill(new OLFill({ color }));
-  }
-
-  @Input() set stroke(color: any) {
-    this.olStyle.setStroke(new OLStroke({ color }));
-  }
-
-  constructor(private layer: OLLayerVectorComponent) {
-    this.olStyle = new OLStyle({ fill: null, stroke: null });
+  constructor(
+    @Optional() layer: OLLayerVectorComponent,
+    @Optional() select: OLInteractionSelectComponent
+  ) {
+    // 👇 choose which styleable parent
+    this.#styleable = select ?? layer;
+    // 👇 build the style
+    this.olStyle = new OLStyle({ fill: null, stroke: null, text: null });
   }
 
   ngAfterContentInit(): void {
-    this.layer.olLayer.setStyle(this.olStyle);
+    this.#styleable.olStyleable.setStyle(this.olStyle);
   }
 }

@@ -6,14 +6,14 @@
 
     <!-- BG LAYER -->
 
-    <!-- <app-ol-layer-tile>
+    <app-ol-layer-tile>
       <app-ol-source-osm></app-ol-source-osm>
       <app-ol-filter-pencil></app-ol-filter-pencil>
-    </app-ol-layer-tile> -->
+    </app-ol-layer-tile>
 
-    <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/light-v9">
+    <!-- <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/light-v9">
       <app-ol-filter-crop></app-ol-filter-crop>
-    </app-ol-layer-mapbox>
+    </app-ol-layer-mapbox> -->
 
     <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
 
@@ -43,7 +43,7 @@
       <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance>
     </app-ol-layer-tile> -->
 
-    <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/streets-v11">
+    <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/bright-v9">
       <app-ol-filter-crop></app-ol-filter-crop>
     </app-ol-layer-mapbox>
 
@@ -57,11 +57,44 @@
       </app-ol-source-xyz>
     </app-ol-layer-tile>
 
+    <!-- SELECTABLES LAYER -->
+
+    <app-ol-layer-vector [styler]="featureStyler()">
+      <app-ol-source-geojson [layerKey]="'selectables'"></app-ol-source-geojson>
+
+      <app-ol-interaction-select
+        [eventType]="'pointermove'"
+        [styler]="selectStyler()"
+      >
+        <!-- <app-ol-style>
+          <app-ol-style-fill [color]="[0, 128, 0, 0.1]"></app-ol-style-fill>
+          <app-ol-style-stroke
+            [color]="[0, 128, 0, 1]"
+            [width]="2"
+          ></app-ol-style-stroke>
+        </app-ol-style> -->
+      </app-ol-interaction-select>
+
+      <app-ol-interaction-select
+        (select)="onSelect($event)"
+        [eventType]="'click'"
+      >
+      </app-ol-interaction-select>
+    </app-ol-layer-vector>
+
     <!-- OUTLINE LAYER -->
 
-    <app-ol-layer-vector>
+    <!-- <app-ol-layer-vector>
       <app-ol-source-boundary></app-ol-source-boundary>
-      <app-ol-style [stroke]="'green'"></app-ol-style>
-    </app-ol-layer-vector>
+
+      <app-ol-style>
+        <app-ol-style-fill [color]="[0, 0, 0, 0]"></app-ol-style-fill>
+        <app-ol-style-stroke
+          [color]="'green'"
+          [lineDash]="[2, 4]"
+          [width]="2"
+        ></app-ol-style-stroke>
+      </app-ol-style>
+    </app-ol-layer-vector> -->
   </ng-container>
 </app-ol-map>
