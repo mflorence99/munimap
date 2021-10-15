@@ -1,6 +1,6 @@
-import { MapState } from '../state/map';
 import { Params } from './params';
-import { Path } from '../state/map';
+import { Path } from '../state/view';
+import { ViewState } from '../state/view';
 
 import { environment } from '../../environment';
 
@@ -48,26 +48,28 @@ export interface StateIndex {
   };
 }
 
+export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
+
 @Injectable({ providedIn: 'root' })
 export class GeoJSONService {
   constructor(private http: HttpClient, private params: Params) {}
-
-  #findIndex(route: ActivatedRoute): Index {
-    let index;
-    do {
-      index = route.snapshot.data.index;
-      route = route.parent;
-    } while (!index);
-    return index;
-  }
 
   #indexFromPath(
     base: Index,
     path: Path
   ): StateIndex | CountyIndex | TownIndex {
-    const parts = MapState.splitPath(path);
+    const parts = ViewState.splitPath(path);
     let index: any = base;
     parts.forEach((part) => (index = index[part]));
+    return index;
+  }
+
+  findIndex(route: ActivatedRoute): Index {
+    let index;
+    do {
+      index = route.snapshot.data.index;
+      route = route.parent;
+    } while (!index);
     return index;
   }
 
@@ -83,7 +85,7 @@ export class GeoJSONService {
     path: string,
     layer: string
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
-    const base = this.#findIndex(route);
+    const base = this.findIndex(route);
     return this.loadFromIndex(base, path, layer);
   }
 

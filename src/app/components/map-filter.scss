@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.form {
+  display: grid;
+  grid-template-rows: auto auto;
+  margin-top: 24px;
+}
+
+.mat-divider {
+  border-top-color: var(--text-color);
+}

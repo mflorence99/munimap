@@ -1,7 +1,7 @@
 import { GeoJSONService } from '../services/geojson';
-import { MapState } from '../state/map';
-import { UpdateView } from '../state/map';
-import { View } from '../state/map';
+import { UpdateView } from '../state/view';
+import { View } from '../state/view';
+import { ViewState } from '../state/view';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterContentInit } from '@angular/core';
@@ -83,7 +83,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
       center: fromLonLat(
         view.center ?? [minX + (maxX - minX) / 2, minY + (maxY - minY) / 2]
       ),
-      zoom: view.zoom ?? MapState.defaultZoom(view.path)
+      zoom: view.zoom ?? ViewState.defaultZoom(view.path)
     });
     this.olMap.setView(this.olView);
     this.boundary = boundary;

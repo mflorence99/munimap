@@ -26,11 +26,6 @@ export class UpdateView {
   constructor(public view: View) {}
 }
 
-export interface MapStateModel {
-  currentPath: Path;
-  viewByPath: Record<Path, View>;
-}
-
 export type Path = string;
 
 export interface View {
@@ -39,19 +34,24 @@ export interface View {
   zoom: number;
 }
 
+export interface ViewStateModel {
+  currentPath: Path;
+  viewByPath: Record<Path, View>;
+}
+
 const theState = 'NEW HAMPSHIRE';
 
-@State<MapStateModel>({
-  name: 'map',
+@State<ViewStateModel>({
+  name: 'view',
   defaults: {
     currentPath: theState,
     viewByPath: {
-      [theState]: MapState.defaultView(theState)
+      [theState]: ViewState.defaultView(theState)
     }
   }
 })
 @Injectable()
-export class MapState {
+export class ViewState {
   static defaultView(path: Path): View {
     return {
       center: null,
@@ -61,7 +61,7 @@ export class MapState {
   }
 
   static defaultZoom(path: Path): number {
-    const parts = MapState.splitPath(path);
+    const parts = ViewState.splitPath(path);
     const defaults = [10, 11, 13];
     return defaults[parts.length - 1];
   }
@@ -74,42 +74,42 @@ export class MapState {
     return path.split(':');
   }
 
-  @Selector() static view(state: MapStateModel): View {
+  @Selector() static view(state: ViewStateModel): View {
     return (
       state.viewByPath[state.currentPath] ??
-      MapState.defaultView(state.currentPath)
+      ViewState.defaultView(state.currentPath)
     );
   }
 
   @Action(PopCurrentPath) popCurrentPath(
-    ctx: StateContext<MapStateModel>,
+    ctx: StateContext<ViewStateModel>,
     _action: PopCurrentPath
   ): void {
     const state = ctx.getState();
-    const parts = MapState.splitPath(state.currentPath);
+    const parts = ViewState.splitPath(state.currentPath);
     if (parts.length > 0) {
       parts.pop();
-      const currentPath = MapState.joinPath(parts);
+      const currentPath = ViewState.joinPath(parts);
       ctx.setState(patch({ currentPath }));
     }
   }
 
   @Action(PushCurrentPath) pushCurrentPath(
-    ctx: StateContext<MapStateModel>,
+    ctx: StateContext<ViewStateModel>,
     action: PushCurrentPath
   ): void {
     const state = ctx.getState();
-    const parts = MapState.splitPath(state.currentPath);
+    const parts = ViewState.splitPath(state.currentPath);
     if (parts.length < 3) {
       const part = action.part;
       parts.push(part);
-      const currentPath = MapState.joinPath(parts);
+      const currentPath = ViewState.joinPath(parts);
       ctx.setState(patch({ currentPath }));
     }
   }
 
   @Action(SetCurrentPath) setCurrentPath(
-    ctx: StateContext<MapStateModel>,
+    ctx: StateContext<ViewStateModel>,
     action: SetCurrentPath
   ): void {
     const currentPath = action.currentPath;
@@ -117,7 +117,7 @@ export class MapState {
   }
 
   @Action(UpdateView) updateView(
-    ctx: StateContext<MapStateModel>,
+    ctx: StateContext<ViewStateModel>,
     action: UpdateView
   ): void {
     const view = action.view;

@@ -1,7 +1,4 @@
-<mat-card
-  *ngIf="user$ | async | pick: 'displayName':'email':'photoURL' as user"
-  class="card"
->
+<mat-card class="card">
   <mat-card-header>
     <ngx-avatar
       [gravatarId]="user.photoURL ? null : user.email"

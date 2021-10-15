@@ -1,0 +1,47 @@
+<mat-card class="card">
+  <mat-card-header>
+    <img src="assets/favicon.svg" mat-card-avatar />
+    <mat-card-title>Create a New Map</mat-card-title>
+    <mat-card-subtitle
+      >Use the map or the dropdowns to drill down to a town</mat-card-subtitle
+    >
+  </mat-card-header>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-content class="form">
+    <mat-form-field>
+      <mat-label>Select a state</mat-label>
+      <mat-select [disabled]="true" [value]="currentState()">
+        <mat-option *ngFor="let state of allStates()" [value]="state">
+          {{ state }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Select a county</mat-label>
+      <mat-select [value]="currentCounty()">
+        <mat-option *ngFor="let county of allCounties()" [value]="county">
+          {{ county }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Select a town</mat-label>
+      <mat-select [value]="currentTown()">
+        <mat-option *ngFor="let town of allTowns()" [value]="town">
+          {{ town }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button *ngIf="currentCounty()" (click)="reset()" mat-flat-button>
+      Start Over
+    </button>
+    <button color="primary" mat-flat-button>NEXT</button>
+  </mat-card-actions>
+</mat-card>

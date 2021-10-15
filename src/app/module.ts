@@ -4,9 +4,9 @@ import { HttpCache } from './services/http-cache';
 import { IndexResolver } from './resolvers/index';
 import { InitializerService } from './services/initializer';
 import { LoginPage } from './pages/login';
+import { MapFilterComponent } from './components/map-filter';
 import { MapPage } from './pages/map';
 import { MapsPage } from './pages/maps';
-import { MapState } from './state/map';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
@@ -30,6 +30,7 @@ import { OLStyleFillComponent } from './ol/ol-style-fill';
 import { OLStyleStrokeComponent } from './ol/ol-style-stroke';
 import { RootPage } from './root';
 import { UserProfileComponent } from './components/user-profile';
+import { ViewState } from './state/view';
 
 import { environment } from '../environment';
 import { initializeAppProvider } from './services/initializer';
@@ -52,10 +53,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
@@ -75,6 +78,7 @@ import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [
+  MapFilterComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlZoomComponent,
@@ -129,8 +133,8 @@ const ROUTES = [
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState, MapState];
-const STATES_SAVED = [MapState, RouterState];
+const STATES = [AuthState, ViewState];
+const STATES_SAVED = [ViewState, RouterState];
 
 @NgModule({
   bootstrap: [RootPage],
@@ -151,10 +155,12 @@ const STATES_SAVED = [MapState, RouterState];
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatProgressBarModule,
+    MatSelectModule,
     MatSidenavModule,
     MatToolbarModule,
     NgObjectPipesModule,

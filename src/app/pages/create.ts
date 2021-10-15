@@ -1,7 +1,8 @@
-import { MapState } from '../state/map';
-import { PushCurrentPath } from '../state/map';
+import { Path } from '../state/view';
+import { PushCurrentPath } from '../state/view';
 import { StyleService } from '../services/style';
-import { View } from '../state/map';
+import { View } from '../state/view';
+import { ViewState } from '../state/view';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -16,9 +17,22 @@ import { Store } from '@ngxs/store';
   templateUrl: './create.html'
 })
 export class CreatePage {
-  @Select(MapState.view) view$: Observable<View>;
+  @Select(ViewState.view) view$: Observable<View>;
 
   constructor(private store: Store, public style: StyleService) {}
+
+  atCountyLevel(path: Path): boolean {
+    return ViewState.splitPath(path).length === 2;
+  }
+
+  atStateLevel(path: Path): boolean {
+    return ViewState.splitPath(path).length === 1;
+  }
+
+  atTownLevel(path: Path): boolean {
+    console.log(ViewState.splitPath(path).length);
+    return ViewState.splitPath(path).length === 3;
+  }
 
   onSelect(part: string): void {
     this.store.dispatch(new PushCurrentPath(part));

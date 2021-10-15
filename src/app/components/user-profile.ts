@@ -1,4 +1,3 @@
-import { AuthState } from '../state/auth';
 import { Logout } from '../state/auth';
 import { UpdateUser } from '../state/auth';
 import { User } from '../state/auth';
@@ -6,11 +5,12 @@ import { User } from '../state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Input } from '@angular/core';
 import { Output } from '@angular/core';
 import { PickPipe } from 'ngx-pipes';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+
+import copy from 'fast-copy';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,11 +20,19 @@ import { Store } from '@ngxs/store';
   templateUrl: './user-profile.html'
 })
 export class UserProfileComponent {
+  #user: User;
+
   @Output() done = new EventEmitter<void>();
 
   editMode = false;
 
-  @Select(AuthState.user) user$: Observable<User>;
+  @Input()
+  get user(): User {
+    return this.#user;
+  }
+  set user(user: User) {
+    this.#user = copy(user);
+  }
 
   constructor(private store: Store) {}
 

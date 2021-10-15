@@ -30,7 +30,10 @@
         [cdkConnectedOverlayOrigin]="trigger"
         [cdkConnectedOverlayOpen]="openUserProfile"
       >
-        <app-user-profile (done)="openUserProfile = false"></app-user-profile>
+        <app-user-profile
+          (done)="openUserProfile = false"
+          [user]="user$ | async"
+        ></app-user-profile>
       </ng-template>
     </ng-container>
   </mat-toolbar>
