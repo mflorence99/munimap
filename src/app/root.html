@@ -7,8 +7,13 @@
     >
       <mat-icon>menu</mat-icon>
     </button>
+
     <h1>MuniMap</h1>
+
+    <h2 *ngIf="(view$ | async) as view">&bull; {{ tail(view.path) }}</h2>
+
     <div class="filler"></div>
+
     <ng-container *ngIf="user$ | async as user">
       <ngx-avatar
         #trigger="cdkOverlayOrigin"
@@ -47,7 +52,7 @@
       <br />
       <a (click)="drawer.close()" routerLink="/maps">List maps</a>
       <br />
-      <a (click)="drawer.close()" routerLink="/map">Edit a map</a>
+      <a (click)="drawer.close()" routerLink="/map/0">Edit a map</a>
     </mat-drawer>
 
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">

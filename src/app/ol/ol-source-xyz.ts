@@ -30,6 +30,8 @@ export class OLSourceXYZComponent implements AfterContentInit {
   }
 
   ngAfterContentInit(): void {
+    // 👉 note that we'rew saying we don't expect
+    //    the list of attributions to change
     this.olXYZ.setAttributions(
       this.attributions.map((attribution) => attribution.getAttribution())
     );

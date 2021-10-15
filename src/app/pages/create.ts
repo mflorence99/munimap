@@ -30,7 +30,6 @@ export class CreatePage {
   }
 
   atTownLevel(path: Path): boolean {
-    console.log(ViewState.splitPath(path).length);
     return ViewState.splitPath(path).length === 3;
   }
 

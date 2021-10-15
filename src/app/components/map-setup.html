@@ -1,0 +1,39 @@
+<mat-card class="card">
+  <mat-card-header>
+    <img src="assets/favicon.svg" mat-card-avatar />
+    <mat-card-title>Configure Your Map</mat-card-title>
+    <mat-card-subtitle>blah blah</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-divider></mat-divider>
+
+  <br />
+
+  <mat-card-content>
+    <form
+      [formGroup]="setupForm"
+      autocomplete="off"
+      class="form"
+      novalidate
+      spellcheck="false"
+    >
+      <input formControlName="id" type="hidden" />
+
+      <mat-form-field>
+        <mat-label>Give your map a name</mat-label>
+        <input formControlName="name" matInput placeholder="eg: My Old Town" />
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button
+      (click)="submit()"
+      [disabled]="setupForm.invalid"
+      color="primary"
+      mat-flat-button
+    >
+      SAVE
+    </button>
+  </mat-card-actions>
+</mat-card>

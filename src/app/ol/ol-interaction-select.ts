@@ -1,3 +1,5 @@
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
@@ -11,17 +13,25 @@ import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import { forwardRef } from '@angular/core';
+
 import OLSelect from 'ol/interaction/Select';
 import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLInteractionSelectComponent)
+    }
+  ],
   selector: 'app-ol-interaction-select',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
 export class OLInteractionSelectComponent
-  implements AfterContentInit, OnDestroy
+  implements AfterContentInit, Mapable, OnDestroy
 {
   #olStyle: OLStyle;
 
@@ -47,6 +57,10 @@ export class OLInteractionSelectComponent
     this.select.emit(event.selected[0]?.getId());
   }
 
+  addToMap(): void {
+    this.map.olMap.addInteraction(this.olSelect);
+  }
+
   ngAfterContentInit(): void {
     // 👇 we can't follow the usual convention because there's
     //    no way to setStyle()
@@ -57,7 +71,6 @@ export class OLInteractionSelectComponent
       style: this.styler ?? this.#olStyle
     });
     this.olSelect.on('select', this.#onSelect.bind(this));
-    this.map.olMap.addInteraction(this.olSelect);
   }
 
   ngOnDestroy(): void {

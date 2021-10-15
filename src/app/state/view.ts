@@ -7,22 +7,22 @@ import { StateContext } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
 
 export class PopCurrentPath {
-  static readonly type = '[Map] PopCurrentPath';
+  static readonly type = '[View] PopCurrentPath';
   constructor() {}
 }
 
 export class PushCurrentPath {
-  static readonly type = '[Map] PushCurrentPath';
+  static readonly type = '[View] PushCurrentPath';
   constructor(public part: string) {}
 }
 
 export class SetCurrentPath {
-  static readonly type = '[Map] SetCurrentPath';
+  static readonly type = '[View] SetCurrentPath';
   constructor(public currentPath: string) {}
 }
 
 export class UpdateView {
-  static readonly type = '[Map] UpdateView';
+  static readonly type = '[View] UpdateView';
   constructor(public view: View) {}
 }
 

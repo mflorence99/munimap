@@ -1,4 +1,5 @@
 import { GeoJSONService } from '../services/geojson';
+import { MapableComponent } from './ol-mapable';
 import { UpdateView } from '../state/view';
 import { View } from '../state/view';
 import { ViewState } from '../state/view';
@@ -8,9 +9,11 @@ import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { ContentChildren } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { QueryList } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { fromLonLat } from 'ol/proj';
@@ -36,8 +39,13 @@ import OLView from 'ol/View';
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy {
   #view: View;
+
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
   initialized = false;
+
+  @ContentChildren(MapableComponent, { descendants: true })
+  mapables$: QueryList<any>;
+
   olMap: OLMap;
   olView: OLView;
   projection = 'EPSG:3857';
@@ -65,12 +73,16 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
     });
   }
 
-  #cleanView(): void {
+  #cleanMap(): void {
     this.olMap
       .getControls()
       .forEach((control) => this.olMap.removeControl(control));
+    this.olMap.getInteractions().forEach((interaction) => {
+      // 👉 OL adds a bunch of interactions of its own
+      //    that we don't want to remove
+      if (interaction['addToMap']) this.olMap.removeInteraction(interaction);
+    });
     this.olMap.getLayers().forEach((layer) => this.olMap.removeLayer(layer));
-    this.olView = null;
   }
 
   #createView(
@@ -91,11 +103,19 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
     this.olView.on('change', this.#onChange.bind(this));
   }
 
+  #handleMapables$(): void {
+    this.mapables$.changes.subscribe((list) => {
+      this.#cleanMap();
+      list.forEach((mapable) => mapable.addToMap());
+    });
+  }
+
   #initializeView(view: View): View {
     // 👉 if the path has changed, clean out the old map
     if (view.path !== this.#view?.path) {
       this.initialized = false;
-      this.#cleanView();
+      this.#cleanMap();
+      this.olView = null;
     }
     // 👉 now create the new
     if (!this.olView) {
@@ -122,6 +142,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
 
   ngAfterContentInit(): void {
     this.olMap.setTarget(this.host.nativeElement);
+    // handle content changes
+    this.#handleMapables$();
   }
 
   ngOnDestroy(): void {

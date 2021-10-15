@@ -1,7 +1,13 @@
 :host {
-  background-color: green;
   display: block;
   height: 100%;
   position: absolute;
   width: 100%;
+}
+
+.setup {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  width: 500px;
 }

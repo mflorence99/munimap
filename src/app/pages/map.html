@@ -1,0 +1,30 @@
+<ng-container *ngIf="view$ | async as view">
+  <app-ol-map #map [view]="view">
+    <ng-container *ngIf="map.initialized">
+      <app-ol-control-attribution></app-ol-control-attribution>
+      <app-ol-control-zoom></app-ol-control-zoom>
+      <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
+
+      <!-- BG LAYER -->
+
+      <app-ol-layer-tile>
+        <app-ol-source-osm></app-ol-source-osm>
+        <app-ol-filter-pencil></app-ol-filter-pencil>
+      </app-ol-layer-tile>
+
+      <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
+
+      <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/bright-v9">
+        <app-ol-filter-crop></app-ol-filter-crop>
+      </app-ol-layer-mapbox>
+
+      <!-- BOUNDARY LAYER -->
+
+      <app-ol-layer-vector [styler]="style.featureOutline()">
+        <app-ol-source-boundary></app-ol-source-boundary>
+      </app-ol-layer-vector>
+    </ng-container>
+  </app-ol-map>
+
+  <app-map-setup [view]="view" class="setup"></app-map-setup>
+</ng-container>

@@ -21,7 +21,10 @@
 
     <mat-form-field>
       <mat-label>Select a county</mat-label>
-      <mat-select [value]="currentCounty()">
+      <mat-select
+        (selectionChange)="switchCounty($event.value)"
+        [value]="currentCounty()"
+      >
         <mat-option *ngFor="let county of allCounties()" [value]="county">
           {{ county }}
         </mat-option>
@@ -30,7 +33,10 @@
 
     <mat-form-field>
       <mat-label>Select a town</mat-label>
-      <mat-select [value]="currentTown()">
+      <mat-select
+        (selectionChange)="switchTown($event.value)"
+        [value]="currentTown()"
+      >
         <mat-option *ngFor="let town of allTowns()" [value]="town">
           {{ town }}
         </mat-option>
@@ -42,6 +48,13 @@
     <button *ngIf="currentCounty()" (click)="reset()" mat-flat-button>
       Start Over
     </button>
-    <button color="primary" mat-flat-button>NEXT</button>
+    <button
+      (click)="next()"
+      [disabled]="!currentTown()"
+      color="primary"
+      mat-flat-button
+    >
+      NEXT
+    </button>
   </mat-card-actions>
 </mat-card>

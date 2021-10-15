@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 
 @Component({
@@ -60,7 +61,25 @@ export class MapFilterComponent {
     return ViewState.splitPath(this.view.path)[2];
   }
 
+  next(): void {
+    this.store.dispatch(new Navigate(['/map/0']));
+  }
+
   reset(): void {
     this.store.dispatch(new SetCurrentPath(this.currentState()));
+  }
+
+  switchCounty(county: string): void {
+    const path = ViewState.joinPath([this.currentState(), county]);
+    this.store.dispatch(new SetCurrentPath(path));
+  }
+
+  switchTown(town: string): void {
+    const path = ViewState.joinPath([
+      this.currentState(),
+      this.currentCounty(),
+      town
+    ]);
+    this.store.dispatch(new SetCurrentPath(path));
   }
 }

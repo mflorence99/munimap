@@ -6,7 +6,9 @@ import { InitializerService } from './services/initializer';
 import { LoginPage } from './pages/login';
 import { MapFilterComponent } from './components/map-filter';
 import { MapPage } from './pages/map';
+import { MapSetupComponent } from './components/map-setup';
 import { MapsPage } from './pages/maps';
+import { MapState } from './state/map';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
@@ -79,6 +81,7 @@ import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [
   MapFilterComponent,
+  MapSetupComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlZoomComponent,
@@ -125,7 +128,7 @@ const ROUTES = [
     },
     children: [
       { path: 'create', component: CreatePage, data: { state: 'create' } },
-      { path: 'map', component: MapPage, data: { state: 'map' } },
+      { path: 'map/:id', component: MapPage, data: { state: 'map' } },
       { path: 'maps', component: MapsPage, data: { state: 'maps' } },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
     ]
@@ -133,8 +136,8 @@ const ROUTES = [
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState, ViewState];
-const STATES_SAVED = [ViewState, RouterState];
+const STATES = [AuthState, MapState, ViewState];
+const STATES_SAVED = [RouterState, ViewState];
 
 @NgModule({
   bootstrap: [RootPage],

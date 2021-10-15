@@ -1,5 +1,11 @@
+import { StyleService } from '../services/style';
+import { View } from '../state/view';
+import { ViewState } from '../state/view';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Select } from '@ngxs/store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -7,4 +13,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./map.scss'],
   templateUrl: './map.html'
 })
-export class MapPage {}
+export class MapPage {
+  @Select(ViewState.view) view$: Observable<View>;
+
+  constructor(public style: StyleService) {}
+}
