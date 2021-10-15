@@ -1,3 +1,5 @@
+import { Map } from '../state/map';
+import { MapState } from '../state/map';
 import { StyleService } from '../services/style';
 import { View } from '../state/view';
 import { ViewState } from '../state/view';
@@ -14,6 +16,7 @@ import { Select } from '@ngxs/store';
   templateUrl: './map.html'
 })
 export class MapPage {
+  @Select(MapState) map$: Observable<Map>;
   @Select(ViewState.view) view$: Observable<View>;
 
   constructor(public style: StyleService) {}

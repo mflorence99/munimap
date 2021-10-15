@@ -73,16 +73,18 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
     });
   }
 
+  // 👇 https://stackoverflow.com/questions/40862706
   #cleanMap(): void {
-    this.olMap
-      .getControls()
-      .forEach((control) => this.olMap.removeControl(control));
-    this.olMap.getInteractions().forEach((interaction) => {
+    const controls = [...this.olMap.getControls().getArray()];
+    controls.forEach((control) => this.olMap.removeControl(control));
+    const interactions = [...this.olMap.getInteractions().getArray()];
+    interactions.forEach((interaction) => {
       // 👉 OL adds a bunch of interactions of its own
       //    that we don't want to remove
       if (interaction['addToMap']) this.olMap.removeInteraction(interaction);
     });
-    this.olMap.getLayers().forEach((layer) => this.olMap.removeLayer(layer));
+    const layers = [...this.olMap.getLayers().getArray()];
+    layers.forEach((layer) => this.olMap.removeLayer(layer));
   }
 
   #createView(

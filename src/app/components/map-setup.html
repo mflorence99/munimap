@@ -23,6 +23,26 @@
         <mat-label>Give your map a name</mat-label>
         <input formControlName="name" matInput placeholder="eg: My Old Town" />
       </mat-form-field>
+
+      <mat-label>Choose a map style</mat-label>
+      <mat-radio-group class="thumbnails" formControlName="style">
+        <figure class="thumbnail">
+          <mat-radio-button value="mapbox"></mat-radio-button>
+          <img src="assets/mapbox.png" />
+        </figure>
+        <figure class="thumbnail">
+          <mat-radio-button value="osm"></mat-radio-button>
+          <img src="assets/osm.png" />
+        </figure>
+        <figure class="thumbnail">
+          <mat-radio-button value="google"></mat-radio-button>
+          <img src="assets/google.png" />
+        </figure>
+        <figure class="thumbnail">
+          <mat-radio-button value="arcgis"></mat-radio-button>
+          <img src="assets/arcgis.jpeg" />
+        </figure>
+      </mat-radio-group>
     </form>
   </mat-card-content>
 

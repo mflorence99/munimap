@@ -66,7 +66,8 @@ export class MapSetupComponent {
   #initialize(): void {
     this.setupForm = this.formBuilder.group({
       id: null,
-      name: [null, Validators.required]
+      name: [null, Validators.required],
+      style: null
     });
   }
 
@@ -74,7 +75,8 @@ export class MapSetupComponent {
     this.setupForm.patchValue(
       {
         id: map.id,
-        name: map.name
+        name: map.name,
+        style: map.style
       },
       { emitEvent: false }
     );
