@@ -1,4 +1,5 @@
 import { AuthState } from './state/auth';
+import { StyleService } from './services/style';
 import { User } from './state/auth';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -37,7 +38,8 @@ export class RootPage {
 
   @Select(AuthState.user) user$: Observable<User>;
 
-  constructor(private router: Router) {
+  // 👉 need to bootup style service
+  constructor(private router: Router, private style: StyleService) {
     this.#handleRouterEvents$();
   }
 

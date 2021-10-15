@@ -1,4 +1,5 @@
 import { AuthState } from './state/auth';
+import { CreatePage } from './pages/create';
 import { HttpCache } from './services/http-cache';
 import { IndexResolver } from './resolvers/index';
 import { InitializerService } from './services/initializer';
@@ -98,7 +99,7 @@ const COMPONENTS = [
   UserProfileComponent
 ];
 
-const PAGES = [LoginPage, MapPage, MapsPage, RootPage];
+const PAGES = [CreatePage, LoginPage, MapPage, MapsPage, RootPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -119,6 +120,7 @@ const ROUTES = [
       index: IndexResolver
     },
     children: [
+      { path: 'create', component: CreatePage, data: { state: 'create' } },
       { path: 'map', component: MapPage, data: { state: 'map' } },
       { path: 'maps', component: MapsPage, data: { state: 'maps' } },
       { path: '', redirectTo: '/login', pathMatch: 'full' }

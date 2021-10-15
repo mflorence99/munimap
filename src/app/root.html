@@ -40,9 +40,11 @@
 
   <mat-drawer-container class="container">
     <mat-drawer #drawer class="sidebar" mode="over">
-      <a (click)="drawer.close()" routerLink="/maps">link to maps</a>
+      <a (click)="drawer.close()" routerLink="/create">Create a new map</a>
       <br />
-      <a (click)="drawer.close()" routerLink="/map">link to map</a>
+      <a (click)="drawer.close()" routerLink="/maps">List maps</a>
+      <br />
+      <a (click)="drawer.close()" routerLink="/map">Edit a map</a>
     </mat-drawer>
 
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">

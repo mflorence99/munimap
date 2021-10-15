@@ -33,9 +33,9 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   src: url('assets/RobotoMono.ttf') format('truetype');
 }
 
-// bridge from Angular Material variables to CSS variables
-
 :root {
+  // 👉 bridge from Angular Material variables to CSS variables
+
   --primary-color: var(--mat-blue-500);
   --accent-color: var(--mat-amber-500);
   --warn-color: var(--mat-red-500);
@@ -43,9 +43,17 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --text-color: var(--mat-grey-100);
   --disabled-color: var(--mat-grey-500);
   --background-color: var(--mat-grey-900);
+
+  // 👉 to support StyleService
+
+  --map-feature-fill: rgba(var(--rgb-green-700), 0.1);
+  --map-feature-outline: var(--mat-green-700);
+  --map-feature-outline-width: 2;
+  --map-feature-text-color: var(--mat-green-700);
+  --map-feature-text-font: bold 20px Roboto;
 }
 
-// base styles
+// 👉 base styles
 
 * {
   box-sizing: border-box;
@@ -115,10 +123,10 @@ ul {
   list-style-type: none;
 }
 
-// Firebase styles
+// 👉 Firebase styles
 
 .firebase-emulator-warning {
   display: none !important;
 }
 
-// OpenLayers styles
+// 👉 OpenLayers styles
