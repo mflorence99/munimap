@@ -1,6 +1,5 @@
 import { AuthState } from './state/auth';
 import { Path } from './state/view';
-import { StyleService } from './services/style';
 import { User } from './state/auth';
 import { View } from './state/view';
 import { ViewState } from './state/view';
@@ -42,8 +41,7 @@ export class RootPage {
   @Select(AuthState.user) user$: Observable<User>;
   @Select(ViewState.view) view$: Observable<View>;
 
-  // 👉 need to bootup style service
-  constructor(private router: Router, private style: StyleService) {
+  constructor(private router: Router) {
     this.#handleRouterEvents$();
   }
 

@@ -48,6 +48,32 @@ export interface StateIndex {
   };
 }
 
+export interface ParcelProperties {
+  abutters: string[];
+  address: string;
+  area: number;
+  areaComputed: number;
+  building$: number;
+  callout: number[];
+  center: number[];
+  cu$: number;
+  elevation: number;
+  id: string;
+  label: { rotate: boolean; split: boolean };
+  land$: number;
+  lengths: number[];
+  minWidth: number;
+  neighborhood: string;
+  orientation: number;
+  owner: string;
+  perimeter: number;
+  sqarcity: number;
+  taxed$: number;
+  usage: string;
+  use: string;
+  zone: string;
+}
+
 export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
 
 @Injectable({ providedIn: 'root' })

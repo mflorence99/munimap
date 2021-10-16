@@ -11,6 +11,7 @@ import { MapsPage } from './pages/maps';
 import { MapState } from './state/map';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
+import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from './ol/ol-control-zoom2extent';
 import { OLFilterCropComponent } from './ol/ol-filter-crop';
@@ -50,6 +51,7 @@ import { AvatarModule } from 'ngx-avatar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { ErrorHandler } from '@angular/core';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { FormsModule } from '@angular/forms';
@@ -87,6 +89,7 @@ const COMPONENTS = [
   MapSetupComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
+  OLControlMousePositionComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
   OLFilterCropComponent,
@@ -196,6 +199,7 @@ const STATES_SAVED = [RouterState, ViewState];
   ],
 
   providers: [
+    DecimalPipe,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAppProvider,

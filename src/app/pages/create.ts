@@ -1,6 +1,6 @@
+import { OLStylerFeatureService } from '../ol/ol-styler-feature';
 import { Path } from '../state/view';
 import { PushCurrentPath } from '../state/view';
-import { StyleService } from '../services/style';
 import { View } from '../state/view';
 import { ViewState } from '../state/view';
 
@@ -19,7 +19,10 @@ import { Store } from '@ngxs/store';
 export class CreatePage {
   @Select(ViewState.view) view$: Observable<View>;
 
-  constructor(private store: Store, public style: StyleService) {}
+  constructor(
+    private store: Store,
+    public olStylerFeature: OLStylerFeatureService
+  ) {}
 
   atCountyLevel(path: Path): boolean {
     return ViewState.splitPath(path).length === 2;

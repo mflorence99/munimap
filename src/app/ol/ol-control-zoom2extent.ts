@@ -6,7 +6,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
-import { transformExtent } from 'ol/proj';
 
 import OLZoomToExtent from 'ol/control/ZoomToExtent';
 
@@ -26,11 +25,8 @@ export class OLControlZoomToExtentComponent implements Mapable {
   olControl: OLZoomToExtent;
 
   constructor(private map: OLMapComponent) {
-    const bbox = this.map.boundary.features[0].bbox;
-    // 👉 TODO: ambient typings missing this
-    const featureProjection = this.map.boundary['crs'].properties.name;
     this.olControl = new OLZoomToExtent({
-      extent: transformExtent(bbox, featureProjection, this.map.projection)
+      extent: this.map.boundaryExtent
     });
   }
 

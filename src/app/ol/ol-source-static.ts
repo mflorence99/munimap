@@ -6,8 +6,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
-import { transformExtent } from 'ol/proj';
-
 import OLStatic from 'ol/source/ImageStatic';
 
 @Component({
@@ -20,15 +18,8 @@ export class OLSourceStaticComponent implements AfterContentInit {
   olStatic: OLStatic;
 
   @Input() set url(url: string) {
-    const bbox = this.map.boundary.features[0].bbox;
-    // 👉 TODO: ambient typings missing this
-    const featureProjection = this.map.boundary['crs'].properties.name;
     this.olStatic = new OLStatic({
-      imageExtent: transformExtent(
-        bbox,
-        featureProjection,
-        this.map.projection
-      ),
+      imageExtent: this.map.boundaryExtent,
       url
     });
   }

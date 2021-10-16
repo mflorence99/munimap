@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ContentChildren } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
@@ -18,6 +19,7 @@ import { Store } from '@ngxs/store';
 
 import { fromLonLat } from 'ol/proj';
 import { toLonLat } from 'ol/proj';
+import { transformExtent } from 'ol/proj';
 
 import OLMap from 'ol/Map';
 import OLView from 'ol/View';
@@ -41,6 +43,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
   #view: View;
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
+  boundaryExtent: Coordinate;
   initialized = false;
 
   @ContentChildren(MapableComponent, { descendants: true })
@@ -100,7 +103,15 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
       zoom: view.zoom ?? ViewState.defaultZoom(view.path)
     });
     this.olMap.setView(this.olView);
+    // 👉 precompute boundary extent
     this.boundary = boundary;
+    // 👉 TODO: ambient typings missing this
+    const featureProjection = boundary['crs'].properties.name;
+    this.boundaryExtent = transformExtent(
+      bbox,
+      featureProjection,
+      this.projection
+    );
     // 👉 handle events
     this.olView.on('change', this.#onChange.bind(this));
   }
@@ -133,13 +144,16 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
   }
 
   #onChange(): void {
-    this.store.dispatch(
-      new UpdateView({
-        center: toLonLat(this.olView.getCenter()),
-        path: this.view.path,
-        zoom: this.olView.getZoom()
-      })
+    const center = toLonLat(this.olView.getCenter());
+    const path = this.view.path;
+    const resolution = this.olView.getResolution();
+    const zoom = this.olView.getZoom();
+    console.log(
+      `%c${path}`,
+      'color: hotpink',
+      `resolution=${resolution} zoom=${zoom}`
     );
+    this.store.dispatch(new UpdateView({ center, path, zoom }));
   }
 
   ngAfterContentInit(): void {

@@ -26,6 +26,14 @@ import OLMapbox from 'ol/layer/MapboxVector';
 export class OLLayerMapboxComponent implements Mapable {
   olLayer: OLMapbox;
 
+  @Input() set maxZoom(maxZoom: number) {
+    this.olLayer.setMaxZoom(maxZoom);
+  }
+
+  @Input() set opacity(opacity: number) {
+    this.olLayer.setOpacity(opacity);
+  }
+
   @Input() set styleUrl(url: string) {
     this.olLayer = new OLMapbox({
       accessToken: this.params.mapbox.apiKey,

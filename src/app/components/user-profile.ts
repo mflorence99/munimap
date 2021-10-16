@@ -14,7 +14,6 @@ import copy from 'fast-copy';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PickPipe],
   selector: 'app-user-profile',
   styleUrls: ['./user-profile.scss'],
   templateUrl: './user-profile.html'

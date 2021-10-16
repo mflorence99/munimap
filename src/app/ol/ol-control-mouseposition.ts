@@ -4,40 +4,34 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
-import OLImage from 'ol/layer/Image';
+import OLMousePosition from 'ol/control/MousePosition';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLLayerImageComponent)
+      useExisting: forwardRef(() => OLControlMousePositionComponent)
     }
   ],
-  selector: 'app-ol-layer-image',
+  selector: 'app-ol-control-mouseposition',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLLayerImageComponent implements Mapable {
-  olLayer: OLImage<any>;
-
-  @Input() set maxZoom(maxZoom: number) {
-    this.olLayer.setMaxZoom(maxZoom);
-  }
-
-  @Input() set opacity(opacity: number) {
-    this.olLayer.setOpacity(opacity);
-  }
+export class OLControlMousePositionComponent implements Mapable {
+  olControl: OLMousePosition;
 
   constructor(private map: OLMapComponent) {
-    this.olLayer = new OLImage({ source: null });
+    this.olControl = new OLMousePosition({
+      className: 'ol-control-mouseposition',
+      projection: 'EPSG:4326'
+    });
   }
 
   addToMap(): void {
-    this.map.olMap.addLayer(this.olLayer);
+    this.map.olMap.addControl(this.olControl);
   }
 }

@@ -1,6 +1,7 @@
 import { Map } from '../state/map';
 import { MapState } from '../state/map';
-import { StyleService } from '../services/style';
+import { OLStylerFeatureService } from '../ol/ol-styler-feature';
+import { OLStylerParcelService } from '../ol/ol-styler-parcel';
 import { View } from '../state/view';
 import { ViewState } from '../state/view';
 
@@ -19,5 +20,8 @@ export class MapPage {
   @Select(MapState) map$: Observable<Map>;
   @Select(ViewState.view) view$: Observable<View>;
 
-  constructor(public style: StyleService) {}
+  constructor(
+    public olStylerFeature: OLStylerFeatureService,
+    public olStylerParcel: OLStylerParcelService
+  ) {}
 }

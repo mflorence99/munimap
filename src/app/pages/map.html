@@ -1,7 +1,8 @@
 <ng-container *ngIf="view$ | async as view">
-  <app-ol-map #olmap [view]="view">
-    <ng-container *ngIf="olmap.initialized">
+  <app-ol-map #theMap [view]="view">
+    <ng-container *ngIf="theMap.initialized">
       <app-ol-control-attribution></app-ol-control-attribution>
+      <app-ol-control-mouseposition></app-ol-control-mouseposition>
       <app-ol-control-zoom></app-ol-control-zoom>
       <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
 
@@ -16,7 +17,7 @@
 
       <ng-container *ngIf="map$ | async as map">
         <ng-container [ngSwitch]="map.style">
-          <app-ol-layer-tile *ngSwitchCase="'arcgis'">
+          <app-ol-layer-tile *ngSwitchCase="'arcgis'" [maxZoom]="17">
             <app-ol-source-xyz
               [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
               ><app-ol-attribution
@@ -59,7 +60,11 @@
 
         <!-- HILLSHADE LAYER (not needed for arcgis) -->
 
-        <app-ol-layer-tile *ngIf="map.style !== 'arcgis'" [opacity]="0.33">
+        <app-ol-layer-tile
+          *ngIf="map.style !== 'arcgis'"
+          [maxZoom]="17"
+          [opacity]="0.33"
+        >
           <app-ol-source-xyz
             [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
           >
@@ -68,9 +73,24 @@
         </app-ol-layer-tile>
       </ng-container>
 
+      <!-- PARCELS LAYER -- WASHINGTON ONLY FOR NOW -->
+
+      <app-ol-layer-vector
+        *ngIf="view.path.endsWith('WASHINGTON')"
+        [styler]="olStylerParcel.outline()"
+      >
+        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+
+        <app-ol-interaction-select
+          [eventType]="'click'"
+          [styler]="olStylerParcel.select()"
+        >
+        </app-ol-interaction-select>
+      </app-ol-layer-vector>
+
       <!-- BOUNDARY LAYER -->
 
-      <app-ol-layer-vector [styler]="style.featureOutline()">
+      <app-ol-layer-vector [styler]="olStylerFeature.outline()">
         <app-ol-source-boundary></app-ol-source-boundary>
       </app-ol-layer-vector>
     </ng-container>

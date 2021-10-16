@@ -26,7 +26,7 @@ export type MapStateModel = Map;
   defaults: {
     id: null,
     name: null,
-    style: 'mapbox'
+    style: 'osm'
   }
 })
 @Injectable()

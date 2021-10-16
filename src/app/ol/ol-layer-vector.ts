@@ -27,13 +27,21 @@ export class OLLayerVectorComponent implements Mapable {
   olLayer: OLVector<any>;
   olStyleable: OLVector<any>;
 
+  @Input() set maxZoom(maxZoom: number) {
+    this.olLayer.setMaxZoom(maxZoom);
+  }
+
+  @Input() set opacity(opacity: number) {
+    this.olLayer.setOpacity(opacity);
+  }
+
   // 👇 if this is used, declarative styles can't be
   @Input() set styler(styler: OLStyleFunction) {
     this.olLayer.setStyle(styler);
   }
 
   constructor(private map: OLMapComponent) {
-    this.olLayer = new OLVector({ declutter: true, source: null, style: null });
+    this.olLayer = new OLVector({ source: null, style: null });
     this.olStyleable = this.olLayer;
   }
 

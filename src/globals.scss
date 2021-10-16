@@ -44,13 +44,35 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --disabled-color: var(--mat-grey-500);
   --background-color: var(--mat-grey-900);
 
-  // 👉 to support StyleService
+  // 👉 to support OLStylerService
 
   --map-feature-fill: rgba(var(--rgb-green-700), 0.1);
   --map-feature-outline: var(--mat-green-700);
   --map-feature-outline-width: 2;
   --map-feature-text-color: var(--mat-green-700);
-  --map-feature-text-font: bold 20px Roboto;
+  --map-feature-text-font-family: Roboto;
+
+  --map-parcel-outline: var(--mat-blue-gray-700);
+  --map-parcel-outline-width: 1;
+  --map-parcel-select: var(--warn-color);
+  --map-parcel-select-width: 3;
+  --map-parcel-text-color: var(--mat-gray-900);
+  --map-parcel-text-font-family: Roboto;
+
+  // land use color shading
+  // 👀  https://www.gismanual.com/style/ColorConventions.pdf
+  --map-parcel-fill-u110: var(--rgb-brown-300);
+  --map-parcel-fill-u120: var(--rgb-brown-500);
+  --map-parcel-fill-u190: var(--rgb-yellow-200);
+  --map-parcel-fill-u260: var(--rgb-red-200);
+  --map-parcel-fill-u261: var(--rgb-purple-200);
+  --map-parcel-fill-u300: var(--rgb-cyan-200);
+  --map-parcel-fill-u400: var(--rgb-orange-200);
+  // 👇 these need to match the colors from OpenStreetMap
+  --map-parcel-fill-u500: 190, 219, 75; // #BEDBAF
+  --map-parcel-fill-u501: 173, 209, 158; // #ADD19E
+  --map-parcel-fill-u502: var(--rgb-green-300);
+  --map-parcel-fill-u999: var(--rgb-gray-300);
 }
 
 // 👉 base styles
@@ -131,6 +153,23 @@ ul {
 
 // 👉 OpenLayers styles
 
-.ol-control button {
-  background-color: var(--mat-gray-800) !important;
+app-ol-map {
+  .ol-control button {
+    background-color: var(--mat-gray-800);
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 20px;
+  }
+
+  .ol-control-mouseposition {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 0 4px 0 0;
+    bottom: 0;
+    color: var(--background-color);
+    font-size: 10px;
+    left: 0;
+    padding: 2px;
+    position: absolute;
+    width: 200px;
+  }
 }
