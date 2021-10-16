@@ -1,7 +1,7 @@
 <mat-card class="card">
   <mat-card-header>
     <img src="assets/favicon.svg" mat-card-avatar />
-    <mat-card-title>Configure Your Map</mat-card-title>
+    <mat-card-title>Customize Your Map</mat-card-title>
     <mat-card-subtitle>blah blah</mat-card-subtitle>
   </mat-card-header>
 
@@ -24,25 +24,77 @@
         <input formControlName="name" matInput placeholder="eg: My Old Town" />
       </mat-form-field>
 
-      <mat-label>Choose a map style</mat-label>
-      <mat-radio-group class="thumbnails" formControlName="style">
-        <figure class="thumbnail">
-          <mat-radio-button value="mapbox"></mat-radio-button>
+      <mat-label>
+        Choose a map style:
+        <ng-container
+          [ngSwitch]="setupForm.controls.style.value"
+          class="explanations"
+        >
+          <span *ngSwitchCase="'mapbox'"
+            ><a href="https://www.mapbox.com/maps" target="_blank">Mapbox</a>
+            Street View emphasizes simplicity</span
+          >
+
+          <span *ngSwitchCase="'osm'"
+            ><a href="https://www.openstreetmap.org/" target="_blank"
+              >OpenStreetMap</a
+            >
+            (OSM) blah blah blah</span
+          >
+
+          <span *ngSwitchCase="'google'">
+            <a href="https://www.google.com/maps" target="_blank">Google</a>
+            blah blah blah</span
+          >
+
+          <span *ngSwitchCase="'arcgis'"
+            ><a
+              href="https://www.arcgis.com/apps/mapviewer/index.html"
+              target="_blank"
+              >ArcGIS</a
+            >
+            blah blah blah</span
+          >
+
+          <span *ngSwitchCase="'blank'"
+            >Overlay a blank canvas with State GIS data</span
+          >
+        </ng-container>
+      </mat-label>
+
+      <!-- 👇 https://stackoverflow.com/questions/17541614/ -->
+
+      <section class="thumbnails">
+        <label class="thumbnail">
+          <input type="radio" formControlName="style" value="mapbox" />
           <img src="assets/mapbox.png" />
-        </figure>
-        <figure class="thumbnail">
-          <mat-radio-button value="osm"></mat-radio-button>
+          Mapbox
+        </label>
+
+        <label class="thumbnail">
+          <input type="radio" formControlName="style" value="osm" />
           <img src="assets/osm.png" />
-        </figure>
-        <figure class="thumbnail">
-          <mat-radio-button value="google"></mat-radio-button>
+          OSM
+        </label>
+
+        <label class="thumbnail">
+          <input type="radio" formControlName="style" value="google" />
           <img src="assets/google.png" />
-        </figure>
-        <figure class="thumbnail">
-          <mat-radio-button value="arcgis"></mat-radio-button>
+          Google
+        </label>
+
+        <label class="thumbnail">
+          <input type="radio" formControlName="style" value="arcgis" />
           <img src="assets/arcgis.jpeg" />
-        </figure>
-      </mat-radio-group>
+          ArcGIS
+        </label>
+
+        <label class="thumbnail">
+          <input type="radio" formControlName="style" value="blank" />
+          <img src="assets/blank.jpeg" />
+          Blank
+        </label>
+      </section>
     </form>
   </mat-card-content>
 

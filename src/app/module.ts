@@ -18,6 +18,7 @@ import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
 import { OLInteractionSelectComponent } from './ol/ol-interaction-select';
+import { OLLayerImageComponent } from './ol/ol-layer-image';
 import { OLLayerMapboxComponent } from './ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol/ol-layer-tile';
 import { OLLayerVectorComponent } from './ol/ol-layer-vector';
@@ -26,6 +27,7 @@ import { OLMapComponent } from './ol/ol-map';
 import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
 import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
+import { OLSourceStaticComponent } from './ol/ol-source-static';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleComponent } from './ol/ol-style';
 import { OLStyleFillComponent } from './ol/ol-style-fill';
@@ -92,6 +94,7 @@ const COMPONENTS = [
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
   OLInteractionSelectComponent,
+  OLLayerImageComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
@@ -100,6 +103,7 @@ const COMPONENTS = [
   OLSourceBoundaryComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
+  OLSourceStaticComponent,
   OLSourceXYZComponent,
   OLStyleComponent,
   OLStyleFillComponent,

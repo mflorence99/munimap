@@ -1,3 +1,4 @@
+import { OLLayerImageComponent } from './ol-layer-image';
 import { OLLayerMapboxComponent } from './ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLMapComponent } from './ol-map';
@@ -24,12 +25,13 @@ export class OLFilterCropComponent implements AfterContentInit {
   olFilter: typeof Crop;
 
   constructor(
-    @Optional() layer1: OLLayerMapboxComponent,
-    @Optional() layer2: OLLayerTileComponent,
+    @Optional() layer1: OLLayerImageComponent,
+    @Optional() layer2: OLLayerMapboxComponent,
+    @Optional() layer3: OLLayerTileComponent,
     private map: OLMapComponent
   ) {
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2;
+    this.#layer = layer1 ?? layer2 ?? layer3;
     // 👇 build the filter
     const coords: any = copy(
       this.map.boundary.features[0].geometry.coordinates

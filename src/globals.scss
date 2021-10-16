@@ -130,3 +130,7 @@ ul {
 }
 
 // 👉 OpenLayers styles
+
+.ol-control button {
+  background-color: var(--mat-gray-800) !important;
+}

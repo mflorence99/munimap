@@ -1,6 +1,6 @@
 <ng-container *ngIf="view$ | async as view">
-  <app-ol-map #map [view]="view">
-    <ng-container *ngIf="map.initialized">
+  <app-ol-map #olmap [view]="view">
+    <ng-container *ngIf="olmap.initialized">
       <app-ol-control-attribution></app-ol-control-attribution>
       <app-ol-control-zoom></app-ol-control-zoom>
       <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
@@ -50,6 +50,11 @@
             <app-ol-filter-crop></app-ol-filter-crop>
             <!-- <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance> -->
           </app-ol-layer-tile>
+
+          <app-ol-layer-image *ngSwitchCase="'blank'">
+            <app-ol-source-static url="assets/white.png"></app-ol-source-static>
+            <app-ol-filter-crop></app-ol-filter-crop>
+          </app-ol-layer-image>
         </ng-container>
 
         <!-- HILLSHADE LAYER (not needed for arcgis) -->
