@@ -1,8 +1,5 @@
 import { AuthState } from './state/auth';
-import { Path } from './state/view';
 import { User } from './state/auth';
-import { View } from './state/view';
-import { ViewState } from './state/view';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -39,7 +36,6 @@ export class RootPage {
   @ViewChild(RouterOutlet) outlet;
 
   @Select(AuthState.user) user$: Observable<User>;
-  @Select(ViewState.view) view$: Observable<View>;
 
   constructor(private router: Router) {
     this.#handleRouterEvents$();
@@ -68,10 +64,5 @@ export class RootPage {
 
   getState(): any {
     return this.outlet?.activatedRouteData?.state;
-  }
-
-  tail(path: Path): string {
-    const parts = ViewState.splitPath(path);
-    return parts[parts.length - 1];
   }
 }

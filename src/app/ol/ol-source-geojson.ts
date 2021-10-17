@@ -33,7 +33,7 @@ export class OLSourceGeoJSONComponent implements AfterContentInit {
 
   ngAfterContentInit(): void {
     this.geoJSON
-      .loadByIndex(this.route, this.map.view.path, this.layerKey)
+      .loadByIndex(this.route, this.map.path, this.layerKey)
       .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
         this.olVector.addFeatures(
           new GeoJSON().readFeatures(geojson, {

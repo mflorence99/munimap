@@ -1,17 +1,15 @@
 import { GeoJSONService } from '../services/geojson';
 import { Index } from '../services/geojson';
-import { SetCurrentPath } from '../state/view';
-import { View } from '../state/view';
-import { ViewState } from '../state/view';
+import { Path } from '../state/view';
 
 import { isIndex } from '../services/geojson';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { Input } from '@angular/core';
-import { Navigate } from '@ngxs/router-plugin';
-import { Store } from '@ngxs/store';
+import { Output } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,13 +20,12 @@ import { Store } from '@ngxs/store';
 export class MapFilterComponent {
   index: Index;
 
-  @Input() view: View;
+  @Input() path: Path;
 
-  constructor(
-    private geoJSON: GeoJSONService,
-    private route: ActivatedRoute,
-    private store: Store
-  ) {
+  @Output() pathChanged = new EventEmitter<Path>();
+  @Output() pathSelected = new EventEmitter<Path>();
+
+  constructor(private geoJSON: GeoJSONService, private route: ActivatedRoute) {
     this.index = this.geoJSON.findIndex(this.route);
   }
 
@@ -50,36 +47,36 @@ export class MapFilterComponent {
   }
 
   currentCounty(): string {
-    return ViewState.splitPath(this.view.path)[1];
+    return this.path.split(':')[1];
   }
 
   currentState(): string {
-    return ViewState.splitPath(this.view.path)[0];
+    return this.path.split(':')[0];
   }
 
   currentTown(): string {
-    return ViewState.splitPath(this.view.path)[2];
-  }
-
-  next(): void {
-    this.store.dispatch(new Navigate(['/town-map/0']));
+    return this.path.split(':')[2];
   }
 
   reset(): void {
-    this.store.dispatch(new SetCurrentPath(this.currentState()));
+    this.pathChanged.emit(this.currentState());
+  }
+
+  submit(): void {
+    this.pathSelected.emit(this.path);
   }
 
   switchCounty(county: string): void {
-    const path = ViewState.joinPath([this.currentState(), county]);
-    this.store.dispatch(new SetCurrentPath(path));
+    this.pathChanged.emit(`${this.currentState()}:${county}`);
+  }
+
+  switchState(state: string): void {
+    this.pathChanged.emit(`${state}`);
   }
 
   switchTown(town: string): void {
-    const path = ViewState.joinPath([
-      this.currentState(),
-      this.currentCounty(),
-      town
-    ]);
-    this.store.dispatch(new SetCurrentPath(path));
+    this.pathChanged.emit(
+      `${this.currentState()}:${this.currentCounty()}:${town}`
+    );
   }
 }

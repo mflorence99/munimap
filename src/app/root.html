@@ -10,8 +10,6 @@
 
     <h1>MuniMap</h1>
 
-    <h2 *ngIf="(view$ | async) as view">&bull; {{ tail(view.path) }}</h2>
-
     <div class="filler"></div>
 
     <ng-container *ngIf="user$ | async as user">

@@ -1,13 +1,11 @@
 import { Path } from '../state/view';
-import { PushCurrentPath } from '../state/view';
-import { View } from '../state/view';
-import { ViewState } from '../state/view';
 
+import { theState } from '../state/view';
+
+import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Select } from '@ngxs/store';
-import { Store } from '@ngxs/store';
+import { Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,23 +14,33 @@ import { Store } from '@ngxs/store';
   templateUrl: './map-create.html'
 })
 export class MapCreatePage {
-  @Select(ViewState.view) view$: Observable<View>;
+  path: Path;
 
-  constructor(private store: Store) {}
+  constructor(private route: ActivatedRoute, private router: Router) {
+    this.path = this.route.snapshot.queryParamMap.get('path') ?? theState;
+  }
 
   atCountyLevel(path: Path): boolean {
-    return ViewState.splitPath(path).length === 2;
+    return path.split(':').length === 2;
   }
 
   atStateLevel(path: Path): boolean {
-    return ViewState.splitPath(path).length === 1;
+    return path.split(':').length === 1;
   }
 
   atTownLevel(path: Path): boolean {
-    return ViewState.splitPath(path).length === 3;
+    return path.split(':').length === 3;
   }
 
-  onSelect(part: string): void {
-    this.store.dispatch(new PushCurrentPath(part));
+  onPathChanged(path: string): void {
+    this.path = path;
+  }
+
+  onPathSelected(path: string): void {
+    this.router.navigate(['/town-map/0'], { queryParams: { path } });
+  }
+
+  onSelectFeature(name: string): void {
+    this.path += `:${name}`;
   }
 }

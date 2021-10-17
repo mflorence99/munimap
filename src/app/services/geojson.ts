@@ -1,6 +1,5 @@
 import { Params } from './params';
 import { Path } from '../state/view';
-import { ViewState } from '../state/view';
 
 import { environment } from '../../environment';
 
@@ -88,7 +87,7 @@ export class GeoJSONService {
     base: Index,
     path: Path
   ): StateIndex | CountyIndex | TownIndex {
-    const parts = ViewState.splitPath(path);
+    const parts = path.split(':');
     let index: any = base;
     parts.forEach((part) => (index = index[part]));
     return index;

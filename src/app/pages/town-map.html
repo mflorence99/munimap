@@ -1,103 +1,94 @@
-<ng-container *ngIf="view$ | async as view">
-  <app-ol-map #theMap [view]="view">
-    <ng-container *ngIf="theMap.initialized">
-      <app-ol-control-attribution></app-ol-control-attribution>
-      <app-ol-control-zoom></app-ol-control-zoom>
-      <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
+<app-ol-map #theMap [path]="path">
+  <ng-container *ngIf="theMap.initialized">
+    <app-ol-control-attribution></app-ol-control-attribution>
+    <app-ol-control-zoom></app-ol-control-zoom>
+    <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
 
-      <!-- BG LAYER -->
+    <!-- BG LAYER -->
 
-      <app-ol-layer-tile>
-        <app-ol-source-osm></app-ol-source-osm>
-        <app-ol-filter-pencil></app-ol-filter-pencil>
+    <app-ol-layer-tile>
+      <app-ol-source-osm></app-ol-source-osm>
+      <app-ol-filter-pencil></app-ol-filter-pencil>
+    </app-ol-layer-tile>
+
+    <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
+
+    <ng-container [ngSwitch]="map.style">
+      <app-ol-layer-tile *ngSwitchCase="'arcgis'" [maxZoom]="17">
+        <app-ol-source-xyz
+          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
+          ><app-ol-attribution
+            >Powered by Esri</app-ol-attribution
+          ></app-ol-source-xyz
+        >
+        <app-ol-filter-crop></app-ol-filter-crop>
       </app-ol-layer-tile>
 
-      <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
-
-      <ng-container *ngIf="map$ | async as map">
-        <ng-container [ngSwitch]="map.style">
-          <app-ol-layer-tile *ngSwitchCase="'arcgis'" [maxZoom]="17">
-            <app-ol-source-xyz
-              [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
-              ><app-ol-attribution
-                >Powered by Esri</app-ol-attribution
-              ></app-ol-source-xyz
-            >
-            <app-ol-filter-crop></app-ol-filter-crop>
-          </app-ol-layer-tile>
-
-          <app-ol-layer-tile *ngSwitchCase="'google'">
-            <app-ol-source-xyz
-              [url]="'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'"
-              ><app-ol-attribution
-                >© Google</app-ol-attribution
-              ></app-ol-source-xyz
-            >
-            <app-ol-filter-crop></app-ol-filter-crop>
-          </app-ol-layer-tile>
-
-          <app-ol-layer-mapbox
-            *ngSwitchCase="'mapbox'"
-            styleUrl="mapbox://styles/mapbox/bright-v9"
-          >
-            <app-ol-filter-crop></app-ol-filter-crop>
-          </app-ol-layer-mapbox>
-
-          <app-ol-layer-tile *ngSwitchCase="'osm'">
-            <app-ol-source-osm></app-ol-source-osm>
-            <app-ol-filter-crop></app-ol-filter-crop>
-          </app-ol-layer-tile>
-
-          <ng-container *ngSwitchCase="'blank'">
-            <app-ol-layer-image>
-              <app-ol-source-static
-                url="assets/white.png"
-              ></app-ol-source-static>
-              <app-ol-filter-crop></app-ol-filter-crop>
-            </app-ol-layer-image>
-
-            <app-ol-layer-vector>
-              <app-ol-style-lakes></app-ol-style-lakes>
-              <app-ol-source-geojson
-                [layerKey]="'lakes'"
-              ></app-ol-source-geojson>
-              <app-ol-filter-crop></app-ol-filter-crop>
-            </app-ol-layer-vector>
-          </ng-container>
-        </ng-container>
-
-        <!-- HILLSHADE LAYER (not needed for arcgis) -->
-
-        <app-ol-layer-tile
-          *ngIf="map.style !== 'arcgis'"
-          [maxZoom]="17"
-          [opacity]="0.33"
+      <app-ol-layer-tile *ngSwitchCase="'google'">
+        <app-ol-source-xyz
+          [url]="'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'"
+          ><app-ol-attribution>© Google</app-ol-attribution></app-ol-source-xyz
         >
-          <app-ol-source-xyz
-            [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
-          >
-            <app-ol-attribution>Powered by Esri</app-ol-attribution>
-          </app-ol-source-xyz>
-        </app-ol-layer-tile>
+        <app-ol-filter-crop></app-ol-filter-crop>
+      </app-ol-layer-tile>
+
+      <app-ol-layer-mapbox
+        *ngSwitchCase="'mapbox'"
+        styleUrl="mapbox://styles/mapbox/bright-v9"
+      >
+        <app-ol-filter-crop></app-ol-filter-crop>
+      </app-ol-layer-mapbox>
+
+      <app-ol-layer-tile *ngSwitchCase="'osm'">
+        <app-ol-source-osm></app-ol-source-osm>
+        <app-ol-filter-crop></app-ol-filter-crop>
+      </app-ol-layer-tile>
+
+      <ng-container *ngSwitchCase="'blank'">
+        <app-ol-layer-image>
+          <app-ol-source-static url="assets/white.png"></app-ol-source-static>
+          <app-ol-filter-crop></app-ol-filter-crop>
+        </app-ol-layer-image>
+
+        <app-ol-layer-vector>
+          <app-ol-style-lakes></app-ol-style-lakes>
+          <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
+          <app-ol-filter-crop></app-ol-filter-crop>
+        </app-ol-layer-vector>
       </ng-container>
 
-      <!-- PARCELS LAYER -- WASHINGTON ONLY FOR NOW -->
+      <!-- HILLSHADE LAYER (not needed for arcgis) -->
 
-      <app-ol-layer-vector>
-        <app-ol-style-parcels></app-ol-style-parcels>
-        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
-
-        <app-ol-interaction-select [eventType]="'click'">
-        </app-ol-interaction-select>
-      </app-ol-layer-vector>
-
-      <!-- BOUNDARY LAYER -->
-
-      <app-ol-layer-vector>
-        <app-ol-source-boundary></app-ol-source-boundary>
-      </app-ol-layer-vector>
+      <app-ol-layer-tile
+        *ngIf="map.style !== 'arcgis'"
+        [maxZoom]="17"
+        [opacity]="0.33"
+      >
+        <app-ol-source-xyz
+          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+        >
+          <app-ol-attribution>Powered by Esri</app-ol-attribution>
+        </app-ol-source-xyz>
+      </app-ol-layer-tile>
     </ng-container>
-  </app-ol-map>
 
-  <app-town-map-setup [view]="view" class="setup"></app-town-map-setup>
-</ng-container>
+    <!-- PARCELS LAYER -- WASHINGTON ONLY FOR NOW -->
+
+    <app-ol-layer-vector>
+      <app-ol-style-parcels></app-ol-style-parcels>
+      <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+
+      <app-ol-interaction-select [eventType]="'click'">
+      </app-ol-interaction-select>
+    </app-ol-layer-vector>
+
+    <!-- BOUNDARY LAYER -->
+
+    <app-ol-layer-vector>
+      <app-ol-style-features></app-ol-style-features>
+      <app-ol-source-boundary></app-ol-source-boundary>
+    </app-ol-layer-vector>
+  </ng-container>
+</app-ol-map>
+
+<app-town-map-setup [map]="map" class="setup"></app-town-map-setup>

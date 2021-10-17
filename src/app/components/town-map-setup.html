@@ -11,25 +11,26 @@
 
   <mat-card-content>
     <form
-      [formGroup]="setupForm"
+      #setupForm="ngForm"
       autocomplete="off"
       class="form"
       novalidate
       spellcheck="false"
     >
-      <input formControlName="id" type="hidden" />
-
       <mat-form-field>
         <mat-label>Give your map a name</mat-label>
-        <input formControlName="name" matInput placeholder="eg: My Old Town" />
+        <input
+          [(ngModel)]="map.name"
+          matInput
+          name="name"
+          placeholder="eg: My Old Town"
+          required
+        />
       </mat-form-field>
 
       <mat-label>
         Choose a map style:
-        <ng-container
-          [ngSwitch]="setupForm.controls.style.value"
-          class="explanations"
-        >
+        <ng-container [ngSwitch]="map.style" class="explanations">
           <span *ngSwitchCase="'mapbox'"
             ><a href="https://www.mapbox.com/maps" target="_blank">Mapbox</a>
             Street View emphasizes simplicity</span
@@ -66,31 +67,56 @@
 
       <section class="thumbnails">
         <label class="thumbnail">
-          <input type="radio" formControlName="style" value="mapbox" />
+          <input
+            [(ngModel)]="map.style"
+            name="style"
+            type="radio"
+            value="mapbox"
+          />
           <img src="assets/mapbox.png" />
           Mapbox
         </label>
 
         <label class="thumbnail">
-          <input type="radio" formControlName="style" value="osm" />
+          <input
+            [(ngModel)]="map.style"
+            type="radio"
+            name="style"
+            value="osm"
+          />
           <img src="assets/osm.png" />
           OSM
         </label>
 
         <label class="thumbnail">
-          <input type="radio" formControlName="style" value="google" />
+          <input
+            [(ngModel)]="map.style"
+            type="radio"
+            name="style"
+            value="google"
+          />
           <img src="assets/google.png" />
           Google
         </label>
 
         <label class="thumbnail">
-          <input type="radio" formControlName="style" value="arcgis" />
+          <input
+            [(ngModel)]="map.style"
+            type="radio"
+            name="style"
+            value="arcgis"
+          />
           <img src="assets/arcgis.jpeg" />
           ArcGIS
         </label>
 
         <label class="thumbnail">
-          <input type="radio" formControlName="style" value="blank" />
+          <input
+            [(ngModel)]="map.style"
+            type="radio"
+            name="style"
+            value="blank"
+          />
           <img src="assets/blank.jpeg" />
           Blank
         </label>

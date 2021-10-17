@@ -6,7 +6,6 @@ import { LoginPage } from './pages/login';
 import { MapCreatePage } from './pages/map-create';
 import { MapFilterComponent } from './components/map-filter';
 import { MapsListPage } from './pages/maps-list';
-import { MapState } from './state/map';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
@@ -76,7 +75,6 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
@@ -156,7 +154,7 @@ const ROUTES = [
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState, MapState, ViewState];
+const STATES = [AuthState, ViewState];
 const STATES_SAVED = [RouterState, ViewState];
 
 @NgModule({
@@ -199,14 +197,13 @@ const STATES_SAVED = [RouterState, ViewState];
     NgxsStoragePluginModule.forRoot({
       beforeSerialize: (obj, key) => {
         // 👉 we ONLY want to save the URL
-        //    problem: we staore large amounts of data in "data"
+        //    problem: we store large amounts of data in "data"
         if (key === 'router') obj = { state: { url: obj.state.url } };
         return obj;
       },
       key: STATES_SAVED
     }),
     OverlayModule,
-    ReactiveFormsModule,
     RouterModule.forRoot(ROUTES)
   ],
 

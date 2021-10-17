@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { Navigate } from '@ngxs/router-plugin';
 import { NgxsOnInit } from '@ngxs/store';
+import { Router } from '@angular/router';
 import { Selector } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
@@ -46,7 +47,8 @@ export class AuthState implements NgxsOnInit {
   constructor(
     private fireauth: AngularFireAuth,
     private location: Location,
-    private store: Store
+    private store: Store,
+    private router: Router
   ) {}
 
   @Selector() static user(state: AuthStateModel): User {
@@ -64,7 +66,7 @@ export class AuthState implements NgxsOnInit {
     const forwardTo = deepLink || lastRoute || '/maps-list';
     this.fireauth.user.subscribe((user) => {
       ctx.dispatch(new SetUser(user));
-      ctx.dispatch(new Navigate([user ? forwardTo : '/login']));
+      this.router.navigateByUrl(user ? forwardTo : '/login');
     });
   }
 

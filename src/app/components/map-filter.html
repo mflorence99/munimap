@@ -14,7 +14,11 @@
   <mat-card-content class="form">
     <mat-form-field>
       <mat-label>Select a state</mat-label>
-      <mat-select [disabled]="true" [value]="currentState()">
+      <mat-select
+        [disabled]="true"
+        (selectionChange)="switchState($event.value)"
+        [value]="currentState()"
+      >
         <mat-option *ngFor="let state of allStates()" [value]="state">
           {{ state }}
         </mat-option>
@@ -51,7 +55,7 @@
       Start Over
     </button>
     <button
-      (click)="next()"
+      (click)="submit()"
       [disabled]="!currentTown()"
       color="primary"
       mat-flat-button

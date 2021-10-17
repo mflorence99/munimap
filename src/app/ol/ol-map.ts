@@ -1,7 +1,8 @@
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
+import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
-import { View } from '../state/view';
+import { ViewState } from '../state/view';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterContentInit } from '@angular/core';
@@ -44,7 +45,7 @@ import OLView from 'ol/View';
   ]
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
-  #view: View;
+  #path: Path;
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
   boundaryExtent: Coordinate;
@@ -57,16 +58,17 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   olMap: OLMap;
   olView: OLView;
-  projection = 'EPSG:3857';
-  vars: Record<string, string> = {};
 
   @Input()
-  get view(): View {
-    return this.#view;
+  get path(): Path {
+    return this.#path;
   }
-  set view(view: View) {
-    this.#view = this.#initializeView(view);
+  set path(path: Path) {
+    this.#path = this.#initializeView(path);
   }
+
+  projection = 'EPSG:3857';
+  vars: Record<string, string> = {};
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -100,10 +102,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     layers.forEach((layer) => this.olMap.removeLayer(layer));
   }
 
-  #createView(
-    view: View,
-    boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>
-  ): void {
+  #createView(boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>): void {
     this.olView = new OLView({});
     this.olMap.setView(this.olView);
     // 👉 precompute boundary extent
@@ -117,7 +116,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.projection
     );
     // 👉 if center, zoom available use them else fit to bounds
-    if (view.center && view.zoom) {
+    const view = this.store.selectSnapshot(ViewState).viewByPath[this.path];
+    if (view?.center && view?.zoom) {
       this.olView.setCenter(fromLonLat(view.center));
       this.olView.setZoom(view.zoom);
     } else {
@@ -169,9 +169,9 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     });
   }
 
-  #initializeView(view: View): View {
+  #initializeView(path: Path): Path {
     // 👉 if the path has changed, clean out the old map
-    if (view.path !== this.#view?.path) {
+    if (path !== this.#path) {
       this.initialized = false;
       this.#cleanMap();
       this.olView = null;
@@ -179,27 +179,26 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     // 👉 now create the new
     if (!this.olView) {
       this.geoJSON
-        .loadByIndex(this.route, view.path, 'boundary')
+        .loadByIndex(this.route, path, 'boundary')
         .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-          this.#createView(view, boundary);
+          this.#createView(boundary);
           this.initialized = true;
           this.cdf.markForCheck();
         });
     }
-    return view;
+    return path;
   }
 
   #onChange(): void {
     const center = toLonLat(this.olView.getCenter());
-    const path = this.view.path;
     const resolution = this.olView.getResolution();
     const zoom = this.olView.getZoom();
     console.log(
-      `%c${path}`,
+      `%c${this.path}`,
       'color: hotpink',
       `resolution=${resolution} zoom=${zoom}`
     );
-    this.store.dispatch(new UpdateView({ center, path, zoom }));
+    this.store.dispatch(new UpdateView(this.path, { center, zoom }));
   }
 
   measureText(text: string, font: string): TextMetrics {

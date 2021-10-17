@@ -1,12 +1,11 @@
 import { Map } from '../state/map';
-import { MapState } from '../state/map';
-import { View } from '../state/view';
-import { ViewState } from '../state/view';
+import { Path } from '../state/view';
 
+import { theState } from '../state/view';
+
+import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Select } from '@ngxs/store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,8 +14,18 @@ import { Select } from '@ngxs/store';
   templateUrl: './town-map.html'
 })
 export class TownMapPage {
-  @Select(MapState) map$: Observable<Map>;
-  @Select(ViewState.view) view$: Observable<View>;
+  map: Map;
+  path: Path;
 
-  constructor() {}
+  constructor(private route: ActivatedRoute) {
+    // 👌 we resally want to read the map by its ID from Firebase
+    //    but we are hacking it foir now with a skeleton
+    this.path = this.route.snapshot.queryParamMap.get('path') ?? theState;
+    this.map = {
+      id: null,
+      name: null,
+      path: this.path,
+      style: 'blank'
+    };
+  }
 }
