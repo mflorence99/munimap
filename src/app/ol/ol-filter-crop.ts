@@ -1,6 +1,8 @@
 import { OLLayerImageComponent } from './ol-layer-image';
 import { OLLayerMapboxComponent } from './ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLLayerVectorTileComponent } from './ol-layer-vectortile';
 import { OLMapComponent } from './ol-map';
 
 import { AfterContentInit } from '@angular/core';
@@ -28,10 +30,12 @@ export class OLFilterCropComponent implements AfterContentInit {
     @Optional() layer1: OLLayerImageComponent,
     @Optional() layer2: OLLayerMapboxComponent,
     @Optional() layer3: OLLayerTileComponent,
+    @Optional() layer4: OLLayerVectorComponent,
+    @Optional() layer5: OLLayerVectorTileComponent,
     private map: OLMapComponent
   ) {
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2 ?? layer3;
+    this.#layer = layer1 ?? layer2 ?? layer3 ?? layer4 ?? layer5;
     // 👇 build the filter
     const coords: any = copy(
       this.map.boundary.features[0].geometry.coordinates

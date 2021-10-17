@@ -1,13 +1,11 @@
 import { AuthState } from './state/auth';
-import { CreatePage } from './pages/create';
 import { HttpCache } from './services/http-cache';
 import { IndexResolver } from './resolvers/index';
 import { InitializerService } from './services/initializer';
 import { LoginPage } from './pages/login';
+import { MapCreatePage } from './pages/map-create';
 import { MapFilterComponent } from './components/map-filter';
-import { MapPage } from './pages/map';
-import { MapSetupComponent } from './components/map-setup';
-import { MapsPage } from './pages/maps';
+import { MapsListPage } from './pages/maps-list';
 import { MapState } from './state/map';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
@@ -30,10 +28,10 @@ import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceStaticComponent } from './ol/ol-source-static';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
-import { OLStyleComponent } from './ol/ol-style';
-import { OLStyleFillComponent } from './ol/ol-style-fill';
-import { OLStyleStrokeComponent } from './ol/ol-style-stroke';
+import { OLStyleLakesComponent } from './ol/ol-style-lakes';
 import { RootPage } from './root';
+import { TownMapPage } from './pages/town-map';
+import { TownMapSetupComponent } from './components/town-map-setup';
 import { UserProfileComponent } from './components/user-profile';
 import { ViewState } from './state/view';
 
@@ -86,7 +84,6 @@ import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [
   MapFilterComponent,
-  MapSetupComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlMousePositionComponent,
@@ -108,13 +105,12 @@ const COMPONENTS = [
   OLSourceOSMComponent,
   OLSourceStaticComponent,
   OLSourceXYZComponent,
-  OLStyleComponent,
-  OLStyleFillComponent,
-  OLStyleStrokeComponent,
+  OLStyleLakesComponent,
+  TownMapSetupComponent,
   UserProfileComponent
 ];
 
-const PAGES = [CreatePage, LoginPage, MapPage, MapsPage, RootPage];
+const PAGES = [LoginPage, MapCreatePage, MapsListPage, RootPage, TownMapPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -135,9 +131,21 @@ const ROUTES = [
       index: IndexResolver
     },
     children: [
-      { path: 'create', component: CreatePage, data: { state: 'create' } },
-      { path: 'map/:id', component: MapPage, data: { state: 'map' } },
-      { path: 'maps', component: MapsPage, data: { state: 'maps' } },
+      {
+        path: 'map-create',
+        component: MapCreatePage,
+        data: { state: 'map-create' }
+      },
+      {
+        path: 'town-map/:id',
+        component: TownMapPage,
+        data: { state: 'town-map' }
+      },
+      {
+        path: 'maps-list',
+        component: MapsListPage,
+        data: { state: 'maps-list' }
+      },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
     ]
   },

@@ -31,6 +31,7 @@ export interface Layer {
 export interface TownIndex {
   layers: {
     boundary: Layer;
+    lakes: Layer;
     parcels: Layer;
     roads: Layer;
     selectables: Layer;

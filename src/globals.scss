@@ -52,6 +52,8 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --map-feature-text-color: var(--mat-green-700);
   --map-feature-text-font-family: Roboto;
 
+  --map-lake-fill: rgba(var(--rgb-light-blue-700), 0.5);
+
   --map-parcel-outline: var(--mat-blue-gray-700);
   --map-parcel-outline-width: 1;
   --map-parcel-select: var(--warn-color);

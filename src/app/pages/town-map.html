@@ -2,7 +2,6 @@
   <app-ol-map #theMap [view]="view">
     <ng-container *ngIf="theMap.initialized">
       <app-ol-control-attribution></app-ol-control-attribution>
-      <app-ol-control-mouseposition></app-ol-control-mouseposition>
       <app-ol-control-zoom></app-ol-control-zoom>
       <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
 
@@ -52,10 +51,22 @@
             <!-- <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance> -->
           </app-ol-layer-tile>
 
-          <app-ol-layer-image *ngSwitchCase="'blank'">
-            <app-ol-source-static url="assets/white.png"></app-ol-source-static>
-            <app-ol-filter-crop></app-ol-filter-crop>
-          </app-ol-layer-image>
+          <ng-container *ngSwitchCase="'blank'">
+            <app-ol-layer-image>
+              <app-ol-source-static
+                url="assets/white.png"
+              ></app-ol-source-static>
+              <app-ol-filter-crop></app-ol-filter-crop>
+            </app-ol-layer-image>
+
+            <app-ol-layer-vector *ngIf="view.path.endsWith('WASHINGTON')">
+              <app-ol-style-lakes></app-ol-style-lakes>
+              <app-ol-source-geojson
+                [layerKey]="'lakes'"
+              ></app-ol-source-geojson>
+              <app-ol-filter-crop></app-ol-filter-crop>
+            </app-ol-layer-vector>
+          </ng-container>
         </ng-container>
 
         <!-- HILLSHADE LAYER (not needed for arcgis) -->
@@ -75,26 +86,20 @@
 
       <!-- PARCELS LAYER -- WASHINGTON ONLY FOR NOW -->
 
-      <app-ol-layer-vector
-        *ngIf="view.path.endsWith('WASHINGTON')"
-        [styler]="olStylerParcel.outline()"
-      >
+      <app-ol-layer-vector *ngIf="view.path.endsWith('WASHINGTON')">
         <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
 
-        <app-ol-interaction-select
-          [eventType]="'click'"
-          [styler]="olStylerParcel.select()"
-        >
+        <app-ol-interaction-select [eventType]="'click'">
         </app-ol-interaction-select>
       </app-ol-layer-vector>
 
       <!-- BOUNDARY LAYER -->
 
-      <app-ol-layer-vector [styler]="olStylerFeature.outline()">
+      <app-ol-layer-vector>
         <app-ol-source-boundary></app-ol-source-boundary>
       </app-ol-layer-vector>
     </ng-container>
   </app-ol-map>
 
-  <app-map-setup [view]="view" class="setup"></app-map-setup>
+  <app-town-map-setup [view]="view" class="setup"></app-town-map-setup>
 </ng-container>

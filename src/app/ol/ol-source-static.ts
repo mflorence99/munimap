@@ -28,7 +28,7 @@ export class OLSourceStaticComponent implements AfterContentInit {
     private layer: OLLayerImageComponent,
     private map: OLMapComponent
   ) {
-    // 👉 can't follow the normal pattern as no setStyleUrl
+    // 👉 can't follow the normal pattern as no setUrl
   }
 
   ngAfterContentInit(): void {

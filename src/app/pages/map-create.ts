@@ -1,4 +1,3 @@
-import { OLStylerFeatureService } from '../ol/ol-styler-feature';
 import { Path } from '../state/view';
 import { PushCurrentPath } from '../state/view';
 import { View } from '../state/view';
@@ -12,17 +11,14 @@ import { Store } from '@ngxs/store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-create',
-  styleUrls: ['./create.scss'],
-  templateUrl: './create.html'
+  selector: 'app-map-create',
+  styleUrls: ['./map-create.scss'],
+  templateUrl: './map-create.html'
 })
-export class CreatePage {
+export class MapCreatePage {
   @Select(ViewState.view) view$: Observable<View>;
 
-  constructor(
-    private store: Store,
-    public olStylerFeature: OLStylerFeatureService
-  ) {}
+  constructor(private store: Store) {}
 
   atCountyLevel(path: Path): boolean {
     return ViewState.splitPath(path).length === 2;

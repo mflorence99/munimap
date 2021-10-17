@@ -28,18 +28,12 @@
 
       <!-- SELECTABLES LAYER -->
 
-      <app-ol-layer-vector
-        *ngIf="!atTownLevel(view.path)"
-        [styler]="olStylerFeature.outline()"
-      >
+      <app-ol-layer-vector *ngIf="!atTownLevel(view.path)">
         <app-ol-source-geojson
           [layerKey]="'selectables'"
         ></app-ol-source-geojson>
 
-        <app-ol-interaction-select
-          [eventType]="'pointermove'"
-          [styler]="olStylerFeature.select()"
-        >
+        <app-ol-interaction-select [eventType]="'pointermove'">
         </app-ol-interaction-select>
 
         <app-ol-interaction-select
@@ -51,10 +45,7 @@
 
       <!-- BOUNDARY LAYER -->
 
-      <app-ol-layer-vector
-        *ngIf="atTownLevel(view.path)"
-        [styler]="olStylerFeature.outline()"
-      >
+      <app-ol-layer-vector *ngIf="atTownLevel(view.path)">
         <app-ol-source-boundary></app-ol-source-boundary>
       </app-ol-layer-vector>
     </ng-container>

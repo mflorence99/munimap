@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-maps',
-  styleUrls: ['./maps.scss'],
-  templateUrl: './maps.html'
+  selector: 'app-maps-list',
+  styleUrls: ['./maps-list.scss'],
+  templateUrl: './maps-list.html'
 })
-export class MapsPage {}
+export class MapsListPage {}

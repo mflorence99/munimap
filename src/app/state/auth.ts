@@ -61,7 +61,7 @@ export class AuthState implements NgxsOnInit {
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
     const deepLink = this.location.path();
     const lastRoute = this.store.snapshot().router?.state.url;
-    const forwardTo = deepLink || lastRoute || '/maps';
+    const forwardTo = deepLink || lastRoute || '/maps-list';
     this.fireauth.user.subscribe((user) => {
       ctx.dispatch(new SetUser(user));
       ctx.dispatch(new Navigate([user ? forwardTo : '/login']));

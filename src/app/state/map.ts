@@ -16,7 +16,7 @@ export class UpdateMap {
 export interface Map {
   id: string;
   name: string;
-  style: 'arcgis' | 'google' | 'mapbox' | 'osm';
+  style: 'arcgis' | 'google' | 'mapbox' | 'osm' | 'blank';
 }
 
 export type MapStateModel = Map;
@@ -26,7 +26,7 @@ export type MapStateModel = Map;
   defaults: {
     id: null,
     name: null,
-    style: 'osm'
+    style: 'blank'
   }
 })
 @Injectable()

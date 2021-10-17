@@ -16,6 +16,7 @@ import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
 import { toLonLat } from 'ol/proj';
@@ -27,7 +28,10 @@ import OLView from 'ol/View';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-map',
-  template: '<ng-content></ng-content>',
+  template: `
+    <canvas #measurator hidden></canvas>
+    <ng-content></ng-content>
+  `,
   styles: [
     `
       :host {
@@ -49,9 +53,12 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(MapableComponent, { descendants: true })
   mapables$: QueryList<any>;
 
+  @ViewChild('measurator') measurator: ElementRef<HTMLCanvasElement>;
+
   olMap: OLMap;
   olView: OLView;
   projection = 'EPSG:3857';
+  vars: Record<string, string> = {};
 
   @Input()
   get view(): View {
@@ -74,6 +81,9 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
       target: null,
       view: null
     });
+    // 👉 get these up front, all at once,
+    //    meaning we don't expect them to change
+    this.vars = this.#findAllCustomVariables();
   }
 
   // 👇 https://stackoverflow.com/questions/40862706
@@ -116,6 +126,41 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
     this.olView.on('change', this.#onChange.bind(this));
   }
 
+  #findAllCustomVariables(): Record<string, string> {
+    // 👉 https://stackoverflow.com/questions/48760274
+    const names = Array.from(document.styleSheets)
+      .filter(
+        (sheet) =>
+          sheet.href === null || sheet.href.startsWith(window.location.origin)
+      )
+      .reduce(
+        (acc, sheet) =>
+          (acc = [
+            ...acc,
+            ...Array.from(sheet.cssRules).reduce(
+              (def, rule: any) =>
+                (def =
+                  rule.selectorText === ':root'
+                    ? [
+                        ...def,
+                        ...Array.from(rule.style).filter((name: any) =>
+                          name.startsWith('--map')
+                        )
+                      ]
+                    : def),
+              []
+            )
+          ]),
+        []
+      );
+    const style = getComputedStyle(document.documentElement);
+    // 👉now organize them as { name: value }
+    return names.reduce((acc, name) => {
+      acc[name] = style.getPropertyValue(name).trim();
+      return acc;
+    }, {});
+  }
+
   #handleMapables$(): void {
     this.mapables$.changes.subscribe((list) => {
       this.#cleanMap();
@@ -156,9 +201,15 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
     this.store.dispatch(new UpdateView({ center, path, zoom }));
   }
 
+  measureText(text: string, font: string): TextMetrics {
+    const ctx = this.measurator.nativeElement.getContext('2d');
+    ctx.font = font;
+    return ctx.measureText(text);
+  }
+
   ngAfterContentInit(): void {
     this.olMap.setTarget(this.host.nativeElement);
-    // handle content changes
+    // 👉 handle content changes
     this.#handleMapables$();
   }
 

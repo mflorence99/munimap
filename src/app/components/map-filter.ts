@@ -62,7 +62,7 @@ export class MapFilterComponent {
   }
 
   next(): void {
-    this.store.dispatch(new Navigate(['/map/0']));
+    this.store.dispatch(new Navigate(['/town-map/0']));
   }
 
   reset(): void {

@@ -23,11 +23,11 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-map-setup',
-  styleUrls: ['./map-setup.scss'],
-  templateUrl: './map-setup.html'
+  selector: 'app-town-map-setup',
+  styleUrls: ['./town-map-setup.scss'],
+  templateUrl: './town-map-setup.html'
 })
-export class MapSetupComponent {
+export class TownMapSetupComponent {
   index: Index;
 
   @Select(MapState) map$: Observable<Map>;

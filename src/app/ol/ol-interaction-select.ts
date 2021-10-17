@@ -11,12 +11,10 @@ import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
-import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
 
 import OLSelect from 'ol/interaction/Select';
-import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,24 +31,21 @@ import OLStyle from 'ol/style/Style';
 export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy
 {
-  #olStyle: OLStyle;
-
   @Input() eventType: string;
 
   olSelect: OLSelect;
-  olStyleable: OLInteractionSelectComponent;
 
   @Output('select') select = new EventEmitter<string>();
-
-  @Input() styler: OLStyleFunction;
 
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
-    // 👇 we can't follow the usual convention because there's
-    //    no way to setStyle() so we defer creation -- see below
-    this.olStyleable = this;
+    this.olSelect = new OLSelect({
+      condition: (event): boolean =>
+        event.type === this.eventType.toLowerCase(),
+      layers: [this.layer.olLayer]
+    });
   }
 
   #onSelect(event: OLSelectEvent): void {
@@ -62,22 +57,10 @@ export class OLInteractionSelectComponent
   }
 
   ngAfterContentInit(): void {
-    // 👇 we can't follow the usual convention because there's
-    //    no way to setStyle()
-    this.olSelect = new OLSelect({
-      condition: (event): boolean =>
-        event.type === this.eventType.toLowerCase(),
-      layers: [this.layer.olLayer],
-      style: this.styler ?? this.#olStyle
-    });
     this.olSelect.on('select', this.#onSelect.bind(this));
   }
 
   ngOnDestroy(): void {
     this.olSelect.un('select', this.#onSelect.bind(this));
-  }
-
-  setStyle(olStyle: OLStyle): void {
-    this.#olStyle = olStyle;
   }
 }
