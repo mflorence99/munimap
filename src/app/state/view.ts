@@ -60,12 +60,6 @@ export class ViewState {
     };
   }
 
-  static defaultZoom(path: Path): number {
-    const parts = ViewState.splitPath(path);
-    const defaults = [10, 11, 13];
-    return defaults[parts.length - 1];
-  }
-
   static joinPath(parts: string[]): Path {
     return parts.join(':');
   }

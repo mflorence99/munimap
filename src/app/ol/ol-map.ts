@@ -2,7 +2,6 @@ import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
 import { UpdateView } from '../state/view';
 import { View } from '../state/view';
-import { ViewState } from '../state/view';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterContentInit } from '@angular/core';
@@ -14,6 +13,7 @@ import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
@@ -43,7 +43,7 @@ import OLView from 'ol/View';
     `
   ]
 })
-export class OLMapComponent implements AfterContentInit, OnDestroy {
+export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   #view: View;
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
@@ -104,17 +104,11 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
     view: View,
     boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>
   ): void {
-    const bbox = boundary.features[0].bbox;
-    const [minX, minY, maxX, maxY] = bbox;
-    this.olView = new OLView({
-      center: fromLonLat(
-        view.center ?? [minX + (maxX - minX) / 2, minY + (maxY - minY) / 2]
-      ),
-      zoom: view.zoom ?? ViewState.defaultZoom(view.path)
-    });
+    this.olView = new OLView({});
     this.olMap.setView(this.olView);
     // 👉 precompute boundary extent
     this.boundary = boundary;
+    const bbox = boundary.features[0].bbox;
     // 👉 TODO: ambient typings missing this
     const featureProjection = boundary['crs'].properties.name;
     this.boundaryExtent = transformExtent(
@@ -122,6 +116,13 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
       featureProjection,
       this.projection
     );
+    // 👉 if center, zoom available use them else fit to bounds
+    if (view.center && view.zoom) {
+      this.olView.setCenter(fromLonLat(view.center));
+      this.olView.setZoom(view.zoom);
+    } else {
+      this.olView.fit(this.boundaryExtent, { size: this.olMap.getSize() });
+    }
     // 👉 handle events
     this.olView.on('change', this.#onChange.bind(this));
   }
@@ -208,12 +209,15 @@ export class OLMapComponent implements AfterContentInit, OnDestroy {
   }
 
   ngAfterContentInit(): void {
-    this.olMap.setTarget(this.host.nativeElement);
     // 👉 handle content changes
     this.#handleMapables$();
   }
 
   ngOnDestroy(): void {
     this.olView.un('change', this.#onChange.bind(this));
+  }
+
+  ngOnInit(): void {
+    this.olMap.setTarget(this.host.nativeElement);
   }
 }
