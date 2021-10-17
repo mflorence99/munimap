@@ -14,6 +14,15 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
+interface Label {
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: string;
+  offsetX: number;
+  offsetY: number;
+  text: string;
+}
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-parcels',
@@ -74,9 +83,68 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       )} ac`;
     }
   }
-
-  #offset(_props: ParcelProperties): number[] {
-    return [0, 0];
+  #labels(props: ParcelProperties, resolution: number): Label[] {
+    const labels: Label[] = [];
+    const fontFamily = this.map.vars['--map-parcel-text-font-family'];
+    const fontSize = this.#fontSize(props, resolution);
+    // 👉 for tiny lots, we'll only show the lot # so we can
+    //    shortcircuit all the calculations
+    if (this.#isTiny(props)) {
+      labels.push({
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        fontWeight: 'bold',
+        offsetX: 0,
+        offsetY: 0,
+        text: props.id
+      });
+    } else {
+      // 👉 measure up the lot id and the acreage text
+      //    NOTE: the acreage font suze is 80% smaller
+      const fAcres = 0.8;
+      const mID = this.map.measureText(
+        props.id,
+        `bold ${fontSize}px '${fontFamily}'`
+      );
+      const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
+      const mAcres = this.map.measureText(
+        acres,
+        `normal ${fontSize * fAcres}px '${fontFamily}'`
+      );
+      // 👉 now compute the x and y offset, which depends
+      //    on whether we're splitting the text or not
+      let x1 = 0;
+      let x2 = 0;
+      let y1 = 0;
+      let y2 = 0;
+      if (!this.#splitation(props)) {
+        const gap = 16; // 👉 just a hack
+        const total = mID.width + gap + mAcres.width;
+        x1 = -(total / 2);
+        x2 = -(total / 2) + mID.width + gap;
+      } else {
+        y1 = -(mID.fontBoundingBoxAscent / 2);
+        y2 = mID.fontBoundingBoxAscent / 2;
+      }
+      // 👉 finally styles are computed for both segments
+      labels.push({
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        fontWeight: 'bold',
+        offsetX: x1,
+        offsetY: y1,
+        text: props.id
+      });
+      labels.push({
+        fontFamily: fontFamily,
+        fontSize: fontSize * fAcres,
+        fontWeight: 'normal',
+        offsetX: x2,
+        offsetY: y2,
+        text: acres
+      });
+    }
+    return labels;
   }
 
   #rotation(props: ParcelProperties): number {
@@ -105,42 +173,53 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return new OLStroke({ color: stroke, width });
   }
 
-  #text(props: ParcelProperties, resolution: number): OLText {
+  #text(props: ParcelProperties, resolution: number): OLText[] {
     const color = this.map.vars['--map-parcel-text-color'];
-    const fontFamily = this.map.vars['--map-parcel-text-font-family'];
-    const label = this.#label(props);
-    const offset = this.#offset(props);
-    return new OLText({
-      font: `normal ${this.#fontSize(props, resolution)}px '${fontFamily}'`,
-      fill: new OLFill({ color }),
-      offsetX: offset[0],
-      offsetY: offset[1],
-      overflow: true,
-      placement: 'point',
-      rotation: this.#rotation(props),
-      text: label
+    const labels = this.#labels(props, resolution);
+    return labels.map((label) => {
+      return new OLText({
+        font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
+        fill: new OLFill({ color }),
+        offsetX: label.offsetX,
+        offsetY: label.offsetY,
+        overflow: true,
+        placement: 'point',
+        rotation: this.#rotation(props),
+        text: label.text
+      });
+    });
+  }
+
+  #theStyles(
+    props: ParcelProperties,
+    resolution: number,
+    whenSelected = false
+  ): OLStyle[] {
+    // 👇 we will potentially develop two texts, one for the lot ID
+    //    and a second for the acreage
+    const texts = this.#text(props, resolution);
+    return texts.map((text) => {
+      return new OLStyle({
+        fill: this.#fill(props),
+        stroke: whenSelected
+          ? this.#strokeSelect(props)
+          : this.#strokeOutline(props),
+        text: text
+      });
     });
   }
 
   style(): OLStyleFunction {
-    return (parcel: OLFeature<any>, resolution: number): OLStyle => {
+    return (parcel: OLFeature<any>, resolution: number): OLStyle[] => {
       const props = parcel.getProperties() as ParcelProperties;
-      return new OLStyle({
-        fill: this.#fill(props),
-        stroke: this.#strokeOutline(props),
-        text: this.#text(props, resolution)
-      });
+      return this.#theStyles(props, resolution);
     };
   }
 
   styleWhenSelected(): OLStyleFunction {
-    return (parcel: OLFeature<any>, resolution: number): OLStyle => {
+    return (parcel: OLFeature<any>, resolution: number): OLStyle[] => {
       const props = parcel.getProperties() as ParcelProperties;
-      return new OLStyle({
-        fill: this.#fill(props),
-        stroke: this.#strokeSelect(props),
-        text: this.#text(props, resolution)
-      });
+      return this.#theStyles(props, resolution, true);
     };
   }
 }
