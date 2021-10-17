@@ -77,6 +77,15 @@ export interface ParcelProperties {
   zone: string;
 }
 
+export interface RoadProperties {
+  class: string;
+  county: string;
+  name: string;
+  owner: string;
+  town: string;
+  width: number;
+}
+
 export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
 
 @Injectable({ providedIn: 'root' })

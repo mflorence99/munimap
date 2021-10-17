@@ -34,7 +34,7 @@ export class OLStyleFeaturesComponent implements OLStyleComponent {
       const width = +this.map.vars['--map-feature-outline-width'];
       return new OLStyle({
         fill: new OLFill({ color: [0, 0, 0, 0] }),
-        stroke: new OLStroke({ color: stroke, width })
+        stroke: new OLStroke({ color: `rgba(${stroke}, 0.75)`, width })
       });
     };
   }
@@ -47,11 +47,11 @@ export class OLStyleFeaturesComponent implements OLStyleComponent {
       const stroke = this.map.vars['--map-feature-outline'];
       const width = +this.map.vars['--map-feature-outline-width'];
       return new OLStyle({
-        fill: new OLFill({ color: fill }),
-        stroke: new OLStroke({ color: stroke, width }),
+        fill: new OLFill({ color: `rgba(${fill}, 0.1)` }),
+        stroke: new OLStroke({ color: `rgba(${stroke}, 0.75)`, width }),
         text: new OLText({
           font: `bold 20px '${fontFamily}'`,
-          fill: new OLFill({ color }),
+          fill: new OLFill({ color: `rgba(${color}, 0.75)` }),
           placement: 'point',
           text: feature.getId() as string
         })

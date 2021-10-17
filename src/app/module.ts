@@ -9,6 +9,7 @@ import { MapsListPage } from './pages/maps-list';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
+import { OLControlScaleLineComponent } from './ol/ol-control-scaleline';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from './ol/ol-control-zoom2extent';
 import { OLFilterCropComponent } from './ol/ol-filter-crop';
@@ -30,6 +31,7 @@ import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleFeaturesComponent } from './ol/ol-style-features';
 import { OLStyleLakesComponent } from './ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from './ol/ol-style-parcels';
+import { OLStyleRoadsComponent } from './ol/ol-style-roads';
 import { RootPage } from './root';
 import { TownMapPage } from './pages/town-map';
 import { TownMapSetupComponent } from './components/town-map-setup';
@@ -87,6 +89,7 @@ const COMPONENTS = [
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlMousePositionComponent,
+  OLControlScaleLineComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
   OLFilterCropComponent,
@@ -108,6 +111,7 @@ const COMPONENTS = [
   OLStyleFeaturesComponent,
   OLStyleLakesComponent,
   OLStyleParcelsComponent,
+  OLStyleRoadsComponent,
   TownMapSetupComponent,
   UserProfileComponent
 ];

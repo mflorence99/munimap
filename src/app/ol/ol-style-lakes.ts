@@ -27,7 +27,7 @@ export class OLStyleLakesComponent implements OLStyleComponent {
     return (): OLStyle => {
       const fill = this.map.vars['--map-lake-fill'];
       return new OLStyle({
-        fill: new OLFill({ color: fill }),
+        fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
         stroke: null
       });
     };

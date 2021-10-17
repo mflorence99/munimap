@@ -40,7 +40,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   #fill(props: ParcelProperties): OLFill {
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
-    return new OLFill({ color: `rgba(${fill}, 0.5)` });
+    return new OLFill({ color: `rgba(${fill}, 0.25)` });
   }
 
   #fontSize(props: ParcelProperties, resolution: number): number {
@@ -162,15 +162,19 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #strokeOutline(_props: ParcelProperties): OLStroke {
-    const stroke = this.map.vars['--map-parcel-outline'];
+    const outline = this.map.vars['--map-parcel-outline'];
     const width = +this.map.vars['--map-parcel-outline-width'];
-    return new OLStroke({ color: stroke, lineDash: [2, 4], width });
+    return new OLStroke({
+      color: `rgba(${outline}, 0.5)`,
+      lineDash: [2, 4],
+      width
+    });
   }
 
   #strokeSelect(_props: ParcelProperties): OLStroke {
-    const stroke = this.map.vars['--map-parcel-select'];
+    const select = this.map.vars['--map-parcel-select'];
     const width = +this.map.vars['--map-parcel-select-width'];
-    return new OLStroke({ color: stroke, width });
+    return new OLStroke({ color: `rgba(${select}, 1)`, width });
   }
 
   #text(props: ParcelProperties, resolution: number): OLText[] {
@@ -179,7 +183,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return labels.map((label) => {
       return new OLText({
         font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
-        fill: new OLFill({ color }),
+        fill: new OLFill({ color: `rgba(${color}, 1)` }),
         offsetX: label.offsetX,
         offsetY: label.offsetY,
         overflow: true,
@@ -198,9 +202,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     // 👇 we will potentially develop two texts, one for the lot ID
     //    and a second for the acreage
     const texts = this.#text(props, resolution);
-    return texts.map((text) => {
+    return texts.map((text, ix) => {
       return new OLStyle({
-        fill: this.#fill(props),
+        fill: ix === 0 ? this.#fill(props) : null,
         stroke: whenSelected
           ? this.#strokeSelect(props)
           : this.#strokeOutline(props),

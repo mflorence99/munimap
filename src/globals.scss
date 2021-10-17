@@ -44,37 +44,41 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --disabled-color: var(--mat-grey-500);
   --background-color: var(--mat-grey-900);
 
-  // 👉 to support OLStylerService
+  // 👉 make sure all colors are RGB,
+  //    style components will figure opacity
 
-  --map-feature-fill: rgba(var(--rgb-green-700), 0.1);
-  --map-feature-outline: var(--mat-green-700);
+  --map-feature-fill: var(--rgb-green-700);
+  --map-feature-outline: var(--rgb-green-700);
   --map-feature-outline-width: 2;
-  --map-feature-text-color: var(--mat-green-700);
+  --map-feature-text-color: var(--rgb-green-700);
   --map-feature-text-font-family: Roboto;
 
-  --map-lake-fill: rgba(var(--rgb-light-blue-700), 0.5);
+  --map-lake-fill: var(--rgb-light-blue-700);
 
-  --map-parcel-outline: var(--mat-blue-gray-700);
+  --map-parcel-outline: var(--rgb-blue-gray-900);
   --map-parcel-outline-width: 1;
-  --map-parcel-select: var(--warn-color);
+  --map-parcel-select: var(--rgb-red-700);
   --map-parcel-select-width: 3;
-  --map-parcel-text-color: var(--mat-gray-900);
+  --map-parcel-text-color: var(--rgb-gray-900);
   --map-parcel-text-font-family: Roboto;
 
   // land use color shading
   // 👀  https://www.gismanual.com/style/ColorConventions.pdf
-  --map-parcel-fill-u110: var(--rgb-brown-300);
-  --map-parcel-fill-u120: var(--rgb-brown-500);
-  --map-parcel-fill-u190: var(--rgb-yellow-200);
-  --map-parcel-fill-u260: var(--rgb-red-200);
-  --map-parcel-fill-u261: var(--rgb-purple-200);
-  --map-parcel-fill-u300: var(--rgb-cyan-200);
-  --map-parcel-fill-u400: var(--rgb-orange-200);
+  --map-parcel-fill-u110: var(--rgb-brown-600);
+  --map-parcel-fill-u120: var(--rgb-brown-800);
+  --map-parcel-fill-u190: var(--rgb-yellow-600);
+  --map-parcel-fill-u260: var(--rgb-red-600);
+  --map-parcel-fill-u261: var(--rgb-purple-600);
+  --map-parcel-fill-u300: var(--rgb-cyan-600);
+  --map-parcel-fill-u400: var(--rgb-orange-600);
   // 👇 these need to match the colors from OpenStreetMap
   --map-parcel-fill-u500: 190, 219, 75; // #BEDBAF
   --map-parcel-fill-u501: 173, 209, 158; // #ADD19E
-  --map-parcel-fill-u502: var(--rgb-green-300);
-  --map-parcel-fill-u999: var(--rgb-gray-300);
+  --map-parcel-fill-u502: var(--rgb-green-600);
+  --map-parcel-fill-u999: var(--rgb-gray-600);
+
+  --map-road-edge: var(--rgb-gray-600);
+  --map-road-lane: var(--rgb-yellow-600);
 }
 
 // 👉 base styles
@@ -173,5 +177,9 @@ app-ol-map {
     padding: 2px;
     position: absolute;
     width: 200px;
+  }
+
+  .ol-scale-step-marker {
+    background-color: var(--mat-gray-500) !important;
   }
 }

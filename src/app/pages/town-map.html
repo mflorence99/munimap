@@ -1,6 +1,7 @@
 <app-ol-map #theMap [path]="path">
   <ng-container *ngIf="theMap.initialized">
     <app-ol-control-attribution></app-ol-control-attribution>
+    <app-ol-control-scaleline></app-ol-control-scaleline>
     <app-ol-control-zoom></app-ol-control-zoom>
     <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
 
@@ -55,6 +56,12 @@
           <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
           <app-ol-filter-crop></app-ol-filter-crop>
         </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-roads></app-ol-style-roads>
+          <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+          <app-ol-filter-crop></app-ol-filter-crop>
+        </app-ol-layer-vector>
       </ng-container>
 
       <!-- HILLSHADE LAYER (not needed for arcgis) -->
@@ -69,6 +76,7 @@
         >
           <app-ol-attribution>Powered by Esri</app-ol-attribution>
         </app-ol-source-xyz>
+        <app-ol-filter-crop></app-ol-filter-crop>
       </app-ol-layer-tile>
     </ng-container>
 
