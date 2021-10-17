@@ -1,6 +1,7 @@
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
+import { OLStyleComponent } from './ol-style';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -25,6 +26,10 @@ import OLVector from 'ol/layer/Vector';
 export class OLLayerVectorComponent implements Mapable {
   olLayer: OLVector<any>;
 
+  // 👇 keep a cache of the styler so that components
+  //    like interactions can grab it
+  style: OLStyleComponent;
+
   @Input() set maxZoom(maxZoom: number) {
     this.olLayer.setMaxZoom(maxZoom);
   }
@@ -39,5 +44,10 @@ export class OLLayerVectorComponent implements Mapable {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
+  }
+
+  setStyle(style: OLStyleComponent): void {
+    this.style = style;
+    this.olLayer.setStyle(style.style());
   }
 }

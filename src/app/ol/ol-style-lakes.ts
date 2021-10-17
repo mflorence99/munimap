@@ -19,10 +19,8 @@ export class OLStyleLakesComponent implements OLStyleComponent {
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
-  ) {}
-
-  ngAfterContentInit(): void {
-    this.layer.olLayer.setStyle(this.style());
+  ) {
+    this.layer.setStyle(this);
   }
 
   style(): OLStyleFunction {

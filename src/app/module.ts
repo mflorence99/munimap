@@ -28,7 +28,9 @@ import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceStaticComponent } from './ol/ol-source-static';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
+import { OLStyleFeaturesComponent } from './ol/ol-style-features';
 import { OLStyleLakesComponent } from './ol/ol-style-lakes';
+import { OLStyleParcelsComponent } from './ol/ol-style-parcels';
 import { RootPage } from './root';
 import { TownMapPage } from './pages/town-map';
 import { TownMapSetupComponent } from './components/town-map-setup';
@@ -105,7 +107,9 @@ const COMPONENTS = [
   OLSourceOSMComponent,
   OLSourceStaticComponent,
   OLSourceXYZComponent,
+  OLStyleFeaturesComponent,
   OLStyleLakesComponent,
+  OLStyleParcelsComponent,
   TownMapSetupComponent,
   UserProfileComponent
 ];

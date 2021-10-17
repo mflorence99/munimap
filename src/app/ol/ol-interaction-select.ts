@@ -44,7 +44,8 @@ export class OLInteractionSelectComponent
     this.olSelect = new OLSelect({
       condition: (event): boolean =>
         event.type === this.eventType.toLowerCase(),
-      layers: [this.layer.olLayer]
+      layers: [this.layer.olLayer],
+      style: this.layer.style?.styleWhenSelected()
     });
   }
 

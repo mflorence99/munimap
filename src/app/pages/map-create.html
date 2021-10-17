@@ -29,6 +29,7 @@
       <!-- SELECTABLES LAYER -->
 
       <app-ol-layer-vector *ngIf="!atTownLevel(view.path)">
+        <app-ol-style-features></app-ol-style-features>
         <app-ol-source-geojson
           [layerKey]="'selectables'"
         ></app-ol-source-geojson>
@@ -46,6 +47,7 @@
       <!-- BOUNDARY LAYER -->
 
       <app-ol-layer-vector *ngIf="atTownLevel(view.path)">
+        <app-ol-style-features></app-ol-style-features>
         <app-ol-source-boundary></app-ol-source-boundary>
       </app-ol-layer-vector>
     </ng-container>

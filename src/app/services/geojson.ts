@@ -10,6 +10,9 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 export interface CountyIndex {
   [town: string]: TownIndex | Record<string, Layer>;
   layers: {
@@ -101,10 +104,19 @@ export class GeoJSONService {
   }
 
   load(path: string): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
-    return this.http.get<GeoJSON.FeatureCollection<GeoJSON.Polygon>>(
-      `${this.params.geoJSON.host}${path}`,
-      { headers: new HttpHeaders({ cache: String(environment.production) }) }
-    );
+    return this.http
+      .get<GeoJSON.FeatureCollection<GeoJSON.Polygon>>(
+        `${this.params.geoJSON.host}${path}`,
+        { headers: new HttpHeaders({ cache: String(environment.production) }) }
+      )
+      .pipe(
+        catchError(() =>
+          of({
+            features: [],
+            type: 'FeatureCollection'
+          } as GeoJSON.FeatureCollection<GeoJSON.Polygon>)
+        )
+      );
   }
 
   loadByIndex(
