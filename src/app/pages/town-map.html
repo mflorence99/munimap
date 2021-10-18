@@ -15,14 +15,14 @@
     <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
 
     <ng-container [ngSwitch]="map.style">
-      <app-ol-layer-tile *ngSwitchCase="'arcgis'" [maxZoom]="17">
+      <app-ol-layer-tile *ngSwitchCase="'arcgis'">
         <app-ol-source-xyz
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
           ><app-ol-attribution
             >Powered by Esri</app-ol-attribution
           ></app-ol-source-xyz
         >
-        <app-ol-filter-crop></app-ol-filter-crop>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
       <app-ol-layer-tile *ngSwitchCase="'google'">
@@ -30,37 +30,37 @@
           [url]="'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'"
           ><app-ol-attribution>© Google</app-ol-attribution></app-ol-source-xyz
         >
-        <app-ol-filter-crop></app-ol-filter-crop>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
       <app-ol-layer-mapbox
         *ngSwitchCase="'mapbox'"
         styleUrl="mapbox://styles/mapbox/bright-v9"
       >
-        <app-ol-filter-crop></app-ol-filter-crop>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-mapbox>
 
       <app-ol-layer-tile *ngSwitchCase="'osm'">
         <app-ol-source-osm></app-ol-source-osm>
-        <app-ol-filter-crop></app-ol-filter-crop>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
       <ng-container *ngSwitchCase="'blank'">
         <app-ol-layer-image>
           <app-ol-source-static url="assets/white.png"></app-ol-source-static>
-          <app-ol-filter-crop></app-ol-filter-crop>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-image>
 
         <app-ol-layer-vector>
           <app-ol-style-lakes></app-ol-style-lakes>
           <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
-          <app-ol-filter-crop></app-ol-filter-crop>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
           <app-ol-style-roads></app-ol-style-roads>
           <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
-          <app-ol-filter-crop></app-ol-filter-crop>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
       </ng-container>
 
@@ -68,7 +68,7 @@
 
       <app-ol-layer-tile
         *ngIf="map.style !== 'arcgis'"
-        [maxZoom]="17"
+        [maxZoom]="17.5"
         [opacity]="0.33"
       >
         <app-ol-source-xyz
@@ -76,7 +76,7 @@
         >
           <app-ol-attribution>Powered by Esri</app-ol-attribution>
         </app-ol-source-xyz>
-        <app-ol-filter-crop></app-ol-filter-crop>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
     </ng-container>
 

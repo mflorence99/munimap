@@ -64,21 +64,21 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
 
   // land use color shading
   // 👀  https://www.gismanual.com/style/ColorConventions.pdf
-  --map-parcel-fill-u110: var(--rgb-brown-600);
-  --map-parcel-fill-u120: var(--rgb-brown-800);
-  --map-parcel-fill-u190: var(--rgb-yellow-600);
-  --map-parcel-fill-u260: var(--rgb-red-600);
-  --map-parcel-fill-u261: var(--rgb-purple-600);
-  --map-parcel-fill-u300: var(--rgb-cyan-600);
-  --map-parcel-fill-u400: var(--rgb-orange-600);
+  --map-parcel-fill-u110: var(--rgb-brown-700);
+  --map-parcel-fill-u120: var(--rgb-brown-900);
+  --map-parcel-fill-u190: var(--rgb-yellow-700);
+  --map-parcel-fill-u260: var(--rgb-red-700);
+  --map-parcel-fill-u261: var(--rgb-purple-700);
+  --map-parcel-fill-u300: var(--rgb-cyan-700);
+  --map-parcel-fill-u400: var(--rgb-orange-700);
   // 👇 these need to match the colors from OpenStreetMap
   --map-parcel-fill-u500: 190, 219, 75; // #BEDBAF
   --map-parcel-fill-u501: 173, 209, 158; // #ADD19E
-  --map-parcel-fill-u502: var(--rgb-green-600);
-  --map-parcel-fill-u999: var(--rgb-gray-600);
+  --map-parcel-fill-u502: var(--rgb-green-700);
+  --map-parcel-fill-u999: var(--rgb-gray-700);
 
   --map-road-edge: var(--rgb-gray-600);
-  --map-road-lane: var(--rgb-yellow-600);
+  --map-road-lane: var(--rgb-gray-50);
 }
 
 // 👉 base styles
@@ -177,9 +177,5 @@ app-ol-map {
     padding: 2px;
     position: absolute;
     width: 200px;
-  }
-
-  .ol-scale-step-marker {
-    background-color: var(--mat-gray-500) !important;
   }
 }

@@ -38,7 +38,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #fill(props: ParcelProperties): OLFill {
+  #fill(parcel: OLFeature<any>): OLFill {
+    const props = parcel.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     return new OLFill({ color: `rgba(${fill}, 0.25)` });
   }
@@ -47,22 +48,26 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     const area = props.areaComputed;
     let base;
     if (area >= 500) base = 100;
-    else if (area >= 100) base = 50;
-    else if (area >= 50) base = 25;
-    else if (area >= 25) base = 22;
-    else if (area >= 10) base = 20;
-    else if (area >= 5) base = 18;
-    else if (area >= 2) base = 16;
-    else if (area >= 1) base = 14;
-    else if (area >= 0.75) base = 12;
-    else if (area >= 0.5) base = 10;
-    else if (area >= 0.25) base = 8;
-    else base = 6;
+    else if (area >= 100) base = 80;
+    else if (area >= 50) base = 70;
+    else if (area >= 25) base = 50;
+    else if (area >= 10) base = 35;
+    else if (area >= 5) base = 20;
+    else if (area >= 2) base = 18;
+    else if (area >= 1) base = 16;
+    else if (area >= 0.75) base = 15;
+    else if (area >= 0.5) base = 14;
+    else if (area >= 0.25) base = 13;
+    else base = 10;
     return base / resolution;
   }
 
+  #isLarge(props: ParcelProperties): boolean {
+    return props.areaComputed >= 25;
+  }
+
   #isSmall(props: ParcelProperties): boolean {
-    return props.areaComputed < 25;
+    return props.areaComputed <= 1;
   }
 
   #isSquare(props: ParcelProperties): boolean {
@@ -70,7 +75,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #isTiny(props: ParcelProperties): boolean {
-    return props.areaComputed < 0.25;
+    return props.areaComputed <= 0.25;
   }
 
   #label(props: ParcelProperties): string {
@@ -106,6 +111,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         props.id,
         `bold ${fontSize}px '${fontFamily}'`
       );
+      const mGap = this.map.measureText(
+        '  ',
+        `normal ${fontSize * fAcres}px '${fontFamily}'`
+      );
       const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
       const mAcres = this.map.measureText(
         acres,
@@ -118,10 +127,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       let y1 = 0;
       let y2 = 0;
       if (!this.#splitation(props)) {
-        const gap = 16; // 👉 just a hack
-        const total = mID.width + gap + mAcres.width;
-        x1 = -(total / 2);
-        x2 = -(total / 2) + mID.width + gap;
+        const total = mID.width + mGap.width + mAcres.width;
+        x1 = -(total / 2) + mID.width / 2;
+        x2 = total / 2 + -(mAcres.width / 2);
       } else {
         y1 = -(mID.fontBoundingBoxAscent / 2);
         y2 = mID.fontBoundingBoxAscent / 2;
@@ -150,18 +158,18 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #rotation(props: ParcelProperties): number {
     const label = props.label;
     const rotate =
-      label?.rotate === undefined ? this.#isSmall(props) : label?.rotate;
+      label?.rotate === undefined ? !this.#isLarge(props) : label?.rotate;
     return rotate ? props.orientation * (Math.PI / 180) : 0;
   }
 
   #splitation(props: ParcelProperties): boolean {
     const label = props.label;
     return label?.split === undefined
-      ? !this.#isSmall(props) || this.#isSquare(props)
+      ? this.#isSmall(props) || this.#isLarge(props) || this.#isSquare(props)
       : label?.split;
   }
 
-  #strokeOutline(_props: ParcelProperties): OLStroke {
+  #strokeOutline(): OLStroke {
     const outline = this.map.vars['--map-parcel-outline'];
     const width = +this.map.vars['--map-parcel-outline-width'];
     return new OLStroke({
@@ -171,43 +179,44 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     });
   }
 
-  #strokeSelect(_props: ParcelProperties): OLStroke {
+  #strokeSelect(): OLStroke {
     const select = this.map.vars['--map-parcel-select'];
     const width = +this.map.vars['--map-parcel-select-width'];
     return new OLStroke({ color: `rgba(${select}, 1)`, width });
   }
 
-  #text(props: ParcelProperties, resolution: number): OLText[] {
+  #text(parcel: OLFeature<any>, resolution: number): OLText[] {
     const color = this.map.vars['--map-parcel-text-color'];
+    const props = parcel.getProperties() as ParcelProperties;
     const labels = this.#labels(props, resolution);
     return labels.map((label) => {
-      return new OLText({
-        font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
-        fill: new OLFill({ color: `rgba(${color}, 1)` }),
-        offsetX: label.offsetX,
-        offsetY: label.offsetY,
-        overflow: true,
-        placement: 'point',
-        rotation: this.#rotation(props),
-        text: label.text
-      });
+      if (label.fontSize < 8) return null;
+      else
+        return new OLText({
+          font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
+          fill: new OLFill({ color: `rgba(${color}, 1)` }),
+          offsetX: label.offsetX,
+          offsetY: label.offsetY,
+          overflow: true,
+          placement: 'point',
+          rotation: this.#rotation(props),
+          text: label.text
+        });
     });
   }
 
   #theStyles(
-    props: ParcelProperties,
+    parcel: OLFeature<any>,
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
     // 👇 we will potentially develop two texts, one for the lot ID
     //    and a second for the acreage
-    const texts = this.#text(props, resolution);
+    const texts = this.#text(parcel, resolution);
     return texts.map((text, ix) => {
       return new OLStyle({
-        fill: ix === 0 ? this.#fill(props) : null,
-        stroke: whenSelected
-          ? this.#strokeSelect(props)
-          : this.#strokeOutline(props),
+        fill: ix === 0 ? this.#fill(parcel) : null,
+        stroke: whenSelected ? this.#strokeSelect() : this.#strokeOutline(),
         text: text
       });
     });
@@ -215,15 +224,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   style(): OLStyleFunction {
     return (parcel: OLFeature<any>, resolution: number): OLStyle[] => {
-      const props = parcel.getProperties() as ParcelProperties;
-      return this.#theStyles(props, resolution);
+      return this.#theStyles(parcel, resolution);
     };
   }
 
   styleWhenSelected(): OLStyleFunction {
     return (parcel: OLFeature<any>, resolution: number): OLStyle[] => {
-      const props = parcel.getProperties() as ParcelProperties;
-      return this.#theStyles(props, resolution, true);
+      return this.#theStyles(parcel, resolution, true);
     };
   }
 }

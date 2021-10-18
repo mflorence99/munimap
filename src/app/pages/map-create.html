@@ -12,18 +12,18 @@
     </app-ol-layer-tile>
 
     <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/bright-v9">
-      <app-ol-filter-crop></app-ol-filter-crop>
+      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-mapbox>
 
     <!-- HILLSHADE LAYER -->
 
-    <app-ol-layer-tile [maxZoom]="17" [opacity]="0.5">
+    <app-ol-layer-tile [maxZoom]="17.5" [opacity]="0.5">
       <app-ol-source-xyz
         [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
       >
         <app-ol-attribution>Powered by Esri</app-ol-attribution>
       </app-ol-source-xyz>
-      <app-ol-filter-crop></app-ol-filter-crop>
+      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-tile>
 
     <!-- SELECTABLES LAYER -->

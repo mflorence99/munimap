@@ -17,11 +17,11 @@ import Polygon from 'ol/geom/Polygon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-filter-crop',
+  selector: 'app-ol-filter-crop2boundary',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLFilterCropComponent implements AfterContentInit {
+export class OLFilterCrop2BoundaryComponent implements AfterContentInit {
   #layer: any;
 
   olFilter: typeof Crop;

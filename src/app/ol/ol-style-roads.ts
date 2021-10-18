@@ -43,7 +43,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
 
   #width(props: RoadProperties, resolution: number): number {
     // 👉 roadway width is in feet, resolution is pixels / meter
-    return +props.width / (resolution * 3.28084);
+    return (+props.width / (resolution * 3.28084)) * 3;
   }
 
   style(): OLStyleFunction {

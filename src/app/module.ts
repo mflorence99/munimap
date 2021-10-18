@@ -12,7 +12,7 @@ import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
 import { OLControlScaleLineComponent } from './ol/ol-control-scaleline';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from './ol/ol-control-zoom2extent';
-import { OLFilterCropComponent } from './ol/ol-filter-crop';
+import { OLFilterCrop2BoundaryComponent } from './ol/ol-filter-crop2boundary';
 import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
@@ -92,7 +92,7 @@ const COMPONENTS = [
   OLControlScaleLineComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
-  OLFilterCropComponent,
+  OLFilterCrop2BoundaryComponent,
   OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
