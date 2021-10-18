@@ -12,11 +12,11 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-style-lakes',
+  selector: 'app-ol-style-boundary',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleLakesComponent implements OLStyleComponent {
+export class OLStyleBoundaryComponent implements OLStyleComponent {
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -26,12 +26,12 @@ export class OLStyleLakesComponent implements OLStyleComponent {
 
   style(): OLStyleFunction {
     return (): OLStyle => {
-      const fill = this.map.vars['--map-lake-fill'];
+      const fill = this.map.vars['--map-boundary-fill'];
       return new OLStyle({
         fill: new OLFillPattern({
           color: `rgba(${fill}, 1)`,
-          fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
-          pattern: 'wave'
+          fill: new OLFill({ color: 'white' }),
+          pattern: 'gravel'
         }),
         stroke: null
       });

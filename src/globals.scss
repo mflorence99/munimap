@@ -47,13 +47,15 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   // 👉 make sure all colors are RGB,
   //    style components will figure opacity
 
+  --map-boundary-fill: var(--rgb-gray-300);
+
   --map-feature-fill: var(--rgb-green-700);
   --map-feature-outline: var(--rgb-green-700);
   --map-feature-outline-width: 2;
   --map-feature-text-color: var(--rgb-green-700);
   --map-feature-text-font-family: Roboto;
 
-  --map-lake-fill: var(--rgb-light-blue-700);
+  --map-lake-fill: var(--rgb-light-blue-400);
 
   --map-parcel-outline: var(--rgb-blue-gray-900);
   --map-parcel-outline-width: 1;

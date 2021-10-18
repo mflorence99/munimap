@@ -46,20 +46,9 @@
       </app-ol-layer-tile>
 
       <ng-container *ngSwitchCase="'blank'">
-        <app-ol-layer-image>
-          <app-ol-source-static url="assets/white.png"></app-ol-source-static>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-image>
-
         <app-ol-layer-vector>
-          <app-ol-style-lakes></app-ol-style-lakes>
-          <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-style-roads></app-ol-style-roads>
-          <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+          <app-ol-style-boundary></app-ol-style-boundary>
+          <app-ol-source-boundary></app-ol-source-boundary>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
       </ng-container>
@@ -69,7 +58,7 @@
       <app-ol-layer-tile
         *ngIf="map.style !== 'arcgis'"
         [maxZoom]="17.5"
-        [opacity]="0.33"
+        [opacity]="0.5"
       >
         <app-ol-source-xyz
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
@@ -80,15 +69,31 @@
       </app-ol-layer-tile>
     </ng-container>
 
-    <!-- PARCELS LAYER -- WASHINGTON ONLY FOR NOW -->
+    <!-- PARCELS LAYER -->
 
     <app-ol-layer-vector>
       <app-ol-style-parcels></app-ol-style-parcels>
       <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
 
-      <app-ol-interaction-select [eventType]="'click'">
+      <app-ol-interaction-select [eventType]="'singleclick'">
       </app-ol-interaction-select>
     </app-ol-layer-vector>
+
+    <!--VECTOR OVERLAYS FOR "BLANK" -->
+
+    <ng-container *ngIf="map.style === 'blank'">
+      <app-ol-layer-vector>
+        <app-ol-style-lakes></app-ol-style-lakes>
+        <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+    </ng-container>
 
     <!-- BOUNDARY LAYER -->
 

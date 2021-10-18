@@ -10,6 +10,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
+import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -41,7 +42,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #fill(parcel: OLFeature<any>): OLFill {
     const props = parcel.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
-    return new OLFill({ color: `rgba(${fill}, 0.25)` });
+    return new OLFillPattern({
+      color: `rgba(${fill}, 0.25)`,
+      fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
+      pattern: 'dot',
+      size: 2,
+      spacing: 4
+    });
   }
 
   #fontSize(props: ParcelProperties, resolution: number): number {
