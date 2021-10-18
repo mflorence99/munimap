@@ -51,6 +51,12 @@ export interface StateIndex {
   };
 }
 
+export interface LakeProperties {
+  county: string;
+  name: string;
+  town: string;
+}
+
 export interface ParcelProperties {
   abutters: string[];
   address: string;
@@ -66,19 +72,78 @@ export interface ParcelProperties {
   land$: number;
   lengths: number[];
   minWidth: number;
-  neighborhood: string;
+  neighborhood: 'U' | 'V' | 'W';
   orientation: number;
   owner: string;
   perimeter: number;
   sqarcity: number;
   taxed$: number;
-  usage: string;
-  use: string;
+  usage: '110' | '120' | '190' | '260' | '300' | '400' | '500' | '501' | '502';
+  use: 'CUFL' | 'CUMH' | 'CUMW' | 'CUUH' | 'CUUW' | 'CUWL';
   zone: string;
 }
 
+export interface PlacesProperties {
+  county: string;
+  name: string;
+  type:
+    | 'airport'
+    | 'area'
+    | 'bar'
+    | 'basin'
+    | 'bay'
+    | 'beach'
+    | 'bench'
+    | 'bend'
+    | 'bridge'
+    | 'building'
+    | 'canal'
+    | 'cape'
+    | 'cave'
+    | 'cemetery'
+    | 'channel'
+    | 'church'
+    | 'civil'
+    | 'cliff'
+    | 'crossing'
+    | 'dam'
+    | 'falls'
+    | 'flat'
+    | 'forest'
+    | 'gap'
+    | 'gut'
+    | 'harbor'
+    | 'hospital'
+    | 'island'
+    | 'lake'
+    | 'locale'
+    | 'military'
+    | 'mine'
+    | 'other'
+    | 'park'
+    | 'pillar'
+    | 'po'
+    | 'ppl'
+    | 'range'
+    | 'rapids'
+    | 'reserve'
+    | 'reservoir'
+    | 'ridge'
+    | 'school'
+    | 'sea'
+    | 'slope'
+    | 'spring'
+    | 'stream'
+    | 'summit'
+    | 'swamp'
+    | 'tower'
+    | 'trail'
+    | 'valley'
+    | 'woods';
+}
+
 export interface RoadProperties {
-  class: string;
+  class: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
   county: string;
   name: string;
   owner: string;

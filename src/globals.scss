@@ -55,14 +55,16 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --map-feature-text-color: var(--rgb-green-700);
   --map-feature-text-font-family: Roboto;
 
-  --map-lake-fill: var(--rgb-light-blue-400);
+  --map-lake-fill: var(--rgb-light-blue-200);
 
-  --map-parcel-outline: var(--rgb-blue-gray-900);
+  --map-parcel-outline: var(--rgb-blue-gray-500);
   --map-parcel-outline-width: 1;
   --map-parcel-select: var(--rgb-red-700);
   --map-parcel-select-width: 3;
   --map-parcel-text-color: var(--rgb-gray-900);
   --map-parcel-text-font-family: Roboto;
+  // 👇 font size determined by acreage
+  // --map-parcel-text-font-size: ???;
 
   // land use color shading
   // 👀  https://www.gismanual.com/style/ColorConventions.pdf
@@ -79,8 +81,48 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --map-parcel-fill-u502: var(--rgb-green-700);
   --map-parcel-fill-u999: var(--rgb-gray-700);
 
-  --map-road-edge: var(--rgb-gray-600);
-  --map-road-lane: var(--rgb-gray-50);
+  --map-parcel-stroke-u501: var(--rgb-green-900);
+  --map-parcel-stroke-CUMH: var(--rgb-brown-500);
+  --map-parcel-stroke-CUMW: var(--rgb-brown-500);
+  --map-parcel-stroke-CUUH: var(--rgb-brown-500);
+  --map-parcel-stroke-CUUW: var(--rgb-brown-500);
+  --map-parcel-stroke-CUFL: var(--rgb-green-500);
+  --map-parcel-stroke-CUWL: var(--rgb-blue-500);
+
+  --map-place-marker-color: var(--rgb-blue-gray-600);
+  --map-place-marker-size: 4;
+
+  --map-place-text-color-ppl: var(--rgb-gray-600);
+
+  --map-place-text-font-family: Roboto;
+  --map-place-text-font-size: 12;
+
+  --map-road-text-color-I: var(--rgb-gray-50);
+  --map-road-text-color-II: var(--rgb-gray-50);
+  --map-road-text-color-III: var(--rgb-gray-50);
+  --map-road-text-color-IV: var(--rgb-gray-600);
+  --map-road-text-color-V: var(--rgb-gray-500);
+  --map-road-text-color-VI: var(--rgb-gray-500);
+  --map-road-text-color-0: var(--rgb-gray-500);
+
+  --map-road-text-font-family: Roboto;
+  --map-road-text-font-size: 10;
+
+  --map-road-edge-I: var(--rgb-gray-600);
+  --map-road-edge-II: var(--rgb-gray-600);
+  --map-road-edge-III: var(--rgb-gray-600);
+  --map-road-edge-IV: var(--rgb-gray-500);
+  --map-road-edge-V: var(--rgb-gray-400);
+  --map-road-edge-VI: var(--rgb-gray-300);
+  --map-road-edge-0: var(--rgb-gray-200);
+
+  --map-road-lane-I: var(--rgb-blue-300);
+  --map-road-lane-II: var(--rgb-red-300);
+  --map-road-lane-III: var(--rgb-orange-300);
+  --map-road-lane-IV: var(--rgb-yellow-300);
+  --map-road-lane-V: var(--rgb-gray-50);
+  --map-road-lane-VI: var(--rgb-gray-50);
+  --map-road-lane-0: var(--rgb-gray-50);
 }
 
 // 👉 base styles

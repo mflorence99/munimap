@@ -124,7 +124,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.olView.fit(this.boundaryExtent, { size: this.olMap.getSize() });
     }
     // 👉 handle events
-    this.olView.on('change', this.#onChange.bind(this));
+    this.olView.on('change', this.onChange.bind(this));
   }
 
   #findAllCustomVariables(): Record<string, string> {
@@ -189,16 +189,16 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     return path;
   }
 
-  #onChange(): void {
-    const center = toLonLat(this.olView.getCenter());
-    const resolution = this.olView.getResolution();
-    const zoom = this.olView.getZoom();
-    console.log(
-      `%c${this.path}`,
-      'color: hotpink',
-      `resolution=${resolution} zoom=${zoom}`
-    );
-    this.store.dispatch(new UpdateView(this.path, { center, zoom }));
+  currentCounty(): string {
+    return this.path.split(':')[1];
+  }
+
+  currentState(): string {
+    return this.path.split(':')[0];
+  }
+
+  currentTown(): string {
+    return this.path.split(':')[2];
   }
 
   measureText(text: string, font: string): TextMetrics {
@@ -213,10 +213,23 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.olView.un('change', this.#onChange.bind(this));
+    this.olView.un('change', this.onChange.bind(this));
   }
 
   ngOnInit(): void {
     this.olMap.setTarget(this.host.nativeElement);
+  }
+
+  // 👉 public so we can call it from outside
+  onChange(): void {
+    const center = toLonLat(this.olView.getCenter());
+    const resolution = this.olView.getResolution();
+    const zoom = this.olView.getZoom();
+    console.log(
+      `%c${this.path}`,
+      'color: hotpink',
+      `resolution=${resolution} zoom=${zoom}`
+    );
+    this.store.dispatch(new UpdateView(this.path, { center, zoom }));
   }
 }

@@ -42,13 +42,41 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #fill(parcel: OLFeature<any>): OLFill {
     const props = parcel.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
-    return new OLFillPattern({
-      color: `rgba(${fill}, 0.25)`,
-      fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
-      pattern: 'dot',
-      size: 2,
-      spacing: 4
-    });
+    let pattern;
+    // 👉 current use pattern comes from the use field (CUUH etc)
+    if (props.usage === '190') {
+      const color = this.map.vars[`--map-parcel-stroke-${props.use}`];
+      // not all current usages have a pattern
+      if (color) {
+        pattern = new OLFillPattern({
+          color: `rgba(${color}, 0.25)`,
+          fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
+          pattern: props.use,
+          scale: 1
+        });
+      }
+    }
+    // 👉 town forest uses standard symbol to match OSM etc
+    else if (props.usage === '501') {
+      const color = this.map.vars['--map-parcel-stroke-u501'];
+      pattern = new OLFillPattern({
+        color: `rgba(${color}, 0.5)`,
+        fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
+        pattern: 'forest',
+        scale: 1
+      });
+    }
+    // 👉 otherwise just use a generic pattern for texture
+    if (!pattern) {
+      pattern = new OLFillPattern({
+        color: `rgba(${fill}, 0.25)`,
+        fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
+        pattern: 'dot',
+        size: 2,
+        spacing: 4
+      });
+    }
+    return pattern;
   }
 
   #fontSize(props: ParcelProperties, resolution: number): number {
@@ -85,16 +113,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return props.areaComputed <= 0.25;
   }
 
-  #label(props: ParcelProperties): string {
-    if (this.#isTiny(props)) return props.id;
-    else {
-      const nl = this.#splitation(props) ? '\n' : ' ';
-      return `${props.id}${nl}${this.decimal.transform(
-        props.area,
-        '1.0-2'
-      )} ac`;
-    }
-  }
   #labels(props: ParcelProperties, resolution: number): Label[] {
     const labels: Label[] = [];
     const fontFamily = this.map.vars['--map-parcel-text-font-family'];
@@ -171,25 +189,30 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   #splitation(props: ParcelProperties): boolean {
     const label = props.label;
-    return label?.split === undefined
+    // 👉 we're ignoring split=false recommendations as that doesn't really
+    //    work in the OpenLayers world
+    return label?.split === undefined || !label?.split
       ? this.#isSmall(props) || this.#isLarge(props) || this.#isSquare(props)
       : label?.split;
   }
 
-  #strokeOutline(): OLStroke {
+  #strokeOutline(resolution: number): OLStroke {
     const outline = this.map.vars['--map-parcel-outline'];
-    const width = +this.map.vars['--map-parcel-outline-width'];
-    return new OLStroke({
-      color: `rgba(${outline}, 0.5)`,
-      lineDash: [2, 4],
-      width
-    });
+    const width = +this.map.vars['--map-parcel-outline-width'] / resolution;
+    if (width < 0.25) return null;
+    else
+      return new OLStroke({
+        color: `rgba(${outline}, 0.5)`,
+        lineDash: [2, 4],
+        width
+      });
   }
 
-  #strokeSelect(): OLStroke {
+  #strokeSelect(resolution: number): OLStroke {
     const select = this.map.vars['--map-parcel-select'];
-    const width = +this.map.vars['--map-parcel-select-width'];
-    return new OLStroke({ color: `rgba(${select}, 1)`, width });
+    const width = +this.map.vars['--map-parcel-select-width'] / resolution;
+    if (width < 0.25) return null;
+    else return new OLStroke({ color: `rgba(${select}, 1)`, width });
   }
 
   #text(parcel: OLFeature<any>, resolution: number): OLText[] {
@@ -223,7 +246,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return texts.map((text, ix) => {
       return new OLStyle({
         fill: ix === 0 ? this.#fill(parcel) : null,
-        stroke: whenSelected ? this.#strokeSelect() : this.#strokeOutline(),
+        stroke: whenSelected
+          ? this.#strokeSelect(resolution)
+          : this.#strokeOutline(resolution),
         text: text
       });
     });
@@ -241,3 +266,113 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     };
   }
 }
+
+// 👉 all the patterns we use for current use etc
+
+OLFillPattern.addPattern('CUMH', {
+  // 👉 copied from tree
+  //    NBEEDS A FILLED VERSION
+  width: 30,
+  height: 30,
+  lines: [
+    [
+      7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71, 6.36,
+      0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78, 4.95, 7.07,
+      7.07, 4.95, 7.78
+    ]
+  ],
+  repeat: [
+    [3, 1],
+    [18, 16]
+  ],
+  stroke: 1
+});
+
+OLFillPattern.addPattern('CUUH', {
+  // 👉 copied from tree
+  width: 30,
+  height: 30,
+  lines: [
+    [
+      7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71, 6.36,
+      0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78, 4.95, 7.07,
+      7.07, 4.95, 7.78
+    ]
+  ],
+  repeat: [
+    [3, 1],
+    [18, 16]
+  ],
+  stroke: 1
+});
+
+OLFillPattern.addPattern('CUMW', {
+  // 👉 copied from pine
+  //    NBEEDS A FILLED VERSION
+  width: 30,
+  height: 30,
+  lines: [
+    [
+      5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49, 2.83,
+      8.49
+    ]
+  ],
+  repeat: [
+    [3, 1],
+    [18, 16]
+  ],
+  stroke: 1
+});
+
+OLFillPattern.addPattern('CUUW', {
+  // 👉 copied from pine
+  width: 30,
+  height: 30,
+  lines: [
+    [
+      5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49, 2.83,
+      8.49
+    ]
+  ],
+  repeat: [
+    [3, 1],
+    [18, 16]
+  ],
+  stroke: 1
+});
+
+OLFillPattern.addPattern('CUFL', {
+  // 👉 copied from grass
+  width: 27,
+  height: 22,
+  lines: [
+    [0, 10.5, 13, 10.5],
+    [2.5, 10, 1.5, 7],
+    [4.5, 10, 4.5, 5, 3.5, 4],
+    [7, 10, 7.5, 6, 8.5, 3],
+    [10, 10, 11, 6]
+  ],
+  repeat: [
+    [0, 0],
+    [14, 10]
+  ],
+  stroke: 1
+});
+
+OLFillPattern.addPattern('CUWL', {
+  // 👉 copied from swamp
+  width: 24,
+  height: 23,
+  lines: [
+    [0, 10.5, 9.5, 10.5],
+    [2.5, 10, 2.5, 7],
+    [4.5, 10, 4.5, 4],
+    [6.5, 10, 6.5, 6],
+    [3, 12.5, 7, 12.5]
+  ],
+  repeat: [
+    [0, 0],
+    [14, 10]
+  ],
+  stroke: 1
+});

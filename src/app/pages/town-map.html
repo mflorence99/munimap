@@ -93,6 +93,16 @@
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-places></app-ol-style-places>
+        <!-- 👉 places only available by county -->
+        <app-ol-source-geojson
+          [layerKey]="'places'"
+          [path]="theMap.currentState() + ':' + theMap.currentCounty()"
+        ></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
     </ng-container>
 
     <!-- BOUNDARY LAYER -->
