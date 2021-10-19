@@ -1,14 +1,22 @@
+import { OLFillPatternType } from './ol-style';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStyle from 'ol/style/Style';
+
+// 👇 fills a lake with:
+//    -- an input pattern
+//       -- with a styled color
+//    -- on a background with the same color
+//       -- with an input opacity
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,6 +25,9 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleLakesComponent implements OLStyleComponent {
+  @Input() opacity = 0.5;
+  @Input() pattern: OLFillPatternType = 'wave';
+
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -32,7 +43,7 @@ export class OLStyleLakesComponent implements OLStyleComponent {
       return new OLStyle({
         fill: new OLFillPattern({
           color: `rgba(${fill}, 1)`,
-          fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
+          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: 'wave'
         }),
         stroke: null

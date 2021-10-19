@@ -4,6 +4,7 @@ import { OLStyleComponent } from './ol-style';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
@@ -12,7 +13,16 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 for use on generic features
+// 👇 fills and outlines a generic feature with:
+//    -- an outline
+//       -- with a styled color
+//       -- with an input width
+//    -- a fill when selected
+//       -- with a styled color
+//       -- with an input opacity
+//    -- the ID of the feature when selected
+//       -- with a styled color
+//       -- with an input font weight, size and family
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +31,12 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleFeaturesComponent implements OLStyleComponent {
+  @Input() fontFamily = 'Roboto';
+  @Input() fontSize = 20;
+  @Input() fontWeight: 'bold' | 'normal' = 'bold';
+  @Input() opacity = 0.1;
+  @Input() width = 3;
+
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -29,12 +45,15 @@ export class OLStyleFeaturesComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (): OLStyle => {
+    return (_feature: OLFeature<any>, _resolution: number): OLStyle => {
       const stroke = this.map.vars['--map-feature-outline'];
-      const width = +this.map.vars['--map-feature-outline-width'];
       return new OLStyle({
+        // 👇 need this so we can click on the feature
         fill: new OLFill({ color: [0, 0, 0, 0] }),
-        stroke: new OLStroke({ color: `rgba(${stroke}, 0.75)`, width })
+        stroke: new OLStroke({
+          color: `rgba(${stroke}, 1)`,
+          width: this.width
+        })
       });
     };
   }
@@ -43,15 +62,16 @@ export class OLStyleFeaturesComponent implements OLStyleComponent {
     return (feature: OLFeature<any>, _resolution: number): OLStyle => {
       const color = this.map.vars['--map-feature-text-color'];
       const fill = this.map.vars['--map-feature-fill'];
-      const fontFamily = this.map.vars['--map-feature-text-font-family'];
       const stroke = this.map.vars['--map-feature-outline'];
-      const width = +this.map.vars['--map-feature-outline-width'];
       return new OLStyle({
-        fill: new OLFill({ color: `rgba(${fill}, 0.1)` }),
-        stroke: new OLStroke({ color: `rgba(${stroke}, 0.75)`, width }),
+        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+        stroke: new OLStroke({
+          color: `rgba(${stroke}, 1)`,
+          width: this.width
+        }),
         text: new OLText({
-          font: `bold 20px '${fontFamily}'`,
-          fill: new OLFill({ color: `rgba(${color}, 0.75)` }),
+          font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,
+          fill: new OLFill({ color: `rgba(${color}, 1)` }),
           placement: 'point',
           text: feature.getId() as string
         })

@@ -6,6 +6,7 @@ import { ParcelProperties } from '../services/geojson';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
@@ -14,6 +15,19 @@ import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
+
+// 👇 fills, outlines and identifies a parcel feature with:
+//    -- text showing the ID and acreage of the lot
+//       -- with a styled color
+//       -- with a fontSize proportional to nthe acreage
+//       -- with an input font family
+//    -- a styled fill color and pattern matching the land use
+//    -- a styled border color
+//       -- wth an input width
+//    -- a styled border color when selected
+//       -- wth an input width
+//    -- a threshold width below which the border will not be shown
+//    -- a threshold fontSize below which the ID will not be shown
 
 interface Label {
   fontFamily: string;
@@ -31,12 +45,31 @@ interface Label {
   styles: [':host { display: none }']
 })
 export class OLStyleParcelsComponent implements OLStyleComponent {
+  @Input() fontFamily = 'Roboto';
+  @Input() threshold = {
+    fontSize: 8,
+    outline: 0.25,
+    select: 0.75
+  };
+  @Input() width = {
+    outline: 1,
+    select: 3
+  };
+
   constructor(
     private decimal: DecimalPipe,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
     this.layer.setStyle(this);
+    // 👉 all the patterns we use for current use etc
+    //    we only really need to do this once, but it dies mo harm
+    OLFillPattern.addPattern('CUMH', OLFillPattern.prototype.patterns['tree2']);
+    OLFillPattern.addPattern('CUUH', OLFillPattern.prototype.patterns['tree']);
+    OLFillPattern.addPattern('CUMW', OLFillPattern.prototype.patterns['pine2']);
+    OLFillPattern.addPattern('CUUW', OLFillPattern.prototype.patterns['pine']);
+    OLFillPattern.addPattern('CUFL', OLFillPattern.prototype.patterns['grass']);
+    OLFillPattern.addPattern('CUWL', OLFillPattern.prototype.patterns['swamp']);
   }
 
   #fill(parcel: OLFeature<any>): OLFill {
@@ -115,13 +148,12 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   #labels(props: ParcelProperties, resolution: number): Label[] {
     const labels: Label[] = [];
-    const fontFamily = this.map.vars['--map-parcel-text-font-family'];
     const fontSize = this.#fontSize(props, resolution);
     // 👉 for tiny lots, we'll only show the lot # so we can
     //    shortcircuit all the calculations
     if (this.#isTiny(props)) {
       labels.push({
-        fontFamily: fontFamily,
+        fontFamily: this.fontFamily,
         fontSize: fontSize,
         fontWeight: 'bold',
         offsetX: 0,
@@ -134,16 +166,16 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const fAcres = 0.8;
       const mID = this.map.measureText(
         props.id,
-        `bold ${fontSize}px '${fontFamily}'`
+        `bold ${fontSize}px '${this.fontFamily}'`
       );
       const mGap = this.map.measureText(
         '  ',
-        `normal ${fontSize * fAcres}px '${fontFamily}'`
+        `normal ${fontSize * fAcres}px '${this.fontFamily}'`
       );
       const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
       const mAcres = this.map.measureText(
         acres,
-        `normal ${fontSize * fAcres}px '${fontFamily}'`
+        `normal ${fontSize * fAcres}px '${this.fontFamily}'`
       );
       // 👉 now compute the x and y offset, which depends
       //    on whether we're splitting the text or not
@@ -161,7 +193,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       }
       // 👉 finally styles are computed for both segments
       labels.push({
-        fontFamily: fontFamily,
+        fontFamily: this.fontFamily,
         fontSize: fontSize,
         fontWeight: 'bold',
         offsetX: x1,
@@ -169,7 +201,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         text: props.id
       });
       labels.push({
-        fontFamily: fontFamily,
+        fontFamily: this.fontFamily,
         fontSize: fontSize * fAcres,
         fontWeight: 'normal',
         offsetX: x2,
@@ -198,8 +230,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   #strokeOutline(resolution: number): OLStroke {
     const outline = this.map.vars['--map-parcel-outline'];
-    const width = +this.map.vars['--map-parcel-outline-width'] / resolution;
-    if (width < 0.25) return null;
+    const width = this.width.outline / resolution;
+    if (width < this.threshold.outline) return null;
     else
       return new OLStroke({
         color: `rgba(${outline}, 0.5)`,
@@ -210,8 +242,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   #strokeSelect(resolution: number): OLStroke {
     const select = this.map.vars['--map-parcel-select'];
-    const width = +this.map.vars['--map-parcel-select-width'] / resolution;
-    if (width < 0.25) return null;
+    const width = this.width.select / resolution;
+    if (width < this.threshold.outline) return null;
     else return new OLStroke({ color: `rgba(${select}, 1)`, width });
   }
 
@@ -220,7 +252,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     const props = parcel.getProperties() as ParcelProperties;
     const labels = this.#labels(props, resolution);
     return labels.map((label) => {
-      if (label.fontSize < 8) return null;
+      if (label.fontSize < this.threshold.fontSize) return null;
       else
         return new OLText({
           font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
@@ -266,113 +298,3 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     };
   }
 }
-
-// 👉 all the patterns we use for current use etc
-
-OLFillPattern.addPattern('CUMH', {
-  // 👉 copied from tree
-  //    NBEEDS A FILLED VERSION
-  width: 30,
-  height: 30,
-  lines: [
-    [
-      7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71, 6.36,
-      0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78, 4.95, 7.07,
-      7.07, 4.95, 7.78
-    ]
-  ],
-  repeat: [
-    [3, 1],
-    [18, 16]
-  ],
-  stroke: 1
-});
-
-OLFillPattern.addPattern('CUUH', {
-  // 👉 copied from tree
-  width: 30,
-  height: 30,
-  lines: [
-    [
-      7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71, 6.36,
-      0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78, 4.95, 7.07,
-      7.07, 4.95, 7.78
-    ]
-  ],
-  repeat: [
-    [3, 1],
-    [18, 16]
-  ],
-  stroke: 1
-});
-
-OLFillPattern.addPattern('CUMW', {
-  // 👉 copied from pine
-  //    NBEEDS A FILLED VERSION
-  width: 30,
-  height: 30,
-  lines: [
-    [
-      5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49, 2.83,
-      8.49
-    ]
-  ],
-  repeat: [
-    [3, 1],
-    [18, 16]
-  ],
-  stroke: 1
-});
-
-OLFillPattern.addPattern('CUUW', {
-  // 👉 copied from pine
-  width: 30,
-  height: 30,
-  lines: [
-    [
-      5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49, 2.83,
-      8.49
-    ]
-  ],
-  repeat: [
-    [3, 1],
-    [18, 16]
-  ],
-  stroke: 1
-});
-
-OLFillPattern.addPattern('CUFL', {
-  // 👉 copied from grass
-  width: 27,
-  height: 22,
-  lines: [
-    [0, 10.5, 13, 10.5],
-    [2.5, 10, 1.5, 7],
-    [4.5, 10, 4.5, 5, 3.5, 4],
-    [7, 10, 7.5, 6, 8.5, 3],
-    [10, 10, 11, 6]
-  ],
-  repeat: [
-    [0, 0],
-    [14, 10]
-  ],
-  stroke: 1
-});
-
-OLFillPattern.addPattern('CUWL', {
-  // 👉 copied from swamp
-  width: 24,
-  height: 23,
-  lines: [
-    [0, 10.5, 9.5, 10.5],
-    [2.5, 10, 2.5, 7],
-    [4.5, 10, 4.5, 4],
-    [6.5, 10, 6.5, 6],
-    [3, 12.5, 7, 12.5]
-  ],
-  repeat: [
-    [0, 0],
-    [14, 10]
-  ],
-  stroke: 1
-});

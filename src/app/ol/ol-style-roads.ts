@@ -5,6 +5,7 @@ import { RoadProperties } from '../services/geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
@@ -13,6 +14,18 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
+// 👇 draws a road with:
+//    -- a width computed to be proportional to the actual roadway width
+//    -- with an edge
+//       -- with a styled color that depends on the road class
+//    -- with a single lane
+//       -- with a styled color that depends on the road class
+//    -- with the road name inside the lane
+//       -- with a styled color that depends on the road class
+//      -- with an input font weight, size and family
+//   -- controlled by an input width threshold below which:
+//      -- theroad is not shown
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-roads',
@@ -20,6 +33,11 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleRoadsComponent implements OLStyleComponent {
+  @Input() fontFamily = 'Roboto';
+  @Input() fontSize = 10;
+  @Input() fontWeight: 'bold' | 'normal' = 'bold';
+  @Input() threshold = 0.5;
+
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -28,24 +46,20 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   }
 
   #drawText(props: RoadProperties, resolution: number): OLText {
-    const klass = props.class ?? '0';
-    const color = this.map.vars[`--map-road-text-color-${klass}`];
-    const fontFamily = this.map.vars['--map-road-text-font-family'];
-    const fontSize = +this.map.vars['--map-road-text-font-size'] / resolution;
-    if (fontSize < 6) return null;
-    else
-      return new OLText({
-        font: `normal ${fontSize}px '${fontFamily}'`,
-        fill: new OLFill({ color: `rgba(${color}, 1)` }),
-        overflow: false,
-        placement: 'line',
-        text: props.name
-      });
+    const color = this.map.vars[`--map-road-text-color-${props.class ?? '0'}`];
+    return new OLText({
+      font: `${this.fontWeight} ${this.fontSize / resolution}px '${
+        this.fontFamily
+      }'`,
+      fill: new OLFill({ color: `rgba(${color}, 1)` }),
+      overflow: false,
+      placement: 'line',
+      text: props.name
+    });
   }
 
   #fillLane(props: RoadProperties, resolution: number): OLStroke {
-    const klass = props.class ?? '0';
-    const lane = this.map.vars[`--map-road-lane-${klass}`];
+    const lane = this.map.vars[`--map-road-lane-${props.class ?? '0'}`];
     const width = this.#width(props, resolution);
     return new OLStroke({
       color: `rgba(${lane}, 1)`,
@@ -55,8 +69,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   }
 
   #strokeEdge(props: RoadProperties, resolution: number): OLStroke {
-    const klass = props.class ?? '0';
-    const edge = this.map.vars[`--map-road-edge-${klass}`];
+    const edge = this.map.vars[`--map-road-edge-${props.class ?? '0'}`];
     const width = this.#width(props, resolution);
     return new OLStroke({ color: `rgba(${edge}, 1)`, lineCap: 'butt', width });
   }
@@ -70,17 +83,20 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (road: OLFeature<any>, resolution: number): OLStyle[] => {
       const props = road.getProperties() as RoadProperties;
-      return [
-        new OLStyle({
-          fill: null,
-          stroke: this.#strokeEdge(props, resolution)
-        }),
-        new OLStyle({
-          fill: null,
-          stroke: this.#fillLane(props, resolution),
-          text: this.#drawText(props, resolution)
-        })
-      ];
+      const width = this.#width(props, resolution);
+      if (width < this.threshold) return null;
+      else
+        return [
+          new OLStyle({
+            fill: null,
+            stroke: this.#strokeEdge(props, resolution)
+          }),
+          new OLStyle({
+            fill: null,
+            stroke: this.#fillLane(props, resolution),
+            text: this.#drawText(props, resolution)
+          })
+        ];
     };
   }
 }
