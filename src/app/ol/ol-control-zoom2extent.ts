@@ -4,6 +4,7 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Options as OLZoomToExtentOptions } from 'ol/control/ZoomToExtent';
 
 import { forwardRef } from '@angular/core';
 
@@ -25,12 +26,27 @@ export class OLControlZoomToExtentComponent implements Mapable {
   olControl: OLZoomToExtent;
 
   constructor(private map: OLMapComponent) {
-    this.olControl = new OLZoomToExtent({
+    this.olControl = new ZoomToExtentExtended(this.map, {
       extent: this.map.boundaryExtent
     });
   }
 
   addToMap(): void {
     this.map.olMap.addControl(this.olControl);
+  }
+}
+
+// 👇 OL's ZoomToExtent does not trigger any events from the View
+//    to indicate that the center or zoom has changed, but we can fix that
+//    thanks to OL's excellent architecture!
+
+class ZoomToExtentExtended extends OLZoomToExtent {
+  constructor(private map: OLMapComponent, options: OLZoomToExtentOptions) {
+    super(options);
+  }
+
+  handleZoomToExtent(): void {
+    super.handleZoomToExtent();
+    this.map.onChange();
   }
 }

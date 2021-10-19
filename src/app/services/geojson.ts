@@ -16,6 +16,7 @@ export interface CountyIndex {
   [town: string]: TownIndex | Record<string, Layer>;
   layers: {
     boundary: Layer;
+    places: Layer;
     selectables: Layer;
     towns: Layer;
   };
@@ -35,6 +36,7 @@ export interface TownIndex {
     boundary: Layer;
     lakes: Layer;
     parcels: Layer;
+    places: Layer;
     roads: Layer;
     selectables: Layer;
   };
@@ -86,6 +88,7 @@ export interface ParcelProperties {
 export interface PlacesProperties {
   county: string;
   name: string;
+  town: string;
   type:
     | 'airport'
     | 'area'

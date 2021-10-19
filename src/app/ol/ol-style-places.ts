@@ -7,8 +7,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import { containsExtent } from 'ol/extent';
-
 import OLCircle from 'ol/style/Circle';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
@@ -59,13 +57,6 @@ export class OLStylePlacesComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (place: OLFeature<any>, resolution: number): OLStyle => {
       const props = place.getProperties() as PlacesProperties;
-      // 👇 this works, but do we need it? OL will filter places not
-      //    showing for us
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const inside = containsExtent(
-        this.map.boundaryExtent,
-        place.getGeometry().getExtent()
-      );
       // ❓ TODO what to support
       if (props.type !== 'ppl') return null;
       else {
