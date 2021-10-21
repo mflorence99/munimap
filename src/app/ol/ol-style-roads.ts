@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
@@ -24,8 +25,9 @@ import OLText from 'ol/style/Text';
 //    -- with the road name inside the lane
 //       -- with a styled color that depends on the road class
 //      -- with an input font weight, size and family
-//   -- controlled by an input width threshold below which:
-//      -- theroad is not shown
+//   -- the road is only shown
+//      -- when the resolution is less than an input threshold
+//      -- each class has its own threshold
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +39,15 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 10;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
-  @Input() threshold = 0.5;
+  @Input() threshold: Record<string, number> = {
+    'I': 24,
+    'II': 24,
+    'IIII': 24,
+    'IV': 24,
+    'V': 3,
+    'VI': 3,
+    '0': 3
+  };
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -84,8 +94,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (road: OLFeature<OLGeometry>, resolution: number): OLStyle[] => {
       const props = road.getProperties() as RoadProperties;
-      const width = this.#width(props, resolution);
-      if (width < this.threshold) return null;
+      if (resolution >= this.threshold[props.class]) return null;
       else
         return [
           new OLStyle({

@@ -79,11 +79,16 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-parcels></app-ol-style-parcels>
+        <app-ol-style-parcels [showText]="false"></app-ol-style-parcels>
         <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
-
         <app-ol-interaction-select [eventType]="'singleclick'">
         </app-ol-interaction-select>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
@@ -93,9 +98,8 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-roads></app-ol-style-roads>
-        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        <app-ol-style-parcels [showBackground]="false"></app-ol-style-parcels>
+        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
       </app-ol-layer-vector>
     </ng-container>
 

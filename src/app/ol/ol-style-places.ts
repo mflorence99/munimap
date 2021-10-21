@@ -23,9 +23,10 @@ import OLText from 'ol/style/Text';
 //      -- with an input opacity
 //      -- with an input font weight, size and family
 //      -- with input horizontal and vertical alignment
-//   -- a marker with the same color and opacity
-//   -- controlled by an input fontSize threshold below which:
-//      -- the place marker is not shown
+//   -- an icon with the same color and opacity
+//      -- selected according to the type of place
+//   -- the marker is only shown
+//      -- when the resolution is less than an input threshold
 
 // 👉 https://stackoverflow.com/questions/43058070/openlayers-color-an-svg-icon
 const ICONS: {
@@ -43,12 +44,12 @@ const ICONS: {
 })
 export class OLStylePlacesComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 10;
+  @Input() fontSize = 12;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
-  @Input() opacity = 0.75;
+  @Input() opacity = 0.5;
   @Input() textAlign = 'center';
   @Input() textBaseline = 'bottom';
-  @Input() threshold = 6;
+  @Input() threshold = 2;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -57,26 +58,25 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  // 🤯 TODO: we want to do a lot better than a circle
-  //    so we are hard-coding its config for now
-  #drawIcon(props: PlacesProperties, resolution: number): OLImage {
+  #drawIcon(props: PlacesProperties, _resolution: number): OLImage {
     const color = this.map.vars[`--map-place-icon-color-${props.type}`];
     const icon = ICONS[props.type];
     return new OLIcon({
       // 👇 can't use rgba here, must use separate opacity
       color: `rgb(${color})`,
       opacity: this.opacity,
-      scale: icon.scale / resolution,
+      scale: icon.scale,
       src: icon.src
     });
   }
 
   #drawText(props: PlacesProperties, resolution: number): OLText {
     const color = this.map.vars[`--map-place-text-color-${props.type}`];
+    // 👉 fontSize is proportional to the resolution,
+    //    but no bigger than the nominal size specified
+    const fontSize = Math.min(this.fontSize, this.fontSize / resolution);
     return new OLText({
-      font: `${this.fontWeight} ${this.fontSize / resolution}px '${
-        this.fontFamily
-      }'`,
+      font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
       fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
       placement: 'point',
       stroke: new OLStroke({
@@ -92,10 +92,8 @@ export class OLStylePlacesComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (place: OLFeature<any>, resolution: number): OLStyle => {
       const props = place.getProperties() as PlacesProperties;
-      const icon = ICONS[props.type];
-      console.log(props.name, icon);
-      if (this.fontSize / resolution <= this.threshold) return null;
-      else if (!icon) return null;
+      if (resolution >= this.threshold) return null;
+      else if (!ICONS[props.type]) return null;
       else {
         return new OLStyle({
           image: this.#drawIcon(props, resolution),
