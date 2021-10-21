@@ -9,6 +9,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
+import OLGeometry from 'ol/geom/Geometry';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -45,7 +46,7 @@ export class OLStyleFeaturesComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (_feature: OLFeature<any>, _resolution: number): OLStyle => {
+    return (): OLStyle => {
       const stroke = this.map.vars['--map-feature-outline'];
       return new OLStyle({
         // 👇 need this so we can click on the feature
@@ -59,7 +60,7 @@ export class OLStyleFeaturesComponent implements OLStyleComponent {
   }
 
   styleWhenSelected(): OLStyleFunction {
-    return (feature: OLFeature<any>, _resolution: number): OLStyle => {
+    return (feature: OLFeature<OLGeometry>): OLStyle => {
       const color = this.map.vars['--map-feature-text-color'];
       const fill = this.map.vars['--map-feature-fill'];
       const stroke = this.map.vars['--map-feature-outline'];

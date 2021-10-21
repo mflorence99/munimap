@@ -12,6 +12,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
+import OLGeometry from 'ol/geom/Geometry';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -63,16 +64,48 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   ) {
     this.layer.setStyle(this);
     // 👉 all the patterns we use for current use etc
-    //    we only really need to do this once, but it dies mo harm
-    OLFillPattern.addPattern('CUMH', OLFillPattern.prototype.patterns['tree2']);
+    //    we only really need to do this once, but it does no harm
+    // 🔥 tree2 and pine2 not yet released on ol-ext
+    OLFillPattern.addPattern('CUMH', {
+      width: 30,
+      height: 30,
+      lines: [
+        [
+          7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71,
+          6.36, 0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78,
+          4.95, 7.07, 7.07, 4.95, 7.78, 4.95, 10.61, 7.78, 10.61
+        ]
+      ],
+      repeat: [
+        [3, 1],
+        [18, 16]
+      ],
+      fill: 1,
+      stroke: 1
+    });
     OLFillPattern.addPattern('CUUH', OLFillPattern.prototype.patterns['tree']);
-    OLFillPattern.addPattern('CUMW', OLFillPattern.prototype.patterns['pine2']);
+    OLFillPattern.addPattern('CUMW', {
+      width: 30,
+      height: 30,
+      lines: [
+        [
+          5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49,
+          2.83, 8.49, 2.83, 11.31, 5.66, 11.31
+        ]
+      ],
+      repeat: [
+        [3, 1],
+        [18, 16]
+      ],
+      fill: 1,
+      stroke: 1
+    });
     OLFillPattern.addPattern('CUUW', OLFillPattern.prototype.patterns['pine']);
     OLFillPattern.addPattern('CUFL', OLFillPattern.prototype.patterns['grass']);
     OLFillPattern.addPattern('CUWL', OLFillPattern.prototype.patterns['swamp']);
   }
 
-  #fill(parcel: OLFeature<any>): OLFill {
+  #fill(parcel: OLFeature<OLGeometry>): OLFill {
     const props = parcel.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let pattern;
@@ -82,10 +115,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       // not all current usages have a pattern
       if (color) {
         pattern = new OLFillPattern({
-          color: `rgba(${color}, 0.25)`,
+          color: `rgba(${color}, 0.15)`,
           fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
           pattern: props.use,
-          scale: 1
+          scale: 2
         });
       }
     }
@@ -162,7 +195,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       });
     } else {
       // 👉 measure up the lot id and the acreage text
-      //    NOTE: the acreage font suze is 80% smaller
+      //    NOTE: the acreage font size is 80% smaller
       const fAcres = 0.8;
       const mID = this.map.measureText(
         props.id,
@@ -247,7 +280,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     else return new OLStroke({ color: `rgba(${select}, 1)`, width });
   }
 
-  #text(parcel: OLFeature<any>, resolution: number): OLText[] {
+  #text(parcel: OLFeature<OLGeometry>, resolution: number): OLText[] {
     const color = this.map.vars['--map-parcel-text-color'];
     const props = parcel.getProperties() as ParcelProperties;
     const labels = this.#labels(props, resolution);
@@ -268,7 +301,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #theStyles(
-    parcel: OLFeature<any>,
+    parcel: OLFeature<OLGeometry>,
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
@@ -277,6 +310,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     const texts = this.#text(parcel, resolution);
     return texts.map((text, ix) => {
       return new OLStyle({
+        // 🔥 don't fill 2x as opacity is halved!
         fill: ix === 0 ? this.#fill(parcel) : null,
         stroke: whenSelected
           ? this.#strokeSelect(resolution)
@@ -287,13 +321,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (parcel: OLFeature<any>, resolution: number): OLStyle[] => {
+    return (parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] => {
       return this.#theStyles(parcel, resolution);
     };
   }
 
   styleWhenSelected(): OLStyleFunction {
-    return (parcel: OLFeature<any>, resolution: number): OLStyle[] => {
+    return (parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] => {
       return this.#theStyles(parcel, resolution, true);
     };
   }

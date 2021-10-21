@@ -66,70 +66,74 @@ export interface PlacesProperties {
   county: string;
   name: string;
   town: string;
-  type:
-    | 'airport'
-    | 'area'
-    | 'bar'
-    | 'basin'
-    | 'bay'
-    | 'beach'
-    | 'bench'
-    | 'bend'
-    | 'bridge'
-    | 'building'
-    | 'canal'
-    | 'cape'
-    | 'cave'
-    | 'cemetery'
-    | 'channel'
-    | 'church'
-    | 'civil'
-    | 'cliff'
-    | 'crossing'
-    | 'dam'
-    | 'falls'
-    | 'flat'
-    | 'forest'
-    | 'gap'
-    | 'gut'
-    | 'harbor'
-    | 'hospital'
-    | 'island'
-    | 'lake'
-    | 'locale'
-    | 'military'
-    | 'mine'
-    | 'other'
-    | 'park'
-    | 'pillar'
-    | 'po'
-    | 'ppl'
-    | 'range'
-    | 'rapids'
-    | 'reserve'
-    | 'reservoir'
-    | 'ridge'
-    | 'school'
-    | 'sea'
-    | 'slope'
-    | 'spring'
-    | 'stream'
-    | 'summit'
-    | 'swamp'
-    | 'tower'
-    | 'trail'
-    | 'valley'
-    | 'woods';
+  type: PlacesPropertiesType;
 }
 
+export type PlacesPropertiesType =
+  | 'airport'
+  | 'area'
+  | 'bar'
+  | 'basin'
+  | 'bay'
+  | 'beach'
+  | 'bench'
+  | 'bend'
+  | 'bridge'
+  | 'building'
+  | 'canal'
+  | 'cape'
+  | 'cave'
+  | 'cemetery'
+  | 'channel'
+  | 'church'
+  | 'civil'
+  | 'cliff'
+  | 'crossing'
+  | 'dam'
+  | 'falls'
+  | 'flat'
+  | 'forest'
+  | 'gap'
+  | 'gut'
+  | 'harbor'
+  | 'hospital'
+  | 'island'
+  | 'lake'
+  | 'locale'
+  | 'military'
+  | 'mine'
+  | 'other'
+  | 'park'
+  | 'pillar'
+  | 'po'
+  | 'ppl'
+  | 'range'
+  | 'rapids'
+  | 'reserve'
+  | 'reservoir'
+  | 'ridge'
+  | 'school'
+  | 'sea'
+  | 'slope'
+  | 'spring'
+  | 'stream'
+  | 'summit'
+  | 'swamp'
+  | 'tower'
+  | 'trail'
+  | 'valley'
+  | 'woods';
+
 export interface RoadProperties {
-  class: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
+  class: RoadPropertiesClass;
   county: string;
   name: string;
   owner: string;
   town: string;
   width: number;
 }
+
+export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 
 export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
 

@@ -38,7 +38,6 @@ export type OLFillPatternType =
   | 'mixtree2'
   | 'nylon'
   | 'pine'
-  | 'pine2'
   | 'pines'
   | 'reed'
   | 'rock'
@@ -49,7 +48,6 @@ export type OLFillPatternType =
   | 'swamp'
   | 'tile'
   | 'tree'
-  | 'tree2'
   | 'vine'
   | 'wave'
   | 'woven';

@@ -82,7 +82,11 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --map-parcel-stroke-CUFL: var(--rgb-green-500);
   --map-parcel-stroke-CUWL: var(--rgb-blue-500);
 
-  --map-place-color-ppl: var(--rgb-gray-800);
+  --map-place-icon-color-church: var(--rgb-brown-900);
+  --map-place-icon-color-summit: var(--rgb-red-900);
+
+  --map-place-text-color-church: var(--rgb-brown-900);
+  --map-place-text-color-summit: var(--rgb-brown-900);
 
   --map-road-text-color-I: var(--rgb-gray-50);
   --map-road-text-color-II: var(--rgb-gray-50);

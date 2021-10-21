@@ -69,16 +69,6 @@
       </app-ol-layer-tile>
     </ng-container>
 
-    <!-- PARCELS LAYER -->
-
-    <app-ol-layer-vector>
-      <app-ol-style-parcels></app-ol-style-parcels>
-      <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
-
-      <app-ol-interaction-select [eventType]="'singleclick'">
-      </app-ol-interaction-select>
-    </app-ol-layer-vector>
-
     <!--VECTOR OVERLAYS FOR "BLANK" -->
 
     <ng-container *ngIf="map.style === 'blank'">
@@ -89,15 +79,35 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-roads></app-ol-style-roads>
-        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        <app-ol-style-parcels></app-ol-style-parcels>
+        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+
+        <app-ol-interaction-select [eventType]="'singleclick'">
+        </app-ol-interaction-select>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
         <app-ol-style-places></app-ol-style-places>
         <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+    </ng-container>
+
+    <!-- VECTOR LAYERS FOR OTHER TYPES -->
+
+    <ng-container *ngIf="map.style !== 'blank'">
+      <app-ol-layer-vector>
+        <app-ol-style-parcels></app-ol-style-parcels>
+        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+
+        <app-ol-interaction-select [eventType]="'singleclick'">
+        </app-ol-interaction-select>
       </app-ol-layer-vector>
     </ng-container>
 

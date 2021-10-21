@@ -10,6 +10,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
+import OLGeometry from 'ol/geom/Geometry';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -81,7 +82,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (road: OLFeature<any>, resolution: number): OLStyle[] => {
+    return (road: OLFeature<OLGeometry>, resolution: number): OLStyle[] => {
       const props = road.getProperties() as RoadProperties;
       const width = this.#width(props, resolution);
       if (width < this.threshold) return null;
