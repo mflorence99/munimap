@@ -16,6 +16,7 @@ export interface Parcel {
   lengths?: number[];
   minWidth?: number;
   neighborhood?: 'U' | 'V' | 'W';
+  numSplits: number;
   orientation?: number;
   owner?: string;
   perimeter?: number;
@@ -25,7 +26,7 @@ export interface Parcel {
   usage:
     | '110' // Single family residence
     | '120' // Multi family residence
-    | '130' // Other residewntial
+    | '130' // Other residential
     | '190' // Current use
     | '260' // Commercial / Industrial
     | '300' // Town property

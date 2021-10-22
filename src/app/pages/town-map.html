@@ -79,10 +79,8 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-parcels [showText]="false"></app-ol-style-parcels>
+        <app-ol-style-parcels [showBackground]="true"></app-ol-style-parcels>
         <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
-        <app-ol-interaction-select [eventType]="'singleclick'">
-        </app-ol-interaction-select>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
@@ -98,8 +96,18 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-parcels [showBackground]="false"></app-ol-style-parcels>
+        <app-ol-style-parcels [showText]="true"></app-ol-style-parcels>
         <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
+        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+        <app-ol-interaction-select
+          (select)="onSelectFeature($event)"
+          [eventType]="'singleclick'"
+        >
+        </app-ol-interaction-select>
       </app-ol-layer-vector>
     </ng-container>
 
@@ -107,10 +115,20 @@
 
     <ng-container *ngIf="map.style !== 'blank'">
       <app-ol-layer-vector>
-        <app-ol-style-parcels></app-ol-style-parcels>
         <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+        <app-ol-style-parcels
+          [showBackground]="true"
+          [showText]="true"
+        ></app-ol-style-parcels>
+      </app-ol-layer-vector>
 
-        <app-ol-interaction-select [eventType]="'singleclick'">
+      <app-ol-layer-vector>
+        <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
+        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+        <app-ol-interaction-select
+          (select)="onSelectFeature($event)"
+          [eventType]="'singleclick'"
+        >
         </app-ol-interaction-select>
       </app-ol-layer-vector>
     </ng-container>

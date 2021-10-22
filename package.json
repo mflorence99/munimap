@@ -10,6 +10,7 @@
   "author": "Mark Florence",
   "scripts": {
     "clean:deps": "rm -rf node_modules && rm package-lock.json && npm install",
+    "emulators": "firebase emulators:start",
     "fa": "./bin/fa.sh $1",
     "lint": "eslint --fix 'bin/**/*.ts' 'src/**/*.ts' 'tests/**/*.ts' && stylelint --fix 'src/**/*.scss'",
     "ng": "ng",

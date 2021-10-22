@@ -24,13 +24,12 @@ import OLText from 'ol/style/Text';
 //       -- with an input font family
 //    -- a styled fill color and pattern matching the land use
 //    -- a styled border color
-//       -- wth an input width
+//       -- with an input width
 //    -- a styled border color when selected
-//       -- wth an input width
+//       -- with the same width
 //    -- the land use fill color is lways shown
 //    -- the border and text are only shown
-//       -- when the resolution is less than an input threshold
-//       -- threshold is set by acreage
+//       -- when the fontSize is less than an input threshold
 
 // 👉 showBackground and showText allow parcels to be split into
 //    2 layers, as is useful for the "blank" map style
@@ -52,40 +51,11 @@ interface Label {
 })
 export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize: [area: number, fontSize: number][] = [
-    [500, 100],
-    [100, 80],
-    [50, 70],
-    [25, 50],
-    [10, 35],
-    [5, 20],
-    [2, 18],
-    [1, 16],
-    [0.75, 15],
-    [0.5, 14],
-    [0.24, 13],
-    [0, 10]
-  ];
-  @Input() showBackground = true;
-  @Input() showText = true;
-  @Input() threshold: [area: number, resolution: number][] = [
-    [500, 500],
-    [100, 500],
-    [50, 100],
-    [25, 50],
-    [10, 25],
-    [5, 10],
-    [2, 5],
-    [1, 2],
-    [0.75, 1],
-    [0.5, 0.75],
-    [0.25, 0.5],
-    [0, 0.25]
-  ];
-  @Input() width = {
-    outline: 1,
-    select: 3
-  };
+  @Input() showBackground = false;
+  @Input() showSelection = false;
+  @Input() showText = false;
+  @Input() threshold = 8;
+  @Input() width = 3;
 
   constructor(
     private decimal: DecimalPipe,
@@ -96,7 +66,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #fill(parcel: OLFeature<OLGeometry>, resolution: number): OLFill {
+  #fill(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let pattern;
@@ -133,13 +103,16 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         spacing: 4
       });
     }
-    return pattern;
+    // 👉 we always fill, regardless of the resolution
+    return [new OLStyle({ fill: pattern })];
   }
 
+  // TODO 👇 just a guess so not parameterizing for now
   #fontSize(props: ParcelProperties, resolution: number): number {
-    const area = props.areaComputed;
-    const step = this.fontSize.find((step) => area >= step[0]);
-    return step[1] / resolution;
+    return (
+      (Math.min(Math.max(props.areaComputed, 5), 50) / 10 / resolution) *
+      this.map.olView.getZoom()
+    );
   }
 
   #isLarge(props: ParcelProperties): boolean {
@@ -240,45 +213,67 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       : label?.split;
   }
 
-  #strokeOutline(parcel: OLFeature<OLGeometry>, resolution: number): OLStroke {
+  // 👐 https://stackoverflow.com/questions/45740521
+  #strokeOutline(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
-    const area = props.areaComputed;
-    const step = this.threshold.find((step) => area >= step[0]);
-    if (resolution >= step[1]) return null;
+    // 👇 onlyif feature will be visible
+    if (this.#fontSize(props, resolution) < this.threshold) return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
-      const width = this.width.outline / resolution;
-      return new OLStroke({
-        color: `rgba(${outline}, 0.5)`,
-        lineDash: [2, 4],
-        width
-      });
+      const width = this.width / resolution;
+      const lineDash = [4 / resolution, 8 / resolution];
+      const lineDashOffset = 6 / resolution;
+      // 👉 alternating light, dark outline
+      return [
+        new OLStyle({
+          stroke: new OLStroke({
+            color: `rgb(${outline})`,
+            lineCap: 'square',
+            lineDash,
+            width
+          })
+        }),
+        new OLStyle({
+          stroke: new OLStroke({
+            color: 'white',
+            lineCap: 'square',
+            lineDash,
+            lineDashOffset,
+            width
+          })
+        })
+      ];
     }
   }
 
-  #strokeSelect(parcel: OLFeature<OLGeometry>, resolution: number): OLStroke {
+  #strokeSelect(
+    parcel: OLFeature<OLGeometry>,
+    resolution: number,
+    whenSelected = false
+  ): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
-    const area = props.areaComputed;
-    const step = this.threshold.find((step) => area >= step[0]);
-    if (resolution >= step[1]) return null;
+    // 👇 onlyif feature will be visible
+    if (this.#fontSize(props, resolution) < this.threshold) return null;
     else {
       const select = this.map.vars['--map-parcel-select'];
-      const width = Math.max(this.width.select / resolution, 3);
-      return new OLStroke({ color: `rgba(${select}, 1)`, width });
+      const width = Math.max(this.width / resolution, 3);
+      // 👉 necessary so we can select
+      const fill = new OLFill({ color: [0, 0, 0, 0] });
+      const stroke = new OLStroke({ color: `rgb(${select})`, width });
+      return [new OLStyle({ fill, stroke: whenSelected ? stroke : null })];
     }
   }
 
-  #text(parcel: OLFeature<OLGeometry>, resolution: number): OLText[] {
+  #text(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
-    const area = props.areaComputed;
-    const step = this.threshold.find((step) => area >= step[0]);
-    if (resolution >= step[1]) return [null];
+    // 👇 onlyif feature will be visible
+    if (this.#fontSize(props, resolution) < this.threshold) return null;
     else {
       const color = this.map.vars['--map-parcel-text-color'];
       const props = parcel.getProperties() as ParcelProperties;
       const labels = this.#labels(props, resolution);
       return labels.map((label) => {
-        return new OLText({
+        const text = new OLText({
           font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
           fill: new OLFill({ color: `rgba(${color}, 1)` }),
           offsetX: label.offsetX,
@@ -288,6 +283,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           rotation: this.#rotation(props),
           text: label.text
         });
+        return new OLStyle({ text });
       });
     }
   }
@@ -297,35 +293,22 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
-    // 👇 we will potentially develop two texts, one for the lot ID
-    //    and a second for the acreage
+    const styles: OLStyle[] = [];
+    if (this.showBackground) {
+      const fills = this.#fill(parcel, resolution);
+      if (fills) styles.push(...fills);
+      const strokes = this.#strokeOutline(parcel, resolution);
+      if (strokes) styles.push(...strokes);
+    }
+    if (this.showSelection) {
+      const strokes = this.#strokeSelect(parcel, resolution, whenSelected);
+      if (strokes) styles.push(...strokes);
+    }
     if (this.showText) {
       const texts = this.#text(parcel, resolution);
-      return texts.map((text, ix) => {
-        return new OLStyle({
-          // 🔥 don't fill 2x as opacity is halved!
-          fill:
-            this.showBackground && ix === 0
-              ? this.#fill(parcel, resolution)
-              : null,
-          stroke: this.showBackground
-            ? whenSelected
-              ? this.#strokeSelect(parcel, resolution)
-              : this.#strokeOutline(parcel, resolution)
-            : null,
-          text: text
-        });
-      });
-    } else if (this.showBackground) {
-      return [
-        new OLStyle({
-          fill: this.#fill(parcel, resolution),
-          stroke: whenSelected
-            ? this.#strokeSelect(parcel, resolution)
-            : this.#strokeOutline(parcel, resolution)
-        })
-      ];
+      if (texts) styles.push(...texts);
     }
+    return styles;
   }
 
   style(): OLStyleFunction {

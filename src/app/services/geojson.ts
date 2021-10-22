@@ -28,6 +28,7 @@ export interface Index {
 }
 
 export interface Layer {
+  available: boolean;
   name: string;
   url: string;
 }
@@ -137,6 +138,11 @@ export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 
 export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
 
+const EMPTY: GeoJSON.FeatureCollection<GeoJSON.Polygon> = {
+  features: [],
+  type: 'FeatureCollection'
+};
+
 @Injectable({ providedIn: 'root' })
 export class GeoJSONService {
   constructor(private http: HttpClient, private params: Params) {}
@@ -166,33 +172,27 @@ export class GeoJSONService {
         `${this.params.geoJSON.host}${path}`,
         { headers: new HttpHeaders({ cache: String(environment.production) }) }
       )
-      .pipe(
-        catchError(() =>
-          of({
-            features: [],
-            type: 'FeatureCollection'
-          } as GeoJSON.FeatureCollection<GeoJSON.Polygon>)
-        )
-      );
+      .pipe(catchError(() => of(EMPTY)));
   }
 
   loadByIndex(
     route: ActivatedRoute,
     path: string,
-    layer: string
+    layerKey: string
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const base = this.findIndex(route);
-    return this.loadFromIndex(base, path, layer);
+    return this.loadFromIndex(base, path, layerKey);
   }
 
   loadFromIndex(
     base: Index,
     path: string,
-    layer: string
+    layerKey: string
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const index = this.#indexFromPath(base, path);
-    const url = index.layers[layer].url;
-    return this.load(url);
+    const layer = index.layers[layerKey];
+    const url = layer.url;
+    return layer.available ? this.load(url) : of(EMPTY);
   }
 
   loadIndex(): Observable<Index> {
