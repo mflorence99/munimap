@@ -1,8 +1,8 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
-import { PlacesProperties } from '../services/geojson';
-import { PlacesPropertiesType } from '../services/geojson';
+import { PlaceProperties } from '../services/geojson';
+import { PlacePropertiesType } from '../services/geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -30,7 +30,7 @@ import OLText from 'ol/style/Text';
 
 // 👉 https://stackoverflow.com/questions/43058070/openlayers-color-an-svg-icon
 const ICONS: {
-  [key in PlacesPropertiesType]?: { scale: number; src: string };
+  [key in PlacePropertiesType]?: { scale: number; src: string };
 } = {
   church: { src: 'assets/place-of-worship.svg', scale: 0.1 },
   summit: { src: 'assets/mountain.svg', scale: 0.1 }
@@ -58,7 +58,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #drawIcon(props: PlacesProperties, _resolution: number): OLImage {
+  #drawIcon(props: PlaceProperties, _resolution: number): OLImage {
     const color = this.map.vars[`--map-place-icon-color-${props.type}`];
     const icon = ICONS[props.type];
     return new OLIcon({
@@ -70,7 +70,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     });
   }
 
-  #drawText(props: PlacesProperties, resolution: number): OLText {
+  #drawText(props: PlaceProperties, resolution: number): OLText {
     const color = this.map.vars[`--map-place-text-color-${props.type}`];
     // 👉 fontSize is proportional to the resolution,
     //    but no bigger than the nominal size specified
@@ -91,7 +91,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
 
   style(): OLStyleFunction {
     return (place: OLFeature<any>, resolution: number): OLStyle => {
-      const props = place.getProperties() as PlacesProperties;
+      const props = place.getProperties() as PlaceProperties;
       if (resolution >= this.threshold) return null;
       else if (!ICONS[props.type]) return null;
       else {

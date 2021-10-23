@@ -8,8 +8,9 @@ import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
-import OLGeometry from 'ol/geom/Geometry';
 import OLIcon from 'ol/style/Icon';
+import OLMultiLineString from 'ol/geom/MultiLineString';
+import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 
@@ -17,8 +18,7 @@ import OLStyle from 'ol/style/Style';
 //    -- a styled color
 //    -- with an input opacity
 //    -- with an input width
-
-// TODO 👇 how to add repeating "bolt" icon?
+//    -- a repeating "bolt" icon
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,23 +37,58 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  style(): OLStyleFunction {
-    return (river: OLFeature<OLGeometry>, resolution: number): OLStyle => {
-      const iconColor = this.map.vars['--map-powerline-icon-color'];
-      const lineColor = this.map.vars['--map-powerline-line-color'];
-      const width = this.width / resolution;
-      return new OLStyle({
-        image: new OLIcon({
-          color: `rgb(${iconColor})`,
-          opacity: this.opacity,
-          scale: 1,
-          src: 'assets/bolt.svg'
-        }),
-        stroke: new OLStroke({
-          color: `rgba(${lineColor}, ${this.opacity})`,
-          width
-        })
+  #drawIcons(
+    river: OLFeature<OLMultiLineString>,
+    _resolution: number
+  ): OLStyle[] {
+    const iconColor = this.map.vars['--map-powerline-icon-color'];
+    const icons: OLStyle[] = [];
+    // genius!! 👉 https://stackoverflow.com/questions/38391780
+    river
+      .getGeometry()
+      .getLineStrings()
+      .forEach((lineString) => {
+        lineString.forEachSegment((start, end) => {
+          const dx = end[0] - start[0];
+          const dy = end[1] - start[1];
+          const rotation = Math.atan2(dy, dx);
+          icons.push(
+            new OLStyle({
+              geometry: new OLPoint(end),
+              image: new OLIcon({
+                color: `rgb(${iconColor})`,
+                opacity: this.opacity,
+                scale: 0.1,
+                rotation: -rotation,
+                src: 'assets/bolt.svg'
+              })
+            })
+          );
+        });
       });
+    return icons;
+  }
+
+  #drawLine(river: OLFeature<OLMultiLineString>, resolution: number): OLStyle {
+    const lineColor = this.map.vars['--map-powerline-line-color'];
+    const width = this.width / resolution;
+    return new OLStyle({
+      stroke: new OLStroke({
+        color: `rgba(${lineColor}, ${this.opacity})`,
+        width
+      })
+    });
+  }
+
+  style(): OLStyleFunction {
+    return (
+      river: OLFeature<OLMultiLineString>,
+      resolution: number
+    ): OLStyle[] => {
+      return [
+        this.#drawLine(river, resolution),
+        ...this.#drawIcons(river, resolution)
+      ];
     };
   }
 }

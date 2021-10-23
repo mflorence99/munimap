@@ -64,14 +64,14 @@ export interface LakeProperties {
 
 export type ParcelProperties = Parcel;
 
-export interface PlacesProperties {
+export interface PlaceProperties {
   county: string;
   name: string;
   town: string;
-  type: PlacesPropertiesType;
+  type: PlacePropertiesType;
 }
 
-export type PlacesPropertiesType =
+export type PlacePropertiesType =
   | 'airport'
   | 'area'
   | 'bar'

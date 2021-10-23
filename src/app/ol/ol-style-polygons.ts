@@ -9,12 +9,12 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
-import OLGeometry from 'ol/geom/Geometry';
+import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 fills and outlines a generic feature with:
+// 👇 fills and outlines a generic polygon with:
 //    -- an outline
 //       -- with a styled color
 //       -- with an input width
@@ -27,11 +27,11 @@ import OLText from 'ol/style/Text';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-style-features',
+  selector: 'app-ol-style-polygons',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleFeaturesComponent implements OLStyleComponent {
+export class OLStylePolygonsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -60,7 +60,7 @@ export class OLStyleFeaturesComponent implements OLStyleComponent {
   }
 
   styleWhenSelected(): OLStyleFunction {
-    return (feature: OLFeature<OLGeometry>): OLStyle => {
+    return (feature: OLFeature<OLPolygon>): OLStyle => {
       const color = this.map.vars['--map-feature-text-color'];
       const fill = this.map.vars['--map-feature-fill'];
       const stroke = this.map.vars['--map-feature-outline'];

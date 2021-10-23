@@ -10,7 +10,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
-import OLGeometry from 'ol/geom/Geometry';
+import OLMultiLineString from 'ol/geom/MultiLineString';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -79,7 +79,10 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (river: OLFeature<OLGeometry>, resolution: number): OLStyle => {
+    return (
+      river: OLFeature<OLMultiLineString>,
+      resolution: number
+    ): OLStyle => {
       const props = river.getProperties() as RiverProperties;
       return new OLStyle({
         stroke: this.#drawLine(props, resolution),

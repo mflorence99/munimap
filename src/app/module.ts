@@ -29,10 +29,10 @@ import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceStaticComponent } from './ol/ol-source-static';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from './ol/ol-style-boundary';
-import { OLStyleFeaturesComponent } from './ol/ol-style-features';
 import { OLStyleLakesComponent } from './ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from './ol/ol-style-parcels';
 import { OLStylePlacesComponent } from './ol/ol-style-places';
+import { OLStylePolygonsComponent } from './ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from './ol/ol-style-powerlines';
 import { OLStyleRiversComponent } from './ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from './ol/ol-style-roads';
@@ -113,10 +113,10 @@ const COMPONENTS = [
   OLSourceStaticComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
-  OLStyleFeaturesComponent,
   OLStyleLakesComponent,
   OLStyleParcelsComponent,
   OLStylePlacesComponent,
+  OLStylePolygonsComponent,
   OLStylePowerlinesComponent,
   OLStyleRiversComponent,
   OLStyleRoadsComponent,

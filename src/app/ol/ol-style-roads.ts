@@ -11,7 +11,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
-import OLGeometry from 'ol/geom/Geometry';
+import OLMultiLineString from 'ol/geom/MultiLineString';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -92,7 +92,10 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (road: OLFeature<OLGeometry>, resolution: number): OLStyle[] => {
+    return (
+      road: OLFeature<OLMultiLineString>,
+      resolution: number
+    ): OLStyle[] => {
       const props = road.getProperties() as RoadProperties;
       if (resolution >= this.threshold[props.class]) return null;
       else

@@ -14,7 +14,8 @@ import { fromLonLat } from 'ol/proj';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
-import OLGeometry from 'ol/geom/Geometry';
+import OLIcon from 'ol/style/Icon';
+import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -29,7 +30,7 @@ import OLText from 'ol/style/Text';
 //       -- with an input width
 //    -- a styled border color when selected
 //       -- with the same width
-//    -- the land use fill color is lways shown
+//    -- the land use fill color is always shown
 //    -- the border and text are only shown
 //       -- when the fontSize is less than an input threshold
 
@@ -52,6 +53,17 @@ interface Label {
   styles: [':host { display: none }']
 })
 export class OLStyleParcelsComponent implements OLStyleComponent {
+  static images = {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    CUFL: new OLIcon({ src: 'assets/CUFL.svg' }),
+    CUMH: new OLIcon({ src: 'assets/CUMH.svg' }),
+    CUMW: new OLIcon({ src: 'assets/CUMW.svg' }),
+    CUUH: new OLIcon({ src: 'assets/CUUH.svg' }),
+    CUUW: new OLIcon({ src: 'assets/CUUW.svg' }),
+    CUWL: new OLIcon({ src: 'assets/CUWL.svg' })
+    /* eslint-enable @typescript-eslint/naming-convention */
+  };
+
   // 👉 we don't really want to parameterize these settings as inputs
   //    as they are a WAG to control computed fontSize for acres
   #acresSizeClamp = [0.1, 1000];
@@ -69,49 +81,52 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
-    addPatterns();
     this.layer.setStyle(this);
   }
 
-  #fill(parcel: OLFeature<OLGeometry>, _resolution: number): OLStyle[] {
+  #fill(parcel: OLFeature<OLPolygon>, _resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
-    let pattern;
+    let patterns;
     // 👉 current use pattern comes from the use field (CUUH etc)
     if (props.usage === '190') {
       const color = this.map.vars[`--map-parcel-stroke-${props.use}`];
       // not all current usages have a pattern
       if (color) {
-        pattern = new OLFillPattern({
-          color: `rgba(${color}, 0.15)`,
-          fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
-          pattern: props.use,
-          scale: 1.5
-        });
+        patterns = [
+          new OLFill({ color: `rgba(${fill}, 0.25)` }),
+          new OLFillPattern({
+            image: OLStyleParcelsComponent.images[props.use]
+          })
+        ];
       }
     }
     // 👉 town forest uses standard symbol to match OSM etc
     else if (props.usage === '501') {
       const color = this.map.vars['--map-parcel-stroke-u501'];
-      pattern = new OLFillPattern({
-        color: `rgba(${color}, 0.5)`,
-        fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
-        pattern: 'forest',
-        scale: 1
-      });
+      patterns = [
+        new OLFillPattern({
+          color: `rgba(${color}, 0.5)`,
+          fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
+          pattern: 'forest',
+          scale: 1
+        })
+      ];
     }
     // 👉 otherwise just use a generic pattern for texture
-    if (!pattern) {
-      pattern = new OLFillPattern({
-        color: `rgba(${fill}, 0.25)`,
-        fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
-        pattern: 'dot',
-        size: 2,
-        spacing: 4
-      });
+    if (!patterns) {
+      patterns = [
+        new OLFillPattern({
+          color: `rgba(${fill}, 0.25)`,
+          fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
+          pattern: 'dot',
+          size: 2,
+          spacing: 4
+        })
+      ];
     }
     // 👉 we always fill, regardless of the resolution
-    return [new OLStyle({ fill: pattern })];
+    return patterns.map((pattern) => new OLStyle({ fill: pattern }));
   }
 
   // 👇 https://stackoverflow.com/questions/846221/logarithmic-slider
@@ -213,7 +228,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return labels;
   }
 
-  #offset(parcel: OLFeature<OLGeometry>): number[] {
+  #offset(parcel: OLFeature<OLPolygon>): number[] {
     // 👉 here we are just finding the delta between what OpenLayers
     //    thinks is the center of the parcel and the much better
     //    "center of gravity" that polylabel pre-computed for us
@@ -253,7 +268,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   // 👐 https://stackoverflow.com/questions/45740521
-  #strokeOutline(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
+  #strokeOutline(parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
     // 👇 only if feature will be visible
     if (this.#fontSize(props, resolution) < this.threshold) return null;
@@ -261,23 +276,20 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const outline = this.map.vars['--map-parcel-outline'];
       const width = this.width / resolution;
       const lineDash = [4 / resolution, 8 / resolution];
-      const lineDashOffset = 6 / resolution;
       // 👉 alternating light, dark outline
       return [
         new OLStyle({
           stroke: new OLStroke({
-            color: `rgb(${outline})`,
+            color: 'white',
             lineCap: 'square',
-            lineDash,
             width
           })
         }),
         new OLStyle({
           stroke: new OLStroke({
-            color: 'white',
+            color: `rgb(${outline})`,
             lineCap: 'square',
             lineDash,
-            lineDashOffset,
             width
           })
         })
@@ -286,7 +298,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #strokeSelect(
-    parcel: OLFeature<OLGeometry>,
+    parcel: OLFeature<OLPolygon>,
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
@@ -303,7 +315,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     }
   }
 
-  #text(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
+  #text(parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
     // 👇 only if feature will be visible
     if (this.#fontSize(props, resolution) < this.threshold) return null;
@@ -329,7 +341,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #theStyles(
-    parcel: OLFeature<OLGeometry>,
+    parcel: OLFeature<OLPolygon>,
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
@@ -352,59 +364,57 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] => {
+    return (parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] => {
       return this.#theStyles(parcel, resolution);
     };
   }
 
   styleWhenSelected(): OLStyleFunction {
-    return (parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] => {
+    return (parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] => {
       return this.#theStyles(parcel, resolution, true);
     };
   }
-}
 
-// 👇 land use categorization patterns
-
-function addPatterns(): void {
-  // 👉 all the patterns we use for current use etc
-  //    we only really need to do this once, but it does no harm
-  // 🔥 tree2 and pine2 not yet released on ol-ext
-  OLFillPattern.addPattern('CUMH', {
-    width: 30,
-    height: 30,
-    lines: [
-      [
-        7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71,
-        6.36, 0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78, 4.95,
-        7.07, 7.07, 4.95, 7.78, 4.95, 10.61, 7.78, 10.61
-      ]
-    ],
-    repeat: [
-      [3, 1],
-      [18, 16]
-    ],
-    fill: 1,
-    stroke: 1
-  });
-  OLFillPattern.addPattern('CUUH', OLFillPattern.prototype.patterns['tree']);
-  OLFillPattern.addPattern('CUMW', {
-    width: 30,
-    height: 30,
-    lines: [
-      [
-        5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49,
-        2.83, 8.49, 2.83, 11.31, 5.66, 11.31
-      ]
-    ],
-    repeat: [
-      [3, 1],
-      [18, 16]
-    ],
-    fill: 1,
-    stroke: 1
-  });
-  OLFillPattern.addPattern('CUUW', OLFillPattern.prototype.patterns['pine']);
-  OLFillPattern.addPattern('CUFL', OLFillPattern.prototype.patterns['grass']);
-  OLFillPattern.addPattern('CUWL', OLFillPattern.prototype.patterns['swamp']);
+  static {
+    // 👉 all the patterns we use for current use etc
+    //    we only really need to do this once, but it does no harm
+    // 🔥 tree2 and pine2 not yet released on ol-ext
+    OLFillPattern.addPattern('CUMH', {
+      width: 30,
+      height: 30,
+      lines: [
+        [
+          7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71,
+          6.36, 0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78,
+          4.95, 7.07, 7.07, 4.95, 7.78, 4.95, 10.61, 7.78, 10.61
+        ]
+      ],
+      repeat: [
+        [3, 1],
+        [18, 16]
+      ],
+      fill: 1,
+      stroke: 1
+    });
+    OLFillPattern.addPattern('CUUH', OLFillPattern.prototype.patterns['tree']);
+    OLFillPattern.addPattern('CUMW', {
+      width: 30,
+      height: 30,
+      lines: [
+        [
+          5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49,
+          2.83, 8.49, 2.83, 11.31, 5.66, 11.31
+        ]
+      ],
+      repeat: [
+        [3, 1],
+        [18, 16]
+      ],
+      fill: 1,
+      stroke: 1
+    });
+    OLFillPattern.addPattern('CUUW', OLFillPattern.prototype.patterns['pine']);
+    OLFillPattern.addPattern('CUFL', OLFillPattern.prototype.patterns['grass']);
+    OLFillPattern.addPattern('CUWL', OLFillPattern.prototype.patterns['swamp']);
+  }
 }
