@@ -9,6 +9,8 @@ import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import { fromLonLat } from 'ol/proj';
+
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
@@ -50,6 +52,11 @@ interface Label {
   styles: [':host { display: none }']
 })
 export class OLStyleParcelsComponent implements OLStyleComponent {
+  // 👉 we don't really want to parameterize these settings as inputs
+  //    as they are a WAG to control computed fontSize for acres
+  #acresSizeClamp = [0.1, 1000];
+  #fontSizeClamp = [0, 75];
+
   @Input() fontFamily = 'Roboto';
   @Input() showBackground = false;
   @Input() showSelection = false;
@@ -66,7 +73,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #fill(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
+  #fill(parcel: OLFeature<OLGeometry>, _resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let pattern;
@@ -79,7 +86,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           color: `rgba(${color}, 0.15)`,
           fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
           pattern: props.use,
-          scale: Math.max(2 / resolution)
+          scale: 1.5
         });
       }
     }
@@ -90,7 +97,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         color: `rgba(${color}, 0.5)`,
         fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
         pattern: 'forest',
-        scale: Math.max(1 / resolution)
+        scale: 1
       });
     }
     // 👉 otherwise just use a generic pattern for texture
@@ -107,12 +114,21 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return [new OLStyle({ fill: pattern })];
   }
 
-  // TODO 👇 just a guess so not parameterizing for now
+  // 👇 https://stackoverflow.com/questions/846221/logarithmic-slider
   #fontSize(props: ParcelProperties, resolution: number): number {
-    return (
-      (Math.min(Math.max(props.areaComputed, 5), 50) / 10 / resolution) *
-      this.map.olView.getZoom()
+    const minp = this.#fontSizeClamp[0];
+    const maxp = this.#fontSizeClamp[1];
+    const minv = Math.log(this.#acresSizeClamp[0]);
+    const maxv = Math.log(this.#acresSizeClamp[1]);
+    const scale = (maxv - minv) / (maxp - minp);
+    const acres = Math.max(
+      Math.min(props.areaComputed, this.#acresSizeClamp[1]),
+      this.#acresSizeClamp[0]
     );
+    const nominal = (Math.log(acres) - minv) / scale + minp;
+    const adjusted = nominal / resolution;
+    // console.log({ id: props.id, scale, acres, nominal, adjusted });
+    return adjusted;
   }
 
   #isLarge(props: ParcelProperties): boolean {
@@ -197,10 +213,33 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return labels;
   }
 
+  #offset(parcel: OLFeature<OLGeometry>): number[] {
+    // 👉 here we are just finding the delta between what OpenLayers
+    //    thinks is the center of the parcel and the much better
+    //    "center of gravity" that polylabel pre-computed for us
+    const props = parcel.getProperties() as ParcelProperties;
+    const [minX, minY, maxX, maxY] = parcel.getGeometry().getExtent();
+    const p = this.map.olMap.getPixelFromCoordinate([
+      minX + (maxX - minX) / 2,
+      minY + (maxY - minY) / 2
+    ]);
+    const q = this.map.olMap.getPixelFromCoordinate(fromLonLat(props.center));
+    const x = q[0] - p[0];
+    const y = q[1] - p[1];
+    // 👉 https://academo.org/demos/rotation-about-point/
+    //    adjust the delta to account for the label rotatin
+    const a = this.#rotation(props) * -1;
+    return [
+      x * Math.cos(a) - y * Math.sin(a),
+      y * Math.cos(a) + x * Math.sin(a)
+    ];
+  }
+
   #rotation(props: ParcelProperties): number {
     const label = props.label;
     const rotate =
       label?.rotate === undefined ? !this.#isLarge(props) : label?.rotate;
+    // 👈 in radians
     return rotate ? props.orientation * (Math.PI / 180) : 0;
   }
 
@@ -216,7 +255,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   // 👐 https://stackoverflow.com/questions/45740521
   #strokeOutline(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
-    // 👇 onlyif feature will be visible
+    // 👇 only if feature will be visible
     if (this.#fontSize(props, resolution) < this.threshold) return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
@@ -252,7 +291,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     whenSelected = false
   ): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
-    // 👇 onlyif feature will be visible
+    // 👇 only if feature will be visible
     if (this.#fontSize(props, resolution) < this.threshold) return null;
     else {
       const select = this.map.vars['--map-parcel-select'];
@@ -266,20 +305,21 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   #text(parcel: OLFeature<OLGeometry>, resolution: number): OLStyle[] {
     const props = parcel.getProperties() as ParcelProperties;
-    // 👇 onlyif feature will be visible
+    // 👇 only if feature will be visible
     if (this.#fontSize(props, resolution) < this.threshold) return null;
     else {
       const color = this.map.vars['--map-parcel-text-color'];
       const props = parcel.getProperties() as ParcelProperties;
       const labels = this.#labels(props, resolution);
+      const offset = this.#offset(parcel);
       return labels.map((label) => {
         const text = new OLText({
           font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
           fill: new OLFill({ color: `rgba(${color}, 1)` }),
-          offsetX: label.offsetX,
-          offsetY: label.offsetY,
+          offsetX: label.offsetX + offset[0],
+          offsetY: label.offsetY + offset[1],
           overflow: true,
-          placement: 'point',
+          padding: [8, 8, 8, 8],
           rotation: this.#rotation(props),
           text: label.text
         });
