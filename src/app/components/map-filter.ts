@@ -1,6 +1,7 @@
 import { GeoJSONService } from '../services/geojson';
 import { Index } from '../services/geojson';
 import { Path } from '../state/view';
+import { TownIndex } from '../services/geojson';
 
 import { isIndex } from '../services/geojson';
 
@@ -41,9 +42,16 @@ export class MapFilterComponent {
   allTowns(): string[] {
     const state = this.currentState();
     const county = this.currentCounty();
-    return Object.keys(this.index[state][county] ?? {})
-      .filter(isIndex)
-      .sort();
+    return (
+      Object.keys(this.index[state][county] ?? {})
+        .filter(isIndex)
+        // 👉 parcels MUST be available
+        .filter((town) => {
+          const townIndex = this.index[state][county][town] as TownIndex;
+          return townIndex.layers.parcels.available;
+        })
+        .sort()
+    );
   }
 
   currentCounty(): string {

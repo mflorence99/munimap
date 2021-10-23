@@ -32,6 +32,7 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStylePolygonsComponent implements OLStyleComponent {
+  @Input() filter: Function;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -46,11 +47,16 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (): OLStyle => {
+    return (feature: OLFeature<OLPolygon>): OLStyle => {
+      const disabled = this.map.vars['--map-feature-disabled'];
       const stroke = this.map.vars['--map-feature-outline'];
+      const unselectable = this.filter && !this.filter(feature);
+      const color = unselectable
+        ? `rgba(${disabled}, ${this.opacity})`
+        : [0, 0, 0, 0];
       return new OLStyle({
         // 👇 need this so we can click on the feature
-        fill: new OLFill({ color: [0, 0, 0, 0] }),
+        fill: new OLFill({ color }),
         stroke: new OLStroke({
           color: `rgba(${stroke}, 1)`,
           width: this.width
@@ -62,21 +68,32 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
   styleWhenSelected(): OLStyleFunction {
     return (feature: OLFeature<OLPolygon>): OLStyle => {
       const color = this.map.vars['--map-feature-text-color'];
+      const disabled = this.map.vars['--map-feature-disabled'];
       const fill = this.map.vars['--map-feature-fill'];
       const stroke = this.map.vars['--map-feature-outline'];
-      return new OLStyle({
-        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-        stroke: new OLStroke({
-          color: `rgba(${stroke}, 1)`,
-          width: this.width
-        }),
-        text: new OLText({
-          font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,
-          fill: new OLFill({ color: `rgba(${color}, 1)` }),
-          placement: 'point',
-          text: feature.getId() as string
-        })
-      });
+      const unselectable = this.filter && !this.filter(feature);
+      if (unselectable)
+        return new OLStyle({
+          fill: new OLFill({ color: `rgba(${disabled}, ${this.opacity})` }),
+          stroke: new OLStroke({
+            color: `rgba(${stroke}, 1)`,
+            width: this.width
+          })
+        });
+      else
+        return new OLStyle({
+          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+          stroke: new OLStroke({
+            color: `rgba(${stroke}, 1)`,
+            width: this.width
+          }),
+          text: new OLText({
+            font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,
+            fill: new OLFill({ color: `rgba(${color}, 1)` }),
+            placement: 'point',
+            text: feature.getId() as string
+          })
+        });
     };
   }
 }

@@ -6,7 +6,6 @@ import { theState } from '../state/view';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { splitNsName } from '@angular/compiler';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +30,6 @@ export class TownMapPage {
   }
 
   onSelectFeature(name: string): void {
-    console.log(splitNsName);
+    console.log(name);
   }
 }

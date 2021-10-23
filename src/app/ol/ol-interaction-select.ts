@@ -14,6 +14,8 @@ import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
 import { forwardRef } from '@angular/core';
 
+import OLFeature from 'ol/Feature';
+import OLLayer from 'ol/layer/Layer';
 import OLSelect from 'ol/interaction/Select';
 
 @Component({
@@ -32,6 +34,7 @@ export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy
 {
   @Input() eventType: string;
+  @Input() filter: Function;
 
   olSelect: OLSelect;
 
@@ -44,9 +47,14 @@ export class OLInteractionSelectComponent
     this.olSelect = new OLSelect({
       condition: (event): boolean =>
         event.type === this.eventType.toLowerCase(),
+      filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
       style: this.layer.style?.styleWhenSelected()
     });
+  }
+
+  #filter(feature: OLFeature<any>, layer: OLLayer<any>): boolean {
+    return this.filter ? this.filter(feature, layer) : true;
   }
 
   #onSelect(event: OLSelectEvent): void {

@@ -28,6 +28,7 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
 
   --map-boundary-fill: var(--rgb-gray-300);
 
+  --map-feature-disabled: var(--rgb-gray-900);
   --map-feature-fill: var(--rgb-green-700);
   --map-feature-outline: var(--rgb-green-700);
   --map-feature-text-color: var(--rgb-green-700);
