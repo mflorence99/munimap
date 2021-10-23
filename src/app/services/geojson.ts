@@ -17,7 +17,6 @@ export interface CountyIndex {
   [town: string]: TownIndex | Record<string, Layer>;
   layers: {
     boundary: Layer;
-    places: Layer;
     selectables: Layer;
     towns: Layer;
   };
@@ -39,6 +38,8 @@ export interface TownIndex {
     lakes: Layer;
     parcels: Layer;
     places: Layer;
+    powerlines: Layer;
+    rivers: Layer;
     roads: Layer;
     selectables: Layer;
   };
@@ -124,6 +125,18 @@ export type PlacesPropertiesType =
   | 'trail'
   | 'valley'
   | 'woods';
+
+export interface PowerlineProperties {
+  county: string;
+  town: string;
+}
+
+export interface RiverProperties {
+  county: string;
+  name: string;
+  section: string;
+  town: string;
+}
 
 export interface RoadProperties {
   class: RoadPropertiesClass;

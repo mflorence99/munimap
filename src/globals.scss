@@ -83,6 +83,12 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --map-parcel-stroke-CUFL: var(--rgb-green-500);
   --map-parcel-stroke-CUWL: var(--rgb-blue-500);
 
+  --map-powerline-icon-color: var(--rgb-yellow-900);
+  --map-powerline-line-color: var(--rgb-gray-900);
+
+  --map-river-line-color: var(--rgb-blue-200);
+  --map-river-text-color: var(--rgb-light-blue-200);
+
   --map-place-icon-color-church: var(--rgb-brown-900);
   --map-place-icon-color-summit: var(--rgb-red-900);
 

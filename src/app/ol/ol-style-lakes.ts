@@ -35,8 +35,6 @@ export class OLStyleLakesComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  // 👉 currently no need to look at LakeProperties
-
   style(): OLStyleFunction {
     return (): OLStyle => {
       const fill = this.map.vars['--map-lake-fill'];

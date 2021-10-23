@@ -84,6 +84,12 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
+        <app-ol-style-rivers></app-ol-style-rivers>
+        <app-ol-source-geojson [layerKey]="'rivers'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
         <app-ol-style-roads></app-ol-style-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -92,6 +98,14 @@
       <app-ol-layer-vector>
         <app-ol-style-places></app-ol-style-places>
         <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-powerlines></app-ol-style-powerlines>
+        <app-ol-source-geojson
+          [layerKey]="'powerlines'"
+        ></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 

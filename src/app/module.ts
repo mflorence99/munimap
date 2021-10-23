@@ -33,6 +33,8 @@ import { OLStyleFeaturesComponent } from './ol/ol-style-features';
 import { OLStyleLakesComponent } from './ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from './ol/ol-style-parcels';
 import { OLStylePlacesComponent } from './ol/ol-style-places';
+import { OLStylePowerlinesComponent } from './ol/ol-style-powerlines';
+import { OLStyleRiversComponent } from './ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from './ol/ol-style-roads';
 import { RootPage } from './root';
 import { TownMapPage } from './pages/town-map';
@@ -115,6 +117,8 @@ const COMPONENTS = [
   OLStyleLakesComponent,
   OLStyleParcelsComponent,
   OLStylePlacesComponent,
+  OLStylePowerlinesComponent,
+  OLStyleRiversComponent,
   OLStyleRoadsComponent,
   TownMapSetupComponent,
   UserProfileComponent

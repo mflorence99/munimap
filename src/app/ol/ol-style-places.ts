@@ -18,7 +18,7 @@ import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
 // 👇 draws a marker for a "point" feature with:
-//   -- the ID of the feature as Text
+//    -- the ID of the feature as Text
 //      -- with a styled color
 //      -- with an input opacity
 //      -- with an input font weight, size and family
@@ -76,8 +76,8 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     //    but no bigger than the nominal size specified
     const fontSize = Math.min(this.fontSize, this.fontSize / resolution);
     return new OLText({
-      font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
       fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
+      font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
       placement: 'point',
       stroke: new OLStroke({
         color: `rgba(255, 255, 255, ${this.opacity})`,
