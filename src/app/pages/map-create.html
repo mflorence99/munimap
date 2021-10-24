@@ -1,4 +1,4 @@
-<app-ol-map #theMap [path]="path">
+<app-ol-map #theMap [fitToBounds]="true" [path]="path">
   <ng-container *ngIf="theMap.initialized">
     <app-ol-control-attribution></app-ol-control-attribution>
     <app-ol-control-zoom></app-ol-control-zoom>

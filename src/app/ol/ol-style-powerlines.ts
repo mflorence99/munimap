@@ -39,7 +39,7 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
 
   #drawIcons(
     river: OLFeature<OLMultiLineString>,
-    _resolution: number
+    resolution: number
   ): OLStyle[] {
     const iconColor = this.map.vars['--map-powerline-icon-color'];
     const icons: OLStyle[] = [];
@@ -56,9 +56,10 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
             new OLStyle({
               geometry: new OLPoint(end),
               image: new OLIcon({
+                // 👇 can't use rgba here, must use separate opacity
                 color: `rgb(${iconColor})`,
                 opacity: this.opacity,
-                scale: 0.1,
+                scale: 0.25 / resolution,
                 rotation: -rotation,
                 src: 'assets/bolt.svg'
               })

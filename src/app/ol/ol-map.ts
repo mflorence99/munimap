@@ -49,6 +49,9 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
   boundaryExtent: Coordinate;
+
+  @Input() fitToBounds = false;
+
   initialized = false;
 
   @ContentChildren(MapableComponent, { descendants: true })
@@ -117,7 +120,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     );
     // 👉 if center, zoom available use them else fit to bounds
     const view = this.store.selectSnapshot(ViewState).viewByPath[this.path];
-    if (view?.center && view?.zoom) {
+    if (!this.fitToBounds && view?.center && view?.zoom) {
       this.olView.setCenter(fromLonLat(view.center));
       this.olView.setZoom(view.zoom);
     } else {
@@ -155,7 +158,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
         []
       );
     const style = getComputedStyle(document.documentElement);
-    // 👉now organize them as { name: value }
+    // 👉 now organize them as { name: value }
     return names.reduce((acc, name) => {
       acc[name] = style.getPropertyValue(name).trim();
       return acc;
@@ -222,14 +225,16 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   // 👉 public so we can call it from outside
   onChange(): void {
-    const center = toLonLat(this.olView.getCenter());
-    const resolution = this.olView.getResolution();
-    const zoom = this.olView.getZoom();
-    console.log(
-      `%c${this.path}`,
-      'color: hotpink',
-      `resolution=${resolution} zoom=${zoom}`
-    );
-    this.store.dispatch(new UpdateView(this.path, { center, zoom }));
+    if (!this.fitToBounds) {
+      const center = toLonLat(this.olView.getCenter());
+      const resolution = this.olView.getResolution();
+      const zoom = this.olView.getZoom();
+      console.log(
+        `%c${this.path}`,
+        'color: hotpink',
+        `resolution=${resolution} zoom=${zoom}`
+      );
+      this.store.dispatch(new UpdateView(this.path, { center, zoom }));
+    }
   }
 }
