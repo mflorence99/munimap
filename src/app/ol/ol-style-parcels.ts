@@ -59,6 +59,7 @@ interface Label {
     <img appPattern src="assets/CUUH.svg" />
     <img appPattern src="assets/CUUW.svg" />
     <img appPattern src="assets/CUWL.svg" />
+    <img appPattern src="assets/forest.png" />
     <ng-content></ng-content>
   `,
   styles: [':host { display: none }']
@@ -99,23 +100,14 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       if (color && icon) {
         patterns = [
           new OLFill({ color: `rgba(${fill}, 0.25)` }),
-          new OLFillPattern({
-            image: icon
-          })
+          new OLFillPattern({ image: icon })
         ];
       }
     }
     // 👉 town forest uses standard symbol to match OSM etc
     else if (props.usage === '501') {
-      const color = this.map.vars['--map-parcel-stroke-u501'];
-      patterns = [
-        new OLFillPattern({
-          color: `rgba(${color}, 0.5)`,
-          fill: new OLFill({ color: `rgba(${fill}, 0.5)` }),
-          pattern: 'forest',
-          scale: 1
-        })
-      ];
+      const icon = this.#iconForUse('forest');
+      patterns = [new OLFillPattern({ image: icon })];
     }
     // 👉 otherwise just use a generic pattern for texture
     if (!patterns) {

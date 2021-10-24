@@ -37,7 +37,7 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 10;
+  @Input() fontSize = 14;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() threshold: Record<string, number> = {
     'I': 24,

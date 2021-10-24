@@ -29,6 +29,7 @@ import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceStaticComponent } from './ol/ol-source-static';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from './ol/ol-style-boundary';
+import { OLStyleBuildingsComponent } from './ol/ol-style-buildings';
 import { OLStyleLakesComponent } from './ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from './ol/ol-style-parcels';
 import { OLStylePatternDirective } from './ol/ol-style-pattern';
@@ -114,6 +115,7 @@ const COMPONENTS = [
   OLSourceStaticComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
+  OLStyleBuildingsComponent,
   OLStyleLakesComponent,
   OLStyleParcelsComponent,
   OLStylePatternDirective,

@@ -28,6 +28,9 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
 
   --map-boundary-fill: var(--rgb-gray-300);
 
+  --map-building-fill: var(--rgb-gray-600);
+  --map-building-outline: var(--rgb-gray-700);
+
   --map-feature-disabled: var(--rgb-gray-900);
   --map-feature-fill: var(--rgb-green-700);
   --map-feature-outline: var(--rgb-green-700);
@@ -63,7 +66,7 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
   --map-parcel-stroke-CUFL: var(--rgb-green-500);
   --map-parcel-stroke-CUWL: var(--rgb-blue-500);
 
-  --map-powerline-icon-color: var(--rgb-gray-900);
+  --map-powerline-icon-color: var(--rgb-yellow-500);
   --map-powerline-line-color: var(--rgb-gray-900);
 
   --map-river-line-color: var(--rgb-blue-200);
