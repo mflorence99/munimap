@@ -30,7 +30,9 @@ export class OLSourceGeoJSONComponent implements AfterContentInit {
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
-    this.olVector = new OLVector({ features: null });
+    this.olVector = new OLVector({
+      features: null
+    });
   }
 
   ngAfterContentInit(): void {

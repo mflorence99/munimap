@@ -8,9 +8,7 @@ import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
-import OLFill from 'ol/style/Fill';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
-import OLIcon from 'ol/style/Icon';
 import OLMultiLineString from 'ol/geom/MultiLineString';
 import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
