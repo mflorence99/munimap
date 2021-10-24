@@ -31,6 +31,7 @@ import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from './ol/ol-style-boundary';
 import { OLStyleLakesComponent } from './ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from './ol/ol-style-parcels';
+import { OLStylePatternDirective } from './ol/ol-style-pattern';
 import { OLStylePlacesComponent } from './ol/ol-style-places';
 import { OLStylePolygonsComponent } from './ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from './ol/ol-style-powerlines';
@@ -115,6 +116,7 @@ const COMPONENTS = [
   OLStyleBoundaryComponent,
   OLStyleLakesComponent,
   OLStyleParcelsComponent,
+  OLStylePatternDirective,
   OLStylePlacesComponent,
   OLStylePolygonsComponent,
   OLStylePowerlinesComponent,

@@ -25,6 +25,8 @@ import OLText from 'ol/style/Text';
 //       -- with a styled color
 //       -- with an input font weight, size and family
 
+export type FilterFunction = (feature: OLFeature<any>) => boolean;
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-polygons',
@@ -32,7 +34,7 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStylePolygonsComponent implements OLStyleComponent {
-  @Input() filter: Function;
+  @Input() filter: FilterFunction;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';

@@ -15,8 +15,9 @@ import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { forwardRef } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
-import OLLayer from 'ol/layer/Layer';
 import OLSelect from 'ol/interaction/Select';
+
+export type FilterFunction = (feature: OLFeature<any>) => boolean;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +35,7 @@ export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy
 {
   @Input() eventType: string;
-  @Input() filter: Function;
+  @Input() filter: FilterFunction;
 
   olSelect: OLSelect;
 
@@ -53,8 +54,8 @@ export class OLInteractionSelectComponent
     });
   }
 
-  #filter(feature: OLFeature<any>, layer: OLLayer<any>): boolean {
-    return this.filter ? this.filter(feature, layer) : true;
+  #filter(feature: OLFeature<any>): boolean {
+    return this.filter ? this.filter(feature) : true;
   }
 
   #onSelect(event: OLSelectEvent): void {

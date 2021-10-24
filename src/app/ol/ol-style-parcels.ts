@@ -1,13 +1,16 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
+import { OLStylePatternDirective } from './ol-style-pattern';
 import { ParcelProperties } from '../services/geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
+import { QueryList } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+import { ViewChildren } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
 
@@ -49,25 +52,25 @@ interface Label {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-parcels',
-  template: '<ng-content></ng-content>',
+  template: `
+    <img appPattern src="assets/CUFL.svg" />
+    <img appPattern src="assets/CUMH.svg" />
+    <img appPattern src="assets/CUMW.svg" />
+    <img appPattern src="assets/CUUH.svg" />
+    <img appPattern src="assets/CUUW.svg" />
+    <img appPattern src="assets/CUWL.svg" />
+    <ng-content></ng-content>
+  `,
   styles: [':host { display: none }']
 })
 export class OLStyleParcelsComponent implements OLStyleComponent {
-  static images = {
-    /* eslint-disable @typescript-eslint/naming-convention */
-    CUFL: new OLIcon({ src: 'assets/CUFL.svg' }),
-    CUMH: new OLIcon({ src: 'assets/CUMH.svg' }),
-    CUMW: new OLIcon({ src: 'assets/CUMW.svg' }),
-    CUUH: new OLIcon({ src: 'assets/CUUH.svg' }),
-    CUUW: new OLIcon({ src: 'assets/CUUW.svg' }),
-    CUWL: new OLIcon({ src: 'assets/CUWL.svg' })
-    /* eslint-enable @typescript-eslint/naming-convention */
-  };
-
   // 👉 we don't really want to parameterize these settings as inputs
   //    as they are a WAG to control computed fontSize for acres
   #acresSizeClamp = [0.1, 1000];
   #fontSizeClamp = [0, 75];
+
+  @ViewChildren(OLStylePatternDirective)
+  appPatterns: QueryList<OLStylePatternDirective>;
 
   @Input() fontFamily = 'Roboto';
   @Input() showBackground = false;
@@ -91,12 +94,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     // 👉 current use pattern comes from the use field (CUUH etc)
     if (props.usage === '190') {
       const color = this.map.vars[`--map-parcel-stroke-${props.use}`];
+      const icon = this.#iconForUse(props.use);
       // not all current usages have a pattern
-      if (color) {
+      if (color && icon) {
         patterns = [
           new OLFill({ color: `rgba(${fill}, 0.25)` }),
           new OLFillPattern({
-            image: OLStyleParcelsComponent.images[props.use]
+            image: icon
           })
         ];
       }
@@ -144,6 +148,18 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     const adjusted = nominal / resolution;
     // console.log({ id: props.id, scale, acres, nominal, adjusted });
     return adjusted;
+  }
+
+  #iconForUse(use: string): OLIcon {
+    const appPattern = this.appPatterns.find((image) =>
+      image.matches(new RegExp(use))
+    );
+    return appPattern
+      ? new OLIcon({
+          img: appPattern.host.nativeElement,
+          imgSize: appPattern.size()
+        })
+      : null;
   }
 
   #isLarge(props: ParcelProperties): boolean {
@@ -373,48 +389,5 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return (parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] => {
       return this.#theStyles(parcel, resolution, true);
     };
-  }
-
-  static {
-    // 👉 all the patterns we use for current use etc
-    //    we only really need to do this once, but it does no harm
-    // 🔥 tree2 and pine2 not yet released on ol-ext
-    OLFillPattern.addPattern('CUMH', {
-      width: 30,
-      height: 30,
-      lines: [
-        [
-          7.78, 10.61, 4.95, 10.61, 4.95, 7.78, 3.54, 7.78, 2.12, 6.36, 0.71,
-          6.36, 0, 4.24, 0.71, 2.12, 4.24, 0, 7.78, 0.71, 9.19, 3.54, 7.78,
-          4.95, 7.07, 7.07, 4.95, 7.78, 4.95, 10.61, 7.78, 10.61
-        ]
-      ],
-      repeat: [
-        [3, 1],
-        [18, 16]
-      ],
-      fill: 1,
-      stroke: 1
-    });
-    OLFillPattern.addPattern('CUUH', OLFillPattern.prototype.patterns['tree']);
-    OLFillPattern.addPattern('CUMW', {
-      width: 30,
-      height: 30,
-      lines: [
-        [
-          5.66, 11.31, 2.83, 11.31, 2.83, 8.49, 0, 8.49, 2.83, 0, 5.66, 8.49,
-          2.83, 8.49, 2.83, 11.31, 5.66, 11.31
-        ]
-      ],
-      repeat: [
-        [3, 1],
-        [18, 16]
-      ],
-      fill: 1,
-      stroke: 1
-    });
-    OLFillPattern.addPattern('CUUW', OLFillPattern.prototype.patterns['pine']);
-    OLFillPattern.addPattern('CUFL', OLFillPattern.prototype.patterns['grass']);
-    OLFillPattern.addPattern('CUWL', OLFillPattern.prototype.patterns['swamp']);
   }
 }

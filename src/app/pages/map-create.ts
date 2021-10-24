@@ -1,3 +1,4 @@
+import { FilterFunction } from '../ol/ol-interaction-select';
 import { GeoJSONService } from '../services/geojson';
 import { Index } from '../services/geojson';
 import { Path } from '../state/view';
@@ -55,7 +56,7 @@ export class MapCreatePage {
     return this.path.split(':')[2];
   }
 
-  filter(): Function {
+  filter(): FilterFunction {
     return (feature: OLFeature<any>): boolean => {
       if (this.atCountyLevel(this.path)) {
         const townIndex = this.index[this.currentState()][this.currentCounty()][
