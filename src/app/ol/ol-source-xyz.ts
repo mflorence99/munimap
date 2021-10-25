@@ -19,6 +19,7 @@ import OLXYZ from 'ol/source/XYZ';
 export class OLSourceXYZComponent implements AfterContentInit {
   @ContentChildren(OLAttributionComponent)
   attributions: QueryList<OLAttributionComponent>;
+
   olXYZ: OLXYZ;
 
   @Input() set url(url: string) {
@@ -30,7 +31,7 @@ export class OLSourceXYZComponent implements AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    // 👉 note that we'rew saying we don't expect
+    // 👉 note that we're saying we don't expect
     //    the list of attributions to change
     this.olXYZ.setAttributions(
       this.attributions.map((attribution) => attribution.getAttribution())

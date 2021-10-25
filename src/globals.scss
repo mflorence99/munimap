@@ -5,24 +5,62 @@
 
 //  Custom Angular Material theme
 
-$custom-primary: mat-palette($mat-blue, 500, 200, 700);
-$custom-accent: mat-palette($mat-amber, 500, 200, 700);
-$custom-warn: mat-palette($mat-red, 500, 200, 700);
-$custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
+// $custom-primary: mat-palette($mat-blue, 500, 200, 700);
+// $custom-accent: mat-palette($mat-amber, 500, 200, 700);
+// $custom-warn: mat-palette($mat-red, 500, 200, 700);
+// $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
 
-@include angular-material-theme($custom-theme);
+// @include angular-material-theme($custom-theme);
 
-:root {
+$light-app-theme: mat-light-theme(
+  (
+    color: (
+      primary: mat-palette($mat-blue),
+      accent: mat-palette($mat-amber, A200, A100, A400),
+      warn: mat-palette($mat-red)
+    )
+  )
+);
+
+$dark-app-theme: mat-dark-theme(
+  (
+    color: (
+      primary: mat-palette($mat-blue),
+      accent: mat-palette($mat-amber, A200, A100, A400),
+      warn: mat-palette($mat-red)
+    )
+  )
+);
+
+.light-theme {
+  @include angular-material-theme($light-app-theme);
+
   // 👉 bridge from Angular Material variables to CSS variables
 
-  --primary-color: var(--mat-blue-500);
-  --accent-color: var(--mat-amber-500);
-  --warn-color: var(--mat-red-500);
+  --primary-color: var(--mat-blue-a200);
+  --accent-color: var(--mat-amber-a200);
+  --warn-color: var(--mat-red-a200);
+
+  --text-color: var(--mat-grey-900);
+  --disabled-color: var(--mat-grey-500);
+  --background-color: var(--mat-grey-100);
+}
+
+.dark-theme {
+  @include angular-material-color($dark-app-theme);
+
+  // 👉 bridge from Angular Material variables to CSS variables
+
+  --primary-color: var(--mat-blue-a200);
+  --accent-color: var(--mat-amber-a200);
+  --warn-color: var(--mat-red-a200);
 
   --text-color: var(--mat-grey-100);
   --disabled-color: var(--mat-grey-500);
   --background-color: var(--mat-grey-900);
+}
 
+:root {
   // 👉 make sure all colors are RGB,
   //    style components will figure opacity
 
@@ -130,7 +168,7 @@ $custom-theme: mat-dark-theme($custom-primary, $custom-accent, $custom-warn);
 }
 
 a {
-  color: var(--accent-color);
+  color: var(--primary-color);
   cursor: pointer;
   text-decoration: none;
 

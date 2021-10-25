@@ -1,8 +1,14 @@
 <app-ol-map #theMap [path]="path">
+  <app-town-map-setup
+    [map]="map"
+    class="setup"
+    mapControlPanel1
+  ></app-town-map-setup>
+
+  <app-ol-control-attribution mapButtonAttribution></app-ol-control-attribution>
+
   <ng-container *ngIf="theMap.initialized">
     <app-ol-control-scaleline></app-ol-control-scaleline>
-    <app-ol-control-zoom></app-ol-control-zoom>
-    <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
 
     <!-- BG LAYER -->
 
@@ -116,9 +122,7 @@
 
       <app-ol-layer-vector>
         <app-ol-style-parcels [showText]="true"></app-ol-style-parcels>
-        <app-ol-source-geojson [layerKey]="'parcels'">
-          <app-ol-control-search></app-ol-control-search>
-        </app-ol-source-geojson>
+        <app-ol-source-geojson [layerKey]="'parcels'"> </app-ol-source-geojson>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
@@ -136,9 +140,7 @@
 
     <ng-container *ngIf="map.style !== 'blank'">
       <app-ol-layer-vector>
-        <app-ol-source-geojson [layerKey]="'parcels'"
-          ><app-ol-control-search></app-ol-control-search
-        ></app-ol-source-geojson>
+        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
         <app-ol-style-parcels
           [showBackground]="true"
           [showText]="true"
@@ -170,5 +172,3 @@
     </app-ol-layer-vector>
   </ng-container>
 </app-ol-map>
-
-<app-town-map-setup [map]="map" class="setup"></app-town-map-setup>

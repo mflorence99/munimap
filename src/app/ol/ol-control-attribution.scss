@@ -2,3 +2,21 @@
   display: block;
   pointer-events: auto;
 }
+
+.attribution {
+  background-color: rgba(var(--rgb-gray-300, 0.25));
+  opacity: 1;
+  padding: 0.5rem;
+  pointer-events: auto;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.attribution.collapsed {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.control {
+  align-items: center;
+  display: flex;
+}

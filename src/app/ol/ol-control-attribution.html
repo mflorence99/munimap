@@ -1,3 +1,7 @@
-<button mat-icon-button>
-  <mat-icon [inline]="true">info</mat-icon>
-</button>
+<article class="control">
+  <p #attribution class="attribution" [class.collapsed]="collapsed"></p>
+
+  <button (click)="toggleAttributions()" mat-icon-button>
+    <mat-icon [inline]="true">info</mat-icon>
+  </button>
+</article>
