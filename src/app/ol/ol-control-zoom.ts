@@ -1,34 +1,22 @@
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-
-import { forwardRef } from '@angular/core';
-
-import OLZoom from 'ol/control/Zoom';
+import { Input } from '@angular/core';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlZoomComponent)
-    }
-  ],
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'app-ol-control-zoom',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  templateUrl: './ol-control-zoom.html',
+  styleUrls: ['./ol-control-zoom.scss']
 })
-export class OLControlZoomComponent implements Mapable {
-  olControl: OLZoom;
+export class OLControlZoomComponent {
+  @Input() zoom: number;
 
-  constructor(private map: OLMapComponent) {
-    this.olControl = new OLZoom();
-  }
+  constructor(public map: OLMapComponent) {}
 
-  addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+  onZoomChange(zoom: number): void {
+    this.zoom = zoom;
+    this.map.olView.setZoom(zoom);
   }
 }

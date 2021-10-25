@@ -12,9 +12,11 @@ import { Component } from '@angular/core';
 import { ContentChildren } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { Output } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
@@ -38,6 +40,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
   boundaryExtent: Coordinate;
 
+  @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
+
   @Input() fitToBounds = false;
 
   initialized = false;
@@ -45,7 +49,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   @ContentChildren(MapableComponent, { descendants: true })
   mapables$: QueryList<any>;
 
-  @ViewChild('measurator') measurator: ElementRef<HTMLCanvasElement>;
+  @Input() maxZoom = 18;
+  @Input() minZoom = 8;
 
   olMap: OLMap;
   olView: OLView;
@@ -60,6 +65,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   projection = 'EPSG:3857';
   vars: Record<string, string> = {};
+
+  @Output() zoomChange = new EventEmitter<number>();
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -94,7 +101,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   #createView(boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>): void {
-    this.olView = new OLView({});
+    this.olView = new OLView({ maxZoom: this.maxZoom, minZoom: this.minZoom });
     this.olMap.setView(this.olView);
     // 👉 precompute boundary extent
     this.boundary = boundary;
@@ -172,6 +179,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
         .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
           this.#createView(boundary);
           this.initialized = true;
+          this.onChange();
           this.cdf.markForCheck();
         });
     }
@@ -191,7 +199,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   measureText(text: string, font: string): TextMetrics {
-    const ctx = this.measurator.nativeElement.getContext('2d');
+    const ctx = this.canvas.nativeElement.getContext('2d');
     ctx.font = font;
     return ctx.measureText(text);
   }
@@ -211,17 +219,11 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   // 👉 public so we can call it from outside
   onChange(): void {
-    if (!this.fitToBounds) {
-      const center = toLonLat(this.olView.getCenter());
-      const resolution = this.olView.getResolution();
-      const zoom = this.olView.getZoom();
-      console.log(
-        `%c${this.path}`,
-        'color: hotpink',
-        `resolution=${resolution} zoom=${zoom}`
-      );
+    const center = toLonLat(this.olView.getCenter());
+    const zoom = this.olView.getZoom();
+    this.zoomChange.emit(zoom);
+    if (!this.fitToBounds)
       this.store.dispatch(new UpdateView(this.path, { center, zoom }));
-    }
   }
 
   zoomToBounds(): void {

@@ -4,13 +4,19 @@
 }
 
 .attribution {
-  background-color: rgba(var(--rgb-gray-300, 0.25));
+  align-items: center;
+  background-color: rgba(var(--rgb-gray-300), 0.5);
+  display: flex;
+  height: 3rem;
   opacity: 1;
   padding: 0.5rem;
   pointer-events: auto;
+  position: absolute;
+  right: 3rem;
+  top: 0.25rem;
   transition: opacity 0.25s ease-in-out;
   white-space: nowrap;
-  width: 100%;
+  width: auto;
 }
 
 .attribution.collapsed {
@@ -21,4 +27,5 @@
 .control {
   align-items: center;
   display: flex;
+  position: relative;
 }

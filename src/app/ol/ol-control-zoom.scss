@@ -1,0 +1,35 @@
+:host {
+  background-color: rgba(var(--rgb-gray-300), 0.5);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  justify-content: center;
+  padding: 0.25rem;
+  pointer-events: auto;
+  width: 3rem;
+}
+
+::ng-deep {
+  .mat-slider {
+    padding: 0;
+
+    .mat-slider-thumb,
+    .mat-slider-thumb-label,
+    .mat-slider-track-fill {
+      background-color: var(--mat-gray-800) !important;
+    }
+
+    .mat-slider-thumb-label-text {
+      color: var(--mat-gray-50) !important;
+    }
+
+    .mat-slider-track-background {
+      background-color: var(--mat-gray-300) !important;
+    }
+  }
+}
+
+.annotation {
+  color: var(--mat-gray-700);
+  font-size: 0.75rem;
+  text-align: center;
+}

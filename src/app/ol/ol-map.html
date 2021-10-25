@@ -4,6 +4,7 @@
   </article>
 
   <article class="light-theme buttons">
+    <ng-content select="[mapButtonZoom]"></ng-content>
     <ng-content select="[mapButtonZoomToExtent]"></ng-content>
     <ng-content select="[mapButtonAttribution]"></ng-content>
   </article>
@@ -11,4 +12,4 @@
 
 <ng-content></ng-content>
 
-<canvas #measurator hidden></canvas>
+<canvas #canvas hidden></canvas>

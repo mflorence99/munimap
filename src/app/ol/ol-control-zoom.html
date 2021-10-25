@@ -1,0 +1,12 @@
+<mat-slider
+  (change)="onZoomChange($event.value)"
+  [max]="map.maxZoom"
+  [min]="map.minZoom"
+  [step]="0.05"
+  [thumbLabel]="true"
+  [value]="zoom"
+  [vertical]="true"
+>
+</mat-slider>
+
+<p class="annotation">{{ zoom | number:'1.0-2' }}</p>

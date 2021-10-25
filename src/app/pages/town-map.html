@@ -1,9 +1,17 @@
-<app-ol-map #theMap [path]="path">
+<app-ol-map
+  #theMap
+  (zoomChange)="theZoomControl.zoom = $event"
+  [minZoom]="12"
+  [maxZoom]="19"
+  [path]="path"
+>
   <app-town-map-setup
     [map]="map"
     class="setup"
     mapControlPanel1
   ></app-town-map-setup>
+
+  <app-ol-control-zoom #theZoomControl mapButtonZoom></app-ol-control-zoom>
 
   <app-ol-control-zoom2extent
     mapButtonZoomToExtent
