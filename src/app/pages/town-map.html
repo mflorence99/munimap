@@ -11,13 +11,17 @@
     mapControlPanel1
   ></app-town-map-setup>
 
-  <app-ol-control-zoom #theZoomControl mapButtonZoom></app-ol-control-zoom>
+  <app-ol-control-search mapControlSearch></app-ol-control-search>
+
+  <app-ol-control-zoom #theZoomControl mapControlZoom></app-ol-control-zoom>
 
   <app-ol-control-zoom2extent
-    mapButtonZoomToExtent
+    mapControlZoomToExtent
   ></app-ol-control-zoom2extent>
 
-  <app-ol-control-attribution mapButtonAttribution></app-ol-control-attribution>
+  <app-ol-control-attribution
+    mapControlAttribution
+  ></app-ol-control-attribution>
 
   <ng-container *ngIf="theMap.initialized">
     <app-ol-control-scaleline></app-ol-control-scaleline>

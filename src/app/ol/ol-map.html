@@ -4,9 +4,11 @@
   </article>
 
   <article class="light-theme buttons">
-    <ng-content select="[mapButtonZoom]"></ng-content>
-    <ng-content select="[mapButtonZoomToExtent]"></ng-content>
-    <ng-content select="[mapButtonAttribution]"></ng-content>
+    <ng-content select="[mapControlSearch]"></ng-content>
+    <div class="filler"></div>
+    <ng-content select="[mapControlZoom]"></ng-content>
+    <ng-content select="[mapControlZoomToExtent]"></ng-content>
+    <ng-content select="[mapControlAttribution]"></ng-content>
   </article>
 </section>
 

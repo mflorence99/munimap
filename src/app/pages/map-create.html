@@ -8,10 +8,12 @@
   </app-map-filter>
 
   <app-ol-control-zoom2extent
-    mapButtonZoomToExtent
+    mapControlZoomToExtent
   ></app-ol-control-zoom2extent>
 
-  <app-ol-control-attribution mapButtonAttribution></app-ol-control-attribution>
+  <app-ol-control-attribution
+    mapControlAttribution
+  ></app-ol-control-attribution>
 
   <ng-container *ngIf="theMap.initialized">
     <!-- BG LAYER -->

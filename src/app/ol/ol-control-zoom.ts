@@ -17,6 +17,9 @@ export class OLControlZoomComponent {
 
   onZoomChange(zoom: number): void {
     this.zoom = zoom;
-    this.map.olView.setZoom(zoom);
+    this.map.olView.animate({
+      duration: 250,
+      zoom
+    });
   }
 }

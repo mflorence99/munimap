@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  pointer-events: auto;
+  position: relative;
+}
+
+.control {
+  align-content: center;
+  background-color: rgba(var(--rgb-gray-300), 0.5);
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: auto 1fr;
+  height: 3rem;
+  position: absolute;
+  right: 0;
+  width: 25rem;
+}
+
+.search {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+}

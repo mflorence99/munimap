@@ -75,7 +75,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
 import { NgObjectPipesModule } from 'ngx-pipes';
@@ -203,7 +202,6 @@ const STATES_SAVED = [RouterState, ViewState];
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
-    MatSliderModule,
     MatToolbarModule,
     NgObjectPipesModule,
     NgxsModule.forRoot(STATES, {
