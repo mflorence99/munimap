@@ -1,0 +1,42 @@
+:host {
+  background: white;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+::ng-deep [mat-icon-button] {
+  font-size: 3rem;
+}
+
+.buttons {
+  align-items: flex-end;
+  color: var(--background-color);
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  grid-area: buttons;
+}
+
+.controls {
+  display: grid;
+  grid-template-areas: 'panels . buttons';
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr;
+  height: 100%;
+  padding: 1rem;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.panels {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  grid-area: panels;
+}

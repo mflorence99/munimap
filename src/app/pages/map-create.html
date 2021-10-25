@@ -1,11 +1,15 @@
 <app-ol-map #theMap [fitToBounds]="true" [path]="path">
-  <ng-container *ngIf="theMap.initialized">
-    <app-ol-control-attribution
-      [collapsible]="true"
-    ></app-ol-control-attribution>
-    <app-ol-control-zoom></app-ol-control-zoom>
-    <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
+  <app-map-filter
+    (pathChanged)="onPathChanged($event)"
+    (pathSelected)="onPathSelected($event)"
+    [path]="path"
+    mapControlPanel1
+  >
+  </app-map-filter>
 
+  <app-ol-control-attribution mapButtonAttribution></app-ol-control-attribution>
+
+  <ng-container *ngIf="theMap.initialized">
     <!-- BG LAYER -->
 
     <app-ol-layer-tile>
@@ -53,11 +57,3 @@
     </app-ol-layer-vector>
   </ng-container>
 </app-ol-map>
-
-<app-map-filter
-  (pathChanged)="onPathChanged($event)"
-  (pathSelected)="onPathSelected($event)"
-  [path]="path"
-  class="filter"
->
-</app-map-filter>

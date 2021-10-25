@@ -29,20 +29,8 @@ import OLView from 'ol/View';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-map',
-  template: `
-    <canvas #measurator hidden></canvas>
-    <ng-content></ng-content>
-  `,
-  styles: [
-    `
-      :host {
-        background: white;
-        display: block;
-        height: 100%;
-        width: 100%;
-      }
-    `
-  ]
+  templateUrl: './ol-map.html',
+  styleUrls: ['./ol-map.scss' ]
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   #path: Path;

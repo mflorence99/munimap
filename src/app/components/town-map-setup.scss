@@ -1,10 +1,7 @@
 :host {
   display: block;
+  width: 35rem;
 }
-
-// .explanations {
-//   margin: 8px 0;
-// }
 
 .form {
   display: grid;
@@ -17,7 +14,7 @@
 
 .thumbnail {
   display: grid;
-  grid-gap: 2px;
+  grid-gap: 0.125rem;
   grid-template-rows: auto auto;
   justify-items: center;
 
@@ -33,12 +30,12 @@
   }
 
   [type='radio']:checked + img {
-    outline: 3px solid var(--accent-color);
+    outline: 0.25rem solid var(--accent-color);
   }
 
   img {
-    height: 64px;
-    width: 64px;
+    height: 4.5rem;
+    width: 4.5rem;
   }
 }
 
@@ -46,5 +43,5 @@
   display: grid;
   grid-template-columns: auto auto auto auto auto;
   justify-content: space-between;
-  margin: 8px 0;
+  margin: 0.5rem 0;
 }

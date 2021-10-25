@@ -1,0 +1,13 @@
+<section class="controls">
+  <article class="panels">
+    <ng-content select="[mapControlPanel1]"></ng-content>
+  </article>
+
+  <article class="buttons">
+    <ng-content select="[mapButtonAttribution]"></ng-content>
+  </article>
+</section>
+
+<ng-content></ng-content>
+
+<canvas #measurator hidden></canvas>

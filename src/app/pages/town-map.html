@@ -1,8 +1,5 @@
 <app-ol-map #theMap [path]="path">
   <ng-container *ngIf="theMap.initialized">
-    <app-ol-control-attribution
-      [collapsible]="true"
-    ></app-ol-control-attribution>
     <app-ol-control-scaleline></app-ol-control-scaleline>
     <app-ol-control-zoom></app-ol-control-zoom>
     <app-ol-control-zoom2extent></app-ol-control-zoom2extent>
