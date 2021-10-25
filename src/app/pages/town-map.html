@@ -5,6 +5,10 @@
     mapControlPanel1
   ></app-town-map-setup>
 
+  <app-ol-control-zoom2extent
+    mapButtonZoomToExtent
+  ></app-ol-control-zoom2extent>
+
   <app-ol-control-attribution mapButtonAttribution></app-ol-control-attribution>
 
   <ng-container *ngIf="theMap.initialized">
@@ -24,7 +28,10 @@
         <app-ol-source-xyz
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
           ><app-ol-attribution
-            >Powered by Esri</app-ol-attribution
+            >Powered by
+            <a href="https://www.esri.com" target="_blank"
+              >Esri</a
+            ></app-ol-attribution
           ></app-ol-source-xyz
         >
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -68,7 +75,12 @@
         <app-ol-source-xyz
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
         >
-          <app-ol-attribution>Powered by Esri</app-ol-attribution>
+          <app-ol-attribution
+            >Powered by
+            <a href="https://www.esri.com" target="_blank"
+              >Esri</a
+            ></app-ol-attribution
+          >
         </app-ol-source-xyz>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>

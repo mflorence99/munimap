@@ -16,6 +16,7 @@ import OLLayer from 'ol/layer/Layer';
 export class OLControlAttributionComponent {
   @ViewChild('attribution') attribution: ElementRef<HTMLParagraphElement>;
 
+  attributions: string[] = [];
   collapsed = true;
 
   constructor(private map: OLMapComponent) {}
@@ -23,14 +24,16 @@ export class OLControlAttributionComponent {
   toggleAttributions(): void {
     this.collapsed = !this.collapsed;
     if (!this.collapsed) {
-      const attributions = [];
+      this.attributions = [];
       this.map.olMap.getLayers().forEach((layer: OLLayer<any>) => {
         layer
           ?.getSource()
           ?.getAttributions?.()?.()
-          ?.forEach((attribution) => attributions.push(attribution));
+          ?.forEach((attribution) => {
+            if (!this.attributions.includes(attribution))
+              this.attributions.push(attribution);
+          });
       });
-      this.attribution.nativeElement.innerHTML = attributions.join(' | ');
     }
   }
 }

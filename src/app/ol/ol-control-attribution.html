@@ -1,5 +1,10 @@
 <article class="control">
-  <p #attribution class="attribution" [class.collapsed]="collapsed"></p>
+  <p #attribution class="attribution" [class.collapsed]="collapsed">
+    <span
+      *ngFor="let attribution of attributions; last as isLast"
+      [innerHTML]="attribution + (isLast? '' : '&nbsp;|&nbsp;')"
+    ></span>
+  </p>
 
   <button (click)="toggleAttributions()" mat-icon-button>
     <mat-icon [inline]="true">info</mat-icon>

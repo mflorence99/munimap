@@ -30,7 +30,7 @@ import OLView from 'ol/View';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-map',
   templateUrl: './ol-map.html',
-  styleUrls: ['./ol-map.scss' ]
+  styleUrls: ['./ol-map.scss']
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   #path: Path;
@@ -111,9 +111,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     if (!this.fitToBounds && view?.center && view?.zoom) {
       this.olView.setCenter(fromLonLat(view.center));
       this.olView.setZoom(view.zoom);
-    } else {
-      this.olView.fit(this.boundaryExtent, { size: this.olMap.getSize() });
-    }
+    } else this.zoomToBounds();
     // 👉 handle events
     this.olView.on('change', this.onChange.bind(this));
   }
@@ -224,5 +222,10 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       );
       this.store.dispatch(new UpdateView(this.path, { center, zoom }));
     }
+  }
+
+  zoomToBounds(): void {
+    this.olView.fit(this.boundaryExtent, { size: this.olMap.getSize() });
+    this.onChange();
   }
 }

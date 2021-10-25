@@ -9,6 +9,8 @@
   padding: 0.5rem;
   pointer-events: auto;
   transition: opacity 0.25s ease-in-out;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .attribution.collapsed {

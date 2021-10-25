@@ -11,6 +11,9 @@ import { Input } from '@angular/core';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLVector from 'ol/source/Vector';
 
+const attribution =
+  'Powered by <a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-source-geojson',
@@ -30,9 +33,7 @@ export class OLSourceGeoJSONComponent implements AfterContentInit {
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
-    this.olVector = new OLVector({
-      features: null
-    });
+    this.olVector = new OLVector({ features: null });
   }
 
   ngAfterContentInit(): void {
@@ -44,6 +45,7 @@ export class OLSourceGeoJSONComponent implements AfterContentInit {
             featureProjection: this.map.projection
           })
         );
+        this.olVector.setAttributions([attribution]);
         this.layer.olLayer.setSource(this.olVector);
       });
   }

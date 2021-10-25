@@ -12,12 +12,13 @@
 }
 
 .buttons {
-  align-items: flex-end;
+  align-items: end;
   color: var(--text-color);
   display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
   grid-area: buttons;
+  justify-content: end;
 }
 
 .controls {
@@ -34,9 +35,10 @@
 }
 
 .panels {
-  align-items: flex-start;
+  align-items: start;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 1rem;
   grid-area: panels;
+  justify-content: start;
 }
