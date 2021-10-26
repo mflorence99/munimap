@@ -1,5 +1,6 @@
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
+import { OLInteractionSelectComponent } from './ol-interaction-select';
 import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
@@ -64,6 +65,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   projection = 'EPSG:3857';
+  selector: OLInteractionSelectComponent;
   vars: Record<string, string> = {};
 
   @Output() zoomChange = new EventEmitter<number>();

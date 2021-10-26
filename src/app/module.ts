@@ -28,6 +28,7 @@ import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
 import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceStaticComponent } from './ol/ol-source-static';
+import { OLSourceStoneWallsComponent } from './ol/ol-source-stonewalls';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from './ol/ol-style-boundary';
 import { OLStyleBuildingsComponent } from './ol/ol-style-buildings';
@@ -39,6 +40,7 @@ import { OLStylePolygonsComponent } from './ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from './ol/ol-style-powerlines';
 import { OLStyleRiversComponent } from './ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from './ol/ol-style-roads';
+import { OLStyleStoneWallsComponent } from './ol/ol-style-stonewalls';
 import { RootPage } from './root';
 import { TownMapPage } from './pages/town-map';
 import { TownMapSetupComponent } from './components/town-map-setup';
@@ -115,6 +117,7 @@ const COMPONENTS = [
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
   OLSourceStaticComponent,
+  OLSourceStoneWallsComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
   OLStyleBuildingsComponent,
@@ -126,6 +129,7 @@ const COMPONENTS = [
   OLStylePowerlinesComponent,
   OLStyleRiversComponent,
   OLStyleRoadsComponent,
+  OLStyleStoneWallsComponent,
   TownMapSetupComponent,
   UserProfileComponent
 ];

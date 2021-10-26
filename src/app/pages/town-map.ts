@@ -1,4 +1,5 @@
 import { Map } from '../state/map';
+import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../state/parcel';
 import { Path } from '../state/view';
 import { RootPage } from '../root';
@@ -8,6 +9,9 @@ import { theState } from '../state/view';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ViewChild } from '@angular/core';
+
+import OLFeature from 'ol/Feature';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +22,8 @@ import { Component } from '@angular/core';
 export class TownMapPage {
   map: Map;
   path: Path;
+
+  @ViewChild(OLMapComponent) theMap;
 
   constructor(private root: RootPage, private route: ActivatedRoute) {
     // 👌 we resally want to read the map by its ID from Firebase
@@ -32,11 +38,11 @@ export class TownMapPage {
     this.root.setTitle(this.path);
   }
 
-  onParcelsFound(parcels: Parcel[]): void {
-    console.log(parcels);
+  onFeaturesSelected(features: OLFeature<any>[]): void {
+    console.log(features.map((feature) => feature.getId()).join(','));
   }
 
-  onSelectFeature(name: string): void {
-    console.log(name);
+  onParcelsFound(parcels: Parcel[]): void {
+    this.theMap.selector.selectFeaturesFromProps(parcels);
   }
 }

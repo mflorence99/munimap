@@ -58,7 +58,7 @@
       </app-ol-interaction-select>
 
       <app-ol-interaction-select
-        (select)="onSelectFeature($event)"
+        (featuresSelected)="onFeaturesSelected($event)"
         [eventType]="'singleclick'"
         [filter]="filter()"
       >

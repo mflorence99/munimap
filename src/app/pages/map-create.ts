@@ -70,6 +70,11 @@ export class MapCreatePage {
     };
   }
 
+  onFeaturesSelected(features: OLFeature<any>[]): void {
+    this.path += `:${features[0].getId()}`;
+    this.root.setTitle(this.path);
+  }
+
   onPathChanged(path: string): void {
     this.path = path;
     this.root.setTitle(this.path);
@@ -77,10 +82,5 @@ export class MapCreatePage {
 
   onPathSelected(path: string): void {
     this.router.navigate(['/town-map/0'], { queryParams: { path } });
-  }
-
-  onSelectFeature(name: string): void {
-    this.path += `:${name}`;
-    this.root.setTitle(this.path);
   }
 }

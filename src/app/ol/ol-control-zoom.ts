@@ -11,14 +11,26 @@ import { Input } from '@angular/core';
   styleUrls: ['./ol-control-zoom.scss']
 })
 export class OLControlZoomComponent {
-  @Input() zoom: number;
+  #zoom: number;
+  @Input() resolution: number;
+
+  @Input()
+  get zoom(): number {
+    return this.#zoom;
+  }
+  set zoom(zoom: number) {
+    this.#zoom = zoom;
+    this.resolution = this.map.olView.getResolutionForZoom(zoom);
+  }
+
+  @Input() zoomAnimationDuration = 250;
 
   constructor(public map: OLMapComponent) {}
 
   onZoomChange(zoom: number): void {
     this.zoom = zoom;
     this.map.olView.animate({
-      duration: 250,
+      duration: this.zoomAnimationDuration,
       zoom
     });
   }

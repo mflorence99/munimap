@@ -51,3 +51,5 @@ export type OLFillPatternType =
   | 'vine'
   | 'wave'
   | 'woven';
+
+export type OLStrokePatternType = OLFillPatternType;

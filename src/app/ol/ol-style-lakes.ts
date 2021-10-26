@@ -42,7 +42,7 @@ export class OLStyleLakesComponent implements OLStyleComponent {
         fill: new OLFillPattern({
           color: `rgba(${fill}, 1)`,
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-          pattern: 'wave'
+          pattern: this.pattern
         }),
         stroke: null
       });

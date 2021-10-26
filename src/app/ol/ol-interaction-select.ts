@@ -12,6 +12,8 @@ import { OnDestroy } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
+import { createEmpty } from 'ol/extent';
+import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
@@ -35,11 +37,14 @@ export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy
 {
   @Input() eventType: string;
+
+  @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
+
   @Input() filter: FilterFunction;
 
   olSelect: OLSelect;
 
-  @Output('select') select = new EventEmitter<string>();
+  @Input() zoomAnimationDuration = 500;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -52,6 +57,8 @@ export class OLInteractionSelectComponent
       layers: [this.layer.olLayer],
       style: this.layer.style?.styleWhenSelected()
     });
+    // 👉 register this selector with the map
+    this.map.selector = this;
   }
 
   #filter(feature: OLFeature<any>): boolean {
@@ -59,7 +66,7 @@ export class OLInteractionSelectComponent
   }
 
   #onSelect(event: OLSelectEvent): void {
-    this.select.emit(event.selected[0]?.getId());
+    this.featuresSelected.emit(event.selected);
   }
 
   addToMap(): void {
@@ -72,5 +79,31 @@ export class OLInteractionSelectComponent
 
   ngOnDestroy(): void {
     this.olSelect.un('select', this.#onSelect.bind(this));
+  }
+
+  selectFeatures(features: OLFeature<any>[]): void {
+    this.olSelect.getFeatures().clear();
+    const extent = createEmpty();
+    // 👉 select supplied features
+    features.forEach((feature) => {
+      extend(extent, feature.getGeometry().getExtent());
+      this.olSelect.getFeatures().push(feature);
+    });
+    // 👉 center the map so all are visible
+    this.map.olView.fit(extent, {
+      duration: this.zoomAnimationDuration,
+      maxZoom: this.map.maxZoom,
+      size: this.map.olMap.getSize()
+    });
+  }
+
+  selectFeaturesFromProps(props: Record<string, any>[], key = 'id'): void {
+    const features: OLFeature<any>[] = [];
+    const ids = props.map((prop) => prop[key]);
+    this.layer.olLayer.getSource().forEachFeature((feature) => {
+      const props = feature.getProperties();
+      if (ids.includes(props[key])) features.push(feature);
+    });
+    this.selectFeatures(features);
   }
 }
