@@ -18,6 +18,7 @@ import { moveFromLeftFade } from 'ngx-router-animations';
 import { transition } from '@angular/animations';
 import { trigger } from '@angular/animations';
 import { useAnimation } from '@angular/animations';
+
 @Component({
   animations: [
     trigger('moveFromLeftFade', [

@@ -2,8 +2,6 @@ import { Params } from './params';
 import { Parcel } from '../state/parcel';
 import { Path } from '../state/view';
 
-import { environment } from '../../environment';
-
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
@@ -184,7 +182,7 @@ export class GeoJSONService {
     return this.http
       .get<GeoJSON.FeatureCollection<GeoJSON.Polygon>>(
         `${this.params.geoJSON.host}${path}`,
-        { headers: new HttpHeaders({ cache: String(environment.production) }) }
+        { headers: new HttpHeaders({ cache: 'page' }) }
       )
       .pipe(catchError(() => of(EMPTY)));
   }
@@ -211,7 +209,7 @@ export class GeoJSONService {
 
   loadIndex(): Observable<Index> {
     return this.http.get<Index>(`${this.params.geoJSON.host}/index.json`, {
-      headers: new HttpHeaders({ cache: String(environment.production) })
+      headers: new HttpHeaders({ cache: 'perm' })
     });
   }
 }

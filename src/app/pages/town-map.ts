@@ -1,5 +1,5 @@
-import { Parcel } from '../state/parcel';
 import { Map } from '../state/map';
+import { Parcel } from '../state/parcel';
 import { Path } from '../state/view';
 import { RootPage } from '../root';
 
