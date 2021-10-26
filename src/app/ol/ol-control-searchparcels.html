@@ -1,0 +1,19 @@
+<article class="control">
+  <mat-icon>search</mat-icon>
+  <input
+    #theSearcher
+    (input)="input($event.srcElement.value)"
+    class="searcher"
+    placeholder="Search by parcel, address or owner"
+    type="search"
+  />
+</article>
+
+<select
+  (input)="theSearcher.value = input($event.srcElement.value)"
+  [size]="maxMatcherSize()"
+  [class.hidden]="matches.length === 0 || !theSearcher.value"
+  class="matcher"
+>
+  <option *ngFor="let match of matches" [value]="match">{{ match }}</option>
+</select>

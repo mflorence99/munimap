@@ -24,7 +24,7 @@ import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
 // 👇 fills, outlines and identifies a parcel feature with:
-//    -- text showing the ID and acreage of the lot
+//    -- text showing the ID and acreage of the parcel
 //       -- with a styled color
 //       -- with a fontSize proportional to the acreage and the resolution
 //       -- with an input font family
@@ -173,7 +173,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #labels(props: ParcelProperties, resolution: number): Label[] {
     const labels: Label[] = [];
     const fontSize = this.#fontSize(props, resolution);
-    // 👉 for tiny lots, we'll only show the lot # so we can
+    // 👉 for tiny parcels, we'll only show the parcel # so we can
     //    shortcircuit all the calculations
     if (this.#isTiny(props)) {
       labels.push({
@@ -185,7 +185,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         text: props.id
       });
     } else {
-      // 👉 measure up the lot id and the acreage text
+      // 👉 measure up the parcel id and the acreage text
       //    NOTE: the acreage font size is 80% smaller
       const fAcres = 0.8;
       const mID = this.map.measureText(

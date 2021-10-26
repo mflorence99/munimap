@@ -1,3 +1,4 @@
+import { Parcel } from '../state/parcel';
 import { Map } from '../state/map';
 import { Path } from '../state/view';
 import { RootPage } from '../root';
@@ -29,6 +30,10 @@ export class TownMapPage {
       style: 'blank'
     };
     this.root.setTitle(this.path);
+  }
+
+  onParcelsFound(parcels: Parcel[]): void {
+    console.log(parcels);
   }
 
   onSelectFeature(name: string): void {

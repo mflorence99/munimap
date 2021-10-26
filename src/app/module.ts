@@ -10,7 +10,7 @@ import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
 import { OLControlScaleLineComponent } from './ol/ol-control-scaleline';
-import { OLControlSearchComponent } from './ol/ol-control-search';
+import { OLControlSearchParcelsComponent } from './ol/ol-control-searchparcels';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from './ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from './ol/ol-filter-crop2boundary';
@@ -97,7 +97,7 @@ const COMPONENTS = [
   OLControlAttributionComponent,
   OLControlMousePositionComponent,
   OLControlScaleLineComponent,
-  OLControlSearchComponent,
+  OLControlSearchParcelsComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
   OLFilterCrop2BoundaryComponent,

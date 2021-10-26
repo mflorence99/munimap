@@ -13,7 +13,10 @@
 
   <!-- 📦 CONTROLS -->
 
-  <app-ol-control-search mapControlSearch></app-ol-control-search>
+  <app-ol-control-searchparcels
+    (parcelsFound)="onParcelsFound($event)"
+    mapControlSearch
+  ></app-ol-control-searchparcels>
 
   <app-ol-control-zoom #theZoomControl mapControlZoom></app-ol-control-zoom>
 
