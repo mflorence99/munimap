@@ -2,6 +2,7 @@ import { FilterFunction } from '../ol/ol-interaction-select';
 import { GeoJSONService } from '../services/geojson';
 import { Index } from '../services/geojson';
 import { Path } from '../state/view';
+import { RootPage } from '../root';
 import { TownIndex } from '../services/geojson';
 
 import { theState } from '../state/view';
@@ -25,11 +26,13 @@ export class MapCreatePage {
 
   constructor(
     private geoJSON: GeoJSONService,
+    private root: RootPage,
     private route: ActivatedRoute,
     private router: Router
   ) {
     this.index = this.geoJSON.findIndex(this.route);
     this.path = this.route.snapshot.queryParamMap.get('path') ?? theState;
+    this.root.setTitle(this.path);
   }
 
   atCountyLevel(path: Path): boolean {
@@ -69,6 +72,7 @@ export class MapCreatePage {
 
   onPathChanged(path: string): void {
     this.path = path;
+    this.root.setTitle(this.path);
   }
 
   onPathSelected(path: string): void {
@@ -77,5 +81,6 @@ export class MapCreatePage {
 
   onSelectFeature(name: string): void {
     this.path += `:${name}`;
+    this.root.setTitle(this.path);
   }
 }

@@ -35,6 +35,8 @@ export class RootPage {
 
   @ViewChild(RouterOutlet) outlet;
 
+  title: string;
+
   @Select(AuthState.user) user$: Observable<User>;
 
   constructor(private router: Router) {
@@ -48,7 +50,6 @@ export class RootPage {
           this.loading = true;
           break;
         }
-
         case event instanceof NavigationEnd:
         case event instanceof NavigationCancel:
         case event instanceof NavigationError: {
@@ -64,5 +65,9 @@ export class RootPage {
 
   getState(): any {
     return this.outlet?.activatedRouteData?.state;
+  }
+
+  setTitle(title: string): void {
+    this.title = title;
   }
 }

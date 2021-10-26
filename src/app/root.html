@@ -8,7 +8,9 @@
       <mat-icon>menu</mat-icon>
     </button>
 
-    <h1>MuniMap</h1>
+    <h1>
+      <ng-container *ngIf="title"> {{ title }} </ng-container>
+    </h1>
 
     <div class="filler"></div>
 

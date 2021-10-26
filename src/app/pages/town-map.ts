@@ -1,5 +1,6 @@
 import { Map } from '../state/map';
 import { Path } from '../state/view';
+import { RootPage } from '../root';
 
 import { theState } from '../state/view';
 
@@ -17,9 +18,9 @@ export class TownMapPage {
   map: Map;
   path: Path;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private root: RootPage, private route: ActivatedRoute) {
     // 👌 we resally want to read the map by its ID from Firebase
-    //    but we are hacking it foir now with a skeleton
+    //    but we are hacking it for now with a skeleton
     this.path = this.route.snapshot.queryParamMap.get('path') ?? theState;
     this.map = {
       id: null,
@@ -27,6 +28,7 @@ export class TownMapPage {
       path: this.path,
       style: 'blank'
     };
+    this.root.setTitle(this.path);
   }
 
   onSelectFeature(name: string): void {

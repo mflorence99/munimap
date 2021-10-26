@@ -11,6 +11,8 @@
     mapControlPanel1
   ></app-town-map-setup>
 
+  <!-- 📦 CONTROLS -->
+
   <app-ol-control-search mapControlSearch></app-ol-control-search>
 
   <app-ol-control-zoom #theZoomControl mapControlZoom></app-ol-control-zoom>
@@ -26,16 +28,16 @@
   <ng-container *ngIf="theMap.initialized">
     <app-ol-control-scaleline></app-ol-control-scaleline>
 
-    <!-- BG LAYER -->
+    <!-- 📦 BG LAYER -->
 
     <app-ol-layer-tile>
       <app-ol-source-osm></app-ol-source-osm>
       <app-ol-filter-pencil></app-ol-filter-pencil>
     </app-ol-layer-tile>
 
-    <!-- BASE LAYER PUNCHED OUT BY BOUNDARY -->
-
     <ng-container [ngSwitch]="map.style">
+      <!-- 📦 ARCGIS -->
+
       <app-ol-layer-tile *ngSwitchCase="'arcgis'">
         <app-ol-source-xyz
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
@@ -49,6 +51,8 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
+      <!-- 📦 GOOGLE -->
+
       <app-ol-layer-tile *ngSwitchCase="'google'">
         <app-ol-source-xyz
           [url]="'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'"
@@ -57,6 +61,8 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
+      <!-- 📦 MAPBOX -->
+
       <app-ol-layer-mapbox
         *ngSwitchCase="'mapbox'"
         styleUrl="mapbox://styles/mapbox/bright-v9"
@@ -64,24 +70,26 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-mapbox>
 
+      <!-- 📦 OSM -->
+
       <app-ol-layer-tile *ngSwitchCase="'osm'">
         <app-ol-source-osm></app-ol-source-osm>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
-      <ng-container *ngSwitchCase="'blank'">
-        <app-ol-layer-vector>
-          <app-ol-style-boundary></app-ol-style-boundary>
-          <app-ol-source-boundary></app-ol-source-boundary>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-      </ng-container>
+      <!-- 📦 "BLANK" (vectors supplied by NH GRANIT) -->
 
-      <!-- HILLSHADE LAYER (not needed for arcgis) -->
+      <app-ol-layer-vector *ngSwitchCase="'blank'">
+        <app-ol-style-boundary></app-ol-style-boundary>
+        <app-ol-source-boundary></app-ol-source-boundary>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <!-- 📦 HILLSHADE LAYER (not needed for ARCGIS) -->
 
       <app-ol-layer-tile
         *ngIf="map.style !== 'arcgis'"
-        [maxZoom]="17.5"
+        [maxZoom]="17"
         [opacity]="0.5"
       >
         <app-ol-source-xyz
@@ -98,7 +106,7 @@
       </app-ol-layer-tile>
     </ng-container>
 
-    <!--VECTOR OVERLAYS FOR "BLANK" -->
+    <!-- 📦 VECTOR OVERLAYS FOR "BLANK" -->
 
     <ng-container *ngIf="map.style === 'blank'">
       <app-ol-layer-vector>
@@ -160,7 +168,7 @@
       </app-ol-layer-vector>
     </ng-container>
 
-    <!-- VECTOR LAYERS FOR OTHER TYPES -->
+    <!-- 📦 VECTOR LAYERS FOR OTHER TYPES -->
 
     <ng-container *ngIf="map.style !== 'blank'">
       <app-ol-layer-vector>
@@ -188,7 +196,7 @@
       </app-ol-layer-vector>
     </ng-container>
 
-    <!-- BOUNDARY LAYER -->
+    <!-- 📦 BOUNDARY LAYER -->
 
     <app-ol-layer-vector>
       <app-ol-style-polygons></app-ol-style-polygons>

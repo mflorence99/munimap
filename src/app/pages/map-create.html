@@ -7,6 +7,8 @@
   >
   </app-map-filter>
 
+  <!-- 📦 CONTROLS -->
+
   <app-ol-control-zoom2extent
     mapControlZoomToExtent
   ></app-ol-control-zoom2extent>
@@ -16,20 +18,22 @@
   ></app-ol-control-attribution>
 
   <ng-container *ngIf="theMap.initialized">
-    <!-- BG LAYER -->
+    <!-- 📦 OUTSIDE TOWN IN B&W -->
 
     <app-ol-layer-tile>
       <app-ol-source-osm></app-ol-source-osm>
       <app-ol-filter-pencil></app-ol-filter-pencil>
     </app-ol-layer-tile>
 
+    <!-- 📦 INSIDE TOWN via MAPBOX -->
+
     <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/bright-v9">
       <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-mapbox>
 
-    <!-- HILLSHADE LAYER -->
+    <!-- 📦 HILLSHADE LAYER (ARCGIS) -->
 
-    <app-ol-layer-tile [maxZoom]="17.5" [opacity]="0.5">
+    <app-ol-layer-tile [maxZoom]="17" [opacity]="0.5">
       <app-ol-source-xyz
         [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
       >
@@ -43,7 +47,7 @@
       <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-tile>
 
-    <!-- SELECTABLES LAYER -->
+    <!-- 📦 SELECTABLES LAYER -->
 
     <app-ol-layer-vector *ngIf="!atTownLevel(path)">
       <app-ol-style-polygons [filter]="filter()"></app-ol-style-polygons>
@@ -61,7 +65,7 @@
       </app-ol-interaction-select>
     </app-ol-layer-vector>
 
-    <!-- BOUNDARY LAYER -->
+    <!-- 📦 BOUNDARY LAYER -->
 
     <app-ol-layer-vector *ngIf="atTownLevel(path)">
       <app-ol-style-polygons></app-ol-style-polygons>
