@@ -33,7 +33,7 @@ export class OLSourceGeoJSONComponent implements AfterContentInit {
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
-    this.olVector = new OLVector({ features: null });
+    this.olVector = new OLVector({ attributions: [attribution] });
   }
 
   ngAfterContentInit(): void {
@@ -45,7 +45,6 @@ export class OLSourceGeoJSONComponent implements AfterContentInit {
             featureProjection: this.map.projection
           })
         );
-        this.olVector.setAttributions([attribution]);
         this.layer.olLayer.setSource(this.olVector);
       });
   }

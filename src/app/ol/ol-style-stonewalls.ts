@@ -26,7 +26,7 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
   @Input() opacity = 0.33;
   @Input() pattern: OLStrokePatternType = 'rocks';
   @Input() threshold = 1;
-  @Input() width = 3;
+  @Input() width = 5;
 
   constructor(
     private layer: OLLayerVectorComponent,

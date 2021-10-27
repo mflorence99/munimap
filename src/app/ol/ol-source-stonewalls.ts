@@ -1,18 +1,14 @@
-import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
+import { Params } from '../services/params';
 
-import { ActivatedRoute } from '@angular/router';
-import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Input } from '@angular/core';
 
+import { bbox } from 'ol/loadingstrategy';
 import { map } from 'rxjs';
-import { switchMap } from 'rxjs';
-import { transformExtent } from 'ol/proj';
 
 import GeoJSON from 'ol/format/GeoJSON';
 import OLVector from 'ol/source/Vector';
@@ -26,61 +22,52 @@ const attribution =
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceStoneWallsComponent implements AfterContentInit {
-  @Input() layerKey: string;
-
+export class OLSourceStoneWallsComponent {
   olVector: OLVector<any>;
 
-  @Input() path: string;
+  @Input() threshold = 1;
 
   constructor(
-    private geoJSON: GeoJSONService,
     private http: HttpClient,
     private layer: OLLayerVectorComponent,
-    private map: OLMapComponent,
-    private route: ActivatedRoute
+    private params: Params
   ) {
-    this.olVector = new OLVector({ features: null });
+    this.olVector = new OLVector({
+      attributions: [attribution],
+      format: new GeoJSON(),
+      loader: this.#loader.bind(this),
+      strategy: bbox
+    });
+    this.layer.olLayer.setSource(this.olVector);
   }
 
-  ngAfterContentInit(): void {
-    this.geoJSON
-      .loadByIndex(this.route, this.path ?? this.map.path, 'boundary')
-      .pipe(
-        switchMap((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-          const bbox = geojson.features[0].bbox;
-          const featureProjection = geojson['crs'].properties.name;
-          const [minX, minY, maxX, maxY] = transformExtent(
-            bbox,
-            featureProjection,
-            this.map.projection
-          );
-          // 👉 see proxy.conf.js for now
-          return this.http.get(
-            `/stonewalls/MAcUimSes4gPY4sM/arcgis/rest/services/NH_Stone_Walls_Layer_Public_View/FeatureServer/0/query?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100&resultType=tile`,
-            {
-              headers: new HttpHeaders({ cache: 'page' })
-            }
-          );
-        }),
-        // 👉 we have no typings for the ESRI format
-        map(
-          (arcgis: any): GeoJSON.FeatureCollection<GeoJSON.LineString> => ({
-            features: arcgis.features.map((feature: any) => ({
-              geometry: {
-                coordinates: feature.geometry.paths[0],
-                type: 'LineString'
-              },
-              type: 'Feature'
-            })),
-            type: 'FeatureCollection'
-          })
+  #loader([minX, minY, maxX, maxY], resolution: number): void {
+    if (resolution < this.threshold) {
+      const url = `https://services1.arcgis.com/MAcUimSes4gPY4sM/arcgis/rest/services/NH_Stone_Walls_Layer_Public_View/FeatureServer/0/query?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100&resultType=tile`;
+      this.http
+        .get(
+          `${this.params.geoJSON.host}/proxy?url=${encodeURIComponent(url)}`,
+          {
+            headers: new HttpHeaders({ cache: 'page' })
+          }
         )
-      )
-      .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.LineString>) => {
-        this.olVector.addFeatures(new GeoJSON().readFeatures(geojson));
-        this.olVector.setAttributions([attribution]);
-        this.layer.olLayer.setSource(this.olVector);
-      });
+        .pipe(
+          map(
+            (arcgis: any): GeoJSON.FeatureCollection<GeoJSON.LineString> => ({
+              features: arcgis.features.map((feature: any) => ({
+                geometry: {
+                  coordinates: feature.geometry.paths[0],
+                  type: 'LineString'
+                },
+                type: 'Feature'
+              })),
+              type: 'FeatureCollection'
+            })
+          )
+        )
+        .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.LineString>) => {
+          this.olVector.addFeatures(new GeoJSON().readFeatures(geojson));
+        });
+    }
   }
 }

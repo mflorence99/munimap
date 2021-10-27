@@ -16,7 +16,7 @@
     "ng": "ng",
     "postinstall": "ngcc",
     "prettier": "prettier --write .",
-    "serve": "ng serve --proxy-config proxy.conf.js",
+    "serve": "ng serve",
     "test": "jest --runInBand --coverage --unhandled-rejections=none && ts-node --dir bin coverage-icon.ts"
   },
   "dependencies": {
