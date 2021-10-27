@@ -178,10 +178,18 @@ export class GeoJSONService {
     return index;
   }
 
-  load(path: string): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
+  load(
+    path: string,
+    extent: number[] = []
+  ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
+    let params = '';
+    if (extent.length === 4) {
+      const [minX, minY, maxX, maxY] = extent;
+      params = `?minX=${minX}&minY=${minY}&maxX=${maxX}&maxY=${maxY}`;
+    }
     return this.http
       .get<GeoJSON.FeatureCollection<GeoJSON.Polygon>>(
-        `${this.params.geoJSON.host}${path}`,
+        `${this.params.geoJSON.host}${path}${params}`,
         { headers: new HttpHeaders({ cache: 'page' }) }
       )
       .pipe(catchError(() => of(EMPTY)));
@@ -190,21 +198,23 @@ export class GeoJSONService {
   loadByIndex(
     route: ActivatedRoute,
     path: string,
-    layerKey: string
+    layerKey: string,
+    extent: number[] = []
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const base = this.findIndex(route);
-    return this.loadFromIndex(base, path, layerKey);
+    return this.loadFromIndex(base, path, layerKey, extent);
   }
 
   loadFromIndex(
     base: Index,
     path: string,
-    layerKey: string
+    layerKey: string,
+    extent: number[] = []
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const index = this.#indexFromPath(base, path);
     const layer = index.layers[layerKey];
     const url = layer.url;
-    return layer.available ? this.load(url) : of(EMPTY);
+    return layer.available ? this.load(url, extent) : of(EMPTY);
   }
 
   loadIndex(): Observable<Index> {

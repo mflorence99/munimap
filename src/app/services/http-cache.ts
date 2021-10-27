@@ -45,12 +45,16 @@ export class HttpCache implements HttpInterceptor {
 
     // 👉 locate the appropriate cache, permanent or by page
     //    bail if no cache
-    const cache = this.#cache[req.headers.get('cache')];
+    const key = req.headers.get('cache');
+    const cache = this.#cache[key];
     if (!cache) return next.handle(req);
 
     // 👉 lookup the cached response
     const cachedResponse: HttpResponse<any> = cache[req.url];
-    if (cachedResponse) return of(cachedResponse.clone());
+    if (cachedResponse) {
+      console.log(`%cFrom ${key} cache:`, 'color: plum', req.url);
+      return of(cachedResponse.clone());
+    }
 
     // 👉 not cached? process request and cache response
     return next.handle(req).pipe(

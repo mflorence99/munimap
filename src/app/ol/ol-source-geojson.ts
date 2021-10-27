@@ -3,12 +3,16 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
 import { ActivatedRoute } from '@angular/router';
-import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+import { bbox } from 'ol/loadingstrategy';
+import { transformExtent } from 'ol/proj';
+
 import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
 
 const attribution =
@@ -20,7 +24,7 @@ const attribution =
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceGeoJSONComponent implements AfterContentInit {
+export class OLSourceGeoJSONComponent {
   @Input() layerKey: string;
 
   olVector: OLVector<any>;
@@ -33,19 +37,31 @@ export class OLSourceGeoJSONComponent implements AfterContentInit {
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
-    this.olVector = new OLVector({ attributions: [attribution] });
+    this.olVector = new OLVector({
+      attributions: [attribution],
+      format: new GeoJSON(),
+      loader: this.#loader.bind(this),
+      strategy: bbox
+    });
+    this.layer.olLayer.setSource(this.olVector);
   }
 
-  ngAfterContentInit(): void {
+  #loader(
+    extent: number[],
+    _resolution: number,
+    projection: OLProjection,
+    success: Function,
+    _faulure: Function
+  ): void {
+    const bbox = transformExtent(extent, projection, 'EPSG:4326');
     this.geoJSON
-      .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey)
+      .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
       .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-        this.olVector.addFeatures(
-          new GeoJSON().readFeatures(geojson, {
-            featureProjection: this.map.projection
-          })
-        );
-        this.layer.olLayer.setSource(this.olVector);
+        const features = this.olVector.getFormat().readFeatures(geojson, {
+          featureProjection: this.map.projection
+        }) as OLFeature<any>[];
+        this.olVector.addFeatures(features);
+        success(features);
       });
   }
 }

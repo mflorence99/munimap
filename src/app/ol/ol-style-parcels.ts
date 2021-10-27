@@ -339,7 +339,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetX: label.offsetX + offset[0],
           offsetY: label.offsetY + offset[1],
           overflow: true,
-          padding: [8, 8, 8, 8],
           rotation: this.#rotation(props),
           text: label.text
         });

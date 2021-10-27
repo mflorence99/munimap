@@ -92,6 +92,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
           text: new OLText({
             font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,
             fill: new OLFill({ color: `rgba(${color}, 1)` }),
+            overflow: true,
             placement: 'point',
             text: feature.getId() as string
           })

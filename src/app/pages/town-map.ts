@@ -1,6 +1,5 @@
 import { Map } from '../state/map';
 import { OLMapComponent } from '../ol/ol-map';
-import { Parcel } from '../state/parcel';
 import { Path } from '../state/view';
 import { RootPage } from '../root';
 
@@ -39,10 +38,13 @@ export class TownMapPage {
   }
 
   onFeaturesSelected(features: OLFeature<any>[]): void {
-    console.log(features.map((feature) => feature.getId()).join(','));
+    const ids = features.map((feature) => feature.getId()).join(', ');
+    console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
   }
 
-  onParcelsFound(parcels: Parcel[]): void {
-    this.theMap.selector.selectFeaturesFromProps(parcels);
+  onParcelsFound(parcels: GeoJSON.Feature[]): void {
+    const ids = parcels.map((parcel) => parcel.properties.id).join(', ');
+    console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
+    this.theMap.selector.selectParcels(parcels);
   }
 }

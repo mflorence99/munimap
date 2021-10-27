@@ -11,6 +11,8 @@ import { bbox } from 'ol/loadingstrategy';
 import { map } from 'rxjs';
 
 import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
 
 const attribution =
@@ -41,7 +43,13 @@ export class OLSourceStoneWallsComponent {
     this.layer.olLayer.setSource(this.olVector);
   }
 
-  #loader([minX, minY, maxX, maxY], resolution: number): void {
+  #loader(
+    [minX, minY, maxX, maxY],
+    resolution: number,
+    _projection: OLProjection,
+    success: Function,
+    _failure: Function
+  ): void {
     if (resolution < this.threshold) {
       const url = `https://services1.arcgis.com/MAcUimSes4gPY4sM/arcgis/rest/services/NH_Stone_Walls_Layer_Public_View/FeatureServer/0/query?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100&resultType=tile`;
       this.http
@@ -66,7 +74,11 @@ export class OLSourceStoneWallsComponent {
           )
         )
         .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.LineString>) => {
-          this.olVector.addFeatures(new GeoJSON().readFeatures(geojson));
+          const features = this.olVector
+            .getFormat()
+            .readFeatures(geojson) as OLFeature<any>[];
+          this.olVector.addFeatures(features);
+          success(features);
         });
     }
   }

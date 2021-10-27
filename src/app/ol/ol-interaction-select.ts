@@ -12,10 +12,10 @@ import { OnDestroy } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
-import { createEmpty } from 'ol/extent';
-import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
+import { transformExtent } from 'ol/proj';
 
+import bbox from '@turf/bbox';
 import OLFeature from 'ol/Feature';
 import OLSelect from 'ol/interaction/Select';
 
@@ -44,7 +44,7 @@ export class OLInteractionSelectComponent
 
   olSelect: OLSelect;
 
-  @Input() zoomAnimationDuration = 500;
+  @Input() zoomAnimationDuration = 200;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -81,29 +81,31 @@ export class OLInteractionSelectComponent
     this.olSelect.un('select', this.#onSelect.bind(this));
   }
 
-  selectFeatures(features: OLFeature<any>[]): void {
-    this.olSelect.getFeatures().clear();
-    const extent = createEmpty();
-    // 👉 select supplied features
-    features.forEach((feature) => {
-      extend(extent, feature.getGeometry().getExtent());
-      this.olSelect.getFeatures().push(feature);
+  selectParcels(parcels: GeoJSON.Feature[]): void {
+    const geojson = {
+      features: parcels,
+      type: 'FeatureCollection'
+    };
+    // 👇 find the union of the extent of all parcels
+    const extent = transformExtent(
+      bbox(geojson),
+      'EPSG:4326',
+      this.map.projection
+    );
+    // 👇 when these parcels are available, select them
+    const ids = parcels.map((parcel) => parcel.properties.id);
+    this.layer.olLayer.getSource().once('featuresloadend', () => {
+      this.olSelect.getFeatures().clear();
+      this.layer.olLayer.getSource().forEachFeature((feature) => {
+        const props = feature.getProperties();
+        if (ids.includes(props.id)) this.olSelect.getFeatures().push(feature);
+      });
     });
-    // 👉 center the map so all are visible
+    // 👇 zoom to the extent of all the selected  parcels
     this.map.olView.fit(extent, {
       duration: this.zoomAnimationDuration,
       maxZoom: this.map.maxZoom,
       size: this.map.olMap.getSize()
     });
-  }
-
-  selectFeaturesFromProps(props: Record<string, any>[], key = 'id'): void {
-    const features: OLFeature<any>[] = [];
-    const ids = props.map((prop) => prop[key]);
-    this.layer.olLayer.getSource().forEachFeature((feature) => {
-      const props = feature.getProperties();
-      if (ids.includes(props[key])) features.push(feature);
-    });
-    this.selectFeatures(features);
   }
 }
