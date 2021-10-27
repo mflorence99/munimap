@@ -41,9 +41,9 @@ export class OLFilterCrop2BoundaryComponent implements AfterContentInit {
       this.map.boundary.features[0].geometry.coordinates
     );
     const feature = new Feature(new Polygon(coords));
-    // 👉 TODO: ambient typings missing this
-    const featureProjection = this.map.boundary['crs'].properties.name;
-    feature.getGeometry().transform(featureProjection, this.map.projection);
+    feature
+      .getGeometry()
+      .transform(this.map.featureProjection, this.map.projection);
     this.olFilter = new Crop({
       active: true,
       feature: feature,

@@ -53,10 +53,15 @@ export class OLSourceGeoJSONComponent {
     success: Function,
     _faulure: Function
   ): void {
-    const bbox = transformExtent(extent, projection, 'EPSG:4326');
+    const bbox = transformExtent(
+      extent,
+      projection,
+      this.map.featureProjection
+    );
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
       .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+        this.olVector.clear();
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.map.projection
         }) as OLFeature<any>[];

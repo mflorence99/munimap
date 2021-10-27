@@ -42,6 +42,8 @@ export class OLInteractionSelectComponent
 
   @Input() filter: FilterFunction;
 
+  @Input() multi = false;
+
   olSelect: OLSelect;
 
   @Input() zoomAnimationDuration = 200;
@@ -65,8 +67,8 @@ export class OLInteractionSelectComponent
     return this.filter ? this.filter(feature) : true;
   }
 
-  #onSelect(event: OLSelectEvent): void {
-    this.featuresSelected.emit(event.selected);
+  #onSelect(_event: OLSelectEvent): void {
+    this.featuresSelected.emit(this.olSelect.getFeatures().getArray());
   }
 
   addToMap(): void {
@@ -89,7 +91,7 @@ export class OLInteractionSelectComponent
     // 👇 find the union of the extent of all parcels
     const extent = transformExtent(
       bbox(geojson),
-      'EPSG:4326',
+      this.map.featureProjection,
       this.map.projection
     );
     // 👇 when these parcels are available, select them

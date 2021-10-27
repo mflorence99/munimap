@@ -1,4 +1,10 @@
-<app-ol-map #theMap [minZoom]="13" [maxZoom]="19" [path]="path">
+<app-ol-map
+  #theMap
+  (contextmenu)="onContextMenu($event)"
+  [minZoom]="13"
+  [maxZoom]="19"
+  [path]="path"
+>
   <app-town-map-setup
     [map]="map"
     class="setup"
@@ -124,14 +130,14 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-buildings></app-ol-style-buildings>
-        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
+        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-roads></app-ol-style-roads>
-        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <app-ol-style-trails></app-ol-style-trails>
+        <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -142,8 +148,8 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-places></app-ol-style-places>
-        <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
+        <app-ol-style-buildings></app-ol-style-buildings>
+        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -161,13 +167,9 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
-        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
-        <app-ol-interaction-select
-          (featuresSelected)="onFeaturesSelected($event)"
-          [eventType]="'singleclick'"
-        >
-        </app-ol-interaction-select>
+        <app-ol-style-places></app-ol-style-places>
+        <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
     </ng-container>
 
@@ -193,17 +195,20 @@
         <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
-        <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
-        <app-ol-interaction-select
-          (featuresSelected)="onFeaturesSelected($event)"
-          [eventType]="'singleclick'"
-        >
-        </app-ol-interaction-select>
-      </app-ol-layer-vector>
     </ng-container>
+
+    <!-- 📦 SELECTION LAYER -->
+
+    <app-ol-layer-vector>
+      <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
+      <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+      <app-ol-interaction-select
+        (featuresSelected)="onFeaturesSelected($event)"
+        [eventType]="'singleclick'"
+        [multi]="true"
+      >
+      </app-ol-interaction-select>
+    </app-ol-layer-vector>
 
     <!-- 📦 BOUNDARY LAYER -->
 

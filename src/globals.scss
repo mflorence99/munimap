@@ -110,11 +110,8 @@ $dark-app-theme: mat-dark-theme(
   --map-river-line-color: var(--rgb-blue-200);
   --map-river-text-color: var(--rgb-light-blue-200);
 
-  --map-place-icon-color-church: var(--rgb-brown-900);
-  --map-place-icon-color-summit: var(--rgb-red-900);
-
-  --map-place-text-color-church: var(--rgb-brown-900);
-  --map-place-text-color-summit: var(--rgb-brown-900);
+  --map-place-icon-color: var(--rgb-brown-900);
+  --map-place-text-color: var(--rgb-brown-900);
 
   --map-road-text-color-I: var(--rgb-gray-50);
   --map-road-text-color-II: var(--rgb-gray-50);
@@ -142,6 +139,9 @@ $dark-app-theme: mat-dark-theme(
 
   --map-stonewall-fill: var(--rgb-gray-300);
   --map-stonewall-rocks: var(--rgb-gray-900);
+
+  --map-trail-line-color: var(--rgb-brown-600);
+  --map-trail-text-color: var(--rgb-brown-600);
 }
 
 // 👉 base styles

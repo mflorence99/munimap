@@ -18,6 +18,7 @@ import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLIcon from 'ol/style/Icon';
+import OLPoint from 'ol/geom/Point';
 import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
@@ -68,7 +69,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   // 👉 we don't really want to parameterize these settings as inputs
   //    as they are a WAG to control computed fontSize for acres
   #acresSizeClamp = [0.1, 1000];
-  #fontSizeClamp = [0, 75];
+  #fontSizeClamp = [0, 66];
 
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
@@ -236,26 +237,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return labels;
   }
 
-  #offset(parcel: OLFeature<OLPolygon>): number[] {
-    // 👉 here we are just finding the delta between what OpenLayers
-    //    thinks is the center of the parcel and the much better
-    //    "center of gravity" that polylabel pre-computed for us
+  #point(parcel: OLFeature<OLPolygon>): OLPoint {
     const props = parcel.getProperties() as ParcelProperties;
-    const [minX, minY, maxX, maxY] = parcel.getGeometry().getExtent();
-    const p = this.map.olMap.getPixelFromCoordinate([
-      minX + (maxX - minX) / 2,
-      minY + (maxY - minY) / 2
-    ]);
-    const q = this.map.olMap.getPixelFromCoordinate(fromLonLat(props.center));
-    const x = q[0] - p[0];
-    const y = q[1] - p[1];
-    // 👉 https://academo.org/demos/rotation-about-point/
-    //    adjust the delta to account for the label rotatin
-    const a = this.#rotation(props) * -1;
-    return [
-      x * Math.cos(a) - y * Math.sin(a),
-      y * Math.cos(a) + x * Math.sin(a)
-    ];
+    return new OLPoint(fromLonLat(props.center));
   }
 
   #rotation(props: ParcelProperties): number {
@@ -331,18 +315,17 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const color = this.map.vars['--map-parcel-text-color'];
       const props = parcel.getProperties() as ParcelProperties;
       const labels = this.#labels(props, resolution);
-      const offset = this.#offset(parcel);
       return labels.map((label) => {
         const text = new OLText({
           font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
           fill: new OLFill({ color: `rgba(${color}, 1)` }),
-          offsetX: label.offsetX + offset[0],
-          offsetY: label.offsetY + offset[1],
+          offsetX: label.offsetX,
+          offsetY: label.offsetY,
           overflow: true,
           rotation: this.#rotation(props),
           text: label.text
         });
-        return new OLStyle({ text });
+        return new OLStyle({ geometry: this.#point(parcel), text });
       });
     }
   }

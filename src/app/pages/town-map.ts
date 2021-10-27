@@ -37,6 +37,11 @@ export class TownMapPage {
     this.root.setTitle(this.path);
   }
 
+  onContextMenu(event: PointerEvent): void {
+    console.log(event);
+    event.preventDefault();
+  }
+
   onFeaturesSelected(features: OLFeature<any>[]): void {
     const ids = features.map((feature) => feature.getId()).join(', ');
     console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);

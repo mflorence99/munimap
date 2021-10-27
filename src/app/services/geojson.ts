@@ -148,6 +148,13 @@ export interface RoadProperties {
 
 export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 
+export interface TrailProperties {
+  county: string;
+  name: string;
+  system: string;
+  town: string;
+}
+
 export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
 
 const EMPTY: GeoJSON.FeatureCollection<GeoJSON.Polygon> = {

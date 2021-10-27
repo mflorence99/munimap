@@ -5,7 +5,6 @@ import { InitializerService } from './services/initializer';
 import { LoginPage } from './pages/login';
 import { MapCreatePage } from './pages/map-create';
 import { MapFilterComponent } from './components/map-filter';
-import { MapsListPage } from './pages/maps-list';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
@@ -41,6 +40,7 @@ import { OLStylePowerlinesComponent } from './ol/ol-style-powerlines';
 import { OLStyleRiversComponent } from './ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from './ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from './ol/ol-style-stonewalls';
+import { OLStyleTrailsComponent } from './ol/ol-style-trails';
 import { RootPage } from './root';
 import { TownMapPage } from './pages/town-map';
 import { TownMapSetupComponent } from './components/town-map-setup';
@@ -130,11 +130,12 @@ const COMPONENTS = [
   OLStyleRiversComponent,
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
+  OLStyleTrailsComponent,
   TownMapSetupComponent,
   UserProfileComponent
 ];
 
-const PAGES = [LoginPage, MapCreatePage, MapsListPage, RootPage, TownMapPage];
+const PAGES = [LoginPage, MapCreatePage, RootPage, TownMapPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -164,11 +165,6 @@ const ROUTES = [
         path: 'town-map/:id',
         component: TownMapPage,
         data: { state: 'town-map' }
-      },
-      {
-        path: 'maps-list',
-        component: MapsListPage,
-        data: { state: 'maps-list' }
       },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
     ]

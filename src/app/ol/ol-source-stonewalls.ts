@@ -74,6 +74,7 @@ export class OLSourceStoneWallsComponent {
           )
         )
         .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.LineString>) => {
+          this.olVector.clear();
           const features = this.olVector
             .getFormat()
             .readFeatures(geojson) as OLFeature<any>[];

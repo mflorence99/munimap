@@ -27,7 +27,7 @@ export class OLControlMousePositionComponent implements Mapable {
   constructor(private map: OLMapComponent) {
     this.olControl = new OLMousePosition({
       className: 'ol-control-mouseposition',
-      projection: 'EPSG:4326'
+      projection: this.map.featureProjection
     });
   }
 

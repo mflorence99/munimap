@@ -43,6 +43,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
 
+  featureProjection = 'EPSG:4326';
+
   @Input() fitToBounds = false;
 
   initialized = false;
@@ -108,11 +110,9 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     // 👉 precompute boundary extent
     this.boundary = boundary;
     const bbox = boundary.features[0].bbox;
-    // 👉 TODO: ambient typings missing this
-    const featureProjection = boundary['crs'].properties.name;
     this.boundaryExtent = transformExtent(
       bbox,
-      featureProjection,
+      this.featureProjection,
       this.projection
     );
     // 👉 if center, zoom available use them else fit to bounds
