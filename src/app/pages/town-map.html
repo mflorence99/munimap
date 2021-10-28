@@ -195,8 +195,20 @@
       <app-ol-interaction-select [eventType]="'singleclick'" [multi]="true">
         <mat-menu mapContextMenu>
           <ng-template matMenuContent>
-            <button mat-menu-item>Some entry</button>
-            <button mat-menu-item>Another entry</button>
+            <article class="contextmenu">
+              <p class="header">Make changes to parcels 9-7, 9-6</p>
+              <mat-divider></mat-divider>
+              <menu>
+                <button mat-menu-item class="item">
+                  <mat-icon>edit</mat-icon
+                  ><span>Change metadata like owner</span>
+                </button>
+                <button mat-menu-item class="item">
+                  <mat-icon>dialpad</mat-icon
+                  ><span>Merge parcels together</span>
+                </button>
+              </menu>
+            </article>
           </ng-template>
         </mat-menu>
       </app-ol-interaction-select>

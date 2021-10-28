@@ -1,4 +1,6 @@
 import { Logout } from '../state/auth';
+import { Profile } from '../state/auth';
+import { UpdateProfile } from '../state/auth';
 import { UpdateUser } from '../state/auth';
 import { User } from '../state/auth';
 
@@ -7,7 +9,6 @@ import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { Input } from '@angular/core';
 import { Output } from '@angular/core';
-import { PickPipe } from 'ngx-pipes';
 import { Store } from '@ngxs/store';
 
 import copy from 'fast-copy';
@@ -19,11 +20,20 @@ import copy from 'fast-copy';
   templateUrl: './user-profile.html'
 })
 export class UserProfileComponent {
+  #profile: Profile;
   #user: User;
 
   @Output() done = new EventEmitter<void>();
 
   editMode = false;
+
+  @Input()
+  get profile(): Profile {
+    return this.#profile;
+  }
+  set profile(profile: Profile) {
+    this.#profile = copy(profile);
+  }
 
   @Input()
   get user(): User {
@@ -40,8 +50,9 @@ export class UserProfileComponent {
     this.done.emit();
   }
 
-  update(changes: any): void {
-    this.store.dispatch(new UpdateUser(changes));
+  update(user: any, profile: any): void {
+    this.store.dispatch(new UpdateUser(user));
+    this.store.dispatch(new UpdateProfile(profile));
     this.done.emit();
   }
 }

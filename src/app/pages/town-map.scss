@@ -4,3 +4,17 @@
   position: absolute;
   width: 100%;
 }
+
+.contextmenu {
+  width: 20rem;
+
+  .header {
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+
+  .item {
+    height: 2.5rem;
+    line-height: 2.5rem;
+  }
+}

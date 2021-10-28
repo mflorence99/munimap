@@ -37,6 +37,7 @@
       >
         <app-user-profile
           (done)="openUserProfile = false"
+          [profile]="profile$ | async"
           [user]="user$ | async"
         ></app-user-profile>
       </ng-template>

@@ -90,6 +90,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
+import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
@@ -250,6 +251,10 @@ const STATES_SAVED = [RouterState, ViewState];
     {
       provide: USE_AUTH_EMULATOR,
       useValue: !environment.production ? ['localhost', 9099] : null
+    },
+    {
+      provide: USE_FIRESTORE_EMULATOR,
+      useValue: !environment.production ? ['localhost', 8080] : null
     }
   ]
 })

@@ -22,16 +22,20 @@
       <input [(ngModel)]="user.displayName" matInput type="text" />
     </mat-form-field>
 
-    <!-- 👉 no one is ever going to do this!
-      <mat-form-field appearance="standard">
-        <mat-label>Photo URL</mat-label>
-        <input [(ngModel)]="user.photoURL" matInput type="url" />
-      </mat-form-field> 
-  -->
+    <mat-form-field appearance="standard">
+      <mat-label>Workgroup</mat-label>
+      <textarea
+        [(ngModel)]="profile.workgroup"
+        cdkTextareaAutosize
+        matInput
+      ></textarea>
+    </mat-form-field>
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button *ngIf="editMode" (click)="update(user)" mat-button>Update</button>
+    <button *ngIf="editMode" (click)="update(user, profile)" mat-button>
+      Update
+    </button>
     <button (click)="logout()" mat-button>Sign out</button>
   </mat-card-actions>
 </mat-card>

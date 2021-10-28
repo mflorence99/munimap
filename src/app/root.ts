@@ -1,4 +1,5 @@
 import { AuthState } from './state/auth';
+import { Profile } from './state/auth';
 import { User } from './state/auth';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -35,6 +36,8 @@ export class RootPage {
   openUserProfile = false;
 
   @ViewChild(RouterOutlet) outlet;
+
+  @Select(AuthState.profile) profile$: Observable<Profile>;
 
   title: string;
 
