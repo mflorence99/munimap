@@ -4,10 +4,8 @@ import { OLMapComponent } from './ol-map';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Output } from '@angular/core';
 
 import fuzzysort from 'fuzzysort';
 
@@ -30,8 +28,6 @@ export class OLControlSearchParcelsComponent implements OnInit {
   matches: string[] = [];
 
   @Input() matchesMaxVisible = 20;
-
-  @Output() parcelsFound = new EventEmitter<GeoJSON.Feature[]>();
 
   constructor(
     private geoJSON: GeoJSONService,
@@ -66,14 +62,19 @@ export class OLControlSearchParcelsComponent implements OnInit {
 
   input(str: string): string {
     const searchFor = str.toUpperCase();
+    // 👉 let's see if we have a direct hit by ID, then address, then owner
     const parcels =
       this.#parcelsByID[searchFor] ??
       this.#parcelsByAddress[searchFor] ??
       this.#parcelsByOwner[searchFor];
     if (parcels) {
+      // 👉 we have a hit, tell the selector
       this.matches = [];
-      this.parcelsFound.emit(parcels);
+      const ids = parcels.map((parcel) => parcel.properties.id).join(', ');
+      console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
+      this.map.selector.selectParcels(parcels);
     } else if (searchFor.length > this.fuzzyMinLength) {
+      // 👉 no hit, but enough charactersvto go for a fuzzy match
       this.matches = fuzzysort
         .go(searchFor, this.#searchTargets, {
           limit: this.fuzzyMaxResults,
@@ -82,6 +83,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
         .map((fuzzy) => fuzzy.target)
         .sort();
     } else if (searchFor.length === 0) {
+      // 👉 reset everything when the search string is cleared
       this.matches = [];
     }
     return searchFor;

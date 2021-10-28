@@ -14,6 +14,7 @@ import { ContentChildren } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { HostListener } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
@@ -122,7 +123,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.olView.setZoom(view.zoom);
     } else this.zoomToBounds();
     // 👉 handle events
-    this.olView.on('change', this.onChange.bind(this));
+    this.olView.on('change', this.#onChange.bind(this));
   }
 
   #findAllCustomVariables(): Record<string, string> {
@@ -181,11 +182,19 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
         .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
           this.#createView(boundary);
           this.initialized = true;
-          this.onChange();
+          this.#onChange();
           this.cdf.markForCheck();
         });
     }
     return path;
+  }
+
+  #onChange(): void {
+    const center = toLonLat(this.olView.getCenter());
+    const zoom = this.olView.getZoom();
+    this.zoomChange.emit(zoom);
+    if (!this.fitToBounds)
+      this.store.dispatch(new UpdateView(this.path, { center, zoom }));
   }
 
   currentCounty(): string {
@@ -212,24 +221,22 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.olView.un('change', this.onChange.bind(this));
+    this.olView.un('change', this.#onChange.bind(this));
   }
 
   ngOnInit(): void {
     this.olMap.setTarget(this.host.nativeElement);
   }
 
-  // 👉 public so we can call it from outside
-  onChange(): void {
-    const center = toLonLat(this.olView.getCenter());
-    const zoom = this.olView.getZoom();
-    this.zoomChange.emit(zoom);
-    if (!this.fitToBounds)
-      this.store.dispatch(new UpdateView(this.path, { center, zoom }));
+  @HostListener('contextmenu', ['$event']) onContextMenu(
+    event: PointerEvent
+  ): void {
+    event.preventDefault();
+    this.selector?.onContextMenu(event);
   }
 
   zoomToBounds(): void {
     this.olView.fit(this.boundaryExtent, { size: this.olMap.getSize() });
-    this.onChange();
+    this.#onChange();
   }
 }

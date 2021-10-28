@@ -20,7 +20,7 @@ import OLVectorTile from 'ol/layer/VectorTile';
   ],
   selector: 'app-ol-layer-vectortile',
   template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerVectorTileComponent implements Mapable {
   olLayer: OLVectorTile;

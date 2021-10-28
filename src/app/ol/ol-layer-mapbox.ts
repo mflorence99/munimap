@@ -21,7 +21,7 @@ import OLMapbox from 'ol/layer/MapboxVector';
   ],
   selector: 'app-ol-layer-mapbox',
   template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerMapboxComponent implements Mapable {
   olLayer: OLMapbox;

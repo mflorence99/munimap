@@ -1,10 +1,4 @@
-<app-ol-map
-  #theMap
-  (contextmenu)="onContextMenu($event)"
-  [minZoom]="13"
-  [maxZoom]="19"
-  [path]="path"
->
+<app-ol-map #theMap [minZoom]="13" [maxZoom]="19" [path]="path">
   <app-town-map-setup
     [map]="map"
     class="setup"
@@ -13,10 +7,7 @@
 
   <!-- 📦 CONTROLS -->
 
-  <app-ol-control-searchparcels
-    (parcelsFound)="onParcelsFound($event)"
-    mapControlSearch
-  ></app-ol-control-searchparcels>
+  <app-ol-control-searchparcels mapControlSearch></app-ol-control-searchparcels>
 
   <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
@@ -105,7 +96,6 @@
             ></app-ol-attribution
           >
         </app-ol-source-xyz>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
     </ng-container>
 
@@ -202,11 +192,13 @@
     <app-ol-layer-vector>
       <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
       <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
-      <app-ol-interaction-select
-        (featuresSelected)="onFeaturesSelected($event)"
-        [eventType]="'singleclick'"
-        [multi]="true"
-      >
+      <app-ol-interaction-select [eventType]="'singleclick'" [multi]="true">
+        <mat-menu mapContextMenu>
+          <ng-template matMenuContent>
+            <button mat-menu-item>Some entry</button>
+            <button mat-menu-item>Another entry</button>
+          </ng-template>
+        </mat-menu>
       </app-ol-interaction-select>
     </app-ol-layer-vector>
 

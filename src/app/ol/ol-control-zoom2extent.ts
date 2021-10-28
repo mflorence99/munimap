@@ -14,9 +14,5 @@ import OLZoomToExtent from 'ol/control/ZoomToExtent';
 export class OLControlZoomToExtentComponent {
   olControl: OLZoomToExtent;
 
-  constructor(private map: OLMapComponent) {}
-
-  zoomToBounds(): void {
-    this.map.zoomToBounds();
-  }
+  constructor(public map: OLMapComponent) {}
 }

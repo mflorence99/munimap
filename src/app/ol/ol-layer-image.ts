@@ -20,7 +20,7 @@ import OLImage from 'ol/layer/Image';
   ],
   selector: 'app-ol-layer-image',
   template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerImageComponent implements Mapable {
   olLayer: OLImage<any>;

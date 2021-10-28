@@ -5,12 +5,17 @@ import { OLMapComponent } from './ol-map';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { ContentChild } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { Input } from '@angular/core';
+import { MatMenu } from '@angular/material/menu';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { OnDestroy } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
+import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { transformExtent } from 'ol/proj';
@@ -30,25 +35,38 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
     }
   ],
   selector: 'app-ol-interaction-select',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  templateUrl: './ol-interaction-select.html',
+  styleUrls: ['./ol-interaction-select.scss']
 })
 export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy
 {
+  @ContentChild(MatMenu) contextMenu: MatMenu;
+  @ViewChild(MatMenuTrigger) contextMenuTrigger: MatMenuTrigger;
+
   @Input() eventType: string;
 
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() filter: FilterFunction;
 
+  menuPosition = {
+    x: 0,
+    y: 0
+  };
+
   @Input() multi = false;
 
   olSelect: OLSelect;
 
+  get selected(): OLFeature<any>[] {
+    return this.olSelect.getFeatures().getArray();
+  }
+
   @Input() zoomAnimationDuration = 200;
 
   constructor(
+    private cdf: ChangeDetectorRef,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
@@ -67,8 +85,10 @@ export class OLInteractionSelectComponent
     return this.filter ? this.filter(feature) : true;
   }
 
-  #onSelect(_event: OLSelectEvent): void {
-    this.featuresSelected.emit(this.olSelect.getFeatures().getArray());
+  #onSelect(_event?: OLSelectEvent): void {
+    const ids = this.selected.map((feature) => feature.getId()).join(', ');
+    console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
+    this.featuresSelected.emit(this.selected);
   }
 
   addToMap(): void {
@@ -81,6 +101,19 @@ export class OLInteractionSelectComponent
 
   ngOnDestroy(): void {
     this.olSelect.un('select', this.#onSelect.bind(this));
+  }
+
+  // 👉 see OLMapComponent for wiring
+  // 👉 see https://marco.dev/angular-right-click-menu
+  onContextMenu(event: PointerEvent): void {
+    if (this.contextMenu && this.selected.length > 0) {
+      const style = getComputedStyle(document.documentElement);
+      const hack = style.getPropertyValue('--map-cy-toolbar');
+      this.menuPosition.x = event.clientX + 8;
+      this.menuPosition.y = event.clientY + 8 - Number(hack);
+      this.cdf.detectChanges();
+      this.contextMenuTrigger.openMenu();
+    }
   }
 
   selectParcels(parcels: GeoJSON.Feature[]): void {
@@ -102,6 +135,7 @@ export class OLInteractionSelectComponent
         const props = feature.getProperties();
         if (ids.includes(props.id)) this.olSelect.getFeatures().push(feature);
       });
+      this.#onSelect();
     });
     // 👇 zoom to the extent of all the selected  parcels
     this.map.olView.fit(extent, {

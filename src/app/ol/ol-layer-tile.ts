@@ -20,7 +20,7 @@ import OLTile from 'ol/layer/Tile';
   ],
   selector: 'app-ol-layer-tile',
   template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerTileComponent implements Mapable {
   olLayer: OLTile<any>;

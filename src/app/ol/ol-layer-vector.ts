@@ -21,7 +21,7 @@ import OLVector from 'ol/layer/Vector';
   ],
   selector: 'app-ol-layer-vector',
   template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerVectorComponent implements Mapable {
   olLayer: OLVector<any>;

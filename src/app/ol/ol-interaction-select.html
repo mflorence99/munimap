@@ -1,0 +1,11 @@
+<div
+  #trigger
+  *ngIf="contextMenu"
+  class="trigger"
+  [matMenuTriggerData]="{ selected: selected }"
+  [matMenuTriggerFor]="contextMenu"
+  [style.left.px]="menuPosition.x"
+  [style.top.px]="menuPosition.y"
+></div>
+
+<ng-content select="[mapContextMenu]"></ng-content>

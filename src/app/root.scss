@@ -1,7 +1,4 @@
 :host {
-  // 👉 this just is -- need a better way
-  --munimap-cy-toolbar: 64px;
-
   display: block;
   height: 100%;
   width: 100%;
@@ -17,9 +14,9 @@
   }
 
   .container {
-    height: calc(100% - var(--munimap-cy-toolbar));
+    height: calc(100% - (var(--map-cy-toolbar) * 1px));
     position: absolute;
-    top: var(--munimap-cy-toolbar);
+    top: calc(var(--map-cy-toolbar) * 1px);
     width: 100%;
   }
 
@@ -38,7 +35,7 @@
     display: grid;
     grid-gap: 0.5rem;
     grid-template-columns: auto auto 1fr auto;
-    height: var(--munimap-cy-toolbar);
+    height: calc(var(--map-cy-toolbar) * 1px);
     position: absolute;
     width: 100%;
   }
