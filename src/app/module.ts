@@ -5,6 +5,7 @@ import { InitializerService } from './services/initializer';
 import { LoginPage } from './pages/login';
 import { MapCreatePage } from './pages/map-create';
 import { MapFilterComponent } from './components/map-filter';
+import { MapState } from './state/map';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
@@ -41,6 +42,7 @@ import { OLStyleRiversComponent } from './ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from './ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from './ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from './ol/ol-style-trails';
+import { ReadyResolver } from './resolvers/ready';
 import { RootPage } from './root';
 import { TownMapPage } from './pages/town-map';
 import { TownMapSetupComponent } from './components/town-map-setup';
@@ -141,7 +143,8 @@ const PAGES = [LoginPage, MapCreatePage, RootPage, TownMapPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
-const redirectLoggedInToMaps = (): AuthPipe => redirectLoggedInTo(['maps']);
+const redirectLoggedInToMaps = (): AuthPipe =>
+  redirectLoggedInTo(['map-create']);
 
 const ROUTES = [
   {
@@ -155,7 +158,8 @@ const ROUTES = [
     canActivate: [AngularFireAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin },
     resolve: {
-      index: IndexResolver
+      index: IndexResolver,
+      ready: ReadyResolver
     },
     children: [
       {
@@ -174,7 +178,7 @@ const ROUTES = [
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState, ViewState];
+const STATES = [AuthState, MapState, ViewState];
 const STATES_SAVED = [RouterState, ViewState];
 
 @NgModule({

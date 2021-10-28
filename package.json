@@ -58,6 +58,7 @@
     "rxjs": "^7",
     "tslib": "^2",
     "ua-parser-js": "^0.7.28",
+    "uuid": "^8",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -75,6 +76,7 @@
     "@types/ol": "^6",
     "@types/proj4": "^2",
     "@types/ua-parser-js": "^0.7.36",
+    "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4",
     "@typescript-eslint/parser": "^4",
     "eslint": "^7",

@@ -49,9 +49,9 @@
 
   <mat-drawer-container class="container">
     <mat-drawer #drawer class="sidebar" mode="over">
-      <a (click)="drawer.close()" routerLink="/map-create">Create a new map</a>
-      <br />
-      <a (click)="drawer.close()" routerLink="/town-map/0">Build a town map</a>
+      <a (click)="drawer.close()" mat-button routerLink="/map-create"
+        ><mat-icon>add_location_alt</mat-icon><span>Build a new map</span></a
+      >
     </mat-drawer>
 
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">

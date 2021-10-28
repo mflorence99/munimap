@@ -1,12 +1,16 @@
+import { LoadMap } from '../state/map';
 import { Map } from '../state/map';
-import { Path } from '../state/view';
+import { MapState } from '../state/map';
 import { RootPage } from '../root';
-
-import { theState } from '../state/view';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
+
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,19 +19,21 @@ import { Component } from '@angular/core';
   templateUrl: './town-map.html'
 })
 export class TownMapPage {
-  map: Map;
-  path: Path;
+  @Select(MapState) map$: Observable<Map>;
 
-  constructor(private root: RootPage, private route: ActivatedRoute) {
-    // 👌 we resally want to read the map by its ID from Firebase
-    //    but we are hacking it for now with a skeleton
-    this.path = this.route.snapshot.queryParamMap.get('path') ?? theState;
-    this.map = {
-      id: null,
+  constructor(
+    private root: RootPage,
+    private route: ActivatedRoute,
+    private store: Store
+  ) {
+    const id = this.route.snapshot.params['id'];
+    const dflt: Map = {
+      id: uuidv4(),
       name: null,
-      path: this.path,
+      owner: this.store.snapshot().auth.profile.email,
+      path: this.route.snapshot.queryParamMap.get('path'),
       style: 'blank'
     };
-    this.root.setTitle(this.path);
+    this.store.dispatch(new LoadMap(id, dflt));
   }
 }
