@@ -79,11 +79,9 @@ export class RootPage {
       switchMap((profile) => {
         if (!profile?.email) return of([]);
         else {
-          let owners = [profile.email];
-          if (profile.workgroup)
-            owners = owners.concat(profile.workgroup.split('\n'));
+          const workgroup = AuthState.workgroup(profile);
           const query = (ref): any =>
-            ref.where('owner', 'in', owners).orderBy('name');
+            ref.where('owner', 'in', workgroup).orderBy('name');
           return this.firestore.collection<Map>('maps', query).valueChanges();
         }
       })

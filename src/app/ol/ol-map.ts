@@ -216,7 +216,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngAfterContentInit(): void {
-    // 👉 handle content changes
     this.#handleMapables$();
   }
 

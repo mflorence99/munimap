@@ -87,6 +87,13 @@ export class AuthState implements NgxsOnInit {
     return state.user;
   }
 
+  static workgroup(profile: Profile): string[] {
+    let workgroup = [profile.email];
+    if (profile.workgroup)
+      workgroup = workgroup.concat(profile.workgroup.split(/[\n ;]+/g));
+    return workgroup;
+  }
+
   // 👇 hoo boy, do I hate this!
 
   #profileProps(obj: any): any {
