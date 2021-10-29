@@ -56,6 +56,13 @@ export class TownMapPage {
       });
   }
 
+  // 👇 this would not work properly on a route change, but
+  //    we have configured the router to always reload on navigate
+  //    to the same route -- it makes the way we build the map
+  //    in town-map.html much easier too
+
+  // 👁️ root.ts
+
   #loadMap(): void {
     const id = this.route.snapshot.params['id'];
     // 👉 an ID of '0' signals that we need to create a new map

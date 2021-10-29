@@ -229,7 +229,7 @@ const STATES_SAVED = [RouterState, ViewState];
       key: STATES_SAVED
     }),
     OverlayModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' })
   ],
 
   providers: [

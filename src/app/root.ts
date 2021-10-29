@@ -1,4 +1,5 @@
 import { AuthState } from './state/auth';
+import { DestroyService } from './services/destroy';
 import { Map } from './state/map';
 import { Profile } from './state/auth';
 import { User } from './state/auth';
@@ -20,6 +21,7 @@ import { ViewChild } from '@angular/core';
 import { moveFromLeftFade } from 'ngx-router-animations';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { transition } from '@angular/animations';
 import { trigger } from '@angular/animations';
 import { useAnimation } from '@angular/animations';
@@ -31,6 +33,7 @@ import { useAnimation } from '@angular/animations';
     ])
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
   selector: 'app-root',
   styleUrls: ['./root.scss'],
   templateUrl: './root.html'
@@ -49,29 +52,38 @@ export class RootPage {
 
   @Select(AuthState.user) user$: Observable<User>;
 
-  constructor(private firestore: AngularFirestore, private router: Router) {
+  constructor(
+    private firestore: AngularFirestore,
+    private destroy$: DestroyService,
+    private router: Router
+  ) {
     this.#handleRouterEvents$();
     this.#makeAllMaps$();
   }
 
   #handleRouterEvents$(): void {
-    this.router.events.subscribe((event: Event) => {
-      switch (true) {
-        case event instanceof NavigationStart: {
-          this.loading = true;
-          break;
+    this.router.routeReuseStrategy.shouldReuseRoute = (): boolean => false;
+    this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: Event) => {
+        switch (true) {
+          case event instanceof NavigationStart: {
+            this.loading = true;
+            break;
+          }
+          case event instanceof NavigationEnd:
+          case event instanceof NavigationCancel:
+          case event instanceof NavigationError: {
+            // 👇 see https://stackoverflow.com/questions/59552387/how-to-reload-a-page-in-angular-8-the-proper-way
+            this.router.navigated = false;
+            this.loading = false;
+            break;
+          }
+          default: {
+            break;
+          }
         }
-        case event instanceof NavigationEnd:
-        case event instanceof NavigationCancel:
-        case event instanceof NavigationError: {
-          this.loading = false;
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-    });
+      });
   }
 
   #makeAllMaps$(): void {
