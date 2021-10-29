@@ -2,11 +2,28 @@
   display: block;
 }
 
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
+}
+
 .card {
-  min-width: 20rem;
+  min-width: 25rem;
+  position: relative;
+}
+
+.editor {
+  position: absolute;
+  right: 0.25rem;
+  top: 0.25rem;
 }
 
 .form {
   display: grid;
   grid-template-rows: auto auto;
+}
+
+.hidden {
+  display: none;
 }

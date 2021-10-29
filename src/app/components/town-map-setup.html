@@ -40,7 +40,6 @@
         <input
           #name="ngModel"
           [(ngModel)]="map.name"
-          id="name"
           matInput
           name="name"
           placeholder="eg: My Old Town"
@@ -148,7 +147,6 @@
     <button
       *ngIf="!townMap.creating"
       (click)="delete(map)"
-      [disabled]="setupForm.invalid"
       color="accent"
       mat-flat-button
     >
