@@ -1,7 +1,9 @@
 import { AuthState } from './state/auth';
+import { Map } from './state/map';
 import { Profile } from './state/auth';
 import { User } from './state/auth';
 
+import { AngularFirestore } from '@angular/fire/firestore';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Event } from '@angular/router';
@@ -16,6 +18,9 @@ import { Select } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { moveFromLeftFade } from 'ngx-router-animations';
+import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { transition } from '@angular/animations';
 import { trigger } from '@angular/animations';
 import { useAnimation } from '@angular/animations';
@@ -32,6 +37,8 @@ import { useAnimation } from '@angular/animations';
   templateUrl: './root.html'
 })
 export class RootPage {
+  allMaps$: Observable<Map[]>;
+
   loading = false;
   openUserProfile = false;
 
@@ -43,8 +50,9 @@ export class RootPage {
 
   @Select(AuthState.user) user$: Observable<User>;
 
-  constructor(private router: Router) {
+  constructor(private firestore: AngularFirestore, private router: Router) {
     this.#handleRouterEvents$();
+    this.#makeAllMaps$();
   }
 
   #handleRouterEvents$(): void {
@@ -65,6 +73,23 @@ export class RootPage {
         }
       }
     });
+  }
+
+  #makeAllMaps$(): void {
+    this.allMaps$ = this.profile$.pipe(
+      switchMap((profile) => {
+        if (!profile?.email) return of([]);
+        else {
+          let owners = [profile.email];
+          if (profile.workgroup)
+            owners = owners.concat(profile.workgroup.split('\n'));
+          const query = (ref): any =>
+            ref.where('owner', 'in', owners).orderBy('name');
+          return this.firestore.collection<Map>('maps', query).valueChanges();
+        }
+      }),
+      tap(console.error)
+    );
   }
 
   getState(): any {

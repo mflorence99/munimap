@@ -52,6 +52,14 @@
       <a (click)="drawer.close()" mat-button routerLink="/map-create"
         ><mat-icon>add_location_alt</mat-icon><span>Build a new map</span></a
       >
+
+      <a
+        *ngFor="let map of allMaps$ | async"
+        (click)="drawer.close()"
+        mat-button
+        routerLink="/town-map/{{ map.id }}"
+        ><mat-icon>map</mat-icon><span>{{ map.name }}</span></a
+      >
     </mat-drawer>
 
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">

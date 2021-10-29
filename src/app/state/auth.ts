@@ -105,6 +105,14 @@ export class AuthState implements NgxsOnInit {
     };
   }
 
+  currentProfile(): Profile {
+    return this.store.snapshot().auth.profile;
+  }
+
+  currentUser(): User {
+    return this.store.snapshot().auth.user;
+  }
+
   @Action(Logout) logout(): void {
     this.fireauth.signOut();
     // 👉 side-effect triggers subscribe in ngxsOnInit

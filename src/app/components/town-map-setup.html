@@ -12,7 +12,7 @@
   <mat-card-content>
     <form
       #setupForm="ngForm"
-      (ngSubmit)="submit()"
+      (ngSubmit)="update(map)"
       autocomplete="off"
       class="form"
       novalidate
@@ -128,7 +128,12 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button [disabled]="setupForm.invalid" color="primary" mat-flat-button>
+    <button
+      (click)="update(map)"
+      [disabled]="setupForm.invalid"
+      color="primary"
+      mat-button
+    >
       SAVE
     </button>
   </mat-card-actions>

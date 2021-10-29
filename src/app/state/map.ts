@@ -4,6 +4,7 @@ import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
 import copy from 'fast-copy';
 
@@ -40,8 +41,12 @@ export type MapStateModel = Map;
 export class MapState {
   #maps: AngularFirestoreCollection<Map>;
 
-  constructor(private firestore: AngularFirestore) {
+  constructor(private firestore: AngularFirestore, private store: Store) {
     this.#maps = this.firestore.collection<Map>('maps');
+  }
+
+  currentMap(): Map {
+    return this.store.snapshot().map;
   }
 
   @Action(LoadMap) loadMap(
