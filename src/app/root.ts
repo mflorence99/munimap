@@ -20,7 +20,6 @@ import { ViewChild } from '@angular/core';
 import { moveFromLeftFade } from 'ngx-router-animations';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { tap } from 'rxjs/operators';
 import { transition } from '@angular/animations';
 import { trigger } from '@angular/animations';
 import { useAnimation } from '@angular/animations';
@@ -87,8 +86,7 @@ export class RootPage {
             ref.where('owner', 'in', owners).orderBy('name');
           return this.firestore.collection<Map>('maps', query).valueChanges();
         }
-      }),
-      tap(console.error)
+      })
     );
   }
 

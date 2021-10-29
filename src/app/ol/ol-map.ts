@@ -221,7 +221,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.olView.un('change', this.#onChange.bind(this));
+    this.olView?.un('change', this.#onChange.bind(this));
   }
 
   ngOnInit(): void {

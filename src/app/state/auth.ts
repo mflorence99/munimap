@@ -119,8 +119,11 @@ export class AuthState implements NgxsOnInit {
   }
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
+    const deepLink = this.location.path();
     const lastRoute = this.store.snapshot().router?.state.url;
-    const forwardTo = lastRoute || '/map-create';
+    // 👇 don't try to use ?? here, because deepLink and lastRoute
+    //    are blank when empty, not null or undefined
+    const forwardTo = deepLink || lastRoute || '/login';
     // 👉 the user will be NULL on logout!
     this.fireauth.user
       .pipe(
@@ -143,7 +146,7 @@ export class AuthState implements NgxsOnInit {
               doc.exists ? doc.data() : { email: user.email, workgroup: '' }
             )
           );
-          if (!this.location.path()) this.router.navigateByUrl(forwardTo);
+          this.router.navigateByUrl(forwardTo);
         } else this.router.navigateByUrl('/login');
       });
   }

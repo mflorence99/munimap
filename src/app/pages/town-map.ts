@@ -23,13 +23,13 @@ export class TownMapPage {
   @Select(MapState) map$: Observable<Map>;
 
   constructor(
-    private auth: AuthState,
+    private authState: AuthState,
     private root: RootPage,
     private route: ActivatedRoute,
     private store: Store
   ) {
     const id = this.route.snapshot.params['id'];
-    const owner = this.auth.currentProfile().email;
+    const owner = this.authState.currentProfile().email;
     const path = this.route.snapshot.queryParamMap.get('path');
     // 👉 this is a default map for the case when we are creating
     const dflt: Map = {
