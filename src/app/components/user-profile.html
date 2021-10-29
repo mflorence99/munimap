@@ -33,9 +33,9 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button *ngIf="editMode" (click)="update(user, profile)" mat-button>
+    <button *ngIf="editMode" (click)="update(user, profile)" mat-flat-button>
       UPDATE
     </button>
-    <button (click)="logout()" mat-button>SIGN OUT</button>
+    <button (click)="logout()" color="primary" mat-flat-button>SIGN OUT</button>
   </mat-card-actions>
 </mat-card>

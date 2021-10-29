@@ -27,7 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
   templateUrl: './town-map.html'
 })
 export class TownMapPage {
-  #creating = false;
+  creating = false;
 
   @Select(MapState) map$: Observable<Map>;
 
@@ -51,7 +51,7 @@ export class TownMapPage {
         // 👉 if we were creating a new map, once that's done rewrite the
         //    URL to the map ID so if we reload we don't enter another
         //    creating state
-        if (this.#creating && action.map.id && action.map.name)
+        if (this.creating && action.map.id && action.map.name)
           this.router.navigate([`/town-map/${action.map.id}`]);
       });
   }
@@ -66,7 +66,7 @@ export class TownMapPage {
   #loadMap(): void {
     const id = this.route.snapshot.params['id'];
     // 👉 an ID of '0' signals that we need to create a new map
-    this.#creating = id === '0';
+    this.creating = id === '0';
     const owner = this.authState.currentProfile().email;
     const path = this.route.snapshot.queryParamMap.get('path');
     // 👉 this is a default map for the case when we are creating
@@ -75,7 +75,7 @@ export class TownMapPage {
       name: null,
       owner: owner,
       path: path,
-      style: 'blank'
+      style: 'nhgranit'
     };
     // 👉 load up the requested (or default) map
     this.store.dispatch(new LoadMap(id, dflt));

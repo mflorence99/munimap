@@ -1,8 +1,25 @@
-<mat-card class="card">
+<!-- <article (click)="rolledup = !rolledup" class="rolledup">
+  <img mat-card-avatar src="assets/favicon.svg" />
+</article> -->
+
+<mat-card [class.rolledup]="rolledup" class="card">
   <mat-card-header>
-    <img src="assets/favicon.svg" mat-card-avatar />
+    <img
+      (click)="rolledup = !rolledup"
+      mat-card-avatar
+      src="assets/favicon.svg"
+    />
+
     <mat-card-title>Customize Your Map</mat-card-title>
-    <mat-card-subtitle>blah blah</mat-card-subtitle>
+    <mat-card-subtitle>Lorem ipsum dolor sit amet.</mat-card-subtitle>
+    <button
+      *ngIf="!rolledup && !townMap.creating"
+      (click)="rolledup = !rolledup"
+      class="closer"
+      mat-icon-button
+    >
+      <mat-icon>close</mat-icon>
+    </button>
   </mat-card-header>
 
   <mat-divider></mat-divider>
@@ -43,12 +60,12 @@
             ><a href="https://www.openstreetmap.org/" target="_blank"
               >OpenStreetMap</a
             >
-            (OSM) blah blah blah</span
+            (OSM) Lorem ipsum dolor sit amet.</span
           >
 
           <span *ngSwitchCase="'google'">
             <a href="https://www.google.com/maps" target="_blank">Google</a>
-            blah blah blah</span
+            Lorem ipsum dolor sit amet.</span
           >
 
           <span *ngSwitchCase="'arcgis'"
@@ -57,12 +74,10 @@
               target="_blank"
               >ArcGIS</a
             >
-            blah blah blah</span
+            Lorem ipsum dolor sit amet.</span
           >
 
-          <span *ngSwitchCase="'blank'"
-            >Overlay a blank canvas with State GIS data</span
-          >
+          <span *ngSwitchCase="'nhgranit'">Vector data from NH GranIT</span>
         </ng-container>
       </mat-label>
 
@@ -109,7 +124,7 @@
             name="style"
             value="arcgis"
           />
-          <img src="assets/arcgis.jpeg" />
+          <img src="assets/arcgis.png" />
           ArcGIS
         </label>
 
@@ -118,21 +133,33 @@
             [(ngModel)]="map.style"
             type="radio"
             name="style"
-            value="blank"
+            value="nhgranit"
           />
-          <img src="assets/blank.jpeg" />
-          Blank
+          <img src="assets/nhgranit.png" />
+          NH GranIT
         </label>
       </section>
     </form>
   </mat-card-content>
 
-  <mat-card-actions align="end">
+  <mat-card-actions class="actions">
+    <div *ngIf="townMap.creating"></div>
+
+    <button
+      *ngIf="!townMap.creating"
+      (click)="delete(map)"
+      [disabled]="setupForm.invalid"
+      color="accent"
+      mat-flat-button
+    >
+      DELETE
+    </button>
+
     <button
       (click)="update(map)"
       [disabled]="setupForm.invalid"
       color="primary"
-      mat-button
+      mat-flat-button
     >
       SAVE
     </button>

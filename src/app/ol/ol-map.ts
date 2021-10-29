@@ -64,7 +64,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     return this.#path;
   }
   set path(path: Path) {
-    if (path) this.#path = this.#initializeView(path);
+    this.#path = this.#initializeView(path);
   }
 
   projection = 'EPSG:3857';

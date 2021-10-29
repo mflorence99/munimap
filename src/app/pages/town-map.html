@@ -22,9 +22,9 @@
       mapControlAttribution
     ></app-ol-control-attribution>
 
-    <ng-container *ngIf="theMap.initialized">
-      <app-ol-control-scaleline></app-ol-control-scaleline>
+    <app-ol-control-scaleline></app-ol-control-scaleline>
 
+    <ng-container *ngIf="theMap.initialized">
       <!-- 📦 BG LAYER -->
 
       <app-ol-layer-tile>
@@ -76,9 +76,9 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-tile>
 
-        <!-- 📦 "BLANK" (vectors supplied by NH GRANIT) -->
+        <!-- 📦 NH GranIT -->
 
-        <app-ol-layer-vector *ngSwitchCase="'blank'">
+        <app-ol-layer-vector *ngSwitchCase="'nhgranit'">
           <app-ol-style-boundary></app-ol-style-boundary>
           <app-ol-source-boundary></app-ol-source-boundary>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -104,9 +104,9 @@
         </app-ol-layer-tile>
       </ng-container>
 
-      <!-- 📦 VECTOR OVERLAYS FOR "BLANK" -->
+      <!-- 📦 NH GranIT VECTOR LAYERS -->
 
-      <ng-container *ngIf="map.style === 'blank'">
+      <ng-container *ngIf="map.style === 'nhgranit'">
         <app-ol-layer-vector>
           <app-ol-style-lakes></app-ol-style-lakes>
           <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
@@ -173,7 +173,7 @@
 
       <!-- 📦 VECTOR LAYERS FOR OTHER TYPES -->
 
-      <ng-container *ngIf="map.style !== 'blank'">
+      <ng-container *ngIf="map.style !== 'nhgranit'">
         <app-ol-layer-vector>
           <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
           <app-ol-style-parcels

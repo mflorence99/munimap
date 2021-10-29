@@ -1,7 +1,29 @@
 :host {
   display: block;
   pointer-events: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  overflow: hidden;
+  position: relative;
+  transition: width 0.25s, height 0.25s;
   width: 35rem;
+
+  &.rolledup {
+    height: 5rem;
+    width: 5rem;
+  }
+}
+
+.closer {
+  position: absolute;
+  right: 0.25rem;
+  top: 0.25rem;
 }
 
 .form {
@@ -11,6 +33,13 @@
 
 .mat-divider {
   border-top-color: var(--text-color);
+}
+
+.rolledup {
+  background-color: var(--mat-gray-800);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  padding: 1.15rem;
 }
 
 .thumbnail {

@@ -8,6 +8,11 @@ import { Store } from '@ngxs/store';
 
 import copy from 'fast-copy';
 
+export class DeleteMap {
+  static readonly type = '[Map] DeleteMap';
+  constructor(public id: string) {}
+}
+
 export class LoadMap {
   static readonly type = '[Map] LoadMap';
   constructor(public id: string, public dflt: Map) {}
@@ -28,7 +33,7 @@ export interface Map {
   name: string;
   owner: string;
   path: string;
-  style: 'arcgis' | 'google' | 'mapbox' | 'osm' | 'blank';
+  style: 'arcgis' | 'google' | 'mapbox' | 'osm' | 'nhgranit';
 }
 
 export type MapStateModel = Map;
@@ -49,10 +54,21 @@ export class MapState {
     return this.store.snapshot().map;
   }
 
+  @Action(DeleteMap) deleteMap(
+    ctx: StateContext<MapStateModel>,
+    action: DeleteMap
+  ): void {
+    ctx.setState(null);
+    this.#maps.doc(action.id).delete();
+  }
+
   @Action(LoadMap) loadMap(
     ctx: StateContext<MapStateModel>,
     action: LoadMap
   ): void {
+    // 👇 there's no map until there is one
+    //    we can't use the old one!
+    ctx.setState(null);
     this.#maps
       .doc(action.id)
       .get()

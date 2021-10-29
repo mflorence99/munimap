@@ -95,6 +95,8 @@ export class OLControlSearchParcelsComponent implements OnInit {
     return Math.max(2, Math.min(this.matches.length, this.matchesMaxVisible));
   }
 
+  // TODO 👇 we need to find a way to download the barest minimum here
+
   ngOnInit(): void {
     this.geoJSON
       .loadByIndex(this.route, this.map.path, 'parcels')

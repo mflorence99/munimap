@@ -49,17 +49,33 @@
 
   <mat-drawer-container class="container">
     <mat-drawer #drawer class="sidebar" mode="over">
-      <a (click)="drawer.close()" mat-button routerLink="/map-create"
-        ><mat-icon>add_location_alt</mat-icon><span>Build a new map</span></a
-      >
+      <nav class="navigator">
+        <ul>
+          <li (click)="drawer.close()" routerLink="/map-create" class="item">
+            <img class="icon" src="assets/favicon.svg" />
+            <div class="title">Create a new map</div>
+            <div class="subtitle">Lorem ipsum dolor sit amet.</div>
+          </li>
 
-      <a
-        *ngFor="let map of allMaps$ | async"
-        (click)="drawer.close()"
-        mat-button
-        routerLink="/town-map/{{ map.id }}"
-        ><mat-icon>map</mat-icon><span>{{ map.name }}</span></a
-      >
+          <mat-divider></mat-divider
+          ><br />
+
+          <li
+            *ngFor="let map of allMaps$ | async"
+            (click)="drawer.close()"
+            class="item"
+            routerLink="/town-map/{{ map.id }}"
+          >
+            <img
+              [class.selected]="title === map.name"
+              class="icon"
+              src="assets/{{ map.style }}.png"
+            />
+            <div class="title">{{ map.name }}</div>
+            <div class="subtitle">{{ map.owner }}</div>
+          </li>
+        </ul>
+      </nav>
     </mat-drawer>
 
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">

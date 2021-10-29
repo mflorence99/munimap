@@ -39,7 +39,7 @@ import OLText from 'ol/style/Text';
 //       -- when the fontSize is less than an input threshold
 
 // 👉 showBackground and showText allow parcels to be split into
-//    2 layers, as is useful for the "blank" map style
+//    2 layers, as is useful for the NHGranIT map style
 
 interface Label {
   fontFamily: string;

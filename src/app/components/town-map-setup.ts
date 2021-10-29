@@ -1,10 +1,16 @@
+import { ConfirmDialogComponent } from './confirm-dialog';
+import { ConfirmDialogData } from './confirm-dialog';
+import { DeleteMap } from '../state/map';
 import { Map } from '../state/map';
 import { RootPage } from '../root';
+import { TownMapPage } from '../pages/town-map';
 import { UpdateMap } from '../state/map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 
 import copy from 'fast-copy';
@@ -28,7 +34,32 @@ export class TownMapSetupComponent {
     if (map.name) this.root.setTitle(map.name);
   }
 
-  constructor(private root: RootPage, private store: Store) {}
+  rolledup = false;
+
+  constructor(
+    private dialog: MatDialog,
+    private root: RootPage,
+    private router: Router,
+    private store: Store,
+    public townMap: TownMapPage
+  ) {}
+
+  delete(map: any): void {
+    const data: ConfirmDialogData = {
+      content:
+        'The map will be permanently deleted, but any changes made to parcels will be kept for use in other maps.',
+      title: 'Please confirm map deletion'
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data, width: '25rem' })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.store.dispatch(new DeleteMap(map.id));
+          this.router.navigate(['/map-create']);
+        }
+      });
+  }
 
   update(map: any): void {
     this.store.dispatch(new UpdateMap(map));
