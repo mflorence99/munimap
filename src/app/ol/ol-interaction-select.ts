@@ -19,7 +19,9 @@ import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { transformExtent } from 'ol/proj';
+import { unByKey } from 'ol/Observable';
 
+import Debounce from 'debounce-decorator';
 import OLFeature from 'ol/Feature';
 import OLSelect from 'ol/interaction/Select';
 
@@ -40,6 +42,8 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
 export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy
 {
+  #featuresLoadEndKey = null;
+
   @ContentChild(MatMenu) contextMenu: MatMenu;
   @ViewChild(MatMenuTrigger) contextMenuTrigger: MatMenuTrigger;
 
@@ -93,6 +97,15 @@ export class OLInteractionSelectComponent
     this.featuresSelected.emit(this.selected);
   }
 
+  #selectParcels(ids: (string | number)[]): void {
+    this.olSelect.getFeatures().clear();
+    this.layer.olLayer.getSource().forEachFeature((feature) => {
+      if (ids.includes(feature.getId()))
+        this.olSelect.getFeatures().push(feature);
+    });
+    this.#onSelect();
+  }
+
   addToMap(): void {
     this.map.olMap.addInteraction(this.olSelect);
   }
@@ -103,6 +116,7 @@ export class OLInteractionSelectComponent
 
   ngOnDestroy(): void {
     this.olSelect.un('select', this.#onSelect.bind(this));
+    if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
   }
 
   // 👉 see OLMapComponent for wiring
@@ -118,7 +132,7 @@ export class OLInteractionSelectComponent
     }
   }
 
-  selectParcels(parcels: GeoJSON.Feature[]): void {
+  @Debounce(250) selectParcels(parcels: GeoJSON.Feature[]): void {
     // 👇 assume these parcels are degenerate and that all we have
     //    available is ID and bbox
     const bbox = parcels.reduce(
@@ -143,32 +157,24 @@ export class OLInteractionSelectComponent
       this.map.featureProjection,
       this.map.projection
     );
-    // 👇 at least some the parcels might be visible
-    //    we'll select what we can now
-    const ids = parcels.map((parcel) => parcel.properties.id);
-    this.olSelect.getFeatures().clear();
-    this.layer.olLayer.getSource().forEachFeature((feature) => {
-      const props = feature.getProperties();
-      if (ids.includes(props.id)) this.olSelect.getFeatures().push(feature);
+    // 👇 select what we can now, because "zoom to extent"
+    //    won't trigger a load if they're all currently available now
+    const ids = parcels.map((parcel) => parcel.id);
+    this.#selectParcels(ids);
+    // 👇 setup a listener to select later if the zoom loads more
+    if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
+    this.#featuresLoadEndKey = this.layer.olLayer
+      .getSource()
+      .on('featuresloadend', () => {
+        this.#selectParcels(ids);
+        this.cdf.detectChanges();
+      });
+    // 👇 zoom to the extent of all the selected  parcels
+    this.map.olView.fit(extent, {
+      duration: this.zoomAnimationDuration,
+      maxZoom: this.map.maxZoom,
+      size: this.map.olMap.getSize()
     });
-    this.#onSelect();
-    // 👇 OK -- they weren't all visible
-    //    so when these parcels are available, select them
-    if (ids.length !== this.olSelect.getFeatures().getLength()) {
-      this.layer.olLayer.getSource().once('featuresloadend', () => {
-        this.olSelect.getFeatures().clear();
-        this.layer.olLayer.getSource().forEachFeature((feature) => {
-          const props = feature.getProperties();
-          if (ids.includes(props.id)) this.olSelect.getFeatures().push(feature);
-        });
-        this.#onSelect();
-      });
-      // 👇 zoom to the extent of all the selected  parcels
-      this.map.olView.fit(extent, {
-        duration: this.zoomAnimationDuration,
-        maxZoom: this.map.maxZoom,
-        size: this.map.olMap.getSize()
-      });
-    }
+    this.cdf.detectChanges();
   }
 }

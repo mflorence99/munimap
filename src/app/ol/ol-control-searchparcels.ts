@@ -70,11 +70,11 @@ export class OLControlSearchParcelsComponent implements OnInit {
     if (parcels) {
       // 👉 we have a hit, tell the selector
       this.matches = [];
-      const ids = parcels.map((parcel) => parcel.properties.id).join(', ');
+      const ids = parcels.map((parcel) => parcel.id).join(', ');
       console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
       this.map.selector.selectParcels(parcels);
     } else if (searchFor.length > this.fuzzyMinLength) {
-      // 👉 no hit, but enough charactersvto go for a fuzzy match
+      // 👉 no hit, but enough characters to go for a fuzzy match
       this.matches = fuzzysort
         .go(searchFor, this.#searchTargets, {
           limit: this.fuzzyMaxResults,

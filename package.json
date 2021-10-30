@@ -39,6 +39,7 @@
     "@sentry/angular": "^6",
     "@sentry/tracing": "^6",
     "@turf/turf": "^6",
+    "debounce-decorator": "^1.0.6",
     "fast-copy": "^2",
     "fast-equals": "^2",
     "firebase": "^8",

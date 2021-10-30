@@ -33,7 +33,7 @@
             }
           },
           "options": {
-            "allowedCommonJsDependencies": ["pbf"],
+            "allowedCommonJsDependencies": ["debounce-decorator", "pbf"],
             "assets": ["src/assets"],
             "index": "src/index.html",
             "main": "src/main.ts",
