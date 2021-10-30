@@ -20,7 +20,6 @@ import { ViewChild } from '@angular/core';
 import { forwardRef } from '@angular/core';
 import { transformExtent } from 'ol/proj';
 
-import bbox from '@turf/bbox';
 import OLFeature from 'ol/Feature';
 import OLSelect from 'ol/interaction/Select';
 
@@ -117,31 +116,56 @@ export class OLInteractionSelectComponent
   }
 
   selectParcels(parcels: GeoJSON.Feature[]): void {
-    const geojson = {
-      features: parcels,
-      type: 'FeatureCollection'
-    };
-    // 👇 find the union of the extent of all parcels
+    // 👇 assume these parcels are degenerate and that all we have
+    //    available is ID and bbox
+    const bbox = parcels.reduce(
+      (acc, parcel) => {
+        const [minX, minY, maxX, maxY] = parcel.bbox;
+        acc[0] = Math.min(acc[0], minX);
+        acc[1] = Math.min(acc[1], minY);
+        acc[2] = Math.max(acc[2], maxX);
+        acc[3] = Math.max(acc[3], maxY);
+        return acc;
+      },
+      [
+        Number.MAX_SAFE_INTEGER,
+        Number.MAX_SAFE_INTEGER,
+        Number.MIN_SAFE_INTEGER,
+        Number.MIN_SAFE_INTEGER
+      ]
+    );
+    // 👉 that's the union of the extent
     const extent = transformExtent(
-      bbox(geojson),
+      bbox,
       this.map.featureProjection,
       this.map.projection
     );
-    // 👇 when these parcels are available, select them
+    // 👇 at least some the parcels might be visible
+    //    we'll select what we can now
     const ids = parcels.map((parcel) => parcel.properties.id);
-    this.layer.olLayer.getSource().once('featuresloadend', () => {
-      this.olSelect.getFeatures().clear();
-      this.layer.olLayer.getSource().forEachFeature((feature) => {
-        const props = feature.getProperties();
-        if (ids.includes(props.id)) this.olSelect.getFeatures().push(feature);
+    this.olSelect.getFeatures().clear();
+    this.layer.olLayer.getSource().forEachFeature((feature) => {
+      const props = feature.getProperties();
+      if (ids.includes(props.id)) this.olSelect.getFeatures().push(feature);
+    });
+    this.#onSelect();
+    // 👇 OK -- they weren't all visible
+    //    so when these parcels are available, select them
+    if (ids.length !== this.olSelect.getFeatures().getLength()) {
+      this.layer.olLayer.getSource().once('featuresloadend', () => {
+        this.olSelect.getFeatures().clear();
+        this.layer.olLayer.getSource().forEachFeature((feature) => {
+          const props = feature.getProperties();
+          if (ids.includes(props.id)) this.olSelect.getFeatures().push(feature);
+        });
+        this.#onSelect();
       });
-      this.#onSelect();
-    });
-    // 👇 zoom to the extent of all the selected  parcels
-    this.map.olView.fit(extent, {
-      duration: this.zoomAnimationDuration,
-      maxZoom: this.map.maxZoom,
-      size: this.map.olMap.getSize()
-    });
+      // 👇 zoom to the extent of all the selected  parcels
+      this.map.olView.fit(extent, {
+        duration: this.zoomAnimationDuration,
+        maxZoom: this.map.maxZoom,
+        size: this.map.olMap.getSize()
+      });
+    }
   }
 }

@@ -95,11 +95,13 @@ export class OLControlSearchParcelsComponent implements OnInit {
     return Math.max(2, Math.min(this.matches.length, this.matchesMaxVisible));
   }
 
-  // TODO 👇 we need to find a way to download the barest minimum here
+  // 👉 the idea behind searchables is to provide just enough data for
+  //    parcels to be searched -- we do this because we MUST have ALL
+  //    the data available
 
   ngOnInit(): void {
     this.geoJSON
-      .loadByIndex(this.route, this.map.path, 'parcels')
+      .loadByIndex(this.route, this.map.path, 'searchables')
       .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
         const parcels = geojson.features;
         this.#searchTargets = this.#makeSearchTargets(parcels);
