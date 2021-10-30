@@ -90,7 +90,9 @@ export class AuthState implements NgxsOnInit {
   static workgroup(profile: Profile): string[] {
     let workgroup = [profile.email];
     if (profile.workgroup)
-      workgroup = workgroup.concat(profile.workgroup.split(/[\n ;]+/g));
+      workgroup = workgroup
+        .concat(profile.workgroup.split(/[\n ;]+/g))
+        .filter((email) => !!email);
     return workgroup;
   }
 

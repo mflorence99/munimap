@@ -45,7 +45,10 @@
           placeholder="eg: My Old Town"
           required
         />
+        <mat-error *ngIf="name.errors">A map name is required </mat-error>
       </mat-form-field>
+
+      <br />
 
       <mat-label>
         Choose a map style:

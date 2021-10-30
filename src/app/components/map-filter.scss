@@ -4,6 +4,13 @@
   width: 25rem;
 }
 
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
+  margin-top: 1rem;
+}
+
 .form {
   display: grid;
   grid-template-rows: auto auto;

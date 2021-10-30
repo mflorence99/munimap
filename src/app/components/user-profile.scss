@@ -6,11 +6,12 @@
   display: flex;
   gap: 1rem;
   justify-content: end;
+  margin-top: 2rem;
 }
 
 .card {
-  min-width: 25rem;
   position: relative;
+  width: 25rem;
 }
 
 .editor {

@@ -35,6 +35,9 @@
           required
           type="text"
         />
+        <mat-error *ngIf="displayName.errors"
+          >A display name is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
@@ -42,11 +45,18 @@
         <textarea
           #workgroup="ngModel"
           [(ngModel)]="profile.workgroup"
+          appWorkgroup
           cdkTextareaAutosize
           matInput
           name="workgroup"
         ></textarea>
-        <mat-hint
+        <mat-error *ngIf="workgroup.errors?.tooMany"
+          >A maximum of 10 email addresses is allowed.
+        </mat-error>
+        <mat-error *ngIf="workgroup.errors?.invalidEmail"
+          >At least one email address is invalid.
+        </mat-error>
+        <mat-hint *ngIf="!workgroup.errors"
           >Give the email addresses of up to 10 colleagues with who you share
           maps, each on a new line.</mat-hint
         >

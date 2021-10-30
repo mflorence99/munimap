@@ -49,6 +49,7 @@ import { TownMapPage } from './pages/town-map';
 import { TownMapSetupComponent } from './components/town-map-setup';
 import { UserProfileComponent } from './components/user-profile';
 import { ViewState } from './state/view';
+import { WorkgroupValidator } from './directives/workgroup-validator';
 
 import { environment } from '../environment';
 import { initializeAppProvider } from './services/initializer';
@@ -142,6 +143,8 @@ const COMPONENTS = [
   UserProfileComponent
 ];
 
+const DIRECTIVES = [WorkgroupValidator];
+
 const PAGES = [LoginPage, MapCreatePage, RootPage, TownMapPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
@@ -187,7 +190,7 @@ const STATES_SAVED = [RouterState, ViewState];
 @NgModule({
   bootstrap: [RootPage],
 
-  declarations: [...COMPONENTS, ...PAGES],
+  declarations: [...COMPONENTS, ...DIRECTIVES, ...PAGES],
 
   entryComponents: [],
 
