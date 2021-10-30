@@ -61,6 +61,9 @@ export class OLInteractionSelectComponent
   get selected(): OLFeature<any>[] {
     return this.olSelect.getFeatures().getArray();
   }
+  get selectedIDs(): string[] {
+    return this.selected.map((feature) => String(feature.getId()));
+  }
 
   @Input() zoomAnimationDuration = 200;
 
@@ -85,7 +88,7 @@ export class OLInteractionSelectComponent
   }
 
   #onSelect(_event?: OLSelectEvent): void {
-    const ids = this.selected.map((feature) => feature.getId()).join(', ');
+    const ids = this.selectedIDs.join(', ');
     console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
     this.featuresSelected.emit(this.selected);
   }

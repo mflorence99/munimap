@@ -5,20 +5,41 @@
   width: 100%;
 }
 
+.container {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.content {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
 .contextmenu {
   width: 20rem;
 
   .header {
     font-weight: bold;
-    padding: 0.5rem;
+    padding: 1rem;
   }
 
   .item {
-    height: 2.5rem;
-    line-height: 2.5rem;
+    align-items: center;
+    cursor: pointer;
+    display: grid;
+    grid-column-gap: 1rem;
+    grid-template-columns: auto 1fr;
+    padding: 0.5rem 1rem;
   }
 
   .mat-divider {
     border-top-color: var(--text-color);
   }
+}
+
+.sidebar {
+  height: 100%;
+  width: 25rem;
 }

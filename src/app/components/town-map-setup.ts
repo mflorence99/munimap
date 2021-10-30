@@ -34,7 +34,7 @@ export class TownMapSetupComponent {
     if (map.name) this.root.setTitle(map.name);
   }
 
-  rolledup = false;
+  rolledup: boolean;
 
   constructor(
     private dialog: MatDialog,
@@ -42,7 +42,9 @@ export class TownMapSetupComponent {
     private router: Router,
     private store: Store,
     public townMap: TownMapPage
-  ) {}
+  ) {
+    this.rolledup = !this.townMap.creating;
+  }
 
   delete(map: any): void {
     const data: ConfirmDialogData = {

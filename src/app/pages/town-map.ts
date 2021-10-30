@@ -3,17 +3,24 @@ import { DestroyService } from '../services/destroy';
 import { LoadMap } from '../state/map';
 import { Map } from '../state/map';
 import { MapState } from '../state/map';
+import { OLMapComponent } from '../ol/ol-map';
+import { ParcelPropertiesComponent } from '../components/parcel-properties';
 import { RootPage } from '../root';
 import { SetMap } from '../state/map';
+import { SidebarHostDirective } from '../directives/sidebar-host';
 
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ComponentFactoryResolver } from '@angular/core';
+import { ComponentRef } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+import { ViewChild } from '@angular/core';
 
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
@@ -29,12 +36,19 @@ import { v4 as uuidv4 } from 'uuid';
 export class TownMapPage {
   creating = false;
 
-  @Select(MapState) map$: Observable<Map>;
+  @ViewChild('drawer') drawer: MatDrawer;
+
+  @Select(MapState) mapState$: Observable<Map>;
+
+  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+
+  @ViewChild(SidebarHostDirective) sidebarHost: SidebarHostDirective;
 
   constructor(
     private actions$: Actions,
     private authState: AuthState,
     private destroy$: DestroyService,
+    private resolver: ComponentFactoryResolver,
     private root: RootPage,
     private route: ActivatedRoute,
     private router: Router,
@@ -81,5 +95,16 @@ export class TownMapPage {
     this.store.dispatch(new LoadMap(id, dflt));
     // 👉 set the window title to something we know for now
     this.root.setTitle(path);
+  }
+
+  xxx(): void {
+    this.drawer.open();
+    this.sidebarHost.vcRef.clear();
+    const cFactory = this.resolver.resolveComponentFactory(
+      ParcelPropertiesComponent
+    );
+    const cRef: ComponentRef<ParcelPropertiesComponent> =
+      this.sidebarHost.vcRef.createComponent(cFactory);
+    cRef.instance.map = this.olMap;
   }
 }

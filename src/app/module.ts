@@ -43,8 +43,10 @@ import { OLStyleRiversComponent } from './ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from './ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from './ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from './ol/ol-style-trails';
+import { ParcelPropertiesComponent } from './components/parcel-properties';
 import { ReadyResolver } from './resolvers/ready';
 import { RootPage } from './root';
+import { SidebarHostDirective } from './directives/sidebar-host';
 import { TownMapPage } from './pages/town-map';
 import { TownMapSetupComponent } from './components/town-map-setup';
 import { UserProfileComponent } from './components/user-profile';
@@ -139,11 +141,12 @@ const COMPONENTS = [
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
   OLStyleTrailsComponent,
+  ParcelPropertiesComponent,
   TownMapSetupComponent,
   UserProfileComponent
 ];
 
-const DIRECTIVES = [WorkgroupValidator];
+const DIRECTIVES = [SidebarHostDirective, WorkgroupValidator];
 
 const PAGES = [LoginPage, MapCreatePage, RootPage, TownMapPage];
 
