@@ -109,8 +109,8 @@ export class ParcelsState implements NgxsOnInit {
             const workgroup = AuthState.workgroup(profile);
             const query = (ref): any =>
               ref
-                .where('path', '==', map.path)
                 .where('owner', 'in', workgroup)
+                .where('path', '==', map.path)
                 .orderBy('timestamp');
             // TODO 🔥 how do we ever unsubscribe?
             return this.firestore
