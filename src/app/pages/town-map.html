@@ -118,9 +118,7 @@
             <app-ol-style-parcels
               [showBackground]="true"
             ></app-ol-style-parcels>
-            <app-ol-source-geojson
-              [layerKey]="'parcels'"
-            ></app-ol-source-geojson>
+            <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
@@ -169,8 +167,7 @@
 
           <app-ol-layer-vector>
             <app-ol-style-parcels [showText]="true"></app-ol-style-parcels>
-            <app-ol-source-geojson [layerKey]="'parcels'">
-            </app-ol-source-geojson>
+            <app-ol-source-parcels> </app-ol-source-parcels>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
@@ -186,13 +183,11 @@
 
         <ng-container *ngIf="map.style !== 'nhgranit'">
           <app-ol-layer-vector>
-            <app-ol-source-geojson
-              [layerKey]="'parcels'"
-            ></app-ol-source-geojson>
             <app-ol-style-parcels
               [showBackground]="true"
               [showText]="true"
             ></app-ol-style-parcels>
+            <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
@@ -214,7 +209,7 @@
 
         <app-ol-layer-vector>
           <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
-          <app-ol-source-geojson [layerKey]="'parcels'"></app-ol-source-geojson>
+          <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-interaction-select [eventType]="'singleclick'" [multi]="true">
             <mat-menu #theContextMenu mapContextMenu>
               <ng-template matMenuContent>

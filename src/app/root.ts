@@ -18,9 +18,9 @@ import { RouterOutlet } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
+import { mergeMap } from 'rxjs/operators';
 import { moveFromLeftFade } from 'ngx-router-animations';
 import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { transition } from '@angular/animations';
 import { trigger } from '@angular/animations';
@@ -64,7 +64,7 @@ export class RootPage {
   #handleAllMaps$(): Observable<Map[]> {
     return this.profile$.pipe(
       takeUntil(this.destroy$),
-      switchMap((profile) => {
+      mergeMap((profile) => {
         if (!profile?.email) return of([]);
         else {
           const workgroup = AuthState.workgroup(profile);

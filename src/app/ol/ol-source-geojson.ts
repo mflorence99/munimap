@@ -66,10 +66,7 @@ export class OLSourceGeoJSONComponent {
           featureProjection: this.map.projection
         }) as OLFeature<any>[];
         // 👉 add each feature not already present
-        features.forEach((feature) => {
-          if (!this.olVector.hasFeature(feature))
-            this.olVector.addFeature(feature);
-        });
+        this.olVector.addFeatures(features);
         success(features);
       });
   }

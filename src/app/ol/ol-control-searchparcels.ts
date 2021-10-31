@@ -1,5 +1,6 @@
 import { GeoJSONService } from '../services/geojson';
 import { OLMapComponent } from './ol-map';
+import { ParcelProperties } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -16,9 +17,11 @@ import fuzzysort from 'fuzzysort';
   styleUrls: ['./ol-control-searchparcels.scss']
 })
 export class OLControlSearchParcelsComponent implements OnInit {
-  #parcelsByAddress: Record<string, GeoJSON.Feature[]> = {};
-  #parcelsByID: Record<string, GeoJSON.Feature[]> = {};
-  #parcelsByOwner: Record<string, GeoJSON.Feature[]> = {};
+  #parcelsByAddress: Record<string, GeoJSON.Feature<any, ParcelProperties>[]> =
+    {};
+  #parcelsByID: Record<string, GeoJSON.Feature<any, ParcelProperties>[]> = {};
+  #parcelsByOwner: Record<string, GeoJSON.Feature<any, ParcelProperties>[]> =
+    {};
   #searchTargets = [];
 
   @Input() fuzzyMaxResults = 100;
@@ -35,7 +38,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  #makeSearchTargets(parcels: GeoJSON.Feature[]): any[] {
+  #makeSearchTargets(parcels: GeoJSON.Feature<any, ParcelProperties>[]): any[] {
     const keys = new Set<string>();
     parcels.forEach((parcel) => {
       const props = parcel.properties;
@@ -47,9 +50,9 @@ export class OLControlSearchParcelsComponent implements OnInit {
   }
 
   #reduceParcelsByProperty(
-    parcels: GeoJSON.Feature[],
+    parcels: GeoJSON.Feature<any, ParcelProperties>[],
     prop: string
-  ): Record<string, GeoJSON.Feature[]> {
+  ): Record<string, GeoJSON.Feature<any, ParcelProperties>[]> {
     return parcels.reduce((acc, parcel) => {
       const props = parcel.properties;
       if (props[prop]) {
@@ -102,15 +105,22 @@ export class OLControlSearchParcelsComponent implements OnInit {
   ngOnInit(): void {
     this.geoJSON
       .loadByIndex(this.route, this.map.path, 'searchables')
-      .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-        const parcels = geojson.features;
-        this.#searchTargets = this.#makeSearchTargets(parcels);
-        this.#parcelsByAddress = this.#reduceParcelsByProperty(
-          parcels,
-          'address'
-        );
-        this.#parcelsByID = this.#reduceParcelsByProperty(parcels, 'id');
-        this.#parcelsByOwner = this.#reduceParcelsByProperty(parcels, 'owner');
-      });
+      .subscribe(
+        (
+          geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon, ParcelProperties>
+        ) => {
+          const parcels = geojson.features;
+          this.#searchTargets = this.#makeSearchTargets(parcels);
+          this.#parcelsByAddress = this.#reduceParcelsByProperty(
+            parcels,
+            'address'
+          );
+          this.#parcelsByID = this.#reduceParcelsByProperty(parcels, 'id');
+          this.#parcelsByOwner = this.#reduceParcelsByProperty(
+            parcels,
+            'owner'
+          );
+        }
+      );
   }
 }

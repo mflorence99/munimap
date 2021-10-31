@@ -1,5 +1,4 @@
 import { Params } from './params';
-import { Parcel } from '../state/parcel';
 import { Path } from '../state/view';
 
 import { ActivatedRoute } from '@angular/router';
@@ -60,8 +59,6 @@ export interface LakeProperties {
   name: string;
   town: string;
 }
-
-export type ParcelProperties = Parcel;
 
 export interface PlaceProperties {
   county: string;

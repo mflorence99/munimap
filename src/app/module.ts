@@ -28,6 +28,7 @@ import { OLMapComponent } from './ol/ol-map';
 import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
 import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
+import { OLSourceParcelsComponent } from './ol/ol-source-parcels';
 import { OLSourceStaticComponent } from './ol/ol-source-static';
 import { OLSourceStoneWallsComponent } from './ol/ol-source-stonewalls';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
@@ -44,6 +45,7 @@ import { OLStyleRoadsComponent } from './ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from './ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from './ol/ol-style-trails';
 import { ParcelPropertiesComponent } from './components/parcel-properties';
+import { ParcelsState } from './state/parcels';
 import { ReadyResolver } from './resolvers/ready';
 import { RootPage } from './root';
 import { SidebarHostDirective } from './directives/sidebar-host';
@@ -126,6 +128,7 @@ const COMPONENTS = [
   OLSourceBoundaryComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
+  OLSourceParcelsComponent,
   OLSourceStaticComponent,
   OLSourceStoneWallsComponent,
   OLSourceXYZComponent,
@@ -187,7 +190,7 @@ const ROUTES = [
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState, MapState, ViewState];
+const STATES = [AuthState, MapState, ParcelsState, ViewState];
 const STATES_SAVED = [RouterState, ViewState];
 
 @NgModule({
