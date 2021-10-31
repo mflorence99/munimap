@@ -1,3 +1,4 @@
+import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -5,8 +6,11 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+import { takeUntil } from 'rxjs/operators';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
+  providers: [DestroyService],
   selector: 'app-ol-control-zoom',
   templateUrl: './ol-control-zoom.html',
   styleUrls: ['./ol-control-zoom.scss']
@@ -16,8 +20,16 @@ export class OLControlZoomComponent {
   @Input() zoom: number;
   @Input() zoomAnimationDuration = 250;
 
-  constructor(private cdf: ChangeDetectorRef, public map: OLMapComponent) {
-    this.map.zoomChange.subscribe((zoom) => {
+  constructor(
+    private cdf: ChangeDetectorRef,
+    private destroy$: DestroyService,
+    public map: OLMapComponent
+  ) {
+    this.#handleZoom$();
+  }
+
+  #handleZoom$(): void {
+    this.map.zoomChange.pipe(takeUntil(this.destroy$)).subscribe((zoom) => {
       this.zoom = zoom;
       this.resolution = this.map.olView.getResolutionForZoom(zoom);
       this.cdf.detectChanges();

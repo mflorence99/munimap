@@ -189,7 +189,7 @@ export class AuthState implements NgxsOnInit {
     const user = ctx.getState().user;
     this.#profiles
       .doc(user.email)
-      .set(this.#profileProps(action.profile))
+      .set(this.#profileProps(action.profile), { merge: true })
       .then(() => ctx.dispatch(new SetProfile(action.profile)));
   }
 

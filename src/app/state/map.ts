@@ -91,7 +91,7 @@ export class MapState {
   ): void {
     this.#maps
       .doc(action.map.id)
-      .set(action.map)
+      .set(action.map, { merge: true })
       .then(() => ctx.dispatch(new SetMap(action.map)));
   }
 }

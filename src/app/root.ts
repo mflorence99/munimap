@@ -57,8 +57,23 @@ export class RootPage {
     private destroy$: DestroyService,
     private router: Router
   ) {
+    this.allMaps$ = this.#handleAllMaps$();
     this.#handleRouterEvents$();
-    this.#makeAllMaps$();
+  }
+
+  #handleAllMaps$(): Observable<Map[]> {
+    return this.profile$.pipe(
+      takeUntil(this.destroy$),
+      switchMap((profile) => {
+        if (!profile?.email) return of([]);
+        else {
+          const workgroup = AuthState.workgroup(profile);
+          const query = (ref): any =>
+            ref.where('owner', 'in', workgroup).orderBy('name');
+          return this.firestore.collection<Map>('maps', query).valueChanges();
+        }
+      })
+    );
   }
 
   #handleRouterEvents$(): void {
@@ -84,20 +99,6 @@ export class RootPage {
           }
         }
       });
-  }
-
-  #makeAllMaps$(): void {
-    this.allMaps$ = this.profile$.pipe(
-      switchMap((profile) => {
-        if (!profile?.email) return of([]);
-        else {
-          const workgroup = AuthState.workgroup(profile);
-          const query = (ref): any =>
-            ref.where('owner', 'in', workgroup).orderBy('name');
-          return this.firestore.collection<Map>('maps', query).valueChanges();
-        }
-      })
-    );
   }
 
   getState(): any {
