@@ -1,4 +1,3 @@
-import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -15,7 +14,6 @@ import { Select } from '@ngxs/store';
 
 import { bbox } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
 import GeoJSON from 'ol/format/GeoJSON';
@@ -30,7 +28,6 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
   selector: 'app-ol-source-parcels',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
@@ -43,26 +40,12 @@ export class OLSourceParcelsComponent {
   @Input() path: string;
 
   constructor(
-    private destroy$: DestroyService,
     private geoJSON: GeoJSONService,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
     this.#initialize();
-    this.#handleParcels$();
-  }
-
-  #handleParcels$(): void {
-    this.parcels$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      const extent = this.map.olView.calculateExtent();
-      const resolution = this.map.olView.getResolution();
-      const projection = new OLProjection({ code: this.map.projection });
-      const success = (): void => {};
-      const failure = console.error;
-      console.error('LOADER called byparcels$');
-      this.#loader(extent, resolution, projection, success, failure);
-    });
   }
 
   #initialize(): void {
@@ -97,9 +80,16 @@ export class OLSourceParcelsComponent {
     >;
     // 👇 we need to merge the incoming geojson with the latest parcels
     combineLatest([geojson$, this.parcels$]).subscribe(([geojson, parcels]) => {
-      console.log({ parcels });
       const parcelsByID = this.#reduceParcels(parcels);
       this.#overrideFeaturesWithParcels(geojson, parcels, parcelsByID);
+      // TODO 🔥 leave as-is for now
+      //         when we have timestamps sorted on parcels, only
+      //         remove a feature if it is outdated
+      Object.keys(parcelsByID).forEach((id) => {
+        const feature = this.olVector.getFeatureById(id);
+        if (feature) this.olVector.removeFeature(feature);
+      });
+      // 👉 convert features into OL format
       const features = this.olVector.getFormat().readFeatures(geojson, {
         featureProjection: this.map.projection
       }) as OLFeature<any>[];
