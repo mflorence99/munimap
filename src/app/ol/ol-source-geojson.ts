@@ -51,7 +51,7 @@ export class OLSourceGeoJSONComponent {
     _resolution: number,
     projection: OLProjection,
     success: Function,
-    _faulure: Function
+    _failure: Function
   ): void {
     const bbox = transformExtent(
       extent,
@@ -61,11 +61,15 @@ export class OLSourceGeoJSONComponent {
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
       .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-        this.olVector.clear();
+        // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.map.projection
         }) as OLFeature<any>[];
-        this.olVector.addFeatures(features);
+        // 👉 add each feature not already present
+        features.forEach((feature) => {
+          if (!this.olVector.hasFeature(feature))
+            this.olVector.addFeature(feature);
+        });
         success(features);
       });
   }

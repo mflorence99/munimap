@@ -17,6 +17,7 @@ import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { ViewChild } from '@angular/core';
 
+import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
 import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
@@ -136,20 +137,8 @@ export class OLInteractionSelectComponent
     // 👇 assume these parcels are degenerate and that all we have
     //    available is ID and bbox
     const bbox = parcels.reduce(
-      (acc, parcel) => {
-        const [minX, minY, maxX, maxY] = parcel.bbox;
-        acc[0] = Math.min(acc[0], minX);
-        acc[1] = Math.min(acc[1], minY);
-        acc[2] = Math.max(acc[2], maxX);
-        acc[3] = Math.max(acc[3], maxY);
-        return acc;
-      },
-      [
-        Number.MAX_SAFE_INTEGER,
-        Number.MAX_SAFE_INTEGER,
-        Number.MIN_SAFE_INTEGER,
-        Number.MIN_SAFE_INTEGER
-      ]
+      (bbox, parcel) => extend(bbox, parcel.bbox),
+      [...parcels[0].bbox]
     );
     // 👉 that's the union of the extent
     const extent = transformExtent(
@@ -157,24 +146,18 @@ export class OLInteractionSelectComponent
       this.map.featureProjection,
       this.map.projection
     );
-    // 👇 select what we can now, because "zoom to extent"
-    //    won't trigger a load if they're all currently available now
+    // 👇 setup a listener to select later if the zoom loads more parcels
     const ids = parcels.map((parcel) => parcel.id);
-    this.#selectParcels(ids);
-    // 👇 setup a listener to select later if the zoom loads more
     if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
     this.#featuresLoadEndKey = this.layer.olLayer
       .getSource()
-      .on('featuresloadend', () => {
-        this.#selectParcels(ids);
-        this.cdf.detectChanges();
-      });
-    // 👇 zoom to the extent of all the selected  parcels
+      .once('featuresloadend', () => this.#selectParcels(ids));
+    // 👇 zoom to the extent of all the selected  parcels and select them
     this.map.olView.fit(extent, {
+      callback: () => this.#selectParcels(ids),
       duration: this.zoomAnimationDuration,
       maxZoom: this.map.maxZoom,
       size: this.map.olMap.getSize()
     });
-    this.cdf.detectChanges();
   }
 }

@@ -74,11 +74,15 @@ export class OLSourceStoneWallsComponent {
           )
         )
         .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.LineString>) => {
-          this.olVector.clear();
+          // 👉 convert features into OL format
           const features = this.olVector
             .getFormat()
             .readFeatures(geojson) as OLFeature<any>[];
-          this.olVector.addFeatures(features);
+          // 👉 add each feature not already present
+          features.forEach((feature) => {
+            if (!this.olVector.hasFeature(feature))
+              this.olVector.addFeature(feature);
+          });
           success(features);
         });
     }
