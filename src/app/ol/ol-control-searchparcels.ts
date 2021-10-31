@@ -1,6 +1,7 @@
 import { GeoJSONService } from '../services/geojson';
 import { OLMapComponent } from './ol-map';
 import { ParcelProperties } from '../state/parcels';
+import { Parcels } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -105,22 +106,15 @@ export class OLControlSearchParcelsComponent implements OnInit {
   ngOnInit(): void {
     this.geoJSON
       .loadByIndex(this.route, this.map.path, 'searchables')
-      .subscribe(
-        (
-          geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon, ParcelProperties>
-        ) => {
-          const parcels = geojson.features;
-          this.#searchTargets = this.#makeSearchTargets(parcels);
-          this.#parcelsByAddress = this.#reduceParcelsByProperty(
-            parcels,
-            'address'
-          );
-          this.#parcelsByID = this.#reduceParcelsByProperty(parcels, 'id');
-          this.#parcelsByOwner = this.#reduceParcelsByProperty(
-            parcels,
-            'owner'
-          );
-        }
-      );
+      .subscribe((geojson: Parcels) => {
+        const parcels = geojson.features;
+        this.#searchTargets = this.#makeSearchTargets(parcels);
+        this.#parcelsByAddress = this.#reduceParcelsByProperty(
+          parcels,
+          'address'
+        );
+        this.#parcelsByID = this.#reduceParcelsByProperty(parcels, 'id');
+        this.#parcelsByOwner = this.#reduceParcelsByProperty(parcels, 'owner');
+      });
   }
 }

@@ -82,6 +82,11 @@ export interface ParcelProperties {
   zone: string;
 }
 
+export type Parcels = GeoJSON.FeatureCollection<
+  GeoJSON.Polygon,
+  ParcelProperties
+>;
+
 export type ParcelsStateModel = Parcel[];
 
 @State<ParcelsStateModel>({

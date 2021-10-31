@@ -1,8 +1,9 @@
+import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../state/parcels';
-import { ParcelProperties } from '../state/parcels';
+import { Parcels } from '../state/parcels';
 import { ParcelsState } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
@@ -11,9 +12,11 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Select } from '@ngxs/store';
+import { Subject } from 'rxjs';
 
 import { bbox } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
 import GeoJSON from 'ol/format/GeoJSON';
@@ -28,11 +31,16 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
   selector: 'app-ol-source-parcels',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
 export class OLSourceParcelsComponent {
+  #success: Function;
+
+  geojson$ = new Subject<Parcels>();
+
   olVector: OLVector<any>;
 
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
@@ -40,12 +48,42 @@ export class OLSourceParcelsComponent {
   @Input() path: string;
 
   constructor(
+    private destroy$: DestroyService,
     private geoJSON: GeoJSONService,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
     this.#initialize();
+    this.#handleStreams();
+  }
+
+  #handleStreams(): void {
+    // 👇 we need to merge the incoming geojson with the latest parcels
+    combineLatest([this.geojson$, this.parcels$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([geojson, parcels]) => {
+        const geojsonByID = this.#reduceParcels(geojson.features as Parcel[]);
+        const parcelsByID = this.#reduceParcels(parcels);
+        this.#overrideFeaturesWithParcels(geojson, parcels, parcelsByID);
+        // TODO 🔥 leave as-is for now -- simply remove features that
+        //         are in both the geojson and in the parcels override
+        //         when we have timestamps sorted on parcels, only
+        //         remove a feature if it is outdated
+        Object.keys(parcelsByID).forEach((id) => {
+          if (geojsonByID[id]) {
+            const feature = this.olVector.getFeatureById(id);
+            if (feature) this.olVector.removeFeature(feature);
+          }
+        });
+        // 👉 convert features into OL format
+        const features = this.olVector.getFormat().readFeatures(geojson, {
+          featureProjection: this.map.projection
+        }) as OLFeature<any>[];
+        // 👉 add each feature not already present
+        this.olVector.addFeatures(features);
+        this.#success?.(features);
+      });
   }
 
   #initialize(): void {
@@ -70,37 +108,17 @@ export class OLSourceParcelsComponent {
       projection,
       this.map.featureProjection
     );
-    const geojson$ = this.geoJSON.loadByIndex(
-      this.route,
-      this.path ?? this.map.path,
-      'parcels',
-      bbox
-    ) as Observable<
-      GeoJSON.FeatureCollection<GeoJSON.Polygon, ParcelProperties>
-    >;
-    // 👇 we need to merge the incoming geojson with the latest parcels
-    combineLatest([geojson$, this.parcels$]).subscribe(([geojson, parcels]) => {
-      const parcelsByID = this.#reduceParcels(parcels);
-      this.#overrideFeaturesWithParcels(geojson, parcels, parcelsByID);
-      // TODO 🔥 leave as-is for now
-      //         when we have timestamps sorted on parcels, only
-      //         remove a feature if it is outdated
-      Object.keys(parcelsByID).forEach((id) => {
-        const feature = this.olVector.getFeatureById(id);
-        if (feature) this.olVector.removeFeature(feature);
+    this.geoJSON
+      .loadByIndex(this.route, this.path ?? this.map.path, 'parcels', bbox)
+      .subscribe((geojson: Parcels) => {
+        // TODO 🔥 is this a miserable hack???
+        this.#success = success;
+        this.geojson$.next(geojson);
       });
-      // 👉 convert features into OL format
-      const features = this.olVector.getFormat().readFeatures(geojson, {
-        featureProjection: this.map.projection
-      }) as OLFeature<any>[];
-      // 👉 add each feature not already present
-      this.olVector.addFeatures(features);
-      success(features);
-    });
   }
 
   #overrideFeaturesWithParcels(
-    geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon, ParcelProperties>,
+    geojson: Parcels,
     parcels: Parcel[],
     parcelsByID: Record<string, Parcel[]>
   ): void {
