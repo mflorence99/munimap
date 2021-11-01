@@ -1,8 +1,11 @@
-<h1>{{ map.selector.selectedIDs.join(', ') }}</h1>
+<h1>{{ selectedIDs.join(', ') }}</h1>
 
-<ng-container *ngIf="(allParcels$ | async) as parcels"
-  ><p *ngFor="let parcel of parcels">
+<ng-container *ngIf="(parcels$ | async) as parcels">
+  <p *ngFor="let parcel of parcels">
     From parcels: {{ parcel.properties | json }} <br /><br />
-    From geojson: {{ 'xxx' }}
-  </p></ng-container
->
+  </p>
+
+  <p *ngFor="let feature  of features">
+    From geojson: {{ feature.getProperties() | json }} <br /><br />
+  </p>
+</ng-container>

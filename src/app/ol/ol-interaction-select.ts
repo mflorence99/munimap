@@ -75,7 +75,8 @@ export class OLInteractionSelectComponent
 
   constructor(
     private cdf: ChangeDetectorRef,
-    private layer: OLLayerVectorComponent,
+    // 👉 we need public access to go through the selector to its layer
+    public layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
     this.olSelect = new OLSelect({

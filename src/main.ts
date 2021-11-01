@@ -18,6 +18,7 @@ Sentry.init({
   dsn: 'https://c4cd041a16584464b8c0f6b2c984b516@o918490.ingest.sentry.io/5861734',
   integrations: [
     new Integrations.BrowserTracing({
+      // TODO 🔥 don't know where it will go yet!
       tracingOrigins: ['localhost', 'https://XXXXX'],
       routingInstrumentation: Sentry.routingInstrumentation
     })
@@ -29,4 +30,4 @@ if (environment.production) enableProdMode();
 
 platformBrowserDynamic()
   .bootstrapModule(RootModule)
-  .catch((error) => console.log(error));
+  .catch((error) => console.error(error));

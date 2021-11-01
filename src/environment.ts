@@ -11,7 +11,7 @@ export const environment = {
     credentialHelper: firebaseui.auth.CredentialHelper.NONE,
     signInFlow: 'popup',
     signInOptions: [
-      // TODO: properly configure these in Firebase
+      // TODO 🔥 properly configure these in Firebase
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
       firebase.auth.TwitterAuthProvider.PROVIDER_ID,

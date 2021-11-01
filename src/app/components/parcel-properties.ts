@@ -1,6 +1,5 @@
 import { AuthState } from '../state/auth';
 import { DestroyService } from '../services/destroy';
-import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../state/parcels';
 import { Profile } from '../state/auth';
 
@@ -15,7 +14,8 @@ import { map } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { tap } from 'rxjs/operators';
+
+import OLFeature from 'ol/Feature';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,20 +25,24 @@ import { tap } from 'rxjs/operators';
   templateUrl: './parcel-properties.html'
 })
 export class ParcelPropertiesComponent {
-  allParcels$: Observable<Parcel[]>;
+  @Input() features: OLFeature<any>[];
 
-  @Input() map: OLMapComponent;
+  parcels$: Observable<Parcel[]>;
+
+  @Input() path: string;
 
   @Select(AuthState.profile) profile$: Observable<Profile>;
+
+  @Input() selectedIDs: string[];
 
   constructor(
     private firestore: AngularFirestore,
     private destroy$: DestroyService
   ) {
-    this.allParcels$ = this.#handleAllParcels$();
+    this.parcels$ = this.#handleParcels$();
   }
 
-  #handleAllParcels$(): Observable<Parcel[]> {
+  #handleParcels$(): Observable<Parcel[]> {
     return this.profile$.pipe(
       takeUntil(this.destroy$),
       mergeMap((profile) => {
@@ -47,16 +51,15 @@ export class ParcelPropertiesComponent {
           const workgroup = AuthState.workgroup(profile);
           const query = (ref): any =>
             ref
-              .where('id', 'in', this.map.selector.selectedIDs)
+              .where('id', 'in', this.selectedIDs)
               // 🔥 crap! can't use more than one "in"
-              // .where('owner', 'in', workgroup)
-              .where('path', '==', this.map.path)
+              //    .where('owner', 'in', workgroup)
+              .where('path', '==', this.path)
               .orderBy('timestamp');
           return this.firestore
             .collection<Parcel>('parcels', query)
             .valueChanges()
             .pipe(
-              tap(console.log),
               map((parcels) =>
                 parcels.filter((parcel) => workgroup.includes(parcel.owner))
               )

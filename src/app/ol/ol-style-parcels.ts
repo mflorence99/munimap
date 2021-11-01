@@ -139,7 +139,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     );
     const nominal = (Math.log(acres) - minv) / scale + minp;
     const adjusted = nominal / resolution;
-    // console.log({ id: props.id, scale, acres, nominal, adjusted });
     return adjusted;
   }
 

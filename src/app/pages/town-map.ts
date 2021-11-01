@@ -97,6 +97,9 @@ export class TownMapPage {
     this.root.setTitle(path);
   }
 
+  // TODO 🔥 temporary until we figure pattern for all menu items
+  //         probably need an interface to describe contextmenu components
+
   xxx(): void {
     this.drawer.open();
     this.sidebarHost.vcRef.clear();
@@ -105,6 +108,11 @@ export class TownMapPage {
     );
     const cRef: ComponentRef<ParcelPropertiesComponent> =
       this.sidebarHost.vcRef.createComponent(cFactory);
-    cRef.instance.map = this.olMap;
+    // 👉 populate @Input() fields
+    const comp = cRef.instance;
+    comp.path = this.olMap.path;
+    comp.selectedIDs = this.olMap.selector.selectedIDs;
+    const source = this.olMap.selector.layer.olLayer.getSource();
+    comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
   }
 }
