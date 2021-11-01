@@ -1,15 +1,3 @@
-<!-- <h1>{{ selectedIDs.join(', ') }}</h1>
-
-<ng-container *ngIf="(parcels$ | async) as parcels">
-  <p *ngFor="let parcel of parcels">
-    From parcels: {{ parcel.properties | json }} <br /><br />
-  </p>
-
-  <p *ngFor="let feature  of features">
-    From geojson: {{ feature.getProperties() | json }} <br /><br />
-  </p>
-</ng-container> -->
-
 <header class="header">
   <img class="icon" mat-card-avatar src="assets/properties.svg" />
   <p class="title">Lorem ipsum dolor emit</p>
@@ -17,3 +5,87 @@
 </header>
 
 <mat-divider></mat-divider>
+
+<form
+  #propertiesForm="ngForm"
+  (ngSubmit)="save(record)"
+  autocomplete="off"
+  class="form"
+  novalidate
+  spellcheck="false"
+>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
+    nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
+  </p>
+
+  <mat-form-field floatLabel="always">
+    <mat-label>Parcel Address</mat-label>
+    <input
+      #address="ngModel"
+      [(ngModel)]="record.address.fromParcels"
+      [placeholder]="record.address.fromFeatures"
+      matInput
+      name="address"
+    />
+    <mat-icon
+      *ngIf="record.address.conflict"
+      [inline]="true"
+      color="accent"
+      matSuffix
+      >warning</mat-icon
+    >
+  </mat-form-field>
+
+  <mat-form-field floatLabel="always">
+    <mat-label>Parcel Owner</mat-label>
+    <input
+      #owner="ngModel"
+      [(ngModel)]="record.owner.fromParcels"
+      [placeholder]="record.owner.fromFeatures"
+      matInput
+      name="owner"
+    />
+    <mat-icon
+      *ngIf="record.address.conflict"
+      [inline]="true"
+      color="accent"
+      matSuffix
+      >warning</mat-icon
+    >
+  </mat-form-field>
+
+  <mat-form-field floatLabel="always">
+    <mat-label>Land Usage</mat-label>
+    <mat-select
+      #name="ngModel"
+      [(ngModel)]="record.usage.fromParcels"
+      [placeholder]="registry.decode('parcel', 'usage', record.usage.fromFeatures)"
+      name="usage"
+    >
+      <mat-option *ngFor="let item of record.usage.list" [value]="item[0]">
+        {{ item[1].decoding }}
+      </mat-option>
+    </mat-select>
+    <mat-icon
+      *ngIf="record.address.conflict"
+      [inline]="true"
+      color="accent"
+      matSuffix
+      >warning</mat-icon
+    >
+  </mat-form-field>
+</form>
+
+<article class="actions">
+  <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+  <button
+    (click)="save(record)"
+    [disabled]="propertiesForm.invalid"
+    color="primary"
+    mat-flat-button
+  >
+    SAVE
+  </button>
+</article>

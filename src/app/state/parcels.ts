@@ -17,8 +17,6 @@ import { combineLatest } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import firebase from 'firebase/app';
-
 export class SetParcels {
   static readonly type = '[Parcels] SetParcels';
   constructor(public parcels: Parcel[]) {}
@@ -28,7 +26,7 @@ export interface Parcel
   extends GeoJSON.Feature<GeoJSON.Polygon, ParcelProperties> {
   owner: string;
   path: string;
-  timestamp: firebase.firestore.Timestamp;
+  timestamp: any;
 }
 
 export interface ParcelProperties {

@@ -3,6 +3,7 @@ import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../state/parcels';
+import { ParcelProperties } from '../state/parcels';
 import { Parcels } from '../state/parcels';
 import { ParcelsState } from '../state/parcels';
 
@@ -11,6 +12,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
@@ -36,7 +38,7 @@ const attribution =
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceParcelsComponent {
+export class OLSourceParcelsComponent implements OnInit {
   #success: Function;
 
   geojson$ = new Subject<Parcels>();
@@ -53,19 +55,16 @@ export class OLSourceParcelsComponent {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private route: ActivatedRoute
-  ) {
-    this.#initialize();
-    this.#handleStreams();
-  }
+  ) {}
 
-  #handleStreams(): void {
+  #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
     combineLatest([this.geojson$, this.parcels$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([geojson, parcels]) => {
         const geojsonByID = this.#reduceParcels(geojson.features as Parcel[]);
         const parcelsByID = this.#reduceParcels(parcels);
-        this.#overrideFeaturesWithParcels(geojson, parcels, parcelsByID);
+        this.#overrideFeaturesWithParcels(geojson, parcelsByID);
         // TODO 🔥 leave as-is for now -- simply remove features that
         //         are in both the geojson and in the parcels override
         //         when we have timestamps sorted on parcels, only
@@ -117,9 +116,17 @@ export class OLSourceParcelsComponent {
       });
   }
 
+  #mergeProperties(
+    toFeature: ParcelProperties,
+    fromParcel: ParcelProperties
+  ): void {
+    Object.keys(fromParcel).forEach((key) => {
+      if (fromParcel[key] != null) toFeature[key] = fromParcel[key];
+    });
+  }
+
   #overrideFeaturesWithParcels(
     geojson: Parcels,
-    parcels: Parcel[],
     parcelsByID: Record<string, Parcel[]>
   ): void {
     geojson.features = geojson.features.map((feature) => {
@@ -131,7 +138,7 @@ export class OLSourceParcelsComponent {
         parcels.forEach((parcel) => {
           if (parcel.geometry) feature.geometry = parcel.geometry;
           if (parcel.properties)
-            Object.assign(feature.properties, parcel.properties);
+            this.#mergeProperties(feature.properties, parcel.properties);
         });
       }
       return feature;
@@ -144,5 +151,10 @@ export class OLSourceParcelsComponent {
       acc[parcel.id].push(parcel);
       return acc;
     }, {} as Record<string, Parcel[]>);
+  }
+
+  ngOnInit(): void {
+    this.#initialize();
+    this.#handleStreams$();
   }
 }

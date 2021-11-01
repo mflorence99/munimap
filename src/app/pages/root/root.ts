@@ -14,6 +14,7 @@ import { NavigationEnd } from '@angular/router';
 import { NavigationError } from '@angular/router';
 import { NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { Select } from '@ngxs/store';
@@ -39,7 +40,7 @@ import { useAnimation } from '@angular/animations';
   styleUrls: ['./root.scss'],
   templateUrl: './root.html'
 })
-export class RootPage {
+export class RootPage implements OnInit {
   allMaps$: Observable<Map[]>;
 
   loading = false;
@@ -58,10 +59,7 @@ export class RootPage {
     private destroy$: DestroyService,
     public registry: TypeRegistry,
     private router: Router
-  ) {
-    this.allMaps$ = this.#handleAllMaps$();
-    this.#handleRouterEvents$();
-  }
+  ) {}
 
   #handleAllMaps$(): Observable<Map[]> {
     return this.profile$.pipe(
@@ -105,6 +103,11 @@ export class RootPage {
 
   getState(): any {
     return this.outlet?.activatedRouteData?.state;
+  }
+
+  ngOnInit(): void {
+    this.allMaps$ = this.#handleAllMaps$();
+    this.#handleRouterEvents$();
   }
 
   setTitle(title: string): void {

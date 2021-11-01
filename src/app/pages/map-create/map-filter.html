@@ -13,7 +13,7 @@
 
   <mat-card-content class="form">
     <mat-form-field>
-      <mat-label>Select a state</mat-label>
+      <mat-label>Select a State</mat-label>
       <mat-select
         [disabled]="true"
         (selectionChange)="switchState($event.value)"
@@ -26,7 +26,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Select a county</mat-label>
+      <mat-label>Select a County</mat-label>
       <mat-select
         (selectionChange)="switchCounty($event.value)"
         [value]="currentCounty()"
@@ -38,7 +38,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Select a town</mat-label>
+      <mat-label>Select a Town</mat-label>
       <mat-select
         (selectionChange)="switchTown($event.value)"
         [value]="currentTown()"

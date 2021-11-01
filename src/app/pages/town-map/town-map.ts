@@ -1,5 +1,5 @@
 import { AuthState } from '../../state/auth';
-import { ContextMenuComponentHostDirective } from '../../contextmenu/component-host';
+import { ContextMenuHostDirective } from '../../contextmenu/contextmenu-host';
 import { DestroyService } from '../../services/destroy';
 import { LoadMap } from '../../state/map';
 import { Map } from '../../state/map';
@@ -17,6 +17,7 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
@@ -33,9 +34,9 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./town-map.scss'],
   templateUrl: './town-map.html'
 })
-export class TownMapPage {
-  @ViewChild(ContextMenuComponentHostDirective)
-  contextMenuComponentHost: ContextMenuComponentHostDirective;
+export class TownMapPage implements OnInit {
+  @ViewChild(ContextMenuHostDirective)
+  contextMenuHost: ContextMenuHostDirective;
 
   creating = false;
 
@@ -54,10 +55,7 @@ export class TownMapPage {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store
-  ) {
-    this.#handleActions$();
-    this.#loadMap();
-  }
+  ) {}
 
   #handleActions$(): void {
     this.actions$
@@ -98,19 +96,25 @@ export class TownMapPage {
     this.root.setTitle(path);
   }
 
+  ngOnInit(): void {
+    this.#handleActions$();
+    this.#loadMap();
+  }
+
   // TODO 🔥 temporary until we figure pattern for all menu items
   //         probably need an interface to describe contextmenu components
 
   xxx(): void {
     this.drawer.open();
-    this.contextMenuComponentHost.vcRef.clear();
+    this.contextMenuHost.vcRef.clear();
     const cFactory = this.resolver.resolveComponentFactory(
       ParcelPropertiesComponent
     );
     const cRef: ComponentRef<ParcelPropertiesComponent> =
-      this.contextMenuComponentHost.vcRef.createComponent(cFactory);
+      this.contextMenuHost.vcRef.createComponent(cFactory);
     // 👉 populate @Input() fields
     const comp = cRef.instance;
+    comp.drawer = this.drawer;
     comp.path = this.olMap.path;
     comp.selectedIDs = this.olMap.selector.selectedIDs;
     const source = this.olMap.selector.layer.olLayer.getSource();

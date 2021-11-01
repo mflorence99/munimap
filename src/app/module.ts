@@ -1,6 +1,6 @@
 import { AuthState } from './state/auth';
 import { ConfirmDialogComponent } from './components/confirm-dialog';
-import { ContextMenuComponentHostDirective } from './contextmenu/component-host';
+import { ContextMenuHostDirective } from './contextmenu/contextmenu-host';
 import { HttpCache } from './services/http-cache';
 import { IndexResolver } from './resolvers/index';
 import { InitializerService } from './services/initializer';
@@ -149,7 +149,7 @@ const COMPONENTS = [
   UserProfileComponent
 ];
 
-const DIRECTIVES = [ContextMenuComponentHostDirective, WorkgroupValidator];
+const DIRECTIVES = [ContextMenuHostDirective, WorkgroupValidator];
 
 const PAGES = [LoginPage, MapCreatePage, RootPage, TownMapPage];
 

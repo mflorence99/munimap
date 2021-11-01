@@ -5,6 +5,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnInit } from '@angular/core';
 
 import { takeUntil } from 'rxjs/operators';
 
@@ -15,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './ol-control-zoom.html',
   styleUrls: ['./ol-control-zoom.scss']
 })
-export class OLControlZoomComponent {
+export class OLControlZoomComponent implements OnInit {
   @Input() resolution: number;
   @Input() zoom: number;
   @Input() zoomAnimationDuration = 250;
@@ -24,9 +25,7 @@ export class OLControlZoomComponent {
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
     public map: OLMapComponent
-  ) {
-    this.#handleZoom$();
-  }
+  ) {}
 
   #handleZoom$(): void {
     this.map.zoomChange.pipe(takeUntil(this.destroy$)).subscribe((zoom) => {
@@ -34,6 +33,10 @@ export class OLControlZoomComponent {
       this.resolution = this.map.olView.getResolutionForZoom(zoom);
       this.cdf.detectChanges();
     });
+  }
+
+  ngOnInit(): void {
+    this.#handleZoom$();
   }
 
   onZoomChange(zoom: number): void {
