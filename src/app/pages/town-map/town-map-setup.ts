@@ -3,7 +3,8 @@ import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DeleteMap } from '../../state/map';
 import { Map } from '../../state/map';
 import { RootPage } from '../../pages/root/root';
-import { TownMapPage } from '../../pages/town-map/town-map';
+import { TownMapPage } from './town-map';
+import { TypeRegistry } from '../../services/typeregistry';
 import { UpdateMap } from '../../state/map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -38,6 +39,7 @@ export class TownMapSetupComponent {
 
   constructor(
     private dialog: MatDialog,
+    public registry: TypeRegistry,
     private root: RootPage,
     private router: Router,
     private store: Store,

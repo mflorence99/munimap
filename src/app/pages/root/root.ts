@@ -2,6 +2,7 @@ import { AuthState } from '../../state/auth';
 import { DestroyService } from '../../services/destroy';
 import { Map } from '../../state/map';
 import { Profile } from '../../state/auth';
+import { TypeRegistry } from '../../services/typeregistry';
 import { User } from '../../state/auth';
 
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -55,6 +56,7 @@ export class RootPage {
   constructor(
     private firestore: AngularFirestore,
     private destroy$: DestroyService,
+    public registry: TypeRegistry,
     private router: Router
   ) {
     this.allMaps$ = this.#handleAllMaps$();

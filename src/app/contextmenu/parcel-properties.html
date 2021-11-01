@@ -1,4 +1,4 @@
-<h1>{{ selectedIDs.join(', ') }}</h1>
+<!-- <h1>{{ selectedIDs.join(', ') }}</h1>
 
 <ng-container *ngIf="(parcels$ | async) as parcels">
   <p *ngFor="let parcel of parcels">
@@ -8,4 +8,12 @@
   <p *ngFor="let feature  of features">
     From geojson: {{ feature.getProperties() | json }} <br /><br />
   </p>
-</ng-container>
+</ng-container> -->
+
+<header class="header">
+  <img class="icon" mat-card-avatar src="assets/properties.svg" />
+  <p class="title">Lorem ipsum dolor emit</p>
+  <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
+</header>
+
+<mat-divider></mat-divider>

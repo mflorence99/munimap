@@ -67,9 +67,10 @@
             routerLink="/town-map/{{ map.id }}"
           >
             <img
+              *ngIf="registry.icon('map', 'style', map.style) as icon"
               [class.selected]="title === map.name"
+              [src]="icon"
               class="icon"
-              src="assets/{{ map.style }}.png"
             />
             <div class="title">{{ map.name }}</div>
             <div class="subtitle">{{ map.owner }}</div>

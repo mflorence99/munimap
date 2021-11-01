@@ -56,31 +56,35 @@ export interface ParcelProperties {
   sqarcity?: number;
   taxed$?: number;
   town: string;
-  usage:
-    | '110' // Single family residence
-    | '120' // Multi family residence
-    | '130' // Other residential
-    | '190' // Current use
-    | '260' // Commercial / Industrial
-    | '300' // Town property
-    | '400' // State property
-    | '500' // State park
-    | '501' // Towm forest
-    | '502'; // Conservation land
-  use?:
-    | 'CUDE' // Discretionary
-    | 'CUFL' // Farm land
-    | 'CUMH' // Managed hardwood
-    | 'CUMO' // Managesd other
-    | 'CUMW' // Managed pine
-    | 'CUNS' // Xmas tree
-    | 'CUUH' // Unmanaged hardwood
-    | 'CUUL' // Unproductive
-    | 'CUUO' // Unm,anaged other
-    | 'CUUW' // Unmanaged pine
-    | 'CUWL'; // Wetland
+  usage: ParcelPropertiesUsage;
+  use?: ParcelPropertiesUse;
   zone: string;
 }
+
+export type ParcelPropertiesUsage =
+  | '110' // Single family residence
+  | '120' // Multi family residence
+  | '130' // Other residential
+  | '190' // Current use
+  | '260' // Commercial / Industrial
+  | '300' // Town property
+  | '400' // State property
+  | '500' // State park
+  | '501' // Towm forest
+  | '502'; // Conservation land
+
+export type ParcelPropertiesUse =
+  | 'CUDE' // Discretionary
+  | 'CUFL' // Farm land
+  | 'CUMH' // Managed hardwood
+  | 'CUMO' // Managed other
+  | 'CUMW' // Managed pine
+  | 'CUNS' // Xmas tree
+  | 'CUUH' // Unmanaged hardwood
+  | 'CUUL' // Unproductive
+  | 'CUUO' // Unmanaged other
+  | 'CUUW' // Unmanaged pine
+  | 'CUWL'; // Wetland
 
 export type Parcels = GeoJSON.FeatureCollection<
   GeoJSON.Polygon,

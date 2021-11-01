@@ -1,4 +1,5 @@
 import { AuthState } from '../state/auth';
+import { ContextMenuComponent } from './contextmenu-component';
 import { DestroyService } from '../services/destroy';
 import { Parcel } from '../state/parcels';
 import { Profile } from '../state/auth';
@@ -21,10 +22,10 @@ import OLFeature from 'ol/Feature';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-parcel-properties',
-  styleUrls: ['./parcel-properties.scss'],
+  styleUrls: ['./contextmenu-component.scss', './parcel-properties.scss'],
   templateUrl: './parcel-properties.html'
 })
-export class ParcelPropertiesComponent {
+export class ParcelPropertiesComponent implements ContextMenuComponent {
   @Input() features: OLFeature<any>[];
 
   parcels$: Observable<Parcel[]>;

@@ -33,8 +33,10 @@ export interface Map {
   name: string;
   owner: string;
   path: string;
-  style: 'arcgis' | 'google' | 'mapbox' | 'osm' | 'nhgranit';
+  style: MapStyle;
 }
+
+export type MapStyle = 'arcgis' | 'google' | 'mapbox' | 'osm' | 'nhgranit';
 
 export type MapStateModel = Map;
 

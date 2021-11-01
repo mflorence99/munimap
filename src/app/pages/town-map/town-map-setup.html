@@ -52,93 +52,20 @@
 
       <mat-label>
         Choose a map style:
-        <ng-container [ngSwitch]="map.style" class="explanations">
-          <span *ngSwitchCase="'mapbox'"
-            ><a href="https://www.mapbox.com/maps" target="_blank">Mapbox</a>
-            Street View emphasizes simplicity</span
-          >
-
-          <span *ngSwitchCase="'osm'"
-            ><a href="https://www.openstreetmap.org/" target="_blank"
-              >OpenStreetMap</a
-            >
-            (OSM) Lorem ipsum dolor sit amet.</span
-          >
-
-          <span *ngSwitchCase="'google'">
-            <a href="https://www.google.com/maps" target="_blank">Google</a>
-            Lorem ipsum dolor sit amet.</span
-          >
-
-          <span *ngSwitchCase="'arcgis'"
-            ><a
-              href="https://www.arcgis.com/apps/mapviewer/index.html"
-              target="_blank"
-              >ArcGIS</a
-            >
-            Lorem ipsum dolor sit amet.</span
-          >
-
-          <span *ngSwitchCase="'nhgranit'">Vector data from NH GranIT</span>
-        </ng-container>
+        <span *ngIf="registry.descriptor('map', 'style', map.style) as desc"
+          ><a [href]="desc.ref" target="_blank">{{ desc.decoding }}</a> {{
+          desc.description }}</span
+        >
       </mat-label>
 
-      <!-- 👇 https://stackoverflow.com/questions/17541614/ -->
-
       <section class="thumbnails">
-        <label class="thumbnail">
-          <input
-            [(ngModel)]="map.style"
-            name="style"
-            type="radio"
-            value="mapbox"
-          />
-          <img src="assets/mapbox.png" />
-          Mapbox
-        </label>
-
-        <label class="thumbnail">
-          <input
-            [(ngModel)]="map.style"
-            type="radio"
-            name="style"
-            value="osm"
-          />
-          <img src="assets/osm.png" />
-          OSM
-        </label>
-
-        <label class="thumbnail">
-          <input
-            [(ngModel)]="map.style"
-            type="radio"
-            name="style"
-            value="google"
-          />
-          <img src="assets/google.png" />
-          Google
-        </label>
-
-        <label class="thumbnail">
-          <input
-            [(ngModel)]="map.style"
-            type="radio"
-            name="style"
-            value="arcgis"
-          />
-          <img src="assets/arcgis.png" />
-          ArcGIS
-        </label>
-
-        <label class="thumbnail">
-          <input
-            [(ngModel)]="map.style"
-            type="radio"
-            name="style"
-            value="nhgranit"
-          />
-          <img src="assets/nhgranit.png" />
-          NH GranIT
+        <label
+          *ngFor="let item of registry.list('map', 'style')"
+          (click)="map.style = item[0]"
+          class="thumbnail"
+        >
+          <img [class.selected]="map.style === item[0]" [src]="item[1].icon" />
+          {{ item[1].decoding}}
         </label>
       </section>
     </form>
