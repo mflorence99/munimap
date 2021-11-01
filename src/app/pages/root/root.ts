@@ -1,8 +1,8 @@
-import { AuthState } from './state/auth';
-import { DestroyService } from './services/destroy';
-import { Map } from './state/map';
-import { Profile } from './state/auth';
-import { User } from './state/auth';
+import { AuthState } from '../../state/auth';
+import { DestroyService } from '../../services/destroy';
+import { Map } from '../../state/map';
+import { Profile } from '../../state/auth';
+import { User } from '../../state/auth';
 
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ChangeDetectionStrategy } from '@angular/core';

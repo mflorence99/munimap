@@ -1,10 +1,10 @@
-import { ConfirmDialogComponent } from './confirm-dialog';
-import { ConfirmDialogData } from './confirm-dialog';
-import { DeleteMap } from '../state/map';
-import { Map } from '../state/map';
-import { RootPage } from '../root';
-import { TownMapPage } from '../pages/town-map';
-import { UpdateMap } from '../state/map';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog';
+import { ConfirmDialogData } from '../../components/confirm-dialog';
+import { DeleteMap } from '../../state/map';
+import { Map } from '../../state/map';
+import { RootPage } from '../../pages/root/root';
+import { TownMapPage } from '../../pages/town-map/town-map';
+import { UpdateMap } from '../../state/map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

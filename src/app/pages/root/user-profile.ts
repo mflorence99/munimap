@@ -1,8 +1,8 @@
-import { Logout } from '../state/auth';
-import { Profile } from '../state/auth';
-import { UpdateProfile } from '../state/auth';
-import { UpdateUser } from '../state/auth';
-import { User } from '../state/auth';
+import { Logout } from '../../state/auth';
+import { Profile } from '../../state/auth';
+import { UpdateProfile } from '../../state/auth';
+import { UpdateUser } from '../../state/auth';
+import { User } from '../../state/auth';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

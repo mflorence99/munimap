@@ -1,11 +1,12 @@
 import { AuthState } from './state/auth';
 import { ConfirmDialogComponent } from './components/confirm-dialog';
+import { ContextMenuComponentHostDirective } from './contextmenu/component-host';
 import { HttpCache } from './services/http-cache';
 import { IndexResolver } from './resolvers/index';
 import { InitializerService } from './services/initializer';
-import { LoginPage } from './pages/login';
-import { MapCreatePage } from './pages/map-create';
-import { MapFilterComponent } from './components/map-filter';
+import { LoginPage } from './pages/login/login';
+import { MapCreatePage } from './pages/map-create/map-create';
+import { MapFilterComponent } from './pages/map-create/map-filter';
 import { MapState } from './state/map';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
@@ -44,16 +45,15 @@ import { OLStyleRiversComponent } from './ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from './ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from './ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from './ol/ol-style-trails';
-import { ParcelPropertiesComponent } from './components/parcel-properties';
+import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
 import { ParcelsState } from './state/parcels';
 import { ReadyResolver } from './resolvers/ready';
-import { RootPage } from './root';
-import { SidebarHostDirective } from './directives/sidebar-host';
-import { TownMapPage } from './pages/town-map';
-import { TownMapSetupComponent } from './components/town-map-setup';
-import { UserProfileComponent } from './components/user-profile';
+import { RootPage } from './pages/root/root';
+import { TownMapPage } from './pages/town-map/town-map';
+import { TownMapSetupComponent } from './pages/town-map/town-map-setup';
+import { UserProfileComponent } from './pages/root/user-profile';
 import { ViewState } from './state/view';
-import { WorkgroupValidator } from './directives/workgroup-validator';
+import { WorkgroupValidator } from './pages/root/workgroup-validator';
 
 import { environment } from '../environment';
 import { initializeAppProvider } from './services/initializer';
@@ -149,7 +149,7 @@ const COMPONENTS = [
   UserProfileComponent
 ];
 
-const DIRECTIVES = [SidebarHostDirective, WorkgroupValidator];
+const DIRECTIVES = [ContextMenuComponentHostDirective, WorkgroupValidator];
 
 const PAGES = [LoginPage, MapCreatePage, RootPage, TownMapPage];
 

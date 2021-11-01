@@ -2,8 +2,8 @@ import { Directive } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[appSidebarHost]'
+  selector: '[appContextMenuComponentHost]'
 })
-export class SidebarHostDirective {
+export class ContextMenuComponentHostDirective {
   constructor(public vcRef: ViewContainerRef) {}
 }

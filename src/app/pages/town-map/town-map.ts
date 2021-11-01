@@ -1,13 +1,13 @@
-import { AuthState } from '../state/auth';
-import { DestroyService } from '../services/destroy';
-import { LoadMap } from '../state/map';
-import { Map } from '../state/map';
-import { MapState } from '../state/map';
-import { OLMapComponent } from '../ol/ol-map';
-import { ParcelPropertiesComponent } from '../components/parcel-properties';
-import { RootPage } from '../root';
-import { SetMap } from '../state/map';
-import { SidebarHostDirective } from '../directives/sidebar-host';
+import { AuthState } from '../../state/auth';
+import { ContextMenuComponentHostDirective } from '../../contextmenu/component-host';
+import { DestroyService } from '../../services/destroy';
+import { LoadMap } from '../../state/map';
+import { Map } from '../../state/map';
+import { MapState } from '../../state/map';
+import { OLMapComponent } from '../../ol/ol-map';
+import { ParcelPropertiesComponent } from '../../contextmenu/parcel-properties';
+import { RootPage } from '../root/root';
+import { SetMap } from '../../state/map';
 
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
@@ -34,6 +34,9 @@ import { v4 as uuidv4 } from 'uuid';
   templateUrl: './town-map.html'
 })
 export class TownMapPage {
+  @ViewChild(ContextMenuComponentHostDirective)
+  contextMenuComponentHost: ContextMenuComponentHostDirective;
+
   creating = false;
 
   @ViewChild('drawer') drawer: MatDrawer;
@@ -41,8 +44,6 @@ export class TownMapPage {
   @Select(MapState) mapState$: Observable<Map>;
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @ViewChild(SidebarHostDirective) sidebarHost: SidebarHostDirective;
 
   constructor(
     private actions$: Actions,
@@ -102,12 +103,12 @@ export class TownMapPage {
 
   xxx(): void {
     this.drawer.open();
-    this.sidebarHost.vcRef.clear();
+    this.contextMenuComponentHost.vcRef.clear();
     const cFactory = this.resolver.resolveComponentFactory(
       ParcelPropertiesComponent
     );
     const cRef: ComponentRef<ParcelPropertiesComponent> =
-      this.sidebarHost.vcRef.createComponent(cFactory);
+      this.contextMenuComponentHost.vcRef.createComponent(cFactory);
     // 👉 populate @Input() fields
     const comp = cRef.instance;
     comp.path = this.olMap.path;
