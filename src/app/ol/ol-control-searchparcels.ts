@@ -1,7 +1,7 @@
+import { Feature } from '../state/parcels';
+import { Features } from '../state/parcels';
 import { GeoJSONService } from '../services/geojson';
 import { OLMapComponent } from './ol-map';
-import { ParcelProperties } from '../state/parcels';
-import { Parcels } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -18,11 +18,9 @@ import fuzzysort from 'fuzzysort';
   styleUrls: ['./ol-control-searchparcels.scss']
 })
 export class OLControlSearchParcelsComponent implements OnInit {
-  #parcelsByAddress: Record<string, GeoJSON.Feature<any, ParcelProperties>[]> =
-    {};
-  #parcelsByID: Record<string, GeoJSON.Feature<any, ParcelProperties>[]> = {};
-  #parcelsByOwner: Record<string, GeoJSON.Feature<any, ParcelProperties>[]> =
-    {};
+  #parcelsByAddress: Record<string, Feature[]> = {};
+  #parcelsByID: Record<string, Feature[]> = {};
+  #parcelsByOwner: Record<string, Feature[]> = {};
   #searchTargets = [];
 
   @Input() fuzzyMaxResults = 100;
@@ -46,7 +44,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
   #handleGeoJSON$(): void {
     this.geoJSON
       .loadByIndex(this.route, this.map.path, 'searchables')
-      .subscribe((geojson: Parcels) => {
+      .subscribe((geojson: Features) => {
         const parcels = geojson.features;
         this.#searchTargets = this.#makeSearchTargets(parcels);
         this.#parcelsByAddress = this.#reduceParcelsByProperty(
@@ -58,7 +56,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
       });
   }
 
-  #makeSearchTargets(parcels: GeoJSON.Feature<any, ParcelProperties>[]): any[] {
+  #makeSearchTargets(parcels: Feature[]): any[] {
     const keys = new Set<string>();
     parcels.forEach((parcel) => {
       const props = parcel.properties;
@@ -70,9 +68,9 @@ export class OLControlSearchParcelsComponent implements OnInit {
   }
 
   #reduceParcelsByProperty(
-    parcels: GeoJSON.Feature<any, ParcelProperties>[],
+    parcels: Feature[],
     prop: string
-  ): Record<string, GeoJSON.Feature<any, ParcelProperties>[]> {
+  ): Record<string, Feature[]> {
     return parcels.reduce((acc, parcel) => {
       const props = parcel.properties;
       if (props[prop]) {

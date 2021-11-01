@@ -1,8 +1,8 @@
+import { Feature } from '../state/parcels';
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { ParcelProperties } from '../state/parcels';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -135,9 +135,7 @@ export class OLInteractionSelectComponent
     }
   }
 
-  @Debounce(250) selectParcels(
-    parcels: GeoJSON.Feature<any, ParcelProperties>[]
-  ): void {
+  @Debounce(250) selectParcels(parcels: Feature[]): void {
     // 👇 assume these parcels are degenerate and that all we have
     //    available is ID and bbox
     const bbox = parcels.reduce(

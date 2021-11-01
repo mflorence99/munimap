@@ -1,10 +1,11 @@
+import { AddFeature } from '../state/parcels';
 import { DestroyService } from '../services/destroy';
+import { Features } from '../state/parcels';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../state/parcels';
 import { ParcelProperties } from '../state/parcels';
-import { Parcels } from '../state/parcels';
 import { ParcelsState } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +15,7 @@ import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
 import { bbox } from 'ol/loadingstrategy';
@@ -21,6 +23,7 @@ import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
+import copy from 'fast-copy';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
@@ -39,13 +42,12 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceParcelsComponent implements OnInit {
+  #geojson$ = new Subject<Features>();
   #success: Function;
-
-  geojson$ = new Subject<Parcels>();
 
   olVector: OLVector<any>;
 
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
+  @Select(ParcelsState.parcels) parcels$: Observable<Parcel[]>;
 
   @Input() path: string;
 
@@ -54,12 +56,13 @@ export class OLSourceParcelsComponent implements OnInit {
     private geoJSON: GeoJSONService,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store
   ) {}
 
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
-    combineLatest([this.geojson$, this.parcels$])
+    combineLatest([this.#geojson$, this.parcels$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([geojson, parcels]) => {
         const geojsonByID = this.#reduceParcels(geojson.features as Parcel[]);
@@ -95,6 +98,10 @@ export class OLSourceParcelsComponent implements OnInit {
     this.layer.olLayer.setSource(this.olVector);
   }
 
+  #isEmpty(obj: any): boolean {
+    return Object.keys(obj ?? {}).length === 0;
+  }
+
   #loader(
     extent: number[],
     _resolution: number,
@@ -109,10 +116,10 @@ export class OLSourceParcelsComponent implements OnInit {
     );
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, 'parcels', bbox)
-      .subscribe((geojson: Parcels) => {
+      .subscribe((geojson: Features) => {
         // TODO 🔥 is this a miserable hack???
         this.#success = success;
-        this.geojson$.next(geojson);
+        this.#geojson$.next(geojson);
       });
   }
 
@@ -126,7 +133,7 @@ export class OLSourceParcelsComponent implements OnInit {
   }
 
   #overrideFeaturesWithParcels(
-    geojson: Parcels,
+    geojson: Features,
     parcelsByID: Record<string, Parcel[]>
   ): void {
     geojson.features = geojson.features.map((feature) => {
@@ -136,8 +143,17 @@ export class OLSourceParcelsComponent implements OnInit {
         //    geometry is all-or-nothing
         //    properties are merged
         parcels.forEach((parcel) => {
-          if (parcel.geometry) feature.geometry = parcel.geometry;
-          if (parcel.properties)
+          if (
+            !this.#isEmpty(parcel.geometry) ||
+            !this.#isEmpty(parcel.properties)
+          ) {
+            this.store.dispatch(
+              new AddFeature(this.map.path, String(feature.id), copy(feature))
+            );
+          }
+          if (!this.#isEmpty(parcel.geometry))
+            feature.geometry = parcel.geometry;
+          if (!this.#isEmpty(parcel.properties))
             this.#mergeProperties(feature.properties, parcel.properties);
         });
       }

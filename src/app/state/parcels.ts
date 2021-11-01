@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 import { NgxsOnInit } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Select } from '@ngxs/store';
+import { Selector } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
@@ -16,14 +17,30 @@ import { Store } from '@ngxs/store';
 import { combineLatest } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { patch } from '@ngxs/store/operators';
+
+export class AddFeature {
+  static readonly type = '[Parcels] AddFeature';
+  constructor(
+    public path: string,
+    public id: string,
+    public feature: Feature
+  ) {}
+}
 
 export class SetParcels {
   static readonly type = '[Parcels] SetParcels';
   constructor(public parcels: Parcel[]) {}
 }
 
-export interface Parcel
-  extends GeoJSON.Feature<GeoJSON.Polygon, ParcelProperties> {
+export type Feature = GeoJSON.Feature<GeoJSON.Polygon, ParcelProperties>;
+
+export type Features = GeoJSON.FeatureCollection<
+  GeoJSON.Polygon,
+  ParcelProperties
+>;
+
+export interface Parcel extends Partial<Feature> {
   owner: string;
   path: string;
   timestamp: any;
@@ -84,16 +101,17 @@ export type ParcelPropertiesUse =
   | 'CUUW' // Unmanaged pine
   | 'CUWL'; // Wetland
 
-export type Parcels = GeoJSON.FeatureCollection<
-  GeoJSON.Polygon,
-  ParcelProperties
->;
-
-export type ParcelsStateModel = Parcel[];
+export interface ParcelsStateModel {
+  features: Record<string, Feature> /* 👈 original geojson */;
+  parcels: Parcel[] /* 👈 overrdes */;
+}
 
 @State<ParcelsStateModel>({
   name: 'parcels',
-  defaults: []
+  defaults: {
+    features: {},
+    parcels: []
+  }
 })
 @Injectable()
 export class ParcelsState implements NgxsOnInit {
@@ -101,6 +119,10 @@ export class ParcelsState implements NgxsOnInit {
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
   constructor(private firestore: AngularFirestore, private store: Store) {}
+
+  @Selector() static parcels(state: ParcelsStateModel): Parcel[] {
+    return state.parcels;
+  }
 
   #handleMap$(): void {
     combineLatest([this.map$, this.profile$])
@@ -126,6 +148,21 @@ export class ParcelsState implements NgxsOnInit {
       );
   }
 
+  @Action(AddFeature) addFeature(
+    ctx: StateContext<ParcelsStateModel>,
+    action: AddFeature
+  ): void {
+    ctx.setState(
+      patch({
+        features: patch({ [`${action.path}:${action.id}`]: action.feature })
+      })
+    );
+  }
+
+  feature(path: string, id: string): Feature {
+    return this.store.snapshot().parcels.features[`${path}:${id}`];
+  }
+
   ngxsOnInit(): void {
     this.#handleMap$();
   }
@@ -134,6 +171,6 @@ export class ParcelsState implements NgxsOnInit {
     ctx: StateContext<ParcelsStateModel>,
     action: SetParcels
   ): void {
-    ctx.setState(action.parcels);
+    ctx.setState(patch({ parcels: action.parcels }));
   }
 }
