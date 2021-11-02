@@ -115,7 +115,7 @@ export class TownMapPage implements OnInit {
     // 👉 populate @Input() fields
     const comp = cRef.instance;
     comp.drawer = this.drawer;
-    comp.path = this.olMap.path;
+    comp.map = this.olMap;
     comp.selectedIDs = this.olMap.selector.selectedIDs;
     const source = this.olMap.selector.layer.olLayer.getSource();
     comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));

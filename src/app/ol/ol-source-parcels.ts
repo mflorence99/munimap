@@ -1,5 +1,5 @@
-import { AddFeature } from '../state/parcels';
 import { DestroyService } from '../services/destroy';
+import { Feature } from '../state/parcels';
 import { Features } from '../state/parcels';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
@@ -23,7 +23,6 @@ import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
-import copy from 'fast-copy';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
@@ -47,7 +46,7 @@ export class OLSourceParcelsComponent implements OnInit {
 
   olVector: OLVector<any>;
 
-  @Select(ParcelsState.parcels) parcels$: Observable<Parcel[]>;
+  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
   @Input() path: string;
 
@@ -60,20 +59,28 @@ export class OLSourceParcelsComponent implements OnInit {
     private store: Store
   ) {}
 
+  #groupByID<T>(things: T[]): Record<string, T[]> {
+    return things.reduce((acc, thing) => {
+      if (!acc[thing['id']]) acc[thing['id']] = [];
+      acc[thing['id']].push(thing);
+      return acc;
+    }, {} as Record<string, T[]>);
+  }
+
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
     combineLatest([this.#geojson$, this.parcels$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([geojson, parcels]) => {
-        const geojsonByID = this.#reduceParcels(geojson.features as Parcel[]);
-        const parcelsByID = this.#reduceParcels(parcels);
+        const featuresByID = this.#groupByID<Feature>(geojson.features);
+        const parcelsByID = this.#groupByID<Parcel>(parcels);
         this.#overrideFeaturesWithParcels(geojson, parcelsByID);
         // TODO 🔥 leave as-is for now -- simply remove features that
         //         are in both the geojson and in the parcels override
         //         when we have timestamps sorted on parcels, only
         //         remove a feature if it is outdated
         Object.keys(parcelsByID).forEach((id) => {
-          if (geojsonByID[id]) {
+          if (featuresByID[id]) {
             const feature = this.olVector.getFeatureById(id);
             if (feature) this.olVector.removeFeature(feature);
           }
@@ -146,11 +153,8 @@ export class OLSourceParcelsComponent implements OnInit {
           if (
             !this.#isEmpty(parcel.geometry) ||
             !this.#isEmpty(parcel.properties)
-          ) {
-            this.store.dispatch(
-              new AddFeature(this.map.path, String(feature.id), copy(feature))
-            );
-          }
+          )
+            this.map.setOriginalFeature(feature);
           if (!this.#isEmpty(parcel.geometry))
             feature.geometry = parcel.geometry;
           if (!this.#isEmpty(parcel.properties))
@@ -159,14 +163,6 @@ export class OLSourceParcelsComponent implements OnInit {
       }
       return feature;
     });
-  }
-
-  #reduceParcels(parcels: Parcel[]): Record<string, Parcel[]> {
-    return parcels.reduce((acc, parcel) => {
-      if (!acc[parcel.id]) acc[parcel.id] = [];
-      acc[parcel.id].push(parcel);
-      return acc;
-    }, {} as Record<string, Parcel[]>);
   }
 
   ngOnInit(): void {

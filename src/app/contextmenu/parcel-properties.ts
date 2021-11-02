@@ -2,13 +2,13 @@ import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { Descriptor } from '../services/typeregistry';
 import { DestroyService } from '../services/destroy';
+import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../state/parcels';
 import { ParcelProperties } from '../state/parcels';
 import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
@@ -40,15 +40,14 @@ interface Value {
 export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
   // TODO 🔥 temporary list of editable parcel fields
   #flds = ['address', 'owner', 'usage'];
-  #parcels: AngularFirestoreCollection<Parcel>;
 
   @Input() drawer: MatDrawer;
 
   @Input() features: OLFeature<any>[];
 
-  @Select(ParcelsState.parcels) parcels$: Observable<Parcel[]>;
+  @Input() map: OLMapComponent;
 
-  @Input() path: string;
+  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
   record: Record<string, Value> = {};
 
@@ -58,11 +57,8 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     private authState: AuthState,
     private destroy$: DestroyService,
     private firestore: AngularFirestore,
-    private parcelsState: ParcelsState,
     public registry: TypeRegistry
-  ) {
-    this.#parcels = this.firestore.collection<Parcel>('parcels');
-  }
+  ) {}
 
   #handleParcels$(): void {
     this.parcels$
@@ -70,7 +66,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         takeUntil(this.destroy$),
         map((parcels) => {
           return parcels.filter((parcel) =>
-            this.selectedIDs.includes(String(parcel.id))
+            this.selectedIDs.includes(parcel.id as string)
           );
         })
       )
@@ -93,12 +89,11 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
       };
       this.features.forEach((feature) => {
         const value = record[fld];
-        const original = this.parcelsState.feature(
-          this.path,
-          String(feature.getId())
+        const originalFeature = this.map.getOriginalFeature(
+          feature.getId() as string
         );
         const fromFeature =
-          original?.properties[fld] ?? feature.getProperties()[fld];
+          originalFeature?.properties[fld] ?? feature.getProperties()[fld];
         if (value.fromFeatures === undefined) value.fromFeatures = fromFeature;
         else if (
           value.fromFeatures !== null &&
@@ -134,11 +129,12 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
   }
 
   save(record: Record<string, Value>): void {
+    const batch = this.firestore.firestore.batch();
     this.features.forEach((feature) => {
       const parcel: Parcel = {
         id: feature.getId(),
         owner: this.authState.currentProfile().email,
-        path: this.path,
+        path: this.map.path,
         properties: {} as ParcelProperties,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         type: 'Feature'
@@ -147,7 +143,10 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         const fromParcels = record[fld].fromParcels;
         if (fromParcels !== undefined) parcel.properties[fld] = fromParcels;
       });
-      this.#parcels.doc().set(parcel);
+      // 👉 https://stackoverflow.com/questions/47268241/
+      const ref = this.firestore.collection('parcels').doc().ref;
+      ref.set(parcel);
     });
+    batch.commit();
   }
 }
