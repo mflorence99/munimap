@@ -136,6 +136,10 @@ export class OLInteractionSelectComponent
     }
   }
 
+  reselectParcels(ids: string[]): void {
+    this.#selectParcels(ids);
+  }
+
   @Debounce(250) selectParcels(parcels: Feature[]): void {
     // 👇 assume these parcels are degenerate and that all we have
     //    available is ID and bbox

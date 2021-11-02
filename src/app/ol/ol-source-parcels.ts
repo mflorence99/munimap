@@ -78,10 +78,15 @@ export class OLSourceParcelsComponent implements OnInit {
         // 👉 remove features that are in both the geojson
         //    and in the parcels override -- then they'll get
         //    added back via "addFeatures" below
+        let featuresRemoved = false;
+        const selectedIDs = this.map.selector.selectedIDs;
         Object.keys(parcelsByID).forEach((id) => {
           if (featuresByID[id]) {
             const feature = this.olVector.getFeatureById(id);
-            if (feature) this.olVector.removeFeature(feature);
+            if (feature) {
+              featuresRemoved = true;
+              this.olVector.removeFeature(feature);
+            }
           }
         });
         // 👉 convert features into OL format
@@ -90,6 +95,10 @@ export class OLSourceParcelsComponent implements OnInit {
         }) as OLFeature<any>[];
         // 👉 add each feature not already present
         this.olVector.addFeatures(features);
+        // 👉 if we removed features, only to recreate them,
+        //    we'll need to reselect them
+        if (featuresRemoved && selectedIDs.length > 0)
+          this.map.selector.reselectParcels(selectedIDs);
         this.#success?.(features);
       });
   }

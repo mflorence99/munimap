@@ -6,7 +6,6 @@
 .actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
 }
 
 .card {
@@ -30,10 +29,6 @@
 .form {
   display: grid;
   grid-template-rows: auto auto;
-}
-
-.mat-divider {
-  border-top-color: var(--text-color);
 }
 
 .rolledup {

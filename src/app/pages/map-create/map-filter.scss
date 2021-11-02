@@ -8,14 +8,9 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
-  margin-top: 1rem;
 }
 
 .form {
   display: grid;
   grid-template-rows: auto auto;
-}
-
-.mat-divider {
-  border-top-color: var(--text-color);
 }

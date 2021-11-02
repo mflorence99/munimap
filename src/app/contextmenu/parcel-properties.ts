@@ -17,6 +17,7 @@ import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { ValuesPipe } from 'ngx-pipes';
 import { ViewChild } from '@angular/core';
 
 import { map } from 'rxjs/operators';
@@ -33,6 +34,7 @@ interface Value {
   list: [any, Descriptor][];
   prop: string;
   refCount: number;
+  type?: string;
 }
 
 type ValueRecord = Record<string, Value>;
@@ -40,15 +42,19 @@ type ValueRecord = Record<string, Value>;
 // 👇 these are the properties we can editable
 
 const editables = [
-  { prop: 'address', label: 'Parcel Address' },
-  { prop: 'owner', label: 'Parcel Owner' },
+  { prop: 'address', label: 'Parcel Address', type: 'text' },
+  { prop: 'owner', label: 'Parcel Owner', type: 'text' },
   { prop: 'usage', label: 'Land Use' },
-  { prop: 'use', label: 'Current Use' }
+  { prop: 'use', label: 'Current Use' },
+  { prop: 'building$', label: 'Building Tax', type: 'number' },
+  { prop: 'land$', label: 'Land Tax', type: 'number' },
+  { prop: 'cu$', label: 'Other Tax', type: 'number' },
+  { prop: 'taxed$', label: 'Total Tax', type: 'number' }
 ];
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
+  providers: [DestroyService, ValuesPipe],
   selector: 'app-parcel-properties',
   styleUrls: ['./contextmenu-component.scss', './parcel-properties.scss'],
   templateUrl: './parcel-properties.html'
@@ -72,6 +78,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     private authState: AuthState,
     private destroy$: DestroyService,
     private firestore: AngularFirestore,
+    private parcelsState: ParcelsState,
     public registry: TypeRegistry
   ) {}
 
@@ -111,7 +118,8 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         label: editable.label,
         list: this.registry.list('parcel', prop),
         prop: prop,
-        refCount: 0
+        refCount: 0,
+        type: editable.type
       };
       // 👉 scan the input features -- these are the ones selected
       this.features.forEach((feature) => {
@@ -209,19 +217,23 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         type: 'Feature'
       };
-      // ... with a property for each modified editable
+      // 👇 some controls are conditional so they may no longer be
+      //    in the form, in which case we don't record a value
       editables.forEach((editable) => {
         const prop = editable.prop;
         if (this.propertiesForm.controls[prop]?.dirty) {
           const fromParcels = record[prop].fromParcels;
-          if (fromParcels !== undefined) parcel.properties[prop] = fromParcels;
+          if (fromParcels === null) parcel.properties[prop] = null;
+          else if (fromParcels !== undefined)
+            parcel.properties[prop] =
+              editable.type === 'number' ? Number(fromParcels) : fromParcels;
         }
       });
       // 👉 https://stackoverflow.com/questions/47268241/
       //    only save if at least one property override
       if (Object.keys(parcel.properties).length > 0) {
         const ref = this.firestore.collection('parcels').doc().ref;
-        ref.set(parcel);
+        ref.set(this.parcelsState.normalize(parcel));
       }
     });
     batch.commit();
