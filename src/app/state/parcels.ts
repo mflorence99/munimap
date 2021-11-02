@@ -131,7 +131,8 @@ export class ParcelsState implements NgxsOnInit {
   }
 
   normalize(parcel: Parcel): Parcel {
-    parcel.properties.address = normalizeAddress(parcel.properties.address);
+    normalizeAddress(parcel);
+    normalizeOwner(parcel);
     return parcel;
   }
 
@@ -145,24 +146,32 @@ export class ParcelsState implements NgxsOnInit {
 
 // TODO 🔥 is there a better place to put these normalizing functions?
 
-function normalizeAddress(address: string): string {
-  if (!address) return address;
-  let normalized = address.trim().toUpperCase();
-  normalized = normalized.replace(/\bCIR\b/, ' CIRCLE ');
-  normalized = normalized.replace(/\bDR\b/, ' DRIVE ');
-  normalized = normalized.replace(/\bE\b/, ' EAST ');
-  normalized = normalized.replace(/\bHGTS\b/, ' HEIGHTS ');
-  normalized = normalized.replace(/\bLN\b/, ' LANE ');
-  normalized = normalized.replace(/\bMT\b/, ' MOUNTAIN ');
-  normalized = normalized.replace(/\bN\b/, ' NORTH ');
-  normalized = normalized.replace(/\bNO\b/, ' NORTH ');
-  normalized = normalized.replace(/\bPD\b/, ' POND ');
-  normalized = normalized.replace(/\bRD\b/, ' ROAD ');
-  normalized = normalized.replace(/\bS\b/, ' SOUTH ');
-  normalized = normalized.replace(/\bSO\b/, ' SOUTH ');
-  normalized = normalized.replace(/\bST\b/, ' STREET ');
-  normalized = normalized.replace(/\bTER\b/, ' TERRACE ');
-  normalized = normalized.replace(/\bTERR\b/, ' TERRACE ');
-  normalized = normalized.replace(/\bW\b/, ' WEST ');
-  return normalized.replace(/  +/g, ' ').trim();
+function normalizeAddress(parcel: Parcel): void {
+  if (parcel.properties.address) {
+    let normalized = parcel.properties.address.trim().toUpperCase();
+    normalized = normalized.replace(/\bCIR\b/, ' CIRCLE ');
+    normalized = normalized.replace(/\bDR\b/, ' DRIVE ');
+    normalized = normalized.replace(/\bE\b/, ' EAST ');
+    normalized = normalized.replace(/\bHGTS\b/, ' HEIGHTS ');
+    normalized = normalized.replace(/\bLN\b/, ' LANE ');
+    normalized = normalized.replace(/\bMT\b/, ' MOUNTAIN ');
+    normalized = normalized.replace(/\bN\b/, ' NORTH ');
+    normalized = normalized.replace(/\bNO\b/, ' NORTH ');
+    normalized = normalized.replace(/\bPD\b/, ' POND ');
+    normalized = normalized.replace(/\bRD\b/, ' ROAD ');
+    normalized = normalized.replace(/\bS\b/, ' SOUTH ');
+    normalized = normalized.replace(/\bSO\b/, ' SOUTH ');
+    normalized = normalized.replace(/\bST\b/, ' STREET ');
+    normalized = normalized.replace(/\bTER\b/, ' TERRACE ');
+    normalized = normalized.replace(/\bTERR\b/, ' TERRACE ');
+    normalized = normalized.replace(/\bW\b/, ' WEST ');
+    parcel.properties.address = normalized.replace(/  +/g, ' ').trim();
+  }
+}
+
+function normalizeOwner(parcel: Parcel): void {
+  if (parcel.properties.owner) {
+    const normalized = parcel.properties.owner.trim().toUpperCase();
+    parcel.properties.owner = normalized;
+  }
 }

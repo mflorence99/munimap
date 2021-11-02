@@ -16,7 +16,7 @@
     nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
   </p>
 
-  <ng-container *ngFor="let value of (record | values)">
+  <ng-container *ngFor="let value of (record | values); trackBy: trackByProp">
     <!-- 
       👇 this control for props with a list 
         NOTE: use only appears if usage === current use
@@ -31,7 +31,6 @@
         [attr.ngControl]="value.prop"
         [name]="value.prop"
         [placeholder]="registry.decode('parcel', value.prop, value.fromFeatures)"
-        ngModel
       >
         <mat-option *ngFor="let option of value.list" [value]="option[0]">
           {{ option[1].decoding }}
@@ -41,7 +40,7 @@
         >warning</mat-icon
       >
       <button
-        (click)="clear($event, value)"
+        (click)="clear($event, record, value.prop)"
         [disabled]="!value.fromParcels"
         mat-icon-button
         matSuffix
@@ -65,7 +64,7 @@
         >warning</mat-icon
       >
       <button
-        (click)="clear($event, value)"
+        (click)="clear($event, record, value.prop)"
         [disabled]="!value.fromParcels"
         mat-icon-button
         matSuffix
