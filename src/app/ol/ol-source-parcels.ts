@@ -5,7 +5,6 @@ import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../state/parcels';
-import { ParcelProperties } from '../state/parcels';
 import { ParcelsState } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
@@ -23,6 +22,7 @@ import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
+import copy from 'fast-copy';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
@@ -75,10 +75,9 @@ export class OLSourceParcelsComponent implements OnInit {
         const featuresByID = this.#groupByID<Feature>(geojson.features);
         const parcelsByID = this.#groupByID<Parcel>(parcels);
         this.#overrideFeaturesWithParcels(geojson, parcelsByID);
-        // TODO 🔥 leave as-is for now -- simply remove features that
-        //         are in both the geojson and in the parcels override
-        //         when we have timestamps sorted on parcels, only
-        //         remove a feature if it is outdated
+        // 👉 remove features that are in both the geojson
+        //    and in the parcels override -- then they'll get
+        //    added back via "addFeatures" below
         Object.keys(parcelsByID).forEach((id) => {
           if (featuresByID[id]) {
             const feature = this.olVector.getFeatureById(id);
@@ -105,10 +104,6 @@ export class OLSourceParcelsComponent implements OnInit {
     this.layer.olLayer.setSource(this.olVector);
   }
 
-  #isEmpty(obj: any): boolean {
-    return Object.keys(obj ?? {}).length === 0;
-  }
-
   #loader(
     extent: number[],
     _resolution: number,
@@ -130,15 +125,6 @@ export class OLSourceParcelsComponent implements OnInit {
       });
   }
 
-  #mergeProperties(
-    toFeature: ParcelProperties,
-    fromParcel: ParcelProperties
-  ): void {
-    Object.keys(fromParcel).forEach((key) => {
-      if (fromParcel[key] != null) toFeature[key] = fromParcel[key];
-    });
-  }
-
   #overrideFeaturesWithParcels(
     geojson: Features,
     parcelsByID: Record<string, Parcel[]>
@@ -146,20 +132,50 @@ export class OLSourceParcelsComponent implements OnInit {
     geojson.features = geojson.features.map((feature) => {
       const parcels = parcelsByID[feature.id];
       if (parcels) {
-        // 👇 parcels are in timestamp order, so we apply the latest last
-        //    geometry is all-or-nothing
-        //    properties are merged
-        parcels.forEach((parcel) => {
-          if (
-            !this.#isEmpty(parcel.geometry) ||
-            !this.#isEmpty(parcel.properties)
-          )
-            this.map.setOriginalFeature(feature);
-          if (!this.#isEmpty(parcel.geometry))
-            feature.geometry = parcel.geometry;
-          if (!this.#isEmpty(parcel.properties))
-            this.#mergeProperties(feature.properties, parcel.properties);
+        // 👇 deal with property overrides first
+        //    consider each property one at a time
+        //    scan all the parcel overrides in reverse timestamp order
+        //    null says let the feature property stand
+        //    not undefined says override the feature property
+        //    save the original feature before modification
+        Object.keys(feature.properties).forEach((prop) => {
+          parcels
+            .filter((parcel) => parcel.properties)
+            .some((parcel) => {
+              if (parcel.properties[prop] === null) {
+                const original = this.map.getOriginalFeature(feature.id);
+                if (original)
+                  feature.properties[prop] = copy(original.properties[prop]);
+                return true;
+              } else if (parcel.properties[prop] !== undefined) {
+                this.map.saveOriginalFeature(feature);
+                feature.properties[prop] = copy(parcel.properties[prop]);
+                return true;
+              }
+            });
         });
+        // 👇 then a similar process for geometry overrides
+        //    geometry overrides are all-or-nothing
+        //    scan all the parcel overrides in reverse timestamp order
+        //    null says let the feature geometry stand
+        //    not undefined says override the feature geometry
+        //    save the original feature before modification
+        parcels
+          .filter((parcel) => parcel.geometry)
+          .some((parcel) => {
+            if (parcel.geometry === null) {
+              return true;
+              const original = this.map.getOriginalFeature(feature.id);
+              if (original) feature.geometry = copy(original.geometry);
+            } else if (
+              parcel.geometry !== undefined &&
+              Object.keys(parcel.geometry).length > 0
+            ) {
+              this.map.saveOriginalFeature(feature);
+              feature.geometry = copy(parcel.geometry);
+              return true;
+            }
+          });
       }
       return feature;
     });

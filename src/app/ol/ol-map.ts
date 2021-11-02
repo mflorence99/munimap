@@ -212,8 +212,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     return this.path.split(':')[2];
   }
 
-  getOriginalFeature(id: string): Feature {
-    return this.#originalFeatures[id];
+  getOriginalFeature(id: string | number): Feature {
+    return this.#originalFeatures[`${id}`];
   }
 
   measureText(text: string, font: string): TextMetrics {
@@ -241,9 +241,9 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     this.selector?.onContextMenu(event);
   }
 
-  setOriginalFeature(feature: Feature): void {
-    if (!this.#originalFeatures[feature.id])
-      this.#originalFeatures[feature.id] = copy(feature);
+  saveOriginalFeature(feature: Feature): void {
+    const id = `${feature.id}`;
+    if (!this.#originalFeatures[id]) this.#originalFeatures[id] = copy(feature);
   }
 
   zoomToBounds(): void {

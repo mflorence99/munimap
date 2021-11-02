@@ -8,7 +8,6 @@
 
 <form
   #propertiesForm="ngForm"
-  (ngSubmit)="save(record)"
   autocomplete="off"
   class="form"
   novalidate
@@ -19,62 +18,60 @@
     nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
   </p>
 
-  <mat-form-field floatLabel="always">
-    <mat-label>Parcel Address</mat-label>
-    <input
-      #address="ngModel"
-      [(ngModel)]="record.address.fromParcels"
-      [placeholder]="record.address.fromFeatures"
-      matInput
-      name="address"
-    />
-    <mat-icon
-      *ngIf="record.address.conflict"
-      [inline]="true"
-      color="accent"
-      matSuffix
-      >warning</mat-icon
+  <ng-container *ngFor="let prop of record | keyvalue">
+    <!-- 
+      👇 this control for props with a list 
+        NOTE: use only appears if usage === current use
+    -->
+    <mat-form-field
+      *ngIf="prop.value.list && (prop.key !== 'use' || record.usage.fromFeatures === '190' || record.usage.fromParcels === '190')"
+      floatLabel="always"
     >
-  </mat-form-field>
+      <mat-label>{{ prop.value.label }}</mat-label>
+      <mat-select
+        [(ngModel)]="prop.value.fromParcels"
+        [attr.ngControl]="prop.key"
+        [name]="prop.key"
+        [placeholder]="registry.decode('parcel', prop.key, prop.value.fromFeatures)"
+      >
+        <mat-option *ngFor="let option of prop.value.list" [value]="option[0]">
+          {{ option[1].decoding }}
+        </mat-option>
+      </mat-select>
+      <mat-icon
+        *ngIf="prop.value.conflict"
+        [inline]="true"
+        color="accent"
+        matSuffix
+        >warning</mat-icon
+      >
+      <button (click)="clear($event, prop.value)" mat-icon-button matSuffix>
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
 
-  <mat-form-field floatLabel="always">
-    <mat-label>Parcel Owner</mat-label>
-    <input
-      #owner="ngModel"
-      [(ngModel)]="record.owner.fromParcels"
-      [placeholder]="record.owner.fromFeatures"
-      matInput
-      name="owner"
-    />
-    <mat-icon
-      *ngIf="record.address.conflict"
-      [inline]="true"
-      color="accent"
-      matSuffix
-      >warning</mat-icon
-    >
-  </mat-form-field>
-
-  <mat-form-field floatLabel="always">
-    <mat-label>Land Usage</mat-label>
-    <mat-select
-      #name="ngModel"
-      [(ngModel)]="record.usage.fromParcels"
-      [placeholder]="registry.decode('parcel', 'usage', record.usage.fromFeatures)"
-      name="usage"
-    >
-      <mat-option *ngFor="let item of record.usage.list" [value]="item[0]">
-        {{ item[1].decoding }}
-      </mat-option>
-    </mat-select>
-    <mat-icon
-      *ngIf="record.address.conflict"
-      [inline]="true"
-      color="accent"
-      matSuffix
-      >warning</mat-icon
-    >
-  </mat-form-field>
+    <!-- 👇 this control for type-in props -->
+    <mat-form-field *ngIf="!prop.value.list" floatLabel="always">
+      <mat-label>{{ prop.value.label }}</mat-label>
+      <input
+        [(ngModel)]="prop.value.fromParcels"
+        [attr.ngControl]="prop.key"
+        [name]="prop.key"
+        [placeholder]="prop.value.fromFeatures"
+        matInput
+      />
+      <mat-icon
+        *ngIf="prop.value.conflict"
+        [inline]="true"
+        color="accent"
+        matSuffix
+        >warning</mat-icon
+      >
+      <button (click)="clear($event, prop.value)" mat-icon-button matSuffix>
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </ng-container>
 </form>
 
 <article class="actions">

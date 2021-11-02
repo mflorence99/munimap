@@ -94,7 +94,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
             fill: new OLFill({ color: `rgba(${color}, 1)` }),
             overflow: true,
             placement: 'point',
-            text: feature.getId() as string
+            text: `${feature.getId()}`
           })
         });
     };

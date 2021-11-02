@@ -114,7 +114,7 @@ export class ParcelsState implements NgxsOnInit {
               ref
                 .where('owner', 'in', workgroup)
                 .where('path', '==', map.path)
-                .orderBy('timestamp');
+                .orderBy('timestamp', 'desc');
             return this.firestore
               .collection<Parcel>('parcels', query)
               .valueChanges();

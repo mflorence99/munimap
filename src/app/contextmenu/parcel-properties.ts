@@ -13,9 +13,11 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { ViewChild } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
@@ -27,8 +29,22 @@ interface Value {
   conflict: boolean;
   fromFeatures: any;
   fromParcels: any;
+  label: string;
   list: [any, Descriptor][];
+  prop: string;
+  refCount: number;
 }
+
+type ValueRecord = Record<string, Value>;
+
+// 👇 these are the properties we can editable
+
+const editables = [
+  { prop: 'address', label: 'Parcel Address' },
+  { prop: 'owner', label: 'Parcel Owner' },
+  { prop: 'usage', label: 'Land Use' },
+  { prop: 'use', label: 'Current Use' }
+];
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,9 +54,6 @@ interface Value {
   templateUrl: './parcel-properties.html'
 })
 export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
-  // TODO 🔥 temporary list of editable parcel fields
-  #flds = ['address', 'owner', 'usage'];
-
   @Input() drawer: MatDrawer;
 
   @Input() features: OLFeature<any>[];
@@ -49,7 +62,9 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
 
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
-  record: Record<string, Value> = {};
+  @ViewChild('propertiesForm', { static: true }) propertiesForm: NgForm;
+
+  record: ValueRecord = {};
 
   @Input() selectedIDs: string[];
 
@@ -60,45 +75,57 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     public registry: TypeRegistry
   ) {}
 
+  #groupByID<T>(things: T[]): Record<string, T[]> {
+    return things.reduce((acc, thing) => {
+      if (!acc[thing['id']]) acc[thing['id']] = [];
+      acc[thing['id']].push(thing);
+      return acc;
+    }, {} as Record<string, T[]>);
+  }
+
   #handleParcels$(): void {
     this.parcels$
       .pipe(
         takeUntil(this.destroy$),
-        map((parcels) => {
-          return parcels.filter((parcel) =>
-            this.selectedIDs.includes(parcel.id as string)
-          );
-        })
+        map(
+          (parcels): Record<string, Parcel[]> =>
+            this.#groupByID<Parcel>(parcels)
+        )
       )
-      .subscribe((parcels) => {
+      .subscribe((parcelsByID) => {
         this.record = this.#makeRecordFromParcels(
-          parcels,
+          parcelsByID,
           this.#makeRecordFromFeatures()
         );
       });
   }
 
-  #makeRecordFromFeatures(): Record<string, Value> {
-    const record: Record<string, Value> = {};
-    this.#flds.forEach((fld) => {
-      record[fld] = {
+  #makeRecordFromFeatures(): ValueRecord {
+    const record: ValueRecord = {};
+    editables.forEach((editable) => {
+      const prop = editable.prop;
+      record[prop] = {
         conflict: false,
         fromFeatures: undefined,
         fromParcels: undefined,
-        list: this.registry.list('parcel', fld)
+        label: editable.label,
+        list: this.registry.list('parcel', prop),
+        prop: prop,
+        refCount: 0
       };
+      // 👉 scan the input features -- these are the ones selected
       this.features.forEach((feature) => {
-        const value = record[fld];
-        const originalFeature = this.map.getOriginalFeature(
-          feature.getId() as string
-        );
+        const id = feature.getId() as string;
+        const value = record[prop];
+        const originalFeature = this.map.getOriginalFeature(id);
+        // 👉 take the feature value from the original (if overridden)
+        //    or directly from the input feature (if not)
         const fromFeature =
-          originalFeature?.properties[fld] ?? feature.getProperties()[fld];
+          originalFeature?.properties[prop] ?? feature.getProperties()[prop];
+        // 👉 if no value has been recorded yet, take the first we see
         if (value.fromFeatures === undefined) value.fromFeatures = fromFeature;
-        else if (
-          value.fromFeatures !== null &&
-          value.fromFeatures !== fromFeature
-        ) {
+        // 👉 but if the value is different, we have to record a conflict
+        else if (value.fromFeatures !== fromFeature) {
           value.conflict = true;
           value.fromFeatures = null;
         }
@@ -108,16 +135,58 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
   }
 
   #makeRecordFromParcels(
-    parcels: Parcel[],
-    record: Record<string, Value>
-  ): Record<string, Value> {
-    this.#flds.forEach((fld) => {
-      parcels.forEach((parcel) => {
-        if (parcel.properties[fld] !== undefined)
-          record[fld].fromParcels = parcel.properties[fld];
+    parcelsByID: Record<string, Parcel[]>,
+    record: ValueRecord
+  ): ValueRecord {
+    editables.forEach((editable) => {
+      const prop = editable.prop;
+      const value = record[prop];
+      this.selectedIDs.forEach((id) => {
+        const parcels = parcelsByID[id];
+        if (parcels) {
+          // 👉 remember: we are travesing the parcel overrides in reverse
+          //    timestamp order -- the first defined value wins
+          parcels
+            .filter((parcel) => parcel.properties?.[prop] !== undefined)
+            .some((parcel) => {
+              const fromParcel = parcel.properties[prop];
+              // 👉 if no value has been recorded yet, take the first we see
+              //    clear the conflict flag, we're looking at overrides now
+              if (value.fromParcels === undefined) {
+                value.conflict = false;
+                value.fromParcels = fromParcel;
+                value.refCount += 1;
+                return true;
+              }
+              // 👉 otherwise record a conflict if there's a mismatch
+              else if (value.fromParcels !== fromParcel) {
+                value.conflict = true;
+                value.fromFeatures = null;
+                value.fromParcels = null;
+                value.refCount += 1;
+                return true;
+              }
+              // 👉 we really care only about the first override
+              else {
+                value.refCount += 1;
+                return true;
+              }
+            });
+        }
       });
+      // 👉 record a conflict for a mismatch in parcel overrides
+      if (value.refCount > 0 && value.refCount !== this.selectedIDs.length)
+        value.conflict = true;
     });
     return record;
+  }
+
+  clear(event: MouseEvent, value: Value): void {
+    value.fromParcels = null;
+    const control = this.propertiesForm.controls[value.prop];
+    control.setValue(null);
+    control.markAsDirty();
+    event.stopPropagation();
   }
 
   done(): void {
@@ -128,8 +197,9 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     this.#handleParcels$();
   }
 
-  save(record: Record<string, Value>): void {
+  save(record: ValueRecord): void {
     const batch = this.firestore.firestore.batch();
+    // 👇 we'll potentially save a parcel override per feature
     this.features.forEach((feature) => {
       const parcel: Parcel = {
         id: feature.getId(),
@@ -139,13 +209,20 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         type: 'Feature'
       };
-      this.#flds.forEach((fld) => {
-        const fromParcels = record[fld].fromParcels;
-        if (fromParcels !== undefined) parcel.properties[fld] = fromParcels;
+      // ... with a property for each modified editable
+      editables.forEach((editable) => {
+        const prop = editable.prop;
+        if (this.propertiesForm.controls[prop]?.dirty) {
+          const fromParcels = record[prop].fromParcels;
+          if (fromParcels !== undefined) parcel.properties[prop] = fromParcels;
+        }
       });
       // 👉 https://stackoverflow.com/questions/47268241/
-      const ref = this.firestore.collection('parcels').doc().ref;
-      ref.set(parcel);
+      //    only save if at least one property override
+      if (Object.keys(parcel.properties).length > 0) {
+        const ref = this.firestore.collection('parcels').doc().ref;
+        ref.set(parcel);
+      }
     });
     batch.commit();
   }

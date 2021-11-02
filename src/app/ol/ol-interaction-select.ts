@@ -67,8 +67,9 @@ export class OLInteractionSelectComponent
   get selected(): OLFeature<any>[] {
     return this.olSelect.getFeatures().getArray();
   }
+
   get selectedIDs(): string[] {
-    return this.selected.map((feature) => feature.getId() as string);
+    return this.selected.map((feature) => `${feature.getId()}`);
   }
 
   @Input() zoomAnimationDuration = 200;
