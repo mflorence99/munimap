@@ -27,7 +27,7 @@ const attribution =
 export class OLSourceStoneWallsComponent {
   olVector: OLVector<any>;
 
-  @Input() threshold = 1;
+  @Input() threshold = 1.5;
 
   constructor(
     private http: HttpClient,

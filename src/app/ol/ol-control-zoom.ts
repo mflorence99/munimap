@@ -31,6 +31,7 @@ export class OLControlZoomComponent implements OnInit {
     this.map.zoomChange.pipe(takeUntil(this.destroy$)).subscribe((zoom) => {
       this.zoom = zoom;
       this.resolution = this.map.olView.getResolutionForZoom(zoom);
+      // 👉 because event is triggered out of the Angular zone
       this.cdf.detectChanges();
     });
   }

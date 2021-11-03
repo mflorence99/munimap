@@ -105,10 +105,30 @@ export class OLInteractionSelectComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: PointerEvent) => {
         if (this.contextMenu) {
+          // 👉 need to hack the Y offset by the height of the toolbar
           const style = getComputedStyle(document.documentElement);
           const hack = style.getPropertyValue('--map-cy-toolbar');
-          this.menuPosition.x = event.clientX + 8;
-          this.menuPosition.y = event.clientY + 8 - Number(hack);
+          const pixel = [event.clientX, event.clientY - Number(hack)];
+          // 👉 position the menu
+          this.menuPosition.x = pixel[0] + 8;
+          this.menuPosition.y = pixel[1] + 8;
+          // 👉 simulate singleclick by selecting the feature we're over
+          //    https://gis.stackexchange.com/questions/148428
+          const cb = (feature: any, layer: any): void => {
+            if (
+              layer === this.layer.olLayer &&
+              !this.selectedIDs.includes(`${feature.getId()}`)
+            ) {
+              console.log(
+                `%cSelected feature`,
+                'color: orchid',
+                feature.getId()
+              );
+              this.olSelect.getFeatures().push(feature);
+            }
+          };
+          this.map.olMap.forEachFeatureAtPixel(pixel, cb);
+          // 👉 because event is triggered out of the Angular zone
           this.cdf.detectChanges();
           this.contextMenuTrigger.openMenu();
         }
