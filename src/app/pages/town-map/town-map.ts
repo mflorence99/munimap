@@ -1,9 +1,11 @@
 import { AuthState } from '../../state/auth';
+import { ContextMenuComponent } from '../../contextmenu/contextmenu-component';
 import { ContextMenuHostDirective } from '../../contextmenu/contextmenu-host';
 import { DestroyService } from '../../services/destroy';
 import { LoadMap } from '../../state/map';
 import { Map } from '../../state/map';
 import { MapState } from '../../state/map';
+import { MergeParcelsComponent } from '../../contextmenu/merge-parcels';
 import { OLMapComponent } from '../../ol/ol-map';
 import { ParcelPropertiesComponent } from '../../contextmenu/parcel-properties';
 import { RootPage } from '../root/root';
@@ -13,6 +15,7 @@ import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -96,21 +99,10 @@ export class TownMapPage implements OnInit {
     this.root.setTitle(path);
   }
 
-  ngOnInit(): void {
-    this.#handleActions$();
-    this.#loadMap();
-  }
-
-  // TODO 🔥 temporary until we figure pattern for all menu items
-  //         probably need an interface to describe contextmenu components
-
-  xxx(): void {
+  #onContextMenu(cFactory: ComponentFactory<ContextMenuComponent>): void {
     this.drawer.open();
     this.contextMenuHost.vcRef.clear();
-    const cFactory = this.resolver.resolveComponentFactory(
-      ParcelPropertiesComponent
-    );
-    const cRef: ComponentRef<ParcelPropertiesComponent> =
+    const cRef: ComponentRef<ContextMenuComponent> =
       this.contextMenuHost.vcRef.createComponent(cFactory);
     // 👉 populate @Input() fields
     const comp = cRef.instance;
@@ -119,5 +111,30 @@ export class TownMapPage implements OnInit {
     comp.selectedIDs = this.olMap.selector.selectedIDs;
     const source = this.olMap.selector.layer.olLayer.getSource();
     comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+  }
+
+  canMergeParcels(event?: MouseEvent): boolean {
+    if (event) event.stopPropagation();
+    return this.olMap.selector.selectedIDs.length > 1;
+  }
+
+  ngOnInit(): void {
+    this.#handleActions$();
+    this.#loadMap();
+  }
+
+  onContextMenu(key: string): void {
+    let cFactory: ComponentFactory<ContextMenuComponent>;
+    switch (key) {
+      case 'parcel-properties':
+        cFactory = this.resolver.resolveComponentFactory(
+          ParcelPropertiesComponent
+        );
+        break;
+      case 'merge-parcels':
+        cFactory = this.resolver.resolveComponentFactory(MergeParcelsComponent);
+        break;
+    }
+    if (cFactory) this.#onContextMenu(cFactory);
   }
 }

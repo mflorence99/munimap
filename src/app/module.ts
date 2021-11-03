@@ -8,6 +8,7 @@ import { LoginPage } from './pages/login/login';
 import { MapCreatePage } from './pages/map-create/map-create';
 import { MapFilterComponent } from './pages/map-create/map-filter';
 import { MapState } from './state/map';
+import { MergeParcelsComponent } from './contextmenu/merge-parcels';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
@@ -107,6 +108,7 @@ import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 const COMPONENTS = [
   ConfirmDialogComponent,
   MapFilterComponent,
+  MergeParcelsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlMousePositionComponent,

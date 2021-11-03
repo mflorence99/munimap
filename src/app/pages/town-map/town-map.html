@@ -245,9 +245,20 @@
     </header>
 
     <ul>
-      <li (click)="xxx()" class="item">
+      <li (click)="onContextMenu('parcel-properties')" class="item">
         <img class="icon" src="assets/properties.svg" />
-        Lorem ipsum dolor emit
+        Parcel properties ...
+      </li>
+    </ul>
+
+    <ul>
+      <li
+        (click)="canMergeParcels($event) && onContextMenu('merge-parcels')"
+        [class.disabled]="!canMergeParcels()"
+        class="item"
+      >
+        <img class="icon" src="assets/merge.svg" />
+        Merge parcels ...
       </li>
     </ul>
   </nav>

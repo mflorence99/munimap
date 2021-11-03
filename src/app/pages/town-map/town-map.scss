@@ -37,6 +37,12 @@
     grid-column-gap: 0.5rem;
     grid-template-columns: auto 1fr;
     padding: 0.5rem 1rem;
+
+    &.disabled {
+      color: var(--mat-gray-500);
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
   }
 }
 

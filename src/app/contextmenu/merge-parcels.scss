@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  width: 25rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem;
+}
