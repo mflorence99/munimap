@@ -34,7 +34,8 @@ interface Value {
   list: [any, Descriptor][];
   prop: string;
   refCount: number;
-  type?: string;
+  step: number;
+  type: string;
 }
 
 type ValueRecord = Record<string, Value>;
@@ -44,6 +45,7 @@ type ValueRecord = Record<string, Value>;
 const editables = [
   { prop: 'address', label: 'Parcel Address', type: 'text' },
   { prop: 'owner', label: 'Parcel Owner', type: 'text' },
+  { prop: 'area', label: 'Acreage', type: 'number', step: 0.01 },
   { prop: 'usage', label: 'Land Use' },
   { prop: 'use', label: 'Current Use' },
   { prop: 'building$', label: 'Building Tax', type: 'number' },
@@ -118,6 +120,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         list: this.registry.list('parcel', prop),
         prop: prop,
         refCount: 0,
+        step: editable.step ?? 1,
         type: editable.type
       };
       // 👉 scan the input features -- these are the ones selected

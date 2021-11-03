@@ -58,6 +58,7 @@
         [name]="value.prop"
         [placeholder]="value.fromFeatures"
         [type]="value.type ?? 'text'"
+        [step]="value.step"
         matInput
       />
       <mat-icon *ngIf="value.conflict" [inline]="true" color="accent" matSuffix
