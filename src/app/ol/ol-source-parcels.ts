@@ -14,7 +14,6 @@ import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
-import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
 import { bbox } from 'ol/loadingstrategy';
@@ -55,8 +54,7 @@ export class OLSourceParcelsComponent implements OnInit {
     private geoJSON: GeoJSONService,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
-    private route: ActivatedRoute,
-    private store: Store
+    private route: ActivatedRoute
   ) {}
 
   #groupByID<T>(things: T[]): Record<string, T[]> {

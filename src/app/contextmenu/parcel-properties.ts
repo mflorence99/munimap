@@ -193,7 +193,6 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     record[prop].fromParcels = null;
     const control = this.propertiesForm.controls[prop];
     control.markAsDirty();
-    console.log(`clear ${prop} fromParcels=${record[prop].fromParcels}`);
     event.stopPropagation();
   }
 
@@ -222,13 +221,8 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
       editables.forEach((editable) => {
         const prop = editable.prop;
         const control = this.propertiesForm.controls[prop];
-        // if (control)
-        //   console.log(
-        //     `${prop} dirty=${control.dirty} touched=${control.touched} pristine=${control.pristine}`
-        //   );
         if (control?.dirty) {
           const fromParcels = record[prop].fromParcels;
-          console.log(`save ${prop} fromParcels=${fromParcels}`);
           if (fromParcels === null) parcel.properties[prop] = null;
           else if (fromParcels !== undefined)
             parcel.properties[prop] =
@@ -243,6 +237,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
       }
     });
     batch.commit();
+    this.propertiesForm.form.markAsPristine();
   }
 
   trackByProp(ix: number, value: Value): string {

@@ -14,6 +14,7 @@ import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 
 import { combineLatest } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -117,7 +118,8 @@ export class ParcelsState implements NgxsOnInit {
                 .orderBy('timestamp', 'desc');
             return this.firestore
               .collection<Parcel>('parcels', query)
-              .valueChanges();
+              .valueChanges()
+              .pipe(debounceTime(1000));
           }
         })
       )
