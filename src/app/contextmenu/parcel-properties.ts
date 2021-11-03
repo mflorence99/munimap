@@ -1,3 +1,4 @@
+import { AddParcels } from '../state/parcels';
 import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { Descriptor } from '../services/typeregistry';
@@ -8,7 +9,6 @@ import { ParcelProperties } from '../state/parcels';
 import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
-import { AngularFirestore } from '@angular/fire/firestore';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
@@ -17,13 +17,13 @@ import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { ValuesPipe } from 'ngx-pipes';
 import { ViewChild } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 
-import firebase from 'firebase/app';
 import OLFeature from 'ol/Feature';
 
 interface Value {
@@ -77,9 +77,8 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
   constructor(
     private authState: AuthState,
     private destroy$: DestroyService,
-    private firestore: AngularFirestore,
-    private parcelsState: ParcelsState,
-    public registry: TypeRegistry
+    public registry: TypeRegistry,
+    private store: Store
   ) {}
 
   #groupByID<T>(things: T[]): Record<string, T[]> {
@@ -205,7 +204,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
   }
 
   save(record: ValueRecord): void {
-    const batch = this.firestore.firestore.batch();
+    const parcels: Parcel[] = [];
     // 👇 we'll potentially save a parcel override per feature
     this.features.forEach((feature) => {
       const parcel: Parcel = {
@@ -213,7 +212,6 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         owner: this.authState.currentProfile().email,
         path: this.map.path,
         properties: {} as ParcelProperties,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         type: 'Feature'
       };
       // 👇 some controls are conditional so they may no longer be
@@ -229,14 +227,12 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
               editable.type === 'number' ? Number(fromParcels) : fromParcels;
         }
       });
-      // 👉 https://stackoverflow.com/questions/47268241/
-      //    only save if at least one property override
-      if (Object.keys(parcel.properties).length > 0) {
-        const ref = this.firestore.collection('parcels').doc().ref;
-        ref.set(this.parcelsState.normalize(parcel));
-      }
+      // 👉 only save if at least one property override
+      if (Object.keys(parcel.properties).length > 0) parcels.push(parcel);
     });
-    batch.commit();
+    this.store.dispatch(new AddParcels(parcels));
+    // 👉 this resets the dirty flag, disabling SAVE until
+    //    additional data entered
     this.propertiesForm.form.markAsPristine();
   }
 

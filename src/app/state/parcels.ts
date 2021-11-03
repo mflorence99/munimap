@@ -18,6 +18,13 @@ import { debounceTime } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
+import firebase from 'firebase/app';
+
+export class AddParcels {
+  static readonly type = '[Parcels] AddParcels';
+  constructor(public parcels: Parcel[]) {}
+}
+
 export class SetParcels {
   static readonly type = '[Parcels] SetParcels';
   constructor(public parcels: Parcel[]) {}
@@ -33,7 +40,7 @@ export type Features = GeoJSON.FeatureCollection<
 export interface Parcel extends Partial<Feature> {
   owner: string;
   path: string;
-  timestamp: any;
+  timestamp?: any /* 👈 optional only because we'll complete it */;
 }
 
 export interface ParcelProperties {
@@ -104,7 +111,7 @@ export class ParcelsState implements NgxsOnInit {
 
   constructor(private firestore: AngularFirestore, private store: Store) {}
 
-  #handleMap$(): void {
+  #handleStreams$(): void {
     combineLatest([this.map$, this.profile$])
       .pipe(
         mergeMap(([map, profile]) => {
@@ -128,14 +135,30 @@ export class ParcelsState implements NgxsOnInit {
       );
   }
 
-  ngxsOnInit(): void {
-    this.#handleMap$();
-  }
-
-  normalize(parcel: Parcel): Parcel {
+  #normalize(parcel: Parcel): Parcel {
+    parcel.timestamp = firebase.firestore.FieldValue.serverTimestamp();
     normalizeAddress(parcel);
     normalizeOwner(parcel);
     return parcel;
+  }
+
+  @Action(AddParcels) addParcels(
+    ctx: StateContext<ParcelsStateModel>,
+    action: AddParcels
+  ): void {
+    const batch = this.firestore.firestore.batch();
+    action.parcels.forEach((parcel) => {
+      const ref = this.firestore.collection('parcels').doc().ref;
+      ref.set(this.#normalize(parcel));
+    });
+    // TODO 🔥 we have a great opportunity here to "cull"
+    //         extraneous parcels
+    batch.commit();
+    // 👉 side-effect of handleStreams$ will update state
+  }
+
+  ngxsOnInit(): void {
+    this.#handleStreams$();
   }
 
   @Action(SetParcels) setParcels(
