@@ -1,3 +1,4 @@
+import { DestroyService } from '../services/destroy';
 import { Feature } from '../state/parcels';
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
@@ -14,12 +15,14 @@ import { Input } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { ViewChild } from '@angular/core';
 
 import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
 
@@ -35,14 +38,15 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
     {
       provide: MapableComponent,
       useExisting: forwardRef(() => OLInteractionSelectComponent)
-    }
+    },
+    DestroyService
   ],
   selector: 'app-ol-interaction-select',
   templateUrl: './ol-interaction-select.html',
   styleUrls: ['./ol-interaction-select.scss']
 })
 export class OLInteractionSelectComponent
-  implements AfterContentInit, Mapable, OnDestroy
+  implements AfterContentInit, Mapable, OnDestroy, OnInit
 {
   #featuresLoadEndKey = null;
 
@@ -76,6 +80,7 @@ export class OLInteractionSelectComponent
 
   constructor(
     private cdf: ChangeDetectorRef,
+    private destroy$: DestroyService,
     // 👉 we need public access to go through the selector to its layer
     public layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -93,6 +98,21 @@ export class OLInteractionSelectComponent
 
   #filter(feature: OLFeature<any>): boolean {
     return this.filter ? this.filter(feature) : true;
+  }
+
+  #handleContextMenu$(): void {
+    this.map.contextMenu$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: PointerEvent) => {
+        if (this.contextMenu) {
+          const style = getComputedStyle(document.documentElement);
+          const hack = style.getPropertyValue('--map-cy-toolbar');
+          this.menuPosition.x = event.clientX + 8;
+          this.menuPosition.y = event.clientY + 8 - Number(hack);
+          this.cdf.detectChanges();
+          this.contextMenuTrigger.openMenu();
+        }
+      });
   }
 
   #onSelect(_event?: OLSelectEvent): void {
@@ -123,17 +143,8 @@ export class OLInteractionSelectComponent
     if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
   }
 
-  // 👉 see OLMapComponent for wiring
-  // 👉 see https://marco.dev/angular-right-click-menu
-  onContextMenu(event: PointerEvent): void {
-    if (this.contextMenu && this.selected.length > 0) {
-      const style = getComputedStyle(document.documentElement);
-      const hack = style.getPropertyValue('--map-cy-toolbar');
-      this.menuPosition.x = event.clientX + 8;
-      this.menuPosition.y = event.clientY + 8 - Number(hack);
-      this.cdf.detectChanges();
-      this.contextMenuTrigger.openMenu();
-    }
+  ngOnInit(): void {
+    this.#handleContextMenu$();
   }
 
   reselectParcels(ids: string[]): void {

@@ -51,6 +51,7 @@
     "ngx-avatar": "^4",
     "ngx-pipes": "^2",
     "ngx-router-animations": "^11",
+    "object-hash": "^2",
     "ol": "^6",
     "ol-ext": "^3",
     "ol-mapbox-style": "^6",

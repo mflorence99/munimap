@@ -5,6 +5,7 @@ import { Profile } from './auth';
 
 import { Action } from '@ngxs/store';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { NgxsOnInit } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -14,11 +15,12 @@ import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 
 import { combineLatest } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import firebase from 'firebase/app';
+import hash from 'object-hash';
 
 export class AddParcels {
   static readonly type = '[Parcels] AddParcels';
@@ -44,7 +46,7 @@ export interface Parcel extends Partial<Feature> {
 }
 
 export interface ParcelProperties {
-  abutters?: string[];
+  abutters?: string[] /* 👈 legacy support */;
   address?: string;
   area: number;
   areaComputed: number;
@@ -60,7 +62,7 @@ export interface ParcelProperties {
   land$?: number;
   lengths?: number[];
   minWidth?: number;
-  neighborhood?: 'U' | 'V' | 'W';
+  neighborhood?: 'U' | 'V' | 'W' /* TODO 🔥 */;
   numSplits: number;
   orientation?: number;
   owner?: string;
@@ -106,10 +108,14 @@ export type ParcelsStateModel = Parcel[];
 })
 @Injectable()
 export class ParcelsState implements NgxsOnInit {
+  #parcels: AngularFirestoreCollection<Parcel>;
+
   @Select(MapState) map$: Observable<Map>;
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
-  constructor(private firestore: AngularFirestore, private store: Store) {}
+  constructor(private firestore: AngularFirestore, private store: Store) {
+    this.#parcels = this.firestore.collection('parcels');
+  }
 
   #handleStreams$(): void {
     combineLatest([this.map$, this.profile$])
@@ -125,10 +131,11 @@ export class ParcelsState implements NgxsOnInit {
                 .orderBy('timestamp', 'desc');
             return this.firestore
               .collection<Parcel>('parcels', query)
-              .valueChanges()
-              .pipe(debounceTime(1000));
+              .valueChanges();
           }
-        })
+        }),
+        // 👉 cut down on noise
+        distinctUntilChanged((p, q): boolean => hash.MD5(p) === hash.MD5(q))
       )
       .subscribe((parcels: Parcel[]) =>
         this.store.dispatch(new SetParcels(parcels))
@@ -148,8 +155,7 @@ export class ParcelsState implements NgxsOnInit {
   ): void {
     const batch = this.firestore.firestore.batch();
     action.parcels.forEach((parcel) => {
-      const ref = this.firestore.collection('parcels').doc().ref;
-      ref.set(this.#normalize(parcel));
+      this.#parcels.add(this.#normalize(parcel));
     });
     // TODO 🔥 we have a great opportunity here to "cull"
     //         extraneous parcels

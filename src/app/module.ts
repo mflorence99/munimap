@@ -27,6 +27,7 @@ import { OLLayerTileComponent } from './ol/ol-layer-tile';
 import { OLLayerVectorComponent } from './ol/ol-layer-vector';
 import { OLLayerVectorTileComponent } from './ol/ol-layer-vectortile';
 import { OLMapComponent } from './ol/ol-map';
+import { OLOverlayLabelComponent } from './ol/ol-overlay-label';
 import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
 import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
@@ -127,6 +128,7 @@ const COMPONENTS = [
   OLLayerVectorComponent,
   OLLayerVectorTileComponent,
   OLMapComponent,
+  OLOverlayLabelComponent,
   OLSourceBoundaryComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,

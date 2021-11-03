@@ -22,6 +22,7 @@ import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { Subject } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
@@ -30,6 +31,7 @@ import { transformExtent } from 'ol/proj';
 
 import copy from 'fast-copy';
 import OLMap from 'ol/Map';
+import OLMapBrowserEvent from 'ol/MapBrowserEvent';
 import OLView from 'ol/View';
 
 @Component({
@@ -46,6 +48,9 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   boundaryExtent: Coordinate;
 
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
+
+  click$ = new Subject<OLMapBrowserEvent<any>>();
+  contextMenu$ = new Subject<PointerEvent>();
 
   featureProjection = 'EPSG:4326';
 
@@ -200,6 +205,10 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.store.dispatch(new UpdateView(this.path, { center, zoom }));
   }
 
+  #onClick(event: OLMapBrowserEvent<any>): void {
+    this.click$.next(event);
+  }
+
   currentCounty(): string {
     return this.path.split(':')[1];
   }
@@ -227,10 +236,12 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
+    this.olMap?.un('click', this.#onClick.bind(this));
     this.olView?.un('change', this.#onChange.bind(this));
   }
 
   ngOnInit(): void {
+    this.olMap.on('click', this.#onClick.bind(this));
     this.olMap.setTarget(this.host.nativeElement);
   }
 
@@ -238,7 +249,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     event: PointerEvent
   ): void {
     event.preventDefault();
-    this.selector?.onContextMenu(event);
+    this.contextMenu$.next(event);
   }
 
   saveOriginalFeature(feature: Feature): void {

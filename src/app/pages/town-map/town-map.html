@@ -219,6 +219,10 @@
           </app-ol-interaction-select>
         </app-ol-layer-vector>
 
+        <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
+
+        <app-ol-overlay-label></app-ol-overlay-label>
+
         <!-- 📦 BOUNDARY LAYER -->
 
         <app-ol-layer-vector>
@@ -245,13 +249,15 @@
     </header>
 
     <ul>
-      <li (click)="onContextMenu('parcel-properties')" class="item">
+      <li
+        (click)="canParcelProperties($event) && onContextMenu('parcel-properties')"
+        [class.disabled]="!canParcelProperties()"
+        class="item"
+      >
         <img class="icon" src="assets/properties.svg" />
         Parcel properties ...
       </li>
-    </ul>
 
-    <ul>
       <li
         (click)="canMergeParcels($event) && onContextMenu('merge-parcels')"
         [class.disabled]="!canMergeParcels()"
@@ -259,6 +265,15 @@
       >
         <img class="icon" src="assets/merge.svg" />
         Merge parcels ...
+      </li>
+
+      <li
+        (click)="canRecenterLabel($event) && onContextMenu('recenter-label')"
+        [class.disabled]="!canRecenterLabel()"
+        class="item"
+      >
+        <img class="icon" src="assets/target.svg" />
+        Recenter label in parcel
       </li>
     </ul>
   </nav>

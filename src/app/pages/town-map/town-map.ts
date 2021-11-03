@@ -7,6 +7,7 @@ import { Map } from '../../state/map';
 import { MapState } from '../../state/map';
 import { MergeParcelsComponent } from '../../contextmenu/merge-parcels';
 import { OLMapComponent } from '../../ol/ol-map';
+import { OLOverlayLabelComponent } from '../../ol/ol-overlay-label';
 import { ParcelPropertiesComponent } from '../../contextmenu/parcel-properties';
 import { RootPage } from '../root/root';
 import { SetMap } from '../../state/map';
@@ -45,6 +46,8 @@ export class TownMapPage implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer;
 
+  @ViewChild(OLOverlayLabelComponent) labelOverlay: OLOverlayLabelComponent;
+
   @Select(MapState) mapState$: Observable<Map>;
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
@@ -59,6 +62,11 @@ export class TownMapPage implements OnInit {
     private router: Router,
     private store: Store
   ) {}
+
+  #can(event: MouseEvent, condition: boolean): boolean {
+    if (!condition && event) event.stopPropagation();
+    return condition;
+  }
 
   #handleActions$(): void {
     this.actions$
@@ -114,8 +122,15 @@ export class TownMapPage implements OnInit {
   }
 
   canMergeParcels(event?: MouseEvent): boolean {
-    if (event) event.stopPropagation();
-    return this.olMap.selector.selectedIDs.length > 1;
+    return this.#can(event, this.olMap.selector.selectedIDs.length > 1);
+  }
+
+  canParcelProperties(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selector.selectedIDs.length > 0);
+  }
+
+  canRecenterLabel(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
   }
 
   ngOnInit(): void {
@@ -133,6 +148,9 @@ export class TownMapPage implements OnInit {
         break;
       case 'merge-parcels':
         cFactory = this.resolver.resolveComponentFactory(MergeParcelsComponent);
+        break;
+      case 'recenter-label':
+        this.labelOverlay.setFeature(this.olMap.selector.selected[0]);
         break;
     }
     if (cFactory) this.#onContextMenu(cFactory);
