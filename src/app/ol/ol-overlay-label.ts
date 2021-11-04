@@ -13,9 +13,12 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
+import { point } from '@turf/helpers';
+import { polygon } from '@turf/helpers';
 import { takeUntil } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
 
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import OLFeature from 'ol/Feature';
 import OLOverlay from 'ol/Overlay';
 
@@ -27,9 +30,14 @@ import OLOverlay from 'ol/Overlay';
   styleUrls: ['./ol-overlay-label.scss']
 })
 export class OLOverlayLabelComponent implements OnInit {
+  #centers: number[][];
+  #contextMenuAt: number[];
+  #hack: number;
+  #id: string;
+  #ix: number;
+
   @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;
 
-  olFeature: OLFeature<any>;
   olOverlay: OLOverlay;
 
   constructor(
@@ -51,27 +59,39 @@ export class OLOverlayLabelComponent implements OnInit {
       .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 
+  #handleContextMenu$(): void {
+    this.map.contextMenu$.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+      this.#contextMenuAt = this.map.olMap.getCoordinateFromPixel([
+        event.clientX,
+        event.clientY - this.#hack
+      ]);
+    });
+  }
+
   ngOnInit(): void {
+    // 👉 need to hack Y offsets by the height of the toolbar
+    const style = getComputedStyle(document.documentElement);
+    this.#hack = Number(style.getPropertyValue('--map-cy-toolbar'));
     this.olOverlay.setElement(this.label.nativeElement);
     this.#handleClick$();
+    this.#handleContextMenu$();
   }
 
   onDragEnd(event: DragEvent): void {
-    // 👉 need to hack the Y offset by the height of the toolbar
-    const style = getComputedStyle(document.documentElement);
-    const hack = style.getPropertyValue('--map-cy-toolbar');
-    // construct a parcel to override the label position
+    // 👉 construct a parcel to override the label position
+    const centers = this.#centers;
+    centers[this.#ix] = toLonLat(
+      this.map.olMap.getCoordinateFromPixel([
+        event.clientX,
+        event.clientY - this.#hack
+      ])
+    );
     const parcel: Parcel = {
-      id: this.olFeature.getId(),
+      id: this.#id,
       owner: this.authState.currentProfile().email,
       path: this.map.path,
       properties: {
-        center: toLonLat(
-          this.map.olMap.getCoordinateFromPixel([
-            event.clientX,
-            event.clientY - Number(hack)
-          ])
-        )
+        centers: centers
       } as ParcelProperties,
       type: 'Feature'
     };
@@ -80,7 +100,22 @@ export class OLOverlayLabelComponent implements OnInit {
   }
 
   setFeature(feature: OLFeature<any>): void {
-    this.olFeature = feature;
-    this.olOverlay.setPosition(fromLonLat(feature.getProperties().center));
+    this.#centers = feature.getProperties().centers;
+    this.#id = `${feature.getId()}`;
+    this.#ix = 0;
+    if (feature.getGeometry().getType() === 'MultiPolygon') {
+      // TODO 🔥 this sucks as we shoud be using getPolygons() ???
+      const coords = feature.getGeometry().getCoordinates()[0];
+      // TODO 🔥 this sucks too as we're using turf when
+      //         there must be a way with OL's Geometry
+      for (this.#ix = 0; this.#ix < coords.length; this.#ix++) {
+        const pt = point(this.#contextMenuAt);
+        const poly = polygon([coords[this.#ix]]);
+        if (booleanPointInPolygon(pt, poly)) break;
+      }
+    }
+    this.olOverlay.setPosition(
+      fromLonLat(feature.getProperties().centers[this.#ix])
+    );
   }
 }

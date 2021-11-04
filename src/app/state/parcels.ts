@@ -55,28 +55,24 @@ class ParcelPropertiesClass {
     public abutters: string[] /* 👈 legacy support */ = null,
     public address: string = null,
     public area: number = null,
-    public areaComputed: number = null,
+    public areas: number[] = null,
     public building$: number = null,
-    public callout: number[] /* 👈 legacy support */ = null,
-    public center: number[] = null,
+    public callouts: number[][] /* 👈 legacy support */ = null,
+    public centers: number[][] = null,
     public county: string = null,
-    public cu$: number /* 👈 should be feature$ !! */ = null,
-    public velevation: number = null,
+    public elevations: number[] /* 👈 legacy support */ = null,
     public id: string = null,
-    public label: {
-      rotate: boolean;
-      split: boolean;
-    } /* 👈 legacy support */ = null,
+    public labels: ParcelPropertiesLabel[] /* 👈 legacy support */ = null,
     public land$: number = null,
-    public lengths: number[] = null,
+    public lengths: number[][] = null,
     public mergedWith: string[] = null,
-    public minWidth: number = null,
-    public neighborhood: 'U' | 'V' | 'W' /* TODO 🔥 */ = null,
-    public numSplits: number = null,
-    public orientation: number = null,
+    public minWidths: number[] = null,
+    public neighborhood: ParcelPropertiesNeighborhood = null,
+    public orientations: number[] = null,
+    public other$: number = null,
     public owner: string = null,
-    public perimeter: number = null,
-    public sqarcity: number = null,
+    public perimeters: number[] = null,
+    public sqarcities: number[] = null,
     public taxed$: number = null,
     public town: string = null,
     public usage: ParcelPropertiesUsage = null,
@@ -85,9 +81,16 @@ class ParcelPropertiesClass {
   ) {}
 }
 
-export interface ParcelProperties extends ParcelPropertiesClass {}
+export interface ParcelProperties extends Partial<ParcelPropertiesClass> {}
 
 export const parcelProperties = Object.keys(new ParcelPropertiesClass());
+
+export interface ParcelPropertiesLabel {
+  rotate: boolean;
+  split: boolean;
+}
+
+export type ParcelPropertiesNeighborhood = 'U' | 'V' | 'W' /* TODO 🔥 */;
 
 export type ParcelPropertiesUsage =
   | '110' // Single family residence

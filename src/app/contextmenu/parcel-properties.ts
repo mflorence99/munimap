@@ -50,7 +50,7 @@ const editables = [
   { prop: 'use', label: 'Current Use' },
   { prop: 'building$', label: 'Building Tax', type: 'number' },
   { prop: 'land$', label: 'Land Tax', type: 'number' },
-  { prop: 'cu$', label: 'Other Tax', type: 'number' },
+  { prop: 'other$', label: 'Other Tax', type: 'number' },
   { prop: 'taxed$', label: 'Total Tax', type: 'number' }
 ];
 

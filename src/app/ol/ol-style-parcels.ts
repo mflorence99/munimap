@@ -19,7 +19,6 @@ import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLIcon from 'ol/style/Icon';
 import OLPoint from 'ol/geom/Point';
-import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -47,6 +46,8 @@ interface Label {
   fontWeight: string;
   offsetX: number;
   offsetY: number;
+  point: OLPoint;
+  rotation: number;
   text: string;
 }
 
@@ -89,8 +90,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #fill(parcel: OLFeature<OLPolygon>, _resolution: number): OLStyle[] {
-    const props = parcel.getProperties() as ParcelProperties;
+  #fill(feature: OLFeature<any>, _resolution: number): OLStyle[] {
+    const props = feature.getProperties() as ParcelProperties;
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let patterns;
     // 👉 current use pattern comes from the use field (CUUH etc)
@@ -127,14 +128,14 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   // 👇 https://stackoverflow.com/questions/846221/logarithmic-slider
-  #fontSize(props: ParcelProperties, resolution: number): number {
+  #fontSize(props: ParcelProperties, resolution: number, ix: number): number {
     const minp = this.#fontSizeClamp[0];
     const maxp = this.#fontSizeClamp[1];
     const minv = Math.log(this.#acresSizeClamp[0]);
     const maxv = Math.log(this.#acresSizeClamp[1]);
     const scale = (maxv - minv) / (maxp - minp);
     const acres = Math.max(
-      Math.min(props.areaComputed, this.#acresSizeClamp[1]),
+      Math.min(props.areas[ix], this.#acresSizeClamp[1]),
       this.#acresSizeClamp[0]
     );
     const nominal = (Math.log(acres) - minv) / scale + minp;
@@ -154,115 +155,129 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       : null;
   }
 
-  #isLarge(props: ParcelProperties): boolean {
-    return props.areaComputed >= 25;
+  #isLarge(props: ParcelProperties, ix: number): boolean {
+    return props.areas[ix] >= 25;
   }
 
-  #isSmall(props: ParcelProperties): boolean {
-    return props.areaComputed <= 1;
+  #isSmall(props: ParcelProperties, ix: number): boolean {
+    return props.areas[ix] <= 1;
   }
 
-  #isSquare(props: ParcelProperties): boolean {
-    return props.sqarcity > 0.6;
+  #isSquare(props: ParcelProperties, ix: number): boolean {
+    return props.sqarcities[ix] > 0.6;
   }
 
-  #isTiny(props: ParcelProperties): boolean {
-    return props.areaComputed <= 0.25;
+  #isTiny(props: ParcelProperties, ix: number): boolean {
+    return props.areas[ix] <= 0.25;
   }
 
-  #labels(props: ParcelProperties, resolution: number): Label[] {
+  #labels(
+    props: ParcelProperties,
+    resolution: number,
+    numLabels: number
+  ): Label[] {
     const labels: Label[] = [];
-    const fontSize = this.#fontSize(props, resolution);
-    // 👉 for tiny parcels, we'll only show the parcel # so we can
-    //    shortcircuit all the calculations
-    if (this.#isTiny(props)) {
-      labels.push({
-        fontFamily: this.fontFamily,
-        fontSize: fontSize,
-        fontWeight: 'bold',
-        offsetX: 0,
-        offsetY: 0,
-        text: props.id
-      });
-    } else {
-      // 👉 measure up the parcel id and the acreage text
-      //    NOTE: the acreage font size is 80% smaller
-      const fAcres = 0.8;
-      const mID = this.map.measureText(
-        props.id,
-        `bold ${fontSize}px '${this.fontFamily}'`
-      );
-      const mGap = this.map.measureText(
-        '  ',
-        `normal ${fontSize * fAcres}px '${this.fontFamily}'`
-      );
-      const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
-      const mAcres = this.map.measureText(
-        acres,
-        `normal ${fontSize * fAcres}px '${this.fontFamily}'`
-      );
-      // 👉 now compute the x and y offset, which depends
-      //    on whether we're splitting the text or not
-      let x1 = 0;
-      let x2 = 0;
-      let y1 = 0;
-      let y2 = 0;
-      if (!this.#splitation(props)) {
-        const total = mID.width + mGap.width + mAcres.width;
-        x1 = -(total / 2) + mID.width / 2;
-        x2 = total / 2 + -(mAcres.width / 2);
+    for (let ix = 0; ix < numLabels; ix++) {
+      const fontSize = this.#fontSize(props, resolution, ix);
+      // 👉 for tiny parcels, we'll only show the parcel # so we can
+      //    shortcircuit all the calculations
+      if (this.#isTiny(props, ix)) {
+        labels.push({
+          fontFamily: this.fontFamily,
+          fontSize: fontSize,
+          fontWeight: 'bold',
+          offsetX: 0,
+          offsetY: 0,
+          point: this.#point(props, ix),
+          rotation: this.#rotation(props, ix),
+          text: props.id
+        });
       } else {
-        y1 = -(mID.fontBoundingBoxAscent / 2);
-        y2 = mID.fontBoundingBoxAscent / 2;
+        // 👉 measure up the parcel id and the acreage text
+        //    NOTE: the acreage font size is 80% smaller
+        const fAcres = 0.8;
+        const mID = this.map.measureText(
+          props.id,
+          `bold ${fontSize}px '${this.fontFamily}'`
+        );
+        const mGap = this.map.measureText(
+          '  ',
+          `normal ${fontSize * fAcres}px '${this.fontFamily}'`
+        );
+        const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
+        const mAcres = this.map.measureText(
+          acres,
+          `normal ${fontSize * fAcres}px '${this.fontFamily}'`
+        );
+        // 👉 now compute the x and y offset, which depends
+        //    on whether we're splitting the text or not
+        let x1 = 0;
+        let x2 = 0;
+        let y1 = 0;
+        let y2 = 0;
+        if (!this.#splitation(props, ix)) {
+          const total = mID.width + mGap.width + mAcres.width;
+          x1 = -(total / 2) + mID.width / 2;
+          x2 = total / 2 + -(mAcres.width / 2);
+        } else {
+          y1 = -(mID.fontBoundingBoxAscent / 2);
+          y2 = mID.fontBoundingBoxAscent / 2;
+        }
+        // 👉 finally styles are computed for both segments
+        labels.push({
+          fontFamily: this.fontFamily,
+          fontSize: fontSize,
+          fontWeight: 'bold',
+          offsetX: x1,
+          offsetY: y1,
+          point: this.#point(props, ix),
+          rotation: this.#rotation(props, ix),
+          text: props.id
+        });
+        labels.push({
+          fontFamily: this.fontFamily,
+          fontSize: fontSize * fAcres,
+          fontWeight: 'normal',
+          offsetX: x2,
+          offsetY: y2,
+          point: this.#point(props, ix),
+          rotation: this.#rotation(props, ix),
+          text: acres
+        });
       }
-      // 👉 finally styles are computed for both segments
-      labels.push({
-        fontFamily: this.fontFamily,
-        fontSize: fontSize,
-        fontWeight: 'bold',
-        offsetX: x1,
-        offsetY: y1,
-        text: props.id
-      });
-      labels.push({
-        fontFamily: this.fontFamily,
-        fontSize: fontSize * fAcres,
-        fontWeight: 'normal',
-        offsetX: x2,
-        offsetY: y2,
-        text: acres
-      });
     }
     return labels;
   }
 
-  #point(parcel: OLFeature<OLPolygon>): OLPoint {
-    const props = parcel.getProperties() as ParcelProperties;
-    return new OLPoint(fromLonLat(props.center));
+  #point(props: ParcelProperties, ix: number): OLPoint {
+    return new OLPoint(fromLonLat(props.centers[ix]));
   }
 
-  #rotation(props: ParcelProperties): number {
-    const label = props.label;
+  #rotation(props: ParcelProperties, ix: number): number {
+    const label = props.labels[ix];
     const rotate =
-      label?.rotate === undefined ? !this.#isLarge(props) : label?.rotate;
+      label?.rotate === undefined ? !this.#isLarge(props, ix) : label?.rotate;
     // 👈 in radians
-    return rotate ? props.orientation * (Math.PI / 180) : 0;
+    return rotate ? props.orientations[ix] * (Math.PI / 180) : 0;
   }
 
-  #splitation(props: ParcelProperties): boolean {
-    const label = props.label;
+  #splitation(props: ParcelProperties, ix: number): boolean {
+    const label = props.labels[ix];
     // 👉 we're ignoring split=false recommendations as that doesn't really
     //    work in the OpenLayers world
     return label?.split === undefined || !label?.split
-      ? this.#isSmall(props) || this.#isLarge(props) || this.#isSquare(props)
+      ? this.#isSmall(props, ix) ||
+          this.#isLarge(props, ix) ||
+          this.#isSquare(props, ix)
       : label?.split;
   }
 
   // 👐 https://stackoverflow.com/questions/45740521
-  #strokeOutline(parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] {
-    const props = parcel.getProperties() as ParcelProperties;
+  #strokeOutline(feature: OLFeature<any>, resolution: number): OLStyle[] {
+    const props = feature.getProperties() as ParcelProperties;
     // 👇 only if feature will be visible
-    if (this.#fontSize(props, resolution) < this.threshold) return null;
+    // TODO 🔥 only considering first fontSize
+    if (this.#fontSize(props, resolution, 0) < this.threshold) return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
       const width = this.width / resolution;
@@ -289,16 +304,17 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #strokeSelect(
-    parcel: OLFeature<OLPolygon>,
+    feature: OLFeature<any>,
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
-    const props = parcel.getProperties() as ParcelProperties;
+    const props = feature.getProperties() as ParcelProperties;
     // 👇 only if feature will be visible
-    if (this.#fontSize(props, resolution) < this.threshold) return null;
+    // TODO 🔥 only considering first fontSize
+    if (this.#fontSize(props, resolution, 0) < this.threshold) return null;
     else {
       const select = this.map.vars['--map-parcel-select'];
-      const width = Math.max(this.width / resolution, 3);
+      const width = this.width / resolution;
       // 👉 necessary so we can select
       const fill = new OLFill({ color: [0, 0, 0, 0] });
       const stroke = new OLStroke({ color: `rgb(${select})`, width });
@@ -306,14 +322,19 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     }
   }
 
-  #text(parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] {
-    const props = parcel.getProperties() as ParcelProperties;
+  #text(feature: OLFeature<any>, resolution: number): OLStyle[] {
+    const props = feature.getProperties() as ParcelProperties;
     // 👇 only if feature will be visible
-    if (this.#fontSize(props, resolution) < this.threshold) return null;
+    // TODO 🔥 only considering first fontSize
+    if (this.#fontSize(props, resolution, 0) < this.threshold) return null;
     else {
       const color = this.map.vars['--map-parcel-text-color'];
-      const props = parcel.getProperties() as ParcelProperties;
-      const labels = this.#labels(props, resolution);
+      // 👉 we need to draw a label in each polygon of a multi-polygon
+      let numLabels = 1;
+      if (feature.getGeometry().getType() === 'MultiPolygon')
+        // TODO 🔥 this sucks as we shoud be using getPolygons() ???
+        numLabels = feature.getGeometry().getCoordinates()[0].length;
+      const labels = this.#labels(props, resolution, numLabels);
       return labels.map((label) => {
         const text = new OLText({
           font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
@@ -321,46 +342,46 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetX: label.offsetX,
           offsetY: label.offsetY,
           overflow: true,
-          rotation: this.#rotation(props),
+          rotation: label.rotation,
           text: label.text
         });
-        return new OLStyle({ geometry: this.#point(parcel), text });
+        return new OLStyle({ geometry: label.point, text });
       });
     }
   }
 
   #theStyles(
-    parcel: OLFeature<OLPolygon>,
+    feature: OLFeature<any>,
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (this.showBackground) {
-      const fills = this.#fill(parcel, resolution);
+      const fills = this.#fill(feature, resolution);
       if (fills) styles.push(...fills);
-      const strokes = this.#strokeOutline(parcel, resolution);
+      const strokes = this.#strokeOutline(feature, resolution);
       if (strokes) styles.push(...strokes);
     }
     if (this.showSelection) {
-      const strokes = this.#strokeSelect(parcel, resolution, whenSelected);
+      const strokes = this.#strokeSelect(feature, resolution, whenSelected);
       if (strokes) styles.push(...strokes);
     }
     if (this.showText) {
-      const texts = this.#text(parcel, resolution);
+      const texts = this.#text(feature, resolution);
       if (texts) styles.push(...texts);
     }
     return styles;
   }
 
   style(): OLStyleFunction {
-    return (parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] => {
-      return this.#theStyles(parcel, resolution);
+    return (feature: OLFeature<any>, resolution: number): OLStyle[] => {
+      return this.#theStyles(feature, resolution);
     };
   }
 
   styleWhenSelected(): OLStyleFunction {
-    return (parcel: OLFeature<OLPolygon>, resolution: number): OLStyle[] => {
-      return this.#theStyles(parcel, resolution, true);
+    return (feature: OLFeature<any>, resolution: number): OLStyle[] => {
+      return this.#theStyles(feature, resolution, true);
     };
   }
 }
