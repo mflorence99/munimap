@@ -40,40 +40,54 @@ export type Features = GeoJSON.FeatureCollection<
 >;
 
 export interface Parcel extends Partial<Feature> {
+  $id?: string /* 👈 optional only because we'll complete it */;
+  geometryStr?: string /* 👈 Firebase won't let us store a real geometry */;
   owner: string;
   path: string;
+  removed?: string | null | undefined;
   timestamp?: any /* 👈 optional only because we'll complete it */;
 }
 
-export interface ParcelProperties {
-  abutters?: string[] /* 👈 legacy support */;
-  address?: string;
-  area: number;
-  areaComputed: number;
-  building$?: number;
-  callout?: number[] /* 👈 legacy support */;
-  center?: number[];
-  class: string;
-  county: string;
-  cu$?: number /* 👈 should be feature$ !! */;
-  elevation?: number;
-  id: string;
-  label?: { rotate: boolean; split: boolean } /* 👈 legacy support */;
-  land$?: number;
-  lengths?: number[];
-  minWidth?: number;
-  neighborhood?: 'U' | 'V' | 'W' /* TODO 🔥 */;
-  numSplits: number;
-  orientation?: number;
-  owner?: string;
-  perimeter?: number;
-  sqarcity?: number;
-  taxed$?: number;
-  town: string;
-  usage: ParcelPropertiesUsage;
-  use?: ParcelPropertiesUse;
-  zone: string;
+// 👉 https://stackoverflow.com/questions/43909566
+
+class ParcelPropertiesClass {
+  constructor(
+    public abutters: string[] /* 👈 legacy support */ = null,
+    public address: string = null,
+    public area: number = null,
+    public areaComputed: number = null,
+    public building$: number = null,
+    public callout: number[] /* 👈 legacy support */ = null,
+    public center: number[] = null,
+    public county: string = null,
+    public cu$: number /* 👈 should be feature$ !! */ = null,
+    public velevation: number = null,
+    public id: string = null,
+    public label: {
+      rotate: boolean;
+      split: boolean;
+    } /* 👈 legacy support */ = null,
+    public land$: number = null,
+    public lengths: number[] = null,
+    public mergedWith: string[] = null,
+    public minWidth: number = null,
+    public neighborhood: 'U' | 'V' | 'W' /* TODO 🔥 */ = null,
+    public numSplits: number = null,
+    public orientation: number = null,
+    public owner: string = null,
+    public perimeter: number = null,
+    public sqarcity: number = null,
+    public taxed$: number = null,
+    public town: string = null,
+    public usage: ParcelPropertiesUsage = null,
+    public use: ParcelPropertiesUse = null,
+    public zone: string = null
+  ) {}
 }
+
+export interface ParcelProperties extends ParcelPropertiesClass {}
+
+export const parcelProperties = Object.keys(new ParcelPropertiesClass());
 
 export type ParcelPropertiesUsage =
   | '110' // Single family residence
@@ -131,7 +145,7 @@ export class ParcelsState implements NgxsOnInit {
                 .orderBy('timestamp', 'desc');
             return this.firestore
               .collection<Parcel>('parcels', query)
-              .valueChanges();
+              .valueChanges({ idField: '$id' });
           }
         }),
         // 👉 cut down on noise

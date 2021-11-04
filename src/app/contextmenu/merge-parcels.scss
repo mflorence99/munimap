@@ -3,9 +3,8 @@
   width: 25rem;
 }
 
-.actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  padding: 0.5rem 1rem;
+.ids {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 33.3% 33.3% 33.3%;
 }

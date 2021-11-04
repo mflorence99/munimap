@@ -53,6 +53,7 @@ import { ReadyResolver } from './resolvers/ready';
 import { RootPage } from './pages/root/root';
 import { TownMapPage } from './pages/town-map/town-map';
 import { TownMapSetupComponent } from './pages/town-map/town-map-setup';
+import { UnmergeParcelComponent } from './contextmenu/unmerge-parcel';
 import { UserProfileComponent } from './pages/root/user-profile';
 import { ViewState } from './state/view';
 import { WorkgroupValidator } from './pages/root/workgroup-validator';
@@ -150,6 +151,7 @@ const COMPONENTS = [
   OLStyleTrailsComponent,
   ParcelPropertiesComponent,
   TownMapSetupComponent,
+  UnmergeParcelComponent,
   UserProfileComponent
 ];
 

@@ -34,6 +34,8 @@ export class OLControlSearchParcelsComponent implements OnInit {
 
   #overridesByID: Record<string, Override> = {};
 
+  #removedIDs = new Set();
+
   #searchTargets = [];
   #searchablesByAddress: Record<string, Feature[]> = {};
   #searchablesByID: Record<string, Feature[]> = {};
@@ -60,16 +62,18 @@ export class OLControlSearchParcelsComponent implements OnInit {
     searchables: Feature[],
     prop: string
   ): Record<string, Feature[]> {
-    return searchables.reduce((acc, searchable) => {
-      const props = searchable.properties;
-      const override = this.#overridesByID[searchable.id];
-      const property = override?.[prop] ?? props[prop];
-      if (property) {
-        if (!acc[property]) acc[property] = [searchable];
-        else acc[property].push(searchable);
-      }
-      return acc;
-    }, {});
+    return searchables
+      .filter((searchable) => !this.#removedIDs.has(searchable.id))
+      .reduce((acc, searchable) => {
+        const props = searchable.properties;
+        const override = this.#overridesByID[searchable.id];
+        const property = override?.[prop] ?? props[prop];
+        if (property) {
+          if (!acc[property]) acc[property] = [searchable];
+          else acc[property].push(searchable);
+        }
+        return acc;
+      }, {});
   }
 
   // 👉 the idea behind "searchables" is to provide just enough data for
@@ -89,6 +93,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe(([geojson, parcels]) => {
         this.#overridesByID = this.#makeOverridesByID(parcels);
+        this.#removedIDs = this.#makeRemovedIDs(parcels);
         this.#searchTargets = this.#makeSearchTargets(geojson.features);
         this.#searchablesByAddress = this.#groupSearchablesByProperty(
           geojson.features,
@@ -121,17 +126,31 @@ export class OLControlSearchParcelsComponent implements OnInit {
     }, {});
   }
 
+  #makeRemovedIDs(parcels: Parcel[]): Set<any> {
+    const removedHash = parcels.reduce((acc, parcel) => {
+      if (acc[parcel.id] === undefined && parcel.removed !== undefined)
+        acc[parcel.id] = parcel.removed;
+      return acc;
+    }, {});
+    const removedIDs = Object.keys(removedHash).filter(
+      (key) => removedHash[key]
+    );
+    return new Set(removedIDs);
+  }
+
   #makeSearchTargets(searchables: Feature[]): any[] {
     const keys = new Set<string>();
-    searchables.forEach((searchable) => {
-      const props = searchable.properties;
-      const override = this.#overridesByID[searchable.id];
-      if (override?.address) keys.add(override.address);
-      else if (props.address) keys.add(props.address);
-      if (override?.owner) keys.add(override.owner);
-      else if (props.owner) keys.add(props.owner);
-      keys.add(props.id);
-    });
+    searchables
+      .filter((searchable) => !this.#removedIDs.has(searchable.id))
+      .forEach((searchable) => {
+        const props = searchable.properties;
+        const override = this.#overridesByID[searchable.id];
+        if (override?.address) keys.add(override.address);
+        else if (props.address) keys.add(props.address);
+        if (override?.owner) keys.add(override.owner);
+        else if (props.owner) keys.add(props.owner);
+        keys.add(props.id);
+      });
     return Array.from(keys).map((key) => fuzzysort.prepare(key));
   }
 
