@@ -14,6 +14,14 @@
 
     <div class="filler"></div>
 
+    <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
+      <mat-icon>redo</mat-icon>
+    </button>
+
+    <button (click)="undo()" [disabled]="!canUndo" mat-icon-button>
+      <mat-icon>undo</mat-icon>
+    </button>
+
     <ng-container *ngIf="user$ | async as user">
       <ngx-avatar
         #trigger="cdkOverlayOrigin"

@@ -35,9 +35,24 @@ export class AddParcels {
   constructor(public parcels: Parcel[]) {}
 }
 
+export class CanDo {
+  static readonly type = '[Parcels] CanDo';
+  constructor(public canUndo: boolean, public canRedo: boolean) {}
+}
+
+export class Redo {
+  static readonly type = '[Parcels] Redo';
+  constructor() {}
+}
+
 export class SetParcels {
   static readonly type = '[Parcels] SetParcels';
   constructor(public parcels: Parcel[]) {}
+}
+
+export class Undo {
+  static readonly type = '[Parcels] Undo';
+  constructor() {}
 }
 
 export type Feature = GeoJSON.Feature<
@@ -138,6 +153,9 @@ export type ParcelPropertiesUse =
 
 export type ParcelsStateModel = Parcel[];
 
+const redoStack: Parcel[] = [];
+const undoStack: string[] = [];
+
 @State<ParcelsStateModel>({
   name: 'parcels',
   defaults: []
@@ -157,8 +175,11 @@ export class ParcelsState implements NgxsOnInit {
     combineLatest([this.map$, this.profile$])
       .pipe(
         mergeMap(([map, profile]) => {
-          if (map === null) return of([]);
-          else {
+          if (map === null) {
+            redoStack.length = 0;
+            undoStack.length = 0;
+            return of([]);
+          } else {
             const workgroup = AuthState.workgroup(profile);
             const query = (ref): any =>
               ref
@@ -192,17 +213,54 @@ export class ParcelsState implements NgxsOnInit {
     action: AddParcels
   ): void {
     const batch = this.firestore.firestore.batch();
-    action.parcels.forEach((parcel) => {
-      this.#parcels.add(this.#normalize(parcel));
+    redoStack.length = 0;
+    undoStack.length = 0;
+    const promises = action.parcels.map((parcel) => {
+      return this.#parcels
+        .add(this.#normalize(parcel))
+        .then((ref) => undoStack.push(ref.id));
     });
     // TODO 🔥 we have a great opportunity here to "cull"
     //         extraneous parcels
     batch.commit();
+    Promise.all(promises).then(() => {
+      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+    });
     // 👉 side-effect of handleStreams$ will update state
+  }
+
+  @Action(CanDo) canDo(
+    _ctx: StateContext<ParcelsStateModel>,
+    _action: CanDo
+  ): void {
+    /* placeholder */
   }
 
   ngxsOnInit(): void {
     this.#handleStreams$();
+  }
+
+  @Action(Redo) redo(
+    ctx: StateContext<ParcelsStateModel>,
+    _action: Redo
+  ): void {
+    // 👉 marshall the undo stack
+    undoStack.length = 0;
+    redoStack.forEach((parcel) => undoStack.push(parcel.$id));
+    // 👉 add all the parcels in the redo stack
+    const batch = this.firestore.firestore.batch();
+    const promises = redoStack.map((parcel) => {
+      return this.#parcels
+        .doc(parcel.$id)
+        .set(parcel)
+        .then(() => undoStack.push(parcel.$id));
+    });
+    redoStack.length = 0;
+    batch.commit();
+    Promise.all(promises).then(() => {
+      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+    });
+    // 👉 side-effect of handleStreams$ will update state
   }
 
   @Action(SetParcels) setParcels(
@@ -210,6 +268,29 @@ export class ParcelsState implements NgxsOnInit {
     action: SetParcels
   ): void {
     ctx.setState(action.parcels);
+  }
+
+  @Action(Undo) undo(
+    ctx: StateContext<ParcelsStateModel>,
+    _action: Undo
+  ): void {
+    const parcels = ctx.getState();
+    // 👉 marshall the redo stack
+    redoStack.length = 0;
+    parcels.forEach((parcel) => {
+      if (undoStack.includes(parcel.$id)) redoStack.push(parcel);
+    });
+    // 👉 delete all the parcels in the undo stack
+    const batch = this.firestore.firestore.batch();
+    const promises = undoStack.map((id) => {
+      return this.#parcels.doc(id).delete();
+    });
+    undoStack.length = 0;
+    batch.commit();
+    Promise.all(promises).then(() => {
+      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+    });
+    // 👉 side-effect of handleStreams$ will update state
   }
 }
 

@@ -1,12 +1,17 @@
 import { AuthState } from '../../state/auth';
+import { CanDo } from '../../state/parcels';
 import { DestroyService } from '../../services/destroy';
 import { Map } from '../../state/map';
 import { Profile } from '../../state/auth';
+import { Redo } from '../../state/parcels';
 import { TypeRegistry } from '../../services/typeregistry';
+import { Undo } from '../../state/parcels';
 import { User } from '../../state/auth';
 
+import { Actions } from '@ngxs/store';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Event } from '@angular/router';
 import { NavigationCancel } from '@angular/router';
@@ -18,11 +23,13 @@ import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { mergeMap } from 'rxjs/operators';
 import { moveFromLeftFade } from 'ngx-router-animations';
 import { of } from 'rxjs';
+import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
 import { transition } from '@angular/animations';
 import { trigger } from '@angular/animations';
@@ -43,6 +50,9 @@ import { useAnimation } from '@angular/animations';
 export class RootPage implements OnInit {
   allMaps$: Observable<Map[]>;
 
+  canRedo = false;
+  canUndo = false;
+
   loading = false;
   openUserProfile = false;
 
@@ -55,11 +65,25 @@ export class RootPage implements OnInit {
   @Select(AuthState.user) user$: Observable<User>;
 
   constructor(
+    private actions$: Actions,
+    private cdf: ChangeDetectorRef,
     private firestore: AngularFirestore,
     private destroy$: DestroyService,
     public registry: TypeRegistry,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
+
+  #handleActions$(): void {
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionSuccessful(CanDo))
+      .subscribe((action: CanDo) => {
+        console.log({ action });
+        this.canRedo = action.canRedo;
+        this.canUndo = action.canUndo;
+        this.cdf.detectChanges();
+      });
+  }
 
   #handleAllMaps$(): Observable<Map[]> {
     return this.profile$.pipe(
@@ -107,10 +131,19 @@ export class RootPage implements OnInit {
 
   ngOnInit(): void {
     this.allMaps$ = this.#handleAllMaps$();
+    this.#handleActions$();
     this.#handleRouterEvents$();
+  }
+
+  redo(): void {
+    this.store.dispatch(new Redo());
   }
 
   setTitle(title: string): void {
     this.title = title;
+  }
+
+  undo(): void {
+    this.store.dispatch(new Undo());
   }
 }

@@ -176,7 +176,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
       this.map.selector.selectParcels(
         searchables.map((searchable) => {
           const override = this.#overridesByID[searchable.id];
-          if (override.bbox) return { ...searchable, bbox: override.bbox };
+          if (override?.bbox) return { ...searchable, bbox: override.bbox };
           else return searchable;
         })
       );
