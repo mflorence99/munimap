@@ -70,7 +70,7 @@
     <div *ngIf="townMap.creating"></div>
 
     <button
-      *ngIf="!townMap.creating"
+      *ngIf="canDelete()"
       (click)="delete(map)"
       color="accent"
       mat-flat-button

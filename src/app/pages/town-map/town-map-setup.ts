@@ -1,3 +1,4 @@
+import { AuthState } from '../../state/auth';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog';
 import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DeleteMap } from '../../state/map';
@@ -38,6 +39,7 @@ export class TownMapSetupComponent {
   rolledup: boolean;
 
   constructor(
+    private authState: AuthState,
     private dialog: MatDialog,
     public registry: TypeRegistry,
     private root: RootPage,
@@ -46,6 +48,13 @@ export class TownMapSetupComponent {
     public townMap: TownMapPage
   ) {
     this.rolledup = !this.townMap.creating;
+  }
+
+  canDelete(): boolean {
+    return (
+      !this.townMap.creating &&
+      this.map.owner === this.authState.currentProfile().email
+    );
   }
 
   delete(map: any): void {

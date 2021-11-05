@@ -93,39 +93,36 @@ export class OLSourceParcelsComponent implements OnInit {
     // 👇 we need to merge the incoming geojson with the latest parcels
     combineLatest([this.#geojson$, this.parcels$])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([geojson, parcels]) => {
-        geojson = copy(geojson);
-        this.#filterRemovedFeatures(geojson, parcels);
-        const featuresByID = this.#groupByID<Feature>(geojson.features);
-        Object.keys(featuresByID).forEach((id) => {
+      .subscribe(([original, parcels]) => {
+        // 👉 remove the features that are in the geojson
+        //    because they will potentially be modified
+        //    by the parcel overrides -- we use groupByID for
+        //    convenience, but there's only one feature per ID
+        const originalsByID = this.#groupByID<Feature>(original.features);
+        Object.keys(originalsByID).forEach((id) => {
           const feature = this.olVector.getFeatureById(id);
           if (feature) this.olVector.removeFeature(feature);
         });
+        // 👉 take a copy of the geojson before we change it
+        const geojson = copy(original);
         const parcelsByID = this.#groupByID<Parcel>(parcels);
+        this.#filterRemovedFeatures(geojson, parcels);
         this.#overrideFeaturesWithParcels(geojson, parcelsByID);
-        // 👉 remove features that are in both the geojson
-        //    and in the parcels override -- then they'll get
-        //    added back via "addFeatures" below
-        // let featuresRemoved = false;
-        const selectedIDs = this.map.selector.selectedIDs;
-        // Object.keys(parcelsByID).forEach((id) => {
-        //   if (featuresByID[id]) {
-        //     const feature = this.olVector.getFeatureById(id);
-        //     if (feature) {
-        //       featuresRemoved = true;
-        //       this.olVector.removeFeature(feature);
-        //     }
-        //   }
-        // });
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.map.projection
         }) as OLFeature<any>[];
+        // 👉 attach the original properties to each OL feature
+        features.forEach((feature) => {
+          const originalProperties =
+            originalsByID[feature.getId()]?.[0]?.properties;
+          feature.set('originalProperties', originalProperties, true);
+        });
         // 👉 refresh each feature
         this.olVector.addFeatures(features);
-        // 👉 if we removed features, only to recreate them,
-        //    we'll need to reselect them
-        if (/* featuresRemoved && */ selectedIDs.length > 0)
+        // 👉 reselect selected features b/c we've potentially removed them
+        const selectedIDs = this.map.selector.selectedIDs;
+        if (selectedIDs.length > 0)
           this.map.selector.reselectParcels(selectedIDs);
         this.#success?.(features);
       });
@@ -179,12 +176,8 @@ export class OLSourceParcelsComponent implements OnInit {
             .filter((parcel) => parcel.properties)
             .some((parcel) => {
               if (parcel.properties[prop] === null) {
-                // const original = this.map.getOriginalFeature(feature.id);
-                // if (original)
-                //   feature.properties[prop] = copy(original.properties[prop]);
                 return true;
               } else if (parcel.properties[prop] !== undefined) {
-                this.map.saveOriginalFeature(feature);
                 feature.properties[prop] = copy(parcel.properties[prop]);
                 return true;
               }
@@ -202,16 +195,10 @@ export class OLSourceParcelsComponent implements OnInit {
           .some((parcel) => {
             if (parcel.geometry === null) {
               return true;
-              // const original = this.map.getOriginalFeature(feature.id);
-              // if (original) {
-              //   feature.bbox = copy(original.bbox);
-              //   feature.geometry = copy(original.geometry);
-              // }
             } else if (
               parcel.geometry !== undefined &&
               Object.keys(parcel.geometry).length > 0
             ) {
-              this.map.saveOriginalFeature(feature);
               feature.bbox = parcel.bbox;
               feature.geometry = parcel.geometry;
               return true;

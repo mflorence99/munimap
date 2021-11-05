@@ -1,4 +1,3 @@
-import { Feature } from '../state/parcels';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
 import { OLInteractionSelectComponent } from './ol-interaction-select';
@@ -29,7 +28,6 @@ import { fromLonLat } from 'ol/proj';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
 
-import copy from 'fast-copy';
 import OLMap from 'ol/Map';
 import OLMapBrowserEvent from 'ol/MapBrowserEvent';
 import OLView from 'ol/View';
@@ -41,7 +39,6 @@ import OLView from 'ol/View';
   styleUrls: ['./ol-map.scss']
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
-  #originalFeatures: Record<string, Feature> = {};
   #path: Path;
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
@@ -221,10 +218,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     return this.path.split(':')[2];
   }
 
-  getOriginalFeature(id: string | number): Feature {
-    return this.#originalFeatures[`${id}`];
-  }
-
   measureText(text: string, font: string): TextMetrics {
     const ctx = this.canvas.nativeElement.getContext('2d');
     ctx.font = font;
@@ -250,11 +243,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   ): void {
     event.preventDefault();
     this.contextMenu$.next(event);
-  }
-
-  saveOriginalFeature(feature: Feature): void {
-    const id = `${feature.id}`;
-    if (!this.#originalFeatures[id]) this.#originalFeatures[id] = copy(feature);
   }
 
   zoomToBounds(): void {

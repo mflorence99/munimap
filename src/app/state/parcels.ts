@@ -23,6 +23,7 @@ import { point } from '@turf/helpers';
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bearing from '@turf/bearing';
+import copy from 'fast-copy';
 import distance from '@turf/distance';
 import firebase from 'firebase/app';
 import hash from 'object-hash';
@@ -201,10 +202,10 @@ export class ParcelsState implements NgxsOnInit {
   }
 
   #normalize(parcel: Parcel): Parcel {
-    parcel.timestamp = firebase.firestore.FieldValue.serverTimestamp();
     calculate(parcel);
     normalize(parcel);
     serialize(parcel);
+    timestamp(parcel);
     return parcel;
   }
 
@@ -249,17 +250,17 @@ export class ParcelsState implements NgxsOnInit {
     redoStack.forEach((parcel) => undoStack.push(parcel.$id));
     // 👉 add all the parcels in the redo stack
     const batch = this.firestore.firestore.batch();
-    const promises = redoStack.map((parcel) => {
+    redoStack.map((parcel) => {
       return this.#parcels
         .doc(parcel.$id)
-        .set(parcel)
+        .set(this.#normalize(parcel))
         .then(() => undoStack.push(parcel.$id));
     });
     redoStack.length = 0;
     batch.commit();
-    Promise.all(promises).then(() => {
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
-    });
+    // Promise.all(promises).then(() => {
+    ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+    // });
     // 👉 side-effect of handleStreams$ will update state
   }
 
@@ -278,18 +279,18 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 marshall the redo stack
     redoStack.length = 0;
     parcels.forEach((parcel) => {
-      if (undoStack.includes(parcel.$id)) redoStack.push(parcel);
+      if (undoStack.includes(parcel.$id)) redoStack.push(copy(parcel));
     });
     // 👉 delete all the parcels in the undo stack
     const batch = this.firestore.firestore.batch();
-    const promises = undoStack.map((id) => {
+    undoStack.map((id) => {
       return this.#parcels.doc(id).delete();
     });
     undoStack.length = 0;
     batch.commit();
-    Promise.all(promises).then(() => {
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
-    });
+    // Promise.all(promises).then(() => {
+    ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+    // });
     // 👉 side-effect of handleStreams$ will update state
   }
 }
@@ -462,4 +463,9 @@ function serialize(parcel: Parcel): void {
     if (parcel.properties[prop])
       parcel.properties[prop] = JSON.stringify(parcel.properties[prop]);
   });
+}
+
+function timestamp(parcel: Parcel): void {
+  if (!parcel.timestamp)
+    parcel.timestamp = firebase.firestore.FieldValue.serverTimestamp();
 }

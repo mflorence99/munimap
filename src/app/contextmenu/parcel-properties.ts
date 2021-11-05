@@ -10,6 +10,7 @@ import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -78,6 +79,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
 
   constructor(
     private authState: AuthState,
+    private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
     public registry: TypeRegistry,
     private store: Store
@@ -105,6 +107,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
           parcelsByID,
           this.#makeRecordFromFeatures()
         );
+        this.cdf.detectChanges();
       });
   }
 
@@ -125,13 +128,14 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
       };
       // 👉 scan the input features -- these are the ones selected
       this.features.forEach((feature) => {
-        const id = feature.getId() as string;
+        // const id = feature.getId() as string;
         const value = record[prop];
-        const originalFeature = this.map.getOriginalFeature(id);
+        // const originalFeature = this.map.getOriginalFeature(id);
         // 👉 take the feature value from the original (if overridden)
         //    or directly from the input feature (if not)
+        const originalProperties = feature.get('originalProperties');
         const fromFeature =
-          originalFeature?.properties[prop] ?? feature.getProperties()[prop];
+          originalProperties?.[prop] ?? feature.getProperties()[prop];
         // 👉 if no value has been recorded yet, take the first we see
         if (value.fromFeatures === undefined) value.fromFeatures = fromFeature;
         // 👉 but if the value is different, we have to record a conflict
