@@ -1,5 +1,5 @@
 import { DestroyService } from '../services/destroy';
-import { Feature } from '../state/parcels';
+import { Feature } from '../common';
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLLayerVectorComponent } from './ol-layer-vector';

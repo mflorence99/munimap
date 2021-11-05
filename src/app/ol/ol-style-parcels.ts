@@ -2,7 +2,7 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
 import { OLStylePatternDirective } from './ol-style-pattern';
-import { ParcelProperties } from '../state/parcels';
+import { ParcelProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -267,7 +267,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #rotation(props: ParcelProperties, ix: number): number {
-    const label = props.labels[ix];
+    const label = props.labels?.[ix];
     const rotate =
       label?.rotate === undefined ? !this.#isLarge(props, ix) : label?.rotate;
     // 👈 in radians
@@ -275,7 +275,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #splitation(props: ParcelProperties, ix: number): boolean {
-    const label = props.labels[ix];
+    const label = props.labels?.[ix];
     // 👉 we're ignoring split=false recommendations as that doesn't really
     //    work in the OpenLayers world
     return label?.split === undefined || !label?.split
@@ -376,7 +376,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     let numPolygons = 1;
     if (feature.getGeometry().getType() === 'MultiPolygon')
       numPolygons = feature.getGeometry().getCoordinates()[0].length;
-    // 👉 we'll adjust how many stroked, fills and textx we draw
+    // 👉 we'll adjust how many stroked, fills and texts we draw
     //    depending on the number of polygons and other factors
     const styles: OLStyle[] = [];
     const props = feature.getProperties() as ParcelProperties;

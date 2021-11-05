@@ -1,9 +1,9 @@
 import { DestroyService } from '../services/destroy';
-import { Feature } from '../state/parcels';
-import { Features } from '../state/parcels';
+import { Feature } from '../common';
+import { Features } from '../common';
 import { GeoJSONService } from '../services/geojson';
 import { OLMapComponent } from './ol-map';
-import { Parcel } from '../state/parcels';
+import { Parcel } from '../common';
 import { ParcelsState } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';

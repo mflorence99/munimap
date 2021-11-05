@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { MapStyle } from '../state/map';
-import { ParcelPropertiesUsage } from '../state/parcels';
-import { ParcelPropertiesUse } from '../state/parcels';
+import { ParcelPropertiesUsage } from '../common';
+import { ParcelPropertiesUse } from '../common';
 
 import { Injectable } from '@angular/core';
 

@@ -2,8 +2,8 @@ import { AddParcels } from '../state/parcels';
 import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { OLMapComponent } from '../ol/ol-map';
-import { Parcel } from '../state/parcels';
-import { ParcelProperties } from '../state/parcels';
+import { Parcel } from '../common';
+import { ParcelProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

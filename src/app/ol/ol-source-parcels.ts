@@ -1,13 +1,13 @@
 import { DestroyService } from '../services/destroy';
-import { Feature } from '../state/parcels';
-import { Features } from '../state/parcels';
+import { Feature } from '../common';
+import { Features } from '../common';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { Parcel } from '../state/parcels';
+import { Parcel } from '../common';
 import { ParcelsState } from '../state/parcels';
 
-import { parcelProperties } from '../state/parcels';
+import { parcelProperties } from '../common';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';

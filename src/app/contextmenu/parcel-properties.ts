@@ -4,8 +4,8 @@ import { ContextMenuComponent } from './contextmenu-component';
 import { Descriptor } from '../services/typeregistry';
 import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from '../ol/ol-map';
-import { Parcel } from '../state/parcels';
-import { ParcelProperties } from '../state/parcels';
+import { Parcel } from '../common';
+import { ParcelProperties } from '../common';
 import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
