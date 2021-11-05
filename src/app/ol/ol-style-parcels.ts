@@ -90,8 +90,11 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #fill(feature: OLFeature<any>, _resolution: number): OLStyle[] {
-    const props = feature.getProperties() as ParcelProperties;
+  #fill(
+    props: ParcelProperties,
+    _resolution: number,
+    _numPolygons: number
+  ): OLStyle[] {
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let patterns;
     // 👉 current use pattern comes from the use field (CUUH etc)
@@ -248,6 +251,16 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     }
     return labels;
   }
+  #maxFontSize(
+    props: ParcelProperties,
+    resolution: number,
+    numPolygons: number
+  ): number {
+    const fontSizes: number[] = [];
+    for (let ix = 0; ix < numPolygons; ix++)
+      fontSizes.push(this.#fontSize(props, resolution, ix));
+    return Math.max(...fontSizes);
+  }
 
   #point(props: ParcelProperties, ix: number): OLPoint {
     return new OLPoint(fromLonLat(props.centers[ix]));
@@ -273,11 +286,14 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   // 👐 https://stackoverflow.com/questions/45740521
-  #strokeOutline(feature: OLFeature<any>, resolution: number): OLStyle[] {
-    const props = feature.getProperties() as ParcelProperties;
+  #strokeOutline(
+    props: ParcelProperties,
+    resolution: number,
+    numPolygons: number
+  ): OLStyle[] {
     // 👇 only if feature will be visible
-    // TODO 🔥 only considering first fontSize
-    if (this.#fontSize(props, resolution, 0) < this.threshold) return null;
+    if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
+      return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
       const width = this.width / resolution;
@@ -304,17 +320,18 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   #strokeSelect(
-    feature: OLFeature<any>,
+    props: ParcelProperties,
     resolution: number,
+    numPolygons: number,
     whenSelected = false
   ): OLStyle[] {
-    const props = feature.getProperties() as ParcelProperties;
     // 👇 only if feature will be visible
-    // TODO 🔥 only considering first fontSize
-    if (this.#fontSize(props, resolution, 0) < this.threshold) return null;
+    if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
+      return null;
     else {
       const select = this.map.vars['--map-parcel-select'];
-      const width = this.width / resolution;
+      // 👉 we always want to see at least 3 pixels
+      const width = Math.max(this.width / resolution, 3);
       // 👉 necessary so we can select
       const fill = new OLFill({ color: [0, 0, 0, 0] });
       const stroke = new OLStroke({ color: `rgb(${select})`, width });
@@ -322,19 +339,19 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     }
   }
 
-  #text(feature: OLFeature<any>, resolution: number): OLStyle[] {
-    const props = feature.getProperties() as ParcelProperties;
+  #text(
+    props: ParcelProperties,
+    resolution: number,
+    numPolygons: number
+  ): OLStyle[] {
     // 👇 only if feature will be visible
-    // TODO 🔥 only considering first fontSize
-    if (this.#fontSize(props, resolution, 0) < this.threshold) return null;
+    if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
+      return null;
     else {
       const color = this.map.vars['--map-parcel-text-color'];
       // 👉 we need to draw a label in each polygon of a multi-polygon
-      let numLabels = 1;
-      if (feature.getGeometry().getType() === 'MultiPolygon')
-        // TODO 🔥 this sucks as we shoud be using getPolygons() ???
-        numLabels = feature.getGeometry().getCoordinates()[0].length;
-      const labels = this.#labels(props, resolution, numLabels);
+      //    and a separate label for parcel ID and acreage
+      const labels = this.#labels(props, resolution, numPolygons);
       return labels.map((label) => {
         const text = new OLText({
           font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
@@ -355,19 +372,31 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
+    // TODO 🔥 this sucks as we should be using getPolygons() ???
+    let numPolygons = 1;
+    if (feature.getGeometry().getType() === 'MultiPolygon')
+      numPolygons = feature.getGeometry().getCoordinates()[0].length;
+    // 👉 we'll adjust how many stroked, fills and textx we draw
+    //    depending on the number of polygons and other factors
     const styles: OLStyle[] = [];
+    const props = feature.getProperties() as ParcelProperties;
     if (this.showBackground) {
-      const fills = this.#fill(feature, resolution);
+      const fills = this.#fill(props, resolution, numPolygons);
       if (fills) styles.push(...fills);
-      const strokes = this.#strokeOutline(feature, resolution);
+      const strokes = this.#strokeOutline(props, resolution, numPolygons);
       if (strokes) styles.push(...strokes);
     }
     if (this.showSelection) {
-      const strokes = this.#strokeSelect(feature, resolution, whenSelected);
+      const strokes = this.#strokeSelect(
+        props,
+        resolution,
+        numPolygons,
+        whenSelected
+      );
       if (strokes) styles.push(...strokes);
     }
     if (this.showText) {
-      const texts = this.#text(feature, resolution);
+      const texts = this.#text(props, resolution, numPolygons);
       if (texts) styles.push(...texts);
     }
     return styles;

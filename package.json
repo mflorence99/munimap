@@ -55,6 +55,7 @@
     "ol": "^6",
     "ol-ext": "^3",
     "ol-mapbox-style": "^6",
+    "polylabel": "^1",
     "proj4": "^2",
     "rxfire": "^6",
     "rxjs": "^7",

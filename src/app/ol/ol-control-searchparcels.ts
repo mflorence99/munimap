@@ -20,7 +20,11 @@ import { takeUntil } from 'rxjs/operators';
 
 import fuzzysort from 'fuzzysort';
 
-type Override = { address: string; owner: string };
+type Override = {
+  address: string;
+  bbox: [number, number, number, number];
+  owner: string;
+};
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -116,8 +120,11 @@ export class OLControlSearchParcelsComponent implements OnInit {
   #makeOverridesByID(parcels: Parcel[]): Record<string, Override> {
     return parcels.reduce((acc, parcel) => {
       if (!acc[parcel.id]) acc[parcel.id] = {};
-      const props = parcel.properties;
       const override = acc[parcel.id];
+      // 👉 awkward: bbox doesn't quite follow pattern
+      if (parcel.bbox !== undefined && override.bbox === undefined)
+        override.bbox = parcel.bbox;
+      const props = parcel.properties;
       if (props.address !== undefined && override.address === undefined)
         override.address = props.address;
       if (props.owner !== undefined && override.owner === undefined)
@@ -157,16 +164,22 @@ export class OLControlSearchParcelsComponent implements OnInit {
   input(str: string): string {
     const searchFor = str.toUpperCase();
     // 👉 let's see if we have a direct hit by ID, then address, then owner
-    const seathables =
+    const searchables =
       this.#searchablesByID[searchFor] ??
       this.#searchablesByAddress[searchFor] ??
       this.#searchablesByOwner[searchFor];
-    if (seathables) {
+    if (searchables) {
       // 👉 we have a hit, tell the selector
       this.matches = [];
-      const ids = seathables.map((searchable) => searchable.id).join(', ');
+      const ids = searchables.map((searchable) => searchable.id).join(', ');
       console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
-      this.map.selector.selectParcels(seathables);
+      this.map.selector.selectParcels(
+        searchables.map((searchable) => {
+          const override = this.#overridesByID[searchable.id];
+          if (override.bbox) return { ...searchable, bbox: override.bbox };
+          else return searchable;
+        })
+      );
     } else if (searchFor.length > this.fuzzyMinLength) {
       // 👉 no hit, but enough characters to go for a fuzzy match
       this.matches = fuzzysort

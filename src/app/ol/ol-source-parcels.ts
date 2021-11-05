@@ -59,7 +59,7 @@ export class OLSourceParcelsComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
+  #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): Features {
     // 👉 remember that NULL resets a parcel override
     const removedHash = parcels.reduce((acc, parcel) => {
       if (acc[parcel.id] === undefined && parcel.removed !== undefined)
@@ -70,15 +70,20 @@ export class OLSourceParcelsComponent implements OnInit {
     const removedIDs = new Set<any>(
       Object.keys(removedHash).filter((key) => removedHash[key])
     );
-    // 👉 remove them from the layer in case they're already there
-    removedIDs.forEach((removedID) => {
-      const feature = this.olVector.getFeatureById(removedID);
-      if (feature) this.olVector.removeFeature(feature);
-    });
-    // 👉 remove them from the geojson so they can't get put back
-    geojson.features = geojson.features.filter(
-      (feature) => !removedIDs.has(feature.id)
-    );
+    if (removedIDs.size === 0) return geojson;
+    else {
+      // 👉 remove them from the layer in case they're already there
+      removedIDs.forEach((removedID) => {
+        const feature = this.olVector.getFeatureById(removedID);
+        if (feature) this.olVector.removeFeature(feature);
+      });
+      // 👉 remove them from the geojson so they can't get put back
+      geojson = copy(geojson);
+      geojson.features = geojson.features.filter(
+        (feature) => !removedIDs.has(feature.id)
+      );
+      return geojson;
+    }
   }
 
   #groupByID<T>(things: T[]): Record<string, T[]> {
@@ -94,7 +99,7 @@ export class OLSourceParcelsComponent implements OnInit {
     combineLatest([this.#geojson$, this.parcels$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([geojson, parcels]) => {
-        this.#filterRemovedFeatures(geojson, parcels);
+        geojson = this.#filterRemovedFeatures(geojson, parcels);
         const featuresByID = this.#groupByID<Feature>(geojson.features);
         const parcelsByID = this.#groupByID<Parcel>(parcels);
         this.#overrideFeaturesWithParcels(geojson, parcelsByID);
@@ -187,23 +192,28 @@ export class OLSourceParcelsComponent implements OnInit {
         });
         // 👇 then a similar process for geometry overrides
         //    geometry overrides are all-or-nothing
+        //    if geometry changes, so does bbox
         //    scan all the parcel overrides in reverse timestamp order
         //    null says let the feature geometry stand
         //    not undefined says override the feature geometry
         //    save the original feature before modification
         parcels
-          .filter((parcel) => parcel.geometryStr !== undefined)
+          .filter((parcel) => parcel.geometry !== undefined)
           .some((parcel) => {
-            if (parcel.geometryStr === null) {
+            if (parcel.geometry === null) {
               return true;
               const original = this.map.getOriginalFeature(feature.id);
-              if (original) feature.geometry = copy(original.geometry);
+              if (original) {
+                feature.bbox = copy(original.bbox);
+                feature.geometry = copy(original.geometry);
+              }
             } else if (
-              parcel.geometryStr !== undefined &&
-              Object.keys(parcel.geometryStr).length > 0
+              parcel.geometry !== undefined &&
+              Object.keys(parcel.geometry).length > 0
             ) {
               this.map.saveOriginalFeature(feature);
-              feature.geometry = JSON.parse(parcel.geometryStr);
+              feature.bbox = parcel.bbox;
+              feature.geometry = parcel.geometry;
               return true;
             }
           });

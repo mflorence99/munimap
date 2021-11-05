@@ -85,9 +85,9 @@ export class MergeParcelsComponent implements ContextMenuComponent {
       });
       return JSON.parse(format.writeFeature(feature));
     });
-    mergedParcel.geometryStr = JSON.stringify(
-      geojsons.reduce((acc, geojson) => union(acc, geojson)).geometry
-    );
+    mergedParcel.geometry = geojsons.reduce((acc, geojson) =>
+      union(acc, geojson)
+    ).geometry;
     // 👉 that's it!
     this.store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
     this.drawer.close();

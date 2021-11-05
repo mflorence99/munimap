@@ -53,7 +53,7 @@ export class UnmergeParcelComponent implements ContextMenuComponent {
       };
     });
     const unmergedParcel: Parcel = {
-      geometryStr: null,
+      geometry: null,
       id: this.selectedIDs[0],
       owner: this.authState.currentProfile().email,
       path: this.map.path,
