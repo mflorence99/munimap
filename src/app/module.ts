@@ -17,6 +17,7 @@ import { OLControlSearchParcelsComponent } from './ol/ol-control-searchparcels';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from './ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from './ol/ol-filter-crop2boundary';
+import { OLFilterCrop2SelectedComponent } from './ol/ol-filter-crop2selected';
 import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
@@ -119,6 +120,7 @@ const COMPONENTS = [
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
   OLFilterCrop2BoundaryComponent,
+  OLFilterCrop2SelectedComponent,
   OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,

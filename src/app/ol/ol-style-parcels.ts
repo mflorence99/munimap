@@ -296,8 +296,11 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
-      const width = this.width / resolution;
-      const lineDash = [4 / resolution, 8 / resolution];
+      const width = Math.min(this.width / resolution, 5);
+      const lineDash = [
+        Math.min(4 / resolution, 4),
+        Math.min(8 / resolution, 8)
+      ];
       // 👉 alternating light, dark outline
       return [
         new OLStyle({
@@ -331,7 +334,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     else {
       const select = this.map.vars['--map-parcel-select'];
       // 👉 we always want to see at least 3 pixels
-      const width = Math.max(this.width / resolution, 3);
+      const width = Math.min(Math.max(this.width / resolution, 3), 5);
       // 👉 necessary so we can select
       const fill = new OLFill({ color: [0, 0, 0, 0] });
       const stroke = new OLStroke({ color: `rgb(${select})`, width });
@@ -342,13 +345,19 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #text(
     props: ParcelProperties,
     resolution: number,
-    numPolygons: number
+    numPolygons: number,
+    whenSelected = false
   ): OLStyle[] {
+    // 👇 only if selected when built for seection
+    if (this.showSelection && !whenSelected) return null;
     // 👇 only if feature will be visible
-    if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
+    else if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
       return null;
     else {
-      const color = this.map.vars['--map-parcel-text-color'];
+      // TODO 🔥 just a temporary hack!!
+      const color = this.showSelection
+        ? '255,255,255'
+        : this.map.vars['--map-parcel-text-color'];
       // 👉 we need to draw a label in each polygon of a multi-polygon
       //    and a separate label for parcel ID and acreage
       const labels = this.#labels(props, resolution, numPolygons);
@@ -396,7 +405,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       if (strokes) styles.push(...strokes);
     }
     if (this.showText) {
-      const texts = this.#text(props, resolution, numPolygons);
+      const texts = this.#text(props, resolution, numPolygons, whenSelected);
       if (texts) styles.push(...texts);
     }
     return styles;

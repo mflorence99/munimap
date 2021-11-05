@@ -205,10 +205,25 @@
           </app-ol-layer-vector>
         </ng-container>
 
+        <!-- 📦 EXPERIMENTAL -->
+
+        <app-ol-layer-tile>
+          <app-ol-source-xyz
+            [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
+            ><app-ol-attribution
+              >© Google</app-ol-attribution
+            ></app-ol-source-xyz
+          >
+          <app-ol-filter-crop2selected></app-ol-filter-crop2selected>
+        </app-ol-layer-tile>
+
         <!-- 📦 SELECTION LAYER -->
 
         <app-ol-layer-vector>
-          <app-ol-style-parcels [showSelection]="true"></app-ol-style-parcels>
+          <app-ol-style-parcels
+            [showSelection]="true"
+            [showText]="true"
+          ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-interaction-select [eventType]="'singleclick'" [multi]="true">
             <mat-menu #theContextMenu mapContextMenu>
