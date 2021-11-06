@@ -6,6 +6,7 @@ import { ParcelProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Coordinate as OLCoordinate } from 'ol/coordinate';
 import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
 import { QueryList } from '@angular/core';
@@ -77,8 +78,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   @Input() fontFamily = 'Roboto';
   @Input() showBackground = false;
+  @Input() showDimensions = false;
+  @Input() showLotLabel = false;
   @Input() showSelection = false;
-  @Input() showText = false;
   @Input() threshold = 8;
   @Input() width = 3;
 
@@ -88,6 +90,15 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     private map: OLMapComponent
   ) {
     this.layer.setStyle(this);
+  }
+
+  #dimensions(
+    props: ParcelProperties,
+    resolution: number,
+    coordinates: OLCoordinate[]
+  ): OLStyle[] {
+    console.log(coordinates);
+    return null;
   }
 
   #fill(
@@ -251,6 +262,51 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     }
     return labels;
   }
+
+  #lotLabel(
+    props: ParcelProperties,
+    resolution: number,
+    numPolygons: number,
+    whenSelected = false
+  ): OLStyle[] {
+    // 👇 only if selected when built for selection
+    if (this.showSelection && !whenSelected) return null;
+    // 👇 only if feature will be visible
+    else if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
+      return null;
+    else {
+      // TODO 🔥 this is a hack, but we don't want to over-engineer
+      //         at this point -- currently, we only showSelection
+      //         and showLotLabel at the same time when the selection
+      //         is over the dark background of satellite view
+      const color = this.showSelection
+        ? this.map.vars['--map-parcel-text-inverse']
+        : this.map.vars['--map-parcel-text-color'];
+      // 👉 we need to draw a label in each polygon of a multi-polygon
+      //    and a separate label for parcel ID and acreage
+      const labels = this.#labels(props, resolution, numPolygons);
+      return labels.map((label) => {
+        const text = new OLText({
+          font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
+          fill: new OLFill({ color: `rgba(${color}, 1)` }),
+          offsetX: label.offsetX,
+          offsetY: label.offsetY,
+          overflow: true,
+          rotation: label.rotation,
+          // TODO 🔥 this is a hack, see above
+          stroke: this.showSelection
+            ? new OLStroke({
+                color: `rgba(0, 0, 0, 1)`,
+                width: label.fontSize / 8
+              })
+            : null,
+          text: label.text
+        });
+        return new OLStyle({ geometry: label.point, text });
+      });
+    }
+  }
+
   #maxFontSize(
     props: ParcelProperties,
     resolution: number,
@@ -296,6 +352,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
+      // 🔥 magic number ensures that the border is never larger than 5px
       const width = Math.min(this.width / resolution, 5);
       const lineDash = [
         Math.min(4 / resolution, 4),
@@ -333,46 +390,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       return null;
     else {
       const select = this.map.vars['--map-parcel-select'];
-      // 👉 we always want to see at least 3 pixels
+      // 🔥 magic numbers ensure that selection border size
+      //    is always in the ranger [3, 5] px
       const width = Math.min(Math.max(this.width / resolution, 3), 5);
       // 👉 necessary so we can select
       const fill = new OLFill({ color: [0, 0, 0, 0] });
       const stroke = new OLStroke({ color: `rgb(${select})`, width });
       return [new OLStyle({ fill, stroke: whenSelected ? stroke : null })];
-    }
-  }
-
-  #text(
-    props: ParcelProperties,
-    resolution: number,
-    numPolygons: number,
-    whenSelected = false
-  ): OLStyle[] {
-    // 👇 only if selected when built for seection
-    if (this.showSelection && !whenSelected) return null;
-    // 👇 only if feature will be visible
-    else if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
-      return null;
-    else {
-      // TODO 🔥 just a temporary hack!!
-      const color = this.showSelection
-        ? '255,255,255'
-        : this.map.vars['--map-parcel-text-color'];
-      // 👉 we need to draw a label in each polygon of a multi-polygon
-      //    and a separate label for parcel ID and acreage
-      const labels = this.#labels(props, resolution, numPolygons);
-      return labels.map((label) => {
-        const text = new OLText({
-          font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
-          fill: new OLFill({ color: `rgba(${color}, 1)` }),
-          offsetX: label.offsetX,
-          offsetY: label.offsetY,
-          overflow: true,
-          rotation: label.rotation,
-          text: label.text
-        });
-        return new OLStyle({ geometry: label.point, text });
-      });
     }
   }
 
@@ -389,12 +413,33 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     //    depending on the number of polygons and other factors
     const styles: OLStyle[] = [];
     const props = feature.getProperties() as ParcelProperties;
+    // 👇 background
     if (this.showBackground) {
       const fills = this.#fill(props, resolution, numPolygons);
       if (fills) styles.push(...fills);
       const strokes = this.#strokeOutline(props, resolution, numPolygons);
       if (strokes) styles.push(...strokes);
     }
+    // TODO 🔥 hack -- we only show dimensions when selected
+    //         make the coordinate look like they're always multi
+    if (this.showDimensions && whenSelected) {
+      let coordinates = feature.getGeometry().getCoordinates();
+      if (feature.getGeometry().getType() === 'Polygon')
+        coordinates = [coordinates];
+      const dimensions = this.#dimensions(props, resolution, coordinates);
+      if (dimensions) styles.push(...dimensions);
+    }
+    // 👇 lot labels
+    if (this.showLotLabel) {
+      const lotLabels = this.#lotLabel(
+        props,
+        resolution,
+        numPolygons,
+        whenSelected
+      );
+      if (lotLabels) styles.push(...lotLabels);
+    }
+    // 👇 selection
     if (this.showSelection) {
       const strokes = this.#strokeSelect(
         props,
@@ -403,10 +448,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         whenSelected
       );
       if (strokes) styles.push(...strokes);
-    }
-    if (this.showText) {
-      const texts = this.#text(props, resolution, numPolygons, whenSelected);
-      if (texts) styles.push(...texts);
     }
     return styles;
   }

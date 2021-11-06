@@ -23,6 +23,15 @@
   > * {
     flex-shrink: 0;
   }
+
+  .lower {
+    background-color: rgba(var(--rgb-gray-100), 0.75);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    justify-content: flex-end;
+    padding: 0.33rem 0;
+  }
 }
 
 .controls {

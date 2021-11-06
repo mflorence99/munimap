@@ -9,6 +9,8 @@
 }
 
 .card {
+  background-color: var(--mat-gray-900) !important;
+  box-shadow: rgb(255 255 255 / 33%) 0px 8px 24px !important;
   overflow: hidden;
   position: relative;
   transition: width 0.25s, height 0.25s;

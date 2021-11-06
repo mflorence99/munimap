@@ -166,7 +166,7 @@
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
-            <app-ol-style-parcels [showText]="true"></app-ol-style-parcels>
+            <app-ol-style-parcels [showLotLabel]="true"></app-ol-style-parcels>
             <app-ol-source-parcels> </app-ol-source-parcels>
           </app-ol-layer-vector>
 
@@ -185,7 +185,7 @@
           <app-ol-layer-vector>
             <app-ol-style-parcels
               [showBackground]="true"
-              [showText]="true"
+              [showLotLabel]="true"
             ></app-ol-style-parcels>
             <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
@@ -205,9 +205,9 @@
           </app-ol-layer-vector>
         </ng-container>
 
-        <!-- 📦 EXPERIMENTAL -->
+        <!-- 📦 SUPPORTS showSatelliteForSelected -->
 
-        <app-ol-layer-tile>
+        <app-ol-layer-tile *ngIf="map.options.showSatelliteForSelected">
           <app-ol-source-xyz
             [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
             ><app-ol-attribution
@@ -221,8 +221,9 @@
 
         <app-ol-layer-vector>
           <app-ol-style-parcels
+            [showDimensions]="map.options.showSatelliteForSelected"
+            [showLotLabel]="map.options.showSatelliteForSelected"
             [showSelection]="true"
-            [showText]="true"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-interaction-select [eventType]="'singleclick'" [multi]="true">
