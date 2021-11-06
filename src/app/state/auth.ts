@@ -136,7 +136,7 @@ export class AuthState implements NgxsOnInit {
     // 👉 the user will be NULL on logout!
     this.fireauth.user
       .pipe(
-        // 👉 combine the user with its correspondinf profile
+        // 👉 combine the user with its corresponding profile
         mergeMap((user) => {
           const profile$ = user
             ? this.#profiles.doc(user.email).get()
@@ -150,11 +150,11 @@ export class AuthState implements NgxsOnInit {
         if (user) {
           // 👉 set the profile corresponding to the User
           //    or an empty one if none found
-          ctx.dispatch(
-            new SetProfile(
-              doc.exists ? doc.data() : { email: user.email, workgroup: '' }
-            )
-          );
+          if (doc.exists) ctx.dispatch(new SetProfile(doc.data()));
+          else
+            ctx.dispatch(
+              new UpdateProfile({ email: user.email, workgroup: '' })
+            );
           this.router.navigateByUrl(forwardTo);
         } else this.router.navigateByUrl('/login');
       });

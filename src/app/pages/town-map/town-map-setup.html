@@ -1,7 +1,3 @@
-<!-- <article (click)="rolledup = !rolledup" class="rolledup">
-  <img mat-card-avatar src="assets/favicon.svg" />
-</article> -->
-
 <mat-card [class.rolledup]="rolledup" class="card">
   <mat-card-header>
     <img
@@ -55,7 +51,7 @@
 
       <section class="thumbnails">
         <label
-          *ngFor="let item of registry.list('map', 'style')"
+          *ngFor="let item of registry.list('map', 'style'); trackBy: trackByStyle"
           (click)="map.style = item[0]"
           class="thumbnail"
         >
@@ -63,24 +59,33 @@
           {{ item[1].decoding}}
         </label>
       </section>
+
+      <br />
+
+      <mat-label>Lorem ipsum dolor sit amet.</mat-label>
+
+      <section class="options">
+        <mat-checkbox
+          #showSatelliteForSelected="ngModel"
+          [(ngModel)]="map.options.showSatelliteForSelected"
+          class="option"
+          name="showSatelliteForSelected"
+          >Expose satellite view for selected parcels</mat-checkbox
+        >
+      </section>
     </form>
   </mat-card-content>
 
   <mat-card-actions class="actions">
     <div *ngIf="townMap.creating"></div>
 
-    <button
-      *ngIf="canDelete()"
-      (click)="delete(map)"
-      color="accent"
-      mat-flat-button
-    >
-      DELETE
-    </button>
+    <a *ngIf="canDelete()" (click)="delete(map)" mat-flat-button>
+      Delete ths map ...
+    </a>
 
     <button
       (click)="update(map)"
-      [disabled]="setupForm.invalid"
+      [disabled]="setupForm.invalid || !setupForm.dirty"
       color="primary"
       mat-flat-button
     >

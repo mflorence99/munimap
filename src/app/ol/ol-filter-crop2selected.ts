@@ -1,3 +1,4 @@
+import { DestroyService } from '../services/destroy';
 import { OLLayerImageComponent } from './ol-layer-image';
 import { OLLayerMapboxComponent } from './ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol-layer-tile';
@@ -10,12 +11,15 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Optional } from '@angular/core';
 
+import { takeUntil } from 'rxjs/operators';
+
 import Crop from 'ol-ext/filter/Crop';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import union from '@turf/union';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
   selector: 'app-ol-filter-crop2selected',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
@@ -28,6 +32,7 @@ export class OLFilterCrop2SelectedComponent implements AfterContentInit {
   olFilter: typeof Crop;
 
   constructor(
+    private destroy$: DestroyService,
     @Optional() layer1: OLLayerImageComponent,
     @Optional() layer2: OLLayerMapboxComponent,
     @Optional() layer3: OLLayerTileComponent,
@@ -58,27 +63,34 @@ export class OLFilterCrop2SelectedComponent implements AfterContentInit {
   }
 
   #handleFeaturesSelected$(): void {
-    this.map.selector.featuresSelected.subscribe((selected) => {
-      // 👇 build the filter as the union of all the selected parcels
-      const geojsons = selected.map((feature) =>
-        JSON.parse(this.#format.writeFeature(feature))
-      );
-      const merged: any = {
-        geometry: geojsons.reduce((acc, geojson) => union(acc, geojson))
-          .geometry,
-        properties: {},
-        type: 'Feature'
-      };
-      const filter = new Crop({
-        active: true,
-        feature: this.#format.readFeature(merged),
-        inner: false
+    this.map.selector.featuresSelected
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((selected) => {
+        let filter = this.#empty;
+        if (selected?.length > 0) {
+          // 👇 build the filter as the union of all the selected parcels
+          const geojsons = selected.map((feature) =>
+            JSON.parse(this.#format.writeFeature(feature))
+          );
+          const merged: any = {
+            geometry: geojsons.reduce((acc, geojson) => union(acc, geojson))
+              .geometry,
+            properties: {},
+            type: 'Feature'
+          };
+          filter = new Crop({
+            active: true,
+            feature: this.#format.readFeature(merged),
+            inner: false
+          });
+        }
+        // 👇 ol-ext has monkey-patched addFilter, getFilters etc
+        const filters = [...this.#layer.olLayer['getFilters']()];
+        filters.forEach((filter) =>
+          this.#layer.olLayer['removeFilter'](filter)
+        );
+        this.#layer.olLayer['addFilter'](filter);
       });
-      // 👇 ol-ext has monkey-patched addFilter
-      const filters = [...this.#layer.olLayer['getFilters']()];
-      filters.forEach((filter) => this.#layer.olLayer['removeFilter'](filter));
-      this.#layer.olLayer['addFilter'](filter);
-    });
   }
 
   ngAfterContentInit(): void {

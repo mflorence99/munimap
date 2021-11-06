@@ -2,6 +2,7 @@ import { AuthState } from '../../state/auth';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog';
 import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DeleteMap } from '../../state/map';
+import { Descriptor } from '../../services/typeregistry';
 import { Map } from '../../state/map';
 import { RootPage } from '../../pages/root/root';
 import { TownMapPage } from './town-map';
@@ -72,6 +73,10 @@ export class TownMapSetupComponent {
           this.router.navigate(['/map-create']);
         }
       });
+  }
+
+  trackByStyle(ix: number, item: [any, Descriptor]): string {
+    return item[0];
   }
 
   update(map: any): void {
