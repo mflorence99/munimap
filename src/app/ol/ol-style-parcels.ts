@@ -14,11 +14,15 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { ViewChildren } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
+import { point } from '@turf/helpers';
+import { toLonLat } from 'ol/proj';
 
+import bearing from '@turf/bearing';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLIcon from 'ol/style/Icon';
+import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
@@ -40,6 +44,15 @@ import OLText from 'ol/style/Text';
 
 // 👉 showBackground and showText allow parcels to be split into
 //    2 layers, as is useful for the NHGranIT map style
+
+class Dimension {
+  constructor(
+    public ix: number /* 👈 polygon index */,
+    public angle = 0,
+    public length = 0,
+    public path: OLCoordinate[] = []
+  ) {}
+}
 
 interface Label {
   fontFamily: string;
@@ -77,11 +90,12 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   appPatterns: QueryList<OLStylePatternDirective>;
 
   @Input() fontFamily = 'Roboto';
+  @Input() fontSize = 16;
+  @Input() minFontSize = 8;
   @Input() showBackground = false;
   @Input() showDimensions = false;
-  @Input() showLotLabel = false;
+  @Input() showLabels = false;
   @Input() showSelection = false;
-  @Input() threshold = 8;
   @Input() width = 3;
 
   constructor(
@@ -95,10 +109,96 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #dimensions(
     props: ParcelProperties,
     resolution: number,
-    coordinates: OLCoordinate[]
+    polygons: OLCoordinate[][][],
+    whenSelected = false
   ): OLStyle[] {
-    console.log(coordinates);
-    return null;
+    // 👇 only if selected when built for selection
+    if (this.showSelection && !whenSelected) return null;
+    else {
+      // 👉 we will draw the length of each "straight" line in each polygon
+      const color = this.map.vars['--map-parcel-text-inverse'];
+      const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
+      // 👉 get the fointSizes up front for each polygon
+      const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
+      return (
+        dimensions
+          // 👉 dont't try to draw the dimension if we can't see it
+          .filter((dimension) => fontSizes[dimension.ix] >= this.minFontSize)
+          .map((dimension) => {
+            const text = new OLText({
+              font: `bold ${fontSizes[dimension.ix]}px '${this.fontFamily}'`,
+              fill: new OLFill({ color: `rgba(${color}, 1)` }),
+              placement: 'line',
+              stroke: new OLStroke({
+                color: `rgba(0, 0, 0, 1)`,
+                width: 3
+              }),
+              text: `${Math.round(dimension.length)}`
+            });
+            const geometry = new OLLineString(
+              dimension.path.map((p) => fromLonLat(p))
+            );
+            return new OLStyle({ geometry, text });
+          })
+      );
+    }
+  }
+
+  #dimensionsAnalyze(
+    props: ParcelProperties,
+    resolution: number,
+    polygons: OLCoordinate[][][]
+  ): Dimension[] {
+    const dimensions: Dimension[] = [];
+    props.lengths.forEach((lengths, ix) => {
+      // 👉 remember, we made Polygons look like MultiPolygons
+      const polygon = polygons[0][ix];
+      let dimension = new Dimension(ix);
+      // 👉 we're going to coalesce the lengths of "straight" lines
+      lengths.reduce((acc, length, iy) => {
+        const p = toLonLat(polygon[iy]);
+        const q = toLonLat(polygon[iy + 1]);
+        const angle = bearing(point(p), point(q));
+        if (iy === 0) {
+          // 👉 this will be true of the first segment
+          dimension.angle = angle;
+          dimension.length = length;
+          dimension.path = [p, q];
+        } else {
+          // 👉 if the segment is straight enough, record it
+          if (!this.#isStraight(angle, dimension.angle)) {
+            acc.push(dimension);
+            dimension = new Dimension(ix);
+          }
+          // 👉 setup for next time
+          dimension.angle = angle;
+          dimension.length += length;
+          // 👉 the first line needs a start point, then we just need the end
+          if (dimension.path.length === 0) dimension.path.push(p);
+          dimension.path.push(q);
+        }
+        return acc;
+      }, dimensions);
+      // 👉 don't forget the final, dangling dimension
+      if (dimension.path.length > 0) dimensions.push(dimension);
+    });
+    return dimensions;
+  }
+
+  #dimensionsFontSizes(
+    props: ParcelProperties,
+    resolution: number,
+    polygons: OLCoordinate[][][]
+  ): number[] {
+    return polygons[0].map((polygon, ix) => {
+      const labelFontSize = this.#labelFontSize(props, resolution, ix);
+      // 👉 fontSize is proportional to the resolution,
+      //    but no bigger than the size of the label
+      return Math.min(
+        Math.min(labelFontSize * 0.8, this.fontSize),
+        this.fontSize / resolution
+      );
+    });
   }
 
   #fill(
@@ -141,22 +241,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return patterns.map((pattern) => new OLStyle({ fill: pattern }));
   }
 
-  // 👇 https://stackoverflow.com/questions/846221/logarithmic-slider
-  #fontSize(props: ParcelProperties, resolution: number, ix: number): number {
-    const minp = this.#fontSizeClamp[0];
-    const maxp = this.#fontSizeClamp[1];
-    const minv = Math.log(this.#acresSizeClamp[0]);
-    const maxv = Math.log(this.#acresSizeClamp[1]);
-    const scale = (maxv - minv) / (maxp - minp);
-    const acres = Math.max(
-      Math.min(props.areas[ix], this.#acresSizeClamp[1]),
-      this.#acresSizeClamp[0]
-    );
-    const nominal = (Math.log(acres) - minv) / scale + minp;
-    const adjusted = nominal / resolution;
-    return adjusted;
-  }
-
   #iconForUse(use: string): OLIcon {
     const appPattern = this.appPatterns.find((image) =>
       image.matches(new RegExp(use))
@@ -181,18 +265,102 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return props.sqarcities[ix] > 0.6;
   }
 
+  // 👇 bearings are in degrees
+  //    magic number is 30 degrees tolerance for straightness
+  //    noone would ever configure that
+  #isStraight(p: number, q: number): boolean {
+    return Math.abs(p - q) < 30 || Math.abs(p - q) > 360 - 30;
+  }
+
   #isTiny(props: ParcelProperties, ix: number): boolean {
     return props.areas[ix] <= 0.25;
   }
 
+  // 👇 https://stackoverflow.com/questions/846221/logarithmic-slider
+  #labelFontSize(
+    props: ParcelProperties,
+    resolution: number,
+    ix: number
+  ): number {
+    const minp = this.#fontSizeClamp[0];
+    const maxp = this.#fontSizeClamp[1];
+    const minv = Math.log(this.#acresSizeClamp[0]);
+    const maxv = Math.log(this.#acresSizeClamp[1]);
+    const scale = (maxv - minv) / (maxp - minp);
+    const acres = Math.max(
+      Math.min(props.areas[ix], this.#acresSizeClamp[1]),
+      this.#acresSizeClamp[0]
+    );
+    const nominal = (Math.log(acres) - minv) / scale + minp;
+    const adjusted = nominal / resolution;
+    return adjusted;
+  }
+
+  #labelFontSizeMax(
+    props: ParcelProperties,
+    resolution: number,
+    numPolygons: number
+  ): number {
+    const fontSizes: number[] = [];
+    for (let ix = 0; ix < numPolygons; ix++)
+      fontSizes.push(this.#labelFontSize(props, resolution, ix));
+    return Math.max(...fontSizes);
+  }
+
   #labels(
+    props: ParcelProperties,
+    resolution: number,
+    numPolygons: number,
+    whenSelected = false
+  ): OLStyle[] {
+    // 👇 only if selected when built for selection
+    if (this.showSelection && !whenSelected) return null;
+    // 👇 only if feature's label will be visible
+    else if (
+      this.#labelFontSizeMax(props, resolution, numPolygons) < this.minFontSize
+    )
+      return null;
+    else {
+      // TODO 🔥 this is a hack, but we don't want to over-engineer
+      //         at this point -- currently, we only showSelection
+      //         and showLotLabel at the same time when the selection
+      //         is over the dark background of satellite view
+      const color = this.showSelection
+        ? this.map.vars['--map-parcel-text-inverse']
+        : this.map.vars['--map-parcel-text-color'];
+      // 👉 we need to draw a label in each polygon of a multi-polygon
+      //    and a separate label for parcel ID and acreage
+      const labels = this.#labelsImpl(props, resolution, numPolygons);
+      return labels.map((label) => {
+        const text = new OLText({
+          font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
+          fill: new OLFill({ color: `rgba(${color}, 1)` }),
+          offsetX: label.offsetX,
+          offsetY: label.offsetY,
+          overflow: true,
+          rotation: label.rotation,
+          // TODO 🔥 this is a hack, see above
+          stroke: this.showSelection
+            ? new OLStroke({
+                color: `rgba(0, 0, 0, 1)`,
+                width: label.fontSize / 8
+              })
+            : null,
+          text: label.text
+        });
+        return new OLStyle({ geometry: label.point, text });
+      });
+    }
+  }
+
+  #labelsImpl(
     props: ParcelProperties,
     resolution: number,
     numLabels: number
   ): Label[] {
     const labels: Label[] = [];
     for (let ix = 0; ix < numLabels; ix++) {
-      const fontSize = this.#fontSize(props, resolution, ix);
+      const fontSize = this.#labelFontSize(props, resolution, ix);
       // 👉 for tiny parcels, we'll only show the parcel # so we can
       //    shortcircuit all the calculations
       if (this.#isTiny(props, ix)) {
@@ -263,61 +431,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     return labels;
   }
 
-  #lotLabel(
-    props: ParcelProperties,
-    resolution: number,
-    numPolygons: number,
-    whenSelected = false
-  ): OLStyle[] {
-    // 👇 only if selected when built for selection
-    if (this.showSelection && !whenSelected) return null;
-    // 👇 only if feature will be visible
-    else if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
-      return null;
-    else {
-      // TODO 🔥 this is a hack, but we don't want to over-engineer
-      //         at this point -- currently, we only showSelection
-      //         and showLotLabel at the same time when the selection
-      //         is over the dark background of satellite view
-      const color = this.showSelection
-        ? this.map.vars['--map-parcel-text-inverse']
-        : this.map.vars['--map-parcel-text-color'];
-      // 👉 we need to draw a label in each polygon of a multi-polygon
-      //    and a separate label for parcel ID and acreage
-      const labels = this.#labels(props, resolution, numPolygons);
-      return labels.map((label) => {
-        const text = new OLText({
-          font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
-          fill: new OLFill({ color: `rgba(${color}, 1)` }),
-          offsetX: label.offsetX,
-          offsetY: label.offsetY,
-          overflow: true,
-          rotation: label.rotation,
-          // TODO 🔥 this is a hack, see above
-          stroke: this.showSelection
-            ? new OLStroke({
-                color: `rgba(0, 0, 0, 1)`,
-                width: label.fontSize / 8
-              })
-            : null,
-          text: label.text
-        });
-        return new OLStyle({ geometry: label.point, text });
-      });
-    }
-  }
-
-  #maxFontSize(
-    props: ParcelProperties,
-    resolution: number,
-    numPolygons: number
-  ): number {
-    const fontSizes: number[] = [];
-    for (let ix = 0; ix < numPolygons; ix++)
-      fontSizes.push(this.#fontSize(props, resolution, ix));
-    return Math.max(...fontSizes);
-  }
-
   #point(props: ParcelProperties, ix: number): OLPoint {
     return new OLPoint(fromLonLat(props.centers[ix]));
   }
@@ -347,8 +460,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     resolution: number,
     numPolygons: number
   ): OLStyle[] {
-    // 👇 only if feature will be visible
-    if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
+    // 👇 only if feature's label will be visible
+    if (
+      this.#labelFontSizeMax(props, resolution, numPolygons) < this.minFontSize
+    )
       return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
@@ -385,8 +500,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     numPolygons: number,
     whenSelected = false
   ): OLStyle[] {
-    // 👇 only if feature will be visible
-    if (this.#maxFontSize(props, resolution, numPolygons) < this.threshold)
+    // 👇 only if feature's label will be visible
+    if (
+      this.#labelFontSizeMax(props, resolution, numPolygons) < this.minFontSize
+    )
       return null;
     else {
       const select = this.map.vars['--map-parcel-select'];
@@ -422,16 +539,20 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     }
     // TODO 🔥 hack -- we only show dimensions when selected
     //         make the coordinate look like they're always multi
-    if (this.showDimensions && whenSelected) {
-      let coordinates = feature.getGeometry().getCoordinates();
-      if (feature.getGeometry().getType() === 'Polygon')
-        coordinates = [coordinates];
-      const dimensions = this.#dimensions(props, resolution, coordinates);
+    if (this.showDimensions) {
+      let polygons = feature.getGeometry().getCoordinates();
+      if (feature.getGeometry().getType() === 'Polygon') polygons = [polygons];
+      const dimensions = this.#dimensions(
+        props,
+        resolution,
+        polygons,
+        whenSelected
+      );
       if (dimensions) styles.push(...dimensions);
     }
     // 👇 lot labels
-    if (this.showLotLabel) {
-      const lotLabels = this.#lotLabel(
+    if (this.showLabels) {
+      const lotLabels = this.#labels(
         props,
         resolution,
         numPolygons,
