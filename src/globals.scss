@@ -220,6 +220,14 @@ ul {
 
 // 👉 Angular Material styles
 
+.mat-card,
+.mat-dialog-container,
+.mat-drawer,
+.mat-menu-content {
+  background-color: var(--background-color) !important;
+  box-shadow: rgb(255 255 255 / 33%) 0px 8px 24px !important;
+}
+
 // 👉 Firebase styles
 
 .firebase-emulator-warning {
