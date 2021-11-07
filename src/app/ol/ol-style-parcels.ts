@@ -24,10 +24,10 @@ import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLIcon from 'ol/style/Icon';
 import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
+import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
-import OLPolygon from 'ol/geom/Polygon';
 
 // 👇 fills, outlines and identifies a parcel feature with:
 //    -- text showing the ID and acreage of the parcel
@@ -337,7 +337,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     else {
       // TODO 🔥 this is a hack, but we don't want to over-engineer
       //         at this point -- currently, we only showSelection
-      //         and showLotLabel at the same time when the selection
+      //         and showLabels at the same time when the selection
       //         is over the dark background of satellite view
       const color = this.showSelection
         ? this.map.vars['--map-parcel-text-inverse']

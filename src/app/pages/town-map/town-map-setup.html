@@ -77,11 +77,11 @@
   </mat-card-content>
 
   <mat-card-actions class="actions">
-    <div *ngIf="townMap.creating"></div>
-
     <a *ngIf="canDelete()" (click)="delete(map)" mat-flat-button>
       Delete ths map ...
     </a>
+
+    <div class="filler"></div>
 
     <button
       (click)="update(map)"

@@ -52,6 +52,7 @@ import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
 import { ParcelsState } from './state/parcels';
 import { ReadyResolver } from './resolvers/ready';
 import { RootPage } from './pages/root/root';
+import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
 import { TownMapPage } from './pages/town-map/town-map';
 import { TownMapSetupComponent } from './pages/town-map/town-map-setup';
 import { UnmergeParcelComponent } from './contextmenu/unmerge-parcel';
@@ -94,7 +95,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
-import { NgObjectPipesModule } from 'ngx-pipes';
+import { NgPipesModule } from 'ngx-pipes';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -153,6 +154,7 @@ const COMPONENTS = [
   OLStyleStoneWallsComponent,
   OLStyleTrailsComponent,
   ParcelPropertiesComponent,
+  SubdivideParcelComponent,
   TownMapSetupComponent,
   UnmergeParcelComponent,
   UserProfileComponent
@@ -233,7 +235,7 @@ const STATES_SAVED = [RouterState, ViewState];
     MatSelectModule,
     MatSidenavModule,
     MatToolbarModule,
-    NgObjectPipesModule,
+    NgPipesModule,
     NgxsModule.forRoot(STATES, {
       developmentMode: !environment.production
     }),

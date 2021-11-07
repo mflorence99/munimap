@@ -180,7 +180,8 @@ a {
   text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
+    color: var(--accent-color);
+    text-decoration: none;
   }
 }
 
@@ -220,12 +221,27 @@ ul {
 
 // 👉 Angular Material styles
 
+a[mat-flat-button] {
+  color: var(--primary-color) !important;
+  background-color: var(--background-color) !important;
+  padding: 0 !important;
+
+  &:hover {
+    color: var(--accent-color) !important;
+    text-decoration: none !important;
+  }
+}
+
 .mat-card,
 .mat-dialog-container,
 .mat-drawer,
 .mat-menu-content {
   background-color: var(--background-color) !important;
   box-shadow: rgb(255 255 255 / 33%) 0px 8px 24px !important;
+}
+
+.mat-card-actions {
+  margin: 0 !important;
 }
 
 // 👉 Firebase styles

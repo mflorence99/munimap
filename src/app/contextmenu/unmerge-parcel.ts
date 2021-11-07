@@ -28,7 +28,7 @@ export class UnmergeParcelComponent implements ContextMenuComponent {
 
   @Input() map: OLMapComponent;
 
-  @ViewChild('unmergeForm', { static: true }) mergeForm: NgForm;
+  @ViewChild('unmergeForm', { static: true }) unmergeForm: NgForm;
 
   @Input() selectedIDs: string[];
 

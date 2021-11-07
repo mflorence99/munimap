@@ -275,6 +275,15 @@
       </li>
 
       <li
+        (click)="canSubdivideParcel($event) && onContextMenu('subdivide-parcel')"
+        [class.disabled]="!canSubdivideParcel()"
+        class="item"
+      >
+        <img class="icon" src="assets/split.png" />
+        Subdivide parcel ...
+      </li>
+
+      <li
         (click)="canMergeParcels($event) && onContextMenu('merge-parcels')"
         [class.disabled]="!canMergeParcels()"
         class="item"
@@ -284,8 +293,8 @@
       </li>
 
       <li
-        (click)="canUnmergeParcels($event) && onContextMenu('unmerge-parcel')"
-        [class.disabled]="!canUnmergeParcels()"
+        (click)="canUnmergeParcel($event) && onContextMenu('unmerge-parcel')"
+        [class.disabled]="!canUnmergeParcel()"
         class="item"
       >
         <img class="icon reversed" src="assets/merge.svg" />

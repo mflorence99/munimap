@@ -1,0 +1,62 @@
+<header class="header">
+  <img class="icon" mat-card-avatar src="assets/split.png" />
+  <p class="title">Lorem ipsum dolor emit</p>
+  <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
+</header>
+
+<form
+  #subdivisionForm="ngForm"
+  autocomplete="off"
+  class="form"
+  novalidate
+  spellcheck="false"
+>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
+    nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
+  </p>
+
+  <article class="subdivisions">
+    <ng-container *ngFor="let subdivision of subdivisions; let ix = index">
+      <mat-form-field>
+        <mat-label>Subdivision ID</mat-label>
+        <input
+          [(ngModel)]="subdivision.id"
+          [name]="'id' + ix"
+          [required]="ix < 2"
+          matInput
+          type="text"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Acreage</mat-label>
+        <input
+          [(ngModel)]="subdivision.area"
+          [name]="'area' + ix"
+          [required]="ix < 2"
+          [step]="0.01"
+          matInput
+          type="number"
+        />
+      </mat-form-field>
+    </ng-container>
+  </article>
+</form>
+
+<article class="actions">
+  <a (click)="more()" mat-flat-button>More...</a>
+
+  <div class="filler"></div>
+
+  <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+  <button
+    (click)="save(subdivisions)"
+    [disabled]="subdivisionForm.invalid || !subdivisionForm.dirty"
+    color="primary"
+    mat-flat-button
+  >
+    SAVE
+  </button>
+</article>

@@ -11,6 +11,7 @@ import { OLOverlayLabelComponent } from '../../ol/ol-overlay-label';
 import { ParcelPropertiesComponent } from '../../contextmenu/parcel-properties';
 import { RootPage } from '../root/root';
 import { SetMap } from '../../state/map';
+import { SubdivideParcelComponent } from '../../contextmenu/subdivide-parcel';
 import { UnmergeParcelComponent } from '../../contextmenu/unmerge-parcel';
 
 import { Actions } from '@ngxs/store';
@@ -137,7 +138,11 @@ export class TownMapPage implements OnInit {
     return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
   }
 
-  canUnmergeParcels(event?: MouseEvent): boolean {
+  canSubdivideParcel(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
+  }
+
+  canUnmergeParcel(event?: MouseEvent): boolean {
     return this.#can(
       event,
       this.olMap.selector.selectedIDs.length === 1 &&
@@ -163,6 +168,11 @@ export class TownMapPage implements OnInit {
         break;
       case 'recenter-label':
         this.labelOverlay.setFeature(this.olMap.selector.selected[0]);
+        break;
+      case 'subdivide-parcel':
+        cFactory = this.resolver.resolveComponentFactory(
+          SubdivideParcelComponent
+        );
         break;
       case 'unmerge-parcel':
         cFactory = this.resolver.resolveComponentFactory(
