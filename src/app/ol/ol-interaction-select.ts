@@ -125,6 +125,7 @@ export class OLInteractionSelectComponent
                 feature.getId()
               );
               this.olSelect.getFeatures().push(feature);
+              this.featuresSelected.emit(this.selected);
             }
           };
           this.map.olMap.forEachFeatureAtPixel(pixel, cb);

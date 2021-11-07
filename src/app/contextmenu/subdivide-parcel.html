@@ -19,7 +19,7 @@
   <article class="subdivisions">
     <ng-container *ngFor="let subdivision of subdivisions; let ix = index">
       <mat-form-field>
-        <mat-label>Subdivision ID</mat-label>
+        <mat-label>Subdivision</mat-label>
         <input
           [(ngModel)]="subdivision.id"
           [name]="'id' + ix"
