@@ -27,6 +27,7 @@ import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
+import OLPolygon from 'ol/geom/Polygon';
 
 // 👇 fills, outlines and identifies a parcel feature with:
 //    -- text showing the ID and acreage of the parcel
@@ -116,7 +117,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #dimensions(
     props: ParcelProperties,
     resolution: number,
-    polygons: OLCoordinate[][][],
+    polygons: OLPolygon[],
     whenSelected = false
   ): OLStyle[] {
     // 👇 only if selected when built for selection
@@ -158,17 +159,18 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #dimensionsAnalyze(
     props: ParcelProperties,
     resolution: number,
-    polygons: OLCoordinate[][][]
+    polygons: OLPolygon[]
   ): Dimension[] {
     const dimensions: Dimension[] = [];
     props.lengths.forEach((lengths, ix) => {
       // 👉 remember, we made Polygons look like MultiPolygons
-      const polygon = polygons[0][ix];
+      //    also, onky interested in outer ring
+      const coords = polygons[ix].getCoordinates()[0];
       let dimension = new Dimension(ix);
       // 👉 we're going to coalesce the lengths of "straight" lines
       lengths.reduce((acc, length, iy) => {
-        const p = toLonLat(polygon[iy]);
-        const q = toLonLat(polygon[iy + 1]);
+        const p = toLonLat(coords[iy]);
+        const q = toLonLat(coords[iy + 1]);
         const angle = bearing(point(p), point(q));
         if (iy === 0) {
           // 👉 this will be true of the first segment
@@ -199,9 +201,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #dimensionsFontSizes(
     props: ParcelProperties,
     resolution: number,
-    polygons: OLCoordinate[][][]
+    polygons: OLPolygon[]
   ): number[] {
-    return polygons[0].map((polygon, ix) => {
+    return polygons.map((polygon, ix) => {
       const labelFontSize = this.#labelFontSize(props, resolution, ix);
       // 👉 fontSize is proportional to the resolution,
       //    but no bigger than the size of the label
@@ -537,10 +539,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     resolution: number,
     whenSelected = false
   ): OLStyle[] {
-    // TODO 🔥 this sucks as we should be using getPolygons() ???
     let numPolygons = 1;
     if (feature.getGeometry().getType() === 'MultiPolygon')
-      numPolygons = feature.getGeometry().getCoordinates()[0].length;
+      numPolygons = feature.getGeometry().getPolygons().length;
     // 👉 we'll adjust how many stroked, fills and texts we draw
     //    depending on the number of polygons and other factors
     const styles: OLStyle[] = [];
@@ -555,8 +556,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     // TODO 🔥 hack -- we only show dimensions when selected
     //         make the coordinate look like they're always multi
     if (this.showDimensions) {
-      let polygons = feature.getGeometry().getCoordinates();
-      if (feature.getGeometry().getType() === 'Polygon') polygons = [polygons];
+      let polygons = [feature.getGeometry()];
+      if (feature.getGeometry().getType() === 'MultiPolygon')
+        polygons = feature.getGeometry().getPolygons();
       const dimensions = this.#dimensions(
         props,
         resolution,

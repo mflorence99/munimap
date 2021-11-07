@@ -105,12 +105,12 @@ export class OLOverlayLabelComponent implements OnInit {
     this.#ix = 0;
     if (feature.getGeometry().getType() === 'MultiPolygon') {
       // TODO 🔥 this sucks as we shoud be using getPolygons() ???
-      const coords = feature.getGeometry().getCoordinates()[0];
+      const polygons = feature.getGeometry().getPolygons();
       // TODO 🔥 this sucks too as we're using turf when
       //         there must be a way with OL's Geometry
-      for (this.#ix = 0; this.#ix < coords.length; this.#ix++) {
+      for (this.#ix = 0; this.#ix < polygons.length; this.#ix++) {
         const pt = point(this.#contextMenuAt);
-        const poly = polygon([coords[this.#ix]]);
+        const poly = polygon([polygons[this.#ix].getCoordinates()[0]]);
         if (booleanPointInPolygon(pt, poly)) break;
       }
     }

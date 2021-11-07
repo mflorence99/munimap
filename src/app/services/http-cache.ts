@@ -8,6 +8,7 @@ import { NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
+import { delay } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';
@@ -53,7 +54,8 @@ export class HttpCache implements HttpInterceptor {
     const cachedResponse: HttpResponse<any> = cache[req.url];
     if (cachedResponse) {
       console.log(`%cFrom ${key} cache:`, 'color: plum', req.url);
-      return of(cachedResponse.clone());
+      // 👉 preserve the semantics of an HTTP request
+      return of(cachedResponse.clone()).pipe(delay(0));
     }
 
     // 👉 not cached? process request and cache response
