@@ -26,7 +26,7 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
   @Input() opacity = 0.33;
   @Input() pattern: OLStrokePatternType = 'rocks';
   @Input() threshold = 1;
-  @Input() width = 7;
+  @Input() wallWidth = 7;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -44,7 +44,7 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
       const rocks = this.map.vars['--map-stonewall-rocks'];
       // 👉 fontSize is proportional to the resolution,
       //    but no bigger than the nominal size specified
-      const width = Math.min(this.width, this.width / resolution);
+      const width = Math.min(this.wallWidth, this.wallWidth / resolution);
       if (resolution >= this.threshold) return null;
       else
         return new OLStyle({

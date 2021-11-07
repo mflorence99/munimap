@@ -37,8 +37,8 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() opacity = 0.9;
+  @Input() riverWidth = 8;
   @Input() threshold = 2;
-  @Input() width = 8;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -51,7 +51,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
     const color = this.map.vars['--map-river-line-color'];
     // 👉 width is proportional to the resolution,
     //    but no bigger than the nominal size specified
-    const width = Math.min(this.width, this.width / resolution);
+    const width = Math.min(this.riverWidth, this.riverWidth / resolution);
     return new OLStroke({
       color: `rgba(${color}, ${this.opacity})`,
       width

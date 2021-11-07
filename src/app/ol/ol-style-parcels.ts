@@ -89,14 +89,21 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 
+  @Input() borderLineDash = [4, 8];
+  @Input() borderWidth = 3;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 16;
+  @Input() fontSizeAcreageRatio = 0.8;
+  @Input() maxBorderWidth = 5;
+  @Input() maxOutlineWidth = 3;
+  @Input() minBorderWidth = 3;
   @Input() minFontSize = 8;
+  @Input() opacity = 0.25;
   @Input() showBackground = false;
   @Input() showDimensions = false;
   @Input() showLabels = false;
   @Input() showSelection = false;
-  @Input() width = 3;
+  @Input() straightLineTolerance = 30;
 
   constructor(
     private decimal: DecimalPipe,
@@ -117,6 +124,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     else {
       // 👉 we will draw the length of each "straight" line in each polygon
       const color = this.map.vars['--map-parcel-text-inverse'];
+      const outline = this.map.vars['--map-parcel-text-color'];
       const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
       // 👉 get the fointSizes up front for each polygon
       const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
@@ -130,8 +138,11 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
               fill: new OLFill({ color: `rgba(${color}, 1)` }),
               placement: 'line',
               stroke: new OLStroke({
-                color: `rgba(0, 0, 0, 1)`,
-                width: 3
+                color: `rgba(${outline}, 1)`,
+                width: Math.min(
+                  fontSizes[dimension.ix] / 8,
+                  this.maxOutlineWidth
+                )
               }),
               text: `${Math.round(dimension.length)}`
             });
@@ -195,7 +206,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       // 👉 fontSize is proportional to the resolution,
       //    but no bigger than the size of the label
       return Math.min(
-        Math.min(labelFontSize * 0.8, this.fontSize),
+        Math.min(labelFontSize * this.fontSizeAcreageRatio, this.fontSize),
         this.fontSize / resolution
       );
     });
@@ -215,7 +226,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       // not all current usages have a pattern
       if (color && icon) {
         patterns = [
-          new OLFill({ color: `rgba(${fill}, 0.25)` }),
+          new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           new OLFillPattern({ image: icon })
         ];
       }
@@ -229,8 +240,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     if (!patterns) {
       patterns = [
         new OLFillPattern({
-          color: `rgba(${fill}, 0.25)`,
-          fill: new OLFill({ color: `rgba(${fill}, 0.25)` }),
+          color: `rgba(${fill}, ${this.opacity})`,
+          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: 'dot',
           size: 2,
           spacing: 4
@@ -266,10 +277,11 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   // 👇 bearings are in degrees
-  //    magic number is 30 degrees tolerance for straightness
-  //    noone would ever configure that
   #isStraight(p: number, q: number): boolean {
-    return Math.abs(p - q) < 30 || Math.abs(p - q) > 360 - 30;
+    return (
+      Math.abs(p - q) < this.straightLineTolerance ||
+      Math.abs(p - q) > 360 - this.straightLineTolerance
+    );
   }
 
   #isTiny(props: ParcelProperties, ix: number): boolean {
@@ -328,6 +340,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const color = this.showSelection
         ? this.map.vars['--map-parcel-text-inverse']
         : this.map.vars['--map-parcel-text-color'];
+      const outline = !this.showSelection
+        ? this.map.vars['--map-parcel-text-inverse']
+        : this.map.vars['--map-parcel-text-color'];
       // 👉 we need to draw a label in each polygon of a multi-polygon
       //    and a separate label for parcel ID and acreage
       const labels = this.#labelsImpl(props, resolution, numPolygons);
@@ -339,13 +354,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetY: label.offsetY,
           overflow: true,
           rotation: label.rotation,
-          // TODO 🔥 this is a hack, see above
-          stroke: this.showSelection
-            ? new OLStroke({
-                color: `rgba(0, 0, 0, 1)`,
-                width: label.fontSize / 8
-              })
-            : null,
+          stroke: new OLStroke({
+            color: `rgba(${outline}, 1)`,
+            width: Math.min(label.fontSize / 8, this.maxOutlineWidth)
+          }),
           text: label.text
         });
         return new OLStyle({ geometry: label.point, text });
@@ -377,7 +389,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       } else {
         // 👉 measure up the parcel id and the acreage text
         //    NOTE: the acreage font size is 80% smaller
-        const fAcres = 0.8;
+        const fAcres = this.fontSizeAcreageRatio;
         const mID = this.map.measureText(
           props.id,
           `bold ${fontSize}px '${this.fontFamily}'`
@@ -467,11 +479,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       return null;
     else {
       const outline = this.map.vars['--map-parcel-outline'];
-      // 🔥 magic number ensures that the border is never larger than 5px
-      const width = Math.min(this.width / resolution, 5);
+      const width = Math.min(
+        this.borderWidth / resolution,
+        this.maxBorderWidth
+      );
       const lineDash = [
-        Math.min(4 / resolution, 4),
-        Math.min(8 / resolution, 8)
+        Math.min(this.borderLineDash[0] / resolution, this.borderLineDash[0]),
+        Math.min(this.borderLineDash[1] / resolution, this.borderLineDash[1])
       ];
       // 👉 alternating light, dark outline
       return [
@@ -507,9 +521,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       return null;
     else {
       const select = this.map.vars['--map-parcel-select'];
-      // 🔥 magic numbers ensure that selection border size
-      //    is always in the ranger [3, 5] px
-      const width = Math.min(Math.max(this.width / resolution, 3), 5);
+      const width = Math.min(
+        Math.max(this.borderWidth / resolution, this.minBorderWidth),
+        this.maxBorderWidth
+      );
       // 👉 necessary so we can select
       const fill = new OLFill({ color: [0, 0, 0, 0] });
       const stroke = new OLStroke({ color: `rgb(${select})`, width });

@@ -39,7 +39,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() opacity = 0.1;
-  @Input() width = 3;
+  @Input() outlineWidth = 3;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -61,7 +61,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
         fill: new OLFill({ color }),
         stroke: new OLStroke({
           color: `rgba(${stroke}, 1)`,
-          width: this.width
+          width: this.outlineWidth
         })
       });
     };
@@ -79,7 +79,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
           fill: new OLFill({ color: `rgba(${disabled}, ${this.opacity})` }),
           stroke: new OLStroke({
             color: `rgba(${stroke}, 1)`,
-            width: this.width
+            width: this.outlineWidth
           })
         });
       else
@@ -87,7 +87,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           stroke: new OLStroke({
             color: `rgba(${stroke}, 1)`,
-            width: this.width
+            width: this.outlineWidth
           }),
           text: new OLText({
             font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,

@@ -38,7 +38,7 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() opacity = 0.9;
   @Input() threshold = 3;
-  @Input() width = 4;
+  @Input() trailWidth = 4;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -51,7 +51,7 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
     const color = this.map.vars['--map-trail-line-color'];
     // 👉 width is proportional to the resolution,
     //    but no bigger than the nominal size specified
-    const width = Math.min(this.width, this.width / resolution);
+    const width = Math.min(this.trailWidth, this.trailWidth / resolution);
     return new OLStroke({
       color: `rgba(${color}, ${this.opacity})`,
       lineDash: [10 / resolution, 10 / resolution],

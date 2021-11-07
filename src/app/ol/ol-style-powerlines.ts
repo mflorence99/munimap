@@ -28,8 +28,8 @@ import OLStyle from 'ol/style/Style';
 })
 export class OLStylePowerlinesComponent implements OLStyleComponent {
   @Input() opacity = 1;
+  @Input() powerLineWidth = 3;
   @Input() threshold = 2;
-  @Input() width = 3;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -81,7 +81,7 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
 
   #drawLine(river: OLFeature<OLMultiLineString>, resolution: number): OLStyle {
     const lineColor = this.map.vars['--map-powerline-line-color'];
-    const width = this.width / resolution;
+    const width = this.powerLineWidth / resolution;
     return new OLStyle({
       stroke: new OLStroke({
         color: `rgba(${lineColor}, ${this.opacity})`,
