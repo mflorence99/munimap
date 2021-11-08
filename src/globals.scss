@@ -244,6 +244,10 @@ a[mat-flat-button] {
   margin: 0 !important;
 }
 
+.mat-dialog-actions {
+  justify-content: flex-end !important;
+}
+
 // 👉 Firebase styles
 
 .firebase-emulator-warning {
