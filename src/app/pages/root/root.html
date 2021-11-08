@@ -1,7 +1,7 @@
 <main class="page">
   <mat-toolbar class="toolbar">
     <button
-      (click)="drawer.toggle()"
+      (click)="nav.toggle()"
       [disabled]="!(user$ | async)"
       mat-icon-button
     >
@@ -24,42 +24,28 @@
 
     <ng-container *ngIf="user$ | async as user">
       <ngx-avatar
-        #trigger="cdkOverlayOrigin"
-        (clickOnAvatar)="openUserProfile = !openUserProfile"
         [gravatarId]="user.photoURL ? null : user.email"
         [initialsSize]="2"
         [name]="user.displayName"
         [round]="true"
         [size]="48"
         [src]="user.photoURL"
-        cdkOverlayOrigin
-        class="avatar"
       ></ngx-avatar>
-
-      <ng-template
-        cdkConnectedOverlay
-        (backdropClick)="openUserProfile = false"
-        [cdkConnectedOverlayHasBackdrop]="true"
-        [cdkConnectedOverlayOrigin]="trigger"
-        [cdkConnectedOverlayOpen]="openUserProfile"
-      >
-        <app-user-profile
-          (done)="openUserProfile = false"
-          [profile]="profile$ | async"
-          [user]="user$ | async"
-        ></app-user-profile>
-      </ng-template>
     </ng-container>
+
+    <button (click)="setup.toggle()" mat-icon-button>
+      <mat-icon>settings</mat-icon>
+    </button>
   </mat-toolbar>
 
   <mat-progress-bar *ngIf="loading" color="primary" mode="indeterminate">
   </mat-progress-bar>
 
   <mat-drawer-container class="container">
-    <mat-drawer #drawer class="sidebar" mode="over">
+    <mat-drawer #nav class="sidebar" mode="over" position="start">
       <nav class="navigator">
         <ul>
-          <li (click)="drawer.close()" routerLink="/map-create" class="item">
+          <li (click)="nav.close()" routerLink="/map-create" class="item">
             <img class="icon" src="assets/favicon.svg" />
             <div class="title">Create a new map</div>
             <div class="subtitle">Lorem ipsum dolor sit amet.</div>
@@ -67,7 +53,7 @@
 
           <li
             *ngFor="let map of allMaps$ | async; trackBy: trackByID"
-            (click)="drawer.close()"
+            (click)="nav.close()"
             class="item"
             routerLink="/town-map/{{ map.id }}"
           >
@@ -82,6 +68,17 @@
           </li>
         </ul>
       </nav>
+    </mat-drawer>
+
+    <mat-drawer #setup class="sidebar" mode="over" position="end">
+      <ng-container *ngIf="user$ | async as user">
+        <ng-container *ngIf="profile$ | async as profile">
+          <app-user-profile
+            [profile]="profile"
+            [user]="user"
+          ></app-user-profile>
+        </ng-container>
+      </ng-container>
     </mat-drawer>
 
     <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">

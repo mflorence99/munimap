@@ -54,7 +54,6 @@ export class RootPage implements OnInit {
   canUndo = false;
 
   loading = false;
-  openUserProfile = false;
 
   @ViewChild(RouterOutlet) outlet;
 

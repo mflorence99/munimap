@@ -6,9 +6,8 @@ import { User } from '../../state/auth';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import { Input } from '@angular/core';
-import { Output } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Store } from '@ngxs/store';
 
 import copy from 'fast-copy';
@@ -22,10 +21,6 @@ import copy from 'fast-copy';
 export class UserProfileComponent {
   #profile: Profile;
   #user: User;
-
-  @Output() done = new EventEmitter<void>();
-
-  editMode = false;
 
   @Input()
   get profile(): Profile {
@@ -43,16 +38,16 @@ export class UserProfileComponent {
     this.#user = copy(user);
   }
 
-  constructor(private store: Store) {}
+  constructor(private drawer: MatDrawer, private store: Store) {}
 
   logout(): void {
     this.store.dispatch(new Logout());
-    this.done.emit();
+    this.drawer.close();
   }
 
   update(user: any, profile: any): void {
     this.store.dispatch(new UpdateUser(user));
     this.store.dispatch(new UpdateProfile(profile));
-    this.done.emit();
+    this.drawer.close();
   }
 }
