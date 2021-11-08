@@ -3,7 +3,6 @@ import { AuthState } from '../state/auth';
 import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
-import { ParcelProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -92,7 +91,7 @@ export class OLOverlayLabelComponent implements OnInit {
       path: this.map.path,
       properties: {
         centers: centers
-      } as ParcelProperties,
+      },
       type: 'Feature'
     };
     this.store.dispatch(new AddParcels([parcel]));
@@ -111,8 +110,6 @@ export class OLOverlayLabelComponent implements OnInit {
         if (booleanPointInPolygon(pt, poly)) break;
       }
     }
-    this.olOverlay.setPosition(
-      fromLonLat(feature.getProperties().centers[this.#ix])
-    );
+    this.olOverlay.setPosition(fromLonLat(this.#centers[this.#ix]));
   }
 }

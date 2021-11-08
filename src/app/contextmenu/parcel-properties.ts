@@ -5,7 +5,6 @@ import { Descriptor } from '../services/typeregistry';
 import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../common';
-import { ParcelProperties } from '../common';
 import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
@@ -218,7 +217,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         id: feature.getId(),
         owner: this.authState.currentProfile().email,
         path: this.map.path,
-        properties: {} as ParcelProperties,
+        properties: {},
         type: 'Feature'
       };
       // 👇 some controls are conditional so they may no longer be

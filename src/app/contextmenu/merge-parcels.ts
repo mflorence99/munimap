@@ -3,7 +3,6 @@ import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../common';
-import { ParcelProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -56,7 +55,7 @@ export class MergeParcelsComponent implements ContextMenuComponent {
         id: removedID,
         owner: this.authState.currentProfile().email,
         path: this.map.path,
-        properties: {} as ParcelProperties,
+        properties: {},
         removed: removedID,
         type: 'Feature'
       };
@@ -67,9 +66,7 @@ export class MergeParcelsComponent implements ContextMenuComponent {
       id: record.mergedID,
       owner: this.authState.currentProfile().email,
       path: this.map.path,
-      properties: {
-        mergedWith: removedIDs
-      } as ParcelProperties,
+      properties: {},
       type: 'Feature'
     };
     // 👉 the new area will be the sum of the merged parcels

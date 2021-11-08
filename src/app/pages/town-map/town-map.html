@@ -299,15 +299,6 @@
       </li>
 
       <li
-        (click)="canUnmergeParcel($event) && onContextMenu('unmerge-parcel')"
-        [class.disabled]="!canUnmergeParcel()"
-        class="item"
-      >
-        <img class="icon reversed" src="assets/merge.svg" />
-        Unmerge parcel ...
-      </li>
-
-      <li
         (click)="canRecenterLabel($event) && onContextMenu('recenter-label')"
         [class.disabled]="!canRecenterLabel()"
         class="item"

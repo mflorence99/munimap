@@ -48,7 +48,6 @@ class ParcelPropertiesClass {
     public labels: ParcelPropertiesLabel[] /* 👈 legacy support */ = [],
     public land$: number = 0,
     public lengths: number[][] = [[]],
-    public mergedWith: string[] = [],
     public minWidths: number[] = [],
     public neighborhood: ParcelPropertiesNeighborhood = null,
     public orientations: number[] = [],

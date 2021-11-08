@@ -3,7 +3,6 @@ import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../common';
-import { ParcelProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -34,28 +33,11 @@ interface Subdivision {
   templateUrl: './subdivide-parcel.html'
 })
 export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
-  #features: OLFeature<any>[];
   #format: OLGeoJSON;
 
   @Input() drawer: MatDrawer;
 
-  @Input()
-  get features(): OLFeature<any>[] {
-    return this.#features;
-  }
-  set features(features: OLFeature<any>[]) {
-    this.#features = features;
-    this.subdivisions = [
-      {
-        area: this.features[0].getProperties().area,
-        id: `${this.features[0].getId()}`
-      },
-      {
-        area: null,
-        id: null
-      }
-    ];
-  }
+  @Input() features: OLFeature<any>[];
 
   @Input() map: OLMapComponent;
 
@@ -74,11 +56,23 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
   more(): void {
     this.subdivisions.push({ area: null, id: null });
   }
+
   ngOnInit(): void {
     this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
+    const source = this.features[0];
+    this.subdivisions = [
+      {
+        area: source.getProperties().area,
+        id: `${source.getId()}`
+      },
+      {
+        area: null,
+        id: null
+      }
+    ];
   }
 
   save(subdivisions: Subdivision[]): void {
@@ -102,6 +96,7 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
       (polygon) => intersect(polygon, sourceGeoJSON)
     );
 
+    // 🔥 TEMPORARY
     const subdividedParcels: Parcel[] = targetGeoJSONs.map((geojson, ix) => {
       const props = source.getProperties();
       const subdivision = subdivisions[ix];
@@ -122,7 +117,7 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
           usage: props.usage,
           use: props.use,
           zone: props.zone
-        } as ParcelProperties,
+        },
         type: 'Feature'
       };
     });
