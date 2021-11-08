@@ -4,6 +4,7 @@ import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
 
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
@@ -76,13 +77,13 @@ export class OLOverlayLabelComponent implements OnInit {
     this.#handleContextMenu$();
   }
 
-  onDragEnd(event: DragEvent): void {
+  onDragEnd(event: CdkDragEnd): void {
     // 👉 construct a parcel to override the label position
     const centers = this.#centers;
     centers[this.#ix] = toLonLat(
       this.map.olMap.getCoordinateFromPixel([
-        event.clientX,
-        event.clientY - this.#hack
+        event.dropPoint.x,
+        event.dropPoint.y - this.#hack
       ])
     );
     const parcel: Parcel = {
@@ -96,6 +97,8 @@ export class OLOverlayLabelComponent implements OnInit {
     };
     this.store.dispatch(new AddParcels([parcel]));
     this.olOverlay.setPosition([0, 0]);
+    // 👉 https://stackoverflow.com/questions/61157528
+    event.source._dragRef.reset();
   }
 
   setFeature(feature: OLFeature<any>): void {

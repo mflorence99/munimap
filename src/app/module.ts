@@ -74,6 +74,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ErrorHandler } from '@angular/core';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { FormsModule } from '@angular/forms';
@@ -216,6 +217,7 @@ const STATES_SAVED = [RouterState, ViewState];
     BrowserAnimationsModule,
     BrowserModule,
     CommonModule,
+    DragDropModule,
     FirebaseUIModule.forRoot(environment.auth),
     FormsModule,
     HttpClientModule,
