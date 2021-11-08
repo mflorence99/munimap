@@ -3,6 +3,7 @@ import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../common';
+import { ParcelID } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -39,7 +40,7 @@ export class MergeParcelsComponent implements ContextMenuComponent {
     mergedID: null
   };
 
-  @Input() selectedIDs: string[];
+  @Input() selectedIDs: ParcelID[];
 
   constructor(private authState: AuthState, private store: Store) {}
 
@@ -55,7 +56,6 @@ export class MergeParcelsComponent implements ContextMenuComponent {
         id: removedID,
         owner: this.authState.currentProfile().email,
         path: this.map.path,
-        properties: {},
         removed: removedID,
         type: 'Feature'
       };

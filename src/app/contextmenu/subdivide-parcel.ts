@@ -3,6 +3,7 @@ import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../common';
+import { ParcelID } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -41,7 +42,7 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
 
   @Input() map: OLMapComponent;
 
-  @Input() selectedIDs: string[];
+  @Input() selectedIDs: ParcelID[];
 
   @ViewChild('subdivisionForm', { static: true }) subdivisionForm: NgForm;
 
@@ -90,13 +91,28 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
       this.#format.writeFeature(this.features[0])
     );
 
-    const randomPoints = randomPoint(subdivisions.length, { bbox });
+    let targetGeoJSONs = [];
+    for (let ix = 0; targetGeoJSONs.length < subdivisions.length; ix++) {
+      const randomPoints = randomPoint(subdivisions.length + ix, { bbox });
+      targetGeoJSONs = voronoi(randomPoints, { bbox }).features.map((polygon) =>
+        intersect(polygon, sourceGeoJSON)
+      );
+    }
+    targetGeoJSONs.length = subdivisions.length;
 
-    const targetGeoJSONs = voronoi(randomPoints, { bbox }).features.map(
-      (polygon) => intersect(polygon, sourceGeoJSON)
-    );
+    const removedParcels: Parcel[] = [];
+    if (
+      subdivisions.every((subdivision) => subdivision.id !== source.getId())
+    ) {
+      removedParcels.push({
+        id: source.getId(),
+        owner: this.authState.currentProfile().email,
+        path: this.map.path,
+        removed: source.getId(),
+        type: 'Feature'
+      });
+    }
 
-    // 🔥 TEMPORARY
     const subdividedParcels: Parcel[] = targetGeoJSONs.map((geojson, ix) => {
       const props = source.getProperties();
       const subdivision = subdivisions[ix];
@@ -122,7 +138,9 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
       };
     });
 
-    this.store.dispatch(new AddParcels(subdividedParcels));
+    this.store.dispatch(
+      new AddParcels([...removedParcels, ...subdividedParcels])
+    );
     this.drawer.close();
   }
 

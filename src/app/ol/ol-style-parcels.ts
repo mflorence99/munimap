@@ -386,14 +386,14 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetY: 0,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
-          text: props.id
+          text: `${props.id}`
         });
       } else {
         // 👉 measure up the parcel id and the acreage text
         //    NOTE: the acreage font size is 80% smaller
         const fAcres = this.fontSizeAcreageRatio;
         const mID = this.map.measureText(
-          props.id,
+          `${props.id}`,
           `bold ${fontSize}px '${this.fontFamily}'`
         );
         const mGap = this.map.measureText(
@@ -428,7 +428,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetY: y1,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
-          text: props.id
+          text: `${props.id}`
         });
         labels.push({
           fontFamily: this.fontFamily,

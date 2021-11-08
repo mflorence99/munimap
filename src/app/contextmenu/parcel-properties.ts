@@ -5,6 +5,7 @@ import { Descriptor } from '../services/typeregistry';
 import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../common';
+import { ParcelID } from '../common';
 import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
@@ -74,7 +75,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
 
   record: ValueRecord = {};
 
-  @Input() selectedIDs: string[];
+  @Input() selectedIDs: ParcelID[];
 
   constructor(
     private authState: AuthState,

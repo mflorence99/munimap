@@ -3,6 +3,7 @@ import { AuthState } from '../state/auth';
 import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
+import { ParcelID } from '../common';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -33,7 +34,7 @@ export class OLOverlayLabelComponent implements OnInit {
   #centers: number[][];
   #contextMenuAt: number[];
   #hack: number;
-  #id: string;
+  #id: ParcelID;
   #ix: number;
 
   @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;
@@ -103,7 +104,7 @@ export class OLOverlayLabelComponent implements OnInit {
 
   setFeature(feature: OLFeature<any>): void {
     this.#centers = feature.getProperties().centers;
-    this.#id = `${feature.getId()}`;
+    this.#id = feature.getId();
     this.#ix = 0;
     if (feature.getGeometry().getType() === 'MultiPolygon') {
       const polygons = feature.getGeometry().getPolygons();

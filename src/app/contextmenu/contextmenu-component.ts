@@ -1,4 +1,5 @@
 import { OLMapComponent } from '../ol/ol-map';
+import { ParcelID } from '../common';
 
 import { MatDrawer } from '@angular/material/sidenav';
 
@@ -8,5 +9,5 @@ export interface ContextMenuComponent {
   drawer: MatDrawer;
   features: OLFeature<any>[];
   map: OLMapComponent;
-  selectedIDs: string[];
+  selectedIDs: ParcelID[];
 }

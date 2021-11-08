@@ -24,12 +24,14 @@ export type Features = GeoJSON.FeatureCollection<
 
 export interface Parcel extends Partial<Feature> {
   $id?: string /* 👈 optional only because we'll complete it */;
-  added?: string | null | undefined;
+  added?: ParcelID | null | undefined;
   owner: string;
   path: string;
-  removed?: string | null | undefined;
+  removed?: ParcelID | null | undefined;
   timestamp?: any /* 👈 optional only because we'll complete it */;
 }
+
+export type ParcelID = string | number;
 
 // 👉 https://stackoverflow.com/questions/43909566
 
@@ -44,7 +46,7 @@ class ParcelPropertiesClass {
     public centers: number[][] = [[]],
     public county: string = '',
     public elevations: number[] /* 👈 legacy support */ = [],
-    public id: string = '',
+    public id: ParcelID = null,
     public labels: ParcelPropertiesLabel[] /* 👈 legacy support */ = [],
     public land$: number = 0,
     public lengths: number[][] = [[]],
@@ -125,6 +127,7 @@ export function calculate(parcel: Parcel): void {
     // 👉 bbox applues to the whole geometry
     parcel.bbox = bbox(parcel);
     // 👉 now do calculations on each Polygon
+    parcel.properties ??= {};
     parcel.properties.areas = polygons.map((polygon) => calculateArea(polygon));
     parcel.properties.centers = polygons.map((polygon) =>
       calculateCenter(polygon)
@@ -227,15 +230,19 @@ function calculateSqarcity(
 
 export function deserialize(parcel: Parcel): void {
   if (parcel.geometry) parcel.geometry = JSON.parse(parcel.geometry as any);
-  serializedProperties.forEach((prop) => {
-    if (parcel.properties[prop])
-      parcel.properties[prop] = JSON.parse(parcel.properties[prop]);
-  });
+  if (parcel.properties) {
+    serializedProperties.forEach((prop) => {
+      if (parcel.properties[prop])
+        parcel.properties[prop] = JSON.parse(parcel.properties[prop]);
+    });
+  }
 }
 
 export function normalize(parcel: Parcel): void {
-  normalizeAddress(parcel);
-  normalizeOwner(parcel);
+  if (parcel.properties) {
+    normalizeAddress(parcel);
+    normalizeOwner(parcel);
+  }
 }
 
 function normalizeAddress(parcel: Parcel): void {
@@ -270,10 +277,12 @@ function normalizeOwner(parcel: Parcel): void {
 
 export function serialize(parcel: Parcel): void {
   if (parcel.geometry) parcel.geometry = JSON.stringify(parcel.geometry) as any;
-  serializedProperties.forEach((prop) => {
-    if (parcel.properties[prop])
-      parcel.properties[prop] = JSON.stringify(parcel.properties[prop]);
-  });
+  if (parcel.properties) {
+    serializedProperties.forEach((prop) => {
+      if (parcel.properties[prop])
+        parcel.properties[prop] = JSON.stringify(parcel.properties[prop]);
+    });
+  }
 }
 
 export function timestamp(parcel: Parcel): void {

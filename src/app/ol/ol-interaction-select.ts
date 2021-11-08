@@ -4,6 +4,7 @@ import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
+import { ParcelID } from '../common';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -72,8 +73,8 @@ export class OLInteractionSelectComponent
     return this.olSelect.getFeatures().getArray();
   }
 
-  get selectedIDs(): string[] {
-    return this.selected.map((feature) => `${feature.getId()}`);
+  get selectedIDs(): ParcelID[] {
+    return this.selected.map((feature) => feature.getId());
   }
 
   @Input() zoomAnimationDuration = 200;
@@ -117,7 +118,7 @@ export class OLInteractionSelectComponent
           const cb = (feature: any, layer: any): void => {
             if (
               layer === this.layer.olLayer &&
-              !this.selectedIDs.includes(`${feature.getId()}`)
+              !this.selectedIDs.includes(feature.getId())
             ) {
               console.log(
                 `%cSelected feature`,
@@ -142,7 +143,7 @@ export class OLInteractionSelectComponent
     this.featuresSelected.emit(this.selected);
   }
 
-  #selectParcels(ids: (string | number)[]): void {
+  #selectParcels(ids: ParcelID[]): void {
     this.olSelect.getFeatures().clear();
     this.layer.olLayer.getSource().forEachFeature((feature) => {
       if (ids.includes(feature.getId()))
@@ -168,7 +169,7 @@ export class OLInteractionSelectComponent
     this.#handleContextMenu$();
   }
 
-  reselectParcels(ids: string[]): void {
+  reselectParcels(ids: ParcelID[]): void {
     this.#selectParcels(ids);
   }
 

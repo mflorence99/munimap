@@ -4,6 +4,7 @@ import { Features } from '../common';
 import { GeoJSONService } from '../services/geojson';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
+import { ParcelID } from '../common';
 import { ParcelsState } from '../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +19,7 @@ import { Subject } from 'rxjs';
 import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import copy from 'fast-copy';
 import fuzzysort from 'fuzzysort';
 
 type Override = {
@@ -37,8 +39,6 @@ export class OLControlSearchParcelsComponent implements OnInit {
   #geojson$ = new Subject<Features>();
 
   #overridesByID: Record<string, Override> = {};
-
-  #removedIDs = new Set();
 
   #searchTargets = [];
   #searchablesByAddress: Record<string, Feature[]> = {};
@@ -62,22 +62,37 @@ export class OLControlSearchParcelsComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+  #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
+    // 👉 remember that NULL resets a parcel override
+    const removedHash = parcels.reduce((acc, parcel) => {
+      if (acc[parcel.id] === undefined && parcel.removed !== undefined)
+        acc[parcel.id] = parcel.removed;
+      return acc;
+    }, {});
+    // 👉 now we have a list of IDs that must be removed
+    const removedIDs = new Set<any>(
+      Object.keys(removedHash).filter((key) => removedHash[key])
+    );
+    // 👉 remove them from the geojson
+    geojson.features = geojson.features.filter(
+      (feature) => !removedIDs.has(feature.id)
+    );
+  }
+
   #groupSearchablesByProperty(
     searchables: Feature[],
     prop: string
   ): Record<string, Feature[]> {
-    return searchables
-      .filter((searchable) => !this.#removedIDs.has(searchable.id))
-      .reduce((acc, searchable) => {
-        const props = searchable.properties;
-        const override = this.#overridesByID[searchable.id];
-        const property = override?.[prop] ?? props[prop];
-        if (property) {
-          if (!acc[property]) acc[property] = [searchable];
-          else acc[property].push(searchable);
-        }
-        return acc;
-      }, {});
+    return searchables.reduce((acc, searchable) => {
+      const props = searchable.properties;
+      const override = this.#overridesByID[searchable.id];
+      const property = override?.[prop] ?? props[prop];
+      if (property) {
+        if (!acc[property]) acc[property] = [searchable];
+        else acc[property].push(searchable);
+      }
+      return acc;
+    }, {});
   }
 
   // 👉 the idea behind "searchables" is to provide just enough data for
@@ -95,9 +110,13 @@ export class OLControlSearchParcelsComponent implements OnInit {
     // 👇 we need to merge the incoming geojson with the latest parcels
     combineLatest([this.#geojson$, this.parcels$])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([geojson, parcels]) => {
+      .subscribe(([original, parcels]) => {
+        // 👉 take a copy of the geojson before we change it
+        const geojson = copy(original);
+        // 👉 build search data structures
+        this.#insertAddedFeatures(geojson, parcels);
+        this.#filterRemovedFeatures(geojson, parcels);
         this.#overridesByID = this.#makeOverridesByID(parcels);
-        this.#removedIDs = this.#makeRemovedIDs(parcels);
         this.#searchTargets = this.#makeSearchTargets(geojson.features);
         this.#searchablesByAddress = this.#groupSearchablesByProperty(
           geojson.features,
@@ -114,6 +133,28 @@ export class OLControlSearchParcelsComponent implements OnInit {
       });
   }
 
+  #insertAddedFeatures(geojson: Features, parcels: Parcel[]): void {
+    // 👉 remember that NULL resets a parcel override
+    const addedHash = parcels.reduce((acc, parcel) => {
+      if (acc[parcel.id] === undefined && parcel.added !== undefined)
+        acc[parcel.id] = parcel.added;
+      return acc;
+    }, {});
+    // 👉 now we have a list of IDs that must be added
+    const addedIDs = new Set<any>(
+      Object.keys(addedHash).filter((key) => addedHash[key])
+    );
+    // 👉 insert a model into the geojson (will be overwritten)
+    addedIDs.forEach((addedID) => {
+      geojson.features.push({
+        geometry: undefined,
+        id: addedID,
+        properties: {},
+        type: 'Feature'
+      });
+    });
+  }
+
   // 👇 remember: parcels are in descending order by timestamp
   //    the first "defined" value wins
   //    null means no override, accept the original geojson
@@ -125,40 +166,28 @@ export class OLControlSearchParcelsComponent implements OnInit {
       if (parcel.bbox !== undefined && override.bbox === undefined)
         override.bbox = parcel.bbox;
       const props = parcel.properties;
-      if (props.address !== undefined && override.address === undefined)
-        override.address = props.address;
-      if (props.owner !== undefined && override.owner === undefined)
-        override.owner = props.owner;
+      if (props) {
+        if (props.address !== undefined && override.address === undefined)
+          override.address = props.address;
+        if (props.owner !== undefined && override.owner === undefined)
+          override.owner = props.owner;
+      }
       return acc;
     }, {});
-  }
-
-  #makeRemovedIDs(parcels: Parcel[]): Set<any> {
-    const removedHash = parcels.reduce((acc, parcel) => {
-      if (acc[parcel.id] === undefined && parcel.removed !== undefined)
-        acc[parcel.id] = parcel.removed;
-      return acc;
-    }, {});
-    const removedIDs = Object.keys(removedHash).filter(
-      (key) => removedHash[key]
-    );
-    return new Set(removedIDs);
   }
 
   #makeSearchTargets(searchables: Feature[]): any[] {
-    const keys = new Set<string>();
-    searchables
-      .filter((searchable) => !this.#removedIDs.has(searchable.id))
-      .forEach((searchable) => {
-        const props = searchable.properties;
-        const override = this.#overridesByID[searchable.id];
-        if (override?.address) keys.add(override.address);
-        else if (props.address) keys.add(props.address);
-        if (override?.owner) keys.add(override.owner);
-        else if (props.owner) keys.add(props.owner);
-        keys.add(props.id);
-      });
-    return Array.from(keys).map((key) => fuzzysort.prepare(key));
+    const keys = new Set<ParcelID>();
+    searchables.forEach((searchable) => {
+      const props = searchable.properties;
+      const override = this.#overridesByID[searchable.id];
+      if (override?.address) keys.add(override.address);
+      else if (props.address) keys.add(props.address);
+      if (override?.owner) keys.add(override.owner);
+      else if (props.owner) keys.add(props.owner);
+      keys.add(props.id);
+    });
+    return Array.from(keys).map((key) => fuzzysort.prepare(`${key}`));
   }
 
   input(str: string): string {
