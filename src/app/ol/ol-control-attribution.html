@@ -1,7 +1,7 @@
 <article class="control">
   <p #attribution class="attribution" [class.collapsed]="collapsed">
     <span
-      *ngFor="let attribution of attributions; last as isLast"
+      *ngFor="let attribution of attributions; last as isLast; trackBy: trackByAttribution"
       [innerHTML]="attribution + (isLast? '' : '&nbsp;|&nbsp;')"
     ></span>
   </p>

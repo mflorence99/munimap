@@ -16,5 +16,7 @@
   [class.hidden]="matches.length === 0 || !theSearcher.value"
   class="matcher"
 >
-  <option *ngFor="let match of matches" [value]="match">{{ match }}</option>
+  <option *ngFor="let match of matches; trackBy: trackByMatch" [value]="match">
+    {{ match }}
+  </option>
 </select>

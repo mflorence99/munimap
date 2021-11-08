@@ -66,7 +66,7 @@
           </li>
 
           <li
-            *ngFor="let map of allMaps$ | async"
+            *ngFor="let map of allMaps$ | async; trackBy: trackByID"
             (click)="drawer.close()"
             class="item"
             routerLink="/town-map/{{ map.id }}"

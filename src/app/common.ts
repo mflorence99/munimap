@@ -24,6 +24,7 @@ export type Features = GeoJSON.FeatureCollection<
 
 export interface Parcel extends Partial<Feature> {
   $id?: string /* 👈 optional only because we'll complete it */;
+  added?: string | null | undefined;
   owner: string;
   path: string;
   removed?: string | null | undefined;

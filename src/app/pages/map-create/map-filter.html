@@ -15,7 +15,10 @@
         (selectionChange)="switchState($event.value)"
         [value]="currentState()"
       >
-        <mat-option *ngFor="let state of allStates()" [value]="state">
+        <mat-option
+          *ngFor="let state of allStates(); trackBy: trackByItem"
+          [value]="state"
+        >
           {{ state }}
         </mat-option>
       </mat-select>
@@ -27,7 +30,10 @@
         (selectionChange)="switchCounty($event.value)"
         [value]="currentCounty()"
       >
-        <mat-option *ngFor="let county of allCounties()" [value]="county">
+        <mat-option
+          *ngFor="let county of allCounties(); trackBy: trackByItem"
+          [value]="county"
+        >
           {{ county }}
         </mat-option>
       </mat-select>
@@ -39,7 +45,10 @@
         (selectionChange)="switchTown($event.value)"
         [value]="currentTown()"
       >
-        <mat-option *ngFor="let town of allTowns()" [value]="town">
+        <mat-option
+          *ngFor="let town of allTowns(); trackBy: trackByItem"
+          [value]="town"
+        >
           {{ town }}
         </mat-option>
       </mat-select>

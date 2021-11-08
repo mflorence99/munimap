@@ -87,4 +87,8 @@ export class MapFilterComponent {
       `${this.currentState()}:${this.currentCounty()}:${town}`
     );
   }
+
+  trackByItem(ix: number, item: string): string {
+    return item;
+  }
 }

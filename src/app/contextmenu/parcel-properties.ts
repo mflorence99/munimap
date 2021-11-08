@@ -243,6 +243,10 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     this.propertiesForm.form.markAsPristine();
   }
 
+  trackByOption(ix: number, option: [any, Descriptor]): string {
+    return option[0];
+  }
+
   trackByProp(ix: number, value: Value): string {
     return value.prop;
   }

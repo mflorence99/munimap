@@ -143,6 +143,10 @@ export class RootPage implements OnInit {
     this.title = title;
   }
 
+  trackByID(ix: number, map: Map): string {
+    return map.id;
+  }
+
   undo(): void {
     this.store.dispatch(new Undo());
   }

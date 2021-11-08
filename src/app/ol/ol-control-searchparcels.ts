@@ -206,4 +206,8 @@ export class OLControlSearchParcelsComponent implements OnInit {
     this.#handleGeoJSON$();
     this.#handleStreams$();
   }
+
+  trackByMatch(ix: number, match: string): string {
+    return match;
+  }
 }

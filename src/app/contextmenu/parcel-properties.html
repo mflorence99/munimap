@@ -32,7 +32,10 @@
         [name]="value.prop"
         [placeholder]="registry.decode('parcel', value.prop, value.fromFeatures)"
       >
-        <mat-option *ngFor="let option of value.list" [value]="option[0]">
+        <mat-option
+          *ngFor="let option of value.list; trackBy: trackByOption"
+          [value]="option[0]"
+        >
           {{ option[1].decoding }}
         </mat-option>
       </mat-select>

@@ -17,7 +17,9 @@
   </p>
 
   <article class="subdivisions">
-    <ng-container *ngFor="let subdivision of subdivisions; let ix = index">
+    <ng-container
+      *ngFor="let subdivision of subdivisions; let ix = index; trackBy: trackByIndex"
+    >
       <mat-form-field>
         <mat-label>Subdivision</mat-label>
         <input

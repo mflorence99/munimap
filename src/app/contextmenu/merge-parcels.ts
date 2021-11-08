@@ -92,4 +92,8 @@ export class MergeParcelsComponent implements ContextMenuComponent {
     this.store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
     this.drawer.close();
   }
+
+  trackByID(ix: number, id: string): string {
+    return id;
+  }
 }
