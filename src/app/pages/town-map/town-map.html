@@ -227,7 +227,7 @@
 
         <app-ol-layer-vector>
           <app-ol-style-parcels
-            [showDimensions]="map.options.showSatelliteForSelected"
+            [showDimensions]="true"
             [showLabels]="map.options.showSatelliteForSelected"
             [showSelection]="true"
           ></app-ol-style-parcels>
@@ -239,11 +239,15 @@
               </ng-template>
             </mat-menu>
           </app-ol-interaction-select>
+          <app-ol-interaction-snap></app-ol-interaction-snap>
+          <app-ol-interaction-redraw></app-ol-interaction-redraw>
         </app-ol-layer-vector>
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
 
         <app-ol-overlay-label></app-ol-overlay-label>
+
+        <!-- 📦 OSUPPORTS PARCEL BOUNDARY REDRAW -->
 
         <!-- 📦 BOUNDARY LAYER -->
 
@@ -287,6 +291,15 @@
       >
         <img class="icon" src="assets/split.png" />
         Subdivide parcel ...
+      </li>
+
+      <li
+        (click)="canRedrawBoundary($event) && onContextMenu('redraw-boundary')"
+        [class.disabled]="!canRedrawBoundary()"
+        class="item"
+      >
+        <img class="icon" src="assets/target2.svg" />
+        Redraw parcel boundary
       </li>
 
       <li

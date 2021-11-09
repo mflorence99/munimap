@@ -1,5 +1,6 @@
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
+import { OLInteractionRedrawComponent } from './ol-interaction-redraw';
 import { OLInteractionSelectComponent } from './ol-interaction-select';
 import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
@@ -73,6 +74,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   projection = 'EPSG:3857';
+  redrawer: OLInteractionRedrawComponent;
   selector: OLInteractionSelectComponent;
   vars: Record<string, string> = {};
 

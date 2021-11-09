@@ -14,6 +14,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { ViewChildren } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
+import { getDistance } from 'ol/sphere';
 import { point } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
 
@@ -96,6 +97,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() fontSize = 16;
   @Input() fontSizeAcreageRatio = 0.8;
   @Input() maxBorderWidth = 5;
+  @Input() maxFontSize = 40;
   @Input() maxOutlineWidth = 3;
   @Input() minBorderWidth = 3;
   @Input() minFontSize = 8;
@@ -104,7 +106,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() showDimensions = false;
   @Input() showLabels = false;
   @Input() showSelection = false;
-  @Input() straightLineTolerance = 30;
+  @Input() straightLineTolerance = 15;
 
   constructor(
     private decimal: DecimalPipe,
@@ -162,9 +164,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     polygons: OLPolygon[]
   ): Dimension[] {
     const dimensions: Dimension[] = [];
-    props.lengths.forEach((lengths, ix) => {
+    const lengthss = this.#dimensionsLengths(polygons);
+    lengthss.forEach((lengths, ix) => {
       // 👉 remember, we made Polygons look like MultiPolygons
-      //    also, onky interested in outer ring
+      //    also, only interested in outer ring
       const coords = polygons[ix].getCoordinates()[0];
       let dimension = new Dimension(ix);
       // 👉 we're going to coalesce the lengths of "straight" lines
@@ -212,6 +215,22 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         this.fontSize / resolution
       );
     });
+  }
+
+  #dimensionsLengths(polygons: OLPolygon[]): number[][] {
+    const lengthss: number[][] = [];
+    polygons.forEach((polygon) => {
+      const lengths: number[] = [];
+      const points = polygon.getCoordinates()[0];
+      for (let ix = 1; ix < points.length; ix++) {
+        const c1 = toLonLat(points[ix - 1]);
+        const c2 = toLonLat(points[ix]);
+        const meters = getDistance(c1, c2);
+        lengths.push(meters * 3.28084);
+      }
+      lengthss.push(lengths);
+    });
+    return lengthss;
   }
 
   #fill(
@@ -306,8 +325,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       this.#acresSizeClamp[0]
     );
     const nominal = (Math.log(acres) - minv) / scale + minp;
-    const adjusted = nominal / resolution;
-    return adjusted;
+    return Math.min(nominal / resolution, this.maxFontSize);
   }
 
   #labelFontSizeMax(
@@ -522,7 +540,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     else {
-      const select = this.map.vars['--map-parcel-select'];
+      const select = this.map.redrawer.active
+        ? this.map.vars['--map-parcel-redraw']
+        : this.map.vars['--map-parcel-select'];
       const width = Math.min(
         Math.max(this.borderWidth / resolution, this.minBorderWidth),
         this.maxBorderWidth

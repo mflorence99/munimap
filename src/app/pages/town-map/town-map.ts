@@ -6,6 +6,7 @@ import { LoadMap } from '../../state/map';
 import { Map } from '../../state/map';
 import { MapState } from '../../state/map';
 import { MergeParcelsComponent } from '../../contextmenu/merge-parcels';
+import { OLInteractionRedrawComponent } from '../../ol/ol-interaction-redraw';
 import { OLMapComponent } from '../../ol/ol-map';
 import { OLOverlayLabelComponent } from '../../ol/ol-overlay-label';
 import { ParcelPropertiesComponent } from '../../contextmenu/parcel-properties';
@@ -47,11 +48,14 @@ export class TownMapPage implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer;
 
-  @ViewChild(OLOverlayLabelComponent) labelOverlay: OLOverlayLabelComponent;
+  @ViewChild(OLInteractionRedrawComponent)
+  interactionRedraw: OLInteractionRedrawComponent;
 
   @Select(MapState) mapState$: Observable<Map>;
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
+
+  @ViewChild(OLOverlayLabelComponent) overlayLabel: OLOverlayLabelComponent;
 
   constructor(
     private actions$: Actions,
@@ -137,6 +141,10 @@ export class TownMapPage implements OnInit {
     return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
   }
 
+  canRedrawBoundary(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
+  }
+
   canSubdivideParcel(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
   }
@@ -158,7 +166,10 @@ export class TownMapPage implements OnInit {
         cFactory = this.resolver.resolveComponentFactory(MergeParcelsComponent);
         break;
       case 'recenter-label':
-        this.labelOverlay.setFeature(this.olMap.selector.selected[0]);
+        this.overlayLabel.setFeature(this.olMap.selector.selected[0]);
+        break;
+      case 'redraw-boundary':
+        this.interactionRedraw.setFeature(this.olMap.selector.selected[0]);
         break;
       case 'subdivide-parcel':
         cFactory = this.resolver.resolveComponentFactory(

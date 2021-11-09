@@ -87,7 +87,7 @@ export class OLOverlayLabelComponent implements OnInit {
         event.dropPoint.y - this.#hack
       ])
     );
-    const parcel: Parcel = {
+    const recenteredParcel: Parcel = {
       action: 'modified',
       id: this.#id,
       owner: this.authState.currentProfile().email,
@@ -97,7 +97,7 @@ export class OLOverlayLabelComponent implements OnInit {
       },
       type: 'Feature'
     };
-    this.store.dispatch(new AddParcels([parcel]));
+    this.store.dispatch(new AddParcels([recenteredParcel]));
     this.olOverlay.setPosition([0, 0]);
     // 👉 https://stackoverflow.com/questions/61157528
     event.source._dragRef.reset();

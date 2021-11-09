@@ -21,7 +21,9 @@ import { OLFilterCrop2SelectedComponent } from './ol/ol-filter-crop2selected';
 import { OLFilterEnhanceComponent } from './ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
+import { OLInteractionRedrawComponent } from './ol/ol-interaction-redraw';
 import { OLInteractionSelectComponent } from './ol/ol-interaction-select';
+import { OLInteractionSnapComponent } from './ol/ol-interaction-snap';
 import { OLLayerImageComponent } from './ol/ol-layer-image';
 import { OLLayerMapboxComponent } from './ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol/ol-layer-tile';
@@ -126,7 +128,9 @@ const COMPONENTS = [
   OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
+  OLInteractionRedrawComponent,
   OLInteractionSelectComponent,
+  OLInteractionSnapComponent,
   OLLayerImageComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
