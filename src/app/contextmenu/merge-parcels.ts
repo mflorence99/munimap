@@ -53,16 +53,17 @@ export class MergeParcelsComponent implements ContextMenuComponent {
     // 👉 these are the parcels that will be removed after the merge
     const removedParcels: Parcel[] = removedIDs.map((removedID) => {
       return {
+        action: 'removed',
         id: removedID,
         owner: this.authState.currentProfile().email,
         path: this.map.path,
-        removed: removedID,
         type: 'Feature'
       };
     });
     // 👉 this is a model for the parcel that will remain
     //    details filled in later
     const mergedParcel: Parcel = {
+      action: 'modified',
       id: record.mergedID,
       owner: this.authState.currentProfile().email,
       path: this.map.path,

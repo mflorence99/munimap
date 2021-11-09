@@ -24,12 +24,14 @@ export type Features = GeoJSON.FeatureCollection<
 
 export interface Parcel extends Partial<Feature> {
   $id?: string /* 👈 optional only because we'll complete it */;
-  added?: ParcelID | null | undefined;
+  action: ParcelAction;
+  id: ParcelID /* 👈 in Feature, also here just to remind us */;
   owner: string;
   path: string;
-  removed?: ParcelID | null | undefined;
   timestamp?: any /* 👈 optional only because we'll complete it */;
 }
+
+export type ParcelAction = 'added' | 'modified' | 'removed';
 
 export type ParcelID = string | number;
 

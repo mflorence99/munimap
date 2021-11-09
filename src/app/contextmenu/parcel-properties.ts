@@ -22,7 +22,6 @@ import { Store } from '@ngxs/store';
 import { ValuesPipe } from 'ngx-pipes';
 import { ViewChild } from '@angular/core';
 
-import { map } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 
 import OLFeature from 'ol/Feature';
@@ -81,34 +80,19 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     private authState: AuthState,
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
+    private parcelsState: ParcelsState,
     public registry: TypeRegistry,
     private store: Store
   ) {}
 
-  #groupByID<T>(things: T[]): Record<string, T[]> {
-    return things.reduce((acc, thing) => {
-      if (!acc[thing['id']]) acc[thing['id']] = [];
-      acc[thing['id']].push(thing);
-      return acc;
-    }, {} as Record<string, T[]>);
-  }
-
   #handleParcels$(): void {
-    this.parcels$
-      .pipe(
-        takeUntil(this.destroy$),
-        map(
-          (parcels): Record<string, Parcel[]> =>
-            this.#groupByID<Parcel>(parcels)
-        )
-      )
-      .subscribe((parcelsByID) => {
-        this.record = this.#makeRecordFromParcels(
-          parcelsByID,
-          this.#makeRecordFromFeatures()
-        );
-        this.cdf.detectChanges();
-      });
+    this.parcels$.pipe(takeUntil(this.destroy$)).subscribe((parcels) => {
+      this.record = this.#makeRecordFromParcels(
+        parcels,
+        this.#makeRecordFromFeatures()
+      );
+      this.cdf.detectChanges();
+    });
   }
 
   #makeRecordFromFeatures(): ValueRecord {
@@ -148,15 +132,13 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     return record;
   }
 
-  #makeRecordFromParcels(
-    parcelsByID: Record<string, Parcel[]>,
-    record: ValueRecord
-  ): ValueRecord {
+  #makeRecordFromParcels(parcels: Parcel[], record: ValueRecord): ValueRecord {
+    const modified = this.parcelsState.parcelsModified(parcels);
     editables.forEach((editable) => {
       const prop = editable.prop;
       const value = record[prop];
       this.selectedIDs.forEach((id) => {
-        const parcels = parcelsByID[id];
+        const parcels = modified[id];
         if (parcels) {
           // 👉 remember: we are travesing the parcel overrides in reverse
           //    timestamp order -- the first defined value wins
@@ -215,6 +197,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     // 👇 we'll potentially save a parcel override per feature
     this.features.forEach((feature) => {
       const parcel: Parcel = {
+        action: 'modified',
         id: feature.getId(),
         owner: this.authState.currentProfile().email,
         path: this.map.path,

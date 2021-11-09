@@ -76,21 +76,26 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
     ];
   }
 
-  save(subdivisions: Subdivision[]): void {
-    while (!subdivisions[subdivisions.length - 1].id) subdivisions.length -= 1;
+  // 👇 the idea is that subdivision is a two-part process
+  //    first, right here, we subdivide into N random polygons
+  //    then later the user will adjust the lot lines
 
+  save(subdivisions: Subdivision[]): void {
+    // 👉 trim out excess subdivisions
+    while (!subdivisions[subdivisions.length - 1].id) subdivisions.length -= 1;
+    // 👉 we need the bbox b/c we can only draw random points inside a box
     const bbox: any = transformExtent(
       this.features[0].getGeometry().getExtent(),
       this.map.projection,
       this.map.featureProjection
     );
-
+    // 👉 there's guaranteed to be only one selected parcel
     const source = this.features[0];
-
     const sourceGeoJSON = JSON.parse(
       this.#format.writeFeature(this.features[0])
     );
-
+    // 👉 keep creating voronoi ploygons until we have enough
+    //    reason: a randpom point may fall outside the source
     let targetGeoJSONs = [];
     for (let ix = 0; targetGeoJSONs.length < subdivisions.length; ix++) {
       const randomPoints = randomPoint(subdivisions.length + ix, { bbox });
@@ -98,26 +103,28 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
         intersect(polygon, sourceGeoJSON)
       );
     }
+    // 👉 trim any excess
     targetGeoJSONs.length = subdivisions.length;
-
+    // 👉 if the source parcel ID is subsumed in the subdivision
+    //    then we'll remove it
     const removedParcels: Parcel[] = [];
     if (
       subdivisions.every((subdivision) => subdivision.id !== source.getId())
     ) {
       removedParcels.push({
+        action: 'removed',
         id: source.getId(),
         owner: this.authState.currentProfile().email,
         path: this.map.path,
-        removed: source.getId(),
         type: 'Feature'
       });
     }
-
+    // 👉 create a new geometry for each subdivision
     const subdividedParcels: Parcel[] = targetGeoJSONs.map((geojson, ix) => {
       const props = source.getProperties();
       const subdivision = subdivisions[ix];
       return {
-        added: subdivision.id !== source.getId() ? subdivision.id : null,
+        action: subdivision.id !== source.getId() ? 'added' : 'modified',
         geometry: geojson.geometry,
         id: subdivision.id,
         owner: this.authState.currentProfile().email,
@@ -137,7 +144,7 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
         type: 'Feature'
       };
     });
-
+    // that's it!
     this.store.dispatch(
       new AddParcels([...removedParcels, ...subdividedParcels])
     );

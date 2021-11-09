@@ -23,9 +23,9 @@ import copy from 'fast-copy';
 import fuzzysort from 'fuzzysort';
 
 type Override = {
-  address: string;
-  bbox: [number, number, number, number];
-  owner: string;
+  address?: string;
+  bbox?: GeoJSON.BBox;
+  owner?: string;
 };
 
 @Component({
@@ -38,11 +38,11 @@ type Override = {
 export class OLControlSearchParcelsComponent implements OnInit {
   #geojson$ = new Subject<Features>();
 
-  #overridesByID: Record<string, Override> = {};
+  #overridesByID: Record<ParcelID, Override> = {};
 
   #searchTargets = [];
   #searchablesByAddress: Record<string, Feature[]> = {};
-  #searchablesByID: Record<string, Feature[]> = {};
+  #searchablesByID: Record<ParcelID, Feature[]> = {};
   #searchablesByOwner: Record<string, Feature[]> = {};
 
   @Input() fuzzyMaxResults = 100;
@@ -59,23 +59,14 @@ export class OLControlSearchParcelsComponent implements OnInit {
     private destroy$: DestroyService,
     private geoJSON: GeoJSONService,
     private map: OLMapComponent,
+    private parcelsState: ParcelsState,
     private route: ActivatedRoute
   ) {}
 
   #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
-    // 👉 remember that NULL resets a parcel override
-    const removedHash = parcels.reduce((acc, parcel) => {
-      if (acc[parcel.id] === undefined && parcel.removed !== undefined)
-        acc[parcel.id] = parcel.removed;
-      return acc;
-    }, {});
-    // 👉 now we have a list of IDs that must be removed
-    const removedIDs = new Set<any>(
-      Object.keys(removedHash).filter((key) => removedHash[key])
-    );
-    // 👉 remove them from the geojson
+    const removed = this.parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
-      (feature) => !removedIDs.has(feature.id)
+      (feature) => !removed.has(feature.id)
     );
   }
 
@@ -134,44 +125,36 @@ export class OLControlSearchParcelsComponent implements OnInit {
   }
 
   #insertAddedFeatures(geojson: Features, parcels: Parcel[]): void {
-    // 👉 remember that NULL resets a parcel override
-    const addedHash = parcels.reduce((acc, parcel) => {
-      if (acc[parcel.id] === undefined && parcel.added !== undefined)
-        acc[parcel.id] = parcel.added;
-      return acc;
-    }, {});
-    // 👉 now we have a list of IDs that must be added
-    const addedIDs = new Set<any>(
-      Object.keys(addedHash).filter((key) => addedHash[key])
-    );
+    const added = this.parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
-    addedIDs.forEach((addedID) => {
+    added.forEach((id) => {
       geojson.features.push({
         geometry: undefined,
-        id: addedID,
+        id: id,
         properties: {},
         type: 'Feature'
       });
     });
   }
 
-  // 👇 remember: parcels are in descending order by timestamp
-  //    the first "defined" value wins
-  //    null means no override, accept the original geojson
-  #makeOverridesByID(parcels: Parcel[]): Record<string, Override> {
-    return parcels.reduce((acc, parcel) => {
-      if (!acc[parcel.id]) acc[parcel.id] = {};
-      const override = acc[parcel.id];
-      // 👉 awkward: bbox doesn't quite follow pattern
-      if (parcel.bbox !== undefined && override.bbox === undefined)
-        override.bbox = parcel.bbox;
-      const props = parcel.properties;
-      if (props) {
-        if (props.address !== undefined && override.address === undefined)
-          override.address = props.address;
-        if (props.owner !== undefined && override.owner === undefined)
-          override.owner = props.owner;
-      }
+  #makeOverridesByID(parcels: Parcel[]): Record<ParcelID, Override> {
+    const modified = this.parcelsState.parcelsModified(parcels);
+    // 👉 merge all the modifications into a single override
+    return Object.keys(modified).reduce((acc, id) => {
+      const override: Override = {};
+      modified[id].forEach((parcel) => {
+        // 👉 awkward: bbox doesn't quite follow pattern
+        if (parcel.bbox !== undefined && override.bbox === undefined)
+          override.bbox = parcel.bbox;
+        const props = parcel.properties;
+        if (props) {
+          if (props.address !== undefined && override.address === undefined)
+            override.address = props.address;
+          if (props.owner !== undefined && override.owner === undefined)
+            override.owner = props.owner;
+        }
+      });
+      acc[id] = override;
       return acc;
     }, {});
   }
