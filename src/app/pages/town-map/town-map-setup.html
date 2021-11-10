@@ -52,9 +52,15 @@
       <section class="thumbnails">
         <label
           *ngFor="let item of registry.list('map', 'style'); trackBy: trackByStyle"
-          (click)="map.style = item[0]"
           class="thumbnail"
         >
+          <input
+            #style="ngModel"
+            [(ngModel)]="map.style"
+            [value]="item[0]"
+            type="radio"
+            name="style"
+          />
           <img [class.selected]="map.style === item[0]" [src]="item[1].icon" />
           {{ item[1].decoding}}
         </label>

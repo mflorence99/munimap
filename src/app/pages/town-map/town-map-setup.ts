@@ -13,8 +13,10 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { ViewChild } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -38,6 +40,8 @@ export class TownMapSetupComponent {
   }
 
   rolledup: boolean;
+
+  @ViewChild('setupForm', { static: true }) setupForm: NgForm;
 
   constructor(
     private authState: AuthState,
@@ -81,5 +85,8 @@ export class TownMapSetupComponent {
 
   update(map: any): void {
     this.store.dispatch(new UpdateMap(map));
+    // 👉 this resets the dirty flag, disabling SAVE until
+    //    additional data entered
+    this.setupForm.form.markAsPristine();
   }
 }

@@ -8,7 +8,9 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { ViewChild } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -30,6 +32,8 @@ export class UserProfileComponent {
     this.#profile = copy(profile);
   }
 
+  @ViewChild('profileForm', { static: true }) profileForm: NgForm;
+
   @Input()
   get user(): User {
     return this.#user;
@@ -48,6 +52,9 @@ export class UserProfileComponent {
   update(user: any, profile: any): void {
     this.store.dispatch(new UpdateUser(user));
     this.store.dispatch(new UpdateProfile(profile));
+    // 👉 this resets the dirty flag, disabling SAVE until
+    //    additional data entered
+    this.profileForm.form.markAsPristine();
     this.drawer.close();
   }
 }
