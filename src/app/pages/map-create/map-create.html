@@ -17,6 +17,8 @@
     mapControlAttribution
   ></app-ol-control-attribution>
 
+  <app-ol-control-scaleline></app-ol-control-scaleline>
+
   <ng-container *ngIf="theMap.initialized">
     <!-- 📦 OUTSIDE TOWN IN B&W -->
 
@@ -72,5 +74,9 @@
       <app-ol-style-polygons></app-ol-style-polygons>
       <app-ol-source-boundary> </app-ol-source-boundary>
     </app-ol-layer-vector>
+
+    <!-- 📦 GRATICULE LAYER -->
+
+    <app-ol-layer-graticule> </app-ol-layer-graticule>
   </ng-container>
 </app-ol-map>

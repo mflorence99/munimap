@@ -4,31 +4,42 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
-import OLGraticule from 'ol-ext/control/Graticule';
+import OLGraticule from 'ol/layer/Graticule';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlGraticuleComponent)
+      useExisting: forwardRef(() => OLLayerGraticuleComponent)
     }
   ],
-  selector: 'app-ol-control-graticule',
+  selector: 'app-ol-layer-graticule',
   template: '<ng-content></ng-content>',
   styles: [':host { display: block; visibility: hidden }']
 })
-export class OLControlGraticuleComponent implements Mapable {
-  olControl: OLGraticule;
+export class OLLayerGraticuleComponent implements Mapable {
+  olLayer: OLGraticule;
+
+  @Input() set maxZoom(maxZoom: number) {
+    this.olLayer.setMaxZoom(maxZoom);
+  }
+
+  @Input() set opacity(opacity: number) {
+    this.olLayer.setOpacity(opacity);
+  }
 
   constructor(private map: OLMapComponent) {
-    this.olControl = new OLGraticule();
+    this.olLayer = new OLGraticule({
+      showLabels: true
+    });
   }
 
   addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.map.olMap.addLayer(this.olLayer);
   }
 }

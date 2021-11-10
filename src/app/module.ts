@@ -11,7 +11,6 @@ import { MapState } from './state/map';
 import { MergeParcelsComponent } from './contextmenu/merge-parcels';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
-import { OLControlGraticuleComponent } from './ol/ol-control-graticule';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
 import { OLControlPrintComponent } from './ol/ol-control-print';
 import { OLControlScaleLineComponent } from './ol/ol-control-scaleline';
@@ -25,7 +24,7 @@ import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
 import { OLInteractionRedrawComponent } from './ol/ol-interaction-redraw';
 import { OLInteractionSelectComponent } from './ol/ol-interaction-select';
-import { OLInteractionSnapComponent } from './ol/ol-interaction-snap';
+import { OLLayerGraticuleComponent } from './ol/ol-layer-graticule';
 import { OLLayerImageComponent } from './ol/ol-layer-image';
 import { OLLayerMapboxComponent } from './ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol/ol-layer-tile';
@@ -120,7 +119,6 @@ const COMPONENTS = [
   MergeParcelsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
-  OLControlGraticuleComponent,
   OLControlMousePositionComponent,
   OLControlPrintComponent,
   OLControlScaleLineComponent,
@@ -134,7 +132,7 @@ const COMPONENTS = [
   OLFilterPencilComponent,
   OLInteractionRedrawComponent,
   OLInteractionSelectComponent,
-  OLInteractionSnapComponent,
+  OLLayerGraticuleComponent,
   OLLayerImageComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,

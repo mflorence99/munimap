@@ -95,7 +95,7 @@
           <app-ol-layer-tile
             *ngIf="map.style !== 'arcgis'"
             [maxZoom]="17"
-            [opacity]="0.5"
+            [opacity]="1"
           >
             <app-ol-source-xyz
               [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
@@ -248,14 +248,16 @@
 
         <app-ol-overlay-label></app-ol-overlay-label>
 
-        <!-- 📦 OSUPPORTS PARCEL BOUNDARY REDRAW -->
-
         <!-- 📦 BOUNDARY LAYER -->
 
         <app-ol-layer-vector>
           <app-ol-style-polygons></app-ol-style-polygons>
           <app-ol-source-boundary></app-ol-source-boundary>
         </app-ol-layer-vector>
+
+        <!-- 📦 GRATICULE LAYER -->
+
+        <app-ol-layer-graticule> </app-ol-layer-graticule>
       </ng-container>
     </app-ol-map>
   </mat-drawer-content>

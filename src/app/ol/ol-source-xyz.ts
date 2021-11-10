@@ -1,5 +1,6 @@
 import { OLAttributionComponent } from './ol-attribution';
 import { OLLayerTileComponent } from './ol-layer-tile';
+import { Params } from '../services/params';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -23,11 +24,14 @@ export class OLSourceXYZComponent implements AfterContentInit {
   olXYZ: OLXYZ;
 
   @Input() set url(url: string) {
-    this.olXYZ.setUrl(url);
+    const encoded = encodeURIComponent(url);
+    this.olXYZ.setUrl(
+      `${this.params.geoJSON.host}/proxy?url=${encoded}&x={x}&y={y}&z={z}`
+    );
   }
 
-  constructor(private layer: OLLayerTileComponent) {
-    this.olXYZ = new OLXYZ({ url: null });
+  constructor(private layer: OLLayerTileComponent, private params: Params) {
+    this.olXYZ = new OLXYZ({ crossOrigin: 'anonymous' });
   }
 
   ngAfterContentInit(): void {
