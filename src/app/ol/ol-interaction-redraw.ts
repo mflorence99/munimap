@@ -3,6 +3,7 @@ import { AuthState } from '../state/auth';
 import { ConfirmDialogComponent } from '../components/confirm-dialog';
 import { ConfirmDialogData } from '../components/confirm-dialog';
 import { DestroyService } from '../services/destroy';
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
 
@@ -12,7 +13,6 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngxs/store';
 
-import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
@@ -23,6 +23,7 @@ import OLGeoJSON from 'ol/format/GeoJSON';
 import OLModify from 'ol/interaction/Modify';
 import OLMultiPolygon from 'ol/geom/MultiPolygon';
 import OLPolygon from 'ol/geom/Polygon';
+import OLSnap from 'ol/interaction/Snap';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,17 +35,19 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
   #feature: OLFeature<OLPolygon | OLMultiPolygon>;
   #format: OLGeoJSON;
   #geometry: OLPolygon | OLMultiPolygon;
-  #modifyEndKey: any;
+  #modifyStartKey: any;
   #touched = false;
 
   active = false;
 
   olModify: OLModify;
+  olSnap: OLSnap;
 
   constructor(
     private authState: AuthState,
     private dialog: MatDialog,
     private destroy$: DestroyService,
+    private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private store: Store
   ) {
@@ -60,20 +63,12 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
 
   #handleFeaturesSelected$(): void {
     this.map.selector.featuresSelected
-      .pipe(
-        takeUntil(this.destroy$),
-        // 👇 ignore selection changes to the feature we've
-        //    been redrawing
-        filter(
-          (selected) =>
-            selected.length !== 1 ||
-            selected[0].getId() !== this.#feature?.getId()
-        )
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.#touched) this.#saveRedraw();
-        if (this.#modifyEndKey) unByKey(this.#modifyEndKey);
+        if (this.#modifyStartKey) unByKey(this.#modifyStartKey);
         if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
+        if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
         this.#touched = false;
         this.active = false;
       });
@@ -117,10 +112,13 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
     // 👇 create a standard OL Modify interaction
     const features = new OLCollection([feature]);
     this.olModify = new OLModify({ features });
-    this.#modifyEndKey = this.olModify.on(
-      'modifyend',
+    this.#modifyStartKey = this.olModify.on(
+      'modifystart',
       () => (this.#touched = true)
     );
     this.map.olMap.addInteraction(this.olModify);
+    // 👇 create a standard OL Snap interaction
+    this.olSnap = new OLSnap({ source: this.layer.olLayer.getSource() });
+    this.map.olMap.addInteraction(this.olSnap);
   }
 }

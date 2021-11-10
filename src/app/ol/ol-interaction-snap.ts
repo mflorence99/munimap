@@ -32,7 +32,6 @@ export class OLInteractionSnapComponent implements Mapable {
 
   addToMap(): void {
     this.olSnap = new OLSnap({ source: this.layer.olLayer.getSource() });
-    this.olSnap.setActive(true);
     this.map.olMap.addInteraction(this.olSnap);
   }
 }
