@@ -10,5 +10,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./ol-control-zoom2extent.scss']
 })
 export class OLControlZoomToExtentComponent {
-  constructor(public map: OLMapComponent) {}
+  constructor(private map: OLMapComponent) {}
+
+  zoom2extent(): void {
+    this.map.zoomToBounds();
+  }
 }

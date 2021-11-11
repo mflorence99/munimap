@@ -1,9 +1,11 @@
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import OLStyle from 'ol/style/Style';
+
 // 👇 https://stackoverflow.com/questions/27522973
 export interface OLStyleComponent {
-  style: () => OLStyleFunction;
-  styleWhenSelected?: () => OLStyleFunction;
+  style: () => OLStyleFunction | OLStyle | OLStyle[];
+  styleWhenSelected?: () => OLStyleFunction | OLStyle | OLStyle[];
 }
 
 export type OLFillPatternType =

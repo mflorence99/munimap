@@ -26,9 +26,9 @@ export class OLControlScaleLineComponent implements Mapable {
 
   constructor(private map: OLMapComponent) {
     this.olControl = new OLScaleLine({
-      bar: true,
-      minWidth: 180,
-      steps: 8,
+      bar: false,
+      className: 'ol-scaleline',
+      minWidth: 80,
       units: 'us'
     });
   }

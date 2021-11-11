@@ -11,6 +11,7 @@ import { bbox } from 'ol/loadingstrategy';
 import { map } from 'rxjs';
 
 import GeoJSON from 'ol/format/GeoJSON';
+import OLCollection from 'ol/Collection';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
@@ -85,6 +86,6 @@ export class OLSourceStoneWallsComponent {
           });
           success(features);
         });
-    }
+    } else success(new OLCollection([]));
   }
 }
