@@ -11,6 +11,7 @@ import { MapState } from './state/map';
 import { MergeParcelsComponent } from './contextmenu/merge-parcels';
 import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
+import { OLControlCreditsComponent } from './ol/ol-control-credits';
 import { OLControlGraticuleComponent } from './ol/ol-control-graticule';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
 import { OLControlPrintComponent } from './ol/ol-control-print';
@@ -120,6 +121,7 @@ const COMPONENTS = [
   MergeParcelsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
+  OLControlCreditsComponent,
   OLControlGraticuleComponent,
   OLControlMousePositionComponent,
   OLControlPrintComponent,

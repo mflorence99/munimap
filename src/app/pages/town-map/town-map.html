@@ -25,13 +25,17 @@
         mapControlAttribution
       ></app-ol-control-attribution>
 
-      <app-ol-control-graticule
-        ><app-ol-style-graticule></app-ol-style-graticule
-      ></app-ol-control-graticule>
-
-      <app-ol-control-scaleline></app-ol-control-scaleline>
-
       <ng-container *ngIf="theMap.initialized">
+        <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+
+        <app-ol-control-graticule
+          ><app-ol-style-graticule></app-ol-style-graticule
+        ></app-ol-control-graticule>
+
+        <app-ol-control-scaleline></app-ol-control-scaleline>
+
+        <app-ol-control-credits></app-ol-control-credits>
+
         <!-- 📦 BG LAYER -->
 
         <app-ol-layer-tile>
@@ -257,7 +261,9 @@
 
         <app-ol-layer-vector>
           <app-ol-style-polygons></app-ol-style-polygons>
-          <app-ol-source-boundary></app-ol-source-boundary>
+          <app-ol-source-boundary>
+            <app-ol-attribution>{{ now | date:'longDate' }}</app-ol-attribution>
+          </app-ol-source-boundary>
         </app-ol-layer-vector>
       </ng-container>
     </app-ol-map>

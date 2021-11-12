@@ -7,28 +7,27 @@ import { Component } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
-import OLScaleLine from 'ol/control/ScaleLine';
+import OLAttribution from 'ol/control/Attribution';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlScaleLineComponent)
+      useExisting: forwardRef(() => OLControlCreditsComponent)
     }
   ],
-  selector: 'app-ol-control-scaleline',
+  selector: 'app-ol-control-credits',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLControlScaleLineComponent implements Mapable {
-  olControl: OLScaleLine;
+export class OLControlCreditsComponent implements Mapable {
+  olControl: OLAttribution;
 
   constructor(private map: OLMapComponent) {
-    this.olControl = new OLScaleLine({
-      bar: false,
-      className: 'ol-scaleline',
-      units: 'us'
+    this.olControl = new OLAttribution({
+      className: 'ol-credits',
+      collapsible: false
     });
   }
 

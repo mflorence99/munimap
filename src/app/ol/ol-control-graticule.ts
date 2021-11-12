@@ -33,7 +33,7 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
 
   @Input() spacing: number;
   @Input() step = 0.01;
-  @Input() stepCoord = 5;
+  @Input() stepCoord = 1;
 
   constructor(private map: OLMapComponent) {}
 

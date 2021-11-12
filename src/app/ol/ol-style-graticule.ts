@@ -22,7 +22,7 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleGraticuleComponent implements OLStyleComponent, OnInit {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 10;
+  @Input() fontSize = 8;
   @Input() fontWeight: 'bold' | 'normal' = 'normal';
   @Input() lineDash = [2, 4];
   @Input() lineWidth = 0.25;
@@ -46,7 +46,7 @@ export class OLStyleGraticuleComponent implements OLStyleComponent, OnInit {
       font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,
       fill: new OLFill({ color: `rgba(${color}, 1)` }),
       stroke: new OLStroke({
-        color: `rgba(${outline}, 1)`,
+        color: `rgba(${outline}, 2)`,
         width: 1
       })
     });

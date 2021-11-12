@@ -53,6 +53,8 @@ export class TownMapPage implements OnInit {
 
   @Select(MapState) mapState$: Observable<Map>;
 
+  now = Date.now();
+
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
 
   @ViewChild(OLOverlayLabelComponent) overlayLabel: OLOverlayLabelComponent;

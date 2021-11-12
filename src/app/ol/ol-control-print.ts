@@ -21,7 +21,7 @@ export class OLControlPrintComponent {
 
   print(): void {
     const zoom = this.map.olView.getZoom();
-    this.map.olView.setZoom(13);
+    this.map.olView.setZoom(15.75);
 
     const [minX, minY, maxX, maxY] = this.map.boundary.features[0].bbox;
     const resolution = this.map.olView.getResolution();
@@ -37,18 +37,23 @@ export class OLControlPrintComponent {
       }).then((canvas) => {
         canvas.toBlob((blob) => {
           saveAs(blob, 'xxx.png');
-          this.map.olMap.getTargetElement().style.overflow = 'hidden';
-          this.map.olMap.getTargetElement().style.width = ``;
-          this.map.olMap.getTargetElement().style.height = ``;
+
+          const element = this.map.olMap.getTargetElement();
+          element.removeAttribute('printing');
+          element.style.overflow = 'hidden';
+          element.style.width = ``;
+          element.style.height = ``;
           this.map.olMap.updateSize();
           this.map.olView.setZoom(zoom);
         });
       });
     });
 
-    this.map.olMap.getTargetElement().style.overflow = 'visible';
-    this.map.olMap.getTargetElement().style.width = `${px}px`;
-    this.map.olMap.getTargetElement().style.height = `${py}px`;
+    const element = this.map.olMap.getTargetElement();
+    element.setAttribute('printing', 'true');
+    element.style.overflow = 'visible';
+    element.style.width = `${px}px`;
+    element.style.height = `${py}px`;
     this.map.olMap.updateSize();
     this.map.zoomToBounds();
   }

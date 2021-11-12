@@ -262,6 +262,35 @@ a[mat-flat-button] {
 
 // 👉 ol styles
 
+app-ol-map[printing] .ol-credits {
+  display: block;
+}
+
+.ol-credits {
+  background-color: rgba(var(--rgb-gray-100), 0.66) !important;
+  bottom: 1rem;
+  color: var(--background-color);
+  display: none;
+  font-size: 8px;
+  padding: 0 0.5rem !important;
+  position: absolute;
+  right: 1rem;
+  white-space: nowrap;
+
+  button {
+    display: none !important;
+  }
+
+  li,
+  ul {
+    display: inline-block;
+  }
+
+  li:not(:last-of-type)::after {
+    content: '\00a0|\00a0';
+  }
+}
+
 .ol-scaleline {
   background-color: rgba(var(--rgb-gray-100), 0.66);
   bottom: 1rem;
@@ -272,7 +301,7 @@ a[mat-flat-button] {
 
 .ol-scaleline-inner {
   color: var(--background-color);
-  font-size: smaller;
+  font-size: 10px;
   position: relative;
   text-align: center;
 }
