@@ -1,5 +1,6 @@
 import { OLAttributionComponent } from './ol-attribution';
 import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLMapComponent } from './ol-map';
 import { OLTileSourceComponent } from './ol-source';
 import { Params } from '../services/params';
 
@@ -34,8 +35,12 @@ export class OLSourceXYZComponent
     );
   }
 
-  constructor(private layer: OLLayerTileComponent, private params: Params) {
-    super();
+  constructor(
+    private layer: OLLayerTileComponent,
+    protected map: OLMapComponent,
+    private params: Params
+  ) {
+    super(map);
     this.olSource = new OLXYZ({ crossOrigin: 'anonymous' });
   }
 

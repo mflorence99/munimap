@@ -1,4 +1,5 @@
 import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLMapComponent } from './ol-map';
 import { OLTileSourceComponent } from './ol-source';
 
 import { AfterContentInit } from '@angular/core';
@@ -19,8 +20,11 @@ export class OLSourceOSMComponent
 {
   olSource: OLOSM;
 
-  constructor(private layer: OLLayerTileComponent) {
-    super();
+  constructor(
+    private layer: OLLayerTileComponent,
+    protected map: OLMapComponent
+  ) {
+    super(map);
     this.olSource = new OLOSM();
   }
 

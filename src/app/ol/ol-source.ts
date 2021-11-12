@@ -1,4 +1,7 @@
+import { OLMapComponent } from './ol-map';
+
 import { Component } from '@angular/core';
+import { EventsKey as OLEventsKey } from 'ol/events';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -20,8 +23,8 @@ export interface OLSourceProgress {
   template: ''
 })
 export abstract class OLTileSourceComponent implements OnDestroy, OnInit {
-  #tileLoadEndKey = null;
-  #tileLoadStartKey = null;
+  #tileLoadEndKey: OLEventsKey = null;
+  #tileLoadStartKey: OLEventsKey = null;
 
   olSource: OLTileSource;
 
@@ -31,6 +34,8 @@ export abstract class OLTileSourceComponent implements OnDestroy, OnInit {
   };
 
   progress$ = new Subject<OLSourceProgress>();
+
+  constructor(protected map: OLMapComponent) {}
 
   #progress(event: OLTileSourceEvent): void {
     if (event.type === 'tileloadstart') this.progress.numLoading += 1;
@@ -48,6 +53,7 @@ export abstract class OLTileSourceComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.map.addProgress$(this.progress$);
     this.#tileLoadEndKey = this.olSource.on(
       'tileloadstart',
       this.#progress.bind(this)

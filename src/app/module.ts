@@ -15,6 +15,7 @@ import { OLControlCreditsComponent } from './ol/ol-control-credits';
 import { OLControlGraticuleComponent } from './ol/ol-control-graticule';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
 import { OLControlPrintComponent } from './ol/ol-control-print';
+import { OLControlPrintProgressComponent } from './ol/ol-control-printprogress';
 import { OLControlScaleLineComponent } from './ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from './ol/ol-control-searchparcels';
 import { OLControlZoomComponent } from './ol/ol-control-zoom';
@@ -124,6 +125,7 @@ const COMPONENTS = [
   OLControlGraticuleComponent,
   OLControlMousePositionComponent,
   OLControlPrintComponent,
+  OLControlPrintProgressComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
   OLControlZoomComponent,

@@ -2,6 +2,7 @@ import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
 import { OLInteractionRedrawComponent } from './ol-interaction-redraw';
 import { OLInteractionSelectComponent } from './ol-interaction-select';
+import { OLSourceProgress } from './ol-source';
 import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
@@ -15,6 +16,7 @@ import { ContentChildren } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { EventsKey as OLEventsKey } from 'ol/events';
 import { HostListener } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
@@ -41,8 +43,8 @@ import OLView from 'ol/View';
   styleUrls: ['./ol-map.scss']
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
-  #changeKey = null;
-  #clickKey = null;
+  #changeKey: OLEventsKey = null;
+  #clickKey: OLEventsKey = null;
   #path: Path;
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
@@ -77,6 +79,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   printing = false;
+
+  progresses$: Subject<OLSourceProgress>[];
 
   projection = 'EPSG:3857';
   redrawer: OLInteractionRedrawComponent;
@@ -117,6 +121,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     });
     const layers = [...this.olMap.getLayers().getArray()];
     layers.forEach((layer) => this.olMap.removeLayer(layer));
+    this.progresses$ = [];
   }
 
   #createView(boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>): void {
@@ -213,6 +218,10 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   #onClick(event: OLMapBrowserEvent<any>): void {
     this.click$.next(event);
+  }
+
+  addProgress$(progress$: Subject<OLSourceProgress>): void {
+    this.progresses$.push(progress$);
   }
 
   currentCounty(): string {

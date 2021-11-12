@@ -12,6 +12,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ContentChild } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { EventsKey as OLEventsKey } from 'ol/events';
 import { Input } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -49,8 +50,8 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
 export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy, OnInit
 {
-  #featuresLoadEndKey = null;
-  #selectKey = null;
+  #featuresLoadEndKey: OLEventsKey = null;
+  #selectKey: OLEventsKey = null;
 
   @ContentChild(MatMenu) contextMenu: MatMenu;
   @ViewChild(MatMenuTrigger) contextMenuTrigger: MatMenuTrigger;

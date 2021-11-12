@@ -10,6 +10,7 @@ import { Parcel } from '../common';
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { EventsKey as OLEventsKey } from 'ol/events';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngxs/store';
 
@@ -35,7 +36,7 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
   #feature: OLFeature<OLPolygon | OLMultiPolygon>;
   #format: OLGeoJSON;
   #geometry: OLPolygon | OLMultiPolygon;
-  #modifyStartKey: any;
+  #modifyStartKey: OLEventsKey = null;
   #touched = false;
 
   active = false;

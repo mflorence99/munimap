@@ -15,7 +15,11 @@
 
       <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-      <app-ol-control-print mapControlPrint></app-ol-control-print>
+      <app-ol-control-print
+        *ngIf="map.name"
+        [fileName]="map.name"
+        mapControlPrint
+      ></app-ol-control-print>
 
       <app-ol-control-zoom2extent
         mapControlZoomToExtent
