@@ -1,10 +1,13 @@
+import { OLAttributionComponent } from './ol-attribution';
 import { OLLayerImageComponent } from './ol-layer-image';
 import { OLMapComponent } from './ol-map';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ContentChildren } from '@angular/core';
 import { Input } from '@angular/core';
+import { QueryList } from '@angular/core';
 
 import OLStatic from 'ol/source/ImageStatic';
 
@@ -15,6 +18,9 @@ import OLStatic from 'ol/source/ImageStatic';
   styles: [':host { display: none }']
 })
 export class OLSourceStaticComponent implements AfterContentInit {
+  @ContentChildren(OLAttributionComponent)
+  attributions: QueryList<OLAttributionComponent>;
+
   olStatic: OLStatic;
 
   @Input() set url(url: string) {
@@ -32,6 +38,11 @@ export class OLSourceStaticComponent implements AfterContentInit {
   }
 
   ngAfterContentInit(): void {
+    // 👉 note that we're saying we don't expect
+    //    the list of attributions to change
+    this.olStatic.setAttributions(
+      this.attributions.map((attribution) => attribution.getAttribution())
+    );
     this.layer.olLayer.setSource(this.olStatic);
   }
 }

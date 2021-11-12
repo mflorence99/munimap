@@ -22,7 +22,6 @@ import OLFeature from 'ol/Feature';
 })
 export class MapCreatePage {
   index: Index;
-  now = Date.now();
   path: Path;
 
   constructor(

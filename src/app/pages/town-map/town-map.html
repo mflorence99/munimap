@@ -34,7 +34,9 @@
 
         <app-ol-control-scaleline></app-ol-control-scaleline>
 
-        <app-ol-control-credits></app-ol-control-credits>
+        <app-ol-control-credits
+          *ngIf="theMap.printing"
+        ></app-ol-control-credits>
 
         <!-- 📦 BG LAYER -->
 
@@ -157,7 +159,7 @@
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          <app-ol-layer-vector>
+          <app-ol-layer-vector *ngIf="!theMap.printing">
             <app-ol-style-stonewalls></app-ol-style-stonewalls>
             <app-ol-source-stonewalls></app-ol-source-stonewalls>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -204,7 +206,7 @@
             <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
 
-          <app-ol-layer-vector>
+          <app-ol-layer-vector *ngIf="!theMap.printing">
             <app-ol-style-stonewalls></app-ol-style-stonewalls>
             <app-ol-source-stonewalls></app-ol-source-stonewalls>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -219,9 +221,11 @@
           </app-ol-layer-vector>
         </ng-container>
 
-        <!-- 📦 SUPPORTS showSatelliteForSelected -->
+        <!-- 📦 SUPPORTS showSatelliteForSelected NOT printed -->
 
-        <app-ol-layer-tile *ngIf="map.options.showSatelliteForSelected">
+        <app-ol-layer-tile
+          *ngIf="map.options.showSatelliteForSelected && !theMap.printing"
+        >
           <app-ol-source-xyz
             [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
             ><app-ol-attribution
@@ -234,9 +238,9 @@
           <app-ol-filter-crop2selected></app-ol-filter-crop2selected>
         </app-ol-layer-tile>
 
-        <!-- 📦 SELECTION LAYER -->
+        <!-- 📦 SELECTION LAYER -- NOT printed-->
 
-        <app-ol-layer-vector>
+        <app-ol-layer-vector *ngIf="!theMap.printing">
           <app-ol-style-parcels
             [showDimensions]="true"
             [showLabels]="map.options.showSatelliteForSelected"
@@ -255,15 +259,12 @@
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
 
-        <app-ol-overlay-label></app-ol-overlay-label>
+        <app-ol-overlay-label *ngIf="!theMap.printing"></app-ol-overlay-label>
 
         <!-- 📦 BOUNDARY LAYER -->
 
         <app-ol-layer-vector>
           <app-ol-style-polygons></app-ol-style-polygons>
-          <app-ol-source-boundary>
-            <app-ol-attribution>{{ now | date:'longDate' }}</app-ol-attribution>
-          </app-ol-source-boundary>
         </app-ol-layer-vector>
       </ng-container>
     </app-ol-map>

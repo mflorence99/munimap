@@ -24,7 +24,7 @@ export class OLControlZoomComponent implements OnInit {
   constructor(
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
-    public map: OLMapComponent
+    private map: OLMapComponent
   ) {}
 
   #handleZoom$(): void {
@@ -34,6 +34,14 @@ export class OLControlZoomComponent implements OnInit {
       // 👉 because event is triggered out of the Angular zone
       this.cdf.detectChanges();
     });
+  }
+
+  maxZoom(): number {
+    return this.map.maxZoom;
+  }
+
+  minZoom(): number {
+    return this.map.minZoom;
   }
 
   ngOnInit(): void {

@@ -18,15 +18,13 @@
   ></app-ol-control-attribution>
 
   <ng-container *ngIf="theMap.initialized">
-    <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+    <!-- 📦 OL CONTROLS -->
 
     <app-ol-control-graticule
       ><app-ol-style-graticule></app-ol-style-graticule
     ></app-ol-control-graticule>
 
     <app-ol-control-scaleline></app-ol-control-scaleline>
-
-    <app-ol-control-credits></app-ol-control-credits>
 
     <!-- 📦 OUTSIDE TOWN IN B&W -->
 
@@ -80,9 +78,6 @@
 
     <app-ol-layer-vector *ngIf="atTownLevel(path)">
       <app-ol-style-polygons></app-ol-style-polygons>
-      <app-ol-source-boundary>
-        <app-ol-attribution>{{ now | date:'longDate' }}</app-ol-attribution>
-      </app-ol-source-boundary>
     </app-ol-layer-vector>
   </ng-container>
 </app-ol-map>

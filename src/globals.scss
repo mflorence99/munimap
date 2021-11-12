@@ -262,15 +262,10 @@ a[mat-flat-button] {
 
 // 👉 ol styles
 
-app-ol-map[printing] .ol-credits {
-  display: block;
-}
-
 .ol-credits {
   background-color: rgba(var(--rgb-gray-100), 0.66) !important;
   bottom: 1rem;
   color: var(--background-color);
-  display: none;
   font-size: 8px;
   padding: 0 0.5rem !important;
   position: absolute;
