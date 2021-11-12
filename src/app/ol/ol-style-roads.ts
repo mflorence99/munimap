@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
@@ -16,19 +15,6 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 draws a road with:
-//    -- a width computed to be proportional to the actual roadway width
-//    -- with an edge
-//       -- with a styled color that depends on the road class
-//    -- with a single lane
-//       -- with a styled color that depends on the road class
-//    -- with the road name inside the lane
-//       -- with a styled color that depends on the road class
-//      -- with an input font weight, size and family
-//   -- the road is only shown
-//      -- when the resolution is less than an input threshold
-//      -- each class has its own threshold
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-roads',
@@ -39,15 +25,8 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 14;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
-  @Input() threshold: Record<string, number> = {
-    'I': 24,
-    'II': 24,
-    'IIII': 24,
-    'IV': 24,
-    'V': 3,
-    'VI': 3,
-    '0': 3
-  };
+  @Input() maxFontSize = 20;
+  @Input() minFontSize = 8;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -57,21 +36,26 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   }
 
   #drawText(props: RoadProperties, resolution: number): OLText {
-    const color = this.map.vars[`--map-road-text-color-${props.class ?? '0'}`];
-    return new OLText({
-      font: `${this.fontWeight} ${this.fontSize / resolution}px '${
-        this.fontFamily
-      }'`,
-      fill: new OLFill({ color: `rgba(${color}, 1)` }),
-      overflow: false,
-      placement: 'line',
-      text: props.name
-    });
+    const roadWidth = this.#roadWidth(props, resolution);
+    const fontSize = roadWidth * 0.8;
+    // 👉 if the river label would be too small to see, don't show it
+    if (fontSize < this.minFontSize) return null;
+    else {
+      const color =
+        this.map.vars[`--map-road-text-color-${props.class ?? '0'}`];
+      return new OLText({
+        font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
+        fill: new OLFill({ color: `rgba(${color}, 1)` }),
+        overflow: false,
+        placement: 'line',
+        text: props.name
+      });
+    }
   }
 
   #fillLane(props: RoadProperties, resolution: number): OLStroke {
     const lane = this.map.vars[`--map-road-lane-${props.class ?? '0'}`];
-    const width = this.#width(props, resolution);
+    const width = this.#roadWidth(props, resolution);
     return new OLStroke({
       color: `rgba(${lane}, 1)`,
       lineCap: 'butt',
@@ -79,16 +63,20 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     });
   }
 
-  #strokeEdge(props: RoadProperties, resolution: number): OLStroke {
-    const edge = this.map.vars[`--map-road-edge-${props.class ?? '0'}`];
-    const width = this.#width(props, resolution);
-    return new OLStroke({ color: `rgba(${edge}, 1)`, lineCap: 'butt', width });
-  }
-
-  #width(props: RoadProperties, resolution: number): number {
+  #roadWidth(props: RoadProperties, resolution: number): number {
     // 👉 roadway width is in feet, resolution is pixels / meter
     //    minimum width 15', double that for the right-of-way
     return (Math.max(props.width, 15) / (resolution * 3.28084)) * 2;
+  }
+
+  #strokeEdge(props: RoadProperties, resolution: number): OLStroke {
+    const edge = this.map.vars[`--map-road-edge-${props.class ?? '0'}`];
+    const roadWidth = this.#roadWidth(props, resolution);
+    return new OLStroke({
+      color: `rgba(${edge}, 1)`,
+      lineCap: 'butt',
+      width: roadWidth
+    });
   }
 
   style(): OLStyleFunction {
@@ -97,19 +85,17 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
       resolution: number
     ): OLStyle[] => {
       const props = road.getProperties() as RoadProperties;
-      if (resolution >= this.threshold[props.class]) return null;
-      else
-        return [
-          new OLStyle({
-            fill: null,
-            stroke: this.#strokeEdge(props, resolution)
-          }),
-          new OLStyle({
-            fill: null,
-            stroke: this.#fillLane(props, resolution),
-            text: this.#drawText(props, resolution)
-          })
-        ];
+      return [
+        new OLStyle({
+          fill: null,
+          stroke: this.#strokeEdge(props, resolution)
+        }),
+        new OLStyle({
+          fill: null,
+          stroke: this.#fillLane(props, resolution),
+          text: this.#drawText(props, resolution)
+        })
+      ];
     };
   }
 }

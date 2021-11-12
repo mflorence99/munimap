@@ -1,5 +1,6 @@
 import { OLAttributionComponent } from './ol-attribution';
 import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLTileSourceComponent } from './ol-source';
 import { Params } from '../services/params';
 
 import { AfterContentInit } from '@angular/core';
@@ -17,29 +18,33 @@ import OLXYZ from 'ol/source/XYZ';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceXYZComponent implements AfterContentInit {
+export class OLSourceXYZComponent
+  extends OLTileSourceComponent
+  implements AfterContentInit
+{
   @ContentChildren(OLAttributionComponent)
   attributions: QueryList<OLAttributionComponent>;
 
-  olXYZ: OLXYZ;
+  olSource: OLXYZ;
 
   @Input() set url(url: string) {
     const encoded = encodeURIComponent(url);
-    this.olXYZ.setUrl(
+    this.olSource.setUrl(
       `${this.params.geoJSON.host}/proxy?url=${encoded}&x={x}&y={y}&z={z}`
     );
   }
 
   constructor(private layer: OLLayerTileComponent, private params: Params) {
-    this.olXYZ = new OLXYZ({ crossOrigin: 'anonymous' });
+    super();
+    this.olSource = new OLXYZ({ crossOrigin: 'anonymous' });
   }
 
   ngAfterContentInit(): void {
     // 👉 note that we're saying we don't expect
     //    the list of attributions to change
-    this.olXYZ.setAttributions(
+    this.olSource.setAttributions(
       this.attributions.map((attribution) => attribution.getAttribution())
     );
-    this.layer.olLayer.setSource(this.olXYZ);
+    this.layer.olLayer.setSource(this.olSource);
   }
 }

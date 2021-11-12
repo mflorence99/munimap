@@ -17,17 +17,6 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 draws a marker for a "point" feature with:
-//    -- the ID of the feature as Text
-//      -- with a styled color
-//      -- with an input opacity
-//      -- with an input font weight, size and family
-//      -- with input horizontal and vertical alignment
-//   -- an icon with the same color and opacity
-//      -- selected according to the type of place
-//   -- the marker is only shown
-//      -- when the resolution is less than an input threshold
-
 const ICONS: {
   [key in PlacePropertiesType]?: string;
 } = {
@@ -95,10 +84,11 @@ export class OLStylePlacesComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 12;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
+  @Input() maxFontSize = 10;
+  @Input() minFontSize = 8;
   @Input() opacity = 0.75;
   @Input() textAlign = 'center';
   @Input() textBaseline = 'bottom';
-  @Input() threshold = 2;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -140,14 +130,16 @@ export class OLStylePlacesComponent implements OLStyleComponent {
 
   #fontSize(resolution: number): number {
     // 👉 fontSize is proportional to the resolution,
-    //    but no bigger than the nominal size specified
-    return Math.min(this.fontSize, this.fontSize / resolution);
+    //    but no bigger than the max size specified
+    return Math.min(this.maxFontSize, this.fontSize / resolution);
   }
 
   style(): OLStyleFunction {
     return (place: OLFeature<any>, resolution: number): OLStyle => {
+      const fontSize = this.#fontSize(resolution);
       const props = place.getProperties() as PlaceProperties;
-      if (resolution >= this.threshold) return null;
+      // 👉 if the place label would be too small to see, don't show anything
+      if (fontSize < this.minFontSize) return null;
       else if (!ICONS[props.type] || ICONS[props.type] === '\u0000')
         return null;
       else {

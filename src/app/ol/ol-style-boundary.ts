@@ -12,12 +12,6 @@ import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStyle from 'ol/style/Style';
 
-// 👇 fills the boundary of a map with:
-//    -- an input pattern
-//       -- with a styled color
-//    -- on a white background
-//       -- with an input opacity
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-boundary',

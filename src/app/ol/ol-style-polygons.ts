@@ -14,17 +14,6 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 fills and outlines a generic polygon with:
-//    -- an outline
-//       -- with a styled color
-//       -- with an input width
-//    -- a fill when selected
-//       -- with a styled color
-//       -- with an input opacity
-//    -- the ID of the feature when selected
-//       -- with a styled color
-//       -- with an input font weight, size and family
-
 export type FilterFunction = (feature: OLFeature<any>) => boolean;
 
 @Component({
@@ -34,12 +23,12 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
   styles: [':host { display: none }']
 })
 export class OLStylePolygonsComponent implements OLStyleComponent {
+  @Input() borderWidth = 3;
   @Input() filter: FilterFunction;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() opacity = 0.1;
-  @Input() outlineWidth = 3;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -61,7 +50,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
         fill: new OLFill({ color }),
         stroke: new OLStroke({
           color: `rgba(${stroke}, 1)`,
-          width: this.outlineWidth
+          width: this.borderWidth
         })
       });
     };
@@ -79,7 +68,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
           fill: new OLFill({ color: `rgba(${disabled}, ${this.opacity})` }),
           stroke: new OLStroke({
             color: `rgba(${stroke}, 1)`,
-            width: this.outlineWidth
+            width: this.borderWidth
           })
         });
       else
@@ -87,7 +76,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           stroke: new OLStroke({
             color: `rgba(${stroke}, 1)`,
-            width: this.outlineWidth
+            width: this.borderWidth
           }),
           text: new OLText({
             font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,

@@ -26,12 +26,10 @@ import { Subject } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
-import { getDistance } from 'ol/sphere';
-import { saveAs } from 'file-saver';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
+import { unByKey } from 'ol/Observable';
 
-import html2canvas from 'html2canvas';
 import OLMap from 'ol/Map';
 import OLMapBrowserEvent from 'ol/MapBrowserEvent';
 import OLView from 'ol/View';
@@ -43,6 +41,8 @@ import OLView from 'ol/View';
   styleUrls: ['./ol-map.scss']
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
+  #changeKey = null;
+  #clickKey = null;
   #path: Path;
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
@@ -137,7 +137,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.olView.setZoom(view.zoom);
     } else this.zoomToBounds();
     // 👉 handle events
-    this.olView.on('change', this.#onChange.bind(this));
+    this.#changeKey = this.olView.on('change', this.#onChange.bind(this));
   }
 
   #findAllCustomVariables(): Record<string, string> {
@@ -238,12 +238,12 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.olMap?.un('click', this.#onClick.bind(this));
-    this.olView?.un('change', this.#onChange.bind(this));
+    if (this.#changeKey) unByKey(this.#changeKey);
+    if (this.#clickKey) unByKey(this.#clickKey);
   }
 
   ngOnInit(): void {
-    this.olMap.on('click', this.#onClick.bind(this));
+    this.#clickKey = this.olMap.on('click', this.#onClick.bind(this));
     this.olMap.setTarget(this.host.nativeElement);
   }
 
@@ -252,47 +252,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   ): void {
     event.preventDefault();
     this.contextMenu$.next(event);
-  }
-
-  // 🔥 all temporary
-
-  print(): void {
-    const zoom = this.olView.getZoom();
-    this.olView.setZoom(13);
-
-    const [minX, minY, maxX, maxY] = this.boundary.features[0].bbox;
-    const resolution = this.olView.getResolution();
-    const px = getDistance([minX, maxY], [maxX, minY]) / resolution;
-    const py = getDistance([minX, minY], [minX, maxY]) / resolution;
-
-    this.olMap.once('rendercomplete', () => {
-      html2canvas(this.olMap.getViewport(), {
-        height: py,
-        useCORS: true,
-        width: px
-      }).then((canvas) => {
-        canvas.toBlob((blob) => {
-          saveAs(blob, 'xxx.png');
-
-          const element = this.olMap.getTargetElement();
-          element.style.height = ``;
-          element.style.overflow = 'hidden';
-          element.style.width = ``;
-          this.olMap.updateSize();
-          this.olView.setZoom(zoom);
-          this.printing = false;
-          this.cdf.markForCheck();
-        });
-      });
-    });
-
-    const element = this.olMap.getTargetElement();
-    element.style.height = `${py}px`;
-    element.style.overflow = 'visible';
-    element.style.width = `${px}px`;
-    this.olMap.updateSize();
-    this.zoomToBounds();
-    this.printing = true;
   }
 
   zoomToBounds(): void {

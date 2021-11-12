@@ -12,12 +12,6 @@ import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStyle from 'ol/style/Style';
 
-// 👇 fills a lake with:
-//    -- an input pattern
-//       -- with a styled color
-//    -- on a background with the same color
-//       -- with an input opacity
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-lakes',

@@ -15,17 +15,6 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 draws a trail with:
-//      -- a styled color
-//      -- with an input opacity
-//      -- with an input width
-//    add the name of the trail
-//      -- with a styled color
-//      -- with an input opacity
-//      -- with an input font weight, size and family
-//    the trail name is only shown
-//      -- when the resolution is less than an input threshold
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-trails',
@@ -36,9 +25,12 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
+  @Input() lineDash = [10, 10];
+  @Input() maxFontSize = 20;
+  @Input() maxTrailWidth = 3;
+  @Input() minFontSize = 8;
   @Input() opacity = 0.9;
-  @Input() threshold = 3;
-  @Input() trailWidth = 4;
+  @Input() trailWidth = 3;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -49,31 +41,46 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
 
   #drawLine(props: TrailProperties, resolution: number): OLStroke {
     const color = this.map.vars['--map-trail-line-color'];
-    // 👉 width is proportional to the resolution,
-    //    but no bigger than the nominal size specified
-    const width = Math.min(this.trailWidth, this.trailWidth / resolution);
+    const trailWidth = this.#trailWidth(resolution);
     return new OLStroke({
       color: `rgba(${color}, ${this.opacity})`,
-      lineDash: [10 / resolution, 10 / resolution],
-      width
+      lineDash: [
+        Math.min(this.lineDash[0] / resolution, this.lineDash[0]),
+        Math.min(this.lineDash[1] / resolution, this.lineDash[1])
+      ],
+      width: trailWidth
     });
   }
 
   #drawText(props: TrailProperties, resolution: number): OLText {
-    const color = this.map.vars['--map-trail-text-color'];
+    const fontSize = this.#fontSize(resolution);
+    // 👉 if the trail label would be too small to see, don't show it
+    if (fontSize < this.minFontSize) return null;
+    else {
+      const color = this.map.vars['--map-trail-text-color'];
+      return new OLText({
+        fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
+        font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
+        placement: 'line',
+        stroke: new OLStroke({
+          color: `rgba(255, 255, 255, ${this.opacity})`,
+          width: 3
+        }),
+        text: props.name
+      });
+    }
+  }
+
+  #fontSize(resolution: number): number {
     // 👉 fontSize is proportional to the resolution,
-    //    but no bigger than the nominal size specified
-    const fontSize = Math.min(this.fontSize, this.fontSize / resolution);
-    return new OLText({
-      fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
-      font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
-      placement: 'line',
-      stroke: new OLStroke({
-        color: `rgba(255, 255, 255, ${this.opacity})`,
-        width: 3
-      }),
-      text: props.name
-    });
+    //    but no bigger than the max size specified
+    return Math.min(this.maxFontSize, this.fontSize / resolution);
+  }
+
+  #trailWidth(resolution: number): number {
+    // 👉 trailWidth is proportional to the resolution,
+    //    but no bigger than the max size specified
+    return Math.min(this.maxTrailWidth, this.trailWidth / resolution);
   }
 
   style(): OLStyleFunction {
@@ -82,12 +89,10 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
       resolution: number
     ): OLStyle => {
       const props = trail.getProperties() as TrailProperties;
-      if (resolution >= this.threshold) return null;
-      else
-        return new OLStyle({
-          stroke: this.#drawLine(props, resolution),
-          text: this.#drawText(props, resolution)
-        });
+      return new OLStyle({
+        stroke: this.#drawLine(props, resolution),
+        text: this.#drawText(props, resolution)
+      });
     };
   }
 }

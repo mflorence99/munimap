@@ -30,23 +30,6 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 fills, outlines and identifies a parcel feature with:
-//    -- text showing the ID and acreage of the parcel
-//       -- with a styled color
-//       -- with a fontSize proportional to the acreage and the resolution
-//       -- with an input font family
-//    -- a styled fill color and pattern matching the land use
-//    -- a styled border color
-//       -- with an input width
-//    -- a styled border color when selected
-//       -- with the same width
-//    -- the land use fill color is always shown
-//    -- the border and text are only shown
-//       -- when the fontSize is less than an input threshold
-
-// 👉 showBackground and showText allow parcels to be split into
-//    2 layers, as is useful for the NHGranIT map style
-
 class Dimension {
   constructor(
     public ix: number /* 👈 polygon index */,
@@ -70,6 +53,7 @@ interface Label {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-parcels',
+  // 🔥 need images for other uses
   template: `
     <img appPattern src="assets/CUFL.svg" />
     <img appPattern src="assets/CUMH.svg" />
@@ -86,21 +70,20 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   // 👉 we don't really want to parameterize these settings as inputs
   //    as they are a WAG to control computed fontSize for acres
   #acresSizeClamp = [0.1, 1000];
-  #fontSizeClamp = [0, 66];
+  #fontSizeClamp = [0, 50];
 
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 
-  @Input() borderLineDash = [4, 8];
   @Input() borderWidth = 3;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 16;
   @Input() fontSizeAcreageRatio = 0.8;
+  @Input() lineDash = [4, 8];
   @Input() maxBorderWidth = 5;
   @Input() maxFontSize = 40;
-  @Input() maxOutlineWidth = 3;
   @Input() minBorderWidth = 3;
-  @Input() minFontSize = 8;
+  @Input() minFontSize = 6;
   @Input() opacity = 0.25;
   @Input() showBackground = false;
   @Input() showDimensions = false;
@@ -114,6 +97,12 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     private map: OLMapComponent
   ) {
     this.layer.setStyle(this);
+  }
+
+  #borderWidth(resolution: number): number {
+    // 👉 borderWidth is proportional to the resolution,
+    //    but no bigger than the max size specified
+    return Math.min(this.maxBorderWidth, this.borderWidth / resolution);
   }
 
   #dimensions(
@@ -144,7 +133,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
                 color: `rgba(${outline}, 1)`,
                 width: Math.min(
                   fontSizes[dimension.ix] / 8,
-                  this.maxOutlineWidth
+                  this.maxBorderWidth
                 )
               }),
               text: `${Math.round(dimension.length)}`
@@ -305,27 +294,33 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     );
   }
 
-  #isTiny(props: ParcelProperties, ix: number): boolean {
-    return props.areas[ix] <= 0.25;
-  }
-
   // 👇 https://stackoverflow.com/questions/846221/logarithmic-slider
   #labelFontSize(
     props: ParcelProperties,
     resolution: number,
     ix: number
   ): number {
-    const minp = this.#fontSizeClamp[0];
-    const maxp = this.#fontSizeClamp[1];
-    const minv = Math.log(this.#acresSizeClamp[0]);
-    const maxv = Math.log(this.#acresSizeClamp[1]);
-    const scale = (maxv - minv) / (maxp - minp);
-    const acres = Math.max(
-      Math.min(props.areas[ix], this.#acresSizeClamp[1]),
-      this.#acresSizeClamp[0]
-    );
-    const nominal = (Math.log(acres) - minv) / scale + minp;
-    return Math.min(nominal / resolution, this.maxFontSize);
+    const acres = props.areas[ix];
+    let nominal = 0;
+    // 👉 this is the nominal font size at zoom level 15.63 / resolution 3.1    //    it tracks the successful ramp we used in the legacy app
+    if (acres <= 0.25) nominal = 5;
+    else if (acres <= 0.5) nominal = 6;
+    else if (acres <= 0.75) nominal = 7;
+    else if (acres <= 1) nominal = 8;
+    else if (acres <= 1.5) nominal = 9;
+    else if (acres <= 2) nominal = 10;
+    else if (acres <= 5) nominal = 11;
+    else if (acres <= 10) nominal = 12;
+    else if (acres <= 25) nominal = 14;
+    else if (acres <= 50) nominal = 16;
+    else if (acres <= 100) nominal = 20;
+    else if (acres <= 500) nominal = 24;
+    else nominal = 28;
+    // 👉 now we wish to adjust by resolution
+    //    more zoom, less resolution increases font size
+    //    less zoom, more resolution decresaes font size
+    //    font size is clamped by a min and a max
+    return Math.min(nominal / Math.sqrt(resolution / 3.1), this.maxFontSize);
   }
 
   #labelFontSizeMax(
@@ -353,10 +348,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     else {
-      // TODO 🔥 this is a hack, but we don't want to over-engineer
-      //         at this point -- currently, we only showSelection
-      //         and showLabels at the same time when the selection
-      //         is over the dark background of satellite view
       const color = this.showSelection
         ? this.map.vars['--map-parcel-text-inverse']
         : this.map.vars['--map-parcel-text-color'];
@@ -376,7 +367,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           rotation: label.rotation,
           stroke: new OLStroke({
             color: `rgba(${outline}, 1)`,
-            width: Math.min(label.fontSize / 8, this.maxOutlineWidth)
+            width: Math.min(label.fontSize / 8, this.maxBorderWidth)
           }),
           text: label.text
         });
@@ -393,9 +384,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     const labels: Label[] = [];
     for (let ix = 0; ix < numLabels; ix++) {
       const fontSize = this.#labelFontSize(props, resolution, ix);
-      // 👉 for tiny parcels, we'll only show the parcel # so we can
-      //    shortcircuit all the calculations
-      if (this.#isTiny(props, ix)) {
+      // 👉 if the fontsize for the acreage is so small we can't
+      //    see it, don't show it
+      if (fontSize * this.fontSizeAcreageRatio < this.minFontSize) {
         labels.push({
           fontFamily: this.fontFamily,
           fontSize: fontSize,
@@ -498,30 +489,26 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     else {
+      const borderWidth = this.#borderWidth(resolution);
       const outline = this.map.vars['--map-parcel-outline'];
-      const width = Math.min(
-        this.borderWidth / resolution,
-        this.maxBorderWidth
-      );
-      const lineDash = [
-        Math.min(this.borderLineDash[0] / resolution, this.borderLineDash[0]),
-        Math.min(this.borderLineDash[1] / resolution, this.borderLineDash[1])
-      ];
       // 👉 alternating light, dark outline
       return [
         new OLStyle({
           stroke: new OLStroke({
             color: 'white',
             lineCap: 'square',
-            width
+            width: borderWidth
           })
         }),
         new OLStyle({
           stroke: new OLStroke({
             color: `rgb(${outline})`,
             lineCap: 'square',
-            lineDash,
-            width
+            lineDash: [
+              Math.min(this.lineDash[0] / resolution, this.lineDash[0]),
+              Math.min(this.lineDash[1] / resolution, this.lineDash[1])
+            ],
+            width: borderWidth
           })
         })
       ];
@@ -540,16 +527,16 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     else {
+      const borderWidth = this.#borderWidth(resolution);
       const select = this.map.redrawer.active
         ? this.map.vars['--map-parcel-redraw']
         : this.map.vars['--map-parcel-select'];
-      const width = Math.min(
-        Math.max(this.borderWidth / resolution, this.minBorderWidth),
-        this.maxBorderWidth
-      );
       // 👉 necessary so we can select
       const fill = new OLFill({ color: [0, 0, 0, 0] });
-      const stroke = new OLStroke({ color: `rgb(${select})`, width });
+      const stroke = new OLStroke({
+        color: `rgb(${select})`,
+        width: borderWidth
+      });
       return [new OLStyle({ fill, stroke: whenSelected ? stroke : null })];
     }
   }

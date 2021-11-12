@@ -37,7 +37,6 @@ import { OLSourceBoundaryComponent } from './ol/ol-source-boundary';
 import { OLSourceGeoJSONComponent } from './ol/ol-source-geojson';
 import { OLSourceOSMComponent } from './ol/ol-source-osm';
 import { OLSourceParcelsComponent } from './ol/ol-source-parcels';
-import { OLSourceStaticComponent } from './ol/ol-source-static';
 import { OLSourceStoneWallsComponent } from './ol/ol-source-stonewalls';
 import { OLSourceXYZComponent } from './ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from './ol/ol-style-boundary';
@@ -147,7 +146,6 @@ const COMPONENTS = [
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
-  OLSourceStaticComponent,
   OLSourceStoneWallsComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,

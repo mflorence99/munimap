@@ -12,13 +12,6 @@ import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 
-// 👇 draws a building with:
-//    -- a styled fill
-//    -- a styled outline
-//    -- with an input opacity
-//    hides buildings when
-//    -- the resoution exceeds a threshold
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-buildings',
@@ -27,7 +20,6 @@ import OLStyle from 'ol/style/Style';
 })
 export class OLStyleBuildingsComponent implements OLStyleComponent {
   @Input() opacity = 0.5;
-  @Input() threshold = 2;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -37,19 +29,16 @@ export class OLStyleBuildingsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (building: OLFeature<any>, resolution: number): OLStyle => {
+    return (_building: OLFeature<any>, _resolution: number): OLStyle => {
       const fill = this.map.vars['--map-building-fill'];
       const outline = this.map.vars['--map-building-outline'];
-      if (resolution >= this.threshold) return null;
-      else {
-        return new OLStyle({
-          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-          stroke: new OLStroke({
-            color: `rgba(${outline}, ${this.opacity})`,
-            width: 1
-          })
-        });
-      }
+      return new OLStyle({
+        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+        stroke: new OLStroke({
+          color: `rgba(${outline}, ${this.opacity})`,
+          width: 1
+        })
+      });
     };
   }
 }

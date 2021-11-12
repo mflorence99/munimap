@@ -14,8 +14,6 @@ import OLLineString from 'ol/geom/MultiLineString';
 import OLStrokePattern from 'ol-ext/style/StrokePattern';
 import OLStyle from 'ol/style/Style';
 
-// 👇 TEMPORARY
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-stonewalls',
@@ -23,9 +21,10 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleStoneWallsComponent implements OLStyleComponent {
+  @Input() maxWallWidth = 6;
+  @Input() minWallWidth = 3;
   @Input() opacity = 0.33;
   @Input() pattern: OLStrokePatternType = 'rocks';
-  @Input() threshold = 1;
   @Input() wallWidth = 7;
 
   constructor(
@@ -35,27 +34,33 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
+  #wallWidth(resolution: number): number {
+    // 👉 wallWidth is proportional to the resolution,
+    //    but no bigger than the max size specified
+    return Math.min(this.maxWallWidth, this.wallWidth / resolution);
+  }
+
   style(): OLStyleFunction {
     return (
       stonewall: OLFeature<OLLineString>,
       resolution: number
     ): OLStyle => {
-      const fill = this.map.vars['--map-stonewall-fill'];
-      const rocks = this.map.vars['--map-stonewall-rocks'];
-      // 👉 fontSize is proportional to the resolution,
-      //    but no bigger than the nominal size specified
-      const width = Math.min(this.wallWidth, this.wallWidth / resolution);
-      if (resolution >= this.threshold) return null;
-      else
+      const wallWidth = this.#wallWidth(resolution);
+      // 👉 if the wall would be too small to see, don't show anything
+      if (wallWidth < this.minWallWidth) return null;
+      else {
+        const fill = this.map.vars['--map-stonewall-fill'];
+        const rocks = this.map.vars['--map-stonewall-rocks'];
         return new OLStyle({
           stroke: new OLStrokePattern({
             color: `rgba(${rocks}, ${this.opacity})`,
             fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
             pattern: this.pattern,
             scale: 2,
-            width
+            width: wallWidth
           })
         });
+      }
     };
   }
 }

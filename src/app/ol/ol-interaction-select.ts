@@ -50,6 +50,7 @@ export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy, OnInit
 {
   #featuresLoadEndKey = null;
+  #selectKey = null;
 
   @ContentChild(MatMenu) contextMenu: MatMenu;
   @ViewChild(MatMenuTrigger) contextMenuTrigger: MatMenuTrigger;
@@ -157,11 +158,11 @@ export class OLInteractionSelectComponent
   }
 
   ngAfterContentInit(): void {
-    this.olSelect.on('select', this.#onSelect.bind(this));
+    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 
   ngOnDestroy(): void {
-    this.olSelect.un('select', this.#onSelect.bind(this));
+    if (this.#selectKey) unByKey(this.#selectKey);
     if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
   }
 

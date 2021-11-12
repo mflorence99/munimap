@@ -15,17 +15,6 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 draws a river with:
-//      -- a styled color
-//      -- with an input opacity
-//      -- with an input width
-//    add the name of the river
-//      -- with a styled color
-//      -- with an input opacity
-//      -- with an input font weight, size and family
-//    the river name is only shown
-//      -- when the resolution is less than an input threshold
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-rivers',
@@ -36,9 +25,11 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
+  @Input() maxFontSize = 20;
+  @Input() maxRiverWidth = 8;
+  @Input() minFontSize = 8;
   @Input() opacity = 0.9;
   @Input() riverWidth = 8;
-  @Input() threshold = 2;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -49,22 +40,19 @@ export class OLStyleRiversComponent implements OLStyleComponent {
 
   #drawLine(props: RiverProperties, resolution: number): OLStroke {
     const color = this.map.vars['--map-river-line-color'];
-    // 👉 width is proportional to the resolution,
-    //    but no bigger than the nominal size specified
-    const width = Math.min(this.riverWidth, this.riverWidth / resolution);
+    const riverWidth = this.#riverWidth(resolution);
     return new OLStroke({
       color: `rgba(${color}, ${this.opacity})`,
-      width
+      width: riverWidth
     });
   }
 
   #drawText(props: RiverProperties, resolution: number): OLText {
-    if (resolution >= this.threshold) return null;
+    const fontSize = this.#fontSize(resolution);
+    // 👉 if the river label would be too small to see, don't show it
+    if (fontSize < this.minFontSize) return null;
     else {
       const color = this.map.vars['--map-river-text-color'];
-      // 👉 fontSize is proportional to the resolution,
-      //    but no bigger than the nominal size specified
-      const fontSize = Math.min(this.fontSize, this.fontSize / resolution);
       return new OLText({
         fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
         font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
@@ -76,6 +64,18 @@ export class OLStyleRiversComponent implements OLStyleComponent {
         text: props.section
       });
     }
+  }
+
+  #fontSize(resolution: number): number {
+    // 👉 fontSize is proportional to the resolution,
+    //    but no bigger than the max size specified
+    return Math.min(this.maxFontSize, this.fontSize / resolution);
+  }
+
+  #riverWidth(resolution: number): number {
+    // 👉 riverWidth is proportional to the resolution,
+    //    but no bigger than the max size specified
+    return Math.min(this.maxRiverWidth, this.riverWidth / resolution);
   }
 
   style(): OLStyleFunction {
