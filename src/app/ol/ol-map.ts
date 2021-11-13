@@ -2,7 +2,6 @@ import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
 import { OLInteractionRedrawComponent } from './ol-interaction-redraw';
 import { OLInteractionSelectComponent } from './ol-interaction-select';
-import { OLSourceProgress } from './ol-source';
 import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
@@ -80,8 +79,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   printing = false;
 
-  progresses$: Subject<OLSourceProgress>[];
-
   projection = 'EPSG:3857';
   redrawer: OLInteractionRedrawComponent;
   selector: OLInteractionSelectComponent;
@@ -90,7 +87,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   @Output() zoomChange = new EventEmitter<number>();
 
   constructor(
-    private cdf: ChangeDetectorRef,
+    public cdf: ChangeDetectorRef,
     private geoJSON: GeoJSONService,
     private host: ElementRef,
     private route: ActivatedRoute,
@@ -121,7 +118,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     });
     const layers = [...this.olMap.getLayers().getArray()];
     layers.forEach((layer) => this.olMap.removeLayer(layer));
-    this.progresses$ = [];
   }
 
   #createView(boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>): void {
@@ -218,10 +214,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   #onClick(event: OLMapBrowserEvent<any>): void {
     this.click$.next(event);
-  }
-
-  addProgress$(progress$: Subject<OLSourceProgress>): void {
-    this.progresses$.push(progress$);
   }
 
   currentCounty(): string {

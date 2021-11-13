@@ -1,5 +1,22 @@
 <h1 mat-dialog-title>Print Progress</h1>
 
+<article mat-dialog-content>
+  <p *ngIf="numLoaded === 0">Preparing map for printing ...</p>
+
+  <p *ngIf="numLoaded > 0 && numLoading === numLoaded">Cleaning up ...</p>
+
+  <p *ngIf="numLoaded > 0 && numLoading !== numLoaded">
+    Loaded {{ numLoaded }} of {{ numLoading }} tiles...
+  </p>
+
+  <br />
+
+  <mat-progress-bar
+    [mode]="numLoaded > 0 && numLoading !== numLoaded ? 'determinate' : 'indeterminate'"
+    [value]="(numLoaded / numLoading) * 100"
+  ></mat-progress-bar>
+</article>
+
 <article mat-dialog-actions>
   <button [mat-dialog-close]="false" color="primary" mat-flat-button>
     CANCEL

@@ -69,7 +69,7 @@ export class TownMapSetupComponent {
       title: 'Please confirm map deletion'
     };
     this.dialog
-      .open(ConfirmDialogComponent, { data, width: '25rem' })
+      .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) {

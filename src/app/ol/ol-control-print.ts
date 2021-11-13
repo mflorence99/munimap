@@ -2,6 +2,7 @@ import { ConfirmDialogComponent } from '../components/confirm-dialog';
 import { ConfirmDialogData } from '../components/confirm-dialog';
 import { OLControlPrintProgressComponent } from './ol-control-printprogress';
 import { OLMapComponent } from './ol-map';
+import { PrintProgressData } from './ol-control-printprogress';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -50,23 +51,30 @@ export class OLControlPrintComponent {
       });
     });
     // 👉 the progress dialog allows the print to be cancelled
+    const data: PrintProgressData = {
+      map: this.map,
+      px: this.#px,
+      py: this.#py
+    };
     this.#progressRef = this.dialog.open(OLControlPrintProgressComponent, {
-      data: { map: this.map },
+      data,
       disableClose: true
     });
-    this.#progressRef.afterClosed().subscribe(() => {
-      if (this.#renderCompleteKey) unByKey(this.#renderCompleteKey);
-      this.#teardown();
-    });
-    // 👉 start printing
-    this.#setup();
+    // 👉 we want the above dialog to appeaer quickly
+    setTimeout(() => {
+      this.#progressRef.afterClosed().subscribe(() => {
+        if (this.#renderCompleteKey) unByKey(this.#renderCompleteKey);
+        this.#teardown();
+      });
+      this.#setup();
+    }, 100);
   }
 
   #setup(): void {
     this.#center = this.map.olView.getCenter();
     this.#zoom = this.map.olView.getZoom();
     // 🔥 needs to be configured
-    this.map.olView.setZoom(13);
+    this.map.olView.setZoom(15.75);
     // 👉 calculate extent of full map
     const [minX, minY, maxX, maxY] = this.map.boundary.features[0].bbox;
     const resolution = this.map.olView.getResolution();
@@ -81,6 +89,7 @@ export class OLControlPrintComponent {
     this.map.zoomToBounds();
     // 👉 controls map configuration
     this.map.printing = true;
+    this.map.cdf.markForCheck();
   }
 
   #teardown(): void {
@@ -95,16 +104,17 @@ export class OLControlPrintComponent {
     this.map.olView.setZoom(this.#zoom);
     // 👉 controls map configuration
     this.map.printing = false;
+    this.map.cdf.markForCheck();
   }
 
   print(): void {
     const data: ConfirmDialogData = {
       content:
-        'The entire map will be exported as a PNG file, suitable for large-format printing',
+        'The entire map will be exported as a PNG file, suitable for large-format printing. It may take several minutes to produce.',
       title: 'Please confirm map print'
     };
     this.dialog
-      .open(ConfirmDialogComponent, { data, width: '25rem' })
+      .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) this.#printImpl();

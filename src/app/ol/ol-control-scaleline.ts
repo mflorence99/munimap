@@ -4,6 +4,8 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
+import { OnInit } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
@@ -21,18 +23,34 @@ import OLScaleLine from 'ol/control/ScaleLine';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLControlScaleLineComponent implements Mapable {
+export class OLControlScaleLineComponent implements Mapable, OnInit {
+  @Input() bar: boolean;
+
+  @Input() dpi: number;
+
+  @Input() minWidth: number;
+
   olControl: OLScaleLine;
 
-  constructor(private map: OLMapComponent) {
-    this.olControl = new OLScaleLine({
-      bar: false,
-      className: 'ol-scaleline',
-      units: 'us'
-    });
-  }
+  @Input() steps: number;
+
+  constructor(private map: OLMapComponent) {}
 
   addToMap(): void {
     this.map.olMap.addControl(this.olControl);
+  }
+
+  ngOnInit(): void {
+    // 👉 we can't follow the normal convention and put this in the
+    //    constructor as there few "set" methods
+    this.olControl = new OLScaleLine({
+      bar: this.bar,
+      dpi: this.dpi,
+      className: this.bar ? 'ol-scaleline-bar' : 'ol-scaleline-line',
+      minWidth: this.minWidth,
+      steps: this.steps,
+      text: false,
+      units: 'us'
+    });
   }
 }

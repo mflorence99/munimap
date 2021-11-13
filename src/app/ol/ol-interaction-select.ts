@@ -133,7 +133,7 @@ export class OLInteractionSelectComponent
           };
           this.map.olMap.forEachFeatureAtPixel(pixel, cb);
           // 👉 because event is triggered out of the Angular zone
-          this.cdf.detectChanges();
+          this.cdf.markForCheck();
           this.contextMenuTrigger.openMenu();
         }
       });

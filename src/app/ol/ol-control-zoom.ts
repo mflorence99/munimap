@@ -32,7 +32,7 @@ export class OLControlZoomComponent implements OnInit {
       this.zoom = zoom;
       this.resolution = this.map.olView.getResolutionForZoom(zoom);
       // 👉 because event is triggered out of the Angular zone
-      this.cdf.detectChanges();
+      this.cdf.markForCheck();
     });
   }
 

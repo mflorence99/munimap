@@ -43,7 +43,7 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
 
   ngOnInit(): void {
     // 👉 we can't follow the normal convention and put this in the
-    // constructor as there a few "set" methods
+    //    constructor as there few "set" methods
     this.olControl = new OLGraticule({
       borderWidth: this.borderWidth,
       // 🔥 make toFixed(2) a function of this.stepCoord

@@ -81,7 +81,7 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
       title: 'Please confirm new boundary'
     };
     this.dialog
-      .open(ConfirmDialogComponent, { data, width: '25rem' })
+      .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) {

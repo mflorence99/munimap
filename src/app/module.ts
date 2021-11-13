@@ -13,6 +13,7 @@ import { OLAttributionComponent } from './ol/ol-attribution';
 import { OLControlAttributionComponent } from './ol/ol-control-attribution';
 import { OLControlCreditsComponent } from './ol/ol-control-credits';
 import { OLControlGraticuleComponent } from './ol/ol-control-graticule';
+import { OLControlLegendComponent } from './ol/ol-control-legend';
 import { OLControlMousePositionComponent } from './ol/ol-control-mouseposition';
 import { OLControlPrintComponent } from './ol/ol-control-print';
 import { OLControlPrintProgressComponent } from './ol/ol-control-printprogress';
@@ -123,6 +124,7 @@ const COMPONENTS = [
   OLControlAttributionComponent,
   OLControlCreditsComponent,
   OLControlGraticuleComponent,
+  OLControlLegendComponent,
   OLControlMousePositionComponent,
   OLControlPrintComponent,
   OLControlPrintProgressComponent,

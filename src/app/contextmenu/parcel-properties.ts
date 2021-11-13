@@ -91,7 +91,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         parcels,
         this.#makeRecordFromFeatures()
       );
-      this.cdf.detectChanges();
+      this.cdf.markForCheck();
     });
   }
 

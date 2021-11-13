@@ -36,7 +36,24 @@
           ><app-ol-style-graticule></app-ol-style-graticule
         ></app-ol-control-graticule>
 
-        <app-ol-control-scaleline></app-ol-control-scaleline>
+        <app-ol-control-legend
+          *ngIf="map.name"
+          [title]="map.name"
+        ></app-ol-control-legend>
+
+        <!-- 🔥 DPI isn't right -->
+
+        <app-ol-control-scaleline
+          *ngIf="theMap.printing"
+          [bar]="true"
+          [dpi]="(25.4 / 0.28) * 3"
+          [minWidth]="128"
+          [steps]="8"
+        ></app-ol-control-scaleline>
+
+        <app-ol-control-scaleline
+          *ngIf="!theMap.printing"
+        ></app-ol-control-scaleline>
 
         <app-ol-control-credits
           *ngIf="theMap.printing"

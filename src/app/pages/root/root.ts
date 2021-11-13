@@ -80,7 +80,7 @@ export class RootPage implements OnInit {
         console.log({ action });
         this.canRedo = action.canRedo;
         this.canUndo = action.canUndo;
-        this.cdf.detectChanges();
+        this.cdf.markForCheck();
       });
   }
 

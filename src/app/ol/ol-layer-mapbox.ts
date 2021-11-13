@@ -6,6 +6,7 @@ import { Params } from '../services/params';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnInit } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
@@ -23,8 +24,10 @@ import OLMapbox from 'ol/layer/MapboxVector';
   template: '<ng-content></ng-content>',
   styles: [':host { display: block; visibility: hidden }']
 })
-export class OLLayerMapboxComponent implements Mapable {
+export class OLLayerMapboxComponent implements Mapable, OnInit {
   olLayer: OLMapbox;
+
+  @Input() styleUrl: string;
 
   @Input() set maxZoom(maxZoom: number) {
     this.olLayer.setMaxZoom(maxZoom);
@@ -34,19 +37,19 @@ export class OLLayerMapboxComponent implements Mapable {
     this.olLayer.setOpacity(opacity);
   }
 
-  @Input() set styleUrl(url: string) {
-    this.olLayer = new OLMapbox({
-      accessToken: this.params.mapbox.apiKey,
-      declutter: true,
-      styleUrl: url
-    });
-  }
-
-  constructor(private map: OLMapComponent, private params: Params) {
-    // 👉 can't follow the normal pattern as no setStyleUrl
-  }
+  constructor(private map: OLMapComponent, private params: Params) {}
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
+  }
+
+  ngOnInit(): void {
+    // 👉 we can't follow the normal convention and put this in the
+    //    constructor as there few "set" methods
+    this.olLayer = new OLMapbox({
+      accessToken: this.params.mapbox.apiKey,
+      declutter: true,
+      styleUrl: this.styleUrl
+    });
   }
 }
