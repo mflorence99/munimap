@@ -38,6 +38,7 @@
 
         <app-ol-control-legend
           *ngIf="map.name"
+          [printing]="theMap.printing"
           [title]="map.name"
         ></app-ol-control-legend>
 
@@ -45,10 +46,7 @@
 
         <app-ol-control-scaleline
           *ngIf="theMap.printing"
-          [bar]="true"
-          [dpi]="(25.4 / 0.28) * 3"
-          [minWidth]="128"
-          [steps]="8"
+          [printing]="theMap.printing"
         ></app-ol-control-scaleline>
 
         <app-ol-control-scaleline

@@ -2,7 +2,8 @@
   display: block;
 }
 
-// 👇 suzes are huge because this is designed fior large-format print
+// 👇 watch out -- these styles are a little different because
+//    OL yanks .legend out of the dom and into its viewport
 
 .header {
   font-family: 'Carnevalee Freakshow', sans-serif;
@@ -10,21 +11,12 @@
   white-space: nowrap;
 
   .title {
-    font-size: 16rem;
-    font-weight: normal;
-  }
-
-  .subtitle {
-    font-size: 14rem;
-    font-weight: normal;
+    font-size: larger;
   }
 }
 
 .legend {
   color: var(--background-color);
   background-color: rgba(var(--rgb-gray-100), 0.75);
-  left: 20rem;
-  padding: 3rem;
-  position: absolute;
-  top: 20rem;
+  padding: 1rem;
 }

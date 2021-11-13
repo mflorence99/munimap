@@ -1,4 +1,8 @@
-<article #legend class="legend ol-unselectable ol-control">
+<article
+  #legend
+  [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
+  class="legend ol-legend ol-unselectable ol-control"
+>
   <header class="header">
     <h1 class="title">{{ title }}</h1>
   </header>

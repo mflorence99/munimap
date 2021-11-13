@@ -50,24 +50,7 @@ export class OLControlPrintComponent {
         });
       });
     });
-    // 👉 the progress dialog allows the print to be cancelled
-    const data: PrintProgressData = {
-      map: this.map,
-      px: this.#px,
-      py: this.#py
-    };
-    this.#progressRef = this.dialog.open(OLControlPrintProgressComponent, {
-      data,
-      disableClose: true
-    });
-    // 👉 we want the above dialog to appeaer quickly
-    setTimeout(() => {
-      this.#progressRef.afterClosed().subscribe(() => {
-        if (this.#renderCompleteKey) unByKey(this.#renderCompleteKey);
-        this.#teardown();
-      });
-      this.#setup();
-    }, 100);
+    this.#setup();
   }
 
   #setup(): void {
@@ -80,16 +63,34 @@ export class OLControlPrintComponent {
     const resolution = this.map.olView.getResolution();
     this.#px = getDistance([minX, maxY], [maxX, minY]) / resolution;
     this.#py = getDistance([minX, minY], [minX, maxY]) / resolution;
+    // 👉 the progress dialog allows the print to be cancelled
+    const data: PrintProgressData = {
+      map: this.map,
+      px: this.#px,
+      py: this.#py
+    };
+    this.#progressRef = this.dialog.open(OLControlPrintProgressComponent, {
+      data,
+      disableClose: true
+    });
+    this.#progressRef.afterClosed().subscribe(() => {
+      if (this.#renderCompleteKey) unByKey(this.#renderCompleteKey);
+      this.#teardown();
+    });
     // 👇 https://openlayers.org/en/latest/examples/print-to-scale.html
-    const element = this.map.olMap.getTargetElement();
-    element.style.height = `${this.#py}px`;
-    element.style.overflow = 'visible';
-    element.style.width = `${this.#px}px`;
-    this.map.olMap.updateSize();
-    this.map.zoomToBounds();
-    // 👉 controls map configuration
-    this.map.printing = true;
-    this.map.cdf.markForCheck();
+    //    also -- we want the dialog to show quickly, before the map
+    //    updateSize etc which takes a lot of dead time
+    setTimeout(() => {
+      const element = this.map.olMap.getTargetElement();
+      element.style.height = `${this.#py}px`;
+      element.style.overflow = 'visible';
+      element.style.width = `${this.#px}px`;
+      this.map.olMap.updateSize();
+      this.map.zoomToBounds();
+      // 👉 controls map configuration
+      this.map.printing = true;
+      this.map.cdf.markForCheck();
+    }, 0);
   }
 
   #teardown(): void {

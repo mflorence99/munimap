@@ -6,7 +6,8 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
-import { OnInit, Input } from '@angular/core';
+import { Input } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
@@ -34,6 +35,7 @@ export class OLControlLegendComponent implements Mapable, OnInit {
 
   olControl: OLControl;
 
+  @Input() printing: boolean;
   @Input() title: string;
 
   constructor(private map: OLMapComponent) {}

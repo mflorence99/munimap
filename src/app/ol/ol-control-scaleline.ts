@@ -8,6 +8,7 @@ import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { getDistance } from 'ol/sphere';
 
 import OLScaleLine from 'ol/control/ScaleLine';
 
@@ -24,15 +25,9 @@ import OLScaleLine from 'ol/control/ScaleLine';
   styles: [':host { display: none }']
 })
 export class OLControlScaleLineComponent implements Mapable, OnInit {
-  @Input() bar: boolean;
-
-  @Input() dpi: number;
-
-  @Input() minWidth: number;
-
   olControl: OLScaleLine;
 
-  @Input() steps: number;
+  @Input() printing: boolean;
 
   constructor(private map: OLMapComponent) {}
 
@@ -41,15 +36,16 @@ export class OLControlScaleLineComponent implements Mapable, OnInit {
   }
 
   ngOnInit(): void {
+    const [minX, minY, maxX, maxY] = this.map.boundary.features[0].bbox;
+    const resolution = this.map.olView.getResolution();
+    const px = getDistance([minX, maxY], [maxX, minY]) / resolution;
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olControl = new OLScaleLine({
-      bar: this.bar,
-      dpi: this.dpi,
-      className: this.bar ? 'ol-scaleline-bar' : 'ol-scaleline-line',
-      minWidth: this.minWidth,
-      steps: this.steps,
-      text: false,
+      bar: this.printing,
+      className: this.printing ? 'ol-scaleline-bar' : 'ol-scaleline-line',
+      minWidth: this.printing ? px / 20 : undefined,
+      steps: this.printing ? 20 : undefined,
       units: 'us'
     });
   }

@@ -45,11 +45,6 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
         (layer: OLBaseTileLayer<any>) => layer.getSource() instanceof OLUrlTile
       )
       .map((layer: OLBaseTileLayer<any>) => layer.getSource());
-    // 👉 assumes 256 x 256 tiles
-    console.log({ data });
-    this.numLoading = Math.round(
-      (data.px / 256) * (data.py / 256) * this.#olSources.length
-    );
   }
 
   #progress(event: OLTileSourceEvent): void {
@@ -64,7 +59,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.#eventKeys = this.#olSources.flatMap((olSource) => [
-      // olSource.on('tileloadstart', this.#progress.bind(this)),
+      olSource.on('tileloadstart', this.#progress.bind(this)),
       olSource.on('tileloadend', this.#progress.bind(this))
     ]);
   }
