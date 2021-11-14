@@ -1,4 +1,4 @@
-<app-ol-map #theMap [fitToBounds]="true" [path]="path">
+<app-ol-map #olMap [fitToBounds]="true" [path]="path">
   <app-map-filter
     (pathChanged)="onPathChanged($event)"
     (pathSelected)="onPathSelected($event)"
@@ -17,7 +17,7 @@
     mapControlAttribution
   ></app-ol-control-attribution>
 
-  <ng-container *ngIf="theMap.initialized">
+  <ng-container *ngIf="olMap.initialized">
     <!-- 📦 OL CONTROLS -->
 
     <app-ol-control-graticule

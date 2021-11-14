@@ -1,6 +1,6 @@
 <mat-drawer-container *ngIf="(mapState$ | async) as map" class="container">
   <mat-drawer-content class="content">
-    <app-ol-map #theMap [minZoom]="12" [maxZoom]="22" [path]="map.path">
+    <app-ol-map #olMap [minZoom]="12" [maxZoom]="22" [path]="map.path">
       <app-town-map-setup
         [map]="map"
         class="setup"
@@ -29,7 +29,7 @@
         mapControlAttribution
       ></app-ol-control-attribution>
 
-      <ng-container *ngIf="theMap.initialized">
+      <ng-container *ngIf="olMap.initialized">
         <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
         <app-ol-control-graticule
@@ -37,25 +37,25 @@
         ></app-ol-control-graticule>
 
         <app-ol-control-legend
-          *ngIf="map.name"
-          [printing]="theMap.printing"
+          *ngIf="map.name && olMap.printing"
+          [county]="map.path.split(':')[1]"
+          [printing]="olMap.printing"
+          [state]="map.path.split(':')[0]"
           [title]="map.name"
         ></app-ol-control-legend>
 
         <!-- 🔥 DPI isn't right -->
 
         <app-ol-control-scaleline
-          *ngIf="theMap.printing"
-          [printing]="theMap.printing"
+          *ngIf="olMap.printing"
+          [printing]="olMap.printing"
         ></app-ol-control-scaleline>
 
         <app-ol-control-scaleline
-          *ngIf="!theMap.printing"
+          *ngIf="!olMap.printing"
         ></app-ol-control-scaleline>
 
-        <app-ol-control-credits
-          *ngIf="theMap.printing"
-        ></app-ol-control-credits>
+        <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
 
         <!-- 📦 BG LAYER -->
 
@@ -178,7 +178,7 @@
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          <app-ol-layer-vector *ngIf="!theMap.printing">
+          <app-ol-layer-vector *ngIf="!olMap.printing">
             <app-ol-style-stonewalls></app-ol-style-stonewalls>
             <app-ol-source-stonewalls></app-ol-source-stonewalls>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -225,7 +225,7 @@
             <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
 
-          <app-ol-layer-vector *ngIf="!theMap.printing">
+          <app-ol-layer-vector *ngIf="!olMap.printing">
             <app-ol-style-stonewalls></app-ol-style-stonewalls>
             <app-ol-source-stonewalls></app-ol-source-stonewalls>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -243,7 +243,7 @@
         <!-- 📦 SUPPORTS showSatelliteForSelected NOT printed -->
 
         <app-ol-layer-tile
-          *ngIf="map.options.showSatelliteForSelected && !theMap.printing"
+          *ngIf="map.options.showSatelliteForSelected && !olMap.printing"
         >
           <app-ol-source-xyz
             [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
@@ -259,7 +259,7 @@
 
         <!-- 📦 SELECTION LAYER -- NOT printed-->
 
-        <app-ol-layer-vector *ngIf="!theMap.printing">
+        <app-ol-layer-vector *ngIf="!olMap.printing">
           <app-ol-style-parcels
             [showDimensions]="true"
             [showLabels]="map.options.showSatelliteForSelected"
@@ -278,7 +278,7 @@
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
 
-        <app-ol-overlay-label *ngIf="!theMap.printing"></app-ol-overlay-label>
+        <app-ol-overlay-label *ngIf="!olMap.printing"></app-ol-overlay-label>
 
         <!-- 📦 BOUNDARY LAYER -->
 
@@ -311,7 +311,7 @@
         [class.disabled]="!canParcelProperties()"
         class="item"
       >
-        <img class="icon" src="assets/properties.svg" />
+        <img class="icon" src="assets/details.svg" />
         Parcel details ...
       </li>
 

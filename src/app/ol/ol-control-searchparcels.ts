@@ -22,11 +22,11 @@ import { takeUntil } from 'rxjs/operators';
 import copy from 'fast-copy';
 import fuzzysort from 'fuzzysort';
 
-type Override = {
+interface Override {
   address?: string;
   bbox?: GeoJSON.BBox;
   owner?: string;
-};
+}
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -148,10 +148,10 @@ export class OLControlSearchParcelsComponent implements OnInit {
           override.bbox = parcel.bbox;
         const props = parcel.properties;
         if (props) {
-          if (props.address !== undefined && override.address === undefined)
-            override.address = props.address;
-          if (props.owner !== undefined && override.owner === undefined)
-            override.owner = props.owner;
+          ['address', 'owner'].forEach((prop) => {
+            if (props[prop] !== undefined && override[prop] === undefined)
+              override[prop] = props[prop];
+          });
         }
       });
       acc[id] = override;

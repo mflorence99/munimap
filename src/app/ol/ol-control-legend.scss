@@ -5,13 +5,94 @@
 // 👇 watch out -- these styles are a little different because
 //    OL yanks .legend out of the dom and into its viewport
 
+.areaByUsage {
+  border-collapse: collapse;
+  font-family: 'Bentham Regular', sans-serif;
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  width: 100%;
+
+  td {
+    padding: 0.25rem;
+  }
+
+  thead td {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .desc {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    &::after {
+      content: '........................................................'
+        '........................................................'
+        '........................................................'
+        '........................................................';
+      position: absolute;
+    }
+  }
+
+  .numeric {
+    text-align: right;
+  }
+
+  .total {
+    td {
+      font-weight: bold;
+      padding-top: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+
+  .usage {
+    .key {
+      border: 3px dashed var(--mat-blue-gray-300);
+      height: 2rem;
+      width: 3rem;
+    }
+  }
+
+  .use {
+    .keys {
+      display: grid;
+      font-size: smaller;
+      gap: 0.5rem;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      padding: 0.5rem 1rem;
+
+      .key {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: auto 1fr;
+        white-space: nowrap;
+
+        > div {
+          background-color: rgba(var(--map-parcel-fill-u190), 0.25);
+          border: 1px dashed rgba(var(--map-parcel-outline), 1);
+          height: 1.5rem;
+          width: 2rem;
+        }
+      }
+    }
+  }
+}
+
 .header {
   font-family: 'Carnevalee Freakshow', sans-serif;
+  line-height: 3.5rem;
   text-align: center;
   white-space: nowrap;
 
   .title {
-    font-size: larger;
+    font-size: 4rem;
+  }
+
+  .subtitle {
+    font-size: 3rem;
   }
 }
 
@@ -19,4 +100,5 @@
   color: var(--background-color);
   background-color: rgba(var(--rgb-gray-100), 0.75);
   padding: 1rem;
+  width: 44rem;
 }

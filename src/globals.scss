@@ -280,6 +280,7 @@ a[mat-flat-button] {
   background-color: rgba(var(--rgb-gray-100), 0.66) !important;
   bottom: 1rem;
   color: var(--background-color);
+  font-family: 'Bentham Regular', sans-serif;
   padding: 0 0.5rem !important;
   position: absolute;
   right: 1rem;
@@ -300,23 +301,18 @@ a[mat-flat-button] {
 }
 
 // 👉 going through some hoops here because although the legend
-//    is ony ever actually printed, we want to see it on the screen
+//    is only ever printed, we want to see it on the screen
 //    for degugging
 
 .ol-legend {
-  left: 1rem;
+  left: 20rem;
   position: absolute;
-  top: 1rem;
+  top: 20rem;
 }
 
 .ol-legend-print {
-  transform: scale(10);
-  transform-origin: -1rem -1rem;
-}
-
-.ol-legend-screen {
-  transform: scale(2);
-  transform-origin: -1rem -1rem;
+  transform: scale(2.5);
+  transform-origin: left top;
 }
 
 .ol-scaleline-line {

@@ -55,17 +55,17 @@ const registry: Record<string, Record<string, Record<string, Descriptor>>> = {
       '502': { decoding: 'Conservation Land' }
     } as Record<ParcelPropertiesUsage, Descriptor>,
     use: {
-      CUDE: { decoding: 'Discretionary' },
+      CUWL: { decoding: 'Wetland' },
       CUFL: { decoding: 'Farmland' },
       CUMH: { decoding: 'Managed Hardwood' },
-      CUMO: { decoding: 'Managed (Other)' },
-      CUMW: { decoding: 'Managed Pine' },
-      CUNS: { decoding: 'Christmas Tree' },
       CUUH: { decoding: 'Unmanaged Hardwood' },
-      CUUL: { decoding: 'Unproductive' },
-      CUUO: { decoding: 'Unmanaged (Other)' },
+      CUMW: { decoding: 'Managed Pine' },
       CUUW: { decoding: 'Unmanaged Pine' },
-      CUWL: { decoding: 'Wetland' }
+      CUMO: { decoding: 'Managed (Other)' },
+      CUUO: { decoding: 'Unmanaged (Other)' },
+      CUDE: { decoding: 'Discretionary' },
+      CUNS: { decoding: 'Christmas Tree' },
+      CUUL: { decoding: 'Unproductive' }
     } as Record<ParcelPropertiesUse, Descriptor>
   }
 };

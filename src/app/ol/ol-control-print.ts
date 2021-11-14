@@ -57,7 +57,7 @@ export class OLControlPrintComponent {
     this.#center = this.map.olView.getCenter();
     this.#zoom = this.map.olView.getZoom();
     // 🔥 needs to be configured
-    this.map.olView.setZoom(15.75);
+    this.map.olView.setZoom(15.8);
     // 👉 calculate extent of full map
     const [minX, minY, maxX, maxY] = this.map.boundary.features[0].bbox;
     const resolution = this.map.olView.getResolution();
