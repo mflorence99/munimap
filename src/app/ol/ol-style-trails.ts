@@ -25,7 +25,6 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
-  @Input() lineDash = [10, 10];
   @Input() maxFontSize = 20;
   @Input() maxTrailWidth = 3;
   @Input() minFontSize = 8;
@@ -44,10 +43,10 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
     const trailWidth = this.#trailWidth(resolution);
     return new OLStroke({
       color: `rgba(${color}, ${this.opacity})`,
-      lineDash: [
-        Math.min(this.lineDash[0] / resolution, this.lineDash[0]),
-        Math.min(this.lineDash[1] / resolution, this.lineDash[1])
-      ],
+      lineDash:
+        trailWidth > 1
+          ? [trailWidth, trailWidth * 2]
+          : [trailWidth * 2, trailWidth],
       width: trailWidth
     });
   }

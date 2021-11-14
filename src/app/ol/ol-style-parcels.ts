@@ -75,10 +75,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 16;
   @Input() fontSizeAcreageRatio = 0.8;
-  @Input() lineDash = [4, 4];
-  @Input() maxBorderWidth = 5;
+  @Input() maxBorderWidth = 3;
   @Input() maxFontSize = 40;
-  @Input() minBorderWidth = 3;
+  @Input() minBorderWidth = 1;
   @Input() minFontSize = 6;
   @Input() minFontSizeOutlined = 28;
   @Input() opacity = 0.25;
@@ -506,10 +505,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           stroke: new OLStroke({
             color: `rgb(${outline})`,
             lineCap: 'square',
-            lineDash: [
-              Math.min(this.lineDash[0] / resolution, this.lineDash[0]),
-              Math.min(this.lineDash[1] / resolution, this.lineDash[1])
-            ],
+            lineDash:
+              borderWidth > 1
+                ? [borderWidth, borderWidth * 2]
+                : [borderWidth * 2, borderWidth],
             width: borderWidth
           })
         })

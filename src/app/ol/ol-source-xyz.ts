@@ -24,9 +24,11 @@ export class OLSourceXYZComponent implements AfterContentInit {
   olXYZ: OLXYZ;
 
   @Input() set url(url: string) {
+    const parsed = new URL(url);
     const encoded = encodeURIComponent(url);
+    // 👇 the proxy path is strictly for the logs only
     this.olXYZ.setUrl(
-      `${this.params.geoJSON.host}/proxy?url=${encoded}&x={x}&y={y}&z={z}`
+      `${this.params.geoJSON.host}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
     );
   }
 

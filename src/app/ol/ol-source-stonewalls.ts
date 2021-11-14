@@ -48,10 +48,16 @@ export class OLSourceStoneWallsComponent {
     _failure: Function
   ): void {
     const url = `https://services1.arcgis.com/MAcUimSes4gPY4sM/arcgis/rest/services/NH_Stone_Walls_Layer_Public_View/FeatureServer/0/query?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100&resultType=tile`;
+    // 👇 the proxy path is strictly for the logs only
     this.http
-      .get(`${this.params.geoJSON.host}/proxy?url=${encodeURIComponent(url)}`, {
-        headers: new HttpHeaders({ cache: 'page' })
-      })
+      .get(
+        `${this.params.geoJSON.host}/proxy/stonewalls?url=${encodeURIComponent(
+          url
+        )}`,
+        {
+          headers: new HttpHeaders({ cache: 'page' })
+        }
+      )
       .pipe(
         map(
           (arcgis: any): GeoJSON.FeatureCollection<GeoJSON.LineString> => ({
