@@ -2,45 +2,36 @@ import { AddParcels } from '../state/parcels';
 import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
 import { Descriptor } from '../services/typeregistry';
-import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from '../ol/ol-map';
 import { Parcel } from '../common';
 import { ParcelID } from '../common';
-import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
 import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ValuesPipe } from 'ngx-pipes';
 import { ViewChild } from '@angular/core';
-
-import { takeUntil } from 'rxjs/operators';
 
 import OLFeature from 'ol/Feature';
 
 interface Value {
   conflict: boolean;
-  fromFeatures: any;
-  fromParcels: any;
   label: string;
   list: [any, Descriptor][];
   prop: string;
-  refCount: number;
   step: number;
   type: string;
+  value: any;
 }
 
 type ValueRecord = Record<string, Value>;
 
-// 👇 these are the properties we can editable
+// 👇 these are the properties we can edit
 
 const editables = [
   { prop: 'address', label: 'Parcel Address', type: 'text' },
@@ -56,7 +47,7 @@ const editables = [
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService, ValuesPipe],
+  providers: [ValuesPipe],
   selector: 'app-parcel-properties',
   styleUrls: ['./contextmenu-component.scss', './parcel-properties.scss'],
   templateUrl: './parcel-properties.html'
@@ -68,8 +59,6 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
 
   @Input() map: OLMapComponent;
 
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
-
   @ViewChild('propertiesForm', { static: true }) propertiesForm: NgForm;
 
   record: ValueRecord = {};
@@ -78,110 +67,36 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
 
   constructor(
     private authState: AuthState,
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    private parcelsState: ParcelsState,
     public registry: TypeRegistry,
     private store: Store
   ) {}
 
-  #handleParcels$(): void {
-    this.parcels$.pipe(takeUntil(this.destroy$)).subscribe((parcels) => {
-      this.record = this.#makeRecordFromParcels(
-        parcels,
-        this.#makeRecordFromFeatures()
-      );
-      this.cdf.markForCheck();
-    });
-  }
-
-  #makeRecordFromFeatures(): ValueRecord {
-    const record: ValueRecord = {};
+  #makeRecord(): void {
+    this.record = {};
     editables.forEach((editable) => {
       const prop = editable.prop;
-      record[prop] = {
+      this.record[prop] = {
         conflict: false,
-        fromFeatures: undefined,
-        fromParcels: undefined,
         label: editable.label,
         list: this.registry.list('parcel', prop),
         prop: prop,
-        refCount: 0,
         step: editable.step ?? 1,
-        type: editable.type
+        type: editable.type,
+        value: undefined
       };
       // 👉 scan the input features -- these are the ones selected
       this.features.forEach((feature) => {
-        // const id = feature.getId() as string;
-        const value = record[prop];
-        // const originalFeature = this.map.getOriginalFeature(id);
-        // 👉 take the feature value from the original (if overridden)
-        //    or directly from the input feature (if not)
-        const originalProperties = feature.get('originalProperties');
-        const fromFeature =
-          originalProperties?.[prop] ?? feature.getProperties()[prop];
+        const value = this.record[prop];
+        const fromFeature = feature.getProperties()[prop];
         // 👉 if no value has been recorded yet, take the first we see
-        if (value.fromFeatures === undefined) value.fromFeatures = fromFeature;
+        if (value.value === undefined) value.value = fromFeature;
         // 👉 but if the value is different, we have to record a conflict
-        else if (value.fromFeatures !== fromFeature) {
+        else if (value.value !== fromFeature) {
           value.conflict = true;
-          value.fromFeatures = null;
+          value.value = undefined;
         }
       });
     });
-    return record;
-  }
-
-  #makeRecordFromParcels(parcels: Parcel[], record: ValueRecord): ValueRecord {
-    const modified = this.parcelsState.parcelsModified(parcels);
-    editables.forEach((editable) => {
-      const prop = editable.prop;
-      const value = record[prop];
-      this.selectedIDs.forEach((id) => {
-        const parcels = modified[id];
-        if (parcels) {
-          // 👉 remember: we are travesing the parcel overrides in reverse
-          //    timestamp order -- the first defined value wins
-          parcels
-            .filter((parcel) => parcel.properties?.[prop] !== undefined)
-            .some((parcel) => {
-              const fromParcel = parcel.properties[prop];
-              // 👉 if no value has been recorded yet, take the first we see
-              //    clear the conflict flag, we're looking at overrides now
-              if (value.fromParcels === undefined) {
-                value.conflict = false;
-                value.fromParcels = fromParcel;
-                value.refCount += 1;
-                return true;
-              }
-              // 👉 otherwise record a conflict if there's a mismatch
-              else if (value.fromParcels !== fromParcel) {
-                value.conflict = true;
-                value.fromFeatures = null;
-                value.fromParcels = null;
-                value.refCount += 1;
-                return true;
-              }
-              // 👉 we really care only about the first override
-              else {
-                value.refCount += 1;
-                return true;
-              }
-            });
-        }
-      });
-      // 👉 record a conflict for a mismatch in parcel overrides
-      if (value.refCount > 0 && value.refCount !== this.selectedIDs.length)
-        value.conflict = true;
-    });
-    return record;
-  }
-
-  clear(event: MouseEvent, record: ValueRecord, prop: string): void {
-    record[prop].fromParcels = null;
-    const control = this.propertiesForm.controls[prop];
-    control.markAsDirty();
-    event.stopPropagation();
   }
 
   done(): void {
@@ -189,7 +104,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
   }
 
   ngOnInit(): void {
-    this.#handleParcels$();
+    this.#makeRecord();
   }
 
   save(record: ValueRecord): void {
@@ -209,12 +124,10 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
       editables.forEach((editable) => {
         const prop = editable.prop;
         const control = this.propertiesForm.controls[prop];
-        if (control?.dirty) {
-          const fromParcels = record[prop].fromParcels;
-          if (fromParcels === null) parcel.properties[prop] = null;
-          else if (fromParcels !== undefined)
-            parcel.properties[prop] =
-              editable.type === 'number' ? Number(fromParcels) : fromParcels;
+        const value = record[prop].value;
+        if (control?.dirty && value) {
+          parcel.properties[prop] =
+            editable.type === 'number' ? Number(value) : value;
         }
       });
       // 👉 only save if at least one property override

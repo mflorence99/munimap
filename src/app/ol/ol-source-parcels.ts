@@ -101,12 +101,6 @@ export class OLSourceParcelsComponent implements OnInit {
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.map.projection
         }) as OLFeature<any>[];
-        // 👉 attach the original properties to each OL feature
-        features.forEach((feature) => {
-          const originalProperties =
-            originalsByID[feature.getId()]?.[0]?.properties;
-          feature.set('originalProperties', originalProperties, true);
-        });
         // 👉 refresh each feature
         this.olVector.addFeatures(features);
         // 👉 reselect selected features b/c we've potentially removed them
