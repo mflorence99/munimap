@@ -45,6 +45,7 @@ interface Label {
   fontWeight: string;
   offsetX: number;
   offsetY: number;
+  outlined: boolean;
   point: OLPoint;
   rotation: number;
   text: string;
@@ -67,11 +68,6 @@ interface Label {
   styles: [':host { display: none }']
 })
 export class OLStyleParcelsComponent implements OLStyleComponent {
-  // 👉 we don't really want to parameterize these settings as inputs
-  //    as they are a WAG to control computed fontSize for acres
-  #acresSizeClamp = [0.1, 1000];
-  #fontSizeClamp = [0, 50];
-
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 
@@ -79,11 +75,12 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 16;
   @Input() fontSizeAcreageRatio = 0.8;
-  @Input() lineDash = [4, 8];
+  @Input() lineDash = [4, 4];
   @Input() maxBorderWidth = 5;
   @Input() maxFontSize = 40;
   @Input() minBorderWidth = 3;
   @Input() minFontSize = 6;
+  @Input() minFontSizeOutlined = 28;
   @Input() opacity = 0.25;
   @Input() showBackground = false;
   @Input() showDimensions = false;
@@ -258,7 +255,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         })
       ];
     }
-    // 👉 we always fill, regardless of the resolution
     return patterns.map((pattern) => new OLStyle({ fill: pattern }));
   }
 
@@ -320,6 +316,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     //    more zoom, less resolution increases font size
     //    less zoom, more resolution decresaes font size
     //    font size is clamped by a min and a max
+    //    3.1 is the magic resolution at which these sizes look good
     return Math.min(nominal / Math.sqrt(resolution / 3.1), this.maxFontSize);
   }
 
@@ -365,10 +362,12 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetY: label.offsetY,
           overflow: true,
           rotation: label.rotation,
-          stroke: new OLStroke({
-            color: `rgba(${outline}, 1)`,
-            width: Math.min(label.fontSize / 8, this.maxBorderWidth)
-          }),
+          stroke: label.outlined
+            ? new OLStroke({
+                color: `rgba(${outline}, 1)`,
+                width: Math.min(label.fontSize / 8, this.maxBorderWidth)
+              })
+            : null,
           text: label.text
         });
         return new OLStyle({ geometry: label.point, text });
@@ -385,7 +384,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     for (let ix = 0; ix < numLabels; ix++) {
       const fontSize = this.#labelFontSize(props, resolution, ix);
       // 👉 if the fontsize for the acreage is so small we can't
-      //    see it, don't show it
+      //    see it, don't show it and don't outline the text either
       if (fontSize * this.fontSizeAcreageRatio < this.minFontSize) {
         labels.push({
           fontFamily: this.fontFamily,
@@ -393,6 +392,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           fontWeight: 'bold',
           offsetX: 0,
           offsetY: 0,
+          outlined: false,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
           text: `${props.id}`
@@ -435,6 +435,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           fontWeight: 'bold',
           offsetX: x1,
           offsetY: y1,
+          outlined: fontSize >= this.minFontSizeOutlined,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
           text: `${props.id}`
@@ -445,6 +446,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           fontWeight: 'normal',
           offsetX: x2,
           offsetY: y2,
+          outlined: fontSize >= this.minFontSizeOutlined,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
           text: acres

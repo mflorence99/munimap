@@ -24,7 +24,7 @@ export class OLStyleGraticuleComponent implements OLStyleComponent, OnInit {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 8;
   @Input() fontWeight: 'bold' | 'normal' = 'normal';
-  @Input() lineDash = [2, 4];
+  @Input() lineDash = [2, 2];
   @Input() lineWidth = 0.25;
 
   constructor(

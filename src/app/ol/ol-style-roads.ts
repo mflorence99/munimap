@@ -23,10 +23,10 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 14;
+  @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
-  @Input() maxFontSize = 20;
-  @Input() minFontSize = 8;
+  @Input() maxFontSize = 24;
+  @Input() minFontSize = 6;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -36,9 +36,8 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   }
 
   #drawText(props: RoadProperties, resolution: number): OLText {
-    const roadWidth = this.#roadWidth(props, resolution);
-    const fontSize = roadWidth * 0.8;
-    // 👉 if the river label would be too small to see, don't show it
+    const fontSize = this.#fontSize(resolution);
+    // 👉 if the road label would be too small to see, don't show it
     if (fontSize < this.minFontSize) return null;
     else {
       const color =
@@ -63,10 +62,16 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     });
   }
 
+  #fontSize(resolution: number): number {
+    // 👉 fontSize is proportional to the resolution,
+    //    but no bigger than the max size specified
+    return Math.min(this.maxFontSize, this.fontSize / resolution);
+  }
+
   #roadWidth(props: RoadProperties, resolution: number): number {
     // 👉 roadway width is in feet, resolution is pixels / meter
-    //    minimum width 15', double that for the right-of-way
-    return (Math.max(props.width, 15) / (resolution * 3.28084)) * 2;
+    //    minimum width 15', multiply that for the right-of-way
+    return (Math.max(props.width, 15) / (resolution * 3.28084)) * 3;
   }
 
   #strokeEdge(props: RoadProperties, resolution: number): OLStroke {

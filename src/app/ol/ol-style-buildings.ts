@@ -19,7 +19,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleBuildingsComponent implements OLStyleComponent {
-  @Input() opacity = 0.5;
+  @Input() opacity = 0.66;
 
   constructor(
     private layer: OLLayerVectorComponent,
