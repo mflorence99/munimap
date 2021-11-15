@@ -82,7 +82,9 @@ import { CommonModule } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ErrorHandler } from '@angular/core';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { FirebaseUIModule } from 'firebaseui-angular';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -92,7 +94,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -113,6 +114,25 @@ import { RouterState } from '@ngxs/router-plugin';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCrosshairs as fadCrosshairs } from '@fortawesome/pro-duotone-svg-icons';
+import { faCrosshairs as fasCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
+import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-icons';
+import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-icons';
+import { faObjectUngroup as fadObjectUngroup } from '@fortawesome/pro-duotone-svg-icons';
+import { faObjectUngroup as fasObjectUngroup } from '@fortawesome/free-solid-svg-icons';
+import { faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faRedo } from '@fortawesome/pro-duotone-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTasks as fadTasks } from '@fortawesome/pro-duotone-svg-icons';
+import { faTasks as fasTasks } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUndo } from '@fortawesome/pro-duotone-svg-icons';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
@@ -231,6 +251,7 @@ const STATES_SAVED = [RouterState, ViewState];
     CommonModule,
     DragDropModule,
     FirebaseUIModule.forRoot(environment.auth),
+    FontAwesomeModule,
     FormsModule,
     HttpClientModule,
     MatButtonModule,
@@ -239,7 +260,6 @@ const STATES_SAVED = [RouterState, ViewState];
     MatDialogModule,
     MatDividerModule,
     MatFormFieldModule,
-    MatIconModule,
     MatInputModule,
     MatMenuModule,
     MatProgressBarModule,
@@ -266,7 +286,8 @@ const STATES_SAVED = [RouterState, ViewState];
       key: STATES_SAVED
     }),
     OverlayModule,
-    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' })
+    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' }),
+    FontAwesomeModule
   ],
 
   providers: [
@@ -299,4 +320,29 @@ const STATES_SAVED = [RouterState, ViewState];
     }
   ]
 })
-export class RootModule {}
+export class RootModule {
+  constructor(library: FaIconLibrary) {
+    // 👇 must add icvons we use right here
+    library.addIcons(
+      faBars,
+      faCog,
+      fadCrosshairs,
+      fasCrosshairs,
+      faDrawPolygon,
+      faExclamationTriangle,
+      faExpandArrows,
+      faInfoCircle,
+      fadObjectGroup,
+      fasObjectGroup,
+      fasObjectUngroup,
+      fadObjectUngroup,
+      faPrint,
+      faRedo,
+      faSearch,
+      fadTasks,
+      fasTasks,
+      faTimes,
+      faUndo
+    );
+  }
+}

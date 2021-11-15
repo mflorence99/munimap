@@ -5,7 +5,7 @@
       [disabled]="!(user$ | async)"
       mat-icon-button
     >
-      <mat-icon>menu</mat-icon>
+      <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
     </button>
 
     <h1>
@@ -15,11 +15,11 @@
     <div class="filler"></div>
 
     <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
-      <mat-icon>redo</mat-icon>
+      <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
     </button>
 
     <button (click)="undo()" [disabled]="!canUndo" mat-icon-button>
-      <mat-icon>undo</mat-icon>
+      <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>
     </button>
 
     <ng-container *ngIf="user$ | async as user">
@@ -34,7 +34,7 @@
     </ng-container>
 
     <button (click)="setup.toggle()" mat-icon-button>
-      <mat-icon>settings</mat-icon>
+      <fa-icon [icon]="['fas', 'cog']" size="2x"></fa-icon>
     </button>
   </mat-toolbar>
 

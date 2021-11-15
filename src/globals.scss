@@ -58,6 +58,12 @@ $dark-app-theme: mat-dark-theme(
   --text-color: var(--mat-grey-900);
   --disabled-color: var(--mat-grey-500);
   --background-color: var(--mat-grey-100);
+
+  --fa-primary-color: var(--text-color);
+  --fa-secondary-color: var(--accent-color);
+
+  --fa-primary-opacity: 1;
+  --fa-secondary-opacity: 0.8;
 }
 
 .dark-theme {
@@ -72,6 +78,12 @@ $dark-app-theme: mat-dark-theme(
   --text-color: var(--mat-grey-100);
   --disabled-color: var(--mat-grey-500);
   --background-color: var(--mat-grey-900);
+
+  --fa-primary-color: var(--text-color);
+  --fa-secondary-color: var(--accent-color);
+
+  --fa-primary-opacity: 1;
+  --fa-secondary-opacity: 0.8;
 }
 
 :root {
@@ -266,6 +278,17 @@ a[mat-flat-button] {
 
 .mat-dialog-actions {
   justify-content: flex-end !important;
+}
+
+.mat-icon-button {
+  line-height: 1 !important;
+
+  &.mat-button-disabled {
+    --fa-primary-color: var(--text-color);
+    --fa-secondary-color: var(--text-color);
+    --fa-primary-opacity: 0.6;
+    --fa-secondary-opacity: 0.4;
+  }
 }
 
 // 👉 Firebase styles

@@ -1,5 +1,5 @@
 <header class="header">
-  <img class="icon" mat-card-avatar src="assets/details.svg" />
+  <fa-icon [icon]="['fad', 'tasks']" class="icon" size="2x"></fa-icon>
   <p class="title">Lorem ipsum dolor emit</p>
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
@@ -38,9 +38,11 @@
           {{ option[1].decoding }}
         </mat-option>
       </mat-select>
-      <mat-icon *ngIf="value.conflict" [inline]="true" color="accent" matSuffix
-        >warning</mat-icon
-      >
+      <fa-icon
+        *ngIf="value.conflict"
+        [icon]="['fad', 'exclamation-triangle']"
+        matSuffix
+      ></fa-icon>
     </mat-form-field>
 
     <!-- 👇 this control for type-in props -->
@@ -54,9 +56,11 @@
         [step]="value.step"
         matInput
       />
-      <mat-icon *ngIf="value.conflict" [inline]="true" color="accent" matSuffix
-        >warning</mat-icon
-      >
+      <fa-icon
+        *ngIf="value.conflict"
+        [icon]="['fad', 'exclamation-triangle']"
+        matSuffix
+      ></fa-icon>
     </mat-form-field>
   </ng-container>
 </form>

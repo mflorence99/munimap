@@ -311,7 +311,7 @@
         [class.disabled]="!canParcelProperties()"
         class="item"
       >
-        <img class="icon" src="assets/details.svg" />
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
         Parcel details ...
       </li>
 
@@ -320,7 +320,10 @@
         [class.disabled]="!canSubdivideParcel()"
         class="item"
       >
-        <img class="icon" src="assets/split.png" />
+        <fa-icon
+          [fixedWidth]="true"
+          [icon]="['fas', 'object-ungroup']"
+        ></fa-icon>
         Subdivide parcel ...
       </li>
 
@@ -329,7 +332,7 @@
         [class.disabled]="!canRedrawBoundary()"
         class="item"
       >
-        <img class="icon" src="assets/draw.svg" />
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'draw-polygon']"></fa-icon>
         Redraw parcel boundary
       </li>
 
@@ -338,7 +341,7 @@
         [class.disabled]="!canMergeParcels()"
         class="item"
       >
-        <img class="icon" src="assets/merge.svg" />
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'object-group']"></fa-icon>
         Merge parcels ...
       </li>
 
@@ -347,7 +350,7 @@
         [class.disabled]="!canRecenterLabel()"
         class="item"
       >
-        <img class="icon" src="assets/target2.svg" />
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
         Recenter label in parcel
       </li>
     </ul>
