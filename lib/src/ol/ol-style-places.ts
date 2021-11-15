@@ -5,8 +5,8 @@ import { OLStyleComponent } from './ol-style';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
-import { PlaceProperties } from '@lib/geojson';
-import { PlacePropertiesType } from '@lib/geojson';
+import { PlaceProperties } from '../geojson';
+import { PlacePropertiesType } from '../geojson';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';

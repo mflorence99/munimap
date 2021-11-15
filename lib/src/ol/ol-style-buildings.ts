@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
@@ -29,7 +28,7 @@ export class OLStyleBuildingsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (_building: OLFeature<any>, _resolution: number): OLStyle => {
+    return (): OLStyle => {
       const fill = this.map.vars['--map-building-fill'];
       const outline = this.map.vars['--map-building-outline'];
       return new OLStyle({

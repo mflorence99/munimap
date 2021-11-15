@@ -1,21 +1,21 @@
-import { AuthState } from '../../state/auth';
-import { ConfirmDialogComponent } from '../../components/confirm-dialog';
-import { ConfirmDialogData } from '../../components/confirm-dialog';
-import { DeleteMap } from '../../state/map';
-import { Descriptor } from '../../services/typeregistry';
-import { Map } from '../../state/map';
 import { RootPage } from '../../pages/root/root';
 import { TownMapPage } from './town-map';
-import { TypeRegistry } from '../../services/typeregistry';
-import { UpdateMap } from '../../state/map';
 
+import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
+import { ConfirmDialogData } from '@lib/components/confirm-dialog';
+import { DeleteMap } from '@lib/state/map';
+import { Descriptor } from '@lib/services/typeregistry';
 import { Input } from '@angular/core';
+import { Map } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { TypeRegistry } from '@lib/services/typeregistry';
+import { UpdateMap } from '@lib/state/map';
 import { ViewChild } from '@angular/core';
 
 import copy from 'fast-copy';

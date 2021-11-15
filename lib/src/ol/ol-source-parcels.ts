@@ -1,24 +1,25 @@
 import { DestroyService } from '../services/destroy';
+import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
+import { Parcel } from '../geojson';
+import { ParcelID } from '../geojson';
 import { ParcelsState } from '../state/parcels';
+
+import { parcelProperties } from '../geojson';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Features } from '@lib/geojson';
 import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Parcel } from '@lib/geojson';
-import { ParcelID } from '@lib/geojson';
 import { Select } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
 import { bbox } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
-import { parcelProperties } from '@lib/geojson';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 

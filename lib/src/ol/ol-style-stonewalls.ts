@@ -8,9 +8,7 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
-import OLLineString from 'ol/geom/MultiLineString';
 import OLStrokePattern from 'ol-ext/style/StrokePattern';
 import OLStyle from 'ol/style/Style';
 
@@ -41,10 +39,7 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (
-      stonewall: OLFeature<OLLineString>,
-      resolution: number
-    ): OLStyle => {
+    return (stonewall: any, resolution: number): OLStyle => {
       const wallWidth = this.#wallWidth(resolution);
       // 👉 if the wall would be too small to see, don't show anything
       if (wallWidth < this.minWallWidth) return null;

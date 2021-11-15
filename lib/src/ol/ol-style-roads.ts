@@ -1,16 +1,14 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
+import { RoadProperties } from '../geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
-import { RoadProperties } from '@lib/geojson';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
-import OLMultiLineString from 'ol/geom/MultiLineString';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -85,10 +83,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (
-      road: OLFeature<OLMultiLineString>,
-      resolution: number
-    ): OLStyle[] => {
+    return (road: any, resolution: number): OLStyle[] => {
       const props = road.getProperties() as RoadProperties;
       return [
         new OLStyle({

@@ -1,8 +1,10 @@
 import { DestroyService } from '../services/destroy';
+import { Feature } from '../geojson';
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
+import { ParcelID } from '../geojson';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -11,14 +13,12 @@ import { Component } from '@angular/core';
 import { ContentChild } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Feature } from '@lib/geojson';
 import { Input } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
-import { ParcelID } from '@lib/geojson';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { ViewChild } from '@angular/core';
 

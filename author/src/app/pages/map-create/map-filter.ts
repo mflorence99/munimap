@@ -1,16 +1,15 @@
-import { GeoJSONService } from '../../services/geojson';
-import { Index } from '@lib/geojson';
-import { Path } from '../../state/view';
-import { TownIndex } from '@lib/geojson';
-
-import { isIndex } from '@lib/geojson';
-
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { GeoJSONService } from '@lib/services/geojson';
+import { Index } from '@lib/geojson';
 import { Input } from '@angular/core';
 import { Output } from '@angular/core';
+import { Path } from '@lib/state/view';
+import { TownIndex } from '@lib/geojson';
+
+import { isIndex } from '@lib/geojson';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

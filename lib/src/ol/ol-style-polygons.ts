@@ -9,7 +9,6 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
-import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -38,7 +37,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (feature: OLFeature<OLPolygon>): OLStyle => {
+    return (feature: any): OLStyle => {
       const disabled = this.map.vars['--map-feature-disabled'];
       const stroke = this.map.vars['--map-feature-outline'];
       const unselectable = this.filter && !this.filter(feature);
@@ -57,7 +56,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
   }
 
   styleWhenSelected(): OLStyleFunction {
-    return (feature: OLFeature<OLPolygon>): OLStyle => {
+    return (feature: any): OLStyle => {
       const color = this.map.vars['--map-feature-text-color'];
       const disabled = this.map.vars['--map-feature-disabled'];
       const fill = this.map.vars['--map-feature-fill'];

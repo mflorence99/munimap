@@ -1,15 +1,15 @@
+import { CountyIndex } from '../geojson';
+import { Index } from '../geojson';
 import { Params } from './params';
 import { Path } from '../state/view';
+import { StateIndex } from '../geojson';
+import { TownIndex } from '../geojson';
 
 import { ActivatedRoute } from '@angular/router';
-import { CountyIndex } from '@lib/geojson';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
-import { Index } from '@lib/geojson';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StateIndex } from '@lib/geojson';
-import { TownIndex } from '@lib/geojson';
 
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';

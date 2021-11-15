@@ -1,16 +1,16 @@
-import { FilterFunction } from '../../ol/ol-interaction-select';
-import { GeoJSONService } from '../../services/geojson';
-import { Index } from '@lib/geojson';
-import { Path } from '../../state/view';
-import { TownIndex } from '@lib/geojson';
 import { RootPage } from '../root/root';
-
-import { theState } from '../../state/view';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { FilterFunction } from '@lib/ol/ol-interaction-select';
+import { GeoJSONService } from '@lib/services/geojson';
+import { Index } from '@lib/geojson';
+import { Path } from '@lib/state/view';
 import { Router } from '@angular/router';
+import { TownIndex } from '@lib/geojson';
+
+import { theState } from '@lib/state/view';
 
 import OLFeature from 'ol/Feature';
 

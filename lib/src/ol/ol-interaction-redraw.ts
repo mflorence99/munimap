@@ -5,13 +5,13 @@ import { ConfirmDialogData } from '../components/confirm-dialog';
 import { DestroyService } from '../services/destroy';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
+import { Parcel } from '../geojson';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { MatDialog } from '@angular/material/dialog';
-import { Parcel } from '@lib/geojson';
 import { Store } from '@ngxs/store';
 
 import { takeUntil } from 'rxjs/operators';

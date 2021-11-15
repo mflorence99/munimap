@@ -1,15 +1,15 @@
-import { AddParcels } from '../state/parcels';
-import { AuthState } from '../state/auth';
 import { ContextMenuComponent } from './contextmenu-component';
-import { OLMapComponent } from '../ol/ol-map';
-import { Parcel } from '@lib/geojson';
-import { ParcelID } from '@lib/geojson';
 
+import { AddParcels } from '@lib/state/parcels';
+import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { Parcel } from '@lib/geojson';
+import { ParcelID } from '@lib/geojson';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 

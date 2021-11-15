@@ -1,16 +1,16 @@
 import { AuthState } from './auth';
 import { Map } from './map';
 import { MapState } from './map';
-import { Parcel } from '@lib/geojson';
-import { ParcelAction } from '@lib/geojson';
-import { ParcelID } from '@lib/geojson';
+import { Parcel } from '../geojson';
+import { ParcelAction } from '../geojson';
+import { ParcelID } from '../geojson';
 import { Profile } from './auth';
 
-import { calculate } from '@lib/geojson';
-import { deserialize } from '@lib/geojson';
-import { normalize } from '@lib/geojson';
-import { serialize } from '@lib/geojson';
-import { timestamp } from '@lib/geojson';
+import { calculate } from '../geojson';
+import { deserialize } from '../geojson';
+import { normalize } from '../geojson';
+import { serialize } from '../geojson';
+import { timestamp } from '../geojson';
 
 import { Action } from '@ngxs/store';
 import { AngularFirestore } from '@angular/fire/firestore';

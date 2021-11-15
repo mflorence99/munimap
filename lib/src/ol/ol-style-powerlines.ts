@@ -92,10 +92,7 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (
-      powerLine: OLFeature<OLMultiLineString>,
-      resolution: number
-    ): OLStyle[] => {
+    return (powerLine: any, resolution: number): OLStyle[] => {
       return [
         this.#drawLine(powerLine, resolution),
         ...this.#drawIcons(powerLine, resolution)

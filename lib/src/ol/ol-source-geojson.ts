@@ -1,10 +1,10 @@
-import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { GeoJSONService } from '../services/geojson';
 import { Input } from '@angular/core';
 
 import { bbox } from 'ol/loadingstrategy';

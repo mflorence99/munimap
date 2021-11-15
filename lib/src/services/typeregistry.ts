@@ -2,8 +2,8 @@
 import { MapStyle } from '../state/map';
 
 import { Injectable } from '@angular/core';
-import { ParcelPropertiesUsage } from '@lib/geojson';
-import { ParcelPropertiesUse } from '@lib/geojson';
+import { ParcelPropertiesUsage } from '../geojson';
+import { ParcelPropertiesUse } from '../geojson';
 
 const registry: Record<string, Record<string, Record<string, Descriptor>>> = {
   map: {

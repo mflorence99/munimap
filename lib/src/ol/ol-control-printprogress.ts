@@ -12,7 +12,6 @@ import { TileSourceEvent as OLTileSourceEvent } from 'ol/source/Tile';
 
 import { unByKey } from 'ol/Observable';
 
-import OLBaseTileLayer from 'ol/layer/BaseTile';
 import OLUrlTile from 'ol/source/UrlTile';
 
 export interface PrintProgressData {
@@ -41,10 +40,8 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
     this.#olSources = data.map.olMap
       .getLayers()
       .getArray()
-      .filter(
-        (layer: OLBaseTileLayer<any>) => layer.getSource() instanceof OLUrlTile
-      )
-      .map((layer: OLBaseTileLayer<any>) => layer.getSource());
+      .filter((layer: any) => layer.getSource() instanceof OLUrlTile)
+      .map((layer: any) => layer.getSource());
   }
 
   #progress(event: OLTileSourceEvent): void {

@@ -1,15 +1,14 @@
-import { Logout } from '../../state/auth';
-import { Profile } from '../../state/auth';
-import { UpdateProfile } from '../../state/auth';
-import { UpdateUser } from '../../state/auth';
-import { User } from '../../state/auth';
-
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { Logout } from '@lib/state/auth';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
+import { Profile } from '@lib/state/auth';
 import { Store } from '@ngxs/store';
+import { UpdateProfile } from '@lib/state/auth';
+import { UpdateUser } from '@lib/state/auth';
+import { User } from '@lib/state/auth';
 import { ViewChild } from '@angular/core';
 
 import copy from 'fast-copy';
