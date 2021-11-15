@@ -54,12 +54,16 @@ interface Label {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-parcels',
-  // 🔥 need images for other uses
   template: `
+    <img appPattern src="assets/CUDE.svg" />
     <img appPattern src="assets/CUFL.svg" />
     <img appPattern src="assets/CUMH.svg" />
+    <img appPattern src="assets/CUMO.svg" />
     <img appPattern src="assets/CUMW.svg" />
+    <img appPattern src="assets/CUNS.svg" />
     <img appPattern src="assets/CUUH.svg" />
+    <img appPattern src="assets/CUUL.svg" />
+    <img appPattern src="assets/CUUO.svg" />
     <img appPattern src="assets/CUUW.svg" />
     <img appPattern src="assets/CUWL.svg" />
     <img appPattern src="assets/forest.png" />
