@@ -3,8 +3,9 @@
   "parserOptions": {
     "project": [
       "./bin/tsconfig.json",
-      "./src/tsconfig.json",
-      "./tests/tsconfig.json"
+      "./author/src/tsconfig.json",
+      "./proxy/src/tsconfig.json",
+      "./viewer/src/tsconfig.json"
     ]
   },
   "plugins": [

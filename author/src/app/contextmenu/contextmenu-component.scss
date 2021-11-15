@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  height: 100%;
+  padding: 1rem 0;
+  width: 25rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+  grid-template-rows: auto auto;
+  padding: 0.5rem 1rem;
+}
+
+.header {
+  align-items: center;
+  cursor: pointer;
+  display: grid;
+  grid-column-gap: 1rem;
+  grid-template-areas: 'icon title' 'icon subtitle';
+  grid-template-columns: auto 1fr;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+
+  .icon {
+    grid-area: icon;
+  }
+
+  .title {
+    align-self: end;
+    font-size: larger;
+    font-weight: bold;
+    grid-area: title;
+  }
+
+  .subtitle {
+    align-self: start;
+    grid-area: subtitle;
+  }
+}

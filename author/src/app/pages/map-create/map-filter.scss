@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  pointer-events: auto;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.card {
+  width: 25rem;
+}
+
+.form {
+  display: grid;
+  grid-template-rows: auto auto;
+}

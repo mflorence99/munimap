@@ -1,0 +1,70 @@
+<header class="header">
+  <ngx-avatar
+    [gravatarId]="user.photoURL ? null : user.email"
+    [initialsSize]="2"
+    [name]="user.displayName"
+    [round]="true"
+    [size]="48"
+    [src]="user.photoURL"
+    class="icon"
+    mat-card-avatar
+  ></ngx-avatar>
+  <p class="title">{{ user.displayName || '&nbsp;' }}</p>
+  <p class="subtitle">{{ user.email }}</p>
+</header>
+
+<form
+  #profileForm="ngForm"
+  autocomplete="off"
+  class="form"
+  novalidate
+  spellcheck="false"
+>
+  <mat-form-field>
+    <mat-label>Display Name</mat-label>
+    <input
+      #displayName="ngModel"
+      [(ngModel)]="user.displayName"
+      matInput
+      name="displayName"
+      required
+      type="text"
+    />
+    <mat-error *ngIf="displayName.errors"
+      >A display name is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Workgroup</mat-label>
+    <textarea
+      #workgroup="ngModel"
+      [(ngModel)]="profile.workgroup"
+      appWorkgroup
+      cdkTextareaAutosize
+      matInput
+      name="workgroup"
+    ></textarea>
+    <mat-error *ngIf="workgroup.errors?.tooMany"
+      >A maximum of 10 email addresses is allowed.
+    </mat-error>
+    <mat-error *ngIf="workgroup.errors?.invalidEmail"
+      >At least one email address is invalid.
+    </mat-error>
+    <mat-hint *ngIf="!workgroup.errors"
+      >Give the email addresses of up to 10 colleagues with who you share maps,
+      each on a new line.</mat-hint
+    >
+  </mat-form-field>
+</form>
+
+<article class="actions">
+  <button
+    [disabled]="profileForm.invalid || !profileForm.dirty"
+    (click)="update(user, profile)"
+    mat-flat-button
+  >
+    UPDATE
+  </button>
+  <button (click)="logout()" color="primary" mat-flat-button>SIGN OUT</button>
+</article>

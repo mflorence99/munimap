@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "outDir": "../../dist/proxy",
+    "skipLibCheck": true,
+    "target": "es6"
+  }
+}

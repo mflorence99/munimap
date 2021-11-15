@@ -1,0 +1,20 @@
+<section class="controls">
+  <article class="panels">
+    <ng-content select="[mapControlPanel1]"></ng-content>
+  </article>
+
+  <article class="light-theme buttons">
+    <ng-content select="[mapControlSearch]"></ng-content>
+    <div class="filler"></div>
+    <div class="lower">
+      <ng-content select="[mapControlZoom]"></ng-content>
+      <ng-content select="[mapControlZoomToExtent]"></ng-content>
+      <ng-content select="[mapControlPrint]"></ng-content>
+      <ng-content select="[mapControlAttribution]"></ng-content>
+    </div>
+  </article>
+</section>
+
+<ng-content></ng-content>
+
+<canvas #canvas hidden></canvas>

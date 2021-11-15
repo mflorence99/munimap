@@ -1,0 +1,79 @@
+<mat-card class="card">
+  <mat-card-header>
+    <img src="assets/favicon.svg" mat-card-avatar />
+    <mat-card-title>Create a New Map</mat-card-title>
+    <mat-card-subtitle
+      >Use the map or the dropdowns to drill down to a town</mat-card-subtitle
+    >
+  </mat-card-header>
+
+  <mat-card-content>
+    <form
+      #filterForm="ngForm"
+      autocomplete="off"
+      class="form"
+      novalidate
+      spellcheck="false"
+    >
+      <mat-form-field>
+        <mat-label>Select a State</mat-label>
+        <mat-select
+          [disabled]="true"
+          (selectionChange)="switchState($event.value)"
+          [value]="currentState()"
+        >
+          <mat-option
+            *ngFor="let state of allStates(); trackBy: trackByItem"
+            [value]="state"
+          >
+            {{ state }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Select a County</mat-label>
+        <mat-select
+          (selectionChange)="switchCounty($event.value)"
+          [value]="currentCounty()"
+        >
+          <mat-option
+            *ngFor="let county of allCounties(); trackBy: trackByItem"
+            [value]="county"
+          >
+            {{ county }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Select a Town</mat-label>
+        <mat-select
+          (selectionChange)="switchTown($event.value)"
+          [value]="currentTown()"
+        >
+          <mat-option
+            *ngFor="let town of allTowns(); trackBy: trackByItem"
+            [value]="town"
+          >
+            {{ town }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions class="actions">
+    <button *ngIf="currentCounty()" (click)="reset()" mat-flat-button>
+      Start Over
+    </button>
+    <button
+      (click)="submit()"
+      [disabled]="!currentTown()"
+      color="primary"
+      mat-flat-button
+    >
+      NEXT
+    </button>
+  </mat-card-actions>
+</mat-card>

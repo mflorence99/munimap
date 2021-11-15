@@ -1,0 +1,79 @@
+<header class="header">
+  <fa-icon [icon]="['fad', 'tasks']" class="icon" size="2x"></fa-icon>
+  <p class="title">Lorem ipsum dolor emit</p>
+  <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
+</header>
+
+<form
+  #propertiesForm="ngForm"
+  autocomplete="off"
+  class="form"
+  novalidate
+  spellcheck="false"
+>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
+    nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
+  </p>
+
+  <ng-container *ngFor="let value of (record | values); trackBy: trackByProp">
+    <!-- 
+      👇 this control for props with a list 
+        NOTE: use only appears if usage === current use
+    -->
+    <mat-form-field
+      *ngIf="value.list && (value.prop !== 'use' || record.usage.value === '190')"
+      floatLabel="always"
+    >
+      <mat-label>{{ value.label }}</mat-label>
+      <mat-select
+        [(ngModel)]="value.value"
+        [attr.ngControl]="value.prop"
+        [name]="value.prop"
+      >
+        <mat-option
+          *ngFor="let option of value.list; trackBy: trackByOption"
+          [value]="option[0]"
+        >
+          {{ option[1].decoding }}
+        </mat-option>
+      </mat-select>
+      <fa-icon
+        *ngIf="value.conflict"
+        [icon]="['fad', 'exclamation-triangle']"
+        matSuffix
+      ></fa-icon>
+    </mat-form-field>
+
+    <!-- 👇 this control for type-in props -->
+    <mat-form-field *ngIf="!value.list" floatLabel="always">
+      <mat-label>{{ value.label }}</mat-label>
+      <input
+        [(ngModel)]="value.value"
+        [attr.ngControl]="value.prop"
+        [name]="value.prop"
+        [type]="value.type ?? 'text'"
+        [step]="value.step"
+        matInput
+      />
+      <fa-icon
+        *ngIf="value.conflict"
+        [icon]="['fad', 'exclamation-triangle']"
+        matSuffix
+      ></fa-icon>
+    </mat-form-field>
+  </ng-container>
+</form>
+
+<article class="actions">
+  <button (click)="done()" mat-flat-button>DONE</button>
+
+  <button
+    (click)="save(record)"
+    [disabled]="!propertiesForm.dirty"
+    color="primary"
+    mat-flat-button
+  >
+    SAVE
+  </button>
+</article>

@@ -1,0 +1,84 @@
+<app-ol-map #olMap [fitToBounds]="true" [path]="path">
+  <app-map-filter
+    (pathChanged)="onPathChanged($event)"
+    (pathSelected)="onPathSelected($event)"
+    [path]="path"
+    mapControlPanel1
+  >
+  </app-map-filter>
+
+  <!-- 📦 CUSTOM CONTROLS -->
+
+  <app-ol-control-zoom2extent
+    mapControlZoomToExtent
+  ></app-ol-control-zoom2extent>
+
+  <app-ol-control-attribution
+    mapControlAttribution
+  ></app-ol-control-attribution>
+
+  <ng-container *ngIf="olMap.initialized">
+    <!-- 📦 OL CONTROLS -->
+
+    <app-ol-control-graticule
+      ><app-ol-style-graticule></app-ol-style-graticule
+    ></app-ol-control-graticule>
+
+    <app-ol-control-scaleline></app-ol-control-scaleline>
+
+    <!-- 📦 OUTSIDE TOWN IN B&W -->
+
+    <app-ol-layer-tile>
+      <app-ol-source-osm></app-ol-source-osm>
+      <app-ol-filter-pencil></app-ol-filter-pencil>
+    </app-ol-layer-tile>
+
+    <!-- 📦 INSIDE TOWN via MAPBOX -->
+
+    <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/bright-v9">
+      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+    </app-ol-layer-mapbox>
+
+    <!-- 📦 HILLSHADE LAYER (ARCGIS) -->
+
+    <app-ol-layer-tile [maxZoom]="17" [opacity]="0.5">
+      <app-ol-source-xyz
+        [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+      >
+        <app-ol-attribution
+          >Powered by
+          <a href="https://www.esri.com" target="_blank"
+            >Esri</a
+          ></app-ol-attribution
+        >
+      </app-ol-source-xyz>
+      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+    </app-ol-layer-tile>
+
+    <!-- 📦 SELECTABLES LAYER -->
+
+    <app-ol-layer-vector *ngIf="!atTownLevel(path)">
+      <app-ol-style-polygons [filter]="filter()"></app-ol-style-polygons>
+      <app-ol-source-geojson [layerKey]="'selectables'">
+      </app-ol-source-geojson>
+
+      <app-ol-interaction-select [eventType]="'pointermove'">
+      </app-ol-interaction-select>
+
+      <app-ol-interaction-select
+        (featuresSelected)="onFeaturesSelected($event)"
+        [eventType]="'singleclick'"
+        [filter]="filter()"
+        [multi]="false"
+      >
+      </app-ol-interaction-select>
+    </app-ol-layer-vector>
+
+    <!-- 📦 BOUNDARY LAYER -->
+
+    <app-ol-layer-vector *ngIf="atTownLevel(path)">
+      <app-ol-style-polygons></app-ol-style-polygons>
+      <app-ol-source-boundary></app-ol-source-boundary>
+    </app-ol-layer-vector>
+  </ng-container>
+</app-ol-map>

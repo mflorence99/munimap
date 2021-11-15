@@ -2,10 +2,9 @@
   "cli": {
     "analytics": "e1797a63-90dc-4047-b3ed-706096956513"
   },
-  "defaultProject": "map",
-  "newProjectRoot": "projects",
+  "newProjectRoot": ".",
   "projects": {
-    "map": {
+    "author": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -38,19 +37,25 @@
               "pbf",
               "polylabel"
             ],
-            "assets": ["src/assets"],
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "outputPath": "dist",
-            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "author/assets",
+              {
+                "glob": "**/*",
+                "input": "lib/assets",
+                "output": "assets"
+              }
+            ],
+            "index": "author/src/index.html",
+            "main": "author/src/main.ts",
+            "outputPath": "dist/author",
+            "polyfills": "author/src/polyfills.ts",
             "styles": [
-              "src/globals.scss",
+              "author/src/globals.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
-              "node_modules/material-design-icons/iconfont/material-icons.css",
               "node_modules/ol/ol.css"
             ],
-            "tsConfig": "src/tsconfig.json",
+            "tsConfig": "author/src/tsconfig.json",
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
@@ -60,33 +65,27 @@
           },
           "defaultConfiguration": ""
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "map:build"
-          }
-        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "map:build:production"
+              "browserTarget": "author:build:production"
             }
           },
           "options": {
-            "browserTarget": "map:build"
+            "browserTarget": "author:build"
           }
         }
       },
       "prefix": "app",
       "projectType": "application",
-      "root": "",
+      "root": "author",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "sourceRoot": "src"
+      "sourceRoot": "author"
     }
   },
   "version": 1

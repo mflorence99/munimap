@@ -1,0 +1,88 @@
+<main class="page">
+  <mat-toolbar class="toolbar">
+    <button
+      (click)="nav.toggle()"
+      [disabled]="!(user$ | async)"
+      mat-icon-button
+    >
+      <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
+    </button>
+
+    <h1>
+      <ng-container *ngIf="title"> {{ title }} </ng-container>
+    </h1>
+
+    <div class="filler"></div>
+
+    <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
+      <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
+    </button>
+
+    <button (click)="undo()" [disabled]="!canUndo" mat-icon-button>
+      <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>
+    </button>
+
+    <ng-container *ngIf="user$ | async as user">
+      <ngx-avatar
+        [gravatarId]="user.photoURL ? null : user.email"
+        [initialsSize]="2"
+        [name]="user.displayName"
+        [round]="true"
+        [size]="48"
+        [src]="user.photoURL"
+      ></ngx-avatar>
+    </ng-container>
+
+    <button (click)="setup.toggle()" mat-icon-button>
+      <fa-icon [icon]="['fas', 'cog']" size="2x"></fa-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-progress-bar *ngIf="loading" color="primary" mode="indeterminate">
+  </mat-progress-bar>
+
+  <mat-drawer-container class="container">
+    <mat-drawer #nav class="sidebar" mode="over" position="start">
+      <nav class="navigator">
+        <ul>
+          <li (click)="nav.close()" routerLink="/map-create" class="item">
+            <img class="icon" src="assets/favicon.svg" />
+            <div class="title">Create a new map</div>
+            <div class="subtitle">Lorem ipsum dolor sit amet.</div>
+          </li>
+
+          <li
+            *ngFor="let map of allMaps$ | async; trackBy: trackByID"
+            (click)="nav.close()"
+            class="item"
+            routerLink="/town-map/{{ map.id }}"
+          >
+            <img
+              *ngIf="registry.icon('map', 'style', map.style) as icon"
+              [class.selected]="title === map.name"
+              [src]="icon"
+              class="icon"
+            />
+            <div class="title">{{ map.name }}</div>
+            <div class="subtitle">{{ map.owner }}</div>
+          </li>
+        </ul>
+      </nav>
+    </mat-drawer>
+
+    <mat-drawer #setup class="sidebar" mode="over" position="end">
+      <ng-container *ngIf="user$ | async as user">
+        <ng-container *ngIf="profile$ | async as profile">
+          <app-user-profile
+            [profile]="profile"
+            [user]="user"
+          ></app-user-profile>
+        </ng-container>
+      </ng-container>
+    </mat-drawer>
+
+    <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</main>

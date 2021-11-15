@@ -1,0 +1,66 @@
+.startup-body {
+  display: block !important;
+}
+
+.startup-loading {
+  align-items: center;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 1s ease-in-out;
+  width: 100%;
+  z-index: -99999;
+}
+
+.startup-caption,
+.startup-logo,
+.startup-wiggle {
+  margin-bottom: 24px;
+}
+
+.startup-caption {
+  font-family: sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.startup-logo {
+  height: 128px;
+  width: 128px;
+}
+
+.startup-wiggle {
+  animation: startup-wiggler 0.5s linear infinite;
+  height: 64px;
+  width: 64px;
+}
+
+app-home:empty + .startup-loading {
+  opacity: 1;
+  z-index: 1;
+}
+
+@keyframes startup-wiggler {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: rotate(-10deg);
+  }
+
+  0%,
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: rotate(10deg);
+  }
+}

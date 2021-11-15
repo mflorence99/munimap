@@ -1,0 +1,13 @@
+.filler {
+  flex-grow: 1;
+}
+
+.subdivisions {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+
+  .mat-form-field {
+    width: 10rem;
+  }
+}

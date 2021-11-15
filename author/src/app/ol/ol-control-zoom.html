@@ -1,0 +1,16 @@
+<p class="annotation">{{ resolution | number:'1.0-2' }}</p>
+
+<div class="slider-wrapper">
+  <input
+    (change)="onZoomChange($event.srcElement.value)"
+    [max]="maxZoom()"
+    [min]="minZoom()"
+    [step]="0.05"
+    [value]="zoom"
+    class="slider"
+    orient="vertical"
+    type="range"
+  />
+</div>
+
+<p class="annotation">{{ zoom | number:'1.0-2' }}</p>

@@ -1,0 +1,71 @@
+<article
+  #legend
+  [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
+  class="legend ol-legend ol-unselectable ol-control"
+>
+  <header class="header">
+    <h1 class="title">{{ title }}</h1>
+    <h2 class="subtitle">{{ county }} Co</h2>
+    <h2 class="subtitle">{{ state }}</h2>
+  </header>
+
+  <table class="areaByUsage">
+    <thead>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="numeric">Acres</td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <ng-container
+        *ngFor="let usage of registry.list('parcel', 'usage'); trackBy: trackByUsage"
+      >
+        <tr *ngIf="areaByUsage[usage[0]]">
+          <td class="usage">
+            <figure
+              [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage[0] + '), 0.25)'"
+              class="key"
+            ></figure>
+          </td>
+          <td class="desc">{{ usage[1].decoding }}</td>
+          <td class="numeric">{{ areaByUsage[usage[0]] | number: '1.0-0' }}</td>
+        </tr>
+
+        <tr *ngIf="usage[0] === '190'">
+          <td></td>
+          <td class="use">
+            <article class="keys">
+              <ng-container
+                *ngFor="let use of registry.list('parcel', 'use'); trackBy: trackByUsage"
+              >
+                <figure *ngIf="areaByUse[use[0]]" class="key">
+                  <div
+                    [style.backgroundImage]="'url(/assets/' + use[0] +'.svg)'"
+                  ></div>
+                  <figcaption>{{ use[1].decoding }}</figcaption>
+                </figure>
+              </ng-container>
+            </article>
+          </td>
+          <td></td>
+        </tr>
+      </ng-container>
+
+      <tr>
+        <td></td>
+        <td class="desc">Lakes, ponds, rights of way</td>
+        <td class="numeric">
+          {{ areaOfTown - areaOfParcels | number: '1.0-0' }}
+        </td>
+      </tr>
+
+      <tr class="total">
+        <td></td>
+        <td class="desc">Total</td>
+        <td class="numeric">{{ areaOfTown | number: '1.0-0' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</article>

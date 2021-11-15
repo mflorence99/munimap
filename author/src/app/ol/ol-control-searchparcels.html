@@ -1,0 +1,22 @@
+<article class="control">
+  <fa-icon [icon]="['fas', 'search']"></fa-icon>
+  <input
+    #theSearcher
+    (input)="input($event.srcElement.value)"
+    map
+    class="searcher"
+    placeholder="Search by parcel, address or owner"
+    type="search"
+  />
+</article>
+
+<select
+  (input)="theSearcher.value = input($event.srcElement.value)"
+  [size]="maxMatcherSize()"
+  [class.hidden]="matches.length === 0 || !theSearcher.value"
+  class="matcher"
+>
+  <option *ngFor="let match of matches; trackBy: trackByMatch" [value]="match">
+    {{ match }}
+  </option>
+</select>

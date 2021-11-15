@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  pointer-events: auto;
+  position: relative;
+}
+
+.control {
+  align-content: center;
+  background-color: rgba(var(--rgb-gray-100), 0.66);
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: auto 1fr;
+  height: 3rem;
+  padding: 0 0.5rem;
+  position: absolute;
+  right: 0;
+  width: 25rem;
+}
+
+.matcher {
+  background-color: rgba(var(--rgb-gray-100), 0.66);
+  border: none;
+  font-size: 1rem;
+  position: absolute;
+  right: 0;
+  top: 3.1rem;
+  width: 24.5rem;
+
+  &.hidden {
+    display: none;
+  }
+
+  option {
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+}
+
+.searcher {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  height: 100%;
+}
