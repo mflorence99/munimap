@@ -1,11 +1,11 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
-import { RiverProperties } from '../services/geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { RiverProperties } from '@lib/geojson';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFeature from 'ol/Feature';

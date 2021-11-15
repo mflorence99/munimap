@@ -1,9 +1,9 @@
 import { FilterFunction } from '../../ol/ol-interaction-select';
 import { GeoJSONService } from '../../services/geojson';
-import { Index } from '../../services/geojson';
+import { Index } from '@lib/geojson';
 import { Path } from '../../state/view';
+import { TownIndex } from '@lib/geojson';
 import { RootPage } from '../root/root';
-import { TownIndex } from '../../services/geojson';
 
 import { theState } from '../../state/view';
 

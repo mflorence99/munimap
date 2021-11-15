@@ -28,7 +28,6 @@ import { OLFilterGrayscaleComponent } from './ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from './ol/ol-filter-pencil';
 import { OLInteractionRedrawComponent } from './ol/ol-interaction-redraw';
 import { OLInteractionSelectComponent } from './ol/ol-interaction-select';
-import { OLLayerImageComponent } from './ol/ol-layer-image';
 import { OLLayerMapboxComponent } from './ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol/ol-layer-tile';
 import { OLLayerVectorComponent } from './ol/ol-layer-vector';
@@ -159,7 +158,6 @@ const COMPONENTS = [
   OLFilterPencilComponent,
   OLInteractionRedrawComponent,
   OLInteractionSelectComponent,
-  OLLayerImageComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,

@@ -1,9 +1,9 @@
 import { GeoJSONService } from '../../services/geojson';
-import { Index } from '../../services/geojson';
+import { Index } from '@lib/geojson';
 import { Path } from '../../state/view';
-import { TownIndex } from '../../services/geojson';
+import { TownIndex } from '@lib/geojson';
 
-import { isIndex } from '../../services/geojson';
+import { isIndex } from '@lib/geojson';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';

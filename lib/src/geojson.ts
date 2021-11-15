@@ -19,6 +19,12 @@ export type Features = GeoJSON.FeatureCollection<
   ParcelProperties
 >;
 
+export interface LakeProperties {
+  county: string;
+  name: string;
+  town: string;
+}
+
 export interface Parcel extends Partial<Feature> {
   $id?: string /* 👈 optional only because we'll complete it */;
   action: ParcelAction;
@@ -109,6 +115,98 @@ export type ParcelPropertiesUse =
   | 'CUUW' // Unmanaged pine
   | 'CUWL'; // Wetland
 
+export interface PlaceProperties {
+  county: string;
+  name: string;
+  town: string;
+  type: PlacePropertiesType;
+}
+
+export type PlacePropertiesType =
+  | 'airport'
+  | 'area'
+  | 'bar'
+  | 'basin'
+  | 'bay'
+  | 'beach'
+  | 'bench'
+  | 'bend'
+  | 'bridge'
+  | 'building'
+  | 'canal'
+  | 'cape'
+  | 'cave'
+  | 'cemetery'
+  | 'channel'
+  | 'church'
+  | 'civil'
+  | 'cliff'
+  | 'crossing'
+  | 'dam'
+  | 'falls'
+  | 'flat'
+  | 'forest'
+  | 'gap'
+  | 'gut'
+  | 'harbor'
+  | 'hospital'
+  | 'island'
+  | 'lake'
+  | 'locale'
+  | 'military'
+  | 'mine'
+  | 'other'
+  | 'park'
+  | 'pillar'
+  | 'po'
+  | 'ppl'
+  | 'range'
+  | 'rapids'
+  | 'reserve'
+  | 'reservoir'
+  | 'ridge'
+  | 'school'
+  | 'sea'
+  | 'slope'
+  | 'spring'
+  | 'stream'
+  | 'summit'
+  | 'swamp'
+  | 'tower'
+  | 'trail'
+  | 'valley'
+  | 'woods';
+
+export interface PowerlineProperties {
+  county: string;
+  town: string;
+}
+
+export interface RiverProperties {
+  county: string;
+  name: string;
+  section: string;
+  town: string;
+}
+
+export interface RoadProperties {
+  class: RoadPropertiesClass;
+  county: string;
+  name: string;
+  owner: string;
+  town: string;
+  width: number;
+}
+
+export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
+
+export interface TrailProperties {
+  county: string;
+  name: string;
+  system: string;
+  town: string;
+}
+
 export interface CountyIndex {
   [town: string]: TownIndex | Record<string, Layer>;
   layers: {
@@ -155,6 +253,8 @@ export interface StateIndex {
     towns: Layer;
   };
 }
+
+export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
 
 export function calculate(parcel: Parcel): void {
   if (parcel.geometry) {

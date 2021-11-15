@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { MapStyle } from '../state/map';
-import { ParcelPropertiesUsage } from '@lib/geojson';
-import { ParcelPropertiesUse } from '@lib/geojson';
 
 import { Injectable } from '@angular/core';
+import { ParcelPropertiesUsage } from '@lib/geojson';
+import { ParcelPropertiesUse } from '@lib/geojson';
 
 const registry: Record<string, Record<string, Record<string, Descriptor>>> = {
   map: {

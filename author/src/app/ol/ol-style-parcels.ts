@@ -2,13 +2,13 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
 import { OLStylePatternDirective } from './ol-style-pattern';
-import { ParcelProperties } from '@lib/geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate as OLCoordinate } from 'ol/coordinate';
 import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
+import { ParcelProperties } from '@lib/geojson';
 import { QueryList } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { ViewChildren } from '@angular/core';

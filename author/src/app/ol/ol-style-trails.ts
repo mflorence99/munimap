@@ -1,12 +1,12 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
-import { TrailProperties } from '../services/geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+import { TrailProperties } from '@lib/geojson';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';

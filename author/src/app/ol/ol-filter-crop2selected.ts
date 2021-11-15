@@ -1,5 +1,4 @@
 import { DestroyService } from '../services/destroy';
-import { OLLayerImageComponent } from './ol-layer-image';
 import { OLLayerMapboxComponent } from './ol-layer-mapbox';
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLLayerVectorComponent } from './ol-layer-vector';
@@ -33,11 +32,10 @@ export class OLFilterCrop2SelectedComponent implements AfterContentInit {
 
   constructor(
     private destroy$: DestroyService,
-    @Optional() layer1: OLLayerImageComponent,
-    @Optional() layer2: OLLayerMapboxComponent,
-    @Optional() layer3: OLLayerTileComponent,
-    @Optional() layer4: OLLayerVectorComponent,
-    @Optional() layer5: OLLayerVectorTileComponent,
+    @Optional() layer1: OLLayerMapboxComponent,
+    @Optional() layer2: OLLayerTileComponent,
+    @Optional() layer3: OLLayerVectorComponent,
+    @Optional() layer4: OLLayerVectorTileComponent,
     private map: OLMapComponent
   ) {
     this.#format = new OLGeoJSON({
@@ -59,7 +57,7 @@ export class OLFilterCrop2SelectedComponent implements AfterContentInit {
       inner: false
     });
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2 ?? layer3 ?? layer4 ?? layer5;
+    this.#layer = layer1 ?? layer2 ?? layer3 ?? layer4;
   }
 
   #handleFeaturesSelected$(): void {

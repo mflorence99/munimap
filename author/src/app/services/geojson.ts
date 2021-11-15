@@ -2,158 +2,17 @@ import { Params } from './params';
 import { Path } from '../state/view';
 
 import { ActivatedRoute } from '@angular/router';
+import { CountyIndex } from '@lib/geojson';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { Index } from '@lib/geojson';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { StateIndex } from '@lib/geojson';
+import { TownIndex } from '@lib/geojson';
 
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-
-export interface CountyIndex {
-  [town: string]: TownIndex | Record<string, Layer>;
-  layers: {
-    boundary: Layer;
-    selectables: Layer;
-    towns: Layer;
-  };
-}
-
-export interface Index {
-  [state: string]: StateIndex;
-}
-
-export interface Layer {
-  available: boolean;
-  name: string;
-  url: string;
-}
-
-export interface TownIndex {
-  layers: {
-    boundary: Layer;
-    buildings: Layer;
-    countables: Layer;
-    lakes: Layer;
-    parcels: Layer;
-    places: Layer;
-    powerlines: Layer;
-    rivers: Layer;
-    roads: Layer;
-    selectables: Layer;
-  };
-}
-
-export interface StateIndex {
-  [county: string]: CountyIndex | Record<string, Layer>;
-  layers: {
-    boundary: Layer;
-    counties: Layer;
-    railroads: Layer;
-    selectables: Layer;
-    towns: Layer;
-  };
-}
-
-export interface LakeProperties {
-  county: string;
-  name: string;
-  town: string;
-}
-
-export interface PlaceProperties {
-  county: string;
-  name: string;
-  town: string;
-  type: PlacePropertiesType;
-}
-
-export type PlacePropertiesType =
-  | 'airport'
-  | 'area'
-  | 'bar'
-  | 'basin'
-  | 'bay'
-  | 'beach'
-  | 'bench'
-  | 'bend'
-  | 'bridge'
-  | 'building'
-  | 'canal'
-  | 'cape'
-  | 'cave'
-  | 'cemetery'
-  | 'channel'
-  | 'church'
-  | 'civil'
-  | 'cliff'
-  | 'crossing'
-  | 'dam'
-  | 'falls'
-  | 'flat'
-  | 'forest'
-  | 'gap'
-  | 'gut'
-  | 'harbor'
-  | 'hospital'
-  | 'island'
-  | 'lake'
-  | 'locale'
-  | 'military'
-  | 'mine'
-  | 'other'
-  | 'park'
-  | 'pillar'
-  | 'po'
-  | 'ppl'
-  | 'range'
-  | 'rapids'
-  | 'reserve'
-  | 'reservoir'
-  | 'ridge'
-  | 'school'
-  | 'sea'
-  | 'slope'
-  | 'spring'
-  | 'stream'
-  | 'summit'
-  | 'swamp'
-  | 'tower'
-  | 'trail'
-  | 'valley'
-  | 'woods';
-
-export interface PowerlineProperties {
-  county: string;
-  town: string;
-}
-
-export interface RiverProperties {
-  county: string;
-  name: string;
-  section: string;
-  town: string;
-}
-
-export interface RoadProperties {
-  class: RoadPropertiesClass;
-  county: string;
-  name: string;
-  owner: string;
-  town: string;
-  width: number;
-}
-
-export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
-
-export interface TrailProperties {
-  county: string;
-  name: string;
-  system: string;
-  town: string;
-}
-
-export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
 
 const EMPTY: GeoJSON.FeatureCollection<GeoJSON.Polygon> = {
   features: [],

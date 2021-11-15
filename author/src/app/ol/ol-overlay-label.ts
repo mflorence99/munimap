@@ -2,14 +2,14 @@ import { AddParcels } from '../state/parcels';
 import { AuthState } from '../state/auth';
 import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
-import { Parcel } from '@lib/geojson';
-import { ParcelID } from '@lib/geojson';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { Parcel } from '@lib/geojson';
+import { ParcelID } from '@lib/geojson';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
