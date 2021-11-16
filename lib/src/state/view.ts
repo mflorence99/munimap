@@ -1,3 +1,5 @@
+import { theState } from '../geojson';
+
 import { Action } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { State } from '@ngxs/store';
@@ -20,8 +22,6 @@ export interface View {
 export interface ViewStateModel {
   viewByPath: Record<Path, View>;
 }
-
-export const theState = 'NEW HAMPSHIRE';
 
 @State<ViewStateModel>({
   name: 'view',

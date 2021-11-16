@@ -9,6 +9,9 @@ import length from '@turf/length';
 import polylabel from 'polylabel';
 import transformRotate from '@turf/transform-rotate';
 
+// 👇 we currently only support one state
+export const theState = 'NEW HAMPSHIRE';
+
 export type Feature = GeoJSON.Feature<
   GeoJSON.Polygon | GeoJSON.MultiPolygon,
   ParcelProperties

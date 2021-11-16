@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -17,13 +18,11 @@ const index = JSON.parse(readFileSync('./dist/index.json').toString());
 const url =
   'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Elevation_and_Derived_Products/d-bathymetry/Bathymetry_Lakes_polygons';
 
-const state = 'NEW HAMPSHIRE';
-
 const lakesByCountyByTown = {};
 
 function lookupCounty(town: string): string {
-  const counties = Object.keys(index[state]);
-  const county = counties.filter((county) => index[state][county][town]);
+  const counties = Object.keys(index[theState]);
+  const county = counties.filter((county) => index[theState][county][town]);
   return county?.[0];
 }
 
@@ -73,11 +72,11 @@ async function main(): Promise<void> {
   Object.keys(lakesByCountyByTown).forEach((county) => {
     Object.keys(lakesByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${state}/${county}/${town}/lakes.geojson`)
+        chalk.green(`... writing ${theState}/${county}/${town}/lakes.geojson`)
       );
-      mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
-        `${dist}/${state}/${county}/${town}/lakes.geojson`,
+        `${dist}/${theState}/${county}/${town}/lakes.geojson`,
         JSON.stringify(lakesByCountyByTown[county][town], null, 2)
       );
     });

@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import booleanIntersects from '@turf/boolean-intersects';
@@ -9,10 +10,8 @@ const powerlines = JSON.parse(
   ).toString()
 );
 
-const state = 'NEW HAMPSHIRE';
-
 const boundary = JSON.parse(
-  readFileSync(`./dist/${state}/boundary.geojson`).toString()
+  readFileSync(`./dist/${theState}/boundary.geojson`).toString()
 );
 
 const geojson: GeoJSON.FeatureCollection = {

@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -13,10 +14,8 @@ const url =
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
-
 const allTowns = JSON.parse(
-  readFileSync(`./dist/${state}/towns.geojson`).toString()
+  readFileSync(`./dist/${theState}/towns.geojson`).toString()
 );
 
 const placesByCountyByTown = {};
@@ -65,11 +64,11 @@ async function main(): Promise<void> {
   Object.keys(placesByCountyByTown).forEach((county) => {
     Object.keys(placesByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${state}/${county}/${town}/places.geojson`)
+        chalk.green(`... writing ${theState}/${county}/${town}/places.geojson`)
       );
-      mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
-        `${dist}/${state}/${county}/${town}/places.geojson`,
+        `${dist}/${theState}/${county}/${town}/places.geojson`,
         JSON.stringify(placesByCountyByTown[county][town], null, 2)
       );
     });

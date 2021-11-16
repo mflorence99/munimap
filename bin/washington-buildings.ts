@@ -1,5 +1,6 @@
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -15,7 +16,6 @@ const gpx = new xmldom.DOMParser().parseFromString(
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
 const county = 'SULLIVAN';
 const town = 'WASHINGTON';
 
@@ -45,10 +45,10 @@ buildings.features.forEach((building) => {
 
 // 👉 one file for Washington
 console.log(
-  chalk.green(`... writing ${state}/${county}/${town}/buildings.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/buildings.geojson`)
 );
-mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 writeFileSync(
-  `${dist}/${state}/${county}/${town}/buildings.geojson`,
+  `${dist}/${theState}/${county}/${town}/buildings.geojson`,
   JSON.stringify(geojson, null, 2)
 );

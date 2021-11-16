@@ -3,6 +3,7 @@ import { PARCELS } from '../proxy/assets/washington-parcels';
 import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -11,7 +12,6 @@ import chalk from 'chalk';
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
 const county = 'SULLIVAN';
 const town = 'WASHINGTON';
 
@@ -69,15 +69,15 @@ PARCELS.lots.forEach((lot) => {
 
 // 👉 one file for Washington
 console.log(
-  chalk.green(`... writing ${state}/${county}/${town}/parcels.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
 );
 const geojson: GeoJSON.FeatureCollection = {
   features: allLots,
   type: 'FeatureCollection'
 };
-mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 writeFileSync(
-  `${dist}/${state}/${county}/${town}/parcels.geojson`,
+  `${dist}/${theState}/${county}/${town}/parcels.geojson`,
   JSON.stringify(geojson, null, 2)
 );
 
@@ -86,9 +86,9 @@ writeFileSync(
 //    the data available
 
 console.log(
-  chalk.green(`... writing ${state}/${county}/${town}/searchables.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/searchables.geojson`)
 );
-mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
 // 👉 now do this again, converting the real parcels into searchables
 geojson.features = allLots.map((feature: any): any => ({
@@ -102,7 +102,7 @@ geojson.features = allLots.map((feature: any): any => ({
   type: 'Feature'
 }));
 writeFileSync(
-  `${dist}/${state}/${county}/${town}/searchables.geojson`,
+  `${dist}/${theState}/${county}/${town}/searchables.geojson`,
   JSON.stringify(geojson, null, 2)
 );
 
@@ -111,9 +111,9 @@ writeFileSync(
 //    the data available
 
 console.log(
-  chalk.green(`... writing ${state}/${county}/${town}/countables.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/countables.geojson`)
 );
-mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
 // 👉 now do this again, converting the real parcels into countables
 geojson.features = allLots.map((feature: any): any => ({
@@ -126,6 +126,6 @@ geojson.features = allLots.map((feature: any): any => ({
   type: 'Feature'
 }));
 writeFileSync(
-  `${dist}/${state}/${county}/${town}/countables.geojson`,
+  `${dist}/${theState}/${county}/${town}/countables.geojson`,
   JSON.stringify(geojson, null, 2)
 );

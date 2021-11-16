@@ -3,6 +3,7 @@ import { Layer } from '@lib/geojson';
 
 import { existsSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -15,8 +16,6 @@ const towns = JSON.parse(
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
-
 function available({ name, url }): Layer {
   return {
     available: existsSync(`${dist}${url}`),
@@ -26,27 +25,27 @@ function available({ name, url }): Layer {
 }
 
 const index: Index = {
-  [state]: {
+  [theState]: {
     layers: {
       boundary: available({
         name: 'New Hampshire State Boundary',
-        url: `/${state}/boundary.geojson`
+        url: `/${theState}/boundary.geojson`
       }),
       counties: available({
         name: 'New Hampshire County Boundaries',
-        url: `/${state}/counties.geojson`
+        url: `/${theState}/counties.geojson`
       }),
       railroads: available({
         name: 'New Hampshire Railroads',
-        url: `/${state}/railroads.geojson`
+        url: `/${theState}/railroads.geojson`
       }),
       selectables: available({
         name: 'New Hampshire County Boundaries',
-        url: `/${state}/counties.geojson`
+        url: `/${theState}/counties.geojson`
       }),
       towns: available({
         name: 'New Hampshire Town Boundaries',
-        url: `/${state}/towns.geojson`
+        url: `/${theState}/towns.geojson`
       })
     }
   }
@@ -59,76 +58,76 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
 
   const town = (feature.properties.pbpNAME as string).toUpperCase();
 
-  console.log(chalk.green(`... indexing ${state}/${county}/${town}`));
+  console.log(chalk.green(`... indexing ${theState}/${county}/${town}`));
 
-  if (!index[state][county]) {
-    index[state][county] = {
+  if (!index[theState][county]) {
+    index[theState][county] = {
       layers: {
         boundary: available({
           name: `${county} Boundary`,
-          url: `/${state}/${county}/boundary.geojson`
+          url: `/${theState}/${county}/boundary.geojson`
         }),
         selectables: available({
           name: `${county} Town Boundaries`,
-          url: `/${state}/${county}/towns.geojson`
+          url: `/${theState}/${county}/towns.geojson`
         }),
         towns: available({
           name: `${county} Town Boundaries`,
-          url: `/${state}/${county}/towns.geojson`
+          url: `/${theState}/${county}/towns.geojson`
         })
       }
     };
   }
 
-  index[state][county][town] = {
+  index[theState][county][town] = {
     layers: {
       boundary: available({
         name: `${town} Boundary`,
-        url: `/${state}/${county}/${town}/boundary.geojson`
+        url: `/${theState}/${county}/${town}/boundary.geojson`
       }),
       buildings: available({
         name: `${town} Buildings`,
-        url: `/${state}/${county}/${town}/buildings.geojson`
+        url: `/${theState}/${county}/${town}/buildings.geojson`
       }),
       countables: available({
         name: `${town} Countables`,
-        url: `/${state}/${county}/${town}/countables.geojson`
+        url: `/${theState}/${county}/${town}/countables.geojson`
       }),
       lakes: available({
         name: `${town} Lakes`,
-        url: `/${state}/${county}/${town}/lakes.geojson`
+        url: `/${theState}/${county}/${town}/lakes.geojson`
       }),
       parcels: available({
         name: `${town} Parcels`,
-        url: `/${state}/${county}/${town}/parcels.geojson`
+        url: `/${theState}/${county}/${town}/parcels.geojson`
       }),
       places: available({
         name: `${town} Places of Interest`,
-        url: `/${state}/${county}/${town}/places.geojson`
+        url: `/${theState}/${county}/${town}/places.geojson`
       }),
       powerlines: available({
         name: `${town} Powerlines`,
-        url: `/${state}/${county}/${town}/powerlines.geojson`
+        url: `/${theState}/${county}/${town}/powerlines.geojson`
       }),
       searchables: available({
         name: `${town} Searchables`,
-        url: `/${state}/${county}/${town}/searchables.geojson`
+        url: `/${theState}/${county}/${town}/searchables.geojson`
       }),
       selectables: available({
         name: `${town} Parcels`,
-        url: `/${state}/${county}/${town}/parcels.geojson`
+        url: `/${theState}/${county}/${town}/parcels.geojson`
       }),
       rivers: available({
         name: `${town} Rivers`,
-        url: `/${state}/${county}/${town}/rivers.geojson`
+        url: `/${theState}/${county}/${town}/rivers.geojson`
       }),
       roads: available({
         name: `${town} Roads`,
-        url: `/${state}/${county}/${town}/roads.geojson`
+        url: `/${theState}/${county}/${town}/roads.geojson`
       }),
       trails: available({
         name: `${town} Trails`,
-        url: `/${state}/${county}/${town}/trails.geojson`
+        url: `/${theState}/${county}/${town}/trails.geojson`
       })
     }
   };

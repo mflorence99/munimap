@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import booleanIntersects from '@turf/boolean-intersects';
@@ -16,10 +17,8 @@ const url =
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
-
 const allTowns = JSON.parse(
-  readFileSync(`./dist/${state}/towns.geojson`).toString()
+  readFileSync(`./dist/${theState}/towns.geojson`).toString()
 );
 
 const index = JSON.parse(readFileSync('./dist/index.json').toString());
@@ -27,8 +26,8 @@ const index = JSON.parse(readFileSync('./dist/index.json').toString());
 const trailsByCountyByTown = {};
 
 function lookupCounty(town: string): string {
-  const counties = Object.keys(index[state]);
-  const county = counties.filter((county) => index[state][county][town]);
+  const counties = Object.keys(index[theState]);
+  const county = counties.filter((county) => index[theState][county][town]);
   return county?.[0];
 }
 
@@ -108,11 +107,11 @@ async function main(): Promise<void> {
   Object.keys(trailsByCountyByTown).forEach((county) => {
     Object.keys(trailsByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${state}/${county}/${town}/trails.geojson`)
+        chalk.green(`... writing ${theState}/${county}/${town}/trails.geojson`)
       );
-      mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
-        `${dist}/${state}/${county}/${town}/trails.geojson`,
+        `${dist}/${theState}/${county}/${town}/trails.geojson`,
         JSON.stringify(trailsByCountyByTown[county][town], null, 2)
       );
     });

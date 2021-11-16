@@ -2,6 +2,7 @@
 import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -11,8 +12,6 @@ const url =
   'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-roads/Roads_DOT';
 
 const dist = './dist/proxy';
-
-const state = 'NEW HAMPSHIRE';
 
 const roadsByCountyByTown = {};
 
@@ -57,11 +56,11 @@ async function main(): Promise<void> {
   Object.keys(roadsByCountyByTown).forEach((county) => {
     Object.keys(roadsByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${state}/${county}/${town}/roads.geojson`)
+        chalk.green(`... writing ${theState}/${county}/${town}/roads.geojson`)
       );
-      mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
-        `${dist}/${state}/${county}/${town}/roads.geojson`,
+        `${dist}/${theState}/${county}/${town}/roads.geojson`,
         JSON.stringify(roadsByCountyByTown[county][town], null, 2)
       );
     });

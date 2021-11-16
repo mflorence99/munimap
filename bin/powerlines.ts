@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import booleanIntersects from '@turf/boolean-intersects';
@@ -18,8 +19,6 @@ import copy from 'fast-copy';
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
-
 const powerlines = JSON.parse(
   readFileSync(
     './proxy/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson'
@@ -27,7 +26,7 @@ const powerlines = JSON.parse(
 );
 
 const allTowns = JSON.parse(
-  readFileSync(`./dist/${state}/towns.geojson`).toString()
+  readFileSync(`./dist/${theState}/towns.geojson`).toString()
 );
 
 const index = JSON.parse(readFileSync('./dist/index.json').toString());
@@ -35,8 +34,8 @@ const index = JSON.parse(readFileSync('./dist/index.json').toString());
 const linesByCountyByTown = {};
 
 function lookupCounty(town: string): string {
-  const counties = Object.keys(index[state]);
-  const county = counties.filter((county) => index[state][county][town]);
+  const counties = Object.keys(index[theState]);
+  const county = counties.filter((county) => index[theState][county][town]);
   return county?.[0];
 }
 
@@ -82,11 +81,13 @@ powerlines.features.forEach((feature: GeoJSON.Feature) => {
 Object.keys(linesByCountyByTown).forEach((county) => {
   Object.keys(linesByCountyByTown[county]).forEach((town) => {
     console.log(
-      chalk.green(`... writing ${state}/${county}/${town}/powerlines.geojson`)
+      chalk.green(
+        `... writing ${theState}/${county}/${town}/powerlines.geojson`
+      )
     );
-    mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+    mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     writeFileSync(
-      `${dist}/${state}/${county}/${town}/powerlines.geojson`,
+      `${dist}/${theState}/${county}/${town}/powerlines.geojson`,
       JSON.stringify(linesByCountyByTown[county][town], null, 2)
     );
   });

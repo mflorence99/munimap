@@ -2,6 +2,7 @@ import { bboxByAspectRatio } from './bbox';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -14,13 +15,14 @@ const counties = JSON.parse(
   ).toString()
 );
 
-const state = 'NEW HAMPSHIRE';
 const wholeState: GeoJSON.Feature[] = [];
 
 counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   const county = (feature.properties.NAME as string).toUpperCase();
 
-  console.log(chalk.green(`... writing ${state}/${county}/boundary.geojson`));
+  console.log(
+    chalk.green(`... writing ${theState}/${county}/boundary.geojson`)
+  );
 
   // 👉 we don't need the properties, but we do need the bbox
   //    for printing, we want the aspect ratio to be 4:3 (or 3:4)
@@ -48,20 +50,20 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   };
 
   // 👉 one file per county
-  mkdirSync(`${dist}/${state}/${county}`, { recursive: true });
+  mkdirSync(`${dist}/${theState}/${county}`, { recursive: true });
   writeFileSync(
-    `${dist}/${state}/${county}/boundary.geojson`,
+    `${dist}/${theState}/${county}/boundary.geojson`,
     JSON.stringify(geojson, null, 2)
   );
 });
 
 // 👉 one file for all towns
-console.log(chalk.green(`... writing ${state}/counties.geojson`));
+console.log(chalk.green(`... writing ${theState}/counties.geojson`));
 const geojson: GeoJSON.FeatureCollection = {
   features: wholeState,
   type: 'FeatureCollection'
 };
 writeFileSync(
-  `${dist}/${state}/counties.geojson`,
+  `${dist}/${theState}/counties.geojson`,
   JSON.stringify(geojson, null, 2)
 );

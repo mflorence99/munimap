@@ -1,14 +1,13 @@
 import { copyFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 
 import chalk from 'chalk';
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
-
-console.log(chalk.green(`... writing ${state}/boundary.geojson`));
+console.log(chalk.green(`... writing ${theState}/boundary.geojson`));
 
 copyFileSync(
   './proxy/assets/New_Hampshite_State_Boundary.geojson',
-  `${dist}/${state}/boundary.geojson`
+  `${dist}/${theState}/boundary.geojson`
 );

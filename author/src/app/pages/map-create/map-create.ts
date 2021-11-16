@@ -10,7 +10,7 @@ import { Path } from '@lib/state/view';
 import { Router } from '@angular/router';
 import { TownIndex } from '@lib/geojson';
 
-import { theState } from '@lib/state/view';
+import { theState } from '@lib/geojson';
 
 import OLFeature from 'ol/Feature';
 
@@ -31,7 +31,7 @@ export class MapCreatePage {
     private router: Router
   ) {
     this.index = this.geoJSON.findIndex(this.route);
-    this.path = this.route.snapshot.queryParamMap.get('path') ?? theState;
+    this.path = theState;
     this.root.setTitle(this.path);
   }
 

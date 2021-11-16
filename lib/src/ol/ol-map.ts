@@ -63,8 +63,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   @ContentChildren(MapableComponent, { descendants: true })
   mapables$: QueryList<any>;
 
-  @Input() maxZoom = 18;
-  @Input() minZoom = 8;
+  @Input() maxZoom;
+  @Input() minZoom;
 
   olMap: OLMap;
   olView: OLView;
@@ -121,8 +121,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   #createView(boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>): void {
-    this.olView = new OLView({ maxZoom: this.maxZoom, minZoom: this.minZoom });
-    this.olMap.setView(this.olView);
     // 👉 precompute boundary extent
     this.boundary = boundary;
     const bbox = boundary.features[0].bbox;
@@ -131,11 +129,20 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.featureProjection,
       this.projection
     );
+    // 👉 create view
+    this.olView = new OLView({
+      extent: this.fitToBounds ? undefined : this.boundaryExtent,
+      maxZoom: this.maxZoom,
+      minZoom: this.minZoom,
+      smoothExtentConstraint: true
+    });
+    this.olMap.setView(this.olView);
     // 👉 if center, zoom available use them else fit to bounds
-    const view = this.store.selectSnapshot(ViewState).viewByPath[this.path];
-    if (!this.fitToBounds && view?.center && view?.zoom) {
-      this.olView.setCenter(fromLonLat(view.center));
-      this.olView.setZoom(view.zoom);
+    const viewState =
+      this.store.selectSnapshot(ViewState).viewByPath[this.path];
+    if (!this.fitToBounds && viewState?.center && viewState?.zoom) {
+      this.olView.setCenter(fromLonLat(viewState.center));
+      this.olView.setZoom(viewState.zoom);
     } else this.zoomToBounds();
     // 👉 handle events
     this.#changeKey = this.olView.on('change', this.#onChange.bind(this));

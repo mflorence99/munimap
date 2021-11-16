@@ -2,6 +2,7 @@ import { bboxByAspectRatio } from './bbox';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -14,8 +15,6 @@ const towns = JSON.parse(
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
-
 const townsByCounty: Record<string, GeoJSON.Feature[]> = {};
 const wholeState: GeoJSON.Feature[] = [];
 
@@ -27,7 +26,7 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
   const town = (feature.properties.pbpNAME as string).toUpperCase();
 
   console.log(
-    chalk.green(`... writing ${state}/${county}/${town}/boundary.geojson`)
+    chalk.green(`... writing ${theState}/${county}/${town}/boundary.geojson`)
   );
 
   // 👉 we don't need the properties, but we do need the bbox
@@ -52,33 +51,33 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
   };
 
   // 👉 one directory, one file per town
-  mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+  mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
   writeFileSync(
-    `${dist}/${state}/${county}/${town}/boundary.geojson`,
+    `${dist}/${theState}/${county}/${town}/boundary.geojson`,
     JSON.stringify(geojson, null, 2)
   );
 });
 
 // 👉 one file for each county
 Object.keys(townsByCounty).forEach((county) => {
-  console.log(chalk.green(`... writing ${state}/${county}/towns.geojson`));
+  console.log(chalk.green(`... writing ${theState}/${county}/towns.geojson`));
   const geojson: GeoJSON.FeatureCollection = {
     features: townsByCounty[county],
     type: 'FeatureCollection'
   };
   writeFileSync(
-    `${dist}/${state}/${county}/towns.geojson`,
+    `${dist}/${theState}/${county}/towns.geojson`,
     JSON.stringify(geojson, null, 2)
   );
 });
 
 // 👉 one file for all towns
-console.log(chalk.green(`... writing ${state}/towns.geojson`));
+console.log(chalk.green(`... writing ${theState}/towns.geojson`));
 const geojson: GeoJSON.FeatureCollection = {
   features: wholeState,
   type: 'FeatureCollection'
 };
 writeFileSync(
-  `${dist}/${state}/towns.geojson`,
+  `${dist}/${theState}/towns.geojson`,
   JSON.stringify(geojson, null, 2)
 );

@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -16,9 +17,7 @@ const railroads = JSON.parse(
 
 const dist = './dist/proxy';
 
-const state = 'NEW HAMPSHIRE';
-
-console.log(chalk.green(`... writing /${state}/railroads.geojson`));
+console.log(chalk.green(`... writing /${theState}/railroads.geojson`));
 
 railroads.features.forEach((feature: GeoJSON.Feature) => {
   // 👉 some features have bbox on the geometry, we created our own
@@ -36,9 +35,9 @@ railroads.features.forEach((feature: GeoJSON.Feature) => {
 });
 
 // 👉 write out all-in-one file
-mkdirSync(`${dist}/${state}`, { recursive: true });
+mkdirSync(`${dist}/${theState}`, { recursive: true });
 writeFileSync(
-  `${dist}/${state}/railroads.geojson`,
+  `${dist}/${theState}/railroads.geojson`,
   JSON.stringify(railroads, null, 2)
 );
 

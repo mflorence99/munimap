@@ -3,10 +3,10 @@ import { Features } from '@lib/geojson';
 import { Parcel } from '@lib/geojson';
 
 import { calculate } from '@lib/geojson';
-import { normalize } from '@lib/geojson';
-
 import { mkdirSync } from 'fs';
+import { normalize } from '@lib/geojson';
 import { stat } from 'fs';
+import { theState } from '@lib/geojson';
 import { unlinkSync } from 'fs';
 import { writeFileSync } from 'fs';
 
@@ -66,8 +66,6 @@ const usageByClass = {
   'Unclass/Unk Non-Res L&B': '190',
   'Unclass/Unk Other': '190'
 };
-
-const state = 'NEW HAMPSHIRE';
 
 // 👇 no town can have more than this number of parcels
 const tooManyParcels = 5000;
@@ -170,14 +168,14 @@ async function main(): Promise<void> {
 
     // 👉 one file per town with <= "tooManyLots"
     Object.keys(parcelsByTown).forEach((town) => {
-      const fn = `${dist}/${state}/${county}/${town}/parcels.geojson`;
+      const fn = `${dist}/${theState}/${county}/${town}/parcels.geojson`;
       if (
         zeroAreaByTown[town] >
         countByTown[town] * tooManyZeroAreaParcelsRatio
       ) {
         console.log(
           chalk.magenta(
-            `... ${state}/${county}/${town}/parcels.geojson has more than ${
+            `... ${theState}/${county}/${town}/parcels.geojson has more than ${
               tooManyZeroAreaParcelsRatio * 100
             }% zero-area parcels`
           )
@@ -188,7 +186,7 @@ async function main(): Promise<void> {
       } else if (countByTown[town] > tooManyParcels) {
         console.log(
           chalk.red(
-            `... ${state}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`
+            `... ${theState}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`
           )
         );
         stat(fn, (err, _stats) => {
@@ -196,9 +194,11 @@ async function main(): Promise<void> {
         });
       } else {
         console.log(
-          chalk.green(`... writing ${state}/${county}/${town}/parcels.geojson`)
+          chalk.green(
+            `... writing ${theState}/${county}/${town}/parcels.geojson`
+          )
         );
-        mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+        mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
         writeFileSync(fn, JSON.stringify(parcelsByTown[town], null, 2));
       }
     });
@@ -208,13 +208,13 @@ async function main(): Promise<void> {
     //    the data available
 
     Object.keys(parcelsByTown).forEach((town) => {
-      const fn = `${dist}/${state}/${county}/${town}/searchables.geojson`;
+      const fn = `${dist}/${theState}/${county}/${town}/searchables.geojson`;
       console.log(
         chalk.green(
-          `... writing ${state}/${county}/${town}/searchables.geojson`
+          `... writing ${theState}/${county}/${town}/searchables.geojson`
         )
       );
-      mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       // 👉 now do this again, converting the real parcels into searchables
       parcelsByTown[town].features = parcelsByTown[town].features.map(
         (feature: any): any => ({
@@ -236,11 +236,13 @@ async function main(): Promise<void> {
     //    the data available
 
     Object.keys(parcelsByTown).forEach((town) => {
-      const fn = `${dist}/${state}/${county}/${town}/countables.geojson`;
+      const fn = `${dist}/${theState}/${county}/${town}/countables.geojson`;
       console.log(
-        chalk.green(`... writing ${state}/${county}/${town}/countables.geojson`)
+        chalk.green(
+          `... writing ${theState}/${county}/${town}/countables.geojson`
+        )
       );
-      mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       // 👉 now do this again, converting the real parcels into countables
       parcelsByTown[town].features = parcelsByTown[town].features.map(
         (feature: any): any => ({

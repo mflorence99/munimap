@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -14,8 +15,6 @@ import unzipper from 'unzipper';
 // 👉 https://github.com/microsoft/USBuildingFootprints
 
 const dist = './dist/proxy';
-
-const state = 'NEW HAMPSHIRE';
 
 // 👇 we won't even bother to look at these towns as we know they're
 //    too big and analyzing them can cause out-of-memory conditions
@@ -41,7 +40,7 @@ const url =
 const fileName = 'NewHampshire.geojson';
 
 const allTowns = JSON.parse(
-  readFileSync(`./dist/${state}/towns.geojson`).toString()
+  readFileSync(`./dist/${theState}/towns.geojson`).toString()
 );
 
 const allTownFeatures = allTowns.features.filter(
@@ -53,8 +52,8 @@ const index = JSON.parse(readFileSync('./dist/index.json').toString());
 const buildingsByCountyByTown = {};
 
 function lookupCounty(town: string): string {
-  const counties = Object.keys(index[state]);
-  const county = counties.filter((county) => index[state][county][town]);
+  const counties = Object.keys(index[theState]);
+  const county = counties.filter((county) => index[theState][county][town]);
   return county?.[0];
 }
 
@@ -133,11 +132,13 @@ async function main(): Promise<void> {
   Object.keys(buildingsByCountyByTown).forEach((county) => {
     Object.keys(buildingsByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${state}/${county}/${town}/buildings.geojson`)
+        chalk.green(
+          `... writing ${theState}/${county}/${town}/buildings.geojson`
+        )
       );
-      mkdirSync(`${dist}/${state}/${county}/${town}`, { recursive: true });
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
-        `${dist}/${state}/${county}/${town}/buildings.geojson`,
+        `${dist}/${theState}/${county}/${town}/buildings.geojson`,
         JSON.stringify(buildingsByCountyByTown[county][town], null, 2)
       );
     });
