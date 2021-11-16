@@ -28,10 +28,10 @@ import { Select } from '@ngxs/store';
 import { SetMap } from '@lib/state/map';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
+import { ViewState } from '@lib/state/view';
 
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,7 +65,8 @@ export class TownMapPage implements OnInit {
     private root: RootPage,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private viewState: ViewState
   ) {}
 
   #can(event: MouseEvent, condition: boolean): boolean {
@@ -98,15 +99,18 @@ export class TownMapPage implements OnInit {
     this.creating = id === '0';
     const owner = this.authState.currentProfile().email;
     const path = this.route.snapshot.queryParamMap.get('path');
+    const recentPath = this.viewState.recentPath();
     // 👉 this is a default map for the case when we are creating
+    //    but it is also used if the map we try to load has been deleted
+    //    so we try to make sure it has a real path to work with
     const dflt: Map = {
-      id: uuidv4(),
+      id: null,
       name: null,
       options: {
         showSatelliteForSelected: true
       },
       owner: owner,
-      path: path,
+      path: path ?? recentPath,
       style: 'nhgranit'
     };
     // 👉 load up the requested (or default) map

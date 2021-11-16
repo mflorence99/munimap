@@ -52,6 +52,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { NgModule } from '@angular/core';
 import { NgPipesModule } from 'ngx-pipes';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -139,6 +140,7 @@ const COMPONENTS = [
   ConfirmDialogComponent,
   MapFilterComponent,
   MergeParcelsComponent,
+  MessageDialogComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,

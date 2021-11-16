@@ -36,7 +36,25 @@
           placeholder="eg: My Old Town"
           required
         />
-        <mat-error *ngIf="name.errors">A map name is required </mat-error>
+        <mat-error *ngIf="name.errors">A map name is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Assign an unique ID to your map</mat-label>
+        <input
+          #id="ngModel"
+          [(ngModel)]="map.id"
+          [disabled]="!map.isDflt"
+          matInput
+          name="id"
+          pattern="[a-z0-9]+"
+          placeholder="eg: myoldtown"
+          required
+        />
+        <mat-error *ngIf="id.errors">Map ID is missing or invalid</mat-error>
+        <mat-hint *ngIf="!id.errors"
+          >Use only lowercase letters and numbers</mat-hint
+        >
       </mat-form-field>
 
       <br />

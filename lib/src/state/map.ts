@@ -28,8 +28,14 @@ export class UpdateMap {
   constructor(public map: Map) {}
 }
 
+export class UpdateMapError {
+  static readonly type = '[Map] UpdateMapError';
+  constructor(public error: string) {}
+}
+
 export interface Map {
   id: string;
+  isDflt?: boolean;
   name: string;
   options: MapOptions;
   owner: string;
@@ -80,7 +86,7 @@ export class MapState {
       .doc(action.id)
       .get()
       .subscribe((doc) => {
-        const map = doc.exists ? doc.data() : action.dflt;
+        const map = doc.exists ? doc.data() : { ...action.dflt, isDflt: true };
         ctx.dispatch(new SetMap(map));
       });
   }
@@ -96,9 +102,34 @@ export class MapState {
     ctx: StateContext<MapStateModel>,
     action: UpdateMap
   ): void {
-    this.#maps
-      .doc(action.map.id)
-      .set(action.map, { merge: true })
-      .then(() => ctx.dispatch(new SetMap(action.map)));
+    if (action.map.isDflt) {
+      this.#maps
+        .doc(action.map.id)
+        .get()
+        .subscribe((doc) => {
+          if (doc.exists) {
+            const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
+            ctx.dispatch(new UpdateMapError(message));
+          } else {
+            const map = { ...action.map, isDflt: false };
+            this.#maps
+              .doc(action.map.id)
+              .set(map, { merge: true })
+              .then(() => ctx.dispatch(new SetMap(action.map)));
+          }
+        });
+    } else {
+      this.#maps
+        .doc(action.map.id)
+        .set(action.map, { merge: true })
+        .then(() => ctx.dispatch(new SetMap(action.map)));
+    }
+  }
+
+  @Action(UpdateMapError) updateMapError(
+    _ctx: StateContext<MapStateModel>,
+    _action: UpdateMapError
+  ): void {
+    /* placeholder */
   }
 }
