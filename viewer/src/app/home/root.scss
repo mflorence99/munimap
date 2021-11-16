@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  height: calc(100% - (var(--map-cy-toolbar) * 1px));
+  position: absolute;
+  top: calc(var(--map-cy-toolbar) * 1px);
+  width: 100%;
+}
+
+.content {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.page {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.toolbar {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: auto;
+  height: calc(var(--map-cy-toolbar) * 1px);
+  position: absolute;
+  width: 100%;
+}

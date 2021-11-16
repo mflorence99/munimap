@@ -50,7 +50,7 @@
             "outputPath": "dist/author",
             "polyfills": "author/src/polyfills.ts",
             "styles": [
-              "author/src/globals.scss",
+              "lib/css/globals.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/ol/ol.css"
@@ -86,6 +86,89 @@
         }
       },
       "sourceRoot": "author"
+    },
+    "viewer": {
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "maximumError": "10mb",
+                  "maximumWarning": "5mb",
+                  "type": "initial"
+                },
+                {
+                  "maximumError": "10kb",
+                  "maximumWarning": "6kb",
+                  "type": "anyComponentStyle"
+                }
+              ],
+              "buildOptimizer": true,
+              "extractLicenses": true,
+              "namedChunks": false,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "vendorChunk": false
+            }
+          },
+          "options": {
+            "allowedCommonJsDependencies": [
+              "debounce-decorator",
+              "pbf",
+              "polylabel"
+            ],
+            "assets": [
+              "viewer/assets",
+              {
+                "glob": "**/*",
+                "input": "lib/assets",
+                "output": "assets"
+              }
+            ],
+            "index": "viewer/src/index.html",
+            "main": "viewer/src/main.ts",
+            "outputPath": "dist/viewer",
+            "polyfills": "viewer/src/polyfills.ts",
+            "styles": [
+              "lib/css/globals.scss",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "node_modules/firebaseui/dist/firebaseui.css",
+              "node_modules/ol/ol.css"
+            ],
+            "tsConfig": "viewer/src/tsconfig.json",
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "defaultConfiguration": ""
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "viewer:build:production"
+            }
+          },
+          "options": {
+            "browserTarget": "viewer:build"
+          }
+        }
+      },
+      "prefix": "app",
+      "projectType": "application",
+      "root": "viewer",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "sourceRoot": "viewer"
     }
   },
   "version": 1

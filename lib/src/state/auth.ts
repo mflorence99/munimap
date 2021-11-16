@@ -83,8 +83,24 @@ export class AuthState implements NgxsOnInit {
     return state.profile;
   }
 
+  static profileProps(obj: any): any {
+    return {
+      email: obj.email,
+      workgroup: obj.workgroup
+    };
+  }
+
   @Selector() static user(state: AuthStateModel): User {
     return state.user;
+  }
+
+  static userProps(obj: any): any {
+    return {
+      displayName: obj.displayName,
+      email: obj.email,
+      photoURL: obj.photoURL,
+      uid: obj.uid
+    };
   }
 
   static workgroup(profile: Profile): string[] {
@@ -94,24 +110,6 @@ export class AuthState implements NgxsOnInit {
         .concat(profile.workgroup.split(/[\n ;]+/g))
         .filter((email) => !!email);
     return workgroup;
-  }
-
-  // 👇 hoo boy, do I hate this!
-
-  #profileProps(obj: any): any {
-    return {
-      email: obj.email,
-      workgroup: obj.workgroup
-    };
-  }
-
-  #userProps(obj: any): any {
-    return {
-      displayName: obj.displayName,
-      email: obj.email,
-      photoURL: obj.photoURL,
-      uid: obj.uid
-    };
   }
 
   currentProfile(): Profile {
@@ -167,7 +165,7 @@ export class AuthState implements NgxsOnInit {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      profile: this.#profileProps(action.profile)
+      profile: AuthState.profileProps(action.profile)
     });
   }
 
@@ -178,7 +176,7 @@ export class AuthState implements NgxsOnInit {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      user: action.user ? this.#userProps(action.user) : null
+      user: action.user ? AuthState.userProps(action.user) : null
     });
   }
 
@@ -189,7 +187,7 @@ export class AuthState implements NgxsOnInit {
     const user = ctx.getState().user;
     this.#profiles
       .doc(user.email)
-      .set(this.#profileProps(action.profile), { merge: true })
+      .set(AuthState.profileProps(action.profile), { merge: true })
       .then(() => ctx.dispatch(new SetProfile(action.profile)));
   }
 
@@ -198,7 +196,7 @@ export class AuthState implements NgxsOnInit {
     action: UpdateUser
   ): void {
     this.fireauth.currentUser.then((user) => {
-      user.updateProfile(this.#userProps(action.user));
+      user.updateProfile(AuthState.userProps(action.user));
       ctx.dispatch(new SetUser(action.user));
     });
   }

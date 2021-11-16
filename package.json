@@ -30,7 +30,8 @@
     "proxy:washington-buildings": "ts-node --dir bin washington-buildings.ts",
     "proxy:washington-parcels": "ts-node --dir bin washington-parcels.ts",
     "serve:author": "ng serve author --port 4200",
-    "serve:proxy": "tsc -p proxy/src && node dist/proxy/server.js"
+    "serve:proxy": "tsc -p proxy/src && node dist/proxy/server.js",
+    "serve:viewer": "ng serve viewer --port 4202"
   },
   "dependencies": {
     "@angular/animations": "^13",
