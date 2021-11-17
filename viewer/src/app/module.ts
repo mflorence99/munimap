@@ -36,9 +36,9 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
+import { OLControlPlusMinusComponent } from '@lib/ol/ol-control-plusminus';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/ol-control-searchparcels';
-import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
@@ -79,6 +79,8 @@ import { ViewState } from '@lib/state/view';
 import { environment } from '@lib/environment';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMinus } from '@fortawesome/pro-light-svg-icons';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { initializeAppProvider } from '@lib/services/initializer';
 
@@ -88,9 +90,9 @@ const COMPONENTS = [
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlGraticuleComponent,
+  OLControlPlusMinusComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
-  OLControlZoomComponent,
   OLControlZoomToExtentComponent,
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2SelectedComponent,
@@ -205,6 +207,6 @@ const STATES_SAVED = [ViewState];
 export class RootModule {
   constructor(library: FaIconLibrary) {
     // 👇 must add icons we use right here
-    library.addIcons(faExpandArrows, faInfoCircle, faSearch);
+    library.addIcons(faExpandArrows, faInfoCircle, faMinus, faPlus, faSearch);
   }
 }

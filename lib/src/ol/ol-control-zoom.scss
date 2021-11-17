@@ -11,8 +11,6 @@ input[type='range'] {
   accent-color: var(--mat-gray-800);
 }
 
-// 👇 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range
-
 .annotation {
   color: var(--mat-gray-700);
   font-size: 0.75rem;
@@ -26,6 +24,7 @@ input[type='range'] {
   transform-origin: 5rem 5rem;
   transform: rotate(-90deg);
 }
+
 .slider-wrapper {
   width: 3rem;
   height: 10rem;

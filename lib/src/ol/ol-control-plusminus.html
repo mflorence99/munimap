@@ -1,0 +1,17 @@
+<button
+  (click)="onZoomChange(zoom + 1)"
+  [disabled]="zoom >= maxZoom()"
+  mat-icon-button
+>
+  <fa-icon [icon]="['fal', 'plus']" size="2x"></fa-icon>
+</button>
+
+<button
+  (click)="onZoomChange(zoom - 1)"
+  [disabled]="zoom <= minZoom()"
+  mat-icon-button
+>
+  <fa-icon [icon]="['fal', 'minus']" size="2x"></fa-icon>
+</button>
+
+<p class="annotation">{{ zoom | number:'1.0-2' }}</p>

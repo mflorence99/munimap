@@ -279,6 +279,8 @@ a[mat-flat-button] {
     --fa-secondary-color: var(--text-color);
     --fa-primary-opacity: 0.6;
     --fa-secondary-opacity: 0.4;
+
+    color: var(--disabled-color) !important;
   }
 }
 

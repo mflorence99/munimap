@@ -1,0 +1,14 @@
+:host {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  justify-content: center;
+  padding: 0.25rem;
+  pointer-events: auto;
+  width: 3rem;
+}
+
+.annotation {
+  color: var(--mat-gray-700);
+  font-size: 0.75rem;
+  text-align: center;
+}
