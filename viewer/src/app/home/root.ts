@@ -14,9 +14,11 @@ import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
+import { SetGPS } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
+import { ViewState } from '@lib/state/view';
 
 import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
@@ -32,6 +34,8 @@ import urlParse from 'url-parse';
 })
 export class RootPage implements OnInit {
   #url: any;
+
+  @Select(ViewState.gps) gps$: Observable<boolean>;
 
   @Select(MapState) map$: Observable<Map>;
 
@@ -93,5 +97,9 @@ export class RootPage implements OnInit {
   ngOnInit(): void {
     this.#handleMap$();
     this.#handleUser$();
+  }
+
+  onGPSToggle(state: boolean): void {
+    this.store.dispatch(new SetGPS(state));
   }
 }

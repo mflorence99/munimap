@@ -1,6 +1,18 @@
 <main class="page">
   <mat-toolbar class="toolbar">
-    <ng-container *ngIf="title"> {{ title }} </ng-container>
+    <button mat-icon-button>
+      <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
+    </button>
+
+    <h1><ng-container *ngIf="title"> {{ title }} </ng-container></h1>
+
+    <mat-button-toggle
+      #gpsToggle
+      (change)="onGPSToggle(gpsToggle.checked)"
+      [checked]="gps$ | async"
+    >
+      <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
+    </mat-button-toggle>
   </mat-toolbar>
 
   <mat-drawer-container class="container">

@@ -4,6 +4,7 @@ import { Map } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
 import { Observable } from 'rxjs';
 import { Select } from '@ngxs/store';
+import { ViewState } from '@lib/state/view';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,5 +13,7 @@ import { Select } from '@ngxs/store';
   templateUrl: './town-map.html'
 })
 export class TownMapPage {
+  @Select(ViewState.gps) gps$: Observable<boolean>;
+
   @Select(MapState) map$: Observable<Map>;
 }

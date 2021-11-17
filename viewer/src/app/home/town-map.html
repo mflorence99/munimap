@@ -228,6 +228,10 @@
       </app-ol-interaction-select>
     </app-ol-layer-vector>
 
+    <!-- 📦 OVERLAY FOR GPS -->
+
+    <app-ol-overlay-gps *ngIf="gps$ | async"></app-ol-overlay-gps>
+
     <!-- 📦 BOUNDARY LAYER -->
 
     <app-ol-layer-vector>

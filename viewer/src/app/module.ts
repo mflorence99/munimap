@@ -15,6 +15,8 @@ import { DecimalPipe } from '@angular/common';
 import { ErrorHandler } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { GeolocationService } from '@lib/services/geolocation';
+import { GeosimulatorService } from '@lib/services/geosimulator';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpCache } from '@lib/services/http-cache';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,9 +25,11 @@ import { InitializerService } from '@lib/services/initializer';
 import { LocationStrategy } from '@angular/common';
 import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { NgModule } from '@angular/core';
@@ -49,6 +53,7 @@ import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLLayerVectorTileComponent } from '@lib/ol/ol-layer-vectortile';
 import { OLMapComponent } from '@lib/ol/ol-map';
+import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -77,8 +82,10 @@ import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore'
 import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
+import { faBars } from '@fortawesome/pro-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt } from '@fortawesome/pro-duotone-svg-icons';
 import { faMinus } from '@fortawesome/pro-light-svg-icons';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -103,6 +110,7 @@ const COMPONENTS = [
   OLLayerVectorComponent,
   OLLayerVectorTileComponent,
   OLMapComponent,
+  OLOverlayGPSComponent,
   OLSourceBoundaryComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
@@ -158,9 +166,11 @@ const STATES_SAVED = [ViewState];
     FontAwesomeModule,
     HttpClientModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatDialogModule,
     MatMenuModule,
     MatSidenavModule,
+    MatSnackBarModule,
     MatToolbarModule,
     NgxsModule.forRoot(STATES, {
       developmentMode: !environment.production
@@ -189,6 +199,12 @@ const STATES_SAVED = [ViewState];
       })
     },
     {
+      provide: GeolocationService,
+      useClass: environment.production
+        ? GeolocationService
+        : GeosimulatorService
+    },
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpCache,
       multi: true
@@ -207,6 +223,14 @@ const STATES_SAVED = [ViewState];
 export class RootModule {
   constructor(library: FaIconLibrary) {
     // 👇 must add icons we use right here
-    library.addIcons(faExpandArrows, faInfoCircle, faMinus, faPlus, faSearch);
+    library.addIcons(
+      faBars,
+      faExpandArrows,
+      faInfoCircle,
+      faMapMarkerAlt,
+      faMinus,
+      faPlus,
+      faSearch
+    );
   }
 }

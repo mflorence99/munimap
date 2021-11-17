@@ -65,6 +65,7 @@
     "@turf/turf": "^6",
     "@types/unzipper": "^0.10.4",
     "@types/xmldom": "^0.1.31",
+    "backoff-rxjs": "^6.5.7",
     "chalk": "^4",
     "debounce-decorator": "^1.0.6",
     "fast-copy": "^2",
