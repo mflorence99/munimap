@@ -20,12 +20,14 @@ import { HttpCache } from '@lib/services/http-cache';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
+import { LocationStrategy } from '@angular/common';
 import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { NgModule } from '@angular/core';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -67,6 +69,7 @@ import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
 import { ParcelsState } from '@lib/state/parcels';
+import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
 import { RouterModule } from '@angular/router';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
@@ -81,6 +84,7 @@ import { initializeAppProvider } from '@lib/services/initializer';
 
 const COMPONENTS = [
   ConfirmDialogComponent,
+  MessageDialogComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlGraticuleComponent,
@@ -187,6 +191,7 @@ const STATES_SAVED = [ViewState];
       useClass: HttpCache,
       multi: true
     },
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     {
       provide: USE_AUTH_EMULATOR,
       useValue: !environment.production ? ['localhost', 9099] : null

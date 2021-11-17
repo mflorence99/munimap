@@ -34,7 +34,9 @@ export const environment = {
     appId: '1:943285729018:web:7d01b14f96a3d0c8497b43',
     measurementId: 'G-NZNZ5E4EV7'
   },
-  localhost: ['localhost', '127.0.0.1'].includes(location.hostname),
+  localhost:
+    ['localhost', '127.0.0.1'].includes(location.hostname) ||
+    !['', '80'].includes(location.port),
   package: {
     author: PACKAGE.author,
     name: PACKAGE.name,

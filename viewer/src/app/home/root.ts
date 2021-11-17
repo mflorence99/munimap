@@ -4,16 +4,24 @@ import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { LoadMap } from '@lib/state/map';
 import { LoadProfile } from '@lib/state/anon';
+import { Location } from '@angular/common';
 import { Map } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
+import { MessageDialogData } from '@lib/components/message-dialog';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
 
+import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
+
+import urlParse from 'url-parse';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +31,8 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './root.html'
 })
 export class RootPage implements OnInit {
+  #url: any;
+
   @Select(MapState) map$: Observable<Map>;
 
   title: string;
@@ -31,36 +41,57 @@ export class RootPage implements OnInit {
 
   constructor(
     private destroy$: DestroyService,
+    private dialog: MatDialog,
+    private location: Location,
     private router: Router,
-    private store: Store
-  ) {}
+    private store: Store,
+    private titleService: Title
+  ) {
+    this.#url = urlParse(this.location.path(), true);
+  }
 
   // 👉 when we've loaded the map, we can load the profile of the
   //    map's owner, which will give us their workgroup
   #handleMap$(): void {
-    this.map$.pipe(takeUntil(this.destroy$)).subscribe((map) => {
-      // 🔥 what if no map?
-      if (map) {
-        this.title = map.name;
-        this.store.dispatch(new LoadProfile(map.owner));
-      }
-    });
+    this.map$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((map) => !!map)
+      )
+      .subscribe((map) => {
+        // 👉 if the LoadMap fails, the default will be set
+        if (map.isDflt) {
+          const data: MessageDialogData = {
+            message: 'The requested app is no longer available'
+          };
+          this.dialog.open(MessageDialogComponent, { data });
+        } else {
+          this.title = map.name;
+          this.titleService.setTitle(map.name);
+          this.store.dispatch(new LoadProfile(map.owner));
+          // 👉 we don't have to wait until the profile is loaded,
+          //    because guards prevent
+          //    the page from loading until everything is set
+          this.router.navigate(['/town-map'], { queryParams: { id: map.id } });
+        }
+      });
   }
 
   // 👉 when we've authenticated anonymously, we can load the map
+  //    we get the map ID from the domain (preferred, used live)
+  //    or from ...?id= (used in testing)
   #handleUser$(): void {
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      // 🔥 what map to load?
-      //    what default to use?
-      if (user) this.store.dispatch(new LoadMap('washington', null));
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      let id;
+      const parts = this.#url.hostname.split('.');
+      if (parts.length === 3) id = parts[0];
+      else id = this.#url.query.id;
+      this.store.dispatch(new LoadMap(id, null));
     });
   }
 
   ngOnInit(): void {
     this.#handleMap$();
     this.#handleUser$();
-    // 👉 it doesn't matter when we naviate, because guards prevent
-    //    the page from loading until everything is set
-    this.router.navigate(['/town-map']);
   }
 }

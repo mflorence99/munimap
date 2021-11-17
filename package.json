@@ -29,9 +29,9 @@
     "proxy:trails": "ts-node --dir bin trails.ts",
     "proxy:washington-buildings": "ts-node --dir bin washington-buildings.ts",
     "proxy:washington-parcels": "ts-node --dir bin washington-parcels.ts",
-    "serve:author": "ng serve author --port 4200",
+    "serve:author": "ng serve author --port 4200 --allowed-hosts admin.lots.online",
     "serve:proxy": "tsc -p proxy/src && node dist/proxy/server.js",
-    "serve:viewer": "ng serve viewer --port 4202"
+    "serve:viewer": "ng serve viewer --port 4202 --allowed-hosts washington.lots.online"
   },
   "dependencies": {
     "@angular/animations": "^13",
@@ -96,6 +96,7 @@
     "tslib": "^2",
     "ua-parser-js": "^1",
     "unzipper": "^0.10.11",
+    "url-parse": "^1.5.3",
     "uuid": "^8",
     "xmldom": "^0.6.0",
     "zone.js": "~0.11.4"
@@ -119,6 +120,7 @@
     "@types/recursive-readdir": "^2",
     "@types/shpjs": "3.4.1",
     "@types/ua-parser-js": "^0.7.36",
+    "@types/url-parse": "^1.4.5",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",

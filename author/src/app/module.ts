@@ -36,6 +36,7 @@ import { HttpCache } from '@lib/services/http-cache';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
+import { LocationStrategy } from '@angular/common';
 import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -103,6 +104,7 @@ import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ParcelsState } from '@lib/state/parcels';
+import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
 import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
@@ -306,6 +308,7 @@ const STATES_SAVED = [RouterState, ViewState];
       useClass: HttpCache,
       multi: true
     },
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     {
       provide: USE_AUTH_EMULATOR,
       useValue: !environment.production ? ['localhost', 9099] : null

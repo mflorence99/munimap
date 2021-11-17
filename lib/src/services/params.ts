@@ -10,7 +10,7 @@ export class Params {
 
   geoJSON = {
     // 👉 TODO: change depending on environment
-    host: 'http://localhost:4201'
+    host: 'http://proxy.lots.online:4201'
   };
 
   google = {
