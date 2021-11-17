@@ -1,6 +1,5 @@
 import { RootPage } from './home/root';
-
-import { environment } from '../environment';
+import { TownMapPage } from './home/town-map';
 
 import * as Sentry from '@sentry/angular';
 
@@ -19,8 +18,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpCache } from '@lib/services/http-cache';
 import { HttpClientModule } from '@angular/common/http';
+import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
 import { MapState } from '@lib/state/map';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -66,10 +67,16 @@ import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
 import { ParcelsState } from '@lib/state/parcels';
+import { ReadyResolver } from '@lib/resolvers/ready';
+import { RouterModule } from '@angular/router';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 import { ViewState } from '@lib/state/view';
 
+import { environment } from '@lib/environment';
+import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { initializeAppProvider } from '@lib/services/initializer';
 
 const COMPONENTS = [
@@ -113,10 +120,21 @@ const COMPONENTS = [
 
 const DIRECTIVES = [];
 
-const PAGES = [RootPage];
+const PAGES = [RootPage, TownMapPage];
+
+const ROUTES = [
+  {
+    path: 'town-map',
+    component: TownMapPage,
+    resolve: {
+      index: IndexResolver,
+      ready: ReadyResolver
+    }
+  }
+];
 
 const STATES = [AnonState, MapState, ParcelsState, ViewState];
-const STATES_SAVED = [AnonState, MapState, ParcelsState, ViewState];
+const STATES_SAVED = [ViewState];
 
 @NgModule({
   bootstrap: [RootPage],
@@ -133,6 +151,7 @@ const STATES_SAVED = [AnonState, MapState, ParcelsState, ViewState];
     CommonModule,
     FontAwesomeModule,
     HttpClientModule,
+    MatButtonModule,
     MatDialogModule,
     MatMenuModule,
     MatSidenavModule,
@@ -144,7 +163,8 @@ const STATES_SAVED = [AnonState, MapState, ParcelsState, ViewState];
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production
     }),
-    NgxsStoragePluginModule.forRoot({ key: STATES_SAVED })
+    NgxsStoragePluginModule.forRoot({ key: STATES_SAVED }),
+    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' })
   ],
 
   providers: [
@@ -179,7 +199,7 @@ const STATES_SAVED = [AnonState, MapState, ParcelsState, ViewState];
 })
 export class RootModule {
   constructor(library: FaIconLibrary) {
-    // 👇 must add icvons we use right here
-    library.addIcons();
+    // 👇 must add icons we use right here
+    library.addIcons(faExpandArrows, faInfoCircle, faSearch);
   }
 }

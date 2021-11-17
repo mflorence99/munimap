@@ -533,7 +533,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       return null;
     else {
       const borderWidth = this.#borderWidth(resolution);
-      const select = this.map.redrawer.active
+      const select = this.map.redrawer?.active
         ? this.map.vars['--map-parcel-redraw']
         : this.map.vars['--map-parcel-select'];
       // 👉 necessary so we can select

@@ -1,3 +1,4 @@
+import { AnonState } from './anon';
 import { AuthState } from './auth';
 import { Map } from './map';
 import { MapState } from './map';
@@ -25,6 +26,7 @@ import { Store } from '@ngxs/store';
 
 import { combineLatest } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -70,17 +72,19 @@ export class ParcelsState implements NgxsOnInit {
   #parcels: AngularFirestoreCollection<Parcel>;
 
   @Select(MapState) map$: Observable<Map>;
-  @Select(AuthState.profile) profile$: Observable<Profile>;
+  @Select(AnonState.profile) profile1$: Observable<Profile>;
+  @Select(AuthState.profile) profile2$: Observable<Profile>;
 
   constructor(private firestore: AngularFirestore, private store: Store) {
     this.#parcels = this.firestore.collection('parcels');
   }
 
   #handleStreams$(): void {
-    combineLatest([this.map$, this.profile$])
+    const either$ = merge(this.profile1$, this.profile2$);
+    combineLatest([this.map$, either$])
       .pipe(
         mergeMap(([map, profile]) => {
-          if (map === null) {
+          if (map == null || profile == null) {
             redoStack.length = 0;
             undoStack.length = 0;
             return of([]);

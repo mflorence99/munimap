@@ -61,7 +61,7 @@ export class OLFilterCrop2SelectedComponent implements AfterContentInit {
   }
 
   #handleFeaturesSelected$(): void {
-    this.map.selector.featuresSelected
+    this.map.selector?.featuresSelected
       .pipe(takeUntil(this.destroy$))
       .subscribe((selected) => {
         let filter = this.#empty;

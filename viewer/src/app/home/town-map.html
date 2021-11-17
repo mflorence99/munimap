@@ -1,0 +1,238 @@
+<app-ol-map
+  *ngIf="(map$ | async) as map"
+  #olMap
+  [minZoom]="15"
+  [maxZoom]="22"
+  [path]="map.path"
+  class="content"
+>
+  <!-- 📦 CONTROLS -->
+
+  <app-ol-control-searchparcels mapControlSearch></app-ol-control-searchparcels>
+
+  <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
+
+  <app-ol-control-zoom2extent
+    mapControlZoomToExtent
+  ></app-ol-control-zoom2extent>
+
+  <app-ol-control-attribution
+    mapControlAttribution
+  ></app-ol-control-attribution>
+
+  <ng-container *ngIf="olMap.initialized">
+    <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+
+    <app-ol-control-graticule
+      ><app-ol-style-graticule></app-ol-style-graticule
+    ></app-ol-control-graticule>
+
+    <app-ol-control-scaleline></app-ol-control-scaleline>
+
+    <!-- 📦 BG LAYER -->
+
+    <app-ol-layer-tile>
+      <app-ol-source-osm></app-ol-source-osm>
+      <app-ol-filter-pencil></app-ol-filter-pencil>
+    </app-ol-layer-tile>
+
+    <ng-container [ngSwitch]="map.style">
+      <!-- 📦 ARCGIS -->
+
+      <app-ol-layer-tile *ngSwitchCase="'arcgis'">
+        <app-ol-source-xyz
+          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
+          ><app-ol-attribution
+            >Powered by
+            <a href="https://www.esri.com" target="_blank"
+              >Esri</a
+            ></app-ol-attribution
+          ></app-ol-source-xyz
+        >
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-tile>
+
+      <!-- 📦 GOOGLE -->
+
+      <app-ol-layer-tile *ngSwitchCase="'google'">
+        <app-ol-source-xyz
+          [url]="'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'"
+          ><app-ol-attribution
+            >©
+            <a href="https://www.google.com" target="_blank"
+              >Google</a
+            ></app-ol-attribution
+          ></app-ol-source-xyz
+        >
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-tile>
+
+      <!-- 📦 MAPBOX -->
+
+      <app-ol-layer-mapbox
+        *ngSwitchCase="'mapbox'"
+        styleUrl="mapbox://styles/mapbox/bright-v9"
+      >
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-mapbox>
+
+      <!-- 📦 OSM -->
+
+      <app-ol-layer-tile *ngSwitchCase="'osm'">
+        <app-ol-source-osm></app-ol-source-osm>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-tile>
+
+      <!-- 📦 NH GranIT -->
+
+      <app-ol-layer-vector *ngSwitchCase="'nhgranit'">
+        <app-ol-style-boundary></app-ol-style-boundary>
+        <app-ol-source-boundary></app-ol-source-boundary>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <!-- 📦 HILLSHADE LAYER (not needed for ARCGIS) -->
+
+      <app-ol-layer-tile
+        *ngIf="map.style !== 'arcgis'"
+        [maxZoom]="17"
+        [opacity]="1"
+      >
+        <app-ol-source-xyz
+          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+        >
+          <app-ol-attribution
+            >Powered by
+            <a href="https://www.esri.com" target="_blank"
+              >Esri</a
+            ></app-ol-attribution
+          >
+        </app-ol-source-xyz>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-tile>
+    </ng-container>
+
+    <!-- 📦 NH GranIT VECTOR LAYERS -->
+
+    <ng-container *ngIf="map.style === 'nhgranit'">
+      <app-ol-layer-vector>
+        <app-ol-style-lakes></app-ol-style-lakes>
+        <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-parcels [showBackground]="true"></app-ol-style-parcels>
+        <app-ol-source-parcels></app-ol-source-parcels>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-rivers></app-ol-style-rivers>
+        <app-ol-source-geojson [layerKey]="'rivers'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-trails></app-ol-style-trails>
+        <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-stonewalls></app-ol-style-stonewalls>
+        <app-ol-source-stonewalls></app-ol-source-stonewalls>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-buildings></app-ol-style-buildings>
+        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-powerlines></app-ol-style-powerlines>
+        <app-ol-source-geojson
+          [layerKey]="'powerlines'"
+        ></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-parcels [showLabels]="true"></app-ol-style-parcels>
+        <app-ol-source-parcels> </app-ol-source-parcels>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-places></app-ol-style-places>
+        <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+    </ng-container>
+
+    <!-- 📦 VECTOR LAYERS FOR OTHER TYPES -->
+
+    <ng-container *ngIf="map.style !== 'nhgranit'">
+      <app-ol-layer-vector>
+        <app-ol-style-parcels
+          [showBackground]="true"
+          [showLabels]="true"
+        ></app-ol-style-parcels>
+        <app-ol-source-parcels></app-ol-source-parcels>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-stonewalls></app-ol-style-stonewalls>
+        <app-ol-source-stonewalls></app-ol-source-stonewalls>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-buildings></app-ol-style-buildings>
+        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+    </ng-container>
+
+    <!-- 📦 SUPPORTS showSatelliteForSelected  -->
+
+    <app-ol-layer-tile *ngIf="map.options.showSatelliteForSelected">
+      <app-ol-source-xyz
+        [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
+        ><app-ol-attribution
+          >©
+          <a href="https://www.google.com" target="_blank"
+            >Google</a
+          ></app-ol-attribution
+        ></app-ol-source-xyz
+      >
+      <app-ol-filter-crop2selected></app-ol-filter-crop2selected>
+    </app-ol-layer-tile>
+
+    <!-- 📦 SELECTION LAYER -->
+
+    <app-ol-layer-vector>
+      <app-ol-style-parcels
+        [showDimensions]="true"
+        [showLabels]="map.options.showSatelliteForSelected"
+        [showSelection]="true"
+      ></app-ol-style-parcels>
+      <app-ol-source-parcels></app-ol-source-parcels>
+      <app-ol-interaction-select [eventType]="'singleclick'" [multi]="true">
+      </app-ol-interaction-select>
+    </app-ol-layer-vector>
+
+    <!-- 📦 BOUNDARY LAYER -->
+
+    <app-ol-layer-vector>
+      <app-ol-style-polygons></app-ol-style-polygons>
+      <app-ol-source-boundary></app-ol-source-boundary>
+    </app-ol-layer-vector>
+  </ng-container>
+</app-ol-map>

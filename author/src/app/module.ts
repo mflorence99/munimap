@@ -11,8 +11,6 @@ import { TownMapSetupComponent } from './pages/town-map/town-map-setup';
 import { UserProfileComponent } from './pages/root/user-profile';
 import { WorkgroupValidator } from './pages/root/workgroup-validator';
 
-import { environment } from '../environment';
-
 import * as Sentry from '@sentry/angular';
 
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
@@ -43,7 +41,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
@@ -113,6 +110,7 @@ import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 import { ViewState } from '@lib/state/view';
 
+import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { faCrosshairs as fadCrosshairs } from '@fortawesome/pro-duotone-svg-icons';
@@ -258,7 +256,6 @@ const STATES_SAVED = [RouterState, ViewState];
     MatCardModule,
     MatCheckboxModule,
     MatDialogModule,
-    MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
@@ -321,7 +318,7 @@ const STATES_SAVED = [RouterState, ViewState];
 })
 export class RootModule {
   constructor(library: FaIconLibrary) {
-    // 👇 must add icvons we use right here
+    // 👇 must add icons we use right here
     library.addIcons(
       faBars,
       faCog,

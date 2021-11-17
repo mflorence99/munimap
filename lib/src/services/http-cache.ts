@@ -6,7 +6,6 @@ import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Optional } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { delay } from 'rxjs/operators';
@@ -23,8 +22,8 @@ export class HttpCache implements HttpInterceptor {
     perm: {}
   };
 
-  constructor(@Optional() private router: Router) {
-    if (this.router) this.#handleRouterEvents$();
+  constructor(private router: Router) {
+    this.#handleRouterEvents$();
   }
 
   #handleRouterEvents$(): void {

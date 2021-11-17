@@ -63,7 +63,7 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
   // 👇 the idea is that a selection change stops the redraw
 
   #handleFeaturesSelected$(): void {
-    this.map.selector.featuresSelected
+    this.map.selector?.featuresSelected
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.#touched) this.#saveRedraw();

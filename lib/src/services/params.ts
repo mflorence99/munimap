@@ -9,7 +9,7 @@ export class Params {
   };
 
   geoJSON = {
-    // 👉 TODO: chanmge depending on environment
+    // 👉 TODO: change depending on environment
     host: 'http://localhost:4201'
   };
 

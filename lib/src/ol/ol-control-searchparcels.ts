@@ -185,7 +185,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
       this.matches = [];
       const ids = searchables.map((searchable) => searchable.id).join(', ');
       console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
-      this.map.selector.selectParcels(
+      this.map.selector?.selectParcels(
         searchables.map((searchable) => {
           const override = this.#overridesByID[searchable.id];
           if (override?.bbox) return { ...searchable, bbox: override.bbox };

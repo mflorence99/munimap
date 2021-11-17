@@ -104,9 +104,11 @@ export class OLSourceParcelsComponent implements OnInit {
         // 👉 refresh each feature
         this.olVector.addFeatures(features);
         // 👉 reselect selected features b/c we've potentially removed them
-        const selectedIDs = this.map.selector.selectedIDs;
-        if (selectedIDs.length > 0)
-          this.map.selector.reselectParcels(selectedIDs);
+        if (this.map.selector) {
+          const selectedIDs = this.map.selector.selectedIDs;
+          if (selectedIDs.length > 0)
+            this.map.selector.reselectParcels(selectedIDs);
+        }
         this.#success?.(features);
       });
   }
