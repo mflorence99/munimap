@@ -48,7 +48,7 @@ export class InitializerService {
     firebase
       .firestore()
       .enablePersistence()
-      .catch((err) => console.error(err));
+      .catch((error) => console.error(error));
 
     // 👉 preload index of geojson data
     const preload = [this.geoJSON.loadIndex()];

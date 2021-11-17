@@ -255,6 +255,16 @@ a[mat-flat-button] {
   }
 }
 
+.mat-button-toggle {
+  --fa-primary-color: var(--text-color);
+  --fa-secondary-color: var(--text-color);
+
+  &.mat-button-toggle-checked {
+    --fa-primary-color: var(--text-color);
+    --fa-secondary-color: var(--accent-color);
+  }
+}
+
 .mat-card,
 .mat-dialog-container,
 .mat-drawer,
@@ -282,6 +292,11 @@ a[mat-flat-button] {
 
     color: var(--disabled-color) !important;
   }
+}
+
+.mat-snack-bar-container {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
 }
 
 // 👉 Firebase styles
@@ -329,6 +344,12 @@ a[mat-flat-button] {
 .ol-legend-print {
   transform: scale(2.5);
   transform-origin: left top;
+}
+
+.ol-overlay-container.ol-selectable {
+  transition-duration: calc(var(--ol-overlay-animate-duration, 500) * 1ms);
+  transition-property: transform;
+  transition-timing-function: linear;
 }
 
 .ol-scaleline-line {

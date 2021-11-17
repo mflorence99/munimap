@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  position: absolute;
+}
+
+.tracker {
+  .inner {
+    animation: ANIMATE_TRACKER 3s ease-in-out infinite;
+    fill: var(--mat-blue-a200);
+    r: 0.8rem;
+  }
+
+  .outer {
+    fill: white;
+    r: 1rem;
+    stroke: var(--mat-blue-a200);
+  }
+}
+
+.tracker.disabled {
+  .inner {
+    fill: var(--mat-gray-600);
+  }
+
+  .outer {
+    stroke: var(--mat-gray-600);
+  }
+}
+
+@keyframes ANIMATE_TRACKER {
+  0% {
+    r: 10px;
+  }
+  50% {
+    r: 7px;
+  }
+  100% {
+    r: 10px;
+  }
+}

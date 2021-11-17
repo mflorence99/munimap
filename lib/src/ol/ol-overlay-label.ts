@@ -51,7 +51,7 @@ export class OLOverlayLabelComponent implements OnInit {
       position: [0, 0],
       positioning: 'center-center'
     });
-    map.olMap.addOverlay(this.olOverlay);
+    this.map.olMap.addOverlay(this.olOverlay);
   }
 
   #handleClick$(): void {
