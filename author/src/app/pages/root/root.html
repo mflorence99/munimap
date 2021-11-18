@@ -46,7 +46,11 @@
       <nav class="navigator">
         <ul>
           <li (click)="nav.close()" routerLink="/map-create" class="item">
-            <img class="icon" src="assets/favicon.svg" />
+            <fa-icon
+              [icon]="['fad', 'layer-plus']"
+              class="icon selected"
+              size="3x"
+            ></fa-icon>
             <div class="title">Create a new map</div>
             <div class="subtitle">Lorem ipsum dolor sit amet.</div>
           </li>
@@ -57,12 +61,13 @@
             class="item"
             routerLink="/town-map/{{ map.id }}"
           >
-            <img
-              *ngIf="registry.icon('map', 'style', map.style) as icon"
+            <fa-icon
               [class.selected]="title === map.name"
-              [src]="icon"
+              [icon]="['fad', 'layer-group']"
               class="icon"
-            />
+              size="3x"
+            ></fa-icon>
+
             <div class="title">{{ map.name }}</div>
             <div class="subtitle">{{ map.owner }}</div>
           </li>

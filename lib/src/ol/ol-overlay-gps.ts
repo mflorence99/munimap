@@ -46,10 +46,9 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
     this.olOverlay = new OLOverlay({
       autoPan: {
         animation: {
-          duration: 500,
+          duration: 100,
           easing: linear
-        },
-        margin: 100
+        }
       },
       positioning: 'center-center'
     });

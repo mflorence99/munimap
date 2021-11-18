@@ -23,10 +23,16 @@
   width: 100%;
 }
 
+.sidebar {
+  height: 100%;
+  padding: 1rem 0;
+  width: 25rem;
+}
+
 .toolbar {
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
   height: calc(var(--map-cy-toolbar) * 1px);
   position: absolute;
   width: 100%;

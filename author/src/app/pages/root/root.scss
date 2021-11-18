@@ -28,12 +28,14 @@
     padding: 0.5rem 1rem;
 
     .icon {
+      --fa-primary-color: var(--text-color);
+      --fa-secondary-color: var(--text-color);
+
       grid-area: icon;
-      height: 3.5rem;
-      width: 3.5rem;
 
       &.selected {
-        outline: 0.25rem solid var(--accent-color);
+        --fa-primary-color: var(--text-color);
+        --fa-secondary-color: var(--accent-color);
       }
     }
 

@@ -1,0 +1,96 @@
+<button (click)="onClose()" class="closer" mat-icon-button>
+  <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
+</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      <td></td>
+      <ng-container *ngFor="let property of properties">
+        <td>
+          {{ property.id }}
+
+          <mark
+            *ngIf="['U', 'V', 'W'].includes(property.neighborhood) && ['110', '120'].includes(property.usage)"
+            >VACANT</mark
+          >
+        </td>
+      </ng-container>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngIf="sameAddress">
+      <td>Address</td>
+      <td [attr.colspan]="properties.length">{{ properties[0].address }}</td>
+    </tr>
+
+    <tr *ngIf="sameOwner">
+      <td>Owner</td>
+      <td [attr.colspan]="properties.length">{{ properties[0].owner }}</td>
+    </tr>
+
+    <tr *ngIf="sameUsage">
+      <td>Land use</td>
+      <td [attr.colspan]="properties.length">
+        {{ registry.decode('parcel', 'usage', properties[0].usage) }}
+        <span *ngIf="properties[0].usage === '190'">
+          &nbsp;&mdash;&nbsp;{{ registry.decode('parcel', 'use',
+          properties[0].use) }}
+        </span>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Area</td>
+      <ng-container *ngFor="let property of properties">
+        <td>
+          <span *ngIf="property.area >= 4"
+            >{{ property.area | number:'1.0-2' }} ac ({{ sum(property.areas) |
+            number:'1.0-2' }} ac <span class="reference">*</span>)
+          </span>
+          <span *ngIf="property.area < 4"
+            >{{ property.area * 43560 | number:'1.0-0' }} sq ft ({{
+            sum(property.areas) * 43560 | number:'1.0-0' }} sq ft<span
+              class="reference"
+              >*</span
+            >)</span
+          >
+        </td>
+      </ng-container>
+    </tr>
+
+    <tr>
+      <td>Building</td>
+      <ng-container *ngFor="let property of properties">
+        <td>{{ property.building$ | currency:'USD':'symbol':'1.0-0' }}</td>
+      </ng-container>
+    </tr>
+
+    <tr>
+      <td>Land</td>
+      <ng-container *ngFor="let property of properties">
+        <td>{{ property.land$ | currency:'USD':'symbol':'1.0-0' }}</td>
+      </ng-container>
+    </tr>
+
+    <tr>
+      <td>Other</td>
+      <ng-container *ngFor="let property of properties">
+        <td>{{ property.other$ | currency:'USD':'symbol':'1.0-0' }}</td>
+      </ng-container>
+    </tr>
+
+    <tr>
+      <td>Total</td>
+      <ng-container *ngFor="let property of properties">
+        <td>{{ property.taxed$ | currency:'USD':'symbol':'1.0-0' }}</td>
+      </ng-container>
+    </tr>
+  </tbody>
+</table>
+
+<aside class="footnote">
+  <span class="reference">*</span> Calculated from perimeter and may not match
+  survey
+</aside>

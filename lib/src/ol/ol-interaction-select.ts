@@ -139,6 +139,12 @@ export class OLInteractionSelectComponent
       });
   }
 
+  #hasSelectionChanged(ids: ParcelID[]): boolean {
+    const diff = new Set(this.selectedIDs);
+    for (const id of ids) diff.delete(id);
+    return diff.size > 0;
+  }
+
   #onSelect(_event?: OLSelectEvent): void {
     const ids = this.selectedIDs.join(', ');
     console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
@@ -146,12 +152,16 @@ export class OLInteractionSelectComponent
   }
 
   #selectParcels(ids: ParcelID[]): void {
+    const delta = this.#hasSelectionChanged(ids);
     this.olSelect.getFeatures().clear();
     this.layer.olLayer.getSource().forEachFeature((feature) => {
       if (ids.includes(feature.getId()))
         this.olSelect.getFeatures().push(feature);
     });
-    this.#onSelect();
+    // 👉 ony push an event if the selection has changed
+    //    OL will reselect when features come in and out of view,
+    //    so we need to jump through all the other hoops
+    if (delta) this.#onSelect();
   }
 
   addToMap(): void {

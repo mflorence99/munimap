@@ -20,7 +20,6 @@ import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
-import { TypeRegistry } from '@lib/services/typeregistry';
 import { Undo } from '@lib/state/parcels';
 import { User } from '@lib/state/auth';
 import { ViewChild } from '@angular/core';
@@ -67,7 +66,6 @@ export class RootPage implements OnInit {
     private cdf: ChangeDetectorRef,
     private firestore: AngularFirestore,
     private destroy$: DestroyService,
-    public registry: TypeRegistry,
     private router: Router,
     private store: Store
   ) {}

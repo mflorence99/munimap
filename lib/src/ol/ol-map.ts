@@ -97,7 +97,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       controls: [],
       layers: null,
       maxTilesLoading: 256,
-      moveTolerance: 8,
+      moveTolerance: 1,
       target: null,
       view: null
     });

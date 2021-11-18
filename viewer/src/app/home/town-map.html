@@ -12,10 +12,6 @@
 
   <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
-  <app-ol-control-zoom2extent
-    mapControlZoomToExtent
-  ></app-ol-control-zoom2extent>
-
   <app-ol-control-attribution
     mapControlAttribution
   ></app-ol-control-attribution>
@@ -238,5 +234,11 @@
       <app-ol-style-polygons></app-ol-style-polygons>
       <app-ol-source-boundary></app-ol-source-boundary>
     </app-ol-layer-vector>
+
+    <!-- 📦 POPUPS -->
+
+    <app-ol-popup-selection>
+      <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>
+    </app-ol-popup-selection>
   </ng-container>
 </app-ol-map>

@@ -30,7 +30,7 @@ import OLSnap from 'ol/interaction/Snap';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-interaction-redraw',
   template: '<ng-content></ng-content>',
-  styles: [':host { display: none; }']
+  styles: [':host { display: none }']
 })
 export class OLInteractionRedrawComponent implements AfterContentInit {
   #feature: OLFeature<OLPolygon | OLMultiPolygon>;

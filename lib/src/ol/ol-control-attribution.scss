@@ -6,17 +6,20 @@
 .attribution {
   align-items: center;
   background-color: rgba(var(--rgb-gray-100), 0.75);
+  bottom: -0.25rem;
   display: flex;
-  height: 3rem;
+  flex-wrap: wrap;
   opacity: 1;
   padding: 0.5rem;
   pointer-events: auto;
   position: absolute;
-  right: 3rem;
-  top: 0.25rem;
+  right: 3.25rem;
   transition: opacity 0.25s ease-in-out;
-  white-space: nowrap;
   width: auto;
+
+  .item {
+    white-space: nowrap;
+  }
 }
 
 .attribution.collapsed {

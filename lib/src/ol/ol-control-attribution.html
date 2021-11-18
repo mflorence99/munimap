@@ -1,10 +1,11 @@
 <article class="control">
-  <p #attribution class="attribution" [class.collapsed]="collapsed">
-    <span
-      *ngFor="let attribution of attributions; last as isLast; trackBy: trackByAttribution"
-      [innerHTML]="attribution + (isLast? '' : '&nbsp;|&nbsp;')"
-    ></span>
-  </p>
+  <ul #attribution class="attribution" [class.collapsed]="collapsed">
+    <li
+      *ngFor="let attribution of attributions; trackBy: trackByAttribution"
+      [innerHTML]="attribution"
+      class="item"
+    ></li>
+  </ul>
 
   <button (click)="toggleAttributions()" mat-icon-button>
     <fa-icon [icon]="['fas', 'info-circle']" size="2x"></fa-icon>

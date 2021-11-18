@@ -46,7 +46,6 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
     //    constructor as there few "set" methods
     this.olControl = new OLGraticule({
       borderWidth: this.borderWidth,
-      // 🔥 make toFixed(2) a function of this.stepCoord
       formatCoord: (coord): string => `${coord.toFixed(2)}°`,
       margin: this.margin,
       maxResolution: this.maxZoom

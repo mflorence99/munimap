@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
+import { CurrencyPipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
 import { ErrorHandler } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -54,6 +55,8 @@ import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLLayerVectorTileComponent } from '@lib/ol/ol-layer-vectortile';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
+import { OLPopupParcelPropertiesComponent } from '@lib/ol/ol-popup-parcelproperties';
+import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -83,12 +86,14 @@ import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
+import { faCog } from '@fortawesome/pro-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faMapMarkerAlt } from '@fortawesome/pro-duotone-svg-icons';
 import { faMinus } from '@fortawesome/pro-light-svg-icons';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { initializeAppProvider } from '@lib/services/initializer';
 
 const COMPONENTS = [
@@ -111,6 +116,8 @@ const COMPONENTS = [
   OLLayerVectorTileComponent,
   OLMapComponent,
   OLOverlayGPSComponent,
+  OLPopupParcelPropertiesComponent,
+  OLPopupSelectionComponent,
   OLSourceBoundaryComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
@@ -184,6 +191,7 @@ const STATES_SAVED = [ViewState];
   ],
 
   providers: [
+    CurrencyPipe,
     DecimalPipe,
     {
       provide: APP_INITIALIZER,
@@ -225,12 +233,14 @@ export class RootModule {
     // 👇 must add icons we use right here
     library.addIcons(
       faBars,
+      faCog,
       faExpandArrows,
       faInfoCircle,
       faMapMarkerAlt,
       faMinus,
       faPlus,
-      faSearch
+      faSearch,
+      faTimes
     );
   }
 }

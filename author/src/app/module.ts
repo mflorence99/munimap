@@ -121,6 +121,8 @@ import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
+import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-icons';
 import { faObjectUngroup as fadObjectUngroup } from '@fortawesome/pro-duotone-svg-icons';
@@ -331,6 +333,8 @@ export class RootModule {
       faExclamationTriangle,
       faExpandArrows,
       faInfoCircle,
+      faLayerGroup,
+      faLayerPlus,
       fadObjectGroup,
       fasObjectGroup,
       fasObjectUngroup,

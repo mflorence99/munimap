@@ -297,6 +297,7 @@ a[mat-flat-button] {
 .mat-snack-bar-container {
   background-color: var(--background-color) !important;
   color: var(--text-color) !important;
+  max-width: 99vw !important;
 }
 
 // 👉 Firebase styles
