@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { theState } from '../lib/src/geojson';
+
 import { Features } from '@lib/geojson';
 import { Parcel } from '@lib/geojson';
 
@@ -6,7 +8,6 @@ import { calculate } from '@lib/geojson';
 import { mkdirSync } from 'fs';
 import { normalize } from '@lib/geojson';
 import { stat } from 'fs';
-import { theState } from '@lib/geojson';
 import { unlinkSync } from 'fs';
 import { writeFileSync } from 'fs';
 

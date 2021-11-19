@@ -3,7 +3,7 @@ import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
-import { theState } from '@lib/geojson';
+import { theState } from '../lib/src/geojson';
 import { writeFileSync } from 'fs';
 
 import booleanIntersects from '@turf/boolean-intersects';
@@ -18,10 +18,10 @@ const url =
 const dist = './dist/proxy';
 
 const allTowns = JSON.parse(
-  readFileSync(`./dist/${theState}/towns.geojson`).toString()
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
-const index = JSON.parse(readFileSync('./dist/index.json').toString());
+const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
 
 const trailsByCountyByTown = {};
 
@@ -79,7 +79,7 @@ async function main(): Promise<void> {
           // 👉 some features have bbox on the geometry, we created our own
           delete trail.geometry.bbox;
 
-          // 👉 Athe original dataset doesn't give a reliable unique ID
+          // 👉 The original dataset doesn't give a reliable unique ID
           //    so let's at least use a hash of the geometry so that
           //    every time we load the same ID is used
           trail.id = hash.MD5(trail.geometry);

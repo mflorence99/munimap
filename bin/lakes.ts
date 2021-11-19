@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { theState } from '../lib/src/geojson';
+
 import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
-import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -13,7 +14,7 @@ import shp from 'shpjs';
 
 const dist = './dist/proxy';
 
-const index = JSON.parse(readFileSync('./dist/index.json').toString());
+const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
 
 const url =
   'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Elevation_and_Derived_Products/d-bathymetry/Bathymetry_Lakes_polygons';

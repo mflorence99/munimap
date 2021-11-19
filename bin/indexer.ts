@@ -1,9 +1,10 @@
+import { theState } from '../lib/src/geojson';
+
 import { Index } from '@lib/geojson';
 import { Layer } from '@lib/geojson';
 
 import { existsSync } from 'fs';
 import { readFileSync } from 'fs';
-import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { theState } from '../lib/src/geojson';
+
 import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
-import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
@@ -40,14 +41,14 @@ const url =
 const fileName = 'NewHampshire.geojson';
 
 const allTowns = JSON.parse(
-  readFileSync(`./dist/${theState}/towns.geojson`).toString()
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
 const allTownFeatures = allTowns.features.filter(
   (feature) => !exclusions.includes(feature.id)
 );
 
-const index = JSON.parse(readFileSync('./dist/index.json').toString());
+const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
 
 const buildingsByCountyByTown = {};
 

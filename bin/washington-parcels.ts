@@ -1,9 +1,10 @@
 import { PARCELS } from '../proxy/assets/washington-parcels';
 
+import { theState } from '../lib/src/geojson';
+
 import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
-import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';

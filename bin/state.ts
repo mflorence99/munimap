@@ -1,5 +1,6 @@
+import { theState } from '../lib/src/geojson';
+
 import { copyFileSync } from 'fs';
-import { theState } from '@lib/geojson';
 
 import chalk from 'chalk';
 

@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { theState } from '../lib/src/geojson';
+
 import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
-import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 
-// 👉 file on server uses eastings, norhings and has no properties
+// 👉 file on server uses eastings, northings and has no properties
 //    so we grabbed a file that works and we assume it won't change
 // url: 'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-railroads/rr'
 const railroads = JSON.parse(

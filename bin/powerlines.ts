@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { theState } from '../lib/src/geojson';
+
 import * as turf from '@turf/turf';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
-import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import booleanIntersects from '@turf/boolean-intersects';
@@ -26,10 +27,10 @@ const powerlines = JSON.parse(
 );
 
 const allTowns = JSON.parse(
-  readFileSync(`./dist/${theState}/towns.geojson`).toString()
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
-const index = JSON.parse(readFileSync('./dist/index.json').toString());
+const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
 
 const linesByCountyByTown = {};
 

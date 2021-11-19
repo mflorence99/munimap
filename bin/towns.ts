@@ -1,8 +1,8 @@
 import { bboxByAspectRatio } from './bbox';
+import { theState } from '../lib/src/geojson';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
-import { theState } from '@lib/geojson';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
