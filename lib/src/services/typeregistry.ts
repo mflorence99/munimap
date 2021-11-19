@@ -1,46 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { MapStyle } from '../state/map';
 import { ParcelPropertiesUsage } from '../geojson';
 import { ParcelPropertiesUse } from '../geojson';
 
 import { Injectable } from '@angular/core';
 
 const registry: Record<string, Record<string, Record<string, Descriptor>>> = {
-  map: {
-    style: {
-      arcgis: {
-        decoding: 'ArcGIS',
-        description: 'Lorem ipsum erat vincit',
-        icon: 'assets/arcgis.jpg',
-        ref: 'https://www.arcgis.com/apps/mapviewer/index.html'
-      },
-      google: {
-        decoding: 'Google',
-        description: 'Lorem ipsum erat vincit',
-        icon: 'assets/google.png',
-        ref: 'https://www.google.com/maps'
-      },
-      mapbox: {
-        decoding: 'Mapbox',
-        description: 'Lorem ipsum erat vincit',
-        icon: 'assets/mapbox.png',
-        ref: 'https://www.mapbox.com/maps'
-      },
-      nhgranit: {
-        decoding: 'NH GranIT',
-        description: 'Lorem ipsum erat vincit',
-        icon: 'assets/nhgranit.jpg',
-        ref: 'https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html'
-      },
-      osm: {
-        decoding: 'OSM',
-        description: 'Lorem ipsum erat vincit',
-        icon: 'assets/osm.png',
-        ref: 'https://www.openstreetmap.org/'
-      }
-    } as Record<MapStyle, Descriptor>
-  },
-
   parcel: {
     // 🔥 this is certainly just valid for Washington
     neighborhood: {

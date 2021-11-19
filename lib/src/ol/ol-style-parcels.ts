@@ -352,6 +352,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const color = this.showLabelContrast
         ? this.map.vars['--map-parcel-text-inverse']
         : this.map.vars['--map-parcel-text-color'];
+      const outline = !this.showLabelContrast
+        ? this.map.vars['--map-parcel-text-inverse']
+        : this.map.vars['--map-parcel-text-color'];
       // 👉 we need to draw a label in each polygon of a multi-polygon
       //    and a separate label for parcel ID and acreage
       const labels = this.#labelsImpl(props, resolution, numPolygons);
@@ -363,6 +366,12 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetY: label.offsetY,
           overflow: true,
           rotation: label.rotation,
+          stroke: this.showLabelContrast
+            ? new OLStroke({
+                color: `rgba(${outline}, 1)`,
+                width: Math.min(label.fontSize / 8, this.maxBorderWidth)
+              })
+            : null,
           text: label.text
         });
         return new OLStyle({ geometry: label.point, text });
@@ -552,13 +561,12 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const fills = this.#fill(props, resolution, numPolygons);
       if (fills) styles.push(...fills);
     }
-    // 👇 background
+    // 👇 border
     if (this.showBorder) {
       const strokes = this.#strokeBorder(props, resolution, numPolygons);
       if (strokes) styles.push(...strokes);
     }
-    // TODO 🔥 hack -- we only show dimensions when selected
-    //         make the coordinate look like they're always multi
+    // 👉 make the coordinates look like they're always multi
     if (this.showDimensions) {
       let polygons = [feature.getGeometry()];
       if (feature.getGeometry().getType() === 'MultiPolygon')

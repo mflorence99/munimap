@@ -107,8 +107,7 @@ export class TownMapPage implements OnInit {
       id: null,
       name: null,
       owner: owner,
-      path: path ?? recentPath,
-      style: 'nhgranit'
+      path: path ?? recentPath
     };
     // 👉 load up the requested (or default) map
     this.store.dispatch(new LoadMap(id, dflt));

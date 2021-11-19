@@ -32,85 +32,25 @@
       <app-ol-filter-pencil></app-ol-filter-pencil>
     </app-ol-layer-tile>
 
-    <ng-container [ngSwitch]="map.style">
-      <!-- 📦 ARCGIS -->
+    <!-- 📦 HILLSHADE LAYER (not needed for ARCGIS) -->
 
-      <app-ol-layer-tile *ngSwitchCase="'arcgis'">
-        <app-ol-source-xyz
-          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
-          ><app-ol-attribution
-            >Powered by
-            <a href="https://www.esri.com" target="_blank"
-              >Esri</a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-tile>
-
-      <!-- 📦 GOOGLE -->
-
-      <app-ol-layer-tile *ngSwitchCase="'google'">
-        <app-ol-source-xyz
-          [url]="'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'"
-          ><app-ol-attribution
-            >©
-            <a href="https://www.google.com" target="_blank"
-              >Google</a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-tile>
-
-      <!-- 📦 MAPBOX -->
-
-      <app-ol-layer-mapbox
-        *ngSwitchCase="'mapbox'"
-        styleUrl="mapbox://styles/mapbox/bright-v9"
+    <app-ol-layer-tile [maxZoom]="17" [opacity]="1">
+      <app-ol-source-xyz
+        [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
       >
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-mapbox>
-
-      <!-- 📦 OSM -->
-
-      <app-ol-layer-tile *ngSwitchCase="'osm'">
-        <app-ol-source-osm></app-ol-source-osm>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-tile>
-
-      <!-- 📦 NH GranIT -->
-
-      <app-ol-layer-vector *ngSwitchCase="'nhgranit'">
-        <app-ol-style-boundary></app-ol-style-boundary>
-        <app-ol-source-boundary></app-ol-source-boundary>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <!-- 📦 HILLSHADE LAYER (not needed for ARCGIS) -->
-
-      <app-ol-layer-tile
-        *ngIf="map.style !== 'arcgis'"
-        [maxZoom]="17"
-        [opacity]="1"
-      >
-        <app-ol-source-xyz
-          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+        <app-ol-attribution
+          >Powered by
+          <a href="https://www.esri.com" target="_blank"
+            >Esri</a
+          ></app-ol-attribution
         >
-          <app-ol-attribution
-            >Powered by
-            <a href="https://www.esri.com" target="_blank"
-              >Esri</a
-            ></app-ol-attribution
-          >
-        </app-ol-source-xyz>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-tile>
-    </ng-container>
+      </app-ol-source-xyz>
+      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+    </app-ol-layer-tile>
 
     <!-- 📦 NH GranIT VECTOR LAYERS -->
 
-    <ng-container *ngIf="map.style === 'nhgranit' && !(satelliteView$ | async)">
+    <ng-container *ngIf="!(satelliteView$ | async)">
       <app-ol-layer-vector>
         <app-ol-style-lakes></app-ol-style-lakes>
         <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
@@ -175,36 +115,11 @@
       </app-ol-layer-vector>
     </ng-container>
 
-    <!-- 📦 VECTOR LAYERS FOR OTHER TYPES -->
-
-    <ng-container *ngIf="map.style !== 'nhgranit' && !(satelliteView$ | async)">
-      <app-ol-layer-vector>
-        <app-ol-style-parcels
-          [showBackground]="true"
-          [showBorder]="true"
-          [showLabels]="true"
-        ></app-ol-style-parcels>
-        <app-ol-source-parcels></app-ol-source-parcels>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-style-stonewalls></app-ol-style-stonewalls>
-        <app-ol-source-stonewalls></app-ol-source-stonewalls>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-style-buildings></app-ol-style-buildings>
-        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-    </ng-container>
-
-    <!-- 📦 SATELLITE LAYERs  -->
+    <!-- 📦 SATELLITE LAYERS  -->
 
     <app-ol-layer-tile>
       <app-ol-source-xyz
-        [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
+        [url]="'http://mt0.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'"
         ><app-ol-attribution
           >©
           <a href="https://www.google.com" target="_blank"
@@ -212,6 +127,7 @@
           ></app-ol-attribution
         ></app-ol-source-xyz
       >
+      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       <app-ol-filter-crop2selected
         *ngIf="!(satelliteView$ | async)"
       ></app-ol-filter-crop2selected>

@@ -12,7 +12,7 @@
   overflow: hidden;
   position: relative;
   transition: width 0.25s, height 0.25s;
-  width: 35rem;
+  width: 25rem;
 
   &.rolledup {
     height: 5rem;
@@ -40,35 +40,4 @@
   border-radius: 0.25rem;
   cursor: pointer;
   padding: 1.15rem;
-}
-
-.thumbnail {
-  display: grid;
-  gap: 0.125rem;
-  grid-template-rows: auto auto;
-  justify-items: center;
-
-  img {
-    cursor: pointer;
-    height: 4.5rem;
-    width: 4.5rem;
-  }
-
-  img.selected {
-    outline: 0.25rem solid var(--accent-color);
-  }
-
-  input[type='radio'] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-}
-
-.thumbnails {
-  display: grid;
-  grid-template-columns: auto auto auto auto auto;
-  justify-content: space-between;
-  margin: 0.5rem 0;
 }

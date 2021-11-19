@@ -6,7 +6,7 @@
       src="assets/favicon.svg"
     />
 
-    <mat-card-title>Customize Your Map</mat-card-title>
+    <mat-card-title>Identify Your Map</mat-card-title>
     <mat-card-subtitle>Lorem ipsum dolor sit amet.</mat-card-subtitle>
     <button
       *ngIf="!rolledup && !townMap.creating"
@@ -56,33 +56,6 @@
           >Use only lowercase letters and numbers</mat-hint
         >
       </mat-form-field>
-
-      <br />
-
-      <mat-label>
-        Choose a map style:
-        <span *ngIf="registry.descriptor('map', 'style', map.style) as desc"
-          ><a [href]="desc.ref" target="_blank">{{ desc.decoding }}</a> {{
-          desc.description }}</span
-        >
-      </mat-label>
-
-      <section class="thumbnails">
-        <label
-          *ngFor="let item of registry.list('map', 'style'); trackBy: trackByStyle"
-          class="thumbnail"
-        >
-          <input
-            #style="ngModel"
-            [(ngModel)]="map.style"
-            [value]="item[0]"
-            type="radio"
-            name="style"
-          />
-          <img [class.selected]="map.style === item[0]" [src]="item[1].icon" />
-          {{ item[1].decoding}}
-        </label>
-      </section>
     </form>
   </mat-card-content>
 
