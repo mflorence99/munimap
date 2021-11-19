@@ -16,4 +16,6 @@ export class TownMapPage {
   @Select(ViewState.gps) gps$: Observable<boolean>;
 
   @Select(MapState) map$: Observable<Map>;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 }

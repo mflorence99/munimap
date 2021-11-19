@@ -45,7 +45,6 @@ interface Label {
   fontWeight: string;
   offsetX: number;
   offsetY: number;
-  outlined: boolean;
   point: OLPoint;
   rotation: number;
   text: string;
@@ -86,7 +85,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() minFontSizeOutlined = 28;
   @Input() opacity = 0.25;
   @Input() showBackground = false;
+  @Input() showBorder = false;
   @Input() showDimensions = false;
+  @Input() showLabelContrast = false;
   @Input() showLabels = false;
   @Input() showSelection = false;
   @Input() straightLineTolerance = 15;
@@ -348,10 +349,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     else {
-      const color = this.showSelection
-        ? this.map.vars['--map-parcel-text-inverse']
-        : this.map.vars['--map-parcel-text-color'];
-      const outline = !this.showSelection
+      const color = this.showLabelContrast
         ? this.map.vars['--map-parcel-text-inverse']
         : this.map.vars['--map-parcel-text-color'];
       // 👉 we need to draw a label in each polygon of a multi-polygon
@@ -365,12 +363,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           offsetY: label.offsetY,
           overflow: true,
           rotation: label.rotation,
-          stroke: label.outlined
-            ? new OLStroke({
-                color: `rgba(${outline}, 1)`,
-                width: Math.min(label.fontSize / 8, this.maxBorderWidth)
-              })
-            : null,
           text: label.text
         });
         return new OLStyle({ geometry: label.point, text });
@@ -395,7 +387,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           fontWeight: 'bold',
           offsetX: 0,
           offsetY: 0,
-          outlined: false,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
           text: `${props.id}`
@@ -438,7 +429,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           fontWeight: 'bold',
           offsetX: x1,
           offsetY: y1,
-          outlined: fontSize >= this.minFontSizeOutlined,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
           text: `${props.id}`
@@ -449,7 +439,6 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           fontWeight: 'normal',
           offsetX: x2,
           offsetY: y2,
-          outlined: fontSize >= this.minFontSizeOutlined,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
           text: acres
@@ -483,7 +472,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   }
 
   // 👐 https://stackoverflow.com/questions/45740521
-  #strokeOutline(
+  #strokeBorder(
     props: ParcelProperties,
     resolution: number,
     numPolygons: number
@@ -562,7 +551,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     if (this.showBackground) {
       const fills = this.#fill(props, resolution, numPolygons);
       if (fills) styles.push(...fills);
-      const strokes = this.#strokeOutline(props, resolution, numPolygons);
+    }
+    // 👇 background
+    if (this.showBorder) {
+      const strokes = this.#strokeBorder(props, resolution, numPolygons);
       if (strokes) styles.push(...strokes);
     }
     // TODO 🔥 hack -- we only show dimensions when selected

@@ -106,9 +106,6 @@ export class TownMapPage implements OnInit {
     const dflt: Map = {
       id: null,
       name: null,
-      options: {
-        showSatelliteForSelected: true
-      },
       owner: owner,
       path: path ?? recentPath,
       style: 'nhgranit'

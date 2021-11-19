@@ -6,6 +6,7 @@ import { OLLayerVectorTileComponent } from './ol-layer-vectortile';
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 import { Optional } from '@angular/core';
 
 import PencilSketch from 'ol-ext/filter/PencilSketch';
@@ -16,7 +17,7 @@ import PencilSketch from 'ol-ext/filter/PencilSketch';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLFilterPencilComponent implements AfterContentInit {
+export class OLFilterPencilComponent implements AfterContentInit, OnDestroy {
   #layer: any;
 
   olFilter: typeof PencilSketch;
@@ -36,5 +37,10 @@ export class OLFilterPencilComponent implements AfterContentInit {
   ngAfterContentInit(): void {
     // 👇 ol-ext has monkey-patched addFilter
     this.#layer.olLayer['addFilter'](this.olFilter);
+  }
+
+  ngOnDestroy(): void {
+    // 👇 ol-ext has monkey-patched removeFilter
+    this.#layer.olLayer['removeFilter'](this.olFilter);
   }
 }

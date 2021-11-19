@@ -110,7 +110,7 @@
 
     <!-- 📦 NH GranIT VECTOR LAYERS -->
 
-    <ng-container *ngIf="map.style === 'nhgranit'">
+    <ng-container *ngIf="map.style === 'nhgranit' && !(satelliteView$ | async)">
       <app-ol-layer-vector>
         <app-ol-style-lakes></app-ol-style-lakes>
         <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
@@ -118,7 +118,10 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-parcels [showBackground]="true"></app-ol-style-parcels>
+        <app-ol-style-parcels
+          [showBackground]="true"
+          [showBorder]="true"
+        ></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
 
@@ -174,10 +177,11 @@
 
     <!-- 📦 VECTOR LAYERS FOR OTHER TYPES -->
 
-    <ng-container *ngIf="map.style !== 'nhgranit'">
+    <ng-container *ngIf="map.style !== 'nhgranit' && !(satelliteView$ | async)">
       <app-ol-layer-vector>
         <app-ol-style-parcels
           [showBackground]="true"
+          [showBorder]="true"
           [showLabels]="true"
         ></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
@@ -196,9 +200,9 @@
       </app-ol-layer-vector>
     </ng-container>
 
-    <!-- 📦 SUPPORTS showSatelliteForSelected  -->
+    <!-- 📦 SATELLITE LAYERs  -->
 
-    <app-ol-layer-tile *ngIf="map.options.showSatelliteForSelected">
+    <app-ol-layer-tile>
       <app-ol-source-xyz
         [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
         ><app-ol-attribution
@@ -208,15 +212,27 @@
           ></app-ol-attribution
         ></app-ol-source-xyz
       >
-      <app-ol-filter-crop2selected></app-ol-filter-crop2selected>
+      <app-ol-filter-crop2selected
+        *ngIf="!(satelliteView$ | async)"
+      ></app-ol-filter-crop2selected>
     </app-ol-layer-tile>
+
+    <app-ol-layer-vector *ngIf="satelliteView$ | async">
+      <app-ol-style-parcels
+        [showBorder]="true"
+        [showLabelContrast]="true"
+        [showLabels]="true"
+      ></app-ol-style-parcels>
+      <app-ol-source-parcels></app-ol-source-parcels>
+    </app-ol-layer-vector>
 
     <!-- 📦 SELECTION LAYER -->
 
     <app-ol-layer-vector>
       <app-ol-style-parcels
         [showDimensions]="true"
-        [showLabels]="map.options.showSatelliteForSelected"
+        [showLabelContrast]="true"
+        [showLabels]="true"
         [showSelection]="true"
       ></app-ol-style-parcels>
       <app-ol-source-parcels></app-ol-source-parcels>

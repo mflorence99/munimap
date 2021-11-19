@@ -257,7 +257,7 @@ a[mat-flat-button] {
 
 .mat-button-toggle {
   --fa-primary-color: var(--text-color);
-  --fa-secondary-color: var(--text-color);
+  --fa-secondary-color: var(--mat-gray-600);
 
   &.mat-button-toggle-checked {
     --fa-primary-color: var(--text-color);

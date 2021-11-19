@@ -14,6 +14,11 @@ export class SetGPS {
   constructor(public gps: boolean) {}
 }
 
+export class SetSatelliteView {
+  static readonly type = '[View] SetSatelliteView';
+  constructor(public satelliteView: boolean) {}
+}
+
 export class UpdateView {
   static readonly type = '[View] UpdateView';
   constructor(public path: Path, public view: View) {}
@@ -29,6 +34,7 @@ export interface View {
 export interface ViewStateModel {
   gps: boolean;
   recentPath: string;
+  satelliteView: boolean;
   viewByPath: Record<Path, View>;
 }
 
@@ -37,6 +43,7 @@ export interface ViewStateModel {
   defaults: {
     gps: false,
     recentPath: null,
+    satelliteView: false,
     viewByPath: {
       [theState]: { center: null, zoom: null }
     }
@@ -50,6 +57,10 @@ export class ViewState {
     return state.gps;
   }
 
+  @Selector() static satelliteView(state: ViewStateModel): boolean {
+    return state.satelliteView;
+  }
+
   recentPath(): string {
     return this.store.snapshot().view.recentPath;
   }
@@ -59,6 +70,13 @@ export class ViewState {
     action: SetGPS
   ): void {
     ctx.setState(patch({ gps: action.gps }));
+  }
+
+  @Action(SetSatelliteView) setSatelliteView(
+    ctx: StateContext<ViewStateModel>,
+    action: SetSatelliteView
+  ): void {
+    ctx.setState(patch({ satelliteView: action.satelliteView }));
   }
 
   @Action(UpdateView) updateView(

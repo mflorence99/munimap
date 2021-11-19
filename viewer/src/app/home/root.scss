@@ -32,7 +32,7 @@
 .toolbar {
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: auto 1fr auto auto auto;
   height: calc(var(--map-cy-toolbar) * 1px);
   position: absolute;
   width: 100%;

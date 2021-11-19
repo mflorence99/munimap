@@ -88,6 +88,7 @@ import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
 import { faCog } from '@fortawesome/pro-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faMapMarkerAlt } from '@fortawesome/pro-duotone-svg-icons';
 import { faMinus } from '@fortawesome/pro-light-svg-icons';
@@ -235,6 +236,7 @@ export class RootModule {
       faBars,
       faCog,
       faExpandArrows,
+      faGlobeAmericas,
       faInfoCircle,
       faMapMarkerAlt,
       faMinus,

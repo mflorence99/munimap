@@ -152,6 +152,7 @@
           <app-ol-layer-vector>
             <app-ol-style-parcels
               [showBackground]="true"
+              [showBorder]="true"
             ></app-ol-style-parcels>
             <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
@@ -220,6 +221,7 @@
           <app-ol-layer-vector>
             <app-ol-style-parcels
               [showBackground]="true"
+              [showBorder]="true"
               [showLabels]="true"
             ></app-ol-style-parcels>
             <app-ol-source-parcels></app-ol-source-parcels>
@@ -240,11 +242,9 @@
           </app-ol-layer-vector>
         </ng-container>
 
-        <!-- 📦 SUPPORTS showSatelliteForSelected NOT printed -->
+        <!-- 📦 SATELLITE LAYER (not printed) -->
 
-        <app-ol-layer-tile
-          *ngIf="map.options.showSatelliteForSelected && !olMap.printing"
-        >
+        <app-ol-layer-tile *ngIf="!olMap.printing">
           <app-ol-source-xyz
             [url]="'http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'"
             ><app-ol-attribution
@@ -262,7 +262,8 @@
         <app-ol-layer-vector *ngIf="!olMap.printing">
           <app-ol-style-parcels
             [showDimensions]="true"
-            [showLabels]="map.options.showSatelliteForSelected"
+            [showLabelContrast]="true"
+            [showLabels]="true"
             [showSelection]="true"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>

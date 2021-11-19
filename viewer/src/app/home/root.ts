@@ -15,6 +15,7 @@ import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SetGPS } from '@lib/state/view';
+import { SetSatelliteView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
@@ -38,6 +39,8 @@ export class RootPage implements OnInit {
   @Select(ViewState.gps) gps$: Observable<boolean>;
 
   @Select(MapState) map$: Observable<Map>;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   title: string;
 
@@ -101,5 +104,9 @@ export class RootPage implements OnInit {
 
   onGPSToggle(state: boolean): void {
     this.store.dispatch(new SetGPS(state));
+  }
+
+  onSatelliteViewToggle(state: boolean): void {
+    this.store.dispatch(new SetSatelliteView(state));
   }
 }

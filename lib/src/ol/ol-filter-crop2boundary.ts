@@ -7,6 +7,7 @@ import { OLMapComponent } from './ol-map';
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 import { Optional } from '@angular/core';
 
 import copy from 'fast-copy';
@@ -20,7 +21,9 @@ import Polygon from 'ol/geom/Polygon';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLFilterCrop2BoundaryComponent implements AfterContentInit {
+export class OLFilterCrop2BoundaryComponent
+  implements AfterContentInit, OnDestroy
+{
   #layer: any;
 
   olFilter: typeof Crop;
@@ -52,5 +55,10 @@ export class OLFilterCrop2BoundaryComponent implements AfterContentInit {
   ngAfterContentInit(): void {
     // 👇 ol-ext has monkey-patched addFilter
     this.#layer.olLayer['addFilter'](this.olFilter);
+  }
+
+  ngOnDestroy(): void {
+    // 👇 ol-ext has monkey-patched removeFilter
+    this.#layer.olLayer['removeFilter'](this.olFilter);
   }
 }

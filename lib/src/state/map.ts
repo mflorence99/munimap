@@ -37,14 +37,9 @@ export interface Map {
   id: string;
   isDflt?: boolean;
   name: string;
-  options: MapOptions;
   owner: string;
   path: string;
   style: MapStyle;
-}
-
-export interface MapOptions {
-  showSatelliteForSelected: boolean;
 }
 
 export type MapStyle = 'arcgis' | 'google' | 'mapbox' | 'osm' | 'nhgranit';
