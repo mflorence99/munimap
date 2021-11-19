@@ -42,6 +42,32 @@ const registry: Record<string, Record<string, Record<string, Descriptor>>> = {
   },
 
   parcel: {
+    // 🔥 this is certainly just valid for Washington
+    neighborhood: {
+      A: { decoding: 'AVG -40' },
+      B: { decoding: 'AVG -30' },
+      C: { decoding: 'AVG -20' },
+      D: { decoding: 'AVG -10' },
+      E: { decoding: 'AVG' },
+      F: { decoding: 'AVG +10' },
+      G: { decoding: 'AVG +20' },
+      H: { decoding: 'MIXED USE' },
+      I: { decoding: 'AVG +40' },
+      J: { decoding: 'AVG +50' },
+      K: { decoding: 'AVG +60' },
+      L: { decoding: 'AVG +70' },
+      M: { decoding: 'AVG +80' },
+      N: { decoding: 'AVG +90' },
+      P: { decoding: 'AVG +100' },
+      Q: { decoding: 'SPECIAL 225%' },
+      R: { decoding: 'SPECIAL 250%' },
+      S: { decoding: 'SPECIAL 275%' },
+      T: { decoding: 'SPECIAL 300%' },
+      U: { decoding: 'ASHUELOT VACANT' },
+      V: { decoding: 'VACANT' },
+      W: { decoding: 'HIGHLAND VACANT' },
+      X: { decoding: 'BACKLAND' }
+    },
     usage: {
       '110': { decoding: 'Single Family Residence' },
       '120': { decoding: 'Multi Family Residence' },

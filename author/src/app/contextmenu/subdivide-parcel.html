@@ -1,5 +1,8 @@
 <header class="header">
-  <fa-icon [icon]="['fad', 'object-ungroup']" class="icon" size="2x"></fa-icon>
+  <figure class="icon">
+    <fa-icon [icon]="['fad', 'object-ungroup']" size="2x"></fa-icon>
+  </figure>
+
   <p class="title">Lorem ipsum dolor emit</p>
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
@@ -11,7 +14,7 @@
   novalidate
   spellcheck="false"
 >
-  <p>
+  <p class="instructions">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
     nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
   </p>

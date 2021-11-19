@@ -60,6 +60,16 @@ export class OLPopupParcelPropertiesComponent {
     });
   }
 
+  // 👉 https://developers.google.com/maps/documentation/urls/get-started
+  googleLink(property: ParcelProperties): string {
+    const link = `https://www.google.com/maps/@?api=1&map_action=map&center=${
+      property.centers[0][1]
+    }%2C${property.centers[0][0]}&zoom=${Math.round(
+      this.map.olView.getZoom()
+    )}&basemap=satellite`;
+    return link;
+  }
+
   onClose(): void {
     this.#subscription?.unsubscribe();
     this.snackBar.dismiss();

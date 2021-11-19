@@ -47,14 +47,14 @@
         <td>
           <span *ngIf="property.area >= 4"
             >{{ property.area | number:'1.0-2' }} ac ({{ sum(property.areas) |
-            number:'1.0-2' }} ac <span class="reference">*</span>)
+            number:'1.0-2' }} ac)<span class="reference">*</span>
           </span>
           <span *ngIf="property.area < 4"
             >{{ property.area * 43560 | number:'1.0-0' }} sq ft ({{
-            sum(property.areas) * 43560 | number:'1.0-0' }} sq ft<span
+            sum(property.areas) * 43560 | number:'1.0-0' }} sq ft)<span
               class="reference"
               >*</span
-            >)</span
+            ></span
           >
         </td>
       </ng-container>
@@ -85,6 +85,15 @@
       <td>Total</td>
       <ng-container *ngFor="let property of properties">
         <td>{{ property.taxed$ | currency:'USD':'symbol':'1.0-0' }}</td>
+      </ng-container>
+    </tr>
+
+    <tr>
+      <td></td>
+      <ng-container *ngFor="let property of properties">
+        <td>
+          <a [href]="googleLink(property)" target="_blank">Google view</a>
+        </td>
       </ng-container>
     </tr>
   </tbody>

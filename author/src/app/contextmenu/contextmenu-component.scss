@@ -14,7 +14,7 @@
 
 .form {
   display: grid;
-  gap: 1rem;
+  gap: 0.5rem;
   grid-template-rows: auto auto;
   padding: 0.5rem 1rem;
 }
@@ -31,7 +31,14 @@
   top: 0;
 
   .icon {
+    align-items: center;
+    background-color: var(--mat-gray-800);
+    border-radius: 50%;
+    display: flex;
     grid-area: icon;
+    height: 3.5rem;
+    justify-content: center;
+    width: 3.5rem;
   }
 
   .title {
@@ -45,4 +52,8 @@
     align-self: start;
     grid-area: subtitle;
   }
+}
+
+.instructions {
+  margin-bottom: 1rem;
 }

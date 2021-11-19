@@ -39,6 +39,7 @@ const editables = [
   { prop: 'area', label: 'Acreage', type: 'number', step: 0.01 },
   { prop: 'usage', label: 'Land Use' },
   { prop: 'use', label: 'Current Use' },
+  { prop: 'neighborhood', label: 'Neighborhood' },
   { prop: 'building$', label: 'Building Tax', type: 'number' },
   { prop: 'land$', label: 'Land Tax', type: 'number' },
   { prop: 'other$', label: 'Other Tax', type: 'number' },
