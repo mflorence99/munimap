@@ -25,17 +25,13 @@ import OLMapbox from 'ol/layer/MapboxVector';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerMapboxComponent implements Mapable, OnInit {
+  @Input() maxZoom: number;
+
   olLayer: OLMapbox;
 
+  @Input() opacity: number;
+
   @Input() styleUrl: string;
-
-  @Input() set maxZoom(maxZoom: number) {
-    this.olLayer.setMaxZoom(maxZoom);
-  }
-
-  @Input() set opacity(opacity: number) {
-    this.olLayer.setOpacity(opacity);
-  }
 
   constructor(private map: OLMapComponent, private params: Params) {}
 
@@ -49,6 +45,8 @@ export class OLLayerMapboxComponent implements Mapable, OnInit {
     this.olLayer = new OLMapbox({
       accessToken: this.params.mapbox.apiKey,
       declutter: true,
+      maxZoom: this.maxZoom,
+      opacity: this.opacity,
       styleUrl: this.styleUrl
     });
   }

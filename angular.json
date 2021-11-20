@@ -35,7 +35,8 @@
             "allowedCommonJsDependencies": [
               "debounce-decorator",
               "pbf",
-              "polylabel"
+              "polylabel",
+              "url-parse"
             ],
             "assets": [
               "author/assets",
@@ -118,7 +119,8 @@
             "allowedCommonJsDependencies": [
               "debounce-decorator",
               "pbf",
-              "polylabel"
+              "polylabel",
+              "url-parse"
             ],
             "assets": [
               "viewer/assets",

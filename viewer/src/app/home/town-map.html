@@ -25,32 +25,41 @@
 
     <app-ol-control-scaleline></app-ol-control-scaleline>
 
-    <!-- 📦 BG LAYER -->
-
-    <app-ol-layer-tile>
-      <app-ol-source-osm></app-ol-source-osm>
-      <app-ol-filter-pencil></app-ol-filter-pencil>
-    </app-ol-layer-tile>
-
-    <!-- 📦 HILLSHADE LAYER (not needed for ARCGIS) -->
-
-    <app-ol-layer-tile [maxZoom]="17" [opacity]="1">
-      <app-ol-source-xyz
-        [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
-      >
-        <app-ol-attribution
-          >Powered by
-          <a href="https://www.esri.com" target="_blank"
-            >Esri</a
-          ></app-ol-attribution
-        >
-      </app-ol-source-xyz>
-      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-    </app-ol-layer-tile>
-
-    <!-- 📦 NH GranIT VECTOR LAYERS -->
+    <!-- 📦 NORMAL (not satellite) LAYERS -->
 
     <ng-container *ngIf="!(satelliteView$ | async)">
+      <!-- 📦 BG LAYER (outside town)-->
+
+      <app-ol-layer-tile>
+        <app-ol-source-osm></app-ol-source-osm>
+        <app-ol-filter-pencil></app-ol-filter-pencil>
+      </app-ol-layer-tile>
+
+      <!-- 📦 BG LAYER (lays down a texture inside town)-->
+
+      <app-ol-layer-vector>
+        <app-ol-style-boundary></app-ol-style-boundary>
+        <app-ol-source-boundary></app-ol-source-boundary>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <!-- 📦 HILLSHADE LAYER  -->
+
+      <app-ol-layer-tile [opacity]="1">
+        <app-ol-source-xyz
+          [maxZoom]="17"
+          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+        >
+          <app-ol-attribution
+            >Powered by
+            <a href="https://www.esri.com" target="_blank"
+              >Esri</a
+            ></app-ol-attribution
+          >
+        </app-ol-source-xyz>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-tile>
+
       <app-ol-layer-vector>
         <app-ol-style-lakes></app-ol-style-lakes>
         <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
@@ -92,6 +101,12 @@
       <app-ol-layer-vector>
         <app-ol-style-buildings></app-ol-style-buildings>
         <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-floods></app-ol-style-floods>
+        <app-ol-source-geojson [layerKey]="'floods'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 

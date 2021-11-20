@@ -38,7 +38,7 @@ export class GeoJSONFilter extends Middleware {
               geojson.features = geojson.features.filter((feature) => {
                 try {
                   // 👉 some features don't have a bbox, but we prefer
-                  // it if present as it is faster
+                  //    it if present as it is faster
                   return booleanIntersects(
                     qbbox,
                     feature.bbox ? bboxPolygon(feature.bbox) : feature

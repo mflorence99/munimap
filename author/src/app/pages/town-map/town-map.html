@@ -57,17 +57,26 @@
 
         <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
 
-        <!-- 📦 BG LAYER -->
+        <!-- 📦 BG LAYER (outside town)-->
 
         <app-ol-layer-tile>
           <app-ol-source-osm></app-ol-source-osm>
           <app-ol-filter-pencil></app-ol-filter-pencil>
         </app-ol-layer-tile>
 
+        <!-- 📦 BG LAYER (lays down a texture inside town)-->
+
+        <app-ol-layer-vector>
+          <app-ol-style-boundary></app-ol-style-boundary>
+          <app-ol-source-boundary></app-ol-source-boundary>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
         <!-- 📦 HILLSHADE LAYER =-->
 
-        <app-ol-layer-tile [maxZoom]="17" [opacity]="1">
+        <app-ol-layer-tile [opacity]="1">
           <app-ol-source-xyz
+            [maxZoom]="17"
             [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
           >
             <app-ol-attribution
@@ -125,6 +134,12 @@
           <app-ol-source-geojson
             [layerKey]="'buildings'"
           ></app-ol-source-geojson>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-floods></app-ol-style-floods>
+          <app-ol-source-geojson [layerKey]="'floods'"></app-ol-source-geojson>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 

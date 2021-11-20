@@ -1,28 +1,23 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { theState } from '../lib/src/geojson';
 
-import * as turf from '@turf/turf';
-
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
+import bbox from '@turf/bbox';
 import booleanIntersects from '@turf/boolean-intersects';
 import chalk from 'chalk';
 import copy from 'fast-copy';
 
 const floods = JSON.parse(
-  readFileSync('/home/mflo/Downloads/fema/S_FLD_HAZ_LN.geojson').toString()
+  readFileSync('/home/mflo/Downloads/fema/S_FLD_HAZ_AR.geojson').toString()
 );
 
 const dist = './dist/proxy';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()
-);
-
-const stateBoundary = JSON.parse(
-  readFileSync(`${dist}/${theState}/boundary.geojson`).toString()
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -42,7 +37,7 @@ let lastTime = Date.now();
 
 function main(): void {
   const numFloods = floods.features.length;
-  floods.features.forEach((feature: GeoJSON.Feature, ix: number) => {
+  floods.features.forEach((feature: GeoJSON.Feature<any>, ix: number) => {
     // 👇 this takes forever, so let's try to log progress
     const index = Math.trunc(ix / gulp) * gulp;
     if (index !== lastIndex) {
@@ -62,45 +57,41 @@ function main(): void {
       lastTime = timeNow;
     }
 
-    // 👇 the data might not even be in-state
+    // 👇 the data doesn't have the town, so lets see if turf can
+    //    find it from the dataset of all towns
+    const towns = allTowns.features.filter((townFeature) =>
+      // 👉 https://github.com/Turfjs/turf/pull/2157
+      /* turf. */ booleanIntersects(feature, townFeature)
+    );
 
-    if (/* turf. */ booleanIntersects(feature, stateBoundary.features[0])) {
-      // 👇 the data doesn't have the town, so lets see if turf can
-      //    find it from the dataset of all towns
-      const towns = allTowns.features.filter((townFeature) =>
-        // 👉 https://github.com/Turfjs/turf/pull/2157
-        /* turf. */ booleanIntersects(feature, townFeature)
-      );
+    towns
+      .map((town) => town.id)
+      .forEach((town) => {
+        const county = lookupCounty(town);
+        if (county) {
+          const flood = copy(feature);
 
-      towns
-        .map((town) => town.id)
-        .forEach((town) => {
-          const county = lookupCounty(town);
-          if (county) {
-            const flood = copy(feature);
+          // 👉 some features have bbox on the geometry, we created our own
+          delete flood.geometry.bbox;
 
-            // 👉 some features have bbox on the geometry, we created our own
-            delete flood.geometry.bbox;
+          // 👉 every feature must have an ID
+          flood.id = flood.properties.FLD_AR_ID;
 
-            // 👉 every feature must have an ID
-            flood.id = flood.properties.FLD_LN_ID;
+          flood.bbox = bbox(flood);
+          flood.properties = {
+            county: county,
+            town: town
+          };
 
-            flood.bbox = turf.bbox(flood);
-            flood.properties = {
-              county: county,
-              town: town
-            };
-
-            floodsByCountyByTown[county] ??= {};
-            const geojson: GeoJSON.FeatureCollection = {
-              features: [],
-              type: 'FeatureCollection'
-            };
-            floodsByCountyByTown[county][town] ??= geojson;
-            floodsByCountyByTown[county][town].features.push(flood);
-          }
-        });
-    }
+          floodsByCountyByTown[county] ??= {};
+          const geojson: GeoJSON.FeatureCollection = {
+            features: [],
+            type: 'FeatureCollection'
+          };
+          floodsByCountyByTown[county][town] ??= geojson;
+          floodsByCountyByTown[county][town].features.push(flood);
+        }
+      });
   });
 
   // 👉 one file per town

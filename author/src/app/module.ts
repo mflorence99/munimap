@@ -91,6 +91,7 @@ import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from '@lib/ol/ol-style-boundary';
 import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
+import { OLStyleFloodsComponent } from '@lib/ol/ol-style-floods';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleLakesComponent } from '@lib/ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
@@ -176,6 +177,7 @@ const COMPONENTS = [
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
   OLStyleBuildingsComponent,
+  OLStyleFloodsComponent,
   OLStyleGraticuleComponent,
   OLStyleLakesComponent,
   OLStyleParcelsComponent,

@@ -1,10 +1,10 @@
+import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { GeoJSONService } from '../services/geojson';
 import { Input } from '@angular/core';
 
 import { bbox } from 'ol/loadingstrategy';
@@ -60,7 +60,7 @@ export class OLSourceGeoJSONComponent {
     );
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
-      .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+      .subscribe((geojson: GeoJSON.FeatureCollection<any>) => {
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.map.projection
