@@ -123,9 +123,21 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector *ngIf="!olMap.printing">
+        <app-ol-layer-vector>
           <app-ol-style-stonewalls></app-ol-style-stonewalls>
           <app-ol-source-stonewalls></app-ol-source-stonewalls>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-peatland></app-ol-style-peatland>
+          <app-ol-source-peatland></app-ol-source-peatland>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-floodplain></app-ol-style-floodplain>
+          <app-ol-source-floodplain></app-ol-source-floodplain>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
@@ -134,12 +146,6 @@
           <app-ol-source-geojson
             [layerKey]="'buildings'"
           ></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-style-floods></app-ol-style-floods>
-          <app-ol-source-geojson [layerKey]="'floods'"></app-ol-source-geojson>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 

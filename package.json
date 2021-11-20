@@ -63,6 +63,7 @@
     "@ngxs/store": "^3",
     "@sentry/angular": "^6",
     "@sentry/tracing": "^6",
+    "@terraformer/arcgis": "^2.1.0",
     "@turf/turf": "^6",
     "@types/unzipper": "^0.10.4",
     "@types/xmldom": "^0.1.31",

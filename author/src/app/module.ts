@@ -84,18 +84,21 @@ import { OLLayerVectorTileComponent } from '@lib/ol/ol-layer-vectortile';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLabelComponent } from '@lib/ol/ol-overlay-label';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
+import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
+import { OLSourcePeatlandComponent } from '@lib/ol/ol-source-peatland';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from '@lib/ol/ol-style-boundary';
 import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
-import { OLStyleFloodsComponent } from '@lib/ol/ol-style-floods';
+import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleLakesComponent } from '@lib/ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
+import { OLStylePeatlandComponent } from '@lib/ol/ol-style-peatland';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
 import { OLStylePolygonsComponent } from '@lib/ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
@@ -170,18 +173,21 @@ const COMPONENTS = [
   OLMapComponent,
   OLOverlayLabelComponent,
   OLSourceBoundaryComponent,
+  OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
+  OLSourcePeatlandComponent,
   OLSourceStoneWallsComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
   OLStyleBuildingsComponent,
-  OLStyleFloodsComponent,
+  OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,
   OLStyleLakesComponent,
   OLStyleParcelsComponent,
   OLStylePatternDirective,
+  OLStylePeatlandComponent,
   OLStylePlacesComponent,
   OLStylePolygonsComponent,
   OLStylePowerlinesComponent,

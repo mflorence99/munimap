@@ -94,10 +94,6 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
         name: `${town} Countables`,
         url: `/${theState}/${county}/${town}/countables.geojson`
       }),
-      floods: available({
-        name: `${town} Floods`,
-        url: `/${theState}/${county}/${town}/floods.geojson`
-      }),
       lakes: available({
         name: `${town} Lakes`,
         url: `/${theState}/${county}/${town}/lakes.geojson`

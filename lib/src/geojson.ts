@@ -234,7 +234,6 @@ export interface TownIndex {
     boundary: Layer;
     buildings: Layer;
     countables: Layer;
-    floods: Layer;
     lakes: Layer;
     parcels: Layer;
     places: Layer;

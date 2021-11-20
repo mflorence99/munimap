@@ -1,23 +1,27 @@
+import { OLFillPatternType } from './ol-style';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import OLStroke from 'ol/style/Stroke';
+import OLFill from 'ol/style/Fill';
+import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStyle from 'ol/style/Style';
-
-// 🔥 TEMPORARY
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-style-floods',
+  selector: 'app-ol-style-floodplain',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleFloodsComponent implements OLStyleComponent {
+export class OLStyleFloodplainComponent implements OLStyleComponent {
+  @Input() opacity = 0;
+  @Input() pattern: OLFillPatternType = 'wave';
+
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -26,14 +30,15 @@ export class OLStyleFloodsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    const color = this.map.vars['--map-flood-outline'];
     return (): OLStyle => {
+      const fill = this.map.vars['--map-floodplain-fill'];
       return new OLStyle({
-        stroke: new OLStroke({
-          color: `rgba(${color}, 1)`,
-          lineDash: [4, 8],
-          width: 2
-        })
+        fill: new OLFillPattern({
+          color: `rgba(${fill}, 1)`,
+          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+          pattern: this.pattern
+        }),
+        stroke: null
       });
     };
   }
