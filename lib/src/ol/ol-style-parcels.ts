@@ -75,14 +75,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   appPatterns: QueryList<OLStylePatternDirective>;
 
   @Input() borderWidth = 3;
+  @Input() dimensionsFontSize = 20;
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 16;
-  @Input() fontSizeAcreageRatio = 0.8;
+  @Input() fontSizeAcreageRatio = 0.75;
   @Input() maxBorderWidth = 3;
   @Input() maxFontSize = 40;
   @Input() minBorderWidth = 1;
   @Input() minFontSize = 6;
-  @Input() minFontSizeOutlined = 28;
   @Input() opacity = 0.25;
   @Input() showBackground = false;
   @Input() showBorder = false;
@@ -201,8 +200,11 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       // 👉 fontSize is proportional to the resolution,
       //    but no bigger than the size of the label
       return Math.min(
-        Math.min(labelFontSize * this.fontSizeAcreageRatio, this.fontSize),
-        this.fontSize / resolution
+        Math.min(
+          labelFontSize * this.fontSizeAcreageRatio,
+          this.dimensionsFontSize
+        ),
+        this.dimensionsFontSize / resolution
       );
     });
   }
@@ -538,7 +540,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const fill = new OLFill({ color: [0, 0, 0, 0] });
       const stroke = new OLStroke({
         color: `rgb(${select})`,
-        width: borderWidth
+        width: borderWidth * 2
       });
       return [new OLStyle({ fill, stroke: whenSelected ? stroke : null })];
     }

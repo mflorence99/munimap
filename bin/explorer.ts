@@ -20,7 +20,7 @@ import jsome from 'jsome';
 // main();
 
 const nfhl = JSON.parse(
-  readFileSync('/home/mflo/Downloads/fema/S_FLD_HAZ_AR.geojson').toString()
+  readFileSync('/home/mflo/Downloads/fema/S_FLD_HAZ_LN.geojson').toString()
 );
 
 jsome(nfhl.features[0]);

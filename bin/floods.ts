@@ -12,13 +12,17 @@ import chalk from 'chalk';
 import copy from 'fast-copy';
 
 const floods = JSON.parse(
-  readFileSync('/home/mflo/Downloads/fema/S_FLD_HAZ_AR.geojson').toString()
+  readFileSync('/home/mflo/Downloads/fema/S_FLD_HAZ_LN.geojson').toString()
 );
 
 const dist = './dist/proxy';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()
+);
+
+const stateBoundary = JSON.parse(
+  readFileSync(`${dist}/${theState}/boundary.geojson`).toString()
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -58,41 +62,45 @@ function main(): void {
       lastTime = timeNow;
     }
 
-    // 👇 the data doesn't have the town, so lets see if turf can
-    //    find it from the dataset of all towns
-    const towns = allTowns.features.filter((townFeature) =>
-      // 👉 https://github.com/Turfjs/turf/pull/2157
-      /* turf. */ booleanIntersects(feature, townFeature)
-    );
+    // 👇 the data might not even be in-state
 
-    towns
-      .map((town) => town.id)
-      .forEach((town) => {
-        const county = lookupCounty(town);
-        if (county) {
-          const flood = copy(feature);
+    if (/* turf. */ booleanIntersects(feature, stateBoundary.features[0])) {
+      // 👇 the data doesn't have the town, so lets see if turf can
+      //    find it from the dataset of all towns
+      const towns = allTowns.features.filter((townFeature) =>
+        // 👉 https://github.com/Turfjs/turf/pull/2157
+        /* turf. */ booleanIntersects(feature, townFeature)
+      );
 
-          // 👉 some features have bbox on the geometry, we created our own
-          delete flood.geometry.bbox;
+      towns
+        .map((town) => town.id)
+        .forEach((town) => {
+          const county = lookupCounty(town);
+          if (county) {
+            const flood = copy(feature);
 
-          // 👉 every feature must have an ID
-          flood.id = flood.properties.FLD_AR_ID;
+            // 👉 some features have bbox on the geometry, we created our own
+            delete flood.geometry.bbox;
 
-          flood.bbox = turf.bbox(flood);
-          flood.properties = {
-            county: county,
-            town: town
-          };
+            // 👉 every feature must have an ID
+            flood.id = flood.properties.FLD_LN_ID;
 
-          floodsByCountyByTown[county] ??= {};
-          const geojson: GeoJSON.FeatureCollection = {
-            features: [],
-            type: 'FeatureCollection'
-          };
-          floodsByCountyByTown[county][town] ??= geojson;
-          floodsByCountyByTown[county][town].features.push(flood);
-        }
-      });
+            flood.bbox = turf.bbox(flood);
+            flood.properties = {
+              county: county,
+              town: town
+            };
+
+            floodsByCountyByTown[county] ??= {};
+            const geojson: GeoJSON.FeatureCollection = {
+              features: [],
+              type: 'FeatureCollection'
+            };
+            floodsByCountyByTown[county][town] ??= geojson;
+            floodsByCountyByTown[county][town].features.push(flood);
+          }
+        });
+    }
   });
 
   // 👉 one file per town
@@ -113,7 +121,7 @@ function main(): void {
 main();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sample = {
+const sample_AR = {
   DFIRM_ID: '33003C',
   VERSION_ID: '1.1.1.0',
   FLD_AR_ID: '33003C_732',
@@ -136,4 +144,14 @@ const sample = {
   GFID: '20130319',
   SHAPE_Length: 0.16024243330482996,
   SHAPE_Area: 0.00005436589839896291
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const sample_LN = {
+  DFIRM_ID: '33007C',
+  VERSION_ID: '1.1.1.0',
+  FLD_LN_ID: '33007C_2575',
+  LN_TYP: 'SFHA / Flood Zone Boundary',
+  SOURCE_CIT: '33007C_NP',
+  GFID: '20130220_fix2'
 };

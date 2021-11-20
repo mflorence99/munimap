@@ -141,6 +141,7 @@ export class OLInteractionSelectComponent
 
   #hasSelectionChanged(ids: ParcelID[]): boolean {
     const diff = new Set(this.selectedIDs);
+    if (ids.length !== diff.size) return true;
     for (const id of ids) diff.delete(id);
     return diff.size > 0;
   }
