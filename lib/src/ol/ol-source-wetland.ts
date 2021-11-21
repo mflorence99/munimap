@@ -8,10 +8,12 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
+import { all } from 'ol/loadingstrategy';
+
 import hash from 'object-hash';
 
 const attribution =
-  '<a href="https://nhdeswppt.unh.edu" target="_blank">NHDES</a>';
+  'Powered by <a href="https://nhdeswppt.unh.edu" target="_blank">NHDES</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +40,10 @@ export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
     //    so let's at least use a hash of the geometry so that
     //    every time we load the same ID is used
     return hash.MD5(feature.geometry);
+  }
+
+  getLoadingStrategy(): any {
+    return all;
   }
 
   getProxyPath(): string {

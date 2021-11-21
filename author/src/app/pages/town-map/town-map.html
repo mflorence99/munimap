@@ -1,6 +1,6 @@
 <mat-drawer-container *ngIf="(mapState$ | async) as map" class="container">
   <mat-drawer-content class="content">
-    <app-ol-map #olMap [minZoom]="13" [maxZoom]="22" [path]="map.path">
+    <app-ol-map #olMap [maxZoom]="22" [path]="map.path">
       <app-town-map-setup
         [map]="map"
         class="setup"
@@ -123,7 +123,9 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
+        <!-- 📦 we can't print stonewalls because the API will only deliver
+           4000 and there are more than that on the entire extent of the map -->
+        <app-ol-layer-vector *ngIf="!olMap.printing">
           <app-ol-style-stonewalls></app-ol-style-stonewalls>
           <app-ol-source-stonewalls></app-ol-source-stonewalls>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>

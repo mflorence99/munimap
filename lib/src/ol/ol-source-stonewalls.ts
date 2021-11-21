@@ -1,4 +1,5 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
 import { Params } from '../services/params';
 
@@ -7,8 +8,10 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
+import { bbox } from 'ol/loadingstrategy';
+
 const attribution =
-  '<a href="https://www.facebook.com/groups/NHstonewalls/" target="_blank">NH Stone Wall</a>';
+  'Powered by <a href="https://www.facebook.com/groups/NHstonewalls/" target="_blank">NH Stone Wall</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,8 +20,21 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceStoneWallsComponent extends OLSourceArcGISComponent {
-  constructor(http: HttpClient, layer: OLLayerVectorComponent, params: Params) {
+  constructor(
+    private map: OLMapComponent,
+    http: HttpClient,
+    layer: OLLayerVectorComponent,
+    params: Params
+  ) {
     super(http, layer, params);
+  }
+
+  // 👇 we don't even try to load the stonewalls below zoom 16
+  //    as the API will try to load as many as it can up to 4000
+  //    which takes a LONG time -- and below 16 we can't see them anyeway
+
+  canLoad(_extent: Coordinate): boolean {
+    return this.map.olView.getZoom() >= 16;
   }
 
   getAttribution(): string {
@@ -27,6 +43,10 @@ export class OLSourceStoneWallsComponent extends OLSourceArcGISComponent {
 
   getFeatureID(feature: GeoJSON.Feature<any>): string {
     return feature.properties.OBJECTID;
+  }
+
+  getLoadingStrategy(): any {
+    return bbox;
   }
 
   getProxyPath(): string {

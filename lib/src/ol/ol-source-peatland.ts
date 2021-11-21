@@ -8,8 +8,10 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
+import { all } from 'ol/loadingstrategy';
+
 const attribution =
-  '<a href="https://nhdeswppt.unh.edu" target="_blank">NHDES</a>';
+  'Powered by <a href="https://nhdeswppt.unh.edu" target="_blank">NHDES</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +35,10 @@ export class OLSourcePeatlandComponent extends OLSourceArcGISComponent {
 
   getFeatureID(feature: GeoJSON.Feature<any>): string {
     return feature.properties.OBJECTID;
+  }
+
+  getLoadingStrategy(): any {
+    return all;
   }
 
   getProxyPath(): string {

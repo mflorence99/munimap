@@ -7,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { arcgisToGeoJSON } from '@terraformer/arcgis';
-import { bbox } from 'ol/loadingstrategy';
 import { map } from 'rxjs';
 import { tap } from 'rxjs';
 
@@ -29,7 +28,7 @@ export abstract class OLSourceArcGISComponent {
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: bbox
+      strategy: this.getLoadingStrategy()
     });
     this.layer.olLayer.setSource(this.olVector);
   }
@@ -40,46 +39,54 @@ export abstract class OLSourceArcGISComponent {
     projection: OLProjection,
     success: Function
   ): void {
-    // 👇 the proxy path is strictly for the logs only
-    this.http
-      .get(
-        `${
-          this.params.geoJSON.host
-        }/proxy/${this.getProxyPath()}?url=${encodeURIComponent(
-          this.getURL(extent)
-        )}`,
-        {
-          headers: new HttpHeaders({ cache: 'page' })
-        }
-      )
-      .pipe(
-        map(
-          (arcgis: any): GeoJSON.FeatureCollection<GeoJSON.Polygon> =>
-            arcgisToGeoJSON(arcgis)
-        ),
-        tap((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-          geojson.features.forEach(
-            (feature) => (feature.id = feature.properties.NWI_ID)
-          );
-        })
-      )
-      .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
-        // 👉 convert features into OL format
-        const features = this.olVector
-          .getFormat()
-          .readFeatures(geojson) as OLFeature<any>[];
-        // 👉 add each feature not already present
-        features.forEach((feature) => {
-          if (!this.olVector.hasFeature(feature))
-            this.olVector.addFeature(feature);
+    if (this.canLoad(extent)) {
+      // 👇 the proxy path is strictly for the logs only
+      this.http
+        .get(
+          `${
+            this.params.geoJSON.host
+          }/proxy/${this.getProxyPath()}?url=${encodeURIComponent(
+            this.getURL(extent)
+          )}`,
+          {
+            headers: new HttpHeaders({ cache: 'page' })
+          }
+        )
+        .pipe(
+          map(
+            (arcgis: any): GeoJSON.FeatureCollection<GeoJSON.Polygon> =>
+              arcgisToGeoJSON(arcgis)
+          ),
+          tap((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+            geojson.features.forEach(
+              (feature) => (feature.id = feature.properties.NWI_ID)
+            );
+          })
+        )
+        .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+          // 👉 convert features into OL format
+          const features = this.olVector
+            .getFormat()
+            .readFeatures(geojson) as OLFeature<any>[];
+          // 👉 add each feature not already present
+          features.forEach((feature) => {
+            if (!this.olVector.hasFeature(feature))
+              this.olVector.addFeature(feature);
+          });
+          success(features);
         });
-        success(features);
-      });
+    } else success([]);
+  }
+
+  canLoad(_extent: Coordinate): boolean {
+    return true;
   }
 
   abstract getAttribution(): string;
 
   abstract getFeatureID(feature: GeoJSON.Feature<any>): string;
+
+  abstract getLoadingStrategy(): any;
 
   abstract getProxyPath(): string;
 
