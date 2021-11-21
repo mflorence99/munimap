@@ -1,9 +1,12 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 import { Params } from '../services/params';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 
 import { arcgisToGeoJSON } from '@terraformer/arcgis';
 import { bbox } from 'ol/loadingstrategy';
@@ -30,6 +33,7 @@ export class OLSourcePeatlandComponent {
   constructor(
     private http: HttpClient,
     private layer: OLLayerVectorComponent,
+    private map: OLMapComponent,
     private params: Params
   ) {
     this.olVector = new OLVector({
@@ -42,19 +46,24 @@ export class OLSourcePeatlandComponent {
   }
 
   #loader(
-    [minX, minY, maxX, maxY],
+    extent: Coordinate,
     resolution: number,
-    _projection: OLProjection,
-    success: Function,
-    _failure: Function
+    projection: OLProjection,
+    success: Function
   ): void {
+    // 👉 we're going to grab everything at once, as the data is sparse,
+    //    meaning that we can cache the result
+    const [minX, minY, maxX, maxY] = this.map.boundaryExtent;
     const url = `https://nhgeodata.unh.edu/nhgeodata/rest/services/EC/NHWAP_2020/MapServer/1/query?f=json&where=WAP_HAB='Peatland'&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
     // 👇 the proxy path is strictly for the logs only
     this.http
       .get(
         `${this.params.geoJSON.host}/proxy/peatland?url=${encodeURIComponent(
           url
-        )}`
+        )}`,
+        {
+          headers: new HttpHeaders({ cache: 'page' })
+        }
       )
       .pipe(
         map(

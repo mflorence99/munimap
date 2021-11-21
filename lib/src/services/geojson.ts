@@ -6,6 +6,7 @@ import { StateIndex } from '../geojson';
 import { TownIndex } from '../geojson';
 
 import { ActivatedRoute } from '@angular/router';
+import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -44,7 +45,7 @@ export class GeoJSONService {
 
   load(
     path: string,
-    extent: number[] = []
+    extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     let params = '';
     if (extent.length === 4) {
@@ -63,7 +64,7 @@ export class GeoJSONService {
     route: ActivatedRoute,
     path: string,
     layerKey: string,
-    extent: number[] = []
+    extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const base = this.findIndex(route);
     return this.loadFromIndex(base, path, layerKey, extent);
@@ -73,7 +74,7 @@ export class GeoJSONService {
     base: Index,
     path: string,
     layerKey: string,
-    extent: number[] = []
+    extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     const index = this.#indexFromPath(base, path);
     const layer = index.layers[layerKey];

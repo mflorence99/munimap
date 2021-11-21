@@ -5,6 +5,7 @@ import { OLMapComponent } from './ol-map';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 import { Input } from '@angular/core';
 
 import { bbox } from 'ol/loadingstrategy';
@@ -47,14 +48,19 @@ export class OLSourceGeoJSONComponent {
   }
 
   #loader(
-    extent: number[],
-    _resolution: number,
+    extent: Coordinate,
+    resolution: number,
     projection: OLProjection,
-    success: Function,
-    _failure: Function
+    success: Function
   ): void {
+    // 👉 we're going to quantize the extent to 500m accuracy
+    //    so that we can cache the result
+    const minX = Math.floor(extent[0] / 500) * 500;
+    const minY = Math.floor(extent[1] / 500) * 500;
+    const maxX = Math.ceil(extent[2] / 500) * 500;
+    const maxY = Math.ceil(extent[3] / 500) * 500;
     const bbox = transformExtent(
-      extent,
+      [minX, minY, maxX, maxY],
       projection,
       this.map.featureProjection
     );
