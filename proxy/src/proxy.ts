@@ -95,7 +95,7 @@ export class ProxyServer extends Handler {
                 tap((resp) => (response.statusCode = resp.status)),
                 mergeMap((resp) => from(resp.buffer())),
                 tap((buffer) => (response.body = buffer)),
-                tap((buffer) => fs.writeFileSync(fpath, buffer))
+                tap((buffer) => fs.writeFile(fpath, buffer, () => {}))
               );
             }
           }),

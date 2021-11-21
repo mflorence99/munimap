@@ -94,7 +94,8 @@ $dark-app-theme: mat-dark-theme(
   --map-feature-outline: var(--rgb-green-700);
   --map-feature-text-color: var(--rgb-green-700);
 
-  --map-floodplain-fill: var(--rgb-blue-900);
+  --map-floodplain-fill: var(--rgb-light-blue-900);
+  --map-floodplain-waves: var(--rgb-blue-900);
 
   --map-graticule-border-color: var(--rgb-gray-50);
   --map-graticule-line-color: var(--rgb-gray-900);
@@ -102,6 +103,7 @@ $dark-app-theme: mat-dark-theme(
   --map-graticule-text-inverse: var(--rgb-gray-50);
 
   --map-lake-fill: var(--rgb-light-blue-200);
+  --map-lake-waves: var(--rgb-blue-400);
 
   --map-parcel-outline: var(--rgb-blue-gray-800);
   --map-parcel-redraw: var(--rgb-blue-a200);
@@ -133,7 +135,8 @@ $dark-app-theme: mat-dark-theme(
   --map-parcel-stroke-CUFL: var(--rgb-green-500);
   --map-parcel-stroke-CUWL: var(--rgb-blue-500);
 
-  --map-peatland-fill: var(--rgb-green-900);
+  --map-peatland-fill: var(--rgb-light-green-900);
+  --map-peatland-scrub: var(--rgb-green-900);
 
   --map-powerline-icon-color: var(--rgb-yellow-500);
   --map-powerline-line-color: var(--rgb-gray-900);

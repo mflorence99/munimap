@@ -32,9 +32,10 @@ export class OLStylePeatlandComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (): OLStyle => {
       const fill = this.map.vars['--map-peatland-fill'];
+      const scrub = this.map.vars['--map-peatland-scrub'];
       return new OLStyle({
         fill: new OLFillPattern({
-          color: `rgba(${fill}, 1)`,
+          color: `rgba(${scrub}, 1)`,
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: this.pattern
         }),

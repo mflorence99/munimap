@@ -4,7 +4,6 @@ import { Params } from '../services/params';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 
 import { bbox } from 'ol/loadingstrategy';
 import { map } from 'rxjs';
@@ -53,10 +52,7 @@ export class OLSourceStoneWallsComponent {
       .get(
         `${this.params.geoJSON.host}/proxy/stonewalls?url=${encodeURIComponent(
           url
-        )}`,
-        {
-          headers: new HttpHeaders({ cache: 'page' })
-        }
+        )}`
       )
       .pipe(
         map(
@@ -66,6 +62,7 @@ export class OLSourceStoneWallsComponent {
                 coordinates: feature.geometry.paths[0],
                 type: 'LineString'
               },
+              id: feature.attributes.OBJECTID,
               type: 'Feature'
             })),
             type: 'FeatureCollection'

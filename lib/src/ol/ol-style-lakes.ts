@@ -32,9 +32,10 @@ export class OLStyleLakesComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (): OLStyle => {
       const fill = this.map.vars['--map-lake-fill'];
+      const waves = this.map.vars['--map-lake-waves'];
       return new OLStyle({
         fill: new OLFillPattern({
-          color: `rgba(${fill}, 1)`,
+          color: `rgba(${waves}, 1)`,
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: this.pattern
         }),
