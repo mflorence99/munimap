@@ -1,6 +1,7 @@
 <app-ol-map
   *ngIf="(map$ | async) as map"
   #olMap
+  [fitToBounds]="true"
   [minZoom]="15"
   [maxZoom]="22"
   [path]="map.path"

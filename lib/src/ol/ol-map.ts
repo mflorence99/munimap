@@ -131,7 +131,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     );
     // 👉 create view
     this.olView = new OLView({
-      extent: this.fitToBounds ? undefined : this.boundaryExtent,
+      extent: this.fitToBounds ? this.boundaryExtent : undefined,
       maxZoom: this.maxZoom,
       minZoom: this.minZoom,
       smoothExtentConstraint: true
