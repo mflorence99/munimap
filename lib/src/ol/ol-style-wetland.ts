@@ -14,13 +14,13 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-style-floodplain',
+  selector: 'app-ol-style-wetland',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleFloodplainComponent implements OLStyleComponent {
+export class OLStyleWetlandComponent implements OLStyleComponent {
   @Input() opacity = 0;
-  @Input() pattern: OLFillPatternType = 'flooded';
+  @Input() pattern: OLFillPatternType = 'swamp';
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -31,11 +31,11 @@ export class OLStyleFloodplainComponent implements OLStyleComponent {
 
   style(): OLStyleFunction {
     return (): OLStyle => {
-      const fill = this.map.vars['--map-floodplain-fill'];
-      const flooded = this.map.vars['--map-floodplain-flooded'];
+      const fill = this.map.vars['--map-wetland-fill'];
+      const swamp = this.map.vars['--map-wetland-swamp'];
       return new OLStyle({
         fill: new OLFillPattern({
-          color: `rgba(${flooded}, 1)`,
+          color: `rgba(${swamp}, 1)`,
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: this.pattern
         }),

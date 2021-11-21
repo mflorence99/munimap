@@ -64,6 +64,7 @@ import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
 import { OLSourcePeatlandComponent } from '@lib/ol/ol-source-peatland';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
+import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from '@lib/ol/ol-style-boundary';
 import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
@@ -80,6 +81,7 @@ import { OLStyleRiversComponent } from '@lib/ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
+import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
 import { ParcelsState } from '@lib/state/parcels';
 import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
@@ -130,6 +132,7 @@ const COMPONENTS = [
   OLSourceParcelsComponent,
   OLSourcePeatlandComponent,
   OLSourceStoneWallsComponent,
+  OLSourceWetlandComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
   OLStyleBuildingsComponent,
@@ -145,7 +148,8 @@ const COMPONENTS = [
   OLStyleRiversComponent,
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
-  OLStyleTrailsComponent
+  OLStyleTrailsComponent,
+  OLStyleWetlandComponent
 ];
 
 const DIRECTIVES = [];

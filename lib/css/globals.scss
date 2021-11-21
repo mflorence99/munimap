@@ -95,7 +95,7 @@ $dark-app-theme: mat-dark-theme(
   --map-feature-text-color: var(--rgb-green-700);
 
   --map-floodplain-fill: var(--rgb-light-blue-900);
-  --map-floodplain-waves: var(--rgb-blue-900);
+  --map-floodplain-flooded: var(--rgb-blue-900);
 
   --map-graticule-border-color: var(--rgb-gray-50);
   --map-graticule-line-color: var(--rgb-gray-900);
@@ -176,6 +176,9 @@ $dark-app-theme: mat-dark-theme(
 
   --map-trail-line-color: var(--rgb-brown-600);
   --map-trail-text-color: var(--rgb-brown-600);
+
+  --map-wetland-fill: var(--rgb-light-blue-900);
+  --map-wetland-swamp: var(--rgb-blue-900);
 }
 
 // 👉 base styles
