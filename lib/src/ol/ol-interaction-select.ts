@@ -30,6 +30,7 @@ import { unByKey } from 'ol/Observable';
 
 import Debounce from 'debounce-decorator';
 import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
 import OLSelect from 'ol/interaction/Select';
 
 export type FilterFunction = (feature: OLFeature<any>) => boolean;
@@ -50,8 +51,17 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
 export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy, OnInit
 {
-  #featuresLoadEndKey: OLEventsKey = null;
-  #selectKey: OLEventsKey = null;
+  #featuresLoadEndKey: OLEventsKey;
+  #format: OLGeoJSON;
+  #selectKey: OLEventsKey;
+
+  abutters: Feature[] = [];
+
+  @Output() abuttersFound = new EventEmitter<Feature[]>();
+
+  get abutterIDs(): ParcelID[] {
+    return this.abutters.map((feature) => feature.id);
+  }
 
   @ContentChild(MatMenu) contextMenu: MatMenu;
   @ViewChild(MatMenuTrigger) contextMenuTrigger: MatMenuTrigger;
@@ -95,12 +105,35 @@ export class OLInteractionSelectComponent
       layers: [this.layer.olLayer],
       style: this.layer.style?.styleWhenSelected()
     });
+    // 👉 one to rule them all
+    this.#format = new OLGeoJSON({
+      dataProjection: this.map.featureProjection,
+      featureProjection: this.map.projection
+    });
     // 👉 register this selector with the map
     this.map.selector = this;
   }
 
   #filter(feature: OLFeature<any>): boolean {
     return this.filter ? this.filter(feature) : true;
+  }
+
+  #findAbutters(): void {
+    const selecteds = this.selected.map((feature) =>
+      JSON.parse(this.#format.writeFeature(feature))
+    );
+    const allFeatures = this.layer.olLayer
+      .getSource()
+      .getFeatures()
+      .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
+    this.abutters = [];
+    // 👉 all this happens asynchronously in a web worker
+    this.map.abutters?.find(selecteds, allFeatures).then((abutters) => {
+      this.abutters = abutters;
+      this.abuttersFound.emit(abutters);
+      // 🔥 this causes flicker!!
+      this.layer.olLayer.getSource().refresh();
+    });
   }
 
   #handleContextMenu$(): void {
@@ -150,6 +183,8 @@ export class OLInteractionSelectComponent
     const ids = this.selectedIDs.join(', ');
     console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
     this.featuresSelected.emit(this.selected);
+    // 👉 find the abutters
+    this.#findAbutters();
   }
 
   #selectParcels(ids: ParcelID[]): void {

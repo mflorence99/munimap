@@ -22,5 +22,6 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "target": "es2017"
-  }
+  },
+  "exclude": ["**/author/**/*.ts", "**/worker/**/*.ts"]
 }

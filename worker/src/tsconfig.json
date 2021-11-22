@@ -11,10 +11,10 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "lib": ["es2020", "dom"],
+    "lib": ["es2020", "webworker"],
     "module": "es2020",
     "moduleResolution": "node",
-    "outDir": "../../dist/author/out-tsc",
+    "outDir": "../../dist/worker/out-tsc",
     "paths": {
       "@lib/*": ["../../lib/src/*"]
     },
@@ -23,5 +23,5 @@
     "resolveJsonModule": true,
     "target": "es2017"
   },
-  "exclude": ["**/author/**/*.ts", "**/worker/**/*.ts"]
+  "include": ["**/*.ts"]
 }

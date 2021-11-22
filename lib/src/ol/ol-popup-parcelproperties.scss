@@ -3,6 +3,10 @@
   width: 100%;
 }
 
+.abutters {
+  display: block;
+}
+
 .closer {
   position: absolute;
   right: 0;
@@ -14,12 +18,7 @@
   font-size: smaller;
 }
 
-.reference {
-  color: var(--accent-color);
-  font-size: large;
-}
-
-.table {
+.properties {
   border-collapse: collapse;
   font-size: smaller;
   overflow: hidden;
@@ -52,4 +51,9 @@
     border-left: 1px solid var(--mat-gray-500);
     padding: 0 0.25rem;
   }
+}
+
+.reference {
+  color: var(--accent-color);
+  font-size: large;
 }

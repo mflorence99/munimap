@@ -1,4 +1,6 @@
+import { Feature } from '../geojson';
 import { OLMapComponent } from './ol-map';
+import { ParcelID } from '../geojson';
 import { ParcelProperties } from '../geojson';
 import { TypeRegistry } from '../services/typeregistry';
 
@@ -7,11 +9,18 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+
+import OLFeature from 'ol/Feature';
 
 // 👇 we can't use the normal DestroyService protocol here
 //    as snackbar popups don't have a standard lifecycle
 //    when created via openFromTemplate
+
+interface Abutter {
+  address: string;
+  id: ParcelID;
+  owner: string;
+}
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,7 +29,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./ol-popup-parcelproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
-  #subscription: Subscription;
+  abutters: Abutter[] = [];
 
   @Input() maxNumProperties = 3;
 
@@ -36,28 +45,49 @@ export class OLPopupParcelPropertiesComponent {
     public registry: TypeRegistry,
     private snackBar: MatSnackBar
   ) {
-    this.map.selector.featuresSelected.subscribe((features) => {
-      this.properties = features.map((feature) => feature.getProperties());
-      this.properties.length = Math.min(
-        this.properties.length,
-        this.maxNumProperties
-      );
-      if (this.properties.length === 0) this.onClose();
-      else {
-        this.sameAddress = this.properties.every(
-          (property) => property.address === this.properties[0].address
-        );
-        this.sameOwner = this.properties.every(
-          (property) => property.owner === this.properties[0].owner
-        );
-        this.sameUsage = this.properties.every(
-          (property) =>
-            property.usage === this.properties[0].usage &&
-            property.use === this.properties[0].use
-        );
-        this.cdf.markForCheck();
-      }
+    this.#handleAbuttersFound$();
+    this.#handleFeaturesSelected$();
+  }
+
+  #handleAbuttersFound$(): void {
+    this.map.selector?.abuttersFound.subscribe((features: Feature[]) => {
+      this.abutters = features
+        .map((feature) => ({
+          address: feature.properties.address,
+          id: feature.id,
+          owner: feature.properties.owner
+        }))
+        .sort((p, q) => String(p.id).localeCompare(String(q.id)));
+      console.log(this.abutters);
+      this.cdf.markForCheck();
     });
+  }
+
+  #handleFeaturesSelected$(): void {
+    this.map.selector?.featuresSelected.subscribe(
+      (features: OLFeature<any>[]) => {
+        this.properties = features.map((feature) => feature.getProperties());
+        this.properties.length = Math.min(
+          this.properties.length,
+          this.maxNumProperties
+        );
+        if (this.properties.length === 0) this.onClose();
+        else {
+          this.sameAddress = this.properties.every(
+            (property) => property.address === this.properties[0].address
+          );
+          this.sameOwner = this.properties.every(
+            (property) => property.owner === this.properties[0].owner
+          );
+          this.sameUsage = this.properties.every(
+            (property) =>
+              property.usage === this.properties[0].usage &&
+              property.use === this.properties[0].use
+          );
+          this.cdf.markForCheck();
+        }
+      }
+    );
   }
 
   // 👉 https://developers.google.com/maps/documentation/urls/get-started
@@ -71,7 +101,6 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   onClose(): void {
-    this.#subscription?.unsubscribe();
     this.snackBar.dismiss();
   }
 

@@ -6,6 +6,8 @@ import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
 
+import * as Comlink from 'comlink';
+
 import { ActivatedRoute } from '@angular/router';
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -42,9 +44,11 @@ import OLView from 'ol/View';
   styleUrls: ['./ol-map.scss']
 })
 export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
-  #changeKey: OLEventsKey = null;
-  #clickKey: OLEventsKey = null;
+  #changeKey: OLEventsKey;
+  #clickKey: OLEventsKey;
   #path: Path;
+
+  abutters: any;
 
   boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
   boundaryExtent: Coordinate;
@@ -251,6 +255,10 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    const proxy: any = Comlink.wrap(
+      new Worker(new URL('../../../worker/src/abutters', import.meta.url))
+    );
+    new proxy().then((instance) => (this.abutters = instance));
     this.#clickKey = this.olMap.on('click', this.#onClick.bind(this));
     this.olMap.setTarget(this.host.nativeElement);
   }

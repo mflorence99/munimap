@@ -5,6 +5,7 @@
       "./bin/tsconfig.json",
       "./author/src/tsconfig.json",
       "./proxy/src/tsconfig.json",
+      "./worker/src/tsconfig.json",
       "./viewer/src/tsconfig.json"
     ]
   },

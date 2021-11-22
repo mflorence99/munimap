@@ -29,7 +29,7 @@ export class OLControlPrintComponent {
   #progressRef: MatDialogRef<OLControlPrintProgressComponent>;
   #px: number;
   #py: number;
-  #renderCompleteKey: OLEventsKey = null;
+  #renderCompleteKey: OLEventsKey;
   #zoom: number;
 
   @Input() fileName: string;

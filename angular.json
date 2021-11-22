@@ -62,7 +62,8 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "webWorkerTsConfig": "worker/src/tsconfig.json"
           },
           "defaultConfiguration": ""
         },
@@ -146,7 +147,8 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "webWorkerTsConfig": "worker/src/tsconfig.json"
           },
           "defaultConfiguration": ""
         },

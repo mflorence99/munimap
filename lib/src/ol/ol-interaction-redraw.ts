@@ -36,7 +36,7 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
   #feature: OLFeature<OLPolygon | OLMultiPolygon>;
   #format: OLGeoJSON;
   #geometry: OLPolygon | OLMultiPolygon;
-  #modifyStartKey: OLEventsKey = null;
+  #modifyStartKey: OLEventsKey;
   #touched = false;
 
   active = false;

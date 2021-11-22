@@ -69,6 +69,7 @@
     "@types/xmldom": "^0.1.31",
     "backoff-rxjs": "^6.5.7",
     "chalk": "^4",
+    "comlink": "^4.3.1",
     "debounce-decorator": "^1.0.6",
     "fast-copy": "^2",
     "fast-equals": "^2",

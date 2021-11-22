@@ -532,6 +532,19 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       this.#labelFontSizeMax(props, resolution, numPolygons) < this.minFontSize
     )
       return null;
+    // 👉 special stroke if abutter
+    else if (this.map.selector?.abutterIDs?.includes(props.id)) {
+      const borderWidth = this.#borderWidth(resolution);
+      const outline = this.map.vars['--map-parcel-abutter'];
+      // 👉 necessary so we can select
+      const fill = new OLFill({ color: [0, 0, 0, 0] });
+      const stroke = new OLStroke({
+        color: `rgb(${outline})`,
+        width: borderWidth
+      });
+      return [new OLStyle({ fill, stroke })];
+    }
+    // 👉 special stroke if selected
     else {
       const borderWidth = this.#borderWidth(resolution);
       const select = this.map.redrawer?.active
