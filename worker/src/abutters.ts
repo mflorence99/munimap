@@ -19,7 +19,6 @@ export class Abutters {
         const buffered = buffer(selected, abutterRange / 5280, {
           units: 'miles'
         });
-        console.log({ id: selected.id });
         return allFeatures.filter(
           (feature) =>
             !selectedIDs.includes(feature.id) && intersect(feature, buffered)

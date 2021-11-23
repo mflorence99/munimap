@@ -32,6 +32,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { NgModule } from '@angular/core';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -92,6 +93,7 @@ import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
+import { faClipboard } from '@fortawesome/pro-regular-svg-icons';
 import { faCog } from '@fortawesome/pro-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
@@ -192,6 +194,7 @@ const STATES_SAVED = [ViewState];
     MatSidenavModule,
     MatSnackBarModule,
     MatToolbarModule,
+    MatTooltipModule,
     NgxsModule.forRoot(STATES, {
       developmentMode: !environment.production
     }),
@@ -246,6 +249,7 @@ export class RootModule {
     // 👇 must add icons we use right here
     library.addIcons(
       faBars,
+      faClipboard,
       faCog,
       faExpandArrows,
       faGlobeAmericas,

@@ -7,6 +7,8 @@ import { TypeRegistry } from '../services/typeregistry';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { HostBinding } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -39,8 +41,12 @@ export class OLPopupParcelPropertiesComponent {
   sameOwner: boolean;
   sameUsage: boolean;
 
+  @HostBinding('class.splitHorizontally') splitHorizontally = false;
+  @HostBinding('class.splitVertically') splitVertically = true;
+
   constructor(
     private cdf: ChangeDetectorRef,
+    private host: ElementRef,
     private map: OLMapComponent,
     public registry: TypeRegistry,
     private snackBar: MatSnackBar
@@ -58,7 +64,6 @@ export class OLPopupParcelPropertiesComponent {
           owner: feature.properties.owner
         }))
         .sort((p, q) => String(p.id).localeCompare(String(q.id)));
-      console.log(this.abutters);
       this.cdf.markForCheck();
     });
   }
@@ -84,6 +89,9 @@ export class OLPopupParcelPropertiesComponent {
               property.usage === this.properties[0].usage &&
               property.use === this.properties[0].use
           );
+          // 👉 split depending on # of parcels
+          this.splitHorizontally = this.properties.length > 1;
+          this.splitVertically = this.properties.length === 1;
           this.cdf.markForCheck();
         }
       }
@@ -98,6 +106,20 @@ export class OLPopupParcelPropertiesComponent {
       this.map.olView.getZoom()
     )}&basemap=satellite`;
     return link;
+  }
+
+  onClipboard(): void {
+    const type = 'text/html';
+    // 👉 get type mismatch error w/o any, contradicting the MDN example
+    //    https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem
+    const data = [
+      new ClipboardItem({
+        [type]: new Blob([this.host.nativeElement.innerHTML], {
+          type
+        }) as any
+      })
+    ];
+    navigator.clipboard.write(data).then(() => console.log('success'));
   }
 
   onClose(): void {

@@ -50,6 +50,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { NgModule } from '@angular/core';
 import { NgPipesModule } from 'ngx-pipes';
@@ -280,6 +281,7 @@ const STATES_SAVED = [RouterState, ViewState];
     MatSelectModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatTooltipModule,
     NgPipesModule,
     NgxsModule.forRoot(STATES, {
       developmentMode: !environment.production

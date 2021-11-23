@@ -83,6 +83,7 @@
     "jsome": "^2",
     "material-design-icons": "^3",
     "ngx-avatar": "^4",
+    "ngx-clipboard": "^14.0.2",
     "ngx-pipes": "^2",
     "ngx-router-animations": "^11",
     "node-fetch": "^2",
