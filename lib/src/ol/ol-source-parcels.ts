@@ -144,14 +144,8 @@ export class OLSourceParcelsComponent implements OnInit {
     projection: OLProjection,
     success: Function
   ): void {
-    // 👉 we're going to quantize the extent to 500m accuracy
-    //    so that we can cache the result
-    const minX = Math.floor(extent[0] / 500) * 500;
-    const minY = Math.floor(extent[1] / 500) * 500;
-    const maxX = Math.ceil(extent[2] / 500) * 500;
-    const maxY = Math.ceil(extent[3] / 500) * 500;
     const bbox = transformExtent(
-      [minX, minY, maxX, maxY],
+      extent,
       projection,
       this.map.featureProjection
     );

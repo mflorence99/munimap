@@ -172,13 +172,18 @@
 
     <app-ol-layer-vector>
       <app-ol-style-parcels
+        [showAbutters]="true"
         [showDimensions]="true"
         [showLabelContrast]="true"
         [showLabels]="true"
         [showSelection]="true"
       ></app-ol-style-parcels>
       <app-ol-source-parcels></app-ol-source-parcels>
-      <app-ol-interaction-select [eventType]="'click'" [multi]="true">
+      <app-ol-interaction-select
+        [eventType]="'click'"
+        [findAbutters]="true"
+        [multi]="true"
+      >
       </app-ol-interaction-select>
       <app-ol-popup-selection>
         <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>

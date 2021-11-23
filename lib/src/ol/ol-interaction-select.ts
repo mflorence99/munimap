@@ -6,6 +6,8 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { ParcelID } from '../geojson';
 
+import * as Comlink from 'comlink';
+
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -51,6 +53,7 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
 export class OLInteractionSelectComponent
   implements AfterContentInit, Mapable, OnDestroy, OnInit
 {
+  #abuttersWorker: any /* 👈 TypeScript no help here */;
   #featuresLoadEndKey: OLEventsKey;
   #format: OLGeoJSON;
   #selectKey: OLEventsKey;
@@ -71,6 +74,8 @@ export class OLInteractionSelectComponent
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() filter: FilterFunction;
+
+  @Input() findAbutters = false;
 
   menuPosition = {
     x: 0,
@@ -114,6 +119,13 @@ export class OLInteractionSelectComponent
     this.map.selector = this;
   }
 
+  #createAbuttersWorker(): void {
+    const proxy: any = Comlink.wrap(
+      new Worker(new URL('../../../worker/src/abutters', import.meta.url))
+    );
+    new proxy().then((instance) => (this.#abuttersWorker = instance));
+  }
+
   #filter(feature: OLFeature<any>): boolean {
     return this.filter ? this.filter(feature) : true;
   }
@@ -128,7 +140,7 @@ export class OLInteractionSelectComponent
       .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
     this.abutters = [];
     // 👉 all this happens asynchronously in a web worker
-    this.map.abutters?.find(selecteds, allFeatures).then((abutters) => {
+    this.#abuttersWorker?.find(selecteds, allFeatures).then((abutters) => {
       this.abutters = abutters;
       this.abuttersFound.emit(abutters);
       // 🔥 this causes flicker!!
@@ -184,7 +196,7 @@ export class OLInteractionSelectComponent
     console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
     this.featuresSelected.emit(this.selected);
     // 👉 find the abutters
-    this.#findAbutters();
+    if (this.findAbutters) this.#findAbutters();
   }
 
   #selectParcels(ids: ParcelID[]): void {
@@ -214,6 +226,7 @@ export class OLInteractionSelectComponent
   }
 
   ngOnInit(): void {
+    if (this.findAbutters) this.#createAbuttersWorker();
     this.#handleContextMenu$();
   }
 

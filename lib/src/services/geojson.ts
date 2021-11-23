@@ -49,7 +49,12 @@ export class GeoJSONService {
   ): Observable<GeoJSON.FeatureCollection<GeoJSON.Polygon>> {
     let params = '';
     if (extent.length === 4) {
-      const [minX, minY, maxX, maxY] = extent;
+      // 👉 we're going to quantize the extent to 2DPs
+      //    so that we can cache the result
+      const minX = (Math.floor(extent[0] * 100) / 100).toFixed(2);
+      const minY = (Math.floor(extent[1] * 100) / 100).toFixed(2);
+      const maxX = (Math.ceil(extent[2] * 100) / 100).toFixed(2);
+      const maxY = (Math.ceil(extent[3] * 100) / 100).toFixed(2);
       params = `?minX=${minX}&minY=${minY}&maxX=${maxX}&maxY=${maxY}`;
     }
     return this.http

@@ -84,6 +84,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() minBorderWidth = 1;
   @Input() minFontSize = 6;
   @Input() opacity = 0.25;
+  @Input() showAbutters = false;
   @Input() showBackground = false;
   @Input() showBorder = false;
   @Input() showDimensions = false;
@@ -533,7 +534,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     // 👉 special stroke if abutter
-    else if (this.map.selector?.abutterIDs?.includes(props.id)) {
+    else if (
+      this.showAbutters &&
+      this.map.selector?.abutterIDs?.includes(props.id)
+    ) {
       const borderWidth = this.#borderWidth(resolution);
       const outline = this.map.vars['--map-parcel-abutter'];
       // 👉 necessary so we can select
