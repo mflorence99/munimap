@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { Features } from '../lib/src/geojson';
+import { Parcel } from '../lib/src/geojson';
+
+import { calculate } from '../lib/src/geojson';
+import { normalize } from '../lib/src/geojson';
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
-import { Features } from '@lib/geojson';
-import { Parcel } from '@lib/geojson';
-
-import { calculate } from '@lib/geojson';
 import { mkdirSync } from 'fs';
-import { normalize } from '@lib/geojson';
 import { stat } from 'fs';
 import { unlinkSync } from 'fs';
 import { writeFileSync } from 'fs';
@@ -200,7 +201,7 @@ async function main(): Promise<void> {
           )
         );
         mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
-        writeFileSync(fn, JSON.stringify(parcelsByTown[town], null, 2));
+        writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
       }
     });
 
@@ -229,7 +230,7 @@ async function main(): Promise<void> {
           type: 'Feature'
         })
       );
-      writeFileSync(fn, JSON.stringify(parcelsByTown[town], null, 2));
+      writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
     });
 
     // 👉 the idea behind countables is to provide just enough data for
@@ -256,7 +257,7 @@ async function main(): Promise<void> {
           type: 'Feature'
         })
       );
-      writeFileSync(fn, JSON.stringify(parcelsByTown[town], null, 2));
+      writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
     });
   }
 }

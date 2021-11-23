@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import * as turf from '@turf/turf';
@@ -39,7 +40,7 @@ railroads.features.forEach((feature: GeoJSON.Feature) => {
 mkdirSync(`${dist}/${theState}`, { recursive: true });
 writeFileSync(
   `${dist}/${theState}/railroads.geojson`,
-  JSON.stringify(railroads, null, 2)
+  JSON.stringify(simplify(railroads))
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

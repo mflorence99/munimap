@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import * as turf from '@turf/turf';
@@ -140,7 +141,7 @@ async function main(): Promise<void> {
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/buildings.geojson`,
-        JSON.stringify(buildingsByCountyByTown[county][town], null, 2)
+        JSON.stringify(simplify(buildingsByCountyByTown[county][town]))
       );
     });
   });

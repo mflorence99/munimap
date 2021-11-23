@@ -434,6 +434,33 @@ export function serialize(parcel: Parcel): void {
   }
 }
 
+// 👉 trim all coordinates to 5 DP's or ~3ft accuracy
+//    http://wiki.gis.com/wiki/index.php/Decimal_degrees
+export function simplify(
+  geojson: GeoJSON.FeatureCollection
+): GeoJSON.FeatureCollection {
+  const trunc = (coords): number[] =>
+    coords.map((coord) =>
+      Number((Math.floor(coord * 100000) / 100000).toFixed(5))
+    );
+  const traverse = (array): void => {
+    for (let ix = 0; ix < array.length; ix++) {
+      if (
+        array[ix].length === 2 &&
+        !isNaN(array[ix][0]) &&
+        !isNaN(array[ix][1])
+      )
+        array[ix] = trunc(array[ix]);
+      else traverse(array[ix]);
+    }
+  };
+  geojson.features.forEach((feature: GeoJSON.Feature<any>) => {
+    if (feature.bbox) feature.bbox = trunc(feature.bbox) as GeoJSON.BBox;
+    if (feature.geometry?.coordinates) traverse(feature.geometry.coordinates);
+  });
+  return geojson;
+}
+
 export function timestamp(parcel: Parcel): void {
   if (!parcel.timestamp)
     parcel.timestamp = firebase.firestore.FieldValue.serverTimestamp();

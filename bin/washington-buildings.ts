@@ -1,3 +1,4 @@
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import { mkdirSync } from 'fs';
@@ -51,5 +52,5 @@ console.log(
 mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 writeFileSync(
   `${dist}/${theState}/${county}/${town}/buildings.geojson`,
-  JSON.stringify(geojson, null, 2)
+  JSON.stringify(simplify(geojson))
 );

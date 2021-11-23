@@ -1,4 +1,5 @@
 import { bboxByAspectRatio } from './bbox';
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import { mkdirSync } from 'fs';
@@ -53,7 +54,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   mkdirSync(`${dist}/${theState}/${county}`, { recursive: true });
   writeFileSync(
     `${dist}/${theState}/${county}/boundary.geojson`,
-    JSON.stringify(geojson, null, 2)
+    JSON.stringify(simplify(geojson))
   );
 });
 
@@ -65,5 +66,5 @@ const geojson: GeoJSON.FeatureCollection = {
 };
 writeFileSync(
   `${dist}/${theState}/counties.geojson`,
-  JSON.stringify(geojson, null, 2)
+  JSON.stringify(simplify(geojson))
 );

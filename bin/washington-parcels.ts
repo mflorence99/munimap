@@ -1,5 +1,6 @@
 import { PARCELS } from '../proxy/assets/washington-parcels';
 
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import * as turf from '@turf/turf';
@@ -79,7 +80,7 @@ const geojson: GeoJSON.FeatureCollection = {
 mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 writeFileSync(
   `${dist}/${theState}/${county}/${town}/parcels.geojson`,
-  JSON.stringify(geojson, null, 2)
+  JSON.stringify(simplify(geojson))
 );
 
 // 👉 the idea behind searchables is to provide just enough data for
@@ -104,7 +105,7 @@ geojson.features = allLots.map((feature: any): any => ({
 }));
 writeFileSync(
   `${dist}/${theState}/${county}/${town}/searchables.geojson`,
-  JSON.stringify(geojson, null, 2)
+  JSON.stringify(simplify(geojson))
 );
 
 // 👉 the idea behind countables is to provide just enough data for
@@ -128,5 +129,5 @@ geojson.features = allLots.map((feature: any): any => ({
 }));
 writeFileSync(
   `${dist}/${theState}/${county}/${town}/countables.geojson`,
-  JSON.stringify(geojson, null, 2)
+  JSON.stringify(simplify(geojson))
 );

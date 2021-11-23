@@ -3,9 +3,6 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "module": "commonjs",
-    "paths": {
-      "@lib/*": ["../lib/src/*"]
-    },
     "target": "es6"
   }
 }

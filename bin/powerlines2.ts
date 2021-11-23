@@ -1,3 +1,4 @@
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import { readFileSync } from 'fs';
@@ -28,5 +29,5 @@ powerlines.features
 
 writeFileSync(
   `./proxy/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson`,
-  JSON.stringify(geojson, null, 2)
+  JSON.stringify(simplify(geojson))
 );

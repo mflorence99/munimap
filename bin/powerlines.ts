@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import * as turf from '@turf/turf';
@@ -89,7 +90,7 @@ Object.keys(linesByCountyByTown).forEach((county) => {
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/powerlines.geojson`,
-      JSON.stringify(linesByCountyByTown[county][town], null, 2)
+      JSON.stringify(simplify(linesByCountyByTown[county][town]))
     );
   });
 });
