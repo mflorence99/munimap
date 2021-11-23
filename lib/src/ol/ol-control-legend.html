@@ -40,10 +40,12 @@
               <ng-container
                 *ngFor="let use of registry.list('parcel', 'use'); trackBy: trackByUsage"
               >
-                <figure *ngIf="areaByUse[use[0]]" class="key">
-                  <div
-                    [style.backgroundImage]="'url(/assets/' + use[0] +'.svg)'"
-                  ></div>
+                <!-- 🔥 TEMPORARY -- WASHINGTON ONLY -->
+                <figure
+                  *ngIf="['CUFL', 'CUMH', 'CUMW', 'CUUH', 'CUUW', 'CUWL'].includes(use[0])"
+                  class="key"
+                >
+                  <img [src]="'assets/legend/' + use[0] +'.png'" />
                   <figcaption>{{ use[1].decoding }}</figcaption>
                 </figure>
               </ng-container>

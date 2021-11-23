@@ -1,6 +1,6 @@
 <main class="page">
   <mat-toolbar class="toolbar">
-    <button (click)="nav.toggle()" mat-icon-button>
+    <button (click)="legend.toggle()" mat-icon-button>
       <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
     </button>
 
@@ -28,7 +28,9 @@
   </mat-toolbar>
 
   <mat-drawer-container class="container">
-    <mat-drawer #nav class="sidebar" mode="over" position="start"> </mat-drawer>
+    <mat-drawer #legend class="sidebar" mode="over" position="start">
+      <app-legend></app-legend>
+    </mat-drawer>
 
     <mat-drawer #setup class="sidebar" mode="over" position="end"> </mat-drawer>
 

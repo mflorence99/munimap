@@ -312,6 +312,10 @@ a[mat-flat-button] {
   max-width: 99vw !important;
 }
 
+.mat-toolbar-single-row {
+  padding: 0 !important;
+}
+
 // 👉 Firebase styles
 
 .firebase-emulator-warning {

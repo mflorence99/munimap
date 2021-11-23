@@ -1,3 +1,4 @@
+import { LegendComponent } from './home/legend';
 import { RootPage } from './home/root';
 import { TownMapPage } from './home/town-map';
 
@@ -107,6 +108,7 @@ import { initializeAppProvider } from '@lib/services/initializer';
 
 const COMPONENTS = [
   ConfirmDialogComponent,
+  LegendComponent,
   MessageDialogComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,

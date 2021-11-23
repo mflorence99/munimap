@@ -70,11 +70,9 @@
         grid-template-columns: auto 1fr;
         white-space: nowrap;
 
-        > div {
-          background-color: rgba(var(--map-parcel-fill-u190), 0.25);
-          border: 1px dashed rgba(var(--map-parcel-outline), 1);
+        > img {
           height: 1.5rem;
-          width: 2rem;
+          width: 1.5rem;
         }
       }
     }
