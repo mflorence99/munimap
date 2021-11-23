@@ -8,9 +8,9 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
-import { HostBinding } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ViewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 
@@ -41,12 +41,13 @@ export class OLPopupParcelPropertiesComponent {
   sameOwner: boolean;
   sameUsage: boolean;
 
-  @HostBinding('class.splitHorizontally') splitHorizontally = false;
-  @HostBinding('class.splitVertically') splitVertically = true;
+  splitHorizontally = false;
+  splitVertically = true;
+
+  @ViewChild('tables', { static: true }) tables: ElementRef;
 
   constructor(
     private cdf: ChangeDetectorRef,
-    private host: ElementRef,
     private map: OLMapComponent,
     public registry: TypeRegistry,
     private snackBar: MatSnackBar
@@ -98,6 +99,10 @@ export class OLPopupParcelPropertiesComponent {
     );
   }
 
+  canClipboard(): boolean {
+    return !!navigator.clipboard?.write;
+  }
+
   // 👉 https://developers.google.com/maps/documentation/urls/get-started
   googleLink(property: ParcelProperties): string {
     const link = `https://www.google.com/maps/@?api=1&map_action=map&center=${
@@ -114,12 +119,19 @@ export class OLPopupParcelPropertiesComponent {
     //    https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem
     const data = [
       new ClipboardItem({
-        [type]: new Blob([this.host.nativeElement.innerHTML], {
+        [type]: new Blob([this.tables.nativeElement.innerHTML], {
           type
         }) as any
       })
     ];
-    navigator.clipboard.write(data).then(() => console.log('success'));
+    navigator.clipboard
+      .write(data)
+      .then(() =>
+        console.log(
+          '%cParcelProperties and Abutters copied to clipboard',
+          'color: khaki'
+        )
+      );
   }
 
   onClose(): void {

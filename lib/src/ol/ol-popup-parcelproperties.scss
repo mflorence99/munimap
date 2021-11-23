@@ -1,16 +1,5 @@
-:host(.splitHorizontally) {
-  display: grid;
-  grid-row-gap: 1rem;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-  width: 100%;
-}
-
-:host(.splitVertically) {
-  display: grid;
-  grid-column-gap: 1rem;
-  grid-template-columns: auto auto;
-  grid-template-rows: 1fr;
+:host {
+  display: block;
   width: 100%;
 }
 
@@ -66,4 +55,21 @@
   color: var(--accent-color);
   cursor: pointer;
   font-size: large;
+}
+
+.tables {
+  display: grid;
+  width: 100%;
+
+  &.splitHorizontally {
+    grid-row-gap: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  &.splitVertically {
+    grid-column-gap: 1rem;
+    grid-template-columns: auto auto;
+    grid-template-rows: 1fr;
+  }
 }
