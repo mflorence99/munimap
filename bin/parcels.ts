@@ -7,6 +7,8 @@ import { normalize } from '../lib/src/geojson';
 import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
+import * as yargs from 'yargs';
+
 import { mkdirSync } from 'fs';
 import { stat } from 'fs';
 import { unlinkSync } from 'fs';
@@ -15,6 +17,8 @@ import { writeFileSync } from 'fs';
 import chalk from 'chalk';
 import hash from 'object-hash';
 import shp from 'shpjs';
+
+const county = yargs.argv['county'];
 
 const dist = '/efs/MuniMap/proxy';
 
@@ -94,172 +98,166 @@ const exclusions = [
 ];
 
 async function main(): Promise<void> {
-  const counties = Object.keys(urlByCounty);
-  for (const county of counties) {
-    const url = urlByCounty[county];
-    console.log(chalk.blue(`Loading ${url}...`));
-    const parcels = (await shp(url)) as GeoJSON.FeatureCollection;
+  const url = urlByCounty[county];
+  console.log(chalk.blue(`Loading ${url}...`));
+  const parcels = (await shp(url)) as GeoJSON.FeatureCollection;
 
-    const countByTown: Record<string, number> = {};
-    const dupesByTown: Record<string, Set<string>> = {};
-    const parcelsByTown: Record<string, Features> = {};
-    const zeroAreaByTown: Record<string, number> = {};
+  const countByTown: Record<string, number> = {};
+  const dupesByTown: Record<string, Set<string>> = {};
+  const parcelsByTown: Record<string, Features> = {};
+  const zeroAreaByTown: Record<string, number> = {};
 
-    parcels.features
-      .filter((feature) => feature.properties.DisplayId)
-      .forEach((feature: GeoJSON.Feature<any>) => {
-        // 👉 SHP files have names truncated to 10 characters
-        const town = (feature.properties.TownName as string)?.toUpperCase();
+  parcels.features
+    .filter((feature) => feature.properties.DisplayId)
+    .forEach((feature: GeoJSON.Feature<any>) => {
+      // 👉 SHP files have names truncated to 10 characters
+      const town = (feature.properties.TownName as string)?.toUpperCase();
 
-        // 👉 we already have Washington via legacy data
-        if (town && !exclusions.includes(town)) {
-          // 👉 initialize all "by town" data structures
-          countByTown[town] ??= 0;
-          dupesByTown[town] ??= new Set<string>();
-          parcelsByTown[town] ??= {
-            features: [],
-            type: 'FeatureCollection'
-          } as any;
-          zeroAreaByTown[town] ??= 0;
+      // 👉 we already have Washington via legacy data
+      if (town && !exclusions.includes(town)) {
+        // 👉 initialize all "by town" data structures
+        countByTown[town] ??= 0;
+        dupesByTown[town] ??= new Set<string>();
+        parcelsByTown[town] ??= {
+          features: [],
+          type: 'FeatureCollection'
+        } as any;
+        zeroAreaByTown[town] ??= 0;
 
-          // 👉 occasionally, the data is dirty in that the same feature
-          //    appears more than once, but not necessarily with the same ID,
-          //    so we dedupe by a hash of its geometry
-          const signature = hash.MD5(feature.geometry);
-          if (dupesByTown[town].has(signature)) return;
-          dupesByTown[town].add(signature);
+        // 👉 occasionally, the data is dirty in that the same feature
+        //    appears more than once, but not necessarily with the same ID,
+        //    so we dedupe by a hash of its geometry
+        const signature = hash.MD5(feature.geometry);
+        if (dupesByTown[town].has(signature)) return;
+        dupesByTown[town].add(signature);
 
-          // 👉 construct a parcel to represent this feature
-          const parcel: Parcel = {
-            action: undefined,
-            geometry: feature.geometry,
+        // 👉 construct a parcel to represent this feature
+        const parcel: Parcel = {
+          action: undefined,
+          geometry: feature.geometry,
+          id: makeID(feature),
+          owner: undefined,
+          path: undefined,
+          properties: {
+            address: makeAddress(feature),
+            area:
+              Math.round(((feature.properties.Shape_Area ?? 0) / 43560) * 100) /
+              100 /* 👈 sq feet to acres to 2dps */,
+            building$: feature.properties.TaxBldg,
+            county: county,
             id: makeID(feature),
-            owner: undefined,
-            path: undefined,
-            properties: {
-              address: makeAddress(feature),
-              area:
-                Math.round(
-                  ((feature.properties.Shape_Area ?? 0) / 43560) * 100
-                ) / 100 /* 👈 sq feet to acres to 2dps */,
-              building$: feature.properties.TaxBldg,
-              county: county,
-              id: makeID(feature),
-              land$: feature.properties.TaxLand,
-              other$: feature.properties.TaxFeature,
-              taxed$: feature.properties.TaxTotal,
-              town: town,
-              usage: usageByClass[feature.properties.SLUC_desc] ?? '190'
-            },
-            type: 'Feature'
-          };
+            land$: feature.properties.TaxLand,
+            other$: feature.properties.TaxFeature,
+            taxed$: feature.properties.TaxTotal,
+            town: town,
+            usage: usageByClass[feature.properties.SLUC_desc] ?? '190'
+          },
+          type: 'Feature'
+        };
 
-          // 👉 we've gone to great lengths to make a bridge to share this
-          //    code with MuniMap -- there' a better way but this will do
-          //    for now
+        // 👉 we've gone to great lengths to make a bridge to share this
+        //    code with MuniMap -- there' a better way but this will do
+        //    for now
 
-          calculate(parcel);
-          normalize(parcel);
+        calculate(parcel);
+        normalize(parcel);
 
-          // 👉 gather town's parcels together for later
-          countByTown[town] += 1;
-          parcelsByTown[town].features.push(parcel as any);
-          if (parcel.properties.area === 0) zeroAreaByTown[town] += 1;
-        }
-      });
-
-    // 👉 one file per town with <= "tooManyLots"
-    Object.keys(parcelsByTown).forEach((town) => {
-      const fn = `${dist}/${theState}/${county}/${town}/parcels.geojson`;
-      if (
-        zeroAreaByTown[town] >
-        countByTown[town] * tooManyZeroAreaParcelsRatio
-      ) {
-        console.log(
-          chalk.magenta(
-            `... ${theState}/${county}/${town}/parcels.geojson has more than ${
-              tooManyZeroAreaParcelsRatio * 100
-            }% zero-area parcels`
-          )
-        );
-        stat(fn, (err, _stats) => {
-          if (!err) unlinkSync(fn);
-        });
-      } else if (countByTown[town] > tooManyParcels) {
-        console.log(
-          chalk.red(
-            `... ${theState}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`
-          )
-        );
-        stat(fn, (err, _stats) => {
-          if (!err) unlinkSync(fn);
-        });
-      } else {
-        console.log(
-          chalk.green(
-            `... writing ${theState}/${county}/${town}/parcels.geojson`
-          )
-        );
-        mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
-        writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
+        // 👉 gather town's parcels together for later
+        countByTown[town] += 1;
+        parcelsByTown[town].features.push(parcel as any);
+        if (parcel.properties.area === 0) zeroAreaByTown[town] += 1;
       }
     });
 
-    // 👉 the idea behind searchables is to provide just enough data for
-    //    parcels to be searched -- we do this because we MUST have ALL
-    //    the data available
-
-    Object.keys(parcelsByTown).forEach((town) => {
-      const fn = `${dist}/${theState}/${county}/${town}/searchables.geojson`;
+  // 👉 one file per town with <= "tooManyLots"
+  Object.keys(parcelsByTown).forEach((town) => {
+    const fn = `${dist}/${theState}/${county}/${town}/parcels.geojson`;
+    if (
+      zeroAreaByTown[town] >
+      countByTown[town] * tooManyZeroAreaParcelsRatio
+    ) {
       console.log(
-        chalk.green(
-          `... writing ${theState}/${county}/${town}/searchables.geojson`
+        chalk.magenta(
+          `... ${theState}/${county}/${town}/parcels.geojson has more than ${
+            tooManyZeroAreaParcelsRatio * 100
+          }% zero-area parcels`
         )
       );
-      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
-      // 👉 now do this again, converting the real parcels into searchables
-      parcelsByTown[town].features = parcelsByTown[town].features.map(
-        (feature: any): any => ({
-          bbox: feature.bbox,
-          id: feature.id,
-          properties: {
-            address: feature.properties.address,
-            id: feature.properties.id,
-            owner: feature.properties.owner
-          },
-          type: 'Feature'
-        })
-      );
-      writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
-    });
-
-    // 👉 the idea behind countables is to provide just enough data for
-    //    parcels to be searched -- we do this because we MUST have ALL
-    //    the data available
-
-    Object.keys(parcelsByTown).forEach((town) => {
-      const fn = `${dist}/${theState}/${county}/${town}/countables.geojson`;
+      stat(fn, (err, _stats) => {
+        if (!err) unlinkSync(fn);
+      });
+    } else if (countByTown[town] > tooManyParcels) {
       console.log(
-        chalk.green(
-          `... writing ${theState}/${county}/${town}/countables.geojson`
+        chalk.red(
+          `... ${theState}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`
         )
       );
-      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
-      // 👉 now do this again, converting the real parcels into countables
-      parcelsByTown[town].features = parcelsByTown[town].features.map(
-        (feature: any): any => ({
-          id: feature.id,
-          properties: {
-            area: feature.properties.area,
-            usage: feature.properties.usage,
-            use: feature.properties.use
-          },
-          type: 'Feature'
-        })
+      stat(fn, (err, _stats) => {
+        if (!err) unlinkSync(fn);
+      });
+    } else {
+      console.log(
+        chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
       );
+      mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
-    });
-  }
+    }
+  });
+
+  // 👉 the idea behind searchables is to provide just enough data for
+  //    parcels to be searched -- we do this because we MUST have ALL
+  //    the data available
+
+  Object.keys(parcelsByTown).forEach((town) => {
+    const fn = `${dist}/${theState}/${county}/${town}/searchables.geojson`;
+    console.log(
+      chalk.green(
+        `... writing ${theState}/${county}/${town}/searchables.geojson`
+      )
+    );
+    mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
+    // 👉 now do this again, converting the real parcels into searchables
+    parcelsByTown[town].features = parcelsByTown[town].features.map(
+      (feature: any): any => ({
+        bbox: feature.bbox,
+        id: feature.id,
+        properties: {
+          address: feature.properties.address,
+          id: feature.properties.id,
+          owner: feature.properties.owner
+        },
+        type: 'Feature'
+      })
+    );
+    writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
+  });
+
+  // 👉 the idea behind countables is to provide just enough data for
+  //    parcels to be searched -- we do this because we MUST have ALL
+  //    the data available
+
+  Object.keys(parcelsByTown).forEach((town) => {
+    const fn = `${dist}/${theState}/${county}/${town}/countables.geojson`;
+    console.log(
+      chalk.green(
+        `... writing ${theState}/${county}/${town}/countables.geojson`
+      )
+    );
+    mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
+    // 👉 now do this again, converting the real parcels into countables
+    parcelsByTown[town].features = parcelsByTown[town].features.map(
+      (feature: any): any => ({
+        id: feature.id,
+        properties: {
+          area: feature.properties.area,
+          usage: feature.properties.usage,
+          use: feature.properties.use
+        },
+        type: 'Feature'
+      })
+    );
+    writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
+  });
 }
 
 main();
