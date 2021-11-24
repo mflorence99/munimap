@@ -32,7 +32,7 @@
     "proxy:washington-buildings": "ts-node --dir bin washington-buildings.ts",
     "proxy:washington-parcels": "ts-node --dir bin washington-parcels.ts",
     "serve:author": "ng serve author --port 4200 --allowed-hosts admin.lots.online",
-    "serve:proxy": "npx tsc -p proxy/src && node dist/proxy/server.js --port 4201",
+    "serve:proxy": "npx -p typescript tsc -p proxy/src && node dist/proxy/server.js --port 4201",
     "serve:viewer": "ng serve viewer --port 4202 --allowed-hosts washington.lots.online"
   },
   "dependencies": {
