@@ -6,6 +6,6 @@
     "target": "es6"
   },
   "ts-node": {
-    "maxOldSpaceSize": 4096
+    "maxOldSpaceSize": 6000
   }
 }
