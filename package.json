@@ -19,7 +19,7 @@
     "proxy:explorer": "ts-node --dir bin explorer.ts",
     "proxy:indexer": "ts-node --dir bin indexer.ts",
     "proxy:lakes": "ts-node --dir bin lakes.ts",
-    "proxy:parcels": "node --max-old-space-size=8192 -- node_modules/.bin/ts-node --dir bin parcels.ts",
+    "proxy:parcels": "ts-node --dir bin parcels.ts",
     "proxy:places": "ts-node --dir bin places.ts",
     "proxy:powerlines": "ts-node --dir bin powerlines.ts",
     "proxy:powerlines2": "ts-node --dir bin powerlines2.ts",
