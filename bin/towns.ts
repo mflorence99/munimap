@@ -14,7 +14,7 @@ const towns = JSON.parse(
   ).toString()
 );
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 const townsByCounty: Record<string, GeoJSON.Feature[]> = {};
 const wholeState: GeoJSON.Feature[] = [];

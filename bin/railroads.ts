@@ -17,7 +17,7 @@ const railroads = JSON.parse(
   readFileSync('./proxy/assets/New_Hampshire_Railroads.geojson').toString()
 );
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 console.log(chalk.green(`... writing /${theState}/railroads.geojson`));
 

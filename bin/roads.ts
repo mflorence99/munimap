@@ -13,7 +13,7 @@ import shp from 'shpjs';
 const url =
   'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-roads/Roads_DOT';
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 const roadsByCountyByTown = {};
 

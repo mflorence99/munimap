@@ -13,7 +13,7 @@ import copy from 'fast-copy';
 import hash from 'object-hash';
 import shp from 'shpjs';
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
 

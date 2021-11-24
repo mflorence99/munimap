@@ -1,7 +1,7 @@
-import { theState } from '../lib/src/geojson';
+import { Index } from '../lib/src/geojson';
+import { Layer } from '../lib/src/geojson';
 
-import { Index } from '@lib/geojson';
-import { Layer } from '@lib/geojson';
+import { theState } from '../lib/src/geojson';
 
 import { existsSync } from 'fs';
 import { readFileSync } from 'fs';
@@ -15,7 +15,7 @@ const towns = JSON.parse(
   ).toString()
 );
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 function available({ name, url }): Layer {
   return {

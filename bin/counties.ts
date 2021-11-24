@@ -8,7 +8,7 @@ import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 const counties = JSON.parse(
   readFileSync(

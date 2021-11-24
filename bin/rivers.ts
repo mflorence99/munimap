@@ -16,7 +16,7 @@ import shp from 'shpjs';
 const url =
   'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Inland_Water_Resources/d-designatedrivers/Designated_Rivers_24k';
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()

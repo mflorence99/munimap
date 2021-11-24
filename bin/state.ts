@@ -7,7 +7,7 @@ import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 const boundary = JSON.parse(
   readFileSync('./proxy/assets/New_Hampshite_State_Boundary.geojson').toString()

@@ -17,7 +17,7 @@ import shp from 'shpjs';
 const url =
   'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-trails/nhtrails';
 
-const dist = './dist/proxy';
+const dist = '/efs/MuniMap/proxy';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()
