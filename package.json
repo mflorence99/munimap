@@ -12,7 +12,7 @@
     "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "emulators": "firebase emulators:start",
     "patcher": "ts-node --dir bin patcher.ts",
-    "postinstall": "npm run patcher && ngcc",
+    "postinstall": "npm run patcher",
     "prettier": "prettier --write .",
     "proxy:buildings": "ts-node --dir bin buildings.ts",
     "proxy:counties": "ts-node --dir bin counties.ts",
