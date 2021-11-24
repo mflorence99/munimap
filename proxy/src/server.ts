@@ -1,4 +1,5 @@
 import { GeoJSONFilter } from './geojson';
+import { PROXY_SERVER_OPTS } from './proxy';
 import { ProxyServer } from './proxy';
 
 import * as yargs from 'yargs';
@@ -13,6 +14,7 @@ import { RequestLogger } from 'serverx-ts';
 import { Route } from 'serverx-ts';
 
 import { createServer } from 'http';
+import { join } from 'path';
 
 import chalk from 'chalk';
 
@@ -41,13 +43,18 @@ const loggerOpts = {
   useValue: { format: 'tiny' }
 };
 
+const proxyServerOpts = {
+  provide: PROXY_SERVER_OPTS,
+  useValue: { cache: join(dir, 'cache') }
+};
+
 const routes: Route[] = [
   {
     path: '/proxy',
     methods: ['GET'],
     handler: ProxyServer,
     middlewares: [Compressor, CORS, RequestLogger],
-    services: [loggerOpts]
+    services: [loggerOpts, proxyServerOpts]
   },
   {
     path: '/',

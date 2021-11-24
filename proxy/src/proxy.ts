@@ -1,9 +1,12 @@
 import * as fs from 'fs';
 
 import { Handler } from 'serverx-ts';
+import { Inject } from 'injection-js';
 import { Injectable } from 'injection-js';
+import { InjectionToken } from 'injection-js';
 import { Message } from 'serverx-ts';
 import { Observable } from 'rxjs';
+import { Optional } from 'injection-js';
 
 import { from } from 'rxjs';
 import { fromReadableStream } from 'serverx-ts';
@@ -16,11 +19,36 @@ import fetch from 'node-fetch';
 import hash from 'object-hash';
 import md5File from 'md5-file';
 
+// 👇 proxy server options
+
+export interface ProxyServerOpts {
+  cache?: string;
+  maxAge?: number;
+}
+
+export const PROXY_SERVER_OPTS = new InjectionToken<ProxyServerOpts>(
+  'PROXY_SERVER_OPTS'
+);
+
+export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
+  cache: '/tmp',
+  maxAge: 30 * 24 * 60 * 60 /* 👈 30 days */
+};
+
 // 👇 a trivial proxy server so that we can use ArcGIS etc
 //    in prodfuction -- ie w/o the Webpack proxy
 
 @Injectable()
 export class ProxyServer extends Handler {
+  private opts: ProxyServerOpts;
+
+  constructor(@Optional() @Inject(PROXY_SERVER_OPTS) opts: ProxyServerOpts) {
+    super();
+    this.opts = opts
+      ? { ...PROXY_SERVER_DEFAULT_OPTS, ...opts }
+      : PROXY_SERVER_DEFAULT_OPTS;
+  }
+
   handle(message$: Observable<Message>): Observable<Message> {
     return message$.pipe(
       mergeMap((message: Message): Observable<Message> => {
@@ -44,12 +72,12 @@ export class ProxyServer extends Handler {
 
         // 👉 see if we've stashed result
         //    stash expires after 30 days
-        const fpath = `/tmp/${hash.MD5(url)}.proxy`;
+        const fpath = `${this.opts.cache}/${hash.MD5(url)}.proxy`;
         let stat;
         try {
           stat = fs.statSync(fpath);
         } catch (error) {}
-        const maxAge = 30 * 24 * 60 * 60;
+        const maxAge = this.opts.maxAge;
         const isStashed = stat?.mtimeMs > Date.now() - maxAge * 1000;
 
         return of(message).pipe(
