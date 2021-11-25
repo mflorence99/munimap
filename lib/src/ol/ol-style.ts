@@ -9,12 +9,6 @@ export interface OLStyleComponent {
 }
 
 export type OLFillPatternType =
-  | 'CUMH'
-  | 'CUUH'
-  | 'CUMW'
-  | 'CUMH'
-  | 'CUFL'
-  | 'CUWL'
   | 'breccia'
   | 'brick'
   | 'caps'

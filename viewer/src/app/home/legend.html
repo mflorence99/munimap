@@ -24,11 +24,7 @@
                 *ngIf="['CUFL', 'CUMH', 'CUMW', 'CUUH', 'CUUW', 'CUWL'].includes(use[0])"
                 class="key"
               >
-                <div
-                  [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage[0] + '), 0.5)'"
-                >
-                  <img [src]="'assets/legend/' + use[0] +'.png'" />
-                </div>
+                <img [src]="'assets/legend/' + use[0] +'.png'" class="icon" />
                 <figcaption>{{ use[1].decoding }}</figcaption>
               </figure>
             </ng-container>

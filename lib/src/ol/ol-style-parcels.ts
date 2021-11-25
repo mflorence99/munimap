@@ -75,7 +75,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   appPatterns: QueryList<OLStylePatternDirective>;
 
   @Input() borderWidth = 3;
-  @Input() borderWidthSelectRatio = 1.5;
+  @Input() borderWidthSelectRatio = 2;
   @Input() dimensionsFontSize = 20;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
@@ -544,7 +544,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       const fill = new OLFill({ color: [0, 0, 0, 0] });
       const stroke = new OLStroke({
         color: `rgb(${outline})`,
-        width: borderWidth
+        width: borderWidth * this.borderWidthSelectRatio
       });
       return [new OLStyle({ fill, stroke })];
     }

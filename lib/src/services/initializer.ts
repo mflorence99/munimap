@@ -3,6 +3,8 @@ import { Params } from './params';
 
 import { environment } from '../environment';
 
+import 'firebase/analytics';
+
 import * as Sentry from '@sentry/angular';
 
 import { Injectable } from '@angular/core';
@@ -24,6 +26,9 @@ export class InitializerService {
   constructor(private geoJSON: GeoJSONService, private params: Params) {}
 
   initialize(): Observable<any> {
+    if (environment.production)
+      console.log('%cPRODUCTION', 'color: darkorange');
+    else console.log('%cLOCALHOST', 'color: dodgerblue');
     console.table(environment.package);
     console.table(environment.build);
     console.table(environment.ua);
@@ -43,6 +48,10 @@ export class InitializerService {
         tracesSampleRate: 1.0
       });
     }
+
+    // 👉 initialize analytics
+    //    just tracking access to the app for now
+    firebase.analytics().logEvent('login');
 
     // 👉 initialize firestore
     firebase

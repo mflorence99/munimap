@@ -55,28 +55,9 @@
         grid-template-columns: auto 1fr;
         white-space: nowrap;
 
-        > div {
-          align-items: center;
-          border: 1px dashed var(--mat-blue-gray-300);
-          display: flex;
-          height: 1.5rem;
-          justify-content: center;
-          position: relative;
-          width: 1.5rem;
-
-          &::before {
-            background-color: white;
-            content: '';
-            height: 100%;
-            position: absolute;
-            width: 100%;
-            z-index: -1;
-          }
-
-          > img {
-            height: 75%;
-            width: 75%;
-          }
+        .icon {
+          height: 1.25rem;
+          width: 1.25rem;
         }
       }
     }

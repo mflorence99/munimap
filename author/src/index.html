@@ -6,10 +6,7 @@
     <title>MuniMap</title>
 
     <script>
-      if (
-        !('IntersectionObserver' in window) ||
-        !('MutationObserver' in window)
-      )
+      if (!('serviceWorker' in navigator) || typeof Worker === undefined)
         location.replace('assets/unsupported.html');
     </script>
 
