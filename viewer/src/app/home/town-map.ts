@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Map } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
 import { Observable } from 'rxjs';
+import { Params } from '@lib/services/params';
 import { Select } from '@ngxs/store';
 import { ViewState } from '@lib/state/view';
 
@@ -18,4 +19,6 @@ export class TownMapPage {
   @Select(MapState) map$: Observable<Map>;
 
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+
+  constructor(public params: Params) {}
 }

@@ -113,7 +113,14 @@ export class ProxyServer extends Handler {
 
             // 👉 use FETCH to GET the proxied URL if not cached
             else {
-              return from(fetch(url)).pipe(
+              return from(
+                fetch(url, {
+                  headers: {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    'User-Agent': request.headers['User-Agent'] as string
+                  }
+                })
+              ).pipe(
                 tap((resp) => {
                   const headers = resp.headers.raw();
                   ['cache-control', 'last-modified', 'etag'].forEach((key) => {
@@ -123,7 +130,10 @@ export class ProxyServer extends Handler {
                 tap((resp) => (response.statusCode = resp.status)),
                 mergeMap((resp) => from(resp.buffer())),
                 tap((buffer) => (response.body = buffer)),
-                tap((buffer) => fs.writeFile(fpath, buffer, () => {}))
+                tap((buffer) => {
+                  if (response.statusCode === 200)
+                    fs.writeFile(fpath, buffer, () => {});
+                })
               );
             }
           }),
