@@ -181,13 +181,13 @@ export class OLControlLegendComponent implements Mapable, OnInit {
 
   addToMap(): void {
     this.map.olMap.addControl(this.olControl);
-    this.#handleBoundary$();
-    this.#handleGeoJSON$();
-    this.#handleStreams$();
   }
 
   ngOnInit(): void {
     this.olControl = new Legend({ element: this.legend.nativeElement });
+    this.#handleBoundary$();
+    this.#handleGeoJSON$();
+    this.#handleStreams$();
   }
 
   trackByUsage(ix: number, item: [any, Descriptor]): string {

@@ -60,6 +60,9 @@ export class OLOverlayLabelComponent implements OnInit {
       .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 
+  // 👉 we need to know where the contextmenu was clicked so that later
+  //    in setFeature we can figure which polygon is bein addressed
+
   #handleContextMenu$(): void {
     this.map.contextMenu$.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       this.#contextMenuAt = this.map.olMap.getCoordinateFromPixel([
@@ -103,6 +106,9 @@ export class OLOverlayLabelComponent implements OnInit {
     event.source._dragRef.reset();
   }
 
+  // 👉 setFeature is called by the contextmenu code to initiate
+  //    this interaction
+
   setFeature(feature: OLFeature<any>): void {
     this.#centers = feature.getProperties().centers;
     this.#id = feature.getId();
@@ -110,6 +116,8 @@ export class OLOverlayLabelComponent implements OnInit {
     if (feature.getGeometry().getType() === 'MultiPolygon') {
       const polygons = feature.getGeometry().getPolygons();
       for (this.#ix = 0; this.#ix < polygons.length; this.#ix++) {
+        // 👉 we need to know which of the possible multiple ploygons
+        //    that make up the parcel we will be re-centering
         const pt = point(this.#contextMenuAt);
         const poly = polygon([polygons[this.#ix].getCoordinates()[0]]);
         if (booleanPointInPolygon(pt, poly)) break;

@@ -52,6 +52,7 @@ export class OLPopupParcelPropertiesComponent {
     public registry: TypeRegistry,
     private snackBar: MatSnackBar
   ) {
+    // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleAbuttersFound$();
     this.#handleFeaturesSelected$();
   }

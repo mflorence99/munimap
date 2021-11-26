@@ -122,8 +122,7 @@ import { ViewState } from '@lib/state/view';
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
-import { faCrosshairs as fadCrosshairs } from '@fortawesome/pro-duotone-svg-icons';
-import { faCrosshairs as fasCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
@@ -341,8 +340,7 @@ export class RootModule {
     library.addIcons(
       faBars,
       faCog,
-      fadCrosshairs,
-      fasCrosshairs,
+      faCrosshairs,
       faDrawPolygon,
       faExclamationTriangle,
       faExpandArrows,

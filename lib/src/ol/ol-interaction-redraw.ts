@@ -7,11 +7,11 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../geojson';
 
-import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { MatDialog } from '@angular/material/dialog';
+import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { takeUntil } from 'rxjs/operators';
@@ -32,7 +32,7 @@ import OLSnap from 'ol/interaction/Snap';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionRedrawComponent implements AfterContentInit {
+export class OLInteractionRedrawComponent implements OnInit {
   #feature: OLFeature<OLPolygon | OLMultiPolygon>;
   #format: OLGeoJSON;
   #geometry: OLPolygon | OLMultiPolygon;
@@ -60,19 +60,27 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
     this.map.redrawer = this;
   }
 
-  // 👇 the idea is that a selection change stops the redraw
+  // 👇 the idea is that a selection change cancels the redraw
+  //    and ESC allows the resdraw to be accepted
+
+  #handleEscape$(): void {
+    this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.#touched) this.#saveRedraw();
+      this.#unsetFeature();
+    });
+  }
 
   #handleFeaturesSelected$(): void {
     this.map.selector?.featuresSelected
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.#touched) this.#saveRedraw();
-        if (this.#modifyStartKey) unByKey(this.#modifyStartKey);
-        if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
-        if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
-        this.#touched = false;
-        this.active = false;
+        if (this.#touched) this.#resetRedraw();
+        this.#unsetFeature();
       });
+  }
+
+  #resetRedraw(): void {
+    this.#feature.setGeometry(this.#geometry);
   }
 
   #saveRedraw(): void {
@@ -97,13 +105,25 @@ export class OLInteractionRedrawComponent implements AfterContentInit {
           this.store.dispatch(new AddParcels([redrawnParcel]));
         }
         // 👉 on CANCEL, reset geometry
-        else this.#feature.setGeometry(this.#geometry);
+        else this.#resetRedraw();
       });
   }
 
-  ngAfterContentInit(): void {
+  #unsetFeature(): void {
+    if (this.#modifyStartKey) unByKey(this.#modifyStartKey);
+    if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
+    if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
+    this.#touched = false;
+    this.active = false;
+  }
+
+  ngOnInit(): void {
+    this.#handleEscape$();
     this.#handleFeaturesSelected$();
   }
+
+  // 👉 setFeature is called by the contextmenu code to initiate
+  //    this interaction
 
   setFeature(feature: OLFeature<OLPolygon | OLMultiPolygon>): void {
     this.active = true;

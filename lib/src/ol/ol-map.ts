@@ -53,6 +53,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   click$ = new Subject<OLMapBrowserEvent<any>>();
   contextMenu$ = new Subject<PointerEvent>();
+  escape$ = new Subject<KeyboardEvent>();
 
   featureProjection = 'EPSG:4326';
 
@@ -259,6 +260,12 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   ): void {
     event.preventDefault();
     this.contextMenu$.next(event);
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onEscape(
+    event: KeyboardEvent
+  ): void {
+    this.escape$.next(event);
   }
 
   zoomToBounds(): void {

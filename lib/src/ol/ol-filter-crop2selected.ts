@@ -9,6 +9,7 @@ import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Optional } from '@angular/core';
 
 import { takeUntil } from 'rxjs/operators';
@@ -25,7 +26,7 @@ import union from '@turf/union';
   styles: [':host { display: none }']
 })
 export class OLFilterCrop2SelectedComponent
-  implements AfterContentInit, OnDestroy
+  implements AfterContentInit, OnDestroy, OnInit
 {
   #format: OLGeoJSON;
   #layer: any;
@@ -95,11 +96,14 @@ export class OLFilterCrop2SelectedComponent
 
   ngAfterContentInit(): void {
     this.#addFilter();
-    this.#handleFeaturesSelected$();
   }
 
   ngOnDestroy(): void {
     // 👇 ol-ext has monkey-patched removeFilter
     this.#layer.olLayer['removeFilter'](this.olFilter);
+  }
+
+  ngOnInit(): void {
+    this.#handleFeaturesSelected$();
   }
 }
