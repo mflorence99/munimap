@@ -23,7 +23,6 @@ import { OLInteractionRedrawComponent } from '@lib/ol/ol-interaction-redraw';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLabelComponent } from '@lib/ol/ol-overlay-label';
 import { OnInit } from '@angular/core';
-import { Params } from '@lib/services/params';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SetMap } from '@lib/state/map';
@@ -62,7 +61,6 @@ export class TownMapPage implements OnInit {
     private actions$: Actions,
     private authState: AuthState,
     private destroy$: DestroyService,
-    public params: Params,
     private resolver: ComponentFactoryResolver,
     private root: RootPage,
     private route: ActivatedRoute,

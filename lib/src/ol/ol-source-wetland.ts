@@ -1,7 +1,6 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
-import { Params } from '../services/params';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -25,10 +24,9 @@ export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
   constructor(
     private map: OLMapComponent,
     http: HttpClient,
-    layer: OLLayerVectorComponent,
-    params: Params
+    layer: OLLayerVectorComponent
   ) {
-    super(http, layer, params);
+    super(http, layer);
   }
 
   getAttribution(): string {

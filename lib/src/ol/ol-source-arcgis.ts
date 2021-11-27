@@ -1,5 +1,6 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
-import { Params } from '../services/params';
+
+import { environment } from '../environment';
 
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
@@ -19,11 +20,7 @@ import OLVector from 'ol/source/Vector';
 export abstract class OLSourceArcGISComponent {
   olVector: OLVector<any>;
 
-  constructor(
-    private http: HttpClient,
-    private layer: OLLayerVectorComponent,
-    private params: Params
-  ) {
+  constructor(private http: HttpClient, private layer: OLLayerVectorComponent) {
     this.olVector = new OLVector({
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
@@ -44,7 +41,7 @@ export abstract class OLSourceArcGISComponent {
       this.http
         .get(
           `${
-            this.params.geoJSON.host
+            environment.endpoints.proxy
           }/proxy/${this.getProxyPath()}?url=${encodeURIComponent(
             this.getURL(extent)
           )}`,

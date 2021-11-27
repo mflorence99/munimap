@@ -1,9 +1,10 @@
 import { CountyIndex } from '../geojson';
 import { Index } from '../geojson';
-import { Params } from './params';
 import { Path } from '../state/view';
 import { StateIndex } from '../geojson';
 import { TownIndex } from '../geojson';
+
+import { environment } from '../environment';
 
 import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';
@@ -22,7 +23,7 @@ const EMPTY: GeoJSON.FeatureCollection<GeoJSON.Polygon> = {
 
 @Injectable({ providedIn: 'root' })
 export class GeoJSONService {
-  constructor(private http: HttpClient, private params: Params) {}
+  constructor(private http: HttpClient) {}
 
   #indexFromPath(
     base: Index,
@@ -59,7 +60,7 @@ export class GeoJSONService {
     }
     return this.http
       .get<GeoJSON.FeatureCollection<GeoJSON.Polygon>>(
-        `${this.params.geoJSON.host}${path}${params}`,
+        `${environment.endpoints.proxy}${path}${params}`,
         { headers: new HttpHeaders({ cache: 'page' }) }
       )
       .pipe(catchError(() => of(EMPTY)));
@@ -88,7 +89,7 @@ export class GeoJSONService {
   }
 
   loadIndex(): Observable<Index> {
-    return this.http.get<Index>(`${this.params.geoJSON.host}/index.json`, {
+    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
       headers: new HttpHeaders({ cache: 'perm' })
     });
   }

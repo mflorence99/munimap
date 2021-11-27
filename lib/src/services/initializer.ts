@@ -1,5 +1,4 @@
 import { GeoJSONService } from './geojson';
-import { Params } from './params';
 
 import { environment } from '../environment';
 
@@ -23,7 +22,7 @@ export function initializeAppProvider(
 
 @Injectable({ providedIn: 'root' })
 export class InitializerService {
-  constructor(private geoJSON: GeoJSONService, private params: Params) {}
+  constructor(private geoJSON: GeoJSONService) {}
 
   initialize(): Observable<any> {
     if (environment.production)

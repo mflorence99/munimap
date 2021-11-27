@@ -4,6 +4,7 @@ import { ProxyServer } from './proxy';
 
 import * as yargs from 'yargs';
 
+import { AWSLambdaApp } from 'serverx-ts';
 import { Compressor } from 'serverx-ts';
 import { CORS } from 'serverx-ts';
 import { FILE_SERVER_OPTS } from 'serverx-ts';
@@ -31,7 +32,10 @@ const argv = yargs
 // 👇 default directory b/c it won't be so convenient to
 //    specify it when serverless
 
-const dir = argv['dir'] ?? '/efs/MuniMap/proxy';
+const isDev = argv['port'];
+
+const dir =
+  argv['dir'] ?? isDev ? '/efs/MuniMap/proxy' : '/mnt/efs/MuniMap/proxy';
 
 const fileServerOpts = {
   provide: FILE_SERVER_OPTS,
@@ -53,35 +57,49 @@ const routes: Route[] = [
     path: '/proxy',
     methods: ['GET'],
     handler: ProxyServer,
-    middlewares: [Compressor, CORS, RequestLogger],
+    middlewares: isDev
+      ? [Compressor, CORS, RequestLogger]
+      : [CORS, RequestLogger],
     services: [loggerOpts, proxyServerOpts]
   },
   {
     path: '/',
     methods: ['GET'],
     handler: FileServer,
-    middlewares: [Compressor, GeoJSONFilter, CORS, RequestLogger],
+    middlewares: isDev
+      ? [Compressor, GeoJSONFilter, CORS, RequestLogger]
+      : [GeoJSONFilter, CORS, RequestLogger],
     services: [loggerOpts, fileServerOpts]
   },
   {
     path: '/',
     methods: ['OPTIONS'],
-    middlewares: [CORS, RequestLogger],
-    services: [loggerOpts]
+    middlewares: [CORS]
   }
 ];
 
-// 🔥 if no port then go serverless
+let app;
 
-const app = new HttpApp(routes);
+// 👉 if port specified, we're in local test mode
 
-const listener = app.listen();
-const server = createServer(listener).on('listening', () => {
-  console.log(
-    chalk.blue(
-      `MuniMap proxy listening on port ${argv['port']} deploying from ${dir}`
-    )
-  );
-});
+if (isDev) {
+  app = new HttpApp(routes);
 
-server.listen(4201);
+  const listener = app.listen();
+  const server = createServer(listener).on('listening', () => {
+    console.log(
+      chalk.blue(
+        `MuniMap proxy listening on port ${argv['port']} deploying from ${dir}`
+      )
+    );
+  });
+
+  server.listen(4201);
+}
+
+// 👉 if no port specified, we're running serverless
+else app = new AWSLambdaApp(routes);
+
+export function aws(event, context): any {
+  return app.handle(event, context);
+}

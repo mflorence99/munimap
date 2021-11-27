@@ -1,7 +1,8 @@
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
-import { Params } from '../services/params';
+
+import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -33,7 +34,7 @@ export class OLLayerMapboxComponent implements Mapable, OnInit {
 
   @Input() styleUrl: string;
 
-  constructor(private map: OLMapComponent, private params: Params) {}
+  constructor(private map: OLMapComponent) {}
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
@@ -43,7 +44,7 @@ export class OLLayerMapboxComponent implements Mapable, OnInit {
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olLayer = new OLMapbox({
-      accessToken: this.params.mapbox.apiKey,
+      accessToken: environment.mapbox.apiKey,
       declutter: true,
       maxZoom: this.maxZoom,
       opacity: this.opacity,

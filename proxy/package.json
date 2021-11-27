@@ -1,0 +1,15 @@
+{
+  "description": "Minimum for serverless deploy of proxy",
+  "dependencies": {
+    "@turf/bbox-polygon": "^6",
+    "@turf/boolean-intersects": "^6",
+    "chalk": "^4",
+    "injection-js": "^2",
+    "md5-file": "^5",
+    "node-fetch": "^2",
+    "object-hash": "^2",
+    "rxjs": "^7",
+    "serverx-ts": "^0.0.41",
+    "yargs": "^17"
+  }
+}

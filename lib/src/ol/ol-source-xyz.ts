@@ -1,6 +1,7 @@
 import { OLAttributionComponent } from './ol-attribution';
 import { OLLayerTileComponent } from './ol-layer-tile';
-import { Params } from '../services/params';
+
+import { environment } from '../environment';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -28,7 +29,7 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
 
   @Input() url: string;
 
-  constructor(private layer: OLLayerTileComponent, private params: Params) {}
+  constructor(private layer: OLLayerTileComponent) {}
 
   ngAfterContentInit(): void {
     // 👉 note that we're saying we don't expect
@@ -47,7 +48,7 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
     this.olXYZ = new OLXYZ({
       crossOrigin: 'anonymous',
       maxZoom: this.maxZoom,
-      url: `${this.params.geoJSON.host}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
+      url: `${environment.endpoints.proxy}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
     });
   }
 }

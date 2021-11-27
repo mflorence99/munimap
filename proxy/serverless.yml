@@ -1,0 +1,29 @@
+service: munimap-proxy
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  region: us-east-1
+  stage: dev
+
+plugins:
+  - serverless-apigw-binary
+  - serverless-domain-manager
+
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
+  customDomain:
+    domainName: proxy.munimap.online
+    certificateName: '*.munimap.online'
+    basePath: ''
+    stage: dev
+
+functions:
+  aws:
+    handler: server.aws
+    events:
+      - http: ANY /
+      - http: 'ANY /{proxy+}'
