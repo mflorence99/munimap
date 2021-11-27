@@ -5,6 +5,7 @@ import { ProxyServer } from './proxy';
 import * as yargs from 'yargs';
 
 import { AWSLambdaApp } from 'serverx-ts';
+import { BinaryTyper } from 'serverx-ts';
 import { Compressor } from 'serverx-ts';
 import { CORS } from 'serverx-ts';
 import { FILE_SERVER_OPTS } from 'serverx-ts';
@@ -58,8 +59,8 @@ const routes: Route[] = [
     methods: ['GET'],
     handler: ProxyServer,
     middlewares: isDev
-      ? [Compressor, CORS, RequestLogger]
-      : [CORS, RequestLogger],
+      ? [BinaryTyper, Compressor, CORS, RequestLogger]
+      : [BinaryTyper, CORS, RequestLogger],
     services: [loggerOpts, proxyServerOpts]
   },
   {

@@ -30,7 +30,8 @@ export const environment = {
   },
 
   endpoints: {
-    proxy: isDev ? 'http://localhost:4201' : 'https://proxy.munimap.online'
+    proxy:
+      /* 🔥 isDev ? 'http://localhost:4201' : */ 'https://proxy.munimap.online'
   },
 
   firebase: {

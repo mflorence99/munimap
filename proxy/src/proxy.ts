@@ -122,10 +122,10 @@ export class ProxyServer extends Handler {
                 })
               ).pipe(
                 tap((resp) => {
-                  const headers = resp.headers.raw();
-                  ['cache-control', 'last-modified', 'etag'].forEach((key) => {
-                    if (headers[key]) response.headers[key] = headers[key];
-                  });
+                  for (const key of resp.headers.keys()) {
+                    if (!['content-encoding'].includes(key.toLowerCase()))
+                      response.headers[key] = resp.headers.get(key);
+                  }
                 }),
                 tap((resp) => (response.statusCode = resp.status)),
                 mergeMap((resp) => from(resp.buffer())),
