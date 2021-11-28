@@ -102,7 +102,7 @@ export class OLInteractionRedrawComponent implements OnInit {
             path: this.map.path,
             type: 'Feature'
           };
-          this.store.dispatch(new AddParcels([redrawnParcel]));
+          this.store.dispatch(new AddParcels([redrawnParcel], 'fromMap'));
         }
         // 👉 on CANCEL, reset geometry
         else this.#resetRedraw();

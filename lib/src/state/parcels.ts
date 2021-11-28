@@ -33,14 +33,21 @@ import { of } from 'rxjs';
 import copy from 'fast-copy';
 import hash from 'object-hash';
 
+export type ActionSource = 'fromMap' | 'fromSidebar';
+
 export class AddParcels {
   static readonly type = '[Parcels] AddParcels';
-  constructor(public parcels: Parcel[]) {}
+  constructor(public parcels: Parcel[], public actionSource: ActionSource) {}
 }
 
 export class CanDo {
   static readonly type = '[Parcels] CanDo';
   constructor(public canUndo: boolean, public canRedo: boolean) {}
+}
+
+export class ClearStacks {
+  static readonly type = '[Parcels] ClearStacks';
+  constructor(public actionSource: ActionSource) {}
 }
 
 export class Redo {
@@ -60,8 +67,15 @@ export class Undo {
 
 export type ParcelsStateModel = Parcel[];
 
-const redoStack: Parcel[] = [];
-const undoStack: Parcel[] = [];
+// 👇 each item in the undo/redo stack is an array of atomic
+//    parcel actions -- the action source must be homogenous
+//    to prevent an undo or redo operation in an area no longer
+//    visible to the user
+
+let actionSource = null;
+const maxStackSize = 7;
+const redoStack: Parcel[][] = [];
+const undoStack: Parcel[][] = [];
 
 @State<ParcelsStateModel>({
   name: 'parcels',
@@ -72,6 +86,10 @@ export class ParcelsState implements NgxsOnInit {
   #parcels: AngularFirestoreCollection<Parcel>;
 
   @Select(MapState) map$: Observable<Map>;
+
+  // 👇 remember that that author app uses regular logins,
+  //    while the viewer app uses anonymous logins --
+  //    we don't care which here
   @Select(AnonState.profile) profile1$: Observable<Profile>;
   @Select(AuthState.profile) profile2$: Observable<Profile>;
 
@@ -109,6 +127,8 @@ export class ParcelsState implements NgxsOnInit {
       });
   }
 
+  // 👇 considering the parcels in reverse chronological order and ignoring
+  //    "modified" actions, was the last action "add" or "remove"?
   #lastActionByParcelID(parcels: Parcel[]): Record<ParcelID, ParcelAction> {
     return parcels
       .filter((parcel) => parcel.action !== 'modified')
@@ -130,13 +150,21 @@ export class ParcelsState implements NgxsOnInit {
     ctx: StateContext<ParcelsStateModel>,
     action: AddParcels
   ): void {
-    const batch = this.firestore.firestore.batch();
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch(new CanDo(false, false));
+    // 👉 reset the stacks as required
     redoStack.length = 0;
-    undoStack.length = 0;
+    if (action.actionSource !== actionSource) undoStack.length = 0;
+    while (undoStack.length >= maxStackSize) undoStack.shift();
+    actionSource = action.actionSource;
+    // 👉 "do" the parcels
+    const batch = this.firestore.firestore.batch();
+    const undos: Parcel[] = [];
+    undoStack.push(undos);
     const promises = action.parcels.map((parcel) => {
       return this.#parcels
         .add(this.#normalize(parcel))
-        .then((ref) => undoStack.push({ ...copy(parcel), $id: ref.id }));
+        .then((ref) => undos.push({ ...copy(parcel), $id: ref.id }));
     });
     // TODO 🔥 we have a great opportunity here to "cull"
     //         extraneous parcels
@@ -154,6 +182,17 @@ export class ParcelsState implements NgxsOnInit {
     /* placeholder */
   }
 
+  @Action(ClearStacks) clearStacks(
+    ctx: StateContext<ParcelsStateModel>,
+    action: ClearStacks
+  ): void {
+    if (action.actionSource === actionSource) {
+      redoStack.length = 0;
+      undoStack.length = 0;
+      ctx.dispatch(new CanDo(false, false));
+    }
+  }
+
   ngxsOnInit(): void {
     this.#handleStreams$();
   }
@@ -164,8 +203,8 @@ export class ParcelsState implements NgxsOnInit {
   }
 
   // 👉 consider the entire stream of parcels, in reverse timestamp order
-  //    separate them by ID
-  //    once a "removed" action found, ignore prior modifications
+  //    separate them by ID -- once a "removed" action found,
+  //    ignore prior modifications
   parcelsModified(parcels: Parcel[]): Record<ParcelID, Parcel[]> {
     const removedIDs = new Set<ParcelID>();
     return parcels.reduce((acc, parcel) => {
@@ -189,28 +228,29 @@ export class ParcelsState implements NgxsOnInit {
   ): void {
     // 👉 block any other undo, redo until this is finished
     ctx.dispatch(new CanDo(false, false));
-    // 👉 clear the undo stack
-    undoStack.length = 0;
-    // 👉 process all the parcels in the redo stack
+    // 👉 prepare the stacks
+    const redos = redoStack.pop();
+    const undos: Parcel[] = [];
+    undoStack.push(undos);
+    // 👉 "redo" the parcels"
     const batch = this.firestore.firestore.batch();
-    const promises = redoStack.map((parcel) => {
+    const promises = redos.map((parcel) => {
       switch (parcel.action) {
         case 'added':
           delete parcel.$id;
           parcel.action = 'removed';
-          return this.#parcels.add(parcel).then(() => undoStack.push(parcel));
+          return this.#parcels.add(parcel).then(() => undos.push(parcel));
         case 'modified':
           delete parcel.$id;
           return this.#parcels
             .add(parcel)
-            .then((ref) => undoStack.push({ ...copy(parcel), $id: ref.id }));
+            .then((ref) => undos.push({ ...copy(parcel), $id: ref.id }));
         case 'removed':
           delete parcel.$id;
           parcel.action = 'added';
-          return this.#parcels.add(parcel).then(() => undoStack.push(parcel));
+          return this.#parcels.add(parcel).then(() => undos.push(parcel));
       }
     });
-    redoStack.length = 0;
     batch.commit();
     Promise.all(promises).then(() => {
       ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
@@ -231,28 +271,29 @@ export class ParcelsState implements NgxsOnInit {
   ): void {
     // 👉 block any other undo, redo until this is finished
     ctx.dispatch(new CanDo(false, false));
-    // 👉 clear the redo stack
-    redoStack.length = 0;
-    // 👉 process all the parcels in the undo stack
+    // 👉 prepare the stacks
+    const undos = undoStack.pop();
+    const redos: Parcel[] = [];
+    redoStack.push(redos);
+    // 👉 "undo" the parcels
     const batch = this.firestore.firestore.batch();
-    const promises = undoStack.map((parcel) => {
+    const promises = undos.map((parcel) => {
       switch (parcel.action) {
         case 'added':
           delete parcel.$id;
           parcel.action = 'removed';
-          return this.#parcels.add(parcel).then(() => redoStack.push(parcel));
+          return this.#parcels.add(parcel).then(() => redos.push(parcel));
         case 'modified':
           return this.#parcels
             .doc(parcel.$id)
             .delete()
-            .then(() => redoStack.push(parcel));
+            .then(() => redos.push(parcel));
         case 'removed':
           delete parcel.$id;
           parcel.action = 'added';
-          return this.#parcels.add(parcel).then(() => redoStack.push(parcel));
+          return this.#parcels.add(parcel).then(() => redos.push(parcel));
       }
     });
-    undoStack.length = 0;
     batch.commit();
     Promise.all(promises).then(() => {
       ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));

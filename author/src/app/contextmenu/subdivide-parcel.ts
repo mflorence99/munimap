@@ -76,6 +76,8 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
     ];
   }
 
+  refresh(): void {}
+
   // 👇 the idea is that subdivision is a two-part process
   //    first, right here, we subdivide into N random polygons
   //    then later the user will adjust the lot lines
@@ -146,7 +148,7 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
     });
     // that's it!
     this.store.dispatch(
-      new AddParcels([...removedParcels, ...subdividedParcels])
+      new AddParcels([...removedParcels, ...subdividedParcels], 'fromMap')
     );
     this.drawer.close();
   }

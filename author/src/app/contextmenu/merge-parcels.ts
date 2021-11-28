@@ -48,6 +48,8 @@ export class MergeParcelsComponent implements ContextMenuComponent {
     this.drawer.close();
   }
 
+  refresh(): void {}
+
   save(record: MergeRecord): void {
     const removedIDs = this.selectedIDs.filter((id) => id !== record.mergedID);
     // 👉 these are the parcels that will be removed after the merge
@@ -87,7 +89,9 @@ export class MergeParcelsComponent implements ContextMenuComponent {
       union(acc, geojson)
     ).geometry;
     // 👉 that's it!
-    this.store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
+    this.store.dispatch(
+      new AddParcels([mergedParcel, ...removedParcels], 'fromMap')
+    );
     this.drawer.close();
   }
 

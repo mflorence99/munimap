@@ -9,6 +9,7 @@ import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ClearStacks } from '@lib/state/parcels';
 import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
@@ -32,6 +33,7 @@ import { ViewState } from '@lib/state/view';
 
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
+import { unByKey } from 'ol/Observable';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -124,29 +126,42 @@ export class TownMapPage implements OnInit {
     const comp = cRef.instance;
     comp.drawer = this.drawer;
     comp.map = this.olMap;
-    comp.selectedIDs = this.olMap.selector.selectedIDs;
+    // 👉 there HAS to be a selector, or else we couldn't be here
     const source = this.olMap.selector.layer.olLayer.getSource();
+    comp.selectedIDs = this.olMap.selector.selectedIDs;
     comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+    // 👉 watch for delta in features
+    const key = source.on('featuresloadend', () => {
+      comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+      comp.refresh();
+    });
+    // 👉 when the sidebar closes, clear the undo/redo stacks if
+    //    they're populated from the sidebar, or else we'll be undoing
+    //    operations that are invisible to the user
+    this.drawer.closedStart.subscribe(() => {
+      unByKey(key);
+      this.store.dispatch(new ClearStacks('fromSidebar'));
+    });
   }
 
   canMergeParcels(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector.selectedIDs.length > 1);
+    return this.#can(event, this.olMap.selector?.selectedIDs.length > 1);
   }
 
   canParcelProperties(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector.selectedIDs.length > 0);
+    return this.#can(event, this.olMap.selector?.selectedIDs.length > 0);
   }
 
   canRecenterLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
+    return this.#can(event, this.olMap.selector?.selectedIDs.length === 1);
   }
 
   canRedrawBoundary(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
+    return this.#can(event, this.olMap.selector?.selectedIDs.length === 1);
   }
 
   canSubdivideParcel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector.selectedIDs.length === 1);
+    return this.#can(event, this.olMap.selector?.selectedIDs.length === 1);
   }
 
   ngOnInit(): void {

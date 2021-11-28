@@ -114,14 +114,21 @@ export class ProxyServer extends Handler {
             // 👉 use FETCH to GET the proxied URL if not cached
             else {
               return from(
+                // 👇 DO proxy the referer (yes, that misspelling is correct!)
+                //    and the user-agent to satisy API domain rstrictions
                 fetch(url, {
                   headers: {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    /* eslint-disable @typescript-eslint/naming-convention */
+                    'Referer': request.headers['Referer'] as string,
                     'User-Agent': request.headers['User-Agent'] as string
+                    /* eslint-enable @typescript-eslint/naming-convention */
                   }
                 })
               ).pipe(
                 tap((resp) => {
+                  // 👇 DON'T proxy content-encoding, because fetch will
+                  //    have already decoded the response and we can't
+                  //    decode it again
                   for (const key of resp.headers.keys()) {
                     if (!['content-encoding'].includes(key.toLowerCase()))
                       response.headers[key] = resp.headers.get(key);

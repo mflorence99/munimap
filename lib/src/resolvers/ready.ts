@@ -14,6 +14,9 @@ import { take } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ReadyResolver implements Resolve<boolean> {
+  // 👇 remember that that author app uses regular logins,
+  //    while the viewer app uses anonymous logins --
+  //    we don't care which here
   @Select(AnonState.profile) profile1$: Observable<Profile>;
   @Select(AuthState.profile) profile2$: Observable<Profile>;
 

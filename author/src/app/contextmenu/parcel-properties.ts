@@ -3,6 +3,7 @@ import { ContextMenuComponent } from './contextmenu-component';
 import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Descriptor } from '@lib/services/typeregistry';
 import { Input } from '@angular/core';
@@ -68,6 +69,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
 
   constructor(
     private authState: AuthState,
+    private cdf: ChangeDetectorRef,
     public registry: TypeRegistry,
     private store: Store
   ) {}
@@ -108,6 +110,11 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
     this.#makeRecord();
   }
 
+  refresh(): void {
+    this.#makeRecord();
+    this.cdf.markForCheck();
+  }
+
   save(record: ValueRecord): void {
     const parcels: Parcel[] = [];
     // 👇 we'll potentially save a parcel override per feature
@@ -134,7 +141,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
       // 👉 only save if at least one property override
       if (Object.keys(parcel.properties).length > 0) parcels.push(parcel);
     });
-    this.store.dispatch(new AddParcels(parcels));
+    this.store.dispatch(new AddParcels(parcels, 'fromSidebar'));
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.propertiesForm.form.markAsPristine();

@@ -9,4 +9,6 @@ export interface ContextMenuComponent {
   features: OLFeature<any>[];
   map: OLMapComponent;
   selectedIDs: ParcelID[];
+
+  refresh(): void;
 }
