@@ -30,7 +30,7 @@ interface Subdivision {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-subdivide-parcels',
-  styleUrls: ['./contextmenu-component.scss', './subdivide-parcel.scss'],
+  styleUrls: ['./subdivide-parcel.scss', '../pages/sidebar.scss'],
   templateUrl: './subdivide-parcel.html'
 })
 export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {

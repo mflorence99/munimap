@@ -24,7 +24,7 @@ interface MergeRecord {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-merge-parcels',
-  styleUrls: ['./contextmenu-component.scss', './merge-parcels.scss'],
+  styleUrls: ['./merge-parcels.scss', '../pages/sidebar.scss'],
   templateUrl: './merge-parcels.html'
 })
 export class MergeParcelsComponent implements ContextMenuComponent {

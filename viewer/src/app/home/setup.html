@@ -1,0 +1,34 @@
+<header class="header">
+  <figure class="icon">
+    <fa-icon [icon]="['far', 'palette']" size="2x"></fa-icon>
+  </figure>
+
+  <p class="title">Lorem ipsum dolor emit</p>
+  <p class="subtitle">Lorem ipsum etc</p>
+</header>
+
+<form
+  #setupForm="ngForm"
+  autocomplete="off"
+  class="form"
+  novalidate
+  spellcheck="false"
+>
+  <p class="instructions">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
+    nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
+  </p>
+</form>
+
+<article class="actions">
+  <button (click)="done()" mat-flat-button>DONE</button>
+
+  <button
+    (click)="save()"
+    [disabled]="!setupForm.dirty"
+    color="primary"
+    mat-flat-button
+  >
+    SAVE
+  </button>
+</article>

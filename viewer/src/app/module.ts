@@ -1,5 +1,6 @@
 import { LegendComponent } from './home/legend';
 import { RootPage } from './home/root';
+import { SetupComponent } from './home/setup';
 import { TownMapPage } from './home/town-map';
 
 import * as Sentry from '@sentry/angular';
@@ -17,6 +18,7 @@ import { DecimalPipe } from '@angular/common';
 import { ErrorHandler } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 import { GeolocationService } from '@lib/services/geolocation';
 import { GeosimulatorService } from '@lib/services/geosimulator';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -99,8 +101,10 @@ import { faCog } from '@fortawesome/pro-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMap } from '@fortawesome/pro-duotone-svg-icons';
 import { faMapMarkerAlt } from '@fortawesome/pro-duotone-svg-icons';
 import { faMinus } from '@fortawesome/pro-light-svg-icons';
+import { faPalette } from '@fortawesome/pro-regular-svg-icons';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -153,7 +157,8 @@ const COMPONENTS = [
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
   OLStyleTrailsComponent,
-  OLStyleWetlandComponent
+  OLStyleWetlandComponent,
+  SetupComponent
 ];
 
 const DIRECTIVES = [];
@@ -188,6 +193,7 @@ const STATES_SAVED = [ViewState];
     BrowserModule,
     CommonModule,
     FontAwesomeModule,
+    FormsModule,
     HttpClientModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -256,8 +262,10 @@ export class RootModule {
       faExpandArrows,
       faGlobeAmericas,
       faInfoCircle,
+      faMap,
       faMapMarkerAlt,
       faMinus,
+      faPalette,
       faPlus,
       faSearch,
       faTimes

@@ -51,7 +51,7 @@ const editables = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ValuesPipe],
   selector: 'app-parcel-properties',
-  styleUrls: ['./contextmenu-component.scss', './parcel-properties.scss'],
+  styleUrls: ['./parcel-properties.scss', '../pages/sidebar.scss'],
   templateUrl: './parcel-properties.html'
 })
 export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {

@@ -3,6 +3,7 @@ import { LoginPage } from './pages/login/login';
 import { MapCreatePage } from './pages/map-create/map-create';
 import { MapFilterComponent } from './pages/map-create/map-filter';
 import { MergeParcelsComponent } from './contextmenu/merge-parcels';
+import { NavigatorComponent } from './pages/root/navigator';
 import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
 import { RootPage } from './pages/root/root';
 import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
@@ -149,6 +150,7 @@ const COMPONENTS = [
   MapFilterComponent,
   MergeParcelsComponent,
   MessageDialogComponent,
+  NavigatorComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,

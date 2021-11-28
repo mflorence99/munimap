@@ -1,0 +1,30 @@
+<nav class="form navigator">
+  <ul>
+    <li (click)="close()" routerLink="/map-create" class="item">
+      <fa-icon
+        [icon]="['fad', 'layer-plus']"
+        class="icon selected"
+        size="3x"
+      ></fa-icon>
+      <div class="title">Create a new map</div>
+      <div class="subtitle">Lorem ipsum dolor sit amet.</div>
+    </li>
+
+    <li
+      *ngFor="let map of allMaps$ | async; trackBy: trackByID"
+      (click)="close()"
+      class="item"
+      routerLink="/town-map/{{ map.id }}"
+    >
+      <fa-icon
+        [class.selected]="title === map.name"
+        [icon]="['fad', 'layer-group']"
+        class="icon"
+        size="3x"
+      ></fa-icon>
+
+      <div class="title">{{ map.name }}</div>
+      <div class="subtitle">{{ map.owner }}</div>
+    </li>
+  </ul>
+</nav>

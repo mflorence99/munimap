@@ -6,7 +6,7 @@ import { TypeRegistry } from '@lib/services/typeregistry';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-legend',
-  styleUrls: ['./legend.scss'],
+  styleUrls: ['./legend.scss', './sidebar.scss'],
   templateUrl: './legend.html'
 })
 export class LegendComponent {

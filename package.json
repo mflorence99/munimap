@@ -99,6 +99,7 @@
     "material-design-icons": "^3",
     "md5-file": "^5",
     "ngx-avatar": "^4",
+    "ngx-color-picker": "^11.0.0",
     "ngx-pipes": "^2",
     "ngx-router-animations": "^11",
     "node-fetch": "^2",

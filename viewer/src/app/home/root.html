@@ -32,7 +32,9 @@
       <app-legend></app-legend>
     </mat-drawer>
 
-    <mat-drawer #setup class="sidebar" mode="over" position="end"> </mat-drawer>
+    <mat-drawer #setup class="sidebar" mode="over" position="end">
+      <app-setup></app-setup>
+    </mat-drawer>
 
     <mat-drawer-content class="content">
       <router-outlet></router-outlet>

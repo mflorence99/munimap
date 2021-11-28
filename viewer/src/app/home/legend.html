@@ -1,4 +1,12 @@
-<table class="legend">
+<header class="header">
+  <figure class="icon">
+    <fa-icon [icon]="['fad', 'map']" size="2x"></fa-icon>
+  </figure>
+  <p class="title">Legend</p>
+  <p class="subtitle">Lorem ipsum erat</p>
+</header>
+
+<table class="form legend">
   <tbody>
     <ng-container
       *ngFor="let usage of registry.list('parcel', 'usage'); trackBy: trackByUsage"

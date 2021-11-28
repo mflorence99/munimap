@@ -1,5 +1,4 @@
 import { Actions } from '@ngxs/store';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthState } from '@lib/state/auth';
 import { CanDo } from '@lib/state/parcels';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -7,7 +6,6 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { Event } from '@angular/router';
-import { Map } from '@lib/state/map';
 import { NavigationCancel } from '@angular/router';
 import { NavigationEnd } from '@angular/router';
 import { NavigationError } from '@angular/router';
@@ -24,9 +22,7 @@ import { Undo } from '@lib/state/parcels';
 import { User } from '@lib/state/auth';
 import { ViewChild } from '@angular/core';
 
-import { mergeMap } from 'rxjs/operators';
 import { moveFromLeftFade } from 'ngx-router-animations';
-import { of } from 'rxjs';
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
 import { transition } from '@angular/animations';
@@ -46,8 +42,6 @@ import { useAnimation } from '@angular/animations';
   templateUrl: './root.html'
 })
 export class RootPage implements OnInit {
-  allMaps$: Observable<Map[]>;
-
   canRedo = false;
   canUndo = false;
 
@@ -64,7 +58,6 @@ export class RootPage implements OnInit {
   constructor(
     private actions$: Actions,
     private cdf: ChangeDetectorRef,
-    private firestore: AngularFirestore,
     private destroy$: DestroyService,
     private router: Router,
     private store: Store
@@ -79,21 +72,6 @@ export class RootPage implements OnInit {
         this.canUndo = action.canUndo;
         this.cdf.markForCheck();
       });
-  }
-
-  #handleAllMaps$(): Observable<Map[]> {
-    return this.profile$.pipe(
-      takeUntil(this.destroy$),
-      mergeMap((profile) => {
-        if (!profile?.email) return of([]);
-        else {
-          const workgroup = AuthState.workgroup(profile);
-          const query = (ref): any =>
-            ref.where('owner', 'in', workgroup).orderBy('name');
-          return this.firestore.collection<Map>('maps', query).valueChanges();
-        }
-      })
-    );
   }
 
   #handleRouterEvents$(): void {
@@ -126,7 +104,6 @@ export class RootPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.allMaps$ = this.#handleAllMaps$();
     this.#handleActions$();
     this.#handleRouterEvents$();
   }
@@ -137,10 +114,7 @@ export class RootPage implements OnInit {
 
   setTitle(title: string): void {
     this.title = title;
-  }
-
-  trackByID(ix: number, map: Map): string {
-    return map.id;
+    console.log({ title: this.title });
   }
 
   undo(): void {
