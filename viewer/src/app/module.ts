@@ -11,6 +11,7 @@ import { AnonState } from '@lib/state/anon';
 import { APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { ColorPickerModule } from 'ngx-color-picker';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { CurrencyPipe } from '@angular/common';
@@ -30,6 +31,7 @@ import { LocationStrategy } from '@angular/common';
 import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -86,6 +88,7 @@ import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
+import { OverlayState } from '@lib/state/overlay';
 import { ParcelsState } from '@lib/state/parcels';
 import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
@@ -176,8 +179,8 @@ const ROUTES = [
   }
 ];
 
-const STATES = [AnonState, MapState, ParcelsState, ViewState];
-const STATES_SAVED = [ViewState];
+const STATES = [AnonState, MapState, OverlayState, ParcelsState, ViewState];
+const STATES_SAVED = [OverlayState, ViewState];
 
 @NgModule({
   bootstrap: [RootPage],
@@ -191,12 +194,14 @@ const STATES_SAVED = [ViewState];
     AngularFireAuthModule,
     BrowserAnimationsModule,
     BrowserModule,
+    ColorPickerModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,
     HttpClientModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatCheckboxModule,
     MatDialogModule,
     MatMenuModule,
     MatSidenavModule,

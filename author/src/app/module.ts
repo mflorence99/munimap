@@ -41,7 +41,6 @@ import { LocationStrategy } from '@angular/common';
 import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -111,6 +110,7 @@ import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { OverlayState } from '@lib/state/overlay';
 import { ParcelsState } from '@lib/state/parcels';
 import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
@@ -248,8 +248,8 @@ const ROUTES = [
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState, MapState, ParcelsState, ViewState];
-const STATES_SAVED = [RouterState, ViewState];
+const STATES = [AuthState, MapState, OverlayState, ParcelsState, ViewState];
+const STATES_SAVED = [OverlayState, RouterState, ViewState];
 
 @NgModule({
   bootstrap: [RootPage],
@@ -272,7 +272,6 @@ const STATES_SAVED = [RouterState, ViewState];
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
-    MatCheckboxModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,

@@ -18,13 +18,47 @@
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
     nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
   </p>
+
+  <section class="properties">
+    <div></div>
+    <div></div>
+    <div>Fill</div>
+    <div>Line</div>
+
+    <ng-container *ngFor="let property of record; trackBy: trackByProp">
+      <p class="caption">{{ property.caption }}</p>
+
+      <mat-checkbox
+        [(ngModel)]="property.enabled"
+        [attr.ngControl]="property.attribute"
+        [name]="property.attribute"
+      ></mat-checkbox>
+
+      <article [style.background]="property.fill" class="square"></article>
+
+      <article [style.background]="property.fill" class="square"></article>
+    </ng-container>
+  </section>
+
+  <br />
+
+  <article
+    [colorPicker]="'#FFFFFF'"
+    [cpAlphaChannel]="false"
+    [cpCancelButton]="true"
+    [cpCancelButtonText]="'Clear'"
+    [cpDialogDisplay]="'inline'"
+    [cpDisableInput]="true"
+    [cpFallbackColor]="''"
+    [cpToggle]="true"
+  ></article>
 </form>
 
 <article class="actions">
   <button (click)="done()" mat-flat-button>DONE</button>
 
   <button
-    (click)="save()"
+    (click)="save(record)"
     [disabled]="!setupForm.dirty"
     color="primary"
     mat-flat-button

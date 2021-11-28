@@ -1,0 +1,24 @@
+.properties {
+  align-content: space-evenly;
+  align-items: center;
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: auto auto auto auto;
+  justify-items: center;
+
+  .square {
+    border: 1px dotted var(--text-color);
+    height: 1.5rem;
+    transition: transform 0.25s ease-in-out;
+    width: 1.5rem;
+
+    &.selected {
+      border-style: solid;
+      transform: scale(1.25);
+    }
+  }
+
+  .caption {
+    justify-self: start;
+  }
+}
