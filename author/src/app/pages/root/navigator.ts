@@ -10,10 +10,12 @@ import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Profile } from '@lib/state/auth';
 import { Select } from '@ngxs/store';
+import { VersionService } from '@lib/services/version';
 
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { theState } from '@lib/geojson';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,12 +29,15 @@ export class NavigatorComponent implements OnInit {
 
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
+  state = theState;
+
   @Input() title: string;
 
   constructor(
+    private destroy$: DestroyService,
     private drawer: MatDrawer,
     private firestore: AngularFirestore,
-    private destroy$: DestroyService
+    private version: VersionService
   ) {}
 
   #handleAllMaps$(): Observable<Map[]> {
@@ -56,6 +61,10 @@ export class NavigatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.allMaps$ = this.#handleAllMaps$();
+  }
+
+  reset(): void {
+    this.version.hardReset();
   }
 
   trackByID(ix: number, map: Map): string {

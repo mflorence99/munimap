@@ -112,6 +112,7 @@ import { faMinus } from '@fortawesome/pro-light-svg-icons';
 import { faPalette } from '@fortawesome/pro-duotone-svg-icons';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { initializeAppProvider } from '@lib/services/initializer';
 
@@ -282,6 +283,7 @@ export class RootModule {
       faPalette,
       faPlus,
       faSearch,
+      faSync,
       faTimes
     );
   }

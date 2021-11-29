@@ -2,13 +2,16 @@
   <ul>
     <li (click)="close()" routerLink="/map-create" class="item">
       <fa-icon
+        [class.selected]="title?.startsWith(state)"
         [icon]="['fad', 'layer-plus']"
-        class="icon selected"
+        class="icon"
         size="3x"
       ></fa-icon>
       <div class="title">Create a new map</div>
       <div class="subtitle">Lorem ipsum dolor sit amet.</div>
     </li>
+
+    <hr />
 
     <li
       *ngFor="let map of allMaps$ | async; trackBy: trackByID"
@@ -25,6 +28,18 @@
 
       <div class="title">{{ map.name }}</div>
       <div class="subtitle">{{ map.owner }}</div>
+    </li>
+
+    <hr />
+
+    <li (click)="reset()" class="item">
+      <fa-icon
+        [icon]="['fad', 'sync']"
+        class="icon selected"
+        size="2x"
+      ></fa-icon>
+      <div class="title">Reload MuniMap</div>
+      <div class="subtitle">Lorem ipsum dolor sit amet.</div>
     </li>
   </ul>
 </nav>

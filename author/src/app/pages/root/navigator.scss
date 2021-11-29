@@ -13,6 +13,7 @@
       --fa-secondary-color: var(--text-color);
 
       grid-area: icon;
+      justify-self: center;
 
       &.selected {
         --fa-primary-color: var(--text-color);

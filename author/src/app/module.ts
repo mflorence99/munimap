@@ -124,7 +124,6 @@ import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
@@ -139,6 +138,7 @@ import { faObjectUngroup as fasObjectUngroup } from '@fortawesome/free-solid-svg
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/pro-duotone-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSync } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fadTasks } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fasTasks } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -349,7 +349,6 @@ export class RootModule {
     // 👇 must add icons we use right here
     library.addIcons(
       faBars,
-      faCog,
       faCrosshairs,
       faDrawPolygon,
       faExclamationTriangle,
@@ -364,6 +363,7 @@ export class RootModule {
       faPrint,
       faRedo,
       faSearch,
+      faSync,
       fadTasks,
       fasTasks,
       faTimes,

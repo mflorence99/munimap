@@ -4,6 +4,10 @@
   width: 100%;
 }
 
+.avatar {
+  cursor: pointer;
+}
+
 .container {
   height: calc(100% - (var(--map-cy-toolbar) * 1px));
   position: absolute;
@@ -30,8 +34,9 @@
 .toolbar {
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: auto auto 1fr auto auto auto auto;
+  grid-template-columns: auto auto 1fr auto auto auto;
   height: calc(var(--map-cy-toolbar) * 1px);
+  padding: 0 0.5rem !important;
   position: absolute;
   width: 100%;
 }

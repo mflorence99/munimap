@@ -242,6 +242,10 @@ h6 {
   margin: 0;
 }
 
+hr {
+  margin: 1rem 0;
+}
+
 html {
   border: 0;
   font-size: 14px;
@@ -319,6 +323,8 @@ a[mat-flat-button] {
 // 👉 Color Picker styles
 
 color-picker {
+  // 🔥 now THAT'S a hack -- but the coor-picker is surprisingly
+  //    hard to style b/c it is yanked out of the DOM
   justify-self: center;
 
   .cp-cancel-button-class {
