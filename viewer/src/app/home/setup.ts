@@ -75,6 +75,11 @@ export class SetupComponent implements OnInit {
     }
   }
 
+  onPropertyEnabled(property: OverlayProperty, state: boolean): void {
+    property.enabled = state;
+    this.setupForm.form.markAsDirty();
+  }
+
   pick([property, fld]): void {
     this.#selectedProperty = [property, fld];
   }

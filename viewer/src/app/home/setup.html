@@ -25,12 +25,14 @@
     <div>Fill</div>
     <div>Line</div>
 
-    <ng-container *ngFor="let property of record; trackBy: trackByProp">
-      <p class="caption">{{ property.caption }}</p>
+    <ng-container
+      *ngFor="let property of record; let ix = index; trackBy: trackByProp"
+    >
+      <p class="caption">{{ schema[ix].caption }}</p>
 
       <mat-checkbox
-        [(ngModel)]="property.enabled"
-        [name]="property.attribute + 'enabled'"
+        (change)="onPropertyEnabled(property, $event.checked)"
+        [checked]="property.enabled"
       ></mat-checkbox>
 
       <article

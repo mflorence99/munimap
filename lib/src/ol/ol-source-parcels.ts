@@ -3,6 +3,8 @@ import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
+import { OverlayProperty } from '../state/overlay';
+import { OverlayState } from '../state/overlay';
 import { Parcel } from '../geojson';
 import { ParcelID } from '../geojson';
 import { ParcelsState } from '../state/parcels';
@@ -48,6 +50,8 @@ export class OLSourceParcelsComponent implements OnInit {
 
   olVector: OLVector<any>;
 
+  @Select(OverlayState) overlay$: Observable<OverlayProperty[]>;
+
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
   @Input() path: string;
@@ -77,7 +81,9 @@ export class OLSourceParcelsComponent implements OnInit {
 
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
-    combineLatest([this.#geojson$, this.parcels$])
+    //    also with the oveylay, but we only care here if it has changed
+    //    we'll look at its value when we come to style the parcels
+    combineLatest([this.#geojson$, this.parcels$, this.overlay$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([original, parcels]) => {
         const originalsByID = original.features.reduce((acc, feature) => {

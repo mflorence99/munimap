@@ -2,6 +2,7 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
 import { OLStylePatternDirective } from './ol-style-pattern';
+import { OverlayState } from '../state/overlay';
 import { ParcelProperties } from '../geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -96,7 +97,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   constructor(
     private decimal: DecimalPipe,
     private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
+    private map: OLMapComponent,
+    private overlayState: OverlayState
   ) {
     this.layer.setStyle(this);
   }
@@ -229,8 +231,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   #fill(
     props: ParcelProperties,
-    _resolution: number,
-    _numPolygons: number
+    resolution: number,
+    numPolygons: number,
+    overlayFill: string
   ): OLStyle[] {
     const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let patterns;
@@ -241,7 +244,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       // not all current usages have a pattern
       if (color && icon) {
         patterns = [
-          new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+          new OLFill({
+            color: overlayFill || `rgba(${fill}, ${this.opacity})`
+          }),
           new OLFillPattern({ image: icon })
         ];
       }
@@ -255,7 +260,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     if (!patterns) {
       patterns = [
         new OLFillPattern({
-          color: `rgba(${fill}, ${this.opacity})`,
+          color: overlayFill || `rgba(${fill}, ${this.opacity})`,
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: 'dot',
           size: 2,
@@ -488,7 +493,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #strokeBorder(
     props: ParcelProperties,
     resolution: number,
-    numPolygons: number
+    numPolygons: number,
+    overlayStroke: string
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
     if (
@@ -509,7 +515,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         }),
         new OLStyle({
           stroke: new OLStroke({
-            color: `rgb(${outline})`,
+            color: overlayStroke || `rgb(${outline})`,
             lineCap: 'square',
             lineDash:
               borderWidth > 1
@@ -576,14 +582,22 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     //    depending on the number of polygons and other factors
     const styles: OLStyle[] = [];
     const props = feature.getProperties() as ParcelProperties;
+    // 👇 normal stroke and fill may be overlaid
+    const { fill: overlayFill, stroke: overlayStroke } =
+      this.overlayState.makeOverlayForParcelProperties(props);
     // 👇 background
     if (this.showBackground) {
-      const fills = this.#fill(props, resolution, numPolygons);
+      const fills = this.#fill(props, resolution, numPolygons, overlayFill);
       if (fills) styles.push(...fills);
     }
     // 👇 border
     if (this.showBorder) {
-      const strokes = this.#strokeBorder(props, resolution, numPolygons);
+      const strokes = this.#strokeBorder(
+        props,
+        resolution,
+        numPolygons,
+        overlayStroke
+      );
       if (strokes) styles.push(...strokes);
     }
     // 👉 make the coordinates look like they're always multi
