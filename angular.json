@@ -44,7 +44,8 @@
                 "glob": "**/*",
                 "input": "lib/assets",
                 "output": "assets"
-              }
+              },
+              "author/manifest.webmanifest"
             ],
             "index": "author/src/index.html",
             "main": "author/src/main.ts",
@@ -63,7 +64,9 @@
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true,
-            "webWorkerTsConfig": "worker/src/tsconfig.json"
+            "webWorkerTsConfig": "worker/src/tsconfig.json",
+            "serviceWorker": true,
+            "ngswConfigPath": "author/ngsw-config.json"
           },
           "defaultConfiguration": ""
         },
@@ -129,7 +132,8 @@
                 "glob": "**/*",
                 "input": "lib/assets",
                 "output": "assets"
-              }
+              },
+              "viewer/manifest.webmanifest"
             ],
             "index": "viewer/src/index.html",
             "main": "viewer/src/main.ts",
@@ -148,7 +152,9 @@
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true,
-            "webWorkerTsConfig": "worker/src/tsconfig.json"
+            "webWorkerTsConfig": "worker/src/tsconfig.json",
+            "serviceWorker": true,
+            "ngswConfigPath": "viewer/ngsw-config.json"
           },
           "defaultConfiguration": ""
         },

@@ -144,6 +144,7 @@ import { faUndo } from '@fortawesome/pro-duotone-svg-icons';
 import { initializeAppProvider } from '@lib/services/initializer';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const COMPONENTS = [
   ConfirmDialogComponent,
@@ -301,7 +302,13 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
       key: STATES_SAVED
     }),
     OverlayModule,
-    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' })
+    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
 
   providers: [

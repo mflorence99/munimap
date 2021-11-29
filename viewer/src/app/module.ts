@@ -112,6 +112,7 @@ import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { initializeAppProvider } from '@lib/services/initializer';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const COMPONENTS = [
   ConfirmDialogComponent,
@@ -216,7 +217,13 @@ const STATES_SAVED = [OverlayState, ViewState];
       disabled: environment.production
     }),
     NgxsStoragePluginModule.forRoot({ key: STATES_SAVED }),
-    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' })
+    RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
 
   providers: [
