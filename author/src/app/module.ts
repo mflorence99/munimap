@@ -116,8 +116,10 @@ import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
 import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
+import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
@@ -144,7 +146,6 @@ import { faUndo } from '@fortawesome/pro-duotone-svg-icons';
 import { initializeAppProvider } from '@lib/services/initializer';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
-import { ServiceWorkerModule } from '@angular/service-worker';
 
 const COMPONENTS = [
   ConfirmDialogComponent,
@@ -205,7 +206,8 @@ const COMPONENTS = [
   ParcelPropertiesComponent,
   SubdivideParcelComponent,
   TownMapSetupComponent,
-  UserProfileComponent
+  UserProfileComponent,
+  VersionDialogComponent
 ];
 
 const DIRECTIVES = [ContextMenuHostDirective, WorkgroupValidator];

@@ -20,6 +20,7 @@ import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { Undo } from '@lib/state/parcels';
 import { User } from '@lib/state/auth';
+import { VersionService } from '@lib/services/version';
 import { ViewChild } from '@angular/core';
 
 import { moveFromLeftFade } from 'ngx-router-animations';
@@ -60,7 +61,8 @@ export class RootPage implements OnInit {
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
     private router: Router,
-    private store: Store
+    private store: Store,
+    _version: VersionService /* 👈 just to get it loaded */
   ) {}
 
   #handleActions$(): void {

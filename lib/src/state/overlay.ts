@@ -68,7 +68,7 @@ export class OverlayState {
   }
 
   #isSet(): boolean {
-    return this.currentProperties().some(
+    return this.currentProperties()?.some(
       (property) => property.enabled && (property.fill || property.stroke)
     );
   }

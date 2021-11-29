@@ -65,5 +65,12 @@ export const environment = {
 
   production: !isDev,
 
-  ua: UAParser()
+  ua: UAParser(),
+
+  version: {
+    allowReloadPostponement: isDev,
+    autoReload: !isDev,
+    checkVersionLegacyAfter: 10 * 1000,
+    checkVersionInterval: 20 * 1000
+  }
 };

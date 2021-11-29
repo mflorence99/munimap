@@ -6,7 +6,7 @@
   "icons": [
     {
       "sizes": "16x16 32x32 72x72 96x96 128x128 144x144 192x192 256x256 512x512",
-      "src": "svg/favicon.svg"
+      "src": "assets/favicon.svg"
     }
   ],
   "lang": "en-US",

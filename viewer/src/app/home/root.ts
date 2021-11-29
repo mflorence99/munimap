@@ -19,6 +19,7 @@ import { SetSatelliteView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
+import { VersionService } from '@lib/services/version';
 import { ViewState } from '@lib/state/view';
 
 import { filter } from 'rxjs/operators';
@@ -52,7 +53,8 @@ export class RootPage implements OnInit {
     private location: Location,
     private router: Router,
     private store: Store,
-    private titleService: Title
+    private titleService: Title,
+    _version: VersionService /* 👈 just to get it loaded */
   ) {
     this.#url = urlParse(this.location.path(), true);
   }
