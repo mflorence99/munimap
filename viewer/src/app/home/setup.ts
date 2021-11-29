@@ -6,20 +6,16 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { OverlayProperties } from '@lib/state/overlay';
+import { OverlayProperty } from '@lib/state/overlay';
 import { OverlayState } from '@lib/state/overlay';
 import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
+import { UpdateProperties } from '@lib/state/overlay';
 import { ViewChild } from '@angular/core';
 
 import { takeUntil } from 'rxjs/operators';
 
-interface PropertiesRecord {
-  attribute: string;
-  caption: string;
-  enabled: boolean;
-  fill: string;
-  stroke: string;
-}
+import copy from 'fast-copy';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,49 +25,68 @@ interface PropertiesRecord {
   templateUrl: './setup.html'
 })
 export class SetupComponent implements OnInit {
-  @Select(OverlayState) overlay$: Observable<OverlayProperties[]>;
+  #selectedProperty: [OverlayProperty, string];
 
-  record: PropertiesRecord[] = [];
+  @Select(OverlayState) overlay$: Observable<OverlayProperty[]>;
+
+  record: OverlayProperty[] = [];
+
+  schema = OverlayState.schema();
 
   @ViewChild('setupForm', { static: true }) setupForm: NgForm;
 
   constructor(
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
-    private drawer: MatDrawer
+    private drawer: MatDrawer,
+    private store: Store
   ) {}
 
   #handleOverlay$(): void {
-    this.overlay$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((properties) => this.#makeRecord(properties));
+    this.overlay$.pipe(takeUntil(this.destroy$)).subscribe((properties) => {
+      this.record = copy(properties);
+      this.cdf.markForCheck();
+    });
   }
 
-  #makeRecord(properties: OverlayProperties[]): void {
-    this.record = properties.map((property, ix) => {
-      // 👉 the schema array is in lock-step with the properties
-      const schema = OverlayState.schema()[ix];
-      return { ...property, caption: schema.caption };
-    });
-    this.cdf.markForCheck();
+  currentColor(): string {
+    const [property, fld] = this.#selectedProperty ?? [];
+    return property?.[fld] ?? '#FFFFFF';
   }
 
   done(): void {
     this.drawer.close();
   }
 
+  isPicked([_property, _fld]): boolean {
+    const [property, fld] = this.#selectedProperty ?? [];
+    return property === _property && fld === _fld;
+  }
+
   ngOnInit(): void {
     this.#handleOverlay$();
   }
 
-  save(record: PropertiesRecord[]): void {
-    console.log({ record });
+  onColorPickerChange(color: string): void {
+    const [property, fld] = this.#selectedProperty ?? [];
+    if (property && fld) {
+      property[fld] = color;
+      this.setupForm.form.markAsDirty();
+    }
+  }
+
+  pick([property, fld]): void {
+    this.#selectedProperty = [property, fld];
+  }
+
+  save(record: OverlayProperty[]): void {
+    this.store.dispatch(new UpdateProperties(record));
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.setupForm.form.markAsPristine();
   }
 
-  trackByProp(ix: number, property: PropertiesRecord): string {
+  trackByProp(ix: number, property: OverlayProperty): string {
     return property.attribute;
   }
 }

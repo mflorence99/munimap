@@ -6,10 +6,10 @@ import { Store } from '@ngxs/store';
 
 export class UpdateProperties {
   static readonly type = '[Overlay] UpdateProperties';
-  constructor(public properties: OverlayProperties[]) {}
+  constructor(public properties: OverlayProperty[]) {}
 }
 
-export interface OverlayProperties {
+export interface OverlayProperty {
   attribute: string;
   enabled: boolean;
   fill: string;
@@ -22,7 +22,7 @@ export interface OverlaySchema {
   value: string;
 }
 
-export type OverlayStateModel = OverlayProperties[];
+export type OverlayStateModel = OverlayProperty[];
 
 @State<OverlayStateModel>({
   name: 'overlay',
@@ -34,7 +34,7 @@ export class OverlayState {
 
   static defaultState(): OverlayStateModel {
     return OverlayState.schema().map(
-      (schema): OverlayProperties => ({
+      (schema): OverlayProperty => ({
         attribute: schema.attribute,
         enabled: false,
         fill: '',
@@ -69,7 +69,7 @@ export class OverlayState {
     );
   }
 
-  get properties(): OverlayProperties[] {
+  get properties(): OverlayProperty[] {
     return this.store.snapshot().overlay;
   }
 

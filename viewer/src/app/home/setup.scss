@@ -1,3 +1,9 @@
+// 👇 attemptbto bdraw real palette from duotone icon
+.palette {
+  --fa-primary-color: var(--mat-yellow-300);
+  --fa-secondary-color: var(--mat-brown-500);
+}
+
 .properties {
   align-content: space-evenly;
   align-items: center;
@@ -6,8 +12,9 @@
   grid-template-columns: auto auto auto auto;
   justify-items: center;
 
-  .square {
+  .picker {
     border: 1px dotted var(--text-color);
+    cursor: pointer;
     height: 1.5rem;
     transition: transform 0.25s ease-in-out;
     width: 1.5rem;

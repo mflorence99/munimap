@@ -1,6 +1,6 @@
 <header class="header">
-  <figure class="icon">
-    <fa-icon [icon]="['far', 'palette']" size="2x"></fa-icon>
+  <figure class="icon palette">
+    <fa-icon [icon]="['fad', 'palette']" size="2x"></fa-icon>
   </figure>
 
   <p class="title">Lorem ipsum dolor emit</p>
@@ -30,21 +30,32 @@
 
       <mat-checkbox
         [(ngModel)]="property.enabled"
-        [attr.ngControl]="property.attribute"
-        [name]="property.attribute"
+        [name]="property.attribute + 'enabled'"
       ></mat-checkbox>
 
-      <article [style.background]="property.fill" class="square"></article>
+      <article
+        (click)="pick([property, 'fill'])"
+        [class.selected]="isPicked([property, 'fill'])"
+        [style.background]="property.fill"
+        class="picker"
+      ></article>
 
-      <article [style.background]="property.fill" class="square"></article>
+      <article
+        (click)="pick([property, 'stroke'])"
+        [class.selected]="isPicked([property, 'stroke'])"
+        [style.background]="property.stroke"
+        class="picker"
+      ></article>
     </ng-container>
   </section>
 
   <br />
 
   <article
-    [colorPicker]="'#FFFFFF'"
-    [cpAlphaChannel]="false"
+    (colorPickerCancel)="onColorPickerChange('')"
+    (colorPickerChange)="onColorPickerChange($event)"
+    [colorPicker]="currentColor()"
+    [cpAlphaChannel]="'disabled'"
     [cpCancelButton]="true"
     [cpCancelButtonText]="'Clear'"
     [cpDialogDisplay]="'inline'"
