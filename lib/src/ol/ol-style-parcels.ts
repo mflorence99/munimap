@@ -514,6 +514,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           })
         }),
         new OLStyle({
+          fill: new OLFill({ color: [0, 0, 0, 0] }),
           stroke: new OLStroke({
             color: overlayStroke || `rgb(${outline})`,
             lineCap: 'square',
@@ -544,15 +545,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       this.showAbutters &&
       this.map.selector?.abutterIDs?.includes(props.id)
     ) {
-      const borderWidth = this.#borderWidth(resolution);
       const outline = this.map.vars['--map-parcel-abutter'];
-      // 👉 necessary so we can select
-      const fill = new OLFill({ color: [0, 0, 0, 0] });
-      const stroke = new OLStroke({
-        color: `rgb(${outline})`,
-        width: borderWidth * this.borderWidthSelectRatio
-      });
-      return [new OLStyle({ fill, stroke })];
+      return this.#strokeBorder(
+        props,
+        resolution,
+        numPolygons,
+        `rgb(${outline})`
+      );
     }
     // 👉 special stroke if selected
     else {

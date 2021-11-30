@@ -62,20 +62,22 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleAbuttersFound$(): void {
-    this.map.selector?.abuttersFound.subscribe((features: Feature[]) => {
-      this.abutters = features
-        .map((feature) => ({
-          address: feature.properties.address,
-          id: feature.id,
-          owner: feature.properties.owner
-        }))
-        .sort((p, q) => String(p.id).localeCompare(String(q.id)));
-      this.cdf.markForCheck();
-    });
+    this.#subToAbutters = this.map.selector?.abuttersFound.subscribe(
+      (features: Feature[]) => {
+        this.abutters = features
+          .map((feature) => ({
+            address: feature.properties.address,
+            id: feature.id,
+            owner: feature.properties.owner
+          }))
+          .sort((p, q) => String(p.id).localeCompare(String(q.id)));
+        this.cdf.markForCheck();
+      }
+    );
   }
 
   #handleFeaturesSelected$(): void {
-    this.map.selector?.featuresSelected.subscribe(
+    this.#subToSelection = this.map.selector?.featuresSelected.subscribe(
       (features: OLFeature<any>[]) => {
         this.properties = features.map((feature) => feature.getProperties());
         this.properties.length = Math.min(

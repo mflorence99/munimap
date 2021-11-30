@@ -35,7 +35,7 @@ export class OLPopupSelectionComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((features) => {
         // 👇 the idea here is to keep the popup open until it is
-        //    manually dismissed, so that is can respond without
+        //    manually dismissed, so that it can respond without
         //    jank as new features are seleted
         if (features.length === 0) this.snackBar.dismiss();
         else if (!this.snackBarRef || this.snackBarRef.instance.destroyed) {

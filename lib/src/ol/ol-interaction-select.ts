@@ -141,10 +141,14 @@ export class OLInteractionSelectComponent
     this.abutters = [];
     // 👉 all this happens asynchronously in a web worker
     this.#abuttersWorker?.find(selecteds, allFeatures).then((abutters) => {
+      // 👉 jank-free repaint of abutter features
+      const source = this.layer.olLayer.getSource();
+      abutters.forEach((abutter) =>
+        source.getFeatureById(abutter.id).changed()
+      );
+      // 👉 propgate abutters
       this.abutters = abutters;
       this.abuttersFound.emit(abutters);
-      // 🔥 this causes flicker!!
-      this.layer.olLayer.getSource().refresh();
     });
   }
 
