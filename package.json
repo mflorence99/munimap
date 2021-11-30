@@ -9,7 +9,9 @@
   },
   "author": "Mark Florence",
   "scripts": {
+    "build:author": "ng build author --configuration production",
     "build:proxy": "npm run compile:proxy && cp proxy/package.json dist/proxy && npm --prefix dist/proxy i",
+    "build:viewer": "ng build viewer --configuration production",
     "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "compile:proxy": "rm -rf dist/proxy/node_modules && rm -f dist/proxy/package-lock.json && npx -p typescript tsc -p proxy/src",
     "deploy:aws:proxy": "npm run build:proxy && cp proxy/serverless.yml dist/proxy && cd dist/proxy && serverless deploy",
@@ -45,8 +47,10 @@
     "proxy:washington-buildings": "ts-node --dir bin washington-buildings.ts",
     "proxy:washington-parcels": "ts-node --dir bin washington-parcels.ts",
     "serve:author": "ng serve author --port 4200 --allowed-hosts admin.lots.online",
+    "serve:author:ssl": "ws -p 8100 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/author --log.format dev",
     "serve:proxy": "npm run compile:proxy && node dist/proxy/server.js --port 4201",
-    "serve:viewer": "ng serve viewer --port 4202 --allowed-hosts washington.lots.online"
+    "serve:viewer": "ng serve viewer --port 4202 --allowed-hosts washington.lots.online",
+    "serve:viewer:ssl": "ws -p 8102 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/viewer --log.format dev"
   },
   "dependencies": {
     "@angular/animations": "^13",

@@ -1,4 +1,4 @@
-<app-ol-map #olMap [path]="path">
+<app-ol-map #olMap [fitToBounds]="atTownLevel(path)" [path]="path">
   <app-map-filter
     (pathChanged)="onPathChanged($event)"
     (pathSelected)="onPathSelected($event)"
@@ -26,32 +26,37 @@
 
     <app-ol-control-scaleline></app-ol-control-scaleline>
 
-    <!-- 📦 OUTSIDE TOWN IN B&W -->
+    <!-- 📦 OUTSIDE TOWN -->
 
     <app-ol-layer-tile>
-      <app-ol-source-osm></app-ol-source-osm>
+      <app-ol-source-xyz
+        [maxZoom]="19"
+        [url]="'https://tile.openstreetmap.org/{z}/{x}/{y}.png'"
+        ><app-ol-attribution
+          >©
+          <a href="https://www.openstreetmap.org/copyright" target="_blank"
+            >OpenStreetMap</a
+          >
+          contributors</app-ol-attribution
+        ></app-ol-source-xyz
+      >
       <app-ol-filter-pencil></app-ol-filter-pencil>
     </app-ol-layer-tile>
 
-    <!-- 📦 INSIDE TOWN via MAPBOX -->
+    <!-- 📦 OUTSIDE TOWN -->
 
-    <app-ol-layer-mapbox styleUrl="mapbox://styles/mapbox/bright-v9">
-      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-    </app-ol-layer-mapbox>
-
-    <!-- 📦 HILLSHADE LAYER (ARCGIS) -->
-
-    <app-ol-layer-tile [maxZoom]="17" [opacity]="0.5">
+    <app-ol-layer-tile>
       <app-ol-source-xyz
-        [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+        [maxZoom]="19"
+        [url]="'https://tile.openstreetmap.org/{z}/{x}/{y}.png'"
+        ><app-ol-attribution
+          >©
+          <a href="https://www.openstreetmap.org/copyright" target="_blank"
+            >OpenStreetMap</a
+          >
+          contributors</app-ol-attribution
+        ></app-ol-source-xyz
       >
-        <app-ol-attribution
-          >Powered by
-          <a href="https://www.esri.com" target="_blank"
-            >Esri</a
-          ></app-ol-attribution
-        >
-      </app-ol-source-xyz>
       <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-tile>
 
