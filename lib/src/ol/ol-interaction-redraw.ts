@@ -14,6 +14,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 
+import { click } from 'ol/events/condition';
+import { merge } from 'rxjs';
+import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
@@ -60,21 +63,13 @@ export class OLInteractionRedrawComponent implements OnInit {
     this.map.redrawer = this;
   }
 
-  // 👇 the idea is that a selection change cancels the redraw
-  //    and ESC allows the resdraw to be accepted
+  // 👇 the idea is that a selection change or ESC accepts the redraw
 
-  #handleEscape$(): void {
-    this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      if (this.#touched) this.#saveRedraw();
-      this.#unsetFeature();
-    });
-  }
-
-  #handleFeaturesSelected$(): void {
-    this.map.selector?.featuresSelected
+  #handleStreams$(): void {
+    merge(this.map.escape$, this.map.selector?.featuresSelected)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.#touched) this.#resetRedraw();
+        if (this.#touched) this.#saveRedraw();
         this.#unsetFeature();
       });
   }
@@ -118,8 +113,7 @@ export class OLInteractionRedrawComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.#handleEscape$();
-    this.#handleFeaturesSelected$();
+    this.#handleStreams$();
   }
 
   // 👉 setFeature is called by the contextmenu code to initiate
@@ -132,7 +126,12 @@ export class OLInteractionRedrawComponent implements OnInit {
     this.#geometry = copy(feature.getGeometry());
     // 👇 create a standard OL Modify interaction
     const features = new OLCollection([feature]);
-    this.olModify = new OLModify({ features });
+    this.olModify = new OLModify({
+      deleteCondition: (event): boolean =>
+        click(event) && platformModifierKeyOnly(event),
+      features,
+      hitDetection: this.layer.olLayer
+    });
     this.#modifyStartKey = this.olModify.on(
       'modifystart',
       () => (this.#touched = true)

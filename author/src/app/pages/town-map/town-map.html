@@ -195,14 +195,14 @@
             [showSelection]="true"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
-          <app-ol-interaction-redraw></app-ol-interaction-redraw>
-          <app-ol-interaction-select [eventType]="'click'" [multi]="true">
+          <app-ol-interaction-select [eventType]="'singleclick'" [multi]="true">
             <mat-menu #theContextMenu mapContextMenu>
               <ng-template matMenuContent>
                 <ng-template [ngTemplateOutlet]="contextmenu"></ng-template>
               </ng-template>
             </mat-menu>
           </app-ol-interaction-select>
+          <app-ol-interaction-redraw></app-ol-interaction-redraw>
         </app-ol-layer-vector>
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->

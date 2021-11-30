@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
@@ -31,6 +32,9 @@ interface Abutter {
   styleUrls: ['./ol-popup-parcelproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
+  #subToAbutters: Subscription;
+  #subToSelection: Subscription;
+
   abutters: Abutter[] = [];
 
   @Input() maxNumProperties = 3;
@@ -137,6 +141,8 @@ export class OLPopupParcelPropertiesComponent {
 
   onClose(): void {
     this.snackBar.dismiss();
+    this.#subToAbutters?.unsubscribe();
+    this.#subToSelection?.unsubscribe();
   }
 
   sum(array: number[]): number {

@@ -16,7 +16,6 @@ import { catchError } from 'rxjs/operators';
 import { concat } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { first } from 'rxjs/operators';
-import { interval } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -101,8 +100,11 @@ export class VersionService {
   }
 
   #pollVersionLegacy(): void {
-    const params = environment.version;
-    timer(params.checkVersionLegacyAfter, params.checkVersionInterval)
+    const periodically$ = timer(
+      environment.version.checkVersionAfter,
+      environment.version.checkVersionInterval
+    );
+    periodically$
       .pipe(
         takeUntil(this.#checkVersionLegacy$),
         mergeMap(() =>
@@ -134,7 +136,10 @@ export class VersionService {
     const appIsStable$ = this.appRef.isStable.pipe(
       first((isStable) => isStable)
     );
-    const periodically$ = interval(environment.version.checkVersionInterval);
+    const periodically$ = timer(
+      environment.version.checkVersionAfter,
+      environment.version.checkVersionInterval
+    );
     concat(appIsStable$, periodically$).subscribe((): any => {
       console.log('%cPolling for new PWA version...', 'color: moccasin');
       this.swUpdate.checkForUpdate().then();

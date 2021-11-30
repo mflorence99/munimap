@@ -70,7 +70,7 @@ export const environment = {
   version: {
     allowReloadPostponement: isDev,
     autoReload: !isDev,
-    checkVersionLegacyAfter: 10 * 1000,
-    checkVersionInterval: 20 * 1000
+    checkVersionAfter: 20 * 1000,
+    checkVersionInterval: 60 * 1000
   }
 };
