@@ -8,6 +8,7 @@ import { ViewState } from '../state/view';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterContentInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
@@ -52,7 +53,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
 
   click$ = new Subject<OLMapBrowserEvent<any>>();
-  contextMenu$ = new Subject<PointerEvent>();
+  contextMenu$ = new BehaviorSubject<PointerEvent>(null);
   escape$ = new Subject<KeyboardEvent>();
 
   featureProjection = 'EPSG:4326';

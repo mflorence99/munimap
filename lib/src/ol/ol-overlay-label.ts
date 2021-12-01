@@ -13,6 +13,7 @@ import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
+import { filter } from 'rxjs/operators';
 import { fromLonLat } from 'ol/proj';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
@@ -61,15 +62,20 @@ export class OLOverlayLabelComponent implements OnInit {
   }
 
   // 👉 we need to know where the contextmenu was clicked so that later
-  //    in setFeature we can figure which polygon is bein addressed
+  //    in setFeature we can figure which polygon is being addressed
 
   #handleContextMenu$(): void {
-    this.map.contextMenu$.pipe(takeUntil(this.destroy$)).subscribe((event) => {
-      this.#contextMenuAt = this.map.olMap.getCoordinateFromPixel([
-        event.clientX,
-        event.clientY - this.#hack
-      ]);
-    });
+    this.map.contextMenu$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((event) => !!event)
+      )
+      .subscribe((event) => {
+        this.#contextMenuAt = this.map.olMap.getCoordinateFromPixel([
+          event.clientX,
+          event.clientY - this.#hack
+        ]);
+      });
   }
 
   ngOnInit(): void {

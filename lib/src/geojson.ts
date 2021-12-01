@@ -91,7 +91,7 @@ export interface ParcelPropertiesLabel {
   split: boolean;
 }
 
-export type ParcelPropertiesNeighborhood = 'U' | 'V' | 'W' /* TODO 🔥 */;
+export type ParcelPropertiesNeighborhood = '' | 'U' | 'V' | 'W' /* TODO 🔥 */;
 
 export type ParcelPropertiesUsage =
   | '110' // Single family residence
@@ -106,6 +106,7 @@ export type ParcelPropertiesUsage =
   | '502'; // Conservation land
 
 export type ParcelPropertiesUse =
+  | ''
   | 'CUDE' // Discretionary
   | 'CUFL' // Farm land
   | 'CUMH' // Managed hardwood
