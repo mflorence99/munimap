@@ -71,6 +71,6 @@ export const environment = {
     allowReloadPostponement: isDev,
     autoReload: !isDev,
     checkVersionAfter: 20 * 1000,
-    checkVersionInterval: 60 * 1000
+    checkVersionInterval: isDev ? 60 * 1000 : 60 * 60 * 1000
   }
 };

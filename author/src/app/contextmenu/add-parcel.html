@@ -1,0 +1,58 @@
+<header class="header">
+  <figure class="icon">
+    <fa-icon [icon]="['fad', 'plus-square']" size="2x"></fa-icon>
+  </figure>
+
+  <p class="title">Lorem ipsum dolor emit</p>
+</header>
+
+<form
+  #additionForm="ngForm"
+  autocomplete="off"
+  class="form"
+  novalidate
+  spellcheck="false"
+>
+  <p class="instructions">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
+    nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
+  </p>
+
+  <article class="addition">
+    <mat-form-field>
+      <mat-label>Parcel ID</mat-label>
+      <input
+        [(ngModel)]="addition.id"
+        [name]="'id'"
+        matInput
+        type="text"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Acreage</mat-label>
+      <input
+        [(ngModel)]="addition.area"
+        [name]="'area'"
+        [step]="0.01"
+        matInput
+        type="number"
+        required
+      />
+    </mat-form-field>
+  </article>
+</form>
+
+<article class="actions">
+  <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+  <button
+    (click)="save(addition)"
+    [disabled]="additionForm.invalid || !additionForm.dirty"
+    color="primary"
+    mat-flat-button
+  >
+    SAVE
+  </button>
+</article>

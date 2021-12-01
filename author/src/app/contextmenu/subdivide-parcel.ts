@@ -29,7 +29,7 @@ interface Subdivision {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-subdivide-parcels',
+  selector: 'app-subdivide-parcel',
   styleUrls: ['./subdivide-parcel.scss', '../pages/sidebar.scss'],
   templateUrl: './subdivide-parcel.html'
 })

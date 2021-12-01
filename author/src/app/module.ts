@@ -1,3 +1,4 @@
+import { AddParcelComponent } from './contextmenu/add-parcel';
 import { ContextMenuHostDirective } from './contextmenu/contextmenu-host';
 import { LoginPage } from './pages/login/login';
 import { MapCreatePage } from './pages/map-create/map-create';
@@ -135,6 +136,8 @@ import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-ic
 import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-icons';
 import { faObjectUngroup as fadObjectUngroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectUngroup as fasObjectUngroup } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare as fadPlusSquare } from '@fortawesome/pro-duotone-svg-icons';
+import { faPlusSquare as fasPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/pro-duotone-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -148,6 +151,7 @@ import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [
+  AddParcelComponent,
   ConfirmDialogComponent,
   MapFilterComponent,
   MergeParcelsComponent,
@@ -358,8 +362,10 @@ export class RootModule {
       faLayerPlus,
       fadObjectGroup,
       fasObjectGroup,
-      fasObjectUngroup,
       fadObjectUngroup,
+      fasObjectUngroup,
+      fadPlusSquare,
+      fasPlusSquare,
       faPrint,
       faRedo,
       faSearch,

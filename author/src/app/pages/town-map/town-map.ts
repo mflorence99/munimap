@@ -1,3 +1,4 @@
+import { AddParcelComponent } from '../../contextmenu/add-parcel';
 import { ContextMenuComponent } from '../../contextmenu/contextmenu-component';
 import { ContextMenuHostDirective } from '../../contextmenu/contextmenu-host';
 import { MergeParcelsComponent } from '../../contextmenu/merge-parcels';
@@ -144,6 +145,10 @@ export class TownMapPage implements OnInit {
     });
   }
 
+  canAddParcel(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selector?.selectedIDs.length === 0);
+  }
+
   canMergeParcels(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selector?.selectedIDs.length > 1);
   }
@@ -172,6 +177,9 @@ export class TownMapPage implements OnInit {
   onContextMenu(key: string): void {
     let cFactory: ComponentFactory<ContextMenuComponent>;
     switch (key) {
+      case 'add-parcel':
+        cFactory = this.resolver.resolveComponentFactory(AddParcelComponent);
+        break;
       case 'parcel-properties':
         cFactory = this.resolver.resolveComponentFactory(
           ParcelPropertiesComponent

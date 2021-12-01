@@ -245,6 +245,15 @@
       </li>
 
       <li
+        (click)="canAddParcel($event) && onContextMenu('add-parcel')"
+        [class.disabled]="!canAddParcel()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus-square']"></fa-icon>
+        New parcel ...
+      </li>
+
+      <li
         (click)="canSubdivideParcel($event) && onContextMenu('subdivide-parcel')"
         [class.disabled]="!canSubdivideParcel()"
         class="item"
