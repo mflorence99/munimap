@@ -1,4 +1,4 @@
-<app-ol-map #olMap [fitToBounds]="atTownLevel(path)" [path]="path">
+<app-ol-map #olMap [fitToBounds]="true" [path]="path">
   <app-map-filter
     (pathChanged)="onPathChanged($event)"
     (pathSelected)="onPathSelected($event)"
