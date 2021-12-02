@@ -66,7 +66,7 @@
             "namedChunks": true,
             "webWorkerTsConfig": "worker/src/tsconfig.json",
             "serviceWorker": true,
-            "ngswConfigPath": "author/ngsw-config.json"
+            "ngswConfigPath": "./ngsw-config.json"
           },
           "defaultConfiguration": ""
         },
@@ -154,7 +154,7 @@
             "namedChunks": true,
             "webWorkerTsConfig": "worker/src/tsconfig.json",
             "serviceWorker": true,
-            "ngswConfigPath": "viewer/ngsw-config.json"
+            "ngswConfigPath": "./ngsw-config.json"
           },
           "defaultConfiguration": ""
         },
