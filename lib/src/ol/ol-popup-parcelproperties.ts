@@ -62,7 +62,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleAbuttersFound$(): void {
-    this.#subToAbutters = this.map.selector?.abuttersFound.subscribe(
+    /* 🔥 this.#subToAbutters = */ this.map.selector?.abuttersFound.subscribe(
       (features: Feature[]) => {
         this.abutters = features
           .map((feature) => ({
@@ -77,7 +77,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleFeaturesSelected$(): void {
-    this.#subToSelection = this.map.selector?.featuresSelected.subscribe(
+    /* 🔥 this.#subToSelection = */ this.map.selector?.featuresSelected.subscribe(
       (features: OLFeature<any>[]) => {
         this.properties = features.map((feature) => feature.getProperties());
         this.properties.length = Math.min(

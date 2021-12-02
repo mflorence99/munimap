@@ -91,7 +91,7 @@ export interface ParcelPropertiesLabel {
   split: boolean;
 }
 
-export type ParcelPropertiesNeighborhood = '' | 'U' | 'V' | 'W' /* TODO 🔥 */;
+export type ParcelPropertiesNeighborhood = '' | 'U' | 'V' | 'W';
 
 export type ParcelPropertiesUsage =
   | '110' // Single family residence

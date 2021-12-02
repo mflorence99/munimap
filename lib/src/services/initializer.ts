@@ -39,8 +39,7 @@ export class InitializerService {
         dsn: 'https://c4cd041a16584464b8c0f6b2c984b516@o918490.ingest.sentry.io/5861734',
         integrations: [
           new Integrations.BrowserTracing({
-            // TODO 🔥 don't know where it will go yet!
-            tracingOrigins: ['https://XXXXX'],
+            tracingOrigins: ['https://proxy.munimap.online'],
             routingInstrumentation: Sentry.routingInstrumentation
           })
         ],
