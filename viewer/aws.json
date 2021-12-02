@@ -1,0 +1,8 @@
+{
+  "certificateName": "*.munimap.online",
+  "domainName": "washington.munimap.online",
+  "provider": "aws",
+  "region": "us-east-1",
+  "service": "munimap-viewer-washington",
+  "stage": "dev"
+}
