@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 
 import { Handler } from 'serverx-ts';
 import { Inject } from 'injection-js';
@@ -70,9 +71,16 @@ export class ProxyServer extends Handler {
           url = url.replace(/\{z\}/, z);
         }
 
+        // 👉 use the first 4 characters of the hash as a drectoty index
+        const fname = hash.MD5(url);
+        const fdir = path.join(
+          this.opts.cache,
+          fname.substring(0, 2),
+          fname.substring(2, 4)
+        );
+        const fpath = path.join(fdir, `${fname}.proxy`);
+
         // 👉 see if we've stashed result
-        //    stash expires after 30 days
-        const fpath = `${this.opts.cache}/${hash.MD5(url)}.proxy`;
         let stat;
         try {
           stat = fs.statSync(fpath);
@@ -138,8 +146,11 @@ export class ProxyServer extends Handler {
                 mergeMap((resp) => from(resp.buffer())),
                 tap((buffer) => (response.body = buffer)),
                 tap((buffer) => {
-                  if (response.statusCode === 200)
-                    fs.writeFile(fpath, buffer, () => {});
+                  if (response.statusCode === 200) {
+                    fs.mkdir(fdir, { recursive: true }, (err, path) => {
+                      if (path) fs.writeFile(fpath, buffer, () => {});
+                    });
+                  }
                 })
               );
             }

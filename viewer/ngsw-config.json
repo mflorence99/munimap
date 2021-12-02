@@ -3,27 +3,41 @@
   "index": "/index.html",
   "assetGroups": [
     {
-      "name": "app",
+      "name": "viewer",
       "installMode": "prefetch",
+      "updateMode": "prefetch",
       "resources": {
         "files": [
           "/favicon.ico",
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
-          "/*.js"
+          "/*.eot",
+          "/*.js",
+          "/*.ttf",
+          "/*.svg",
+          "/*.woff",
+          "/*.woff2"
         ]
       }
     },
     {
       "name": "assets",
-      "installMode": "lazy",
+      "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
-        "files": [
-          "/assets/**",
-          "/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
-        ]
+        "files": ["/assets/**"]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "proxy",
+      "urls": ["https://proxy.munimap.online/**"],
+      "cacheConfig": {
+        "maxAge": "30d",
+        "maxSize": 5000,
+        "strategy": "performance"
       }
     }
   ]
