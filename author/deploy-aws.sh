@@ -15,4 +15,4 @@ git push origin main
 
 npm run build:author
 
-serverx-angular --app dist/author --deploy aws.json
+serverx-angular --app dist/author --deploy author/aws.json

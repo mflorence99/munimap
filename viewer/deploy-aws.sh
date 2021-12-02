@@ -15,4 +15,4 @@ git push origin main
 
 npm run build:viewer
 
-serverx-angular --app dist/viewer --deploy aws.json
+serverx-angular --app dist/viewer --deploy viewer/aws.json
