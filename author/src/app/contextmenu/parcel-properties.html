@@ -3,7 +3,7 @@
     <fa-icon [icon]="['fad', 'tasks']" size="2x"></fa-icon>
   </figure>
 
-  <p class="title">Lorem ipsum dolor emit</p>
+  <p class="title">Modify parcel settings</p>
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
 
@@ -14,9 +14,10 @@
   novalidate
   spellcheck="false"
 >
-  <p class="instructions">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
-    nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
+  <p *ngIf="selectedIDs.length > 1" class="instructions">
+    All selected parcels will be modified with the same settings.
+    <fa-icon [icon]="['fad', 'exclamation-triangle']"></fa-icon> indicates
+    settings that are currently different.
   </p>
 
   <ng-container *ngFor="let value of (record | values); trackBy: trackByProp">

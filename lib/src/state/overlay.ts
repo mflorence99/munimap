@@ -52,18 +52,26 @@ export class OverlayState {
       {
         attribute: 'neighborhood',
         value: 'vacant',
-        caption: 'Vacant'
+        caption: 'Vacant parcels'
       },
       {
         attribute: 'area',
         value: 'quarter',
-        caption: 'Lots \u2264 \u00BC acre'
+        caption: 'Parcels \u2264 \u00BC acre'
       },
-      { attribute: 'area', value: 'half', caption: 'Lots \u2264 \u00BD acre' },
-      { attribute: 'area', value: 'one', caption: 'Lots \u2264 1 acre' },
-      { attribute: 'area', value: 'two', caption: 'Lots \u2264 2 acres' },
-      { attribute: 'area', value: 'four', caption: 'Lots \u2264 4 acres' },
-      { attribute: 'width', value: 'sixty', caption: 'Lots \u2264 60ft wide' }
+      {
+        attribute: 'area',
+        value: 'half',
+        caption: 'Parcels \u2264 \u00BD acre'
+      },
+      { attribute: 'area', value: 'one', caption: 'Parcels \u2264 1 acre' },
+      { attribute: 'area', value: 'two', caption: 'Parcels \u2264 2 acres' },
+      { attribute: 'area', value: 'four', caption: 'Parcels \u2264 4 acres' },
+      {
+        attribute: 'width',
+        value: 'sixty',
+        caption: 'Parcels \u2264 60ft wide'
+      }
     ];
   }
 

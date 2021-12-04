@@ -228,8 +228,8 @@
 
 <ng-template #contextmenu>
   <nav class="contextmenu">
-    <header class="header">
-      Lorem ipsum {{ olMap.selector.selectedIDs.join(', ') }}
+    <header *ngIf="olMap.selector.selectedIDs.length !== 0" class="header">
+      Modify {{ olMap.selector.selectedIDs.join(', ') }}
     </header>
 
     <ul>
@@ -239,7 +239,7 @@
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
-        Parcel details ...
+        <p>Modify parcel settings &hellip;</p>
       </li>
 
       <li
@@ -248,7 +248,7 @@
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus-square']"></fa-icon>
-        New parcel ...
+        <p>New parcel &hellip;</p>
       </li>
 
       <li
@@ -260,7 +260,7 @@
           [fixedWidth]="true"
           [icon]="['fas', 'object-ungroup']"
         ></fa-icon>
-        Subdivide parcel ...
+        <p>Subdivide parcel &hellip;</p>
       </li>
 
       <li
@@ -269,7 +269,15 @@
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'draw-polygon']"></fa-icon>
-        Redraw parcel boundary
+        <p>
+          Redraw parcel boundary
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click and drag the blue perimeter dots. Click+Ctrl to delete a point. ESC when finished."
+            ></fa-icon
+          ></em>
+        </p>
       </li>
 
       <li
@@ -278,7 +286,7 @@
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'object-group']"></fa-icon>
-        Merge parcels ...
+        <p>Merge parcels &hellip;</p>
       </li>
 
       <li
@@ -287,7 +295,15 @@
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
-        Recenter label in parcel
+        <p>
+          Recenter label in parcel
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click and drag the target icon to the new label position"
+            ></fa-icon
+          ></em>
+        </p>
       </li>
     </ul>
   </nav>

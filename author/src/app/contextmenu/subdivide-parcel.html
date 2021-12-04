@@ -3,7 +3,7 @@
     <fa-icon [icon]="['fad', 'object-ungroup']" size="2x"></fa-icon>
   </figure>
 
-  <p class="title">Lorem ipsum dolor emit</p>
+  <p class="title">Subdivide parcel</p>
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
 
@@ -15,8 +15,9 @@
   spellcheck="false"
 >
   <p class="instructions">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel metus eu
-    nunc lacinia feugiat. Morbi molestie mi in odio laoreet aliquet.
+    Specify the ID and acreage of each subdivision. After <em>SAVE</em>, use
+    <em>Redraw parcel boundary</em> and <em>Modify parcel settings</em> to
+    complete the subdivision.
   </p>
 
   <article class="subdivisions">
@@ -50,7 +51,7 @@
 </form>
 
 <article class="actions">
-  <a (click)="more()" mat-flat-button>More...</a>
+  <a (click)="more()" mat-flat-button>More &hellip;</a>
 
   <div class="filler"></div>
 

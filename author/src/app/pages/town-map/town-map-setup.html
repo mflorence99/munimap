@@ -7,7 +7,7 @@
     />
 
     <mat-card-title>Identify Your Map</mat-card-title>
-    <mat-card-subtitle>Lorem ipsum dolor sit amet.</mat-card-subtitle>
+    <mat-card-subtitle>Name will appear on printed version</mat-card-subtitle>
     <button
       *ngIf="!rolledup && !townMap.creating"
       (click)="rolledup = !rolledup"
@@ -51,9 +51,12 @@
           placeholder="eg: myoldtown"
           required
         />
-        <mat-error *ngIf="id.errors">Map ID is missing or invalid</mat-error>
+        <mat-error *ngIf="id.errors"
+          >Use only lowercase letters and numbers</mat-error
+        >
         <mat-hint *ngIf="!id.errors"
-          >Use only lowercase letters and numbers</mat-hint
+          >Viewer app URL:
+          <em>https://{{ map.id }}.munimap.online</em></mat-hint
         >
       </mat-form-field>
     </form>
@@ -61,7 +64,7 @@
 
   <mat-card-actions class="actions">
     <a *ngIf="canDelete()" (click)="delete(map)" mat-flat-button>
-      Delete ths map ...
+      Delete ths map &hellip;
     </a>
 
     <div class="filler"></div>

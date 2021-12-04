@@ -1,12 +1,12 @@
 <h1 mat-dialog-title>Print Progress</h1>
 
 <article mat-dialog-content>
-  <p *ngIf="numLoaded === 0">Preparing map for printing ...</p>
+  <p *ngIf="numLoaded === 0">Preparing map for printing &hellip;</p>
 
-  <p *ngIf="numLoaded > 0 && numLoading === numLoaded">Cleaning up ...</p>
+  <p *ngIf="numLoaded > 0 && numLoading === numLoaded">Cleaning up &hellip;</p>
 
   <p *ngIf="numLoaded > 0 && numLoading !== numLoaded">
-    Loaded {{ numLoaded }} of {{ numLoading }} tiles...
+    Loaded {{ numLoaded }} of {{ numLoading }} tiles n&hellip;
   </p>
 
   <br />
