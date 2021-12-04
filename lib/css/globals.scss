@@ -275,6 +275,8 @@ a[mat-flat-button] {
   --fa-primary-color: var(--text-color);
   --fa-secondary-color: var(--mat-gray-600);
 
+  flex-shrink: 0;
+
   &.mat-button-toggle-checked {
     --fa-primary-color: var(--text-color);
     --fa-secondary-color: var(--accent-color);

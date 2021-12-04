@@ -13,6 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
+import { map } from 'rxjs/operators';
+
 import OLFeature from 'ol/Feature';
 
 // 👇 we can't use the normal DestroyService protocol here
@@ -62,28 +64,45 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleAbuttersFound$(): void {
-    /* 🔥 this.#subToAbutters = */ this.map.selector?.abuttersFound.subscribe(
-      (features: Feature[]) => {
-        this.abutters = features
-          .map((feature) => ({
-            address: feature.properties.address,
-            id: feature.id,
-            owner: feature.properties.owner
-          }))
-          .sort((p, q) => String(p.id).localeCompare(String(q.id)));
+    /* 🔥 this.#subToAbutters = */ this.map.selector?.abuttersFound
+      .pipe(
+        map((features: Feature[]): Abutter[] =>
+          features
+            .map((feature) => ({
+              address: feature.properties.address,
+              id: feature.id,
+              owner: feature.properties.owner
+            }))
+            .sort((p, q) => String(p.id).localeCompare(String(q.id)))
+        ),
+        // 👉 only show abutters if there's room
+        map((abutters: Abutter[]): Abutter[] =>
+          window.innerWidth * window.innerHeight >= 1024 * 768 ? abutters : []
+        )
+      )
+      .subscribe((abutters: Abutter[]) => {
+        this.abutters = abutters;
         this.cdf.markForCheck();
-      }
-    );
+      });
   }
 
   #handleFeaturesSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.map.selector?.featuresSelected.subscribe(
-      (features: OLFeature<any>[]) => {
-        this.properties = features.map((feature) => feature.getProperties());
-        this.properties.length = Math.min(
-          this.properties.length,
-          this.maxNumProperties
-        );
+    /* 🔥 this.#subToSelection = */ this.map.selector?.featuresSelected
+      .pipe(
+        map((features: OLFeature<any>[]): ParcelProperties[] =>
+          features.map((feature) => feature.getProperties())
+        ),
+        // 👉 show only as many properties as there's room
+        map((properties: ParcelProperties[]): ParcelProperties[] => {
+          const numProperties = window.innerWidth / 240;
+          return properties.slice(
+            0,
+            Math.min(properties.length, numProperties, this.maxNumProperties)
+          );
+        })
+      )
+      .subscribe((properties: ParcelProperties[]) => {
+        this.properties = properties;
         if (this.properties.length === 0) this.onClose();
         else {
           this.sameAddress = this.properties.every(
@@ -102,8 +121,7 @@ export class OLPopupParcelPropertiesComponent {
           this.splitVertically = this.properties.length === 1;
           this.cdf.markForCheck();
         }
-      }
-    );
+      });
   }
 
   canClipboard(): boolean {

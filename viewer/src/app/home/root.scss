@@ -27,6 +27,12 @@
   height: 100%;
 }
 
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .toolbar {
   display: grid;
   gap: 0.5rem;
