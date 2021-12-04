@@ -437,8 +437,13 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           x1 = -(total / 2) + mID.width / 2;
           x2 = total / 2 + -(mAcres.width / 2);
         } else {
-          y1 = -(mID.fontBoundingBoxAscent / 2);
-          y2 = mID.fontBoundingBoxAscent / 2;
+          // 👉 Firefox doesn't support mID.fontBoundingBoxAscent
+          //    so rather than a huge polyfill, use an approximation
+          const height = isNaN(mID.fontBoundingBoxAscent)
+            ? mGap.width * 2.5
+            : mID.fontBoundingBoxAscent;
+          y1 = -(height / 2);
+          y2 = height / 2;
         }
         // 👉 finally styles are computed for both segments
         labels.push({
