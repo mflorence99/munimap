@@ -8,6 +8,8 @@
     <script>
       if (!('serviceWorker' in navigator) || typeof Worker === undefined)
         location.replace('assets/unsupported.html');
+      if (!matchMedia('(pointer:fine)').matches)
+        location.replace('assets/no-mouse.html');
     </script>
 
     <meta charset="utf-8" />
