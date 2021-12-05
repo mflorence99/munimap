@@ -7,7 +7,7 @@ import { VersionService } from '@lib/services/version';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-legend',
-  styleUrls: ['./legend.scss', './sidebar.scss'],
+  styleUrls: ['./legend.scss', '../../../../lib/css/sidebar.scss'],
   templateUrl: './legend.html'
 })
 export class LegendComponent {

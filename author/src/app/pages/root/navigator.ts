@@ -21,7 +21,7 @@ import { theState } from '@lib/geojson';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-navigator',
-  styleUrls: ['./navigator.scss', '../sidebar.scss'],
+  styleUrls: ['./navigator.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './navigator.html'
 })
 export class NavigatorComponent implements OnInit {

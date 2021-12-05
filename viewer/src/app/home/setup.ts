@@ -21,7 +21,7 @@ import copy from 'fast-copy';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-setup',
-  styleUrls: ['./setup.scss', './sidebar.scss'],
+  styleUrls: ['./setup.scss', '../../../../lib/css/sidebar.scss'],
   templateUrl: './setup.html'
 })
 export class SetupComponent implements OnInit {

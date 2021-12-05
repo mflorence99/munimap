@@ -16,7 +16,7 @@ import copy from 'fast-copy';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-user-profile',
-  styleUrls: ['../sidebar.scss', './user-profile.scss'],
+  styleUrls: ['../../../../../lib/css/sidebar.scss', './user-profile.scss'],
   templateUrl: './user-profile.html'
 })
 export class UserProfileComponent {

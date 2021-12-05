@@ -4,12 +4,16 @@
   position: relative;
 }
 
+.closer {
+  cursor: pointer;
+}
+
 .control {
-  align-content: center;
+  align-items: center;
   background-color: rgba(var(--rgb-gray-100), 0.66);
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   height: 3rem;
   max-width: 90vmin;
   padding: 0 0.5rem;
@@ -20,8 +24,6 @@
 
 .matcher {
   background-color: rgba(var(--rgb-gray-100), 0.66);
-  border: none;
-  font-size: 1rem;
   max-width: 90vmin;
   position: absolute;
   right: 0;
@@ -32,7 +34,8 @@
     display: none;
   }
 
-  option {
+  .match {
+    color: var(--mat-gray-900);
     cursor: pointer;
     padding: 0.25rem;
   }
@@ -41,6 +44,7 @@
 .searcher {
   background-color: transparent;
   border: none;
+  color: var(--mat-gray-900);
   font-size: 1rem;
   height: 100%;
 }

@@ -1,22 +1,28 @@
 <article class="control">
   <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
   <input
     #theSearcher
-    (input)="input($event.srcElement.value)"
-    map
+    (input)="onSearch($event.srcElement.value)"
     class="searcher"
     placeholder="Search by parcel, address or owner"
-    type="search"
   />
+
+  <button
+    (click)="theSearcher.value = ''"
+    [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
+    mat-icon-button
+  >
+    <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>
+  </button>
 </article>
 
-<select
-  (input)="theSearcher.value = input($event.srcElement.value)"
-  [size]="maxMatcherSize()"
-  [class.hidden]="matches.length === 0 || !theSearcher.value"
-  class="matcher"
->
-  <option *ngFor="let match of matches; trackBy: trackByMatch" [value]="match">
+<ul [class.hidden]="matches.length === 0 || !theSearcher.value" class="matcher">
+  <li
+    *ngFor="let match of matches; trackBy: trackByMatch"
+    (click)="onSearch(match)"
+    class="match"
+  >
     {{ match }}
-  </option>
-</select>
+  </li>
+</ul>

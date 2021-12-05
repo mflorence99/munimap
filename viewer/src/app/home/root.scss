@@ -38,6 +38,7 @@
   gap: 0.5rem;
   grid-template-columns: auto 1fr auto auto auto;
   height: calc(var(--map-cy-toolbar) * 1px);
+  padding: 0 0.5rem !important;
   position: absolute;
   width: 100%;
 }

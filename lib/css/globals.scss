@@ -190,6 +190,13 @@ $dark-app-theme: mat-dark-theme(
   margin: 0;
   padding: 0;
 }
+::-webkit-input-placeholder {
+  color: var(--mat-gray-600);
+}
+
+::-moz-placeholder {
+  color: var(--mat-gray-600);
+}
 
 ::-webkit-scrollbar {
   height: 0.5rem;

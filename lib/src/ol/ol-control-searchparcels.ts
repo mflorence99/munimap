@@ -173,7 +173,18 @@ export class OLControlSearchParcelsComponent implements OnInit {
     return Array.from(keys).map((key) => fuzzysort.prepare(`${key}`));
   }
 
-  input(str: string): string {
+  maxMatcherSize(): number {
+    // 👇 we need at least 2 entries to get the HTML <select>
+    //    to behave properly
+    return Math.max(2, Math.min(this.matches.length, this.matchesMaxVisible));
+  }
+
+  ngOnInit(): void {
+    this.#handleGeoJSON$();
+    this.#handleStreams$();
+  }
+
+  onSearch(str: string): string {
     const searchFor = str.toUpperCase();
     // 👉 let's see if we have a direct hit by ID, then address, then owner
     const searchables =
@@ -206,17 +217,6 @@ export class OLControlSearchParcelsComponent implements OnInit {
       this.matches = [];
     }
     return searchFor;
-  }
-
-  maxMatcherSize(): number {
-    // 👇 we need at least 2 entries to get the HTML <select>
-    //    to behave properly
-    return Math.max(2, Math.min(this.matches.length, this.matchesMaxVisible));
-  }
-
-  ngOnInit(): void {
-    this.#handleGeoJSON$();
-    this.#handleStreams$();
   }
 
   trackByMatch(ix: number, match: string): string {
