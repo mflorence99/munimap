@@ -444,6 +444,7 @@ export function simplify(
     coords.map((coord) =>
       Number((Math.floor(coord * 100000) / 100000).toFixed(5))
     );
+
   const traverse = (array): void => {
     for (let ix = 0; ix < array.length; ix++) {
       if (
@@ -455,6 +456,7 @@ export function simplify(
       else traverse(array[ix]);
     }
   };
+
   geojson.features.forEach((feature: GeoJSON.Feature<any>) => {
     if (feature.bbox) feature.bbox = trunc(feature.bbox) as GeoJSON.BBox;
     if (feature.geometry?.coordinates) traverse(feature.geometry.coordinates);

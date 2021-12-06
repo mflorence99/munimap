@@ -12,11 +12,12 @@
   margin-top: 3rem;
   width: 100%;
 
-  td {
+  td,
+  th {
     padding: 0.25rem;
   }
 
-  thead td {
+  th {
     font-weight: bold;
     text-transform: uppercase;
   }

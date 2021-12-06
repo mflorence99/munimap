@@ -7,35 +7,40 @@
 .properties {
   border-collapse: collapse;
   font-size: smaller;
-  overflow: hidden;
   width: 100%;
 
-  tbody td:first-child {
-    font-weight: bold;
-  }
-
-  thead td {
-    font-weight: bold;
-  }
-
-  thead tr {
+  th {
+    background-color: var(--mat-gray-900);
     border-bottom: 1px solid var(--mat-gray-500);
+    font-weight: bold;
+    position: sticky;
+    text-align: left;
+    top: 0;
+    z-index: 1;
   }
 
-  td {
+  td,
+  th {
     margin: 0;
     padding: 0;
     white-space: nowrap;
   }
 
-  td:first-child {
+  td:first-child,
+  th:first-child {
+    font-weight: bold;
     padding: 0 0.25rem 0 0;
     width: 4rem;
   }
 
-  td:not(:first-child) {
+  td:not(:first-child),
+  th:not(:first-child) {
     border-left: 1px solid var(--mat-gray-500);
     padding: 0 0.25rem;
+  }
+
+  th {
+    font-weight: bold;
   }
 }
 
@@ -43,12 +48,14 @@
   position: absolute;
   right: 2rem;
   top: 0;
+  z-index: 2;
 }
 
 .closer {
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 2;
 }
 
 .reference {

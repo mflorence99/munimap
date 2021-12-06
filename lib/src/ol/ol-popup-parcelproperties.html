@@ -12,20 +12,20 @@
   [class.splitVertically]="splitVertically"
   class="tables"
 >
-  <aside *ngIf="properties.length > 0">
+  <aside *ngIf="properties.length > 0" class="wrapper">
     <table class="properties">
       <thead>
         <tr>
-          <td></td>
+          <th></th>
           <ng-container *ngFor="let property of properties">
-            <td>
+            <th>
               {{ property.id }}
 
               <mark
                 *ngIf="['U', 'V', 'W'].includes(property.neighborhood) && ['110', '120'].includes(property.usage)"
                 >VACANT</mark
               >
-            </td>
+            </th>
           </ng-container>
         </tr>
       </thead>
@@ -126,8 +126,8 @@
     <table class="abutters">
       <thead>
         <tr>
-          <td></td>
-          <td>Abutters</td>
+          <th></th>
+          <th>Abutters</th>
         </tr>
       </thead>
 
