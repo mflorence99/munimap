@@ -13,7 +13,7 @@
     "build:proxy": "npm run compile:proxy && cp proxy/package.json dist/proxy && npm --prefix dist/proxy i",
     "build:viewer": "ng build viewer --configuration production",
     "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm install",
-    "compile:proxy": "rm -rf dist/proxy/node_modules && rm -f dist/proxy/package-lock.json && npx -p typescript tsc -p proxy/src",
+    "compile:proxy": "rm -rf dist/proxy/node_modules && rm -f dist/proxy/package-lock.json && tsc -p proxy/src",
     "deploy:aws:author": "./author/deploy-aws.sh",
     "deploy:aws:proxy": "npm run build:proxy && cp proxy/serverless.yml dist/proxy && cd dist/proxy && serverless deploy",
     "deploy:aws:viewer": "./viewer/deploy-aws.sh",

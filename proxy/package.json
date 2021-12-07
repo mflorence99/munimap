@@ -4,6 +4,7 @@
     "@turf/bbox-polygon": "^6",
     "@turf/boolean-intersects": "^6",
     "chalk": "^4",
+    "fast-copy": "^2",
     "injection-js": "^2",
     "md5-file": "^5",
     "node-fetch": "^2",

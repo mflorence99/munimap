@@ -41,11 +41,11 @@ export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
 
 @Injectable()
 export class ProxyServer extends Handler {
-  private opts: ProxyServerOpts;
+  #opts: ProxyServerOpts;
 
   constructor(@Optional() @Inject(PROXY_SERVER_OPTS) opts: ProxyServerOpts) {
     super();
-    this.opts = opts
+    this.#opts = opts
       ? { ...PROXY_SERVER_DEFAULT_OPTS, ...opts }
       : PROXY_SERVER_DEFAULT_OPTS;
   }
@@ -55,7 +55,7 @@ export class ProxyServer extends Handler {
       mergeMap((message: Message): Observable<Message> => {
         const { request, response } = message;
 
-        // 👉 Etag is the fie hash
+        // 👉 Etag is the file hash
         const etag = request.headers['If-None-Match'];
 
         // 👉 proxied URL is in the query param
@@ -71,10 +71,10 @@ export class ProxyServer extends Handler {
           url = url.replace(/\{z\}/, z);
         }
 
-        // 👉 use the first 4 characters of the hash as a drectoty index
+        // 👉 use the first 4 characters of the hash as a directory index
         const fname = hash.MD5(url);
         const fdir = path.join(
-          this.opts.cache,
+          this.#opts.cache,
           fname.substring(0, 2),
           fname.substring(2, 4)
         );
@@ -85,7 +85,7 @@ export class ProxyServer extends Handler {
         try {
           stat = fs.statSync(fpath);
         } catch (error) {}
-        const maxAge = this.opts.maxAge;
+        const maxAge = this.#opts.maxAge;
         const isStashed = stat?.mtimeMs > Date.now() - maxAge * 1000;
 
         return of(message).pipe(

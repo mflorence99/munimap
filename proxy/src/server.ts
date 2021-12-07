@@ -1,4 +1,5 @@
-import { GeoJSONFilter } from './geojson';
+import { GEO_SERVER_OPTS } from './geoserver';
+import { GeoServer } from './geoserver';
 import { PROXY_SERVER_OPTS } from './proxy';
 import { ProxyServer } from './proxy';
 
@@ -43,6 +44,11 @@ const fileServerOpts = {
   useValue: { root: dir }
 };
 
+const geoServerOpts = {
+  provide: GEO_SERVER_OPTS,
+  useValue: { root: dir }
+};
+
 const loggerOpts = {
   provide: REQUEST_LOGGER_OPTS,
   useValue: { format: 'tiny' }
@@ -53,6 +59,8 @@ const proxyServerOpts = {
   useValue: { cache: join(dir, 'cache') }
 };
 
+// 👉 CORS & Compression handled by API Gateway
+
 const routes: Route[] = [
   {
     path: '/proxy',
@@ -60,16 +68,21 @@ const routes: Route[] = [
     handler: ProxyServer,
     middlewares: isDev
       ? [BinaryTyper, Compressor, CORS, RequestLogger]
-      : [BinaryTyper, CORS, RequestLogger],
+      : [BinaryTyper, RequestLogger],
     services: [loggerOpts, proxyServerOpts]
+  },
+  {
+    path: '/NEW HAMPSHIRE',
+    methods: ['GET'],
+    handler: GeoServer,
+    middlewares: isDev ? [Compressor, CORS, RequestLogger] : [RequestLogger],
+    services: [loggerOpts, geoServerOpts]
   },
   {
     path: '/',
     methods: ['GET'],
     handler: FileServer,
-    middlewares: isDev
-      ? [Compressor, GeoJSONFilter, CORS, RequestLogger]
-      : [GeoJSONFilter, CORS, RequestLogger],
+    middlewares: isDev ? [Compressor, CORS, RequestLogger] : [RequestLogger],
     services: [loggerOpts, fileServerOpts]
   },
   {
@@ -95,7 +108,7 @@ if (isDev) {
     );
   });
 
-  server.listen(4201);
+  server.listen(Number(argv['port']));
 }
 
 // 👉 if no port specified, we're running serverless
