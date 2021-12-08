@@ -59,8 +59,6 @@ const proxyServerOpts = {
   useValue: { cache: join(dir, 'cache') }
 };
 
-// 👉 CORS & Compression handled by API Gateway
-
 const routes: Route[] = [
   {
     path: '/proxy',
@@ -68,21 +66,25 @@ const routes: Route[] = [
     handler: ProxyServer,
     middlewares: isDev
       ? [BinaryTyper, Compressor, CORS, RequestLogger]
-      : [BinaryTyper, RequestLogger],
+      : [BinaryTyper, CORS, RequestLogger],
     services: [loggerOpts, proxyServerOpts]
   },
   {
     path: '/NEW HAMPSHIRE',
     methods: ['GET'],
     handler: GeoServer,
-    middlewares: isDev ? [Compressor, CORS, RequestLogger] : [RequestLogger],
+    middlewares: isDev
+      ? [Compressor, CORS, RequestLogger]
+      : [CORS, RequestLogger],
     services: [loggerOpts, geoServerOpts]
   },
   {
     path: '/',
     methods: ['GET'],
     handler: FileServer,
-    middlewares: isDev ? [Compressor, CORS, RequestLogger] : [RequestLogger],
+    middlewares: isDev
+      ? [Compressor, CORS, RequestLogger]
+      : [CORS, RequestLogger],
     services: [loggerOpts, fileServerOpts]
   },
   {
