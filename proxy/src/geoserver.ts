@@ -41,6 +41,10 @@ export const GEO_SERVER_DEFAULT_OPTS: GeoServerOpts = {
 @Injectable()
 export class GeoServer extends Handler {
   #opts: GeoServerOpts;
+
+  // 🔥 in memory cache of ALL geojon data by path that NEVER
+  //    gets evicted  -- it works FOR NOW because Washington is
+  //    the only real implementation with 5mb of data
   #stash: Record<string, GeoJSON.FeatureCollection> = {};
 
   constructor(@Optional() @Inject(GEO_SERVER_OPTS) opts: GeoServerOpts) {
