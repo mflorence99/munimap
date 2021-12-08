@@ -11,6 +11,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { MatDialog } from '@angular/material/dialog';
+import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 
@@ -35,7 +36,7 @@ import OLSnap from 'ol/interaction/Snap';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionRedrawComponent implements OnInit {
+export class OLInteractionRedrawComponent implements OnDestroy, OnInit {
   #feature: OLFeature<OLPolygon | OLMultiPolygon>;
   #format: OLGeoJSON;
   #geometry: OLPolygon | OLMultiPolygon;
@@ -110,6 +111,10 @@ export class OLInteractionRedrawComponent implements OnInit {
     if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
     this.#touched = false;
     this.active = false;
+  }
+
+  ngOnDestroy(): void {
+    this.#unsetFeature();
   }
 
   ngOnInit(): void {

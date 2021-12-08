@@ -113,9 +113,14 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     controls.forEach((control) => this.olMap.removeControl(control));
     const interactions = [...this.olMap.getInteractions().getArray()];
     interactions.forEach((interaction) => {
-      // 👉 OL adds a bunch of interactions of its own
+      // 🔥 OL adds a bunch of interactions of its own
       //    that we don't want to remove
-      if (interaction['addToMap']) this.olMap.removeInteraction(interaction);
+      if (
+        ['Draw', 'Modify', 'Select', 'Snap'].includes(
+          interaction.constructor.name
+        )
+      )
+        this.olMap.removeInteraction(interaction);
     });
     const layers = [...this.olMap.getLayers().getArray()];
     layers.forEach((layer) => this.olMap.removeLayer(layer));
