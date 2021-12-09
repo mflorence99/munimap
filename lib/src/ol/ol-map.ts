@@ -116,9 +116,11 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       // 🔥 OL adds a bunch of interactions of its own
       //    that we don't want to remove
       if (
-        ['Draw', 'Modify', 'Select', 'Snap'].includes(
-          interaction.constructor.name
-        )
+        [
+          this.selector?.olSelect,
+          this.redrawer?.olModify,
+          this.redrawer?.olSnap
+        ].includes(interaction as any)
       )
         this.olMap.removeInteraction(interaction);
     });
