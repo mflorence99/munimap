@@ -7,13 +7,7 @@
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
 
-<form
-  #subdivisionForm="ngForm"
-  autocomplete="off"
-  class="form"
-  novalidate
-  spellcheck="false"
->
+<form #subdivisionForm="ngForm" class="form" novalidate spellcheck="false">
   <p class="instructions">
     Specify the ID and acreage of each subdivision. After <em>SAVE</em>, use
     <em>Redraw parcel boundary</em> and <em>Modify parcel settings</em> to
@@ -27,12 +21,20 @@
       <mat-form-field>
         <mat-label>Subdivision</mat-label>
         <input
+          #subdivisionID="ngModel"
           [(ngModel)]="subdivision.id"
           [name]="'id' + ix"
           [required]="ix < 2"
+          [subdivision]="ix"
+          [subdivisions]="subdivisions"
+          appSubdivisionID
+          autocomplete="off"
           matInput
           type="text"
         />
+        <mat-error *ngIf="subdivisionID.errors?.duplicate"
+          >Subdivision ID is a duplicate.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -42,6 +44,7 @@
           [name]="'area' + ix"
           [required]="ix < 2"
           [step]="0.01"
+          autocomplete="off"
           matInput
           type="number"
         />

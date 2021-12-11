@@ -13,18 +13,13 @@
   <p class="subtitle">{{ user.email }}</p>
 </header>
 
-<form
-  #profileForm="ngForm"
-  autocomplete="off"
-  class="form"
-  novalidate
-  spellcheck="false"
->
+<form #profileForm="ngForm" class="form" novalidate spellcheck="false">
   <mat-form-field>
     <mat-label>Display Name</mat-label>
     <input
       #displayName="ngModel"
       [(ngModel)]="user.displayName"
+      autocomplete="off"
       matInput
       name="displayName"
       required
@@ -41,6 +36,7 @@
       #workgroup="ngModel"
       [(ngModel)]="profile.workgroup"
       appWorkgroup
+      autocomplete="off"
       cdkTextareaAutosize
       matInput
       name="workgroup"

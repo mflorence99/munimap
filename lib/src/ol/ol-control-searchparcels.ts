@@ -148,7 +148,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
           override.bbox = parcel.bbox;
         const props = parcel.properties;
         if (props) {
-          ['address', 'owner'].forEach((prop) => {
+          ['address', 'id', 'owner'].forEach((prop) => {
             if (props[prop] !== undefined && override[prop] === undefined)
               override[prop] = props[prop];
           });

@@ -22,7 +22,7 @@ import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import voronoi from '@turf/voronoi';
 
-interface Subdivision {
+export interface Subdivision {
   area: number;
   id: string;
 }

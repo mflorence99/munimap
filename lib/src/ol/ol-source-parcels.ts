@@ -173,7 +173,6 @@ export class OLSourceParcelsComponent implements OnInit {
         //    scan all the parcel overrides in reverse timestamp order
         //    null says let the feature property stand
         //    not undefined says override the feature property
-        //    save the original feature before modification
         parcelProperties.forEach((prop) => {
           parcels
             .filter((parcel) => parcel.properties)
@@ -192,7 +191,6 @@ export class OLSourceParcelsComponent implements OnInit {
         //    scan all the parcel overrides in reverse timestamp order
         //    null says let the feature geometry stand
         //    not undefined says override the feature geometry
-        //    save the original feature before modification
         parcels
           .filter((parcel) => parcel.geometry !== undefined)
           .some((parcel) => {

@@ -6,13 +6,7 @@
   <p class="title">New parcel</p>
 </header>
 
-<form
-  #additionForm="ngForm"
-  autocomplete="off"
-  class="form"
-  novalidate
-  spellcheck="false"
->
+<form #additionForm="ngForm" class="form" novalidate spellcheck="false">
   <p class="instructions">
     Specify the ID and acreage of the new parcel. After <em>SAVE</em>, use
     <em>Redraw parcel boundary</em> and <em>Modify parcel settings</em> to
@@ -25,6 +19,7 @@
       <input
         [(ngModel)]="addition.id"
         [name]="'id'"
+        autocomplete="off"
         matInput
         type="text"
         required
@@ -37,6 +32,7 @@
         [(ngModel)]="addition.area"
         [name]="'area'"
         [step]="0.01"
+        autocomplete="off"
         matInput
         type="number"
         required

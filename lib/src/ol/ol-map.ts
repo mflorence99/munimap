@@ -162,8 +162,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     // 👉 https://stackoverflow.com/questions/48760274
     const names = Array.from(document.styleSheets)
       .filter(
-        (sheet) =>
-          sheet.href == null || sheet.href.startsWith(window.location.origin)
+        (sheet) => sheet.href == null || sheet.href.startsWith(location.origin)
       )
       .reduce(
         (acc, sheet) =>

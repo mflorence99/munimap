@@ -19,18 +19,13 @@
   </mat-card-header>
 
   <mat-card-content>
-    <form
-      #setupForm="ngForm"
-      autocomplete="off"
-      class="form"
-      novalidate
-      spellcheck="false"
-    >
+    <form #setupForm="ngForm" class="form" novalidate spellcheck="false">
       <mat-form-field>
         <mat-label>Give your map a name</mat-label>
         <input
           #name="ngModel"
           [(ngModel)]="map.name"
+          autocomplete="off"
           matInput
           name="name"
           placeholder="eg: My Old Town"
@@ -45,6 +40,7 @@
           #id="ngModel"
           [(ngModel)]="map.id"
           [disabled]="!map.isDflt"
+          autocomplete="off"
           matInput
           name="id"
           pattern="[a-z0-9]+"

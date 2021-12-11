@@ -122,7 +122,9 @@ export class AuthState implements NgxsOnInit {
 
   @Action(Logout) logout(): void {
     this.fireauth.signOut();
-    // 👉 side-effect triggers subscribe in ngxsOnInit
+    // 👉 we relaod the app to cancel all the subscriptions
+    //    that rely on a logged-in user
+    setTimeout(() => location.reload(), 100);
   }
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
@@ -140,7 +142,7 @@ export class AuthState implements NgxsOnInit {
             ? this.#profiles.doc(user.email).get()
             : of(null);
           const user$ = of(user);
-          return forkJoin(user$, profile$);
+          return forkJoin([user$, profile$]);
         })
       )
       .subscribe(([user, doc]) => {
@@ -154,7 +156,7 @@ export class AuthState implements NgxsOnInit {
               new UpdateProfile({ email: user.email, workgroup: '' })
             );
           this.router.navigateByUrl(forwardTo);
-        } else this.router.navigateByUrl('/login');
+        }
       });
   }
 

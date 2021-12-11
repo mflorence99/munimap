@@ -8,6 +8,7 @@ import { NavigatorComponent } from './pages/root/navigator';
 import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
 import { RootPage } from './pages/root/root';
 import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
+import { SubdivisionIDValidator } from './contextmenu/subdivisionid-validator';
 import { TownMapPage } from './pages/town-map/town-map';
 import { TownMapSetupComponent } from './pages/town-map/town-map-setup';
 import { UserProfileComponent } from './pages/root/user-profile';
@@ -210,6 +211,7 @@ const COMPONENTS = [
   OLStyleWetlandComponent,
   ParcelPropertiesComponent,
   SubdivideParcelComponent,
+  SubdivisionIDValidator,
   TownMapSetupComponent,
   UserProfileComponent,
   VersionDialogComponent
