@@ -311,6 +311,10 @@ a[mat-flat-button] {
   justify-content: flex-end !important;
 }
 
+.mat-form-field.ng-invalid {
+  padding-bottom: 1rem !important;
+}
+
 .mat-icon-button {
   line-height: 1 !important;
 
