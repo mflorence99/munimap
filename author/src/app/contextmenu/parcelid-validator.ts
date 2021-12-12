@@ -1,30 +1,28 @@
-import { Subdivision } from './subdivide-parcel';
-
 import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Input } from '@angular/core';
 import { NG_VALIDATORS } from '@angular/forms';
+import { OLControlSearchParcelsComponent } from '@lib/ol/ol-control-searchparcels';
 import { OnInit } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Validator } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
 
-function subdivisionIDValidatorFactory(
-  subdivisions: Subdivision[],
-  ix: number
+function parcelIDValidatorFactory(
+  searcher: OLControlSearchParcelsComponent,
+  original: any
 ): ValidatorFn {
   return (control: FormControl): ValidationErrors => {
     const value = control.value;
 
-    // 👉 quick exit if no value
-    if (!value) return null;
+    // 👉 quick exit if no value or no searcher
+    if (!value || !searcher) return null;
+
+    // 👉 quick exit if return to orignal value
+    if (value === original) return null;
 
     // 👉 error if duplicate
-    if (
-      subdivisions.some(
-        (subdivision, iy) => subdivision.id === value && ix !== iy
-      )
-    )
+    if (searcher.searchablesByID[value])
       return {
         duplicate: {
           valid: false
@@ -37,19 +35,19 @@ function subdivisionIDValidatorFactory(
 
 @Directive({
   providers: [
-    { provide: NG_VALIDATORS, useExisting: SubdivisionIDValidator, multi: true }
+    { provide: NG_VALIDATORS, useExisting: ParcelIDValidator, multi: true }
   ],
-  selector: '[appSubdivisionID][ngModel]'
+  selector: '[appParcelID][ngModel]'
 })
-export class SubdivisionIDValidator implements OnInit, Validator {
-  @Input() appSubdivisionID: [Subdivision[], number];
+export class ParcelIDValidator implements OnInit, Validator {
+  @Input() appParcelID: [OLControlSearchParcelsComponent, any];
 
   validator: ValidatorFn;
 
   ngOnInit(): void {
-    this.validator = subdivisionIDValidatorFactory(
-      this.appSubdivisionID[0],
-      this.appSubdivisionID[1]
+    this.validator = parcelIDValidatorFactory(
+      this.appParcelID[0],
+      this.appParcelID[1]
     );
   }
 

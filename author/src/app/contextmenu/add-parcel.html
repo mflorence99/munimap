@@ -17,23 +17,29 @@
     <mat-form-field>
       <mat-label>Parcel ID</mat-label>
       <input
+        #parcelID="ngModel"
         [(ngModel)]="addition.id"
-        [name]="'id'"
+        [appParcelID]="[map.searcher, addition.id]"
         autocomplete="off"
         matInput
+        name="id"
         type="text"
         required
       />
+      <mat-error *ngIf="parcelID.errors?.duplicate"
+        >Parcel ID is a duplicate.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Acreage</mat-label>
       <input
+        #area="ngModel"
         [(ngModel)]="addition.area"
-        [name]="'area'"
         [step]="0.01"
         autocomplete="off"
         matInput
+        name="area"
         type="number"
         required
       />

@@ -23,11 +23,10 @@
         <input
           #subdivisionID="ngModel"
           [(ngModel)]="subdivision.id"
+          [appParcelID]="[map.searcher, subdivision.id]"
+          [appSubdivisionID]="[subdivisions, ix]"
           [name]="'id' + ix"
           [required]="ix < 2"
-          [subdivision]="ix"
-          [subdivisions]="subdivisions"
-          appSubdivisionID
           autocomplete="off"
           matInput
           type="text"
@@ -40,6 +39,7 @@
       <mat-form-field>
         <mat-label>Acreage</mat-label>
         <input
+          #area="ngModel"
           [(ngModel)]="subdivision.area"
           [name]="'area' + ix"
           [required]="ix < 2"

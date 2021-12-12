@@ -41,9 +41,6 @@ export class OLControlSearchParcelsComponent implements OnInit {
   #overridesByID: Record<ParcelID, Override> = {};
 
   #searchTargets = [];
-  #searchablesByAddress: Record<string, Feature[]> = {};
-  #searchablesByID: Record<ParcelID, Feature[]> = {};
-  #searchablesByOwner: Record<string, Feature[]> = {};
 
   @Input() fuzzyMaxResults = 100;
   @Input() fuzzyMinLength = 3;
@@ -55,13 +52,20 @@ export class OLControlSearchParcelsComponent implements OnInit {
 
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
+  searchablesByAddress: Record<string, Feature[]> = {};
+  searchablesByID: Record<ParcelID, Feature[]> = {};
+  searchablesByOwner: Record<string, Feature[]> = {};
+
   constructor(
     private destroy$: DestroyService,
     private geoJSON: GeoJSONService,
     private map: OLMapComponent,
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    // 👉 register searcher with map
+    this.map.searcher = this;
+  }
 
   #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
@@ -109,15 +113,15 @@ export class OLControlSearchParcelsComponent implements OnInit {
         this.#filterRemovedFeatures(geojson, parcels);
         this.#overridesByID = this.#makeOverridesByID(parcels);
         this.#searchTargets = this.#makeSearchTargets(geojson.features);
-        this.#searchablesByAddress = this.#groupSearchablesByProperty(
+        this.searchablesByAddress = this.#groupSearchablesByProperty(
           geojson.features,
           'address'
         );
-        this.#searchablesByID = this.#groupSearchablesByProperty(
+        this.searchablesByID = this.#groupSearchablesByProperty(
           geojson.features,
           'id'
         );
-        this.#searchablesByOwner = this.#groupSearchablesByProperty(
+        this.searchablesByOwner = this.#groupSearchablesByProperty(
           geojson.features,
           'owner'
         );
@@ -173,12 +177,6 @@ export class OLControlSearchParcelsComponent implements OnInit {
     return Array.from(keys).map((key) => fuzzysort.prepare(`${key}`));
   }
 
-  maxMatcherSize(): number {
-    // 👇 we need at least 2 entries to get the HTML <select>
-    //    to behave properly
-    return Math.max(2, Math.min(this.matches.length, this.matchesMaxVisible));
-  }
-
   ngOnInit(): void {
     this.#handleGeoJSON$();
     this.#handleStreams$();
@@ -188,9 +186,9 @@ export class OLControlSearchParcelsComponent implements OnInit {
     const searchFor = str.toUpperCase();
     // 👉 let's see if we have a direct hit by ID, then address, then owner
     const searchables =
-      this.#searchablesByID[searchFor] ??
-      this.#searchablesByAddress[searchFor] ??
-      this.#searchablesByOwner[searchFor];
+      this.searchablesByID[searchFor] ??
+      this.searchablesByAddress[searchFor] ??
+      this.searchablesByOwner[searchFor];
     if (searchables) {
       // 👉 we have a hit, tell the selector
       this.matches = [];
