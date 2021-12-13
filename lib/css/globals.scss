@@ -94,8 +94,8 @@ $dark-app-theme: mat-dark-theme(
   --map-feature-outline: var(--rgb-green-700);
   --map-feature-text-color: var(--rgb-green-700);
 
-  --map-floodplain-fill: var(--rgb-light-blue-900);
-  --map-floodplain-flooded: var(--rgb-blue-900);
+  --map-floodplain-fill: var(--rgb-light-blue-500);
+  --map-floodplain-flooded: var(--rgb-blue-500);
 
   --map-graticule-border-color: var(--rgb-gray-50);
   --map-graticule-line-color: var(--rgb-gray-900);
@@ -160,9 +160,9 @@ $dark-app-theme: mat-dark-theme(
   --map-road-edge-I: var(--rgb-gray-600);
   --map-road-edge-II: var(--rgb-gray-600);
   --map-road-edge-III: var(--rgb-gray-600);
-  --map-road-edge-IV: var(--rgb-gray-500);
-  --map-road-edge-V: var(--rgb-gray-400);
-  --map-road-edge-VI: var(--rgb-gray-300);
+  --map-road-edge-IV: var(--rgb-gray-600);
+  --map-road-edge-V: var(--rgb-gray-600);
+  --map-road-edge-VI: var(--rgb-gray-500);
   --map-road-edge-0: var(--rgb-gray-200);
 
   --map-road-lane-I: var(--rgb-blue-300);

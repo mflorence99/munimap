@@ -47,6 +47,6 @@ export class OLSourceFloodplainComponent extends OLSourceArcGISComponent {
     // 👉 we're going to grab everything at once, as the data is sparse,
     //    meaning that we can cache the result
     const [minX, minY, maxX, maxY] = this.map.boundaryExtent;
-    return `https://gis.des.nh.gov/server/rest/services/Projects_LRM/Wetlands_Permit_Planning_PRA_NotRestricted/MapServer/0/query?f=json&returnIdsOnly=false&returnCountOnly=false&where=1=1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
+    return `https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/CV_InlandWaterResources/MapServer/7/query?f=json&returnIdsOnly=false&returnCountOnly=false&where=1=1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
   }
 }

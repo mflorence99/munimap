@@ -10,6 +10,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
+import OLStrokePattern from 'ol-ext/style/StrokePattern';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
@@ -45,19 +46,31 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
         fill: new OLFill({ color: `rgba(${color}, 1)` }),
         overflow: false,
         placement: 'line',
-        text: props.name
+        text: props.class === 'VI' ? `${props.name} (Class VI)` : props.name
       });
     }
   }
 
-  #fillLane(props: RoadProperties, resolution: number): OLStroke {
+  #fillLane(
+    props: RoadProperties,
+    resolution: number
+  ): OLStroke | OLStrokePattern {
+    const edge = this.map.vars[`--map-road-edge-${props.class ?? '0'}`];
     const lane = this.map.vars[`--map-road-lane-${props.class ?? '0'}`];
     const width = this.#roadWidth(props, resolution);
-    return new OLStroke({
-      color: `rgba(${lane}, 1)`,
-      lineCap: 'butt',
-      width: width * 0.9
-    });
+    return props.class === 'VI'
+      ? new OLStrokePattern({
+          color: `rgba(${edge}, 1)`,
+          fill: new OLFill({ color: `rgba(${lane}, 1)` }),
+          pattern: 'conglomerate',
+          scale: 0.66,
+          width: width * 0.9
+        })
+      : new OLStroke({
+          color: `rgba(${lane}, 1)`,
+          lineCap: 'butt',
+          width: width * 0.9
+        });
   }
 
   #fontSize(resolution: number): number {

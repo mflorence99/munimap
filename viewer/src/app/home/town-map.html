@@ -71,17 +71,17 @@
       </app-ol-layer-tile>
 
       <app-ol-layer-vector>
-        <app-ol-style-lakes></app-ol-style-lakes>
-        <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
         <app-ol-style-parcels
           [showBackground]="true"
           [showBorder]="true"
         ></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-lakes></app-ol-style-lakes>
+        <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>

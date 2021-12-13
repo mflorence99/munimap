@@ -26,6 +26,7 @@ import { Store } from '@ngxs/store';
 
 import { combineLatest } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -118,11 +119,14 @@ export class ParcelsState implements NgxsOnInit {
               .valueChanges({ idField: '$id' });
           }
         }),
+        map((parcels: Parcel[]) => {
+          parcels.forEach((parcel) => deserialize(parcel));
+          return parcels;
+        }),
         // 👉 cut down on noise
         distinctUntilChanged((p, q): boolean => hash.MD5(p) === hash.MD5(q))
       )
       .subscribe((parcels: Parcel[]) => {
-        parcels.forEach((parcel) => deserialize(parcel));
         this.store.dispatch(new SetParcels(parcels));
       });
   }
@@ -136,6 +140,28 @@ export class ParcelsState implements NgxsOnInit {
         if (!acc[parcel.id]) acc[parcel.id] = parcel.action;
         return acc;
       }, {});
+  }
+
+  #logParcels(parcels: Parcel[]): void {
+    console.table(
+      parcels.map((parcel) => {
+        return {
+          action: parcel.action,
+          id: parcel.id,
+          geometry: parcel.geometry?.type,
+          address: parcel.properties?.address,
+          area: parcel.properties?.area,
+          neighborhood: parcel.properties?.neighborhood,
+          owner: parcel.properties?.owner,
+          usage: parcel.properties?.usage,
+          use: parcel.properties?.use,
+          building$: parcel.properties?.building$,
+          land$: parcel.properties?.land$,
+          other$: parcel.properties?.other$,
+          taxed$: parcel.properties?.taxed$
+        };
+      })
+    );
   }
 
   #normalize(parcel: Parcel): Parcel {
@@ -262,6 +288,7 @@ export class ParcelsState implements NgxsOnInit {
     ctx: StateContext<ParcelsStateModel>,
     action: SetParcels
   ): void {
+    this.#logParcels(action.parcels);
     ctx.setState(action.parcels);
   }
 

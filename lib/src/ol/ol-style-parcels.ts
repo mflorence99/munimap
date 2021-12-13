@@ -397,7 +397,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     for (let ix = 0; ix < numLabels; ix++) {
       const fontSize = this.#labelFontSize(props, resolution, ix);
       // 👉 if the fontsize for the acreage is so small we can't
-      //    see it, don't show it and don't outline the text either
+      //    see it, don't show it
       if (fontSize * this.fontSizeAcreageRatio < this.minFontSize) {
         labels.push({
           fontFamily: this.fontFamily,

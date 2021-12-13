@@ -116,7 +116,6 @@ export class RootPage implements OnInit {
 
   setTitle(title: string): void {
     this.title = title;
-    console.log({ title: this.title });
   }
 
   undo(): void {
