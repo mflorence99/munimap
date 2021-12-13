@@ -84,6 +84,7 @@
     "@ngxs/storage-plugin": "^3",
     "@ngxs/store": "^3",
     "@sentry/angular": "^6",
+    "@sentry/browser": "^6",
     "@sentry/tracing": "^6",
     "@terraformer/arcgis": "^2",
     "@turf/turf": "^6",

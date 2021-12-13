@@ -242,7 +242,7 @@ const STATES_SAVED = [OverlayState, ViewState];
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({
         logErrors: true,
-        showDialog: true
+        showDialog: false
       })
     },
     {

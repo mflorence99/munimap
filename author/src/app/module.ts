@@ -334,7 +334,7 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({
         logErrors: true,
-        showDialog: true
+        showDialog: false
       })
     },
     {

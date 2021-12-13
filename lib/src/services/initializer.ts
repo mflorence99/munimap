@@ -7,7 +7,6 @@ import 'firebase/analytics';
 import * as Sentry from '@sentry/angular';
 
 import { Injectable } from '@angular/core';
-import { Integrations } from '@sentry/tracing';
 import { Observable } from 'rxjs';
 
 import { forkJoin } from 'rxjs';
@@ -33,17 +32,12 @@ export class InitializerService {
     console.table(environment.ua);
     console.table(environment.firebase);
 
-    // 👉 initialize Sentry.io
+    // // 👉 initialize Sentry.io
     if (environment.production) {
       Sentry.init({
+        debug: true,
         dsn: 'https://c4cd041a16584464b8c0f6b2c984b516@o918490.ingest.sentry.io/5861734',
-        integrations: [
-          new Integrations.BrowserTracing({
-            tracingOrigins: ['https://proxy.munimap.online'],
-            routingInstrumentation: Sentry.routingInstrumentation
-          })
-        ],
-        tracesSampleRate: 1.0
+        release: 'MuniMap'
       });
     }
 
