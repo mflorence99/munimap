@@ -3,6 +3,7 @@
 /// <reference lib="webworker" />
 
 import * as Comlink from 'comlink';
+import * as Sentry from '@sentry/angular';
 
 import buffer from '@turf/buffer';
 import intersect from '@turf/intersect';
@@ -16,12 +17,26 @@ export class Abutters {
     const selectedIDs = selecteds.map((selected) => selected.id);
     const unique = selecteds
       .flatMap((selected) => {
+        // 👉 inflate selected feature by N ft all around
         const buffered = buffer(selected, abutterRange / 5280, {
           units: 'miles'
         });
-        return allFeatures.filter(
-          (feature) =>
-            !selectedIDs.includes(feature.id) && intersect(feature, buffered)
+        return (
+          allFeatures
+            // 🔥 try to capture problem where some features appear to have
+            //    no geometry after modification
+            .filter((feature) => {
+              const hasGeometry = feature.geometry?.coordinates;
+              if (!hasGeometry)
+                Sentry.captureMessage(`${feature.id} has no geometry`);
+              return hasGeometry;
+            })
+            // 👉 match those in range
+            .filter(
+              (feature) =>
+                !selectedIDs.includes(feature.id) &&
+                intersect(feature, buffered)
+            )
         );
       })
       .reduce((acc, abutter) => {

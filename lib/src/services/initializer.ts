@@ -32,14 +32,12 @@ export class InitializerService {
     console.table(environment.ua);
     console.table(environment.firebase);
 
-    // // 👉 initialize Sentry.io
-    if (environment.production) {
-      Sentry.init({
-        debug: true,
-        dsn: 'https://c4cd041a16584464b8c0f6b2c984b516@o918490.ingest.sentry.io/5861734',
-        release: 'MuniMap'
-      });
-    }
+    // 👉 initialize Sentry.io
+    Sentry.init({
+      debug: true,
+      dsn: 'https://c4cd041a16584464b8c0f6b2c984b516@o918490.ingest.sentry.io/5861734',
+      release: 'MuniMap'
+    });
 
     // 👉 initialize analytics
     //    just tracking access to the app for now

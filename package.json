@@ -17,7 +17,7 @@
     "deploy:aws:author": "./author/deploy-aws.sh",
     "deploy:aws:proxy": "npm run build:proxy && cp proxy/serverless.yml dist/proxy && cd dist/proxy && serverless deploy",
     "deploy:aws:viewer": "./viewer/deploy-aws.sh",
-    "emulators": "firebase emulators:start",
+    "firebase:emulators": "firebase emulators:start",
     "patcher": "ts-node --dir bin patcher.ts",
     "postinstall": "npm run patcher",
     "prettier": "prettier --write .",
