@@ -48,8 +48,10 @@ PARCELS.lots.forEach((lot) => {
       id: lot.id,
       labels: lot.labels,
       land$: lot.land$,
-      lengths: lot.lengths,
-      minWidths: lot.minWidths,
+      lengths: lot.lengths.map((lengths) =>
+        lengths.map((length) => Math.round(length))
+      ),
+      minWidths: lot.minWidths.map((width) => Math.round(width)),
       neighborhood: lot.neighborhood,
       orientations: lot.orientations,
       other$: lot.cu$,

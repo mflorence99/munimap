@@ -328,7 +328,9 @@ function calculateLengths(polygon: GeoJSON.Feature<GeoJSON.Polygon>): number[] {
       properties: {},
       type: 'Feature'
     };
-    lengths.push(length(lineString, { units: 'miles' }) * 5280); /* 👈 feet */
+    lengths.push(
+      Math.round(length(lineString, { units: 'miles' }) * 5280 /* 👈 feet */)
+    );
   }
   return lengths;
 }
@@ -341,7 +343,9 @@ function calculateMinWidth(
   const [minX, minY, , maxY] = bbox(rotated);
   const from = point([minX, minY]);
   const to = point([minX, maxY]);
-  return distance(from, to, { units: 'miles' }) * 5280; /* 👈 feet */
+  return Math.round(
+    distance(from, to, { units: 'miles' }) * 5280 /* 👈 feet */
+  );
 }
 
 function calculateOrientation(

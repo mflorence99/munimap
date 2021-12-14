@@ -21,6 +21,7 @@
     "patcher": "ts-node --dir bin patcher.ts",
     "postinstall": "npm run patcher",
     "prettier": "prettier --write .",
+    "proxy:all": "npm run proxy:state && npm run proxy:counties && npm run proxy:towns && npm run proxy:indexer && npm run proxy:buildings && npm run proxy:lakes && npm run proxy:parcels && npm run proxy:places && npm run proxy:powerlines && npm run proxy:railroads && npm run proxy:rivers && npm run proxy:roads && npm run proxy:trails && npm run proxy:washington && npm run proxy:indexer",
     "proxy:buildings": "ts-node --dir bin buildings.ts",
     "proxy:counties": "ts-node --dir bin counties.ts",
     "proxy:explorer": "ts-node --dir bin explorer.ts",
