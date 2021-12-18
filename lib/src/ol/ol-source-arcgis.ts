@@ -7,7 +7,9 @@ import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
 import { arcgisToGeoJSON } from '@terraformer/arcgis';
+import { catchError } from 'rxjs/operators';
 import { map } from 'rxjs';
+import { of } from 'rxjs';
 import { tap } from 'rxjs';
 
 import GeoJSON from 'ol/format/GeoJSON';
@@ -46,6 +48,7 @@ export abstract class OLSourceArcGISComponent {
           )}`
         )
         .pipe(
+          catchError(() => of({ features: [] })),
           map(
             (arcgis: any): GeoJSON.FeatureCollection<GeoJSON.Polygon> =>
               arcgisToGeoJSON(arcgis)
