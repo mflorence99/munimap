@@ -23,8 +23,8 @@ import md5File from 'md5-file';
 // 👇 proxy server options
 
 export interface ProxyServerOpts {
-  cache?: string;
   maxAge?: number;
+  root?: string;
 }
 
 export const PROXY_SERVER_OPTS = new InjectionToken<ProxyServerOpts>(
@@ -32,8 +32,8 @@ export const PROXY_SERVER_OPTS = new InjectionToken<ProxyServerOpts>(
 );
 
 export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
-  cache: '/tmp',
-  maxAge: 30 * 24 * 60 * 60 /* 👈 30 days */
+  maxAge: 600,
+  root: '/tmp'
 };
 
 // 👇 a trivial proxy server so that we can use ArcGIS etc
@@ -74,7 +74,7 @@ export class ProxyServer extends Handler {
         // 👉 use the first 4 characters of the hash as a directory index
         const fname = hash.MD5(url);
         const fdir = path.join(
-          this.#opts.cache,
+          this.#opts.root,
           fname.substring(0, 2),
           fname.substring(2, 4)
         );

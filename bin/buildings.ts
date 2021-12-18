@@ -16,7 +16,7 @@ import unzipper from 'unzipper';
 
 // 👉 https://github.com/microsoft/USBuildingFootprints
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 // 👇 we won't even bother to look at these towns as we know they're
 //    too big and analyzing them can cause out-of-memory conditions

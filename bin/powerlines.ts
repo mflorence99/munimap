@@ -19,7 +19,7 @@ import copy from 'fast-copy';
 
 // 👉 https://hifld-geoplatform.opendata.arcgis.com/datasets/electric-power-transmission-lines/explore
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 const powerlines = JSON.parse(
   readFileSync(

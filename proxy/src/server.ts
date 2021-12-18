@@ -36,17 +36,16 @@ const argv = yargs
 
 const isDev = argv['port'];
 
-const dir =
-  argv['dir'] ?? isDev ? '/efs/MuniMap/proxy' : '/mnt/efs/MuniMap/proxy';
+const dir = argv['dir'] ?? isDev ? './data' : '/mnt/efs/MuniMap/proxy';
 
 const fileServerOpts = {
   provide: FILE_SERVER_OPTS,
-  useValue: { root: dir }
+  useValue: { maxAge: 60 * 10 /* 👈 10 minutes */, root: dir }
 };
 
 const geoServerOpts = {
   provide: GEO_SERVER_OPTS,
-  useValue: { root: dir }
+  useValue: { maxAge: 60 * 10 /* 👈 10 minutes */, root: dir }
 };
 
 const loggerOpts = {
@@ -54,9 +53,15 @@ const loggerOpts = {
   useValue: { format: 'tiny' }
 };
 
+// 👇 the proxy serves hillshade, satellite view etc which changes
+//    infrequently, so we can make maxAge quite long
+
 const proxyServerOpts = {
   provide: PROXY_SERVER_OPTS,
-  useValue: { cache: join(dir, 'cache') }
+  useValue: {
+    maxAge: 30 * 24 * 60 * 60 /* 👈 30 days */,
+    root: join(dir, 'cache')
+  }
 };
 
 const routes: Route[] = [

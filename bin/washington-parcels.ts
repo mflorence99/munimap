@@ -12,7 +12,7 @@ import chalk from 'chalk';
 
 // 👉 Washington is special as we have already curated the lots
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 const county = 'SULLIVAN';
 const town = 'WASHINGTON';

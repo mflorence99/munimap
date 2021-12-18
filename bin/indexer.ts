@@ -15,7 +15,7 @@ const towns = JSON.parse(
   ).toString()
 );
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 function available({ name, url }): Layer {
   return {

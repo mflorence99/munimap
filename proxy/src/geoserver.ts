@@ -58,7 +58,6 @@ export class GeoServer extends Handler {
   ): Buffer {
     if (minX && minY && maxX && maxY) {
       geojson = copy(geojson);
-      // const qbbox = bboxPolygon([minX, minY, maxX, maxY]);
       geojson.features = geojson.features.filter((feature) => {
         // 👉 some features don't have a bbox, but we prefer
         //    it if present as it is faster

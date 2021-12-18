@@ -14,7 +14,7 @@ import shp from 'shpjs';
 const url =
   'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Cultural_Society_and_Demographic/d-gnis/GNIS_2008';
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()

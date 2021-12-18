@@ -12,7 +12,7 @@ const powerlines = JSON.parse(
   ).toString()
 );
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 const boundary = JSON.parse(
   readFileSync(`${dist}/${theState}/boundary.geojson`).toString()

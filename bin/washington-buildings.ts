@@ -16,7 +16,7 @@ const gpx = new xmldom.DOMParser().parseFromString(
 
 // 👉 Washington is special as we have already curated the bildings
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 const county = 'SULLIVAN';
 const town = 'WASHINGTON';

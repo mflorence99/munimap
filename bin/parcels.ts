@@ -20,7 +20,7 @@ import shp from 'shpjs';
 
 const county = yargs.argv['county'];
 
-const dist = '/efs/MuniMap/proxy';
+const dist = './data';
 
 const urlByCounty = {
   BELKNAP:
