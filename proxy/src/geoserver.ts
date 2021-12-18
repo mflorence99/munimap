@@ -42,11 +42,6 @@ export const GEO_SERVER_DEFAULT_OPTS: GeoServerOpts = {
 export class GeoServer extends Handler {
   #opts: GeoServerOpts;
 
-  // 🔥 in memory cache of ALL geojon data by path that NEVER
-  //    gets evicted  -- it works FOR NOW because Washington is
-  //    the only real implementation with 5mb of data
-  #stash: Record<string, GeoJSON.FeatureCollection> = {};
-
   constructor(@Optional() @Inject(GEO_SERVER_OPTS) opts: GeoServerOpts) {
     super();
     this.#opts = opts
@@ -105,7 +100,6 @@ export class GeoServer extends Handler {
           // 👉 flip to cached/not cached pipes
           mergeMap((hash: string): Observable<Message> => {
             const isCached = etag === hash;
-            const isStashed = !!this.#stash[fpath];
 
             // 👉 cached pipe
             const cached$ = of(hash).pipe(
@@ -113,37 +107,23 @@ export class GeoServer extends Handler {
               mapTo(message)
             );
 
-            // 👉 stashed pipe
-            const stashed$ = of(hash).pipe(
-              tap(() => {
-                const geojson = this.#stash[fpath];
-                response.body = this.#filter(geojson, minX, minY, maxX, maxY);
-                response.statusCode = 200;
-              }),
-              mapTo(message)
-            );
-
-            // 👉 "must read" pipe
-            const mustRead$ = of(hash).pipe(
+            // 👉 not cached pipe
+            const notCached$ = of(hash).pipe(
               mergeMap(
                 (): Observable<Buffer> =>
                   fromReadableStream(fs.createReadStream(fpath))
               ),
               tap((buffer: Buffer) => {
                 const geojson = JSON.parse(buffer.toString());
-                this.#stash[fpath] = geojson;
                 response.body = this.#filter(geojson, minX, minY, maxX, maxY);
                 response.statusCode = 200;
               }),
               mapTo(message)
             );
 
-            return isStashed ? stashed$ : isCached ? cached$ : mustRead$;
+            return isCached ? cached$ : notCached$;
           }),
-          catchError((e) => {
-            console.error(e);
-            return throwError(() => new Exception({ statusCode: 404 }));
-          })
+          catchError(() => throwError(() => new Exception({ statusCode: 404 })))
         );
       })
     );
