@@ -13,6 +13,6 @@ npm version $version
 
 git push origin main
 
-npm run build:viewer
+npm run build:viewer:washington
 
-serverx-angular --app dist/viewer --deploy viewer/aws.json
+serverx-angular --app dist/viewer --deploy viewer/aws-washington.json

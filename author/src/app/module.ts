@@ -35,6 +35,8 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import { GeoJSONAuthorService } from '@lib/services/geojson-author';
+import { GeoJSONService } from '@lib/services/geojson';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
@@ -335,6 +337,7 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
         showDialog: false
       })
     },
+    { provide: GeoJSONService, useClass: GeoJSONAuthorService },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {
       provide: USE_AUTH_EMULATOR,

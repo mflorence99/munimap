@@ -20,6 +20,8 @@ import { ErrorHandler } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import { GeoJSONService } from '@lib/services/geojson';
+import { GeoJSONViewerService } from '@lib/services/geojson-viewer';
 import { GeolocationService } from '@lib/services/geolocation';
 import { GeosimulatorService } from '@lib/services/geosimulator';
 import { HttpClientModule } from '@angular/common/http';
@@ -243,6 +245,7 @@ const STATES_SAVED = [OverlayState, ViewState];
         showDialog: false
       })
     },
+    { provide: GeoJSONService, useClass: GeoJSONViewerService },
     {
       provide: GeolocationService,
       useClass: environment.production
