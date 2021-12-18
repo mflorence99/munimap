@@ -35,8 +35,6 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpCache } from '@lib/services/http-cache';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
@@ -336,11 +334,6 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
         logErrors: true,
         showDialog: false
       })
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpCache,
-      multi: true
     },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {

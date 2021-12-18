@@ -9,7 +9,6 @@ import { environment } from '../environment';
 import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -60,8 +59,7 @@ export class GeoJSONService {
     }
     return this.http
       .get<GeoJSON.FeatureCollection<GeoJSON.Polygon>>(
-        `${environment.endpoints.proxy}${path}${params}`,
-        { headers: new HttpHeaders({ cache: 'page' }) }
+        `${environment.endpoints.proxy}${path}${params}`
       )
       .pipe(catchError(() => of(EMPTY)));
   }
@@ -89,8 +87,6 @@ export class GeoJSONService {
   }
 
   loadIndex(): Observable<Index> {
-    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
-      headers: new HttpHeaders({ cache: 'perm' })
-    });
+    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`);
   }
 }

@@ -37,7 +37,7 @@ export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
 };
 
 // 👇 a trivial proxy server so that we can use ArcGIS etc
-//    in prodfuction -- ie w/o the Webpack proxy
+//    in production -- ie w/o the Webpack proxy
 
 @Injectable()
 export class ProxyServer extends Handler {

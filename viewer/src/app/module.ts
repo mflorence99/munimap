@@ -22,8 +22,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { GeolocationService } from '@lib/services/geolocation';
 import { GeosimulatorService } from '@lib/services/geosimulator';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpCache } from '@lib/services/http-cache';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
@@ -250,11 +248,6 @@ const STATES_SAVED = [OverlayState, ViewState];
       useClass: environment.production
         ? GeolocationService
         : GeosimulatorService
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpCache,
-      multi: true
     },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {

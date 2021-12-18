@@ -5,7 +5,6 @@ import { environment } from '../environment';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 
 import { arcgisToGeoJSON } from '@terraformer/arcgis';
 import { map } from 'rxjs';
@@ -44,10 +43,7 @@ export abstract class OLSourceArcGISComponent {
             environment.endpoints.proxy
           }/proxy/${this.getProxyPath()}?url=${encodeURIComponent(
             this.getURL(extent)
-          )}`,
-          {
-            headers: new HttpHeaders({ cache: 'page' })
-          }
+          )}`
         )
         .pipe(
           map(
@@ -56,7 +52,7 @@ export abstract class OLSourceArcGISComponent {
           ),
           tap((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
             geojson.features.forEach(
-              (feature) => (feature.id = feature.properties.NWI_ID)
+              (feature) => (feature.id = this.getFeatureID(feature))
             );
           })
         )
