@@ -2,6 +2,8 @@ import { VersionDialogComponent } from '../components/version-dialog';
 
 import { environment } from '../environment';
 
+import * as Sentry from '@sentry/angular';
+
 import { ApplicationRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -48,6 +50,7 @@ export class VersionService {
   #checkUnrecoverableServiceWorker(): void {
     this.swUpdate.unrecoverable.subscribe((event: UnrecoverableStateEvent) => {
       console.error('🔥 Unrecoverable PWA error', event.reason);
+      Sentry.captureException(event);
       this.hardReset();
     });
   }
@@ -170,7 +173,8 @@ export class VersionService {
         );
       })
       .finally(() => {
-        console.log('%cReloading app', 'color: plum');
+        console.log('%cHard reset', 'color: plum');
+        Sentry.captureMessage('Hard reset');
         location.reload();
       });
   }

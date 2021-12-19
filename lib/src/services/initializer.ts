@@ -44,7 +44,10 @@ export class InitializerService {
     firebase
       .firestore()
       .enablePersistence()
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        Sentry.captureException(error);
+      });
 
     return EMPTY;
   }

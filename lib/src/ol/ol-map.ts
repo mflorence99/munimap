@@ -143,6 +143,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     );
     // 👉 create view
     this.olView = new OLView({
+      // 🔥 see ol-control-print if you ever change this
       constrainResolution: true /* 👈 to maximize tile caching */,
       extent: this.fitToBounds ? this.boundaryExtent : undefined,
       maxZoom: this.maxZoom,

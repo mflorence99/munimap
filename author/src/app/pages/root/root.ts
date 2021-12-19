@@ -69,7 +69,6 @@ export class RootPage implements OnInit {
     this.actions$
       .pipe(takeUntil(this.destroy$), ofActionSuccessful(CanDo))
       .subscribe((action: CanDo) => {
-        console.log({ action });
         this.canRedo = action.canRedo;
         this.canUndo = action.canUndo;
         this.cdf.markForCheck();

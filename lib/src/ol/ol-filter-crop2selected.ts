@@ -69,7 +69,7 @@ export class OLFilterCrop2SelectedComponent
         inner: false
       });
     }
-    // 🔥 probably a crap way to do it, but this is meant
+    // 👇 probably a crap way to do it, but this is meant
     //    to ensure that everyting is cropped, until a selection is made
     else {
       this.olFilter = new Crop({

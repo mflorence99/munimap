@@ -13,6 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
+import * as Sentry from '@sentry/angular';
+
 import { map } from 'rxjs/operators';
 
 import OLFeature from 'ol/Feature';
@@ -149,14 +151,18 @@ export class OLPopupParcelPropertiesComponent {
         }) as any
       })
     ];
-    navigator.clipboard.write(data).then(
-      () =>
+    navigator.clipboard
+      .write(data)
+      .then(() =>
         console.log(
           '%cParcelProperties and Abutters copied to clipboard',
           'color: skyblue'
-        ),
-      () => console.error('Copy to clipboard failed')
-    );
+        )
+      )
+      .catch(() => {
+        console.error('Copy to clipboard failed');
+        Sentry.captureMessage('Copy to clipboard failed');
+      });
   }
 
   onClose(): void {
