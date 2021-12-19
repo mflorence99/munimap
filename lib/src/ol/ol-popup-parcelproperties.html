@@ -2,7 +2,12 @@
   <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
 </button>
 
-<button (click)="onClipboard()" class="clipboard" mat-icon-button>
+<button
+  *ngIf="canClipboard()"
+  (click)="onClipboard()"
+  class="clipboard"
+  mat-icon-button
+>
   <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
 </button>
 

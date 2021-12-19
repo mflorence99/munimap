@@ -125,7 +125,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   canClipboard(): boolean {
-    return !!navigator.clipboard?.write;
+    return typeof ClipboardItem !== 'undefined';
   }
 
   // 👉 https://developers.google.com/maps/documentation/urls/get-started
@@ -149,14 +149,14 @@ export class OLPopupParcelPropertiesComponent {
         }) as any
       })
     ];
-    navigator.clipboard
-      .write(data)
-      .then(() =>
+    navigator.clipboard.write(data).then(
+      () =>
         console.log(
           '%cParcelProperties and Abutters copied to clipboard',
-          'color: khaki'
-        )
-      );
+          'color: skyblue'
+        ),
+      () => console.error('Copy to clipboard failed')
+    );
   }
 
   onClose(): void {

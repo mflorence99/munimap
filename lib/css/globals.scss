@@ -341,7 +341,7 @@ a[mat-flat-button] {
 // 👉 Color Picker styles
 
 color-picker {
-  // 🔥 now THAT'S a hack -- but the coor-picker is surprisingly
+  // 🔥 now THAT'S a hack -- but the color-picker is surprisingly
   //    hard to style b/c it is yanked out of the DOM
   justify-self: center;
 
@@ -352,6 +352,7 @@ color-picker {
     padding: 0.25rem 0.5rem !important;
   }
 }
+
 // 👉 Firebase styles
 
 .firebase-emulator-warning {
