@@ -1,5 +1,8 @@
+import { Features } from '../geojson';
 import { GeoJSONService } from './geojson';
 import { Index } from '../geojson';
+
+import { emptyFeatures } from '../geojson';
 
 import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';
@@ -21,19 +24,16 @@ import copy from 'fast-copy';
 
 @Injectable()
 export class GeoJSONViewerService extends GeoJSONService {
-  #cache: Record<string, GeoJSON.FeatureCollection> = {};
+  #cache: Record<string, Features> = {};
 
   constructor(private http: HttpClient) {
     super();
   }
 
-  #filter(
-    geojson: GeoJSON.FeatureCollection,
-    extent: Coordinate
-  ): GeoJSON.FeatureCollection {
+  #filter(geojson: Features, extent: Coordinate): Features {
     const [minX, minY, maxX, maxY] = extent;
     if (minX && minY && maxX && maxY) {
-      const filtered = copy(GeoJSONService.empty);
+      const filtered = copy(emptyFeatures);
       filtered.features = geojson.features.filter((feature) => {
         // 👉 some features don't have a bbox, but we prefer
         //    it if present as it is faster
@@ -45,13 +45,11 @@ export class GeoJSONViewerService extends GeoJSONService {
     } else return geojson;
   }
 
-  #load(layerKey: string): Observable<GeoJSON.FeatureCollection> {
-    return this.http
-      .get<GeoJSON.FeatureCollection>(`assets/${layerKey}.geojson`)
-      .pipe(
-        catchError(() => of(GeoJSONService.empty)),
-        tap((geojson) => (this.#cache[layerKey] = geojson))
-      );
+  #load(layerKey: string): Observable<Features> {
+    return this.http.get<Features>(`assets/${layerKey}.geojson`).pipe(
+      catchError(() => of(emptyFeatures)),
+      tap((geojson) => (this.#cache[layerKey] = geojson))
+    );
   }
 
   loadByIndex(
@@ -59,7 +57,7 @@ export class GeoJSONViewerService extends GeoJSONService {
     path: string,
     layerKey: string,
     extent: Coordinate = []
-  ): Observable<GeoJSON.FeatureCollection> {
+  ): Observable<Features> {
     const cached = this.#cache[layerKey];
     return (cached ? of(cached) : this.#load(layerKey)).pipe(
       map((geojson) => this.#filter(geojson, extent))

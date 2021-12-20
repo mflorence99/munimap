@@ -22,6 +22,11 @@ export type Features = GeoJSON.FeatureCollection<
   ParcelProperties
 >;
 
+export const emptyFeatures: Features = {
+  features: [],
+  type: 'FeatureCollection'
+};
+
 export interface LakeProperties {
   county: string;
   name: string;

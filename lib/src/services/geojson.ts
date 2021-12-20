@@ -1,3 +1,4 @@
+import { Features } from '../geojson';
 import { Index } from '../geojson';
 
 import { ActivatedRoute } from '@angular/router';
@@ -5,11 +6,6 @@ import { Coordinate } from 'ol/coordinate';
 import { Observable } from 'rxjs';
 
 export abstract class GeoJSONService {
-  static empty: GeoJSON.FeatureCollection = {
-    features: [],
-    type: 'FeatureCollection'
-  };
-
   findIndex(route: ActivatedRoute): Index {
     let index;
     do {
@@ -24,7 +20,7 @@ export abstract class GeoJSONService {
     path: string,
     layerKey: string,
     extent?: Coordinate
-  ): Observable<GeoJSON.FeatureCollection>;
+  ): Observable<Features>;
 
   abstract loadIndex(): Observable<Index>;
 }

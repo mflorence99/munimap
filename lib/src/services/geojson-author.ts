@@ -1,10 +1,12 @@
 import { CountyIndex } from '../geojson';
+import { Features } from '../geojson';
 import { GeoJSONService } from './geojson';
 import { Index } from '../geojson';
 import { Path } from '../state/view';
 import { StateIndex } from '../geojson';
 import { TownIndex } from '../geojson';
 
+import { emptyFeatures } from '../geojson';
 import { environment } from '../environment';
 
 import { ActivatedRoute } from '@angular/router';
@@ -35,10 +37,7 @@ export class GeoJSONAuthorService extends GeoJSONService {
     return index;
   }
 
-  #load(
-    path: string,
-    extent: Coordinate = []
-  ): Observable<GeoJSON.FeatureCollection> {
+  #load(path: string, extent: Coordinate = []): Observable<Features> {
     let params = '';
     if (extent.length === 4) {
       // 👉 we're going to quantize the extent to 2DPs
@@ -50,10 +49,8 @@ export class GeoJSONAuthorService extends GeoJSONService {
       params = `?minX=${minX}&minY=${minY}&maxX=${maxX}&maxY=${maxY}`;
     }
     return this.http
-      .get<GeoJSON.FeatureCollection>(
-        `${environment.endpoints.proxy}${path}${params}`
-      )
-      .pipe(catchError(() => of(GeoJSONService.empty)));
+      .get<Features>(`${environment.endpoints.proxy}${path}${params}`)
+      .pipe(catchError(() => of(emptyFeatures)));
   }
 
   #loadFromIndex(
@@ -61,11 +58,11 @@ export class GeoJSONAuthorService extends GeoJSONService {
     path: string,
     layerKey: string,
     extent: Coordinate = []
-  ): Observable<GeoJSON.FeatureCollection> {
+  ): Observable<Features> {
     const index = this.#indexFromPath(base, path);
     const layer = index.layers[layerKey];
     const url = layer.url;
-    return layer.available ? this.#load(url, extent) : of(GeoJSONService.empty);
+    return layer.available ? this.#load(url, extent) : of(emptyFeatures);
   }
 
   loadByIndex(
@@ -73,7 +70,7 @@ export class GeoJSONAuthorService extends GeoJSONService {
     path: string,
     layerKey: string,
     extent: Coordinate = []
-  ): Observable<GeoJSON.FeatureCollection> {
+  ): Observable<Features> {
     const base = this.findIndex(route);
     return this.#loadFromIndex(base, path, layerKey, extent);
   }
