@@ -10,6 +10,7 @@ import { Path } from '@lib/state/view';
 import { Router } from '@angular/router';
 import { TownIndex } from '@lib/geojson';
 
+import { environment } from '@lib/environment';
 import { theState } from '@lib/geojson';
 
 import OLFeature from 'ol/Feature';
@@ -21,6 +22,7 @@ import OLFeature from 'ol/Feature';
   templateUrl: './map-create.html'
 })
 export class MapCreatePage {
+  env = environment;
   index: Index;
   path: Path;
 

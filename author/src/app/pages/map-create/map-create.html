@@ -26,38 +26,18 @@
 
     <app-ol-control-scaleline></app-ol-control-scaleline>
 
-    <!-- 📦 OUTSIDE BOUNDARY -->
+    <!-- 📦 BG LAYER -->
 
     <app-ol-layer-tile>
       <app-ol-source-xyz
-        [maxZoom]="19"
-        [url]="'https://tile.openstreetmap.org/{z}/{x}/{y}.png'"
+        [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
         ><app-ol-attribution
           >©
-          <a href="https://www.openstreetmap.org/copyright" target="_blank"
-            >OpenStreetMap</a
-          >
-          contributors</app-ol-attribution
+          <a href="https://mapbox.com" target="_blank"
+            >Mapbox</a
+          ></app-ol-attribution
         ></app-ol-source-xyz
       >
-      <app-ol-filter-pencil></app-ol-filter-pencil>
-    </app-ol-layer-tile>
-
-    <!-- 📦 INSIDE BOUNDARY -->
-
-    <app-ol-layer-tile>
-      <app-ol-source-xyz
-        [maxZoom]="19"
-        [url]="'https://tile.openstreetmap.org/{z}/{x}/{y}.png'"
-        ><app-ol-attribution
-          >©
-          <a href="https://www.openstreetmap.org/copyright" target="_blank"
-            >OpenStreetMap</a
-          >
-          contributors</app-ol-attribution
-        ></app-ol-source-xyz
-      >
-      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-tile>
 
     <!-- 📦 SELECTABLES LAYER -->

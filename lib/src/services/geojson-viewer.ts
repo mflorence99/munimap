@@ -64,7 +64,7 @@ export class GeoJSONViewerService extends GeoJSONService {
     );
   }
 
-  // 👇 we don't need an index for a singular tow, so we create a dummy
+  // 👇 we don't need an index for a singular town, so we create a dummy
 
   loadIndex(): Observable<Index> {
     return of({});

@@ -32,6 +32,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
+import { environment } from '@lib/environment';
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
@@ -50,6 +51,8 @@ export class TownMapPage implements OnInit {
   creating = false;
 
   @ViewChild('drawer') drawer: MatDrawer;
+
+  env = environment;
 
   @ViewChild(OLInteractionRedrawComponent)
   interactionRedraw: OLInteractionRedrawComponent;
