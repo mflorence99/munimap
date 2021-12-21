@@ -1,3 +1,4 @@
+import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
 import { OLControlSearchParcelsComponent } from './ol-control-searchparcels';
@@ -48,7 +49,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   #clickKey: OLEventsKey;
   #path: Path;
 
-  boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
+  boundary: Features;
   boundaryExtent: Coordinate;
 
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
@@ -132,7 +133,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     layers.forEach((layer) => this.olMap.removeLayer(layer));
   }
 
-  #createView(boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>): void {
+  #createView(boundary: Features): void {
     // 👉 precompute boundary extent
     this.boundary = boundary;
     const bbox = boundary.features[0].bbox;
@@ -215,7 +216,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     if (!this.olView) {
       this.geoJSON
         .loadByIndex(this.route, path, 'boundary')
-        .subscribe((boundary: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+        .subscribe((boundary: Features) => {
           this.#createView(boundary);
           this.initialized = true;
           this.#onChange();

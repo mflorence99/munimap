@@ -1,3 +1,4 @@
+import { Features } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 
 import { environment } from '../environment';
@@ -49,17 +50,14 @@ export abstract class OLSourceArcGISComponent {
         )
         .pipe(
           catchError(() => of({ features: [] })),
-          map(
-            (arcgis: any): GeoJSON.FeatureCollection<GeoJSON.Polygon> =>
-              arcgisToGeoJSON(arcgis)
-          ),
-          tap((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+          map((arcgis: any): Features => arcgisToGeoJSON(arcgis)),
+          tap((geojson: Features) => {
             geojson.features.forEach(
               (feature) => (feature.id = this.getFeatureID(feature))
             );
           })
         )
-        .subscribe((geojson: GeoJSON.FeatureCollection<GeoJSON.Polygon>) => {
+        .subscribe((geojson: Features) => {
           // 👉 convert features into OL format
           const features = this.olVector
             .getFormat()
