@@ -37,7 +37,7 @@
         ></app-ol-control-graticule>
 
         <app-ol-control-legend
-          *ngIf="map.name && !olMap.printing"
+          *ngIf="map.name && olMap.printing"
           [county]="map.path.split(':')[1]"
           [printing]="olMap.printing"
           [state]="map.path.split(':')[0]"
