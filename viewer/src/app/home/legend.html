@@ -45,5 +45,41 @@
         <td></td>
       </tr>
     </ng-container>
+
+    <tr>
+      <td colspan="2"></td>
+    </tr>
+
+    <tr>
+      <td class="des" colspan="2">
+        <article class="keys">
+          DES
+
+          <figure class="key">
+            <div
+              [style.backgroundImage]="'url(\'' + floodplain.getImage().toDataURL() +  '\')'"
+              class="icon"
+            ></div>
+            <figcaption>FEMA Floodplain</figcaption>
+          </figure>
+
+          <figure class="key">
+            <div
+              [style.backgroundImage]="'url(\'' + peatland.getImage().toDataURL() +  '\')'"
+              class="icon"
+            ></div>
+            <figcaption>Peatland</figcaption>
+          </figure>
+
+          <figure class="key">
+            <div
+              [style.backgroundImage]="'url(\'' + wetland.getImage().toDataURL() +  '\')'"
+              class="icon"
+            ></div>
+            <figcaption>Wetland</figcaption>
+          </figure>
+        </article>
+      </td>
+    </tr>
   </tbody>
 </table>

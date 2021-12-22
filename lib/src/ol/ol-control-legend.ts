@@ -29,6 +29,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import area from '@turf/area';
 import copy from 'fast-copy';
+import OLFillPattern from 'ol-ext/style/FillPattern';
 
 class Legend extends OLControl {
   constructor(opts: any) {
@@ -65,6 +66,21 @@ export class OLControlLegendComponent implements Mapable, OnInit {
   areaOfTown: number;
 
   @Input() county: string;
+
+  // 👇 sucks we have to re-code these settings but they are approximations
+  //    to the actual styles anyway, in order to contrast
+  //    with a white background
+  iconFloodplain = new OLFillPattern({ color: '#0d47a1', pattern: 'flooded' });
+  iconPeatland = new OLFillPattern({
+    color: '#1b5e20',
+    pattern: 'scrub',
+    scale: 0.66
+  });
+  iconWetland = new OLFillPattern({
+    color: '#004d40',
+    pattern: 'swamp',
+    scale: 0.66
+  });
 
   @ViewChild('legend', { static: true }) legend: ElementRef;
 

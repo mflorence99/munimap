@@ -11,6 +11,28 @@
     text-transform: uppercase;
   }
 
+  .des {
+    .keys {
+      display: grid;
+      font-size: smaller;
+      gap: 0.5rem;
+      grid-template-columns: 2rem 1fr 1fr 1fr;
+
+      .key {
+        align-items: center;
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: auto 1fr;
+        white-space: nowrap;
+
+        .icon {
+          height: 1rem;
+          width: 1rem;
+        }
+      }
+    }
+  }
+
   .desc {
     overflow: hidden;
     position: relative;
