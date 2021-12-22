@@ -175,6 +175,13 @@
       <app-ol-source-parcels></app-ol-source-parcels>
     </app-ol-layer-vector>
 
+    <!-- 📦 BOUNDARY LAYER -->
+
+    <app-ol-layer-vector>
+      <app-ol-style-polygons></app-ol-style-polygons>
+      <app-ol-source-boundary></app-ol-source-boundary>
+    </app-ol-layer-vector>
+
     <!-- 📦 SELECTION LAYER -->
 
     <app-ol-layer-vector>
@@ -200,12 +207,5 @@
     <!-- 📦 OVERLAY FOR GPS -->
 
     <app-ol-overlay-gps *ngIf="gps$ | async"></app-ol-overlay-gps>
-
-    <!-- 📦 BOUNDARY LAYER -->
-
-    <app-ol-layer-vector>
-      <app-ol-style-polygons></app-ol-style-polygons>
-      <app-ol-source-boundary></app-ol-source-boundary>
-    </app-ol-layer-vector>
   </ng-container>
 </app-ol-map>

@@ -181,6 +181,14 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
+        <!-- 📦 BOUNDARY LAYER -->
+
+        <app-ol-layer-vector>
+          <app-ol-style-polygons></app-ol-style-polygons>
+          <app-ol-source-boundary></app-ol-source-boundary>
+          <app-ol-interaction-boundary></app-ol-interaction-boundary>
+        </app-ol-layer-vector>
+
         <!-- 📦 SELECTION LAYER (not printed) -->
 
         <app-ol-layer-vector *ngIf="!olMap.printing">
@@ -203,14 +211,6 @@
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
 
         <app-ol-overlay-label *ngIf="!olMap.printing"></app-ol-overlay-label>
-
-        <!-- 📦 BOUNDARY LAYER -->
-
-        <app-ol-layer-vector>
-          <app-ol-style-polygons></app-ol-style-polygons>
-          <app-ol-source-boundary></app-ol-source-boundary>
-          <app-ol-interaction-boundary></app-ol-interaction-boundary>
-        </app-ol-layer-vector>
       </ng-container>
     </app-ol-map>
   </mat-drawer-content>
