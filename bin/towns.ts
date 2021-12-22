@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
+import { Features } from '../lib/src/geojson';
+
 import { bboxByAspectRatio } from './bbox';
 import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
@@ -8,11 +12,20 @@ import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 
-const towns = JSON.parse(
-  readFileSync(
-    './proxy/assets/New_Hampshire_Political_Boundaries.geojson'
-  ).toString()
+const loadem = (fn): Features => JSON.parse(readFileSync(fn).toString());
+
+const towns = loadem(
+  './proxy/assets/New_Hampshire_Political_Boundaries.geojson'
 );
+
+// 👇 some towns have hand-tweaked boundaries to try to perfectly align
+//    them with the boundaries of the border parcels
+
+const overrides = {
+  SULLIVAN: {
+    WASHINGTON: loadem('./proxy/assets/washington-boundary.geojson')
+  }
+};
 
 const dist = './data';
 
@@ -51,11 +64,15 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
     type: 'FeatureCollection'
   };
 
-  // 👉 one directory, one file per town
+  // 👇 one directory, one file per town
+  //    use the hand-tweaked version here if we have one
+  //    DON'T use it elsewhere so that the town boundaries can jigsaw together
+  //    as the original State data intended them to
+
   mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
   writeFileSync(
     `${dist}/${theState}/${county}/${town}/boundary.geojson`,
-    JSON.stringify(simplify(geojson))
+    JSON.stringify(overrides[county]?.[town] ?? simplify(geojson))
   );
 });
 
