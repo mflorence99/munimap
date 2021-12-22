@@ -79,6 +79,7 @@ import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected'
 import { OLFilterEnhanceComponent } from '@lib/ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from '@lib/ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
+import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
 import { OLInteractionRedrawComponent } from '@lib/ol/ol-interaction-redraw';
 import { OLInteractionSelectComponent } from '@lib/ol/ol-interaction-select';
 import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
@@ -177,6 +178,7 @@ const COMPONENTS = [
   OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
+  OLInteractionBoundaryComponent,
   OLInteractionRedrawComponent,
   OLInteractionSelectComponent,
   OLLayerMapboxComponent,

@@ -43,8 +43,6 @@ export class OLInteractionRedrawComponent implements OnDestroy, OnInit {
   #modifyStartKey: OLEventsKey;
   #touched = false;
 
-  active = false;
-
   olModify: OLModify;
   olSnap: OLSnap;
 
@@ -60,8 +58,6 @@ export class OLInteractionRedrawComponent implements OnDestroy, OnInit {
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
-    // 👉 register this redrawer with the map
-    this.map.redrawer = this;
   }
 
   // 👇 the idea is that a selection change or ESC accepts the redraw
@@ -109,8 +105,8 @@ export class OLInteractionRedrawComponent implements OnDestroy, OnInit {
     if (this.#modifyStartKey) unByKey(this.#modifyStartKey);
     if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
     if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
+    if (this.#feature) this.#feature.set('ol-interaction-redraw', false);
     this.#touched = false;
-    this.active = false;
   }
 
   ngOnDestroy(): void {
@@ -125,8 +121,8 @@ export class OLInteractionRedrawComponent implements OnDestroy, OnInit {
   //    this interaction
 
   setFeature(feature: OLFeature<OLPolygon | OLMultiPolygon>): void {
-    this.active = true;
     this.#feature = feature;
+    this.#feature.set('ol-interaction-redraw', true);
     // 👇 copy the geometry so we can restore it if redraw cancelled
     this.#geometry = copy(feature.getGeometry());
     // 👇 create a standard OL Modify interaction

@@ -2,7 +2,6 @@ import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
 import { OLControlSearchParcelsComponent } from './ol-control-searchparcels';
-import { OLInteractionRedrawComponent } from './ol-interaction-redraw';
 import { OLInteractionSelectComponent } from './ol-interaction-select';
 import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
@@ -84,7 +83,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   printing = false;
   projection = 'EPSG:3857';
 
-  redrawer: OLInteractionRedrawComponent;
   searcher: OLControlSearchParcelsComponent;
   selector: OLInteractionSelectComponent;
 
@@ -120,13 +118,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     interactions.forEach((interaction) => {
       // 🔥 OL adds a bunch of interactions of its own
       //    that we don't want to remove
-      if (
-        [
-          this.selector?.olSelect,
-          this.redrawer?.olModify,
-          this.redrawer?.olSnap
-        ].includes(interaction as any)
-      )
+      if ([this.selector?.olSelect].includes(interaction as any))
         this.olMap.removeInteraction(interaction);
     });
     const layers = [...this.olMap.getLayers().getArray()];

@@ -538,6 +538,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     props: ParcelProperties,
     resolution: number,
     numPolygons: number,
+    whenRedrawn = false,
     whenSelected = false
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
@@ -561,7 +562,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     // 👉 special stroke if selected
     else {
       const borderWidth = this.#borderWidth(resolution);
-      const select = this.map.redrawer?.active
+      const select = whenRedrawn
         ? this.map.vars['--map-parcel-redraw']
         : this.map.vars['--map-parcel-select'];
       // 👉 necessary so we can select
@@ -577,6 +578,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #theStyles(
     feature: OLFeature<any>,
     resolution: number,
+    whenRedrawn = false,
     whenSelected = false
   ): OLStyle[] {
     let numPolygons = 1;
@@ -633,6 +635,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         props,
         resolution,
         numPolygons,
+        whenRedrawn,
         whenSelected
       );
       if (strokes) styles.push(...strokes);
@@ -648,7 +651,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   styleWhenSelected(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      return this.#theStyles(feature, resolution, true);
+      const whenRedrawn = !!feature.get('ol-interaction-redraw');
+      return this.#theStyles(feature, resolution, whenRedrawn, true);
     };
   }
 }

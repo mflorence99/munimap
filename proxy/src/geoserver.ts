@@ -122,7 +122,10 @@ export class GeoServer extends Handler {
 
             return isCached ? cached$ : notCached$;
           }),
-          catchError(() => throwError(() => new Exception({ statusCode: 404 })))
+          catchError((error) => {
+            console.error(error);
+            return throwError(() => new Exception({ statusCode: 404 }));
+          })
         );
       })
     );

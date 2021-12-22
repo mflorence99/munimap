@@ -31,7 +31,7 @@
             <ng-container
               *ngFor="let use of registry.list('parcel', 'use'); trackBy: trackByUsage"
             >
-              <!-- 🔥 TEMPORARY -- WASHINGTON ONLY -->
+              <!-- 🔥 TEMPORARY - WASHINGTON ONLY -->
               <figure
                 *ngIf="['CUFL', 'CUMH', 'CUMW', 'CUUH', 'CUUW', 'CUWL'].includes(use[0])"
                 class="key"
