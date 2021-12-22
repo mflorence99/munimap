@@ -1,7 +1,10 @@
 import { AuthState } from '../state/auth';
 import { DestroyService } from '../services/destroy';
+import { Features } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
+
+import { simplify } from '../geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -12,6 +15,7 @@ import { click } from 'ol/events/condition';
 import { merge } from 'rxjs';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
+import { transformExtent } from 'ol/proj';
 
 import OLCollection from 'ol/Collection';
 import OLFeature from 'ol/Feature';
@@ -49,8 +53,19 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
   }
 
   #emitBoundary(): void {
-    const geojson = JSON.parse(this.#format.writeFeature(this.#boundary));
-    console.log(JSON.stringify(geojson, null, '  '));
+    const geojson: Features = {
+      features: [JSON.parse(this.#format.writeFeature(this.#boundary))],
+      type: 'FeatureCollection'
+    };
+    // 👉 reverse projection of original bbox
+    geojson.features[0].bbox = transformExtent(
+      this.map.boundaryExtent,
+      this.map.projection,
+      this.map.featureProjection
+    ) as any;
+    // 👉 put the adjusted boundary on the clipboard
+    navigator.clipboard.writeText(JSON.stringify(simplify(geojson), null, ' '));
+    console.log('%cAdjusted boundary copied to clipboard', 'color: skyblue');
   }
 
   // 👇 the idea is that a selection change or ESC accepts the redraw
@@ -84,8 +99,15 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
     this.#unsetBoundary();
   }
 
+  // 👇 this makes the interaction work only for me
+
   ngOnInit(): void {
-    this.#handleStreams$();
-    setTimeout(() => this.#setBoundary(), 1000);
+    if (this.authState.currentProfile().email === 'mflo999@gmail.com') {
+      // 🔥 horrible hack but OK as this is just a backdoor
+      setTimeout(() => {
+        this.#handleStreams$();
+        this.#setBoundary();
+      }, 1000);
+    }
   }
 }

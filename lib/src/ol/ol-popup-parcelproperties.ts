@@ -4,6 +4,8 @@ import { ParcelID } from '../geojson';
 import { ParcelProperties } from '../geojson';
 import { TypeRegistry } from '../services/typeregistry';
 
+import * as Sentry from '@sentry/angular';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
@@ -12,8 +14,6 @@ import { Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
-
-import * as Sentry from '@sentry/angular';
 
 import { map } from 'rxjs/operators';
 
