@@ -390,14 +390,12 @@ color-picker {
 //    for degugging
 
 .ol-legend {
-  left: 2rem;
+  left: 20rem;
   position: absolute;
-  top: 2rem;
+  top: 20rem;
 }
 
 .ol-legend-print {
-  left: 20rem;
-  top: 20rem;
   transform: scale(2.5);
   transform-origin: left top;
 }

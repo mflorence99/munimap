@@ -57,12 +57,8 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
       features: [JSON.parse(this.#format.writeFeature(this.#boundary))],
       type: 'FeatureCollection'
     };
-    // 👉 reverse projection of original bbox
-    geojson.features[0].bbox = transformExtent(
-      this.map.boundaryExtent,
-      this.map.projection,
-      this.map.featureProjection
-    ) as any;
+    // 👉 jam original bbox, which was calculated as 4:3
+    geojson.features[0].bbox = this.map.boundary.features[0].bbox;
     // 👉 put the adjusted boundary on the clipboard
     navigator.clipboard.writeText(JSON.stringify(simplify(geojson), null, ' '));
     console.log('%cAdjusted boundary copied to clipboard', 'color: skyblue');

@@ -33,7 +33,7 @@ export class OLControlPrintComponent {
   #zoom: number;
 
   @Input() fileName: string;
-  @Input() zoom = 15.8;
+  @Input() resolution = 2 /* 👈 controls pixel density of print image */;
 
   constructor(private dialog: MatDialog, private map: OLMapComponent) {}
 
@@ -45,10 +45,14 @@ export class OLControlPrintComponent {
         useCORS: true,
         width: this.#px
       }).then((canvas) => {
-        canvas.toBlob((blob) => {
-          saveAs(blob, `${this.fileName}.png`);
-          this.#teardown();
-        });
+        canvas.toBlob(
+          (blob) => {
+            saveAs(blob, `${this.fileName}.jpeg`);
+            this.#teardown();
+          },
+          'image/jpeg',
+          0.95 /* 👈 juggle quality with resolution to get best image */
+        );
       });
     });
     this.#setup();
@@ -60,12 +64,10 @@ export class OLControlPrintComponent {
     // this.#constrainResolution = this.map.olView.getConstrainResolution();
     this.#zoom = this.map.olView.getZoom();
     this.map.olView.setConstrainResolution(false);
-    this.map.olView.setZoom(this.zoom);
     // 👉 calculate extent of full map
     const [minX, minY, maxX, maxY] = this.map.boundary.features[0].bbox;
-    const resolution = this.map.olView.getResolution();
-    this.#px = getDistance([minX, maxY], [maxX, minY]) / resolution;
-    this.#py = getDistance([minX, minY], [minX, maxY]) / resolution;
+    this.#px = getDistance([minX, minY], [maxX, minY]) / this.resolution;
+    this.#py = getDistance([minX, minY], [minX, maxY]) / this.resolution;
     // 👉 the progress dialog allows the print to be cancelled
     const data: PrintProgressData = {
       map: this.map,
@@ -117,7 +119,7 @@ export class OLControlPrintComponent {
   print(): void {
     const data: ConfirmDialogData = {
       content:
-        'The entire map will be exported as a PNG file, suitable for large-format printing. It may take several minutes to produce.',
+        'The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce.',
       title: 'Please confirm map print'
     };
     this.dialog

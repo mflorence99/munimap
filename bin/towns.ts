@@ -45,8 +45,7 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
 
   // 👉 we don't need the properties, but we do need the bbox
   //    for printing, we want the aspect ratio to be 4:3 (or 3:4)
-  //    with mesurements rounded up to the nearest mile
-  feature.bbox = bboxByAspectRatio(feature, 4, 3, 'miles');
+  feature.bbox = bboxByAspectRatio(feature, 4, 3);
   feature.id = town;
   delete feature.properties;
 
@@ -64,15 +63,17 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
     type: 'FeatureCollection'
   };
 
-  // 👇 one directory, one file per town
-  //    use the hand-tweaked version here if we have one
+  // 👇 use the hand-tweaked version here if we have one
   //    DON'T use it elsewhere so that the town boundaries can jigsaw together
   //    as the original State data intended them to
+  const override = overrides[county]?.[town];
+  if (override) override.features[0].bbox = geojson.features[0].bbox;
 
+  // 👇 one directory, one file per town
   mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
   writeFileSync(
     `${dist}/${theState}/${county}/${town}/boundary.geojson`,
-    JSON.stringify(overrides[county]?.[town] ?? simplify(geojson))
+    JSON.stringify(override ?? simplify(geojson))
   );
 });
 

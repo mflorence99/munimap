@@ -1,6 +1,6 @@
 <mat-drawer-container *ngIf="(mapState$ | async) as map" class="container">
   <mat-drawer-content class="content">
-    <app-ol-map #olMap [minZoom]="13" [maxZoom]="22" [path]="map.path">
+    <app-ol-map #olMap [minZoom]="15" [maxZoom]="22" [path]="map.path">
       <app-town-map-setup
         [map]="map"
         class="setup"
@@ -136,23 +136,23 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
+        <!-- <app-ol-layer-vector>
           <app-ol-style-peatland></app-ol-style-peatland>
           <app-ol-source-peatland></app-ol-source-peatland>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+        </app-ol-layer-vector> -->
 
-        <app-ol-layer-vector>
+        <!-- <app-ol-layer-vector>
           <app-ol-style-floodplain></app-ol-style-floodplain>
           <app-ol-source-floodplain></app-ol-source-floodplain>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+        </app-ol-layer-vector> -->
 
-        <app-ol-layer-vector>
+        <!-- <app-ol-layer-vector>
           <app-ol-style-wetland></app-ol-style-wetland>
           <app-ol-source-wetland></app-ol-source-wetland>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+        </app-ol-layer-vector> -->
 
         <app-ol-layer-vector>
           <app-ol-style-buildings></app-ol-style-buildings>
