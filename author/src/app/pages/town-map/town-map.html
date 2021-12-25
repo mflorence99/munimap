@@ -39,6 +39,7 @@
         <app-ol-control-legend
           *ngIf="map.name && olMap.printing"
           [county]="map.path.split(':')[1]"
+          [id]="map.id"
           [printing]="olMap.printing"
           [state]="map.path.split(':')[0]"
           [title]="map.name"
@@ -136,23 +137,23 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <!-- <app-ol-layer-vector>
+        <app-ol-layer-vector>
           <app-ol-style-peatland></app-ol-style-peatland>
           <app-ol-source-peatland></app-ol-source-peatland>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector> -->
+        </app-ol-layer-vector>
 
-        <!-- <app-ol-layer-vector>
+        <app-ol-layer-vector>
           <app-ol-style-floodplain></app-ol-style-floodplain>
           <app-ol-source-floodplain></app-ol-source-floodplain>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector> -->
+        </app-ol-layer-vector>
 
-        <!-- <app-ol-layer-vector>
+        <app-ol-layer-vector>
           <app-ol-style-wetland></app-ol-style-wetland>
           <app-ol-source-wetland></app-ol-source-wetland>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector> -->
+        </app-ol-layer-vector>
 
         <app-ol-layer-vector>
           <app-ol-style-buildings></app-ol-style-buildings>

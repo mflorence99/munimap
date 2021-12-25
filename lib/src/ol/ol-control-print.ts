@@ -7,10 +7,12 @@ import { PrintProgressData } from './ol-control-printprogress';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate as OLCoordinate } from 'ol/coordinate';
+import { ElementRef } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ViewChild } from '@angular/core';
 
 import { getDistance } from 'ol/sphere';
 import { saveAs } from 'file-saver';
@@ -32,20 +34,43 @@ export class OLControlPrintComponent {
   #renderCompleteKey: OLEventsKey;
   #zoom: number;
 
+  @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
+
   @Input() fileName: string;
+
   @Input() resolution = 2 /* 👈 controls pixel density of print image */;
 
   constructor(private dialog: MatDialog, private map: OLMapComponent) {}
+
+  // 👇 we want a nomimal half-inch border around the map to accomodate
+  //    the safe print area -- to preserve the aspect ratio, the border
+  //    is narrower on the long side, wider on the short side -- that
+  //    sounds countr-intuitive until you draw out what it looks like!
+
+  #padding(cx: number, cy: number): [number, number] {
+    const nominal = (cx + cy) / 84; /* 👈 magic number is paper size 36 x 48 */
+    const ar = cx / cy;
+    return ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
+  }
 
   #printImpl(): void {
     // 👉 tripped when print is complete
     this.#renderCompleteKey = this.map.olMap.once('rendercomplete', () => {
       html2canvas(this.map.olMap.getViewport(), {
         height: this.#py,
-        useCORS: true,
         width: this.#px
-      }).then((canvas) => {
-        canvas.toBlob(
+      }).then((viewport) => {
+        // 👉 compute padding and draw it around viewport
+        const padding = this.#padding(this.#px, this.#py);
+        const printout = this.canvas.nativeElement;
+        printout.height = this.#py + padding[1];
+        printout.width = this.#px + padding[0];
+        const ctx = printout.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, printout.width, printout.height);
+        ctx.drawImage(viewport, padding[0] / 2, padding[1] / 2);
+        // 👉 now render printer as image
+        printout.toBlob(
           (blob) => {
             saveAs(blob, `${this.fileName}.jpeg`);
             this.#teardown();

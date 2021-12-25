@@ -109,6 +109,12 @@
   text-align: center;
   white-space: nowrap;
 
+  .link {
+    color: var(--primary-color);
+    font-family: monospace;
+    font-size: 2rem;
+  }
+
   .title {
     font-size: 4rem;
   }
@@ -121,6 +127,6 @@
 .legend {
   color: var(--background-color);
   background-color: rgba(var(--rgb-gray-100), 0.75);
-  padding: 1rem;
+  padding: 2rem;
   width: 44rem;
 }

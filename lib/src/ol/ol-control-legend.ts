@@ -82,6 +82,8 @@ export class OLControlLegendComponent implements Mapable, OnInit {
     scale: 0.66
   });
 
+  @Input() id: string;
+
   @ViewChild('legend', { static: true }) legend: ElementRef;
 
   olControl: OLControl;
