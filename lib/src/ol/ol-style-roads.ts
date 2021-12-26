@@ -22,7 +22,7 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 16;
+  @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
   @Input() minFontSize = 6;
@@ -47,6 +47,10 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
         // 👇 false b/c road segments can be very short
         overflow: false,
         placement: 'line',
+        stroke: new OLStroke({
+          color: `rgba(255, 255, 255, 1)`,
+          width: 3
+        }),
         text: props.class === 'VI' ? `${props.name} (Class VI)` : props.name
       });
     }
