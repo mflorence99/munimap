@@ -64,9 +64,9 @@ export const environment = {
   version: {
     allowReloadPostponement: isDev,
     autoReload: !isDev,
-    checkVersionAfter: 60 * 1000 /* 👈 one minute */,
+    checkVersionAfter: 30 * 1000 /* 👈 30 seconds */,
     checkVersionInterval: isDev
-      ? 60 * 1000 /* 👈 one minute */
-      : 60 * 60 * 1000 /* 👈 one hour */
+      ? 30 * 1000 /* 👈 30 seconds */
+      : 60 * 60 * 1000 /* 👈 1 hour */
   }
 };

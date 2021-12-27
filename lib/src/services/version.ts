@@ -15,12 +15,13 @@ import { UnrecoverableStateEvent } from '@angular/service-worker';
 import { VersionDetectedEvent } from '@angular/service-worker';
 
 import { catchError } from 'rxjs/operators';
-import { concat } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { first } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { timer } from 'rxjs';
 
 interface Build {
@@ -65,7 +66,7 @@ export class VersionService {
           (event as VersionDetectedEvent).version.hash
         );
         if (environment.version.autoReload)
-          this.swUpdate.activateUpdate().then(() => location.reload());
+          this.swUpdate.activateUpdate().then(() => this.hardReset());
         else this.#newVersionDetected();
       });
   }
@@ -78,7 +79,7 @@ export class VersionService {
         if (result) {
           // 👇 use says ACTIVATE
           if (this.#serviceWorkerCanNotify)
-            this.swUpdate.activateUpdate().then(() => location.reload());
+            this.swUpdate.activateUpdate().then(() => this.hardReset());
           else this.hardReset();
         } else if (!this.#serviceWorkerEnabled) {
           // 👇 once the user says LATER we won't check again in legacy
@@ -136,17 +137,23 @@ export class VersionService {
   }
 
   #pollVersionServiceWorker(): void {
-    const appIsStable$ = this.appRef.isStable.pipe(
-      first((isStable) => isStable)
-    );
-    const periodically$ = timer(
-      environment.version.checkVersionAfter,
-      environment.version.checkVersionInterval
-    );
-    concat(appIsStable$, periodically$).subscribe((): any => {
-      console.log('%cPolling for new PWA version...', 'color: moccasin');
-      this.swUpdate.checkForUpdate().then();
-    });
+    this.appRef.isStable
+      .pipe(
+        // 🔥 looks like firebase is preventing the app from
+        //    becoming stable but not totally sure
+        // first((isStable) => isStable),
+        tap(() => console.log('%cPWA is stable', 'color: thistle')),
+        switchMap(() =>
+          timer(
+            environment.version.checkVersionAfter,
+            environment.version.checkVersionInterval
+          )
+        )
+      )
+      .subscribe((): any => {
+        console.log('%cPolling for new PWA version...', 'color: moccasin');
+        this.swUpdate.checkForUpdate().then();
+      });
   }
 
   hardReset(): void {
