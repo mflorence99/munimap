@@ -16,7 +16,7 @@
       display: grid;
       font-size: smaller;
       gap: 0.5rem;
-      grid-template-columns: 2rem 1fr 1fr 1fr;
+      grid-template-columns: 2rem auto auto auto;
 
       .key {
         align-items: center;
