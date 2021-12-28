@@ -30,23 +30,11 @@
   </mat-toolbar>
 
   <mat-drawer-container class="container">
-    <mat-drawer
-      #legend
-      (swipe)="legend.close()"
-      class="sidebar"
-      mode="over"
-      position="start"
-    >
+    <mat-drawer #legend class="sidebar" mode="over" position="start">
       <app-legend></app-legend>
     </mat-drawer>
 
-    <mat-drawer
-      #setup
-      (swipe)="setup.close()"
-      class="sidebar"
-      mode="over"
-      position="end"
-    >
+    <mat-drawer #setup class="sidebar" mode="over" position="end">
       <app-setup></app-setup>
     </mat-drawer>
 

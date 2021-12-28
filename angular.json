@@ -57,7 +57,6 @@
             "optimization": false,
             "outputPath": "dist/author",
             "polyfills": "author/src/polyfills.ts",
-            "scripts": ["node_modules/hammerjs/hammer.min.js"],
             "serviceWorker": true,
             "sourceMap": true,
             "styles": [
@@ -146,7 +145,6 @@
             "optimization": false,
             "outputPath": "dist/viewer",
             "polyfills": "viewer/src/polyfills.ts",
-            "scripts": ["node_modules/hammerjs/hammer.min.js"],
             "serviceWorker": true,
             "sourceMap": true,
             "styles": [

@@ -37,9 +37,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { GeoJSONAuthorService } from '@lib/services/geojson-author';
 import { GeoJSONService } from '@lib/services/geojson';
-import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { HammerConfig } from '@lib/services/hammer';
-import { HammerModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
@@ -286,7 +283,6 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
     FirebaseUIModule.forRoot(environment.auth),
     FontAwesomeModule,
     FormsModule,
-    HammerModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
@@ -342,10 +338,6 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
       })
     },
     { provide: GeoJSONService, useClass: GeoJSONAuthorService },
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: HammerConfig
-    },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {
       provide: USE_AUTH_EMULATOR,
