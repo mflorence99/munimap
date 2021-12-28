@@ -31,6 +31,7 @@
               "vendorChunk": false
             }
           },
+          "defaultConfiguration": "",
           "options": {
             "allowedCommonJsDependencies": [
               "debounce-decorator",
@@ -47,10 +48,18 @@
               },
               "author/manifest.webmanifest"
             ],
+            "buildOptimizer": false,
+            "extractLicenses": false,
             "index": "author/src/index.html",
             "main": "author/src/main.ts",
+            "namedChunks": true,
+            "ngswConfigPath": "./ngsw-config.json",
+            "optimization": false,
             "outputPath": "dist/author",
             "polyfills": "author/src/polyfills.ts",
+            "scripts": ["node_modules/hammerjs/hammer.min.js"],
+            "serviceWorker": true,
+            "sourceMap": true,
             "styles": [
               "lib/css/globals.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -59,16 +68,8 @@
             ],
             "tsConfig": "author/src/tsconfig.json",
             "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true,
-            "webWorkerTsConfig": "worker/src/tsconfig.json",
-            "serviceWorker": true,
-            "ngswConfigPath": "./ngsw-config.json"
-          },
-          "defaultConfiguration": ""
+            "webWorkerTsConfig": "worker/src/tsconfig.json"
+          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -119,6 +120,7 @@
               "vendorChunk": false
             }
           },
+          "defaultConfiguration": "",
           "options": {
             "allowedCommonJsDependencies": [
               "debounce-decorator",
@@ -135,10 +137,18 @@
               },
               "viewer/manifest.webmanifest"
             ],
+            "buildOptimizer": false,
+            "extractLicenses": false,
             "index": "viewer/src/index.html",
             "main": "viewer/src/main.ts",
+            "namedChunks": true,
+            "ngswConfigPath": "./ngsw-config.json",
+            "optimization": false,
             "outputPath": "dist/viewer",
             "polyfills": "viewer/src/polyfills.ts",
+            "scripts": ["node_modules/hammerjs/hammer.min.js"],
+            "serviceWorker": true,
+            "sourceMap": true,
             "styles": [
               "lib/css/globals.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -147,16 +157,8 @@
             ],
             "tsConfig": "viewer/src/tsconfig.json",
             "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true,
-            "webWorkerTsConfig": "worker/src/tsconfig.json",
-            "serviceWorker": true,
-            "ngswConfigPath": "./ngsw-config.json"
-          },
-          "defaultConfiguration": ""
+            "webWorkerTsConfig": "worker/src/tsconfig.json"
+          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",

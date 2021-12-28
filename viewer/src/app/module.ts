@@ -24,6 +24,9 @@ import { GeoJSONService } from '@lib/services/geojson';
 import { GeoJSONViewerService } from '@lib/services/geojson-viewer';
 import { GeolocationService } from '@lib/services/geolocation';
 import { GeosimulatorService } from '@lib/services/geosimulator';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { HammerConfig } from '@lib/services/hammer';
+import { HammerModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
@@ -202,6 +205,7 @@ const STATES_SAVED = [OverlayState, ViewState];
     CommonModule,
     FontAwesomeModule,
     FormsModule,
+    HammerModule,
     HttpClientModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -249,6 +253,10 @@ const STATES_SAVED = [OverlayState, ViewState];
       useClass: environment.production
         ? GeolocationService
         : GeosimulatorService
+    },
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: HammerConfig
     },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {
