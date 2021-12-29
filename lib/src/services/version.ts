@@ -181,7 +181,6 @@ export class VersionService {
       })
       .finally(() => {
         console.log('%cHard reset', 'color: plum');
-        Sentry.captureMessage('Hard reset');
         location.reload();
       });
   }
