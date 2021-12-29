@@ -157,7 +157,7 @@
     "@types/url-parse": "^1",
     "@types/uuid": "^8",
     "@types/yargs": "^17",
-    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/eslint-plugin": "5.3.1",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
     "eslint-config-mflorence99": "^1",

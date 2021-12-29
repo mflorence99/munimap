@@ -7,7 +7,7 @@ import { MergeParcelsComponent } from './contextmenu/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
 import { ParcelIDValidator } from './contextmenu/parcelid-validator';
 import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
-import { RootPage } from './pages/root/root';
+import { RootPage } from './pages/root/page';
 import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
 import { SubdivisionIDValidator } from './contextmenu/subdivisionid-validator';
 import { TownMapPage } from './pages/town-map/town-map';

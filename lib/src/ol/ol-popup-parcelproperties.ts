@@ -3,6 +3,7 @@ import { OLMapComponent } from './ol-map';
 import { ParcelID } from '../geojson';
 import { ParcelProperties } from '../geojson';
 import { TypeRegistry } from '../services/typeregistry';
+import { UtilsService } from '../services/utils';
 
 import * as Sentry from '@sentry/angular';
 
@@ -58,7 +59,8 @@ export class OLPopupParcelPropertiesComponent {
     private cdf: ChangeDetectorRef,
     private map: OLMapComponent,
     public registry: TypeRegistry,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private utils: UtilsService
   ) {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleAbuttersFound$();
@@ -126,8 +128,9 @@ export class OLPopupParcelPropertiesComponent {
       });
   }
 
+  // 🔥 copy to clipboard does not seems to work under iOS
   canClipboard(): boolean {
-    return typeof ClipboardItem !== 'undefined';
+    return typeof ClipboardItem !== 'undefined' && !this.utils.iOS();
   }
 
   // 👉 https://developers.google.com/maps/documentation/urls/get-started

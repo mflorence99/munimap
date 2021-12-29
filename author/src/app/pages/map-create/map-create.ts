@@ -1,4 +1,4 @@
-import { RootPage } from '../root/root';
+import { RootPage } from '../root/page';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';

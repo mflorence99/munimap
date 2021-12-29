@@ -3,7 +3,7 @@ import { ContextMenuComponent } from '../../contextmenu/contextmenu-component';
 import { ContextMenuHostDirective } from '../../contextmenu/contextmenu-host';
 import { MergeParcelsComponent } from '../../contextmenu/merge-parcels';
 import { ParcelPropertiesComponent } from '../../contextmenu/parcel-properties';
-import { RootPage } from '../root/root';
+import { RootPage } from '../root/page';
 import { SubdivideParcelComponent } from '../../contextmenu/subdivide-parcel';
 
 import { Actions } from '@ngxs/store';

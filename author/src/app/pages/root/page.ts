@@ -39,8 +39,8 @@ import { useAnimation } from '@angular/animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-root',
-  styleUrls: ['./root.scss'],
-  templateUrl: './root.html'
+  styleUrls: ['./page.scss'],
+  templateUrl: './page.html'
 })
 export class RootPage implements OnInit {
   canRedo = false;

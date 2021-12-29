@@ -1,4 +1,4 @@
-import { RootPage } from '../../pages/root/root';
+import { RootPage } from '../../pages/root/page';
 import { TownMapPage } from './town-map';
 
 import { Actions } from '@ngxs/store';
