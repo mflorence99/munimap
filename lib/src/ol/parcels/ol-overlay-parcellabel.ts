@@ -1,9 +1,9 @@
-import { AddParcels } from '../state/parcels';
-import { AuthState } from '../state/auth';
-import { DestroyService } from '../services/destroy';
-import { OLMapComponent } from './ol-map';
-import { Parcel } from '../geojson';
-import { ParcelID } from '../geojson';
+import { AddParcels } from '../../state/parcels';
+import { AuthState } from '../../state/auth';
+import { DestroyService } from '../../services/destroy';
+import { OLMapComponent } from '../ol-map';
+import { Parcel } from '../../geojson';
+import { ParcelID } from '../../geojson';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -27,11 +27,11 @@ import OLOverlay from 'ol/Overlay';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-overlay-label',
-  templateUrl: './ol-overlay-label.html',
-  styleUrls: ['./ol-overlay-label.scss']
+  selector: 'app-ol-overlay-parcellabel',
+  templateUrl: './ol-overlay-parcellabel.html',
+  styleUrls: ['./ol-overlay-parcellabel.scss']
 })
-export class OLOverlayLabelComponent implements OnInit {
+export class OLOverlayParcelLabelComponent implements OnInit {
   #centers: number[][];
   #contextMenuAt: number[];
   #hack: number;

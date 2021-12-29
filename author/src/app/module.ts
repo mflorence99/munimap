@@ -63,12 +63,12 @@ import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
-import { OLControlLegendComponent } from '@lib/ol/ol-control-legend';
 import { OLControlMousePositionComponent } from '@lib/ol/ol-control-mouseposition';
+import { OLControlParcelsLegendComponent } from '@lib/ol/parcels/ol-control-parcelslegend';
 import { OLControlPrintComponent } from '@lib/ol/ol-control-print';
 import { OLControlPrintProgressComponent } from '@lib/ol/ol-control-printprogress';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
-import { OLControlSearchParcelsComponent } from '@lib/ol/ol-control-searchparcels';
+import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
@@ -77,14 +77,15 @@ import { OLFilterEnhanceComponent } from '@lib/ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from '@lib/ol/ol-filter-grayscale';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
 import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
-import { OLInteractionRedrawComponent } from '@lib/ol/ol-interaction-redraw';
-import { OLInteractionSelectComponent } from '@lib/ol/ol-interaction-select';
+import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
+import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
+import { OLInteractionSelectPolygonComponent } from '@lib/ol/ol-interaction-selectpolygon';
 import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLLayerVectorTileComponent } from '@lib/ol/ol-layer-vectortile';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { OLOverlayLabelComponent } from '@lib/ol/ol-overlay-label';
+import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
@@ -165,8 +166,8 @@ const COMPONENTS = [
   OLControlAttributionComponent,
   OLControlCreditsComponent,
   OLControlGraticuleComponent,
-  OLControlLegendComponent,
   OLControlMousePositionComponent,
+  OLControlParcelsLegendComponent,
   OLControlPrintComponent,
   OLControlPrintProgressComponent,
   OLControlScaleLineComponent,
@@ -179,14 +180,15 @@ const COMPONENTS = [
   OLFilterGrayscaleComponent,
   OLFilterPencilComponent,
   OLInteractionBoundaryComponent,
-  OLInteractionRedrawComponent,
-  OLInteractionSelectComponent,
+  OLInteractionRedrawParcelComponent,
+  OLInteractionSelectParcelsComponent,
+  OLInteractionSelectPolygonComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLLayerVectorTileComponent,
   OLMapComponent,
-  OLOverlayLabelComponent,
+  OLOverlayParcelLabelComponent,
   OLSourceBoundaryComponent,
   OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,

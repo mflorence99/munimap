@@ -1,14 +1,14 @@
-import { Descriptor } from '../services/typeregistry';
-import { DestroyService } from '../services/destroy';
-import { Features } from '../geojson';
-import { GeoJSONService } from '../services/geojson';
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
-import { OLMapComponent } from './ol-map';
-import { Parcel } from '../geojson';
-import { ParcelID } from '../geojson';
-import { ParcelsState } from '../state/parcels';
-import { TypeRegistry } from '../services/typeregistry';
+import { Descriptor } from '../../services/typeregistry';
+import { DestroyService } from '../../services/destroy';
+import { Features } from '../../geojson';
+import { GeoJSONService } from '../../services/geojson';
+import { Mapable } from '../ol-mapable';
+import { MapableComponent } from '../ol-mapable';
+import { OLMapComponent } from '../ol-map';
+import { Parcel } from '../../geojson';
+import { ParcelID } from '../../geojson';
+import { ParcelsState } from '../../state/parcels';
+import { TypeRegistry } from '../../services/typeregistry';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -48,15 +48,15 @@ interface Override {
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlLegendComponent)
+      useExisting: forwardRef(() => OLControlParcelsLegendComponent)
     },
     DestroyService
   ],
-  selector: 'app-ol-control-legend',
-  templateUrl: './ol-control-legend.html',
-  styleUrls: ['./ol-control-legend.scss']
+  selector: 'app-ol-control-parcelslegend',
+  templateUrl: './ol-control-parcelslegend.html',
+  styleUrls: ['./ol-control-parcelslegend.scss']
 })
-export class OLControlLegendComponent implements Mapable, OnInit {
+export class OLControlParcelsLegendComponent implements Mapable, OnInit {
   #boundary$ = new Subject<Features>();
   #geojson$ = new Subject<Features>();
 

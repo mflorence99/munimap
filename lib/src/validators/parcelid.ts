@@ -2,7 +2,7 @@ import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Input } from '@angular/core';
 import { NG_VALIDATORS } from '@angular/forms';
-import { OLControlSearchParcelsComponent } from '@lib/ol/ol-control-searchparcels';
+import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OnInit } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Validator } from '@angular/forms';

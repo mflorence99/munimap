@@ -49,19 +49,19 @@ import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
 import { OLControlPlusMinusComponent } from '@lib/ol/ol-control-plusminus';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
-import { OLControlSearchParcelsComponent } from '@lib/ol/ol-control-searchparcels';
+import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
-import { OLInteractionSelectComponent } from '@lib/ol/ol-interaction-select';
+import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLLayerVectorTileComponent } from '@lib/ol/ol-layer-vectortile';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
-import { OLPopupParcelPropertiesComponent } from '@lib/ol/ol-popup-parcelproperties';
+import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parcelproperties';
 import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
@@ -129,7 +129,7 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2SelectedComponent,
   OLFilterPencilComponent,
-  OLInteractionSelectComponent,
+  OLInteractionSelectParcelsComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,

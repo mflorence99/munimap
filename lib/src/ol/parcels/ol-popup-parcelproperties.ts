@@ -1,9 +1,9 @@
-import { Feature } from '../geojson';
-import { OLMapComponent } from './ol-map';
-import { ParcelID } from '../geojson';
-import { ParcelProperties } from '../geojson';
-import { TypeRegistry } from '../services/typeregistry';
-import { UtilsService } from '../services/utils';
+import { Feature } from '../../geojson';
+import { OLMapComponent } from '../ol-map';
+import { ParcelID } from '../../geojson';
+import { ParcelProperties } from '../../geojson';
+import { TypeRegistry } from '../../services/typeregistry';
+import { UtilsService } from '../../services/utils';
 
 import * as Sentry from '@sentry/angular';
 

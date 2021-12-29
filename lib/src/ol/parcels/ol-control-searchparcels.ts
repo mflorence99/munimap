@@ -1,11 +1,11 @@
-import { DestroyService } from '../services/destroy';
-import { Feature } from '../geojson';
-import { Features } from '../geojson';
-import { GeoJSONService } from '../services/geojson';
-import { OLMapComponent } from './ol-map';
-import { Parcel } from '../geojson';
-import { ParcelID } from '../geojson';
-import { ParcelsState } from '../state/parcels';
+import { DestroyService } from '../../services/destroy';
+import { Feature } from '../../geojson';
+import { Features } from '../../geojson';
+import { GeoJSONService } from '../../services/geojson';
+import { OLMapComponent } from '../ol-map';
+import { Parcel } from '../../geojson';
+import { ParcelID } from '../../geojson';
+import { ParcelsState } from '../../state/parcels';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';

@@ -36,14 +36,14 @@
           ><app-ol-style-graticule></app-ol-style-graticule
         ></app-ol-control-graticule>
 
-        <app-ol-control-legend
+        <app-ol-control-parcelslegend
           *ngIf="map.name && olMap.printing"
           [county]="map.path.split(':')[1]"
           [id]="map.id"
           [printing]="olMap.printing"
           [state]="map.path.split(':')[0]"
           [title]="map.name"
-        ></app-ol-control-legend>
+        ></app-ol-control-parcelslegend>
 
         <app-ol-control-scaleline
           *ngIf="olMap.printing"
@@ -199,19 +199,21 @@
             [showSelection]="true"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
-          <app-ol-interaction-select [eventType]="'click'" [multi]="true">
+          <app-ol-interaction-selectparcels [eventType]="'click'">
             <mat-menu #theContextMenu mapContextMenu>
               <ng-template matMenuContent>
                 <ng-template [ngTemplateOutlet]="contextmenu"></ng-template>
               </ng-template>
             </mat-menu>
-          </app-ol-interaction-select>
-          <app-ol-interaction-redraw></app-ol-interaction-redraw>
+          </app-ol-interaction-selectparcels>
+          <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
         </app-ol-layer-vector>
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
 
-        <app-ol-overlay-label *ngIf="!olMap.printing"></app-ol-overlay-label>
+        <app-ol-overlay-parcellabel
+          *ngIf="!olMap.printing"
+        ></app-ol-overlay-parcellabel>
       </ng-container>
     </app-ol-map>
   </mat-drawer-content>

@@ -1,10 +1,10 @@
-import { DestroyService } from '../services/destroy';
-import { Feature } from '../geojson';
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
-import { ParcelID } from '../geojson';
+import { DestroyService } from '../../services/destroy';
+import { Feature } from '../../geojson';
+import { Mapable } from '../ol-mapable';
+import { MapableComponent } from '../ol-mapable';
+import { OLLayerVectorComponent } from '../ol-layer-vector';
+import { OLMapComponent } from '../ol-map';
+import { ParcelID } from '../../geojson';
 
 import * as Comlink from 'comlink';
 
@@ -35,22 +35,20 @@ import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLSelect from 'ol/interaction/Select';
 
-export type FilterFunction = (feature: OLFeature<any>) => boolean;
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectComponent)
+      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
     },
     DestroyService
   ],
-  selector: 'app-ol-interaction-select',
-  templateUrl: './ol-interaction-select.html',
-  styleUrls: ['./ol-interaction-select.scss']
+  selector: 'app-ol-interaction-selectparcels',
+  templateUrl: './ol-interaction-selectparcels.html',
+  styleUrls: ['./ol-interaction-selectparcels.scss']
 })
-export class OLInteractionSelectComponent
+export class OLInteractionSelectParcelsComponent
   implements AfterContentInit, Mapable, OnDestroy, OnInit
 {
   #abuttersWorker: any /* 👈 TypeScript no help here */;
@@ -73,16 +71,12 @@ export class OLInteractionSelectComponent
 
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
-  @Input() filter: FilterFunction;
-
   @Input() findAbutters = false;
 
   menuPosition = {
     x: 0,
     y: 0
   };
-
-  @Input() multi = false;
 
   olSelect: OLSelect;
 
@@ -106,8 +100,8 @@ export class OLInteractionSelectComponent
     this.olSelect = new OLSelect({
       condition: (event): boolean =>
         event.type === this.eventType.toLowerCase(),
-      filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
+      multi: true,
       style: this.layer.style?.styleWhenSelected()
     });
     // 👉 one to rule them all
@@ -121,13 +115,9 @@ export class OLInteractionSelectComponent
 
   #createAbuttersWorker(): void {
     const proxy: any = Comlink.wrap(
-      new Worker(new URL('../../../worker/src/abutters', import.meta.url))
+      new Worker(new URL('../../../../worker/src/abutters', import.meta.url))
     );
     new proxy().then((instance) => (this.#abuttersWorker = instance));
-  }
-
-  #filter(feature: OLFeature<any>): boolean {
-    return this.filter ? this.filter(feature) : true;
   }
 
   #findAbutters(): void {

@@ -21,9 +21,9 @@ import { Map } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
-import { OLInteractionRedrawComponent } from '@lib/ol/ol-interaction-redraw';
+import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { OLOverlayLabelComponent } from '@lib/ol/ol-overlay-label';
+import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
@@ -54,14 +54,15 @@ export class ParcelsPage implements OnInit {
 
   env = environment;
 
-  @ViewChild(OLInteractionRedrawComponent)
-  interactionRedraw: OLInteractionRedrawComponent;
+  @ViewChild(OLInteractionRedrawParcelComponent)
+  interactionRedraw: OLInteractionRedrawParcelComponent;
 
   @Select(MapState) mapState$: Observable<Map>;
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
 
-  @ViewChild(OLOverlayLabelComponent) overlayLabel: OLOverlayLabelComponent;
+  @ViewChild(OLOverlayParcelLabelComponent)
+  overlayLabel: OLOverlayParcelLabelComponent;
 
   constructor(
     private actions$: Actions,

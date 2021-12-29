@@ -1,8 +1,8 @@
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
-import { OLControlSearchParcelsComponent } from './ol-control-searchparcels';
-import { OLInteractionSelectComponent } from './ol-interaction-select';
+import { OLControlSearchParcelsComponent } from './parcels/ol-control-searchparcels';
+import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
 import { Path } from '../state/view';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
@@ -84,7 +84,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   projection = 'EPSG:3857';
 
   searcher: OLControlSearchParcelsComponent;
-  selector: OLInteractionSelectComponent;
+  selector: OLInteractionSelectParcelsComponent;
 
   vars: Record<string, string> = {};
 

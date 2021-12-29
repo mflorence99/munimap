@@ -46,6 +46,7 @@ export class PropertiesComponent implements OnInit {
     this.#map = copy(map);
     // 👉 set the window title every time it changes
     if (map.name) this.root.setTitle(map.name);
+    this.rolledup = !!map.id;
   }
 
   rolledup: boolean;

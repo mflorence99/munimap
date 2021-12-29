@@ -1,11 +1,11 @@
-import { AddParcels } from '../state/parcels';
-import { AuthState } from '../state/auth';
-import { ConfirmDialogComponent } from '../components/confirm-dialog';
-import { ConfirmDialogData } from '../components/confirm-dialog';
-import { DestroyService } from '../services/destroy';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
-import { Parcel } from '../geojson';
+import { AddParcels } from '../../state/parcels';
+import { AuthState } from '../../state/auth';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog';
+import { ConfirmDialogData } from '../../components/confirm-dialog';
+import { DestroyService } from '../../services/destroy';
+import { OLLayerVectorComponent } from '../ol-layer-vector';
+import { OLMapComponent } from '../ol-map';
+import { Parcel } from '../../geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -32,11 +32,11 @@ import OLSnap from 'ol/interaction/Snap';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-interaction-redraw',
+  selector: 'app-ol-interaction-redrawparcel',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionRedrawComponent implements OnDestroy, OnInit {
+export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
   #feature: OLFeature<OLPolygon | OLMultiPolygon>;
   #format: OLGeoJSON;
   #geometry: OLPolygon | OLMultiPolygon;
