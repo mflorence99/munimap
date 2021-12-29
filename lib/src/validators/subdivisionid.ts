@@ -1,5 +1,5 @@
+import { AbstractControl } from '@angular/forms';
 import { Directive } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Input } from '@angular/core';
 import { NG_VALIDATORS } from '@angular/forms';
 import { OnInit } from '@angular/core';
@@ -16,7 +16,7 @@ function subdivisionIDValidatorFactory(
   subdivisions: Subdivision[],
   ix: number
 ): ValidatorFn {
-  return (control: FormControl): ValidationErrors => {
+  return (control: AbstractControl): ValidationErrors => {
     const value = control.value;
 
     // 👉 quick exit if no value
@@ -56,7 +56,7 @@ export class SubdivisionIDValidator implements OnInit, Validator {
     );
   }
 
-  validate(control: FormControl): ValidationErrors {
+  validate(control: AbstractControl): ValidationErrors {
     return this.validator(control);
   }
 }

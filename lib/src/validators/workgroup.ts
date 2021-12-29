@@ -1,12 +1,12 @@
+import { AbstractControl } from '@angular/forms';
 import { Directive } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { NG_VALIDATORS } from '@angular/forms';
 import { ValidationErrors } from '@angular/forms';
 import { Validator } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
 
 function workgroupValidatorFactory(): ValidatorFn {
-  return (control: FormControl): ValidationErrors => {
+  return (control: AbstractControl): ValidationErrors => {
     const value = control.value;
 
     // 👉 quick exit if no value
@@ -48,7 +48,7 @@ function workgroupValidatorFactory(): ValidatorFn {
 export class WorkgroupValidator implements Validator {
   validator: ValidatorFn = workgroupValidatorFactory();
 
-  validate(control: FormControl): ValidationErrors {
+  validate(control: AbstractControl): ValidationErrors {
     return this.validator(control);
   }
 }
