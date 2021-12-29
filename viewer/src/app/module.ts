@@ -1,7 +1,7 @@
-import { LegendComponent } from './home/legend';
-import { RootPage } from './home/root';
-import { SetupComponent } from './home/setup';
-import { TownMapPage } from './home/town-map';
+import { ParcelsLegendComponent } from './pages/parcels/legend';
+import { ParcelsOverlayComponent } from './pages/parcels/overlay';
+import { ParcelsPage } from './pages/parcels/page';
+import { RootPage } from './pages/root/page';
 
 import * as Sentry from '@sentry/angular';
 
@@ -118,7 +118,6 @@ import { initializeAppProvider } from '@lib/services/initializer';
 
 const COMPONENTS = [
   ConfirmDialogComponent,
-  LegendComponent,
   MessageDialogComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
@@ -164,22 +163,38 @@ const COMPONENTS = [
   OLStyleStoneWallsComponent,
   OLStyleTrailsComponent,
   OLStyleWetlandComponent,
-  SetupComponent,
+  ParcelsLegendComponent,
+  ParcelsOverlayComponent,
   VersionDialogComponent
 ];
 
 const DIRECTIVES = [];
 
-const PAGES = [RootPage, TownMapPage];
+const PAGES = [ParcelsPage, RootPage];
 
 const ROUTES = [
   {
-    path: 'town-map',
-    component: TownMapPage,
+    path: '',
     resolve: {
       index: IndexResolver,
       ready: ReadyResolver
-    }
+    },
+    children: [
+      {
+        path: 'parcels',
+        component: ParcelsPage
+      },
+      {
+        path: 'parcels-legend',
+        component: ParcelsLegendComponent,
+        outlet: 'leftSidebar'
+      },
+      {
+        path: 'parcels-overlay',
+        component: ParcelsOverlayComponent,
+        outlet: 'rightSidebar'
+      }
+    ]
   }
 ];
 

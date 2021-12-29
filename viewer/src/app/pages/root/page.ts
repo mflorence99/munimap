@@ -31,8 +31,8 @@ import urlParse from 'url-parse';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-root',
-  styleUrls: ['./root.scss'],
-  templateUrl: './root.html'
+  styleUrls: ['./page.scss'],
+  templateUrl: './page.html'
 })
 export class RootPage implements OnInit {
   #url: any;
@@ -81,7 +81,10 @@ export class RootPage implements OnInit {
           // 👉 we don't have to wait until the profile is loaded,
           //    because guards prevent
           //    the page from loading until everything is set
-          this.router.navigate(['/town-map'], { queryParams: { id: map.id } });
+          this.router.navigateByUrl(
+            `/parcels(leftSidebar:parcels-legend//rightSidebar:parcels-overlay)?id=${map.id}`,
+            { skipLocationChange: true }
+          );
         }
       });
   }

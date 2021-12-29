@@ -20,11 +20,11 @@ import copy from 'fast-copy';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-setup',
-  styleUrls: ['./setup.scss', '../../../../lib/css/sidebar.scss'],
-  templateUrl: './setup.html'
+  selector: 'app-parcels-overlay',
+  styleUrls: ['./overlay.scss', '../../../../../lib/css/sidebar.scss'],
+  templateUrl: './overlay.html'
 })
-export class SetupComponent implements OnInit {
+export class ParcelsOverlayComponent implements OnInit {
   #selectedProperty: [OverlayProperty, string];
 
   @Select(OverlayState) overlay$: Observable<OverlayProperty[]>;

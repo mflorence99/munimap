@@ -8,11 +8,11 @@ import OLFillPattern from 'ol-ext/style/FillPattern';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-legend',
-  styleUrls: ['./legend.scss', '../../../../lib/css/sidebar.scss'],
+  selector: 'app-parcels-legend',
+  styleUrls: ['./legend.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './legend.html'
 })
-export class LegendComponent {
+export class ParcelsLegendComponent {
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast
   //    with a black background

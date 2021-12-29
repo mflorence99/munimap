@@ -10,11 +10,11 @@ import { environment } from '@lib/environment';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-town-map',
-  styleUrls: ['./town-map.scss'],
-  templateUrl: './town-map.html'
+  selector: 'app-parcels',
+  styleUrls: ['./page.scss'],
+  templateUrl: './page.html'
 })
-export class TownMapPage {
+export class ParcelsPage {
   env = environment;
 
   @Select(ViewState.gps) gps$: Observable<boolean>;
