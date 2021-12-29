@@ -1,5 +1,3 @@
-import { Subdivision } from './subdivide-parcel';
-
 import { Directive } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Input } from '@angular/core';
@@ -8,6 +6,11 @@ import { OnInit } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Validator } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
+
+interface Subdivision {
+  area: number;
+  id: string;
+}
 
 function subdivisionIDValidatorFactory(
   subdivisions: Subdivision[],

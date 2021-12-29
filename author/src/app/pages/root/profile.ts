@@ -15,11 +15,11 @@ import copy from 'fast-copy';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-user-profile',
-  styleUrls: ['../../../../../lib/css/sidebar.scss', './user-profile.scss'],
-  templateUrl: './user-profile.html'
+  selector: 'app-profile',
+  styleUrls: ['../../../../../lib/css/sidebar.scss', './profile.scss'],
+  templateUrl: './profile.html'
 })
-export class UserProfileComponent {
+export class ProfileComponent {
   #profile: Profile;
   #user: User;
 

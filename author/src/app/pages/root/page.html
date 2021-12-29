@@ -47,10 +47,7 @@
     <mat-drawer #setup class="sidebar" mode="over" position="end">
       <ng-container *ngIf="user$ | async as user">
         <ng-container *ngIf="profile$ | async as profile">
-          <app-user-profile
-            [profile]="profile"
-            [user]="user"
-          ></app-user-profile>
+          <app-profile [profile]="profile" [user]="user"></app-profile>
         </ng-container>
       </ng-container>
     </mat-drawer>

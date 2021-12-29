@@ -5,15 +5,12 @@ import { MapCreatePage } from './pages/map-create/map-create';
 import { MapFilterComponent } from './pages/map-create/map-filter';
 import { MergeParcelsComponent } from './contextmenu/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
-import { ParcelIDValidator } from './contextmenu/parcelid-validator';
 import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
+import { ProfileComponent } from './pages/root/profile';
 import { RootPage } from './pages/root/page';
 import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
-import { SubdivisionIDValidator } from './contextmenu/subdivisionid-validator';
 import { TownMapPage } from './pages/town-map/town-map';
 import { TownMapSetupComponent } from './pages/town-map/town-map-setup';
-import { UserProfileComponent } from './pages/root/user-profile';
-import { WorkgroupValidator } from './pages/root/workgroup-validator';
 
 import * as Sentry from '@sentry/angular';
 
@@ -115,16 +112,19 @@ import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayState } from '@lib/state/overlay';
+import { ParcelIDValidator } from '@lib/validators/parcelid';
 import { ParcelsState } from '@lib/state/parcels';
 import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
 import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { SubdivisionIDValidator } from '@lib/validators/subdivisionid';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
+import { WorkgroupValidator } from '@lib/validators/workgroup';
 
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -214,10 +214,10 @@ const COMPONENTS = [
   OLStyleWetlandComponent,
   ParcelIDValidator,
   ParcelPropertiesComponent,
+  ProfileComponent,
   SubdivideParcelComponent,
   SubdivisionIDValidator,
   TownMapSetupComponent,
-  UserProfileComponent,
   VersionDialogComponent
 ];
 
