@@ -17,11 +17,11 @@ import OLFeature from 'ol/Feature';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-map-create',
-  styleUrls: ['./map-create.scss'],
-  templateUrl: './map-create.html'
+  selector: 'app-create',
+  styleUrls: ['./page.scss'],
+  templateUrl: './page.html'
 })
-export class MapCreatePage {
+export class CreatePage {
   env = environment;
   index: Index;
   path: Path;
@@ -83,6 +83,7 @@ export class MapCreatePage {
   }
 
   onPathSelected(path: string): void {
-    this.router.navigate(['/town-map/0'], { queryParams: { path } });
+    // 🔥 change "parcels"to type of map when we have culverts etc
+    this.router.navigate(['/parcels/0'], { queryParams: { path } });
   }
 }

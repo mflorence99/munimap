@@ -13,11 +13,11 @@ import { isIndex } from '@lib/geojson';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-map-filter',
-  styleUrls: ['./map-filter.scss'],
-  templateUrl: './map-filter.html'
+  selector: 'app-builder',
+  styleUrls: ['./builder.scss'],
+  templateUrl: './builder.html'
 })
-export class MapFilterComponent {
+export class BuilderComponent {
   index: Index;
 
   @Input() path: Path;

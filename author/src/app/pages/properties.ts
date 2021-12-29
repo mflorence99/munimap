@@ -1,5 +1,4 @@
-import { RootPage } from '../../pages/root/page';
-import { TownMapPage } from './town-map';
+import { RootPage } from './root/page';
 
 import { Actions } from '@ngxs/store';
 import { AuthState } from '@lib/state/auth';
@@ -32,11 +31,11 @@ import copy from 'fast-copy';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-town-map-setup',
-  styleUrls: ['./town-map-setup.scss'],
-  templateUrl: './town-map-setup.html'
+  selector: 'app-properties',
+  styleUrls: ['./properties.scss'],
+  templateUrl: './properties.html'
 })
-export class TownMapSetupComponent implements OnInit {
+export class PropertiesComponent implements OnInit {
   #map: Map;
 
   @Input()
@@ -61,11 +60,8 @@ export class TownMapSetupComponent implements OnInit {
     public registry: TypeRegistry,
     private root: RootPage,
     private router: Router,
-    private store: Store,
-    public townMap: TownMapPage
-  ) {
-    this.rolledup = !this.townMap.creating;
-  }
+    private store: Store
+  ) {}
 
   #handleActions$(): void {
     this.actions$
@@ -80,8 +76,7 @@ export class TownMapSetupComponent implements OnInit {
 
   canDelete(): boolean {
     return (
-      !this.townMap.creating &&
-      this.map.owner === this.authState.currentProfile().email
+      this.map.id && this.map.owner === this.authState.currentProfile().email
     );
   }
 
@@ -97,7 +92,7 @@ export class TownMapSetupComponent implements OnInit {
       .subscribe((result) => {
         if (result) {
           this.store.dispatch(new DeleteMap(map.id));
-          this.router.navigate(['/map-create']);
+          this.router.navigate(['/create']);
         }
       });
   }

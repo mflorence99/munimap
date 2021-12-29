@@ -1,6 +1,6 @@
 <nav class="form navigator">
   <ul>
-    <li (click)="close()" routerLink="/map-create" class="item">
+    <li (click)="close()" routerLink="/create" class="item">
       <fa-icon
         [class.selected]="title?.startsWith(state)"
         [icon]="['fad', 'layer-plus']"
@@ -13,11 +13,13 @@
 
     <hr />
 
+    <!-- 🔥 change "parcels"to type of map when we have culverts etc -->
+
     <li
       *ngFor="let map of allMaps$ | async; trackBy: trackByID"
       (click)="close()"
       class="item"
-      routerLink="/town-map/{{ map.id }}"
+      routerLink="/parcels/{{ map.id }}"
     >
       <fa-icon
         [class.selected]="title === map.name"

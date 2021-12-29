@@ -40,11 +40,11 @@ import { unByKey } from 'ol/Observable';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-town-map',
-  styleUrls: ['./town-map.scss'],
-  templateUrl: './town-map.html'
+  selector: 'app-parcels',
+  styleUrls: ['./page.scss'],
+  templateUrl: './page.html'
 })
-export class TownMapPage implements OnInit {
+export class ParcelsPage implements OnInit {
   @ViewChild(ContextMenuHostDirective)
   contextMenuHost: ContextMenuHostDirective;
 
@@ -88,14 +88,14 @@ export class TownMapPage implements OnInit {
         //    URL to the map ID so if we reload we don't enter another
         //    creating state
         if (this.creating && action.map.id && action.map.name)
-          this.router.navigate([`/town-map/${action.map.id}`]);
+          this.router.navigate([`/parcels/${action.map.id}`]);
       });
   }
 
   // 👇 this would not work properly on a route change, but
   //    we have configured the router to always reload on navigate
   //    to the same route -- it makes the way we build the map
-  //    in town-map.html much easier too
+  //    much easier too
 
   // 👁️ root.ts
 

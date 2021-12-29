@@ -1,16 +1,16 @@
 import { AddParcelComponent } from './contextmenu/add-parcel';
+import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuHostDirective } from './contextmenu/contextmenu-host';
+import { CreatePage } from './pages/create/page';
 import { LoginPage } from './pages/login/login';
-import { MapCreatePage } from './pages/map-create/map-create';
-import { MapFilterComponent } from './pages/map-create/map-filter';
 import { MergeParcelsComponent } from './contextmenu/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
 import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
+import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
+import { PropertiesComponent } from './pages/properties';
 import { RootPage } from './pages/root/page';
 import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
-import { TownMapPage } from './pages/town-map/town-map';
-import { TownMapSetupComponent } from './pages/town-map/town-map-setup';
 
 import * as Sentry from '@sentry/angular';
 
@@ -156,8 +156,8 @@ import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const COMPONENTS = [
   AddParcelComponent,
+  BuilderComponent,
   ConfirmDialogComponent,
-  MapFilterComponent,
   MergeParcelsComponent,
   MessageDialogComponent,
   NavigatorComponent,
@@ -215,20 +215,19 @@ const COMPONENTS = [
   ParcelIDValidator,
   ParcelPropertiesComponent,
   ProfileComponent,
+  PropertiesComponent,
   SubdivideParcelComponent,
   SubdivisionIDValidator,
-  TownMapSetupComponent,
   VersionDialogComponent
 ];
 
 const DIRECTIVES = [ContextMenuHostDirective, WorkgroupValidator];
 
-const PAGES = [LoginPage, MapCreatePage, RootPage, TownMapPage];
+const PAGES = [LoginPage, CreatePage, ParcelsPage, RootPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
-const redirectLoggedInToMaps = (): AuthPipe =>
-  redirectLoggedInTo(['map-create']);
+const redirectLoggedInToMaps = (): AuthPipe => redirectLoggedInTo(['create']);
 
 const ROUTES = [
   {
@@ -247,14 +246,14 @@ const ROUTES = [
     },
     children: [
       {
-        path: 'map-create',
-        component: MapCreatePage,
-        data: { state: 'map-create' }
+        path: 'create',
+        component: CreatePage,
+        data: { state: 'create' }
       },
       {
-        path: 'town-map/:id',
-        component: TownMapPage,
-        data: { state: 'town-map' }
+        path: 'parcels/:id',
+        component: ParcelsPage,
+        data: { state: 'parcels' }
       },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
     ]

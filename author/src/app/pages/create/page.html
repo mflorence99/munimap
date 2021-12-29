@@ -1,11 +1,11 @@
 <app-ol-map #olMap [fitToBounds]="true" [path]="path">
-  <app-map-filter
+  <app-builder
     (pathChanged)="onPathChanged($event)"
     (pathSelected)="onPathSelected($event)"
     [path]="path"
     mapControlPanel1
   >
-  </app-map-filter>
+  </app-builder>
 
   <!-- 📦 CUSTOM CONTROLS -->
 
