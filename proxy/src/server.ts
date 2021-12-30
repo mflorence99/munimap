@@ -59,7 +59,7 @@ const loggerOpts = {
 const proxyServerOpts = {
   provide: PROXY_SERVER_OPTS,
   useValue: {
-    maxAge: 30 * 24 * 60 * 60 /* 👈 30 days */,
+    maxAge: 45 * 24 * 60 * 60 /* 👈 45 days */,
     root: join(dir, 'cache')
   }
 };
