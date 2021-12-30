@@ -141,7 +141,7 @@ export class VersionService {
       .pipe(
         // 🔥 looks like firebase is preventing the app from
         //    becoming stable but not totally sure
-        // first((isStable) => isStable),
+        first(/* (isStable) => isStable */),
         tap(() => console.log('%cPWA is stable', 'color: thistle')),
         switchMap(() =>
           timer(
