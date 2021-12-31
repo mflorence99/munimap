@@ -162,6 +162,14 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       .filter(
         (sheet) => sheet.href == null || sheet.href.startsWith(location.origin)
       )
+      // 🐛 Failed to read the 'cssRules' property from 'CSSStyleSheet': Cannot access rules
+      .filter((sheet) => {
+        try {
+          return !!sheet.cssRules;
+        } catch (ignored) {
+          return false;
+        }
+      })
       .reduce(
         (acc, sheet) =>
           (acc = [
