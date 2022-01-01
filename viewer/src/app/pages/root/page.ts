@@ -93,13 +93,19 @@ export class RootPage implements OnInit {
   //    we get the map ID from the domain (preferred, used live)
   //    or from ...?id= (used in testing)
   #handleUser$(): void {
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      let id;
-      const parts = this.#url.hostname.split('.');
-      if (parts.length === 3) id = parts[0];
-      else id = this.#url.query.id;
-      this.store.dispatch(new LoadMap(id, null));
-    });
+    this.user$
+      .pipe(
+        takeUntil(this.destroy$),
+        // 🐛 Firebase Missing or insufficient permissions.
+        filter((user) => !!user)
+      )
+      .subscribe(() => {
+        let id;
+        const parts = this.#url.hostname.split('.');
+        if (parts.length === 3) id = parts[0];
+        else id = this.#url.query.id;
+        this.store.dispatch(new LoadMap(id, null));
+      });
   }
 
   ngOnInit(): void {
