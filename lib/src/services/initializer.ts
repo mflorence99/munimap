@@ -43,7 +43,8 @@ export class InitializerService {
     // 👉 initialize firestore
     firebase
       .firestore()
-      .enablePersistence()
+      // 🐛 Failed to obtain exclusive access to the persistence layer
+      .enablePersistence({ synchronizeTabs: true })
       .catch((error) => {
         console.error(error);
         Sentry.captureException(error);
