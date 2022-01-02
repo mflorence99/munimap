@@ -553,7 +553,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     // 👉 special stroke if selected or abutter
     const borderWidth = this.#borderWidth(resolution);
     let outline = null;
-    if (whenSelected) this.map.vars['--map-parcel-select'];
+    if (whenSelected) outline = this.map.vars['--map-parcel-select'];
     if (whenRedrawn) outline = this.map.vars['--map-parcel-redraw'];
     // 🔥 for now, showing abutters same as selected
     if (this.showAbutters && this.map.selector?.abutterIDs?.includes(props.id))

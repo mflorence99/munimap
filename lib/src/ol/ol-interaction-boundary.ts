@@ -61,7 +61,6 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
     geojson.features[0].bbox = this.map.boundary.features[0].bbox;
     // 👉 put the adjusted boundary on the clipboard
     navigator.clipboard.writeText(JSON.stringify(simplify(geojson), null, ' '));
-    console.log('%cAdjusted boundary copied to clipboard', 'color: skyblue');
   }
 
   // 👇 the idea is that a selection change or ESC accepts the redraw
