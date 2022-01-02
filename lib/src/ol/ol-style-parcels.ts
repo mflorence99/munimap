@@ -233,9 +233,11 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     props: ParcelProperties,
     resolution: number,
     numPolygons: number,
-    overlayFill: string
+    overlayFill: [number, number, number]
   ): OLStyle[] {
-    const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
+    const fill = overlayFill
+      ? overlayFill.join(',')
+      : this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let patterns;
     // 👉 current use pattern comes from the use field (CUUH etc)
     if (props.usage === '190') {
@@ -245,7 +247,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       if (color && icon) {
         patterns = [
           new OLFill({
-            color: overlayFill || `rgba(${fill}, ${this.opacity})`
+            color: `rgba(${fill}, ${this.opacity})`
           }),
           new OLFillPattern({ image: icon })
         ];
@@ -260,7 +262,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     if (!patterns) {
       patterns = [
         new OLFillPattern({
-          color: overlayFill || `rgba(${fill}, ${this.opacity})`,
+          color: `rgba(${fill}, ${this.opacity})`,
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: 'dot',
           size: 2,
@@ -499,7 +501,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     props: ParcelProperties,
     resolution: number,
     numPolygons: number,
-    overlayStroke: string
+    overlayStroke: [number, number, number]
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
     if (
@@ -508,7 +510,9 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       return null;
     else {
       const borderWidth = this.#borderWidth(resolution);
-      const outline = this.map.vars['--map-parcel-outline'];
+      const outline = overlayStroke
+        ? overlayStroke.join(',')
+        : this.map.vars['--map-parcel-outline'];
       // 👉 alternating light, dark outline
       return [
         new OLStyle({
@@ -521,7 +525,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         new OLStyle({
           fill: new OLFill({ color: [0, 0, 0, 0] }),
           stroke: new OLStroke({
-            color: overlayStroke || `rgb(${outline})`,
+            color: `rgb(${outline})`,
             lineCap: 'square',
             lineDash:
               borderWidth > 1
@@ -546,33 +550,21 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       this.#labelFontSizeMax(props, resolution, numPolygons) < this.minFontSize
     )
       return null;
-    // 👉 special stroke if abutter
-    else if (
-      this.showAbutters &&
-      this.map.selector?.abutterIDs?.includes(props.id)
-    ) {
-      const outline = this.map.vars['--map-parcel-abutter'];
-      return this.#strokeBorder(
-        props,
-        resolution,
-        numPolygons,
-        `rgb(${outline})`
-      );
-    }
-    // 👉 special stroke if selected
-    else {
-      const borderWidth = this.#borderWidth(resolution);
-      const select = whenRedrawn
-        ? this.map.vars['--map-parcel-redraw']
-        : this.map.vars['--map-parcel-select'];
-      // 👉 necessary so we can select
-      const fill = new OLFill({ color: [0, 0, 0, 0] });
-      const stroke = new OLStroke({
-        color: `rgb(${select})`,
-        width: borderWidth * this.borderWidthSelectRatio
-      });
-      return [new OLStyle({ fill, stroke: whenSelected ? stroke : null })];
-    }
+    // 👉 special stroke if selected or abutter
+    const borderWidth = this.#borderWidth(resolution);
+    let outline = null;
+    if (whenSelected) this.map.vars['--map-parcel-select'];
+    if (whenRedrawn) outline = this.map.vars['--map-parcel-redraw'];
+    // 🔥 for now, showing abutters same as selected
+    if (this.showAbutters && this.map.selector?.abutterIDs?.includes(props.id))
+      outline = this.map.vars['--map-parcel-select'];
+    // 👉 necessary so we can select
+    const fill = new OLFill({ color: [0, 0, 0, 0] });
+    const stroke = new OLStroke({
+      color: `rgb(${outline})`,
+      width: borderWidth * this.borderWidthSelectRatio
+    });
+    return [new OLStyle({ fill, stroke: outline ? stroke : null })];
   }
 
   #theStyles(

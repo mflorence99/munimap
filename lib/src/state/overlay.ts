@@ -100,13 +100,22 @@ export class OverlayState {
     else return null;
   }
 
+  // 👇 convert #rrggbb to [r, g, b]
+  #rgb(hex: string): [number, number, number] {
+    if (!hex) return null;
+    else {
+      const rgb = hex.substring(1).match(/.{1,2}/g);
+      return [parseInt(rgb[0], 16), parseInt(rgb[1], 16), parseInt(rgb[2], 16)];
+    }
+  }
+
   currentProperties(): OverlayProperty[] {
     return this.store.snapshot().overlay;
   }
 
   makeOverlayForParcelProperties(props: ParcelProperties): {
-    fill: string;
-    stroke: string;
+    fill: [number, number, number];
+    stroke: [number, number, number];
   } {
     let fill: string = null;
     let stroke: string = null;
@@ -128,7 +137,7 @@ export class OverlayState {
           }
         });
     }
-    return { fill, stroke };
+    return { fill: this.#rgb(fill), stroke: this.#rgb(stroke) };
   }
 
   @Action(UpdateProperties) updateProperties(
