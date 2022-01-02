@@ -105,6 +105,7 @@
     "firebaseui-angular": "^5",
     "fontfaceobserver": "^2",
     "fuzzysort": "^1",
+    "globalthis": "^1",
     "html2canvas": "^1",
     "injection-js": "^2",
     "jsome": "^2",
