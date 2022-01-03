@@ -50,7 +50,8 @@ export class OLControlZoomComponent implements OnInit {
 
   onZoomChange(zoom: number): void {
     this.zoom = zoom;
-    this.map.olView.animate({
+    // 🐛 null is not an object (evaluating 'this.map.olView.animate')
+    this.map.olView?.animate({
       duration: this.zoomAnimationDuration,
       zoom
     });
