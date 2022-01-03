@@ -92,7 +92,8 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
         const value = this.record[prop];
         const fromFeature = feature.getProperties()[prop];
         // 👉 if no value has been recorded yet, take the first we see
-        if (value.value === undefined) value.value = fromFeature;
+        if (!value.conflict && value.value === undefined)
+          value.value = fromFeature;
         // 👉 but if the value is different, we have to record a conflict
         else if (value.value !== fromFeature) {
           value.conflict = true;
