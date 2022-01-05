@@ -21,6 +21,7 @@ import { tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 import bbox from '@turf/bbox';
+import chalk from 'chalk';
 import copy from 'fast-copy';
 import md5File from 'md5-file';
 
@@ -103,7 +104,15 @@ export class GeoServer extends Handler {
             // 👉 cached pipe
             const cached$ = of(hash).pipe(
               tap(() => (response.statusCode = 304)),
-              mapTo(message)
+              mapTo(message),
+              tap(() => {
+                console.log(
+                  chalk.cyan(request.method),
+                  request.path,
+                  chalk.green(response.statusCode),
+                  chalk.green('CACHED')
+                );
+              })
             );
 
             // 👉 not cached pipe
@@ -117,7 +126,15 @@ export class GeoServer extends Handler {
                 response.body = this.#filter(geojson, minX, minY, maxX, maxY);
                 response.statusCode = 200;
               }),
-              mapTo(message)
+              mapTo(message),
+              tap(() => {
+                console.log(
+                  chalk.cyan(request.method),
+                  request.path,
+                  chalk.green(response.statusCode),
+                  chalk.red('FETCHED')
+                );
+              })
             );
 
             return isCached ? cached$ : notCached$;

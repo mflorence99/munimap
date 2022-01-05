@@ -36,6 +36,7 @@ import { unByKey } from 'ol/Observable';
 import OLMap from 'ol/Map';
 import OLMapBrowserEvent from 'ol/MapBrowserEvent';
 import OLView from 'ol/View';
+import squareGrid from '@turf/square-grid';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,6 +51,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
 
   boundary: Features;
   boundaryExtent: Coordinate;
+  boundaryGrid: Features;
 
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
 
@@ -134,6 +136,22 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.featureProjection,
       this.projection
     );
+    // 👉 precompute boundary grid, but only for towns
+    //    we need to make sure that the bounding box is an even
+    //    multiple of the cell size for complete grid coverage
+    if (this.currentTown()) {
+      const [minX, minY, maxX, maxY] = bbox;
+      const floored: GeoJSON.BBox = [
+        Math.floor(minX * 10) / 10,
+        Math.floor(minY * 10) / 10,
+        Math.ceil(maxX * 10) / 10,
+        Math.ceil(maxY * 10) / 10
+      ];
+      this.boundaryGrid = squareGrid(floored, 0.02, {
+        units: 'degrees',
+        mask: boundary.features[0]
+      });
+    }
     // 👉 create view
     this.olView = new OLView({
       // 🔥 see ol-control-print if you ever change this

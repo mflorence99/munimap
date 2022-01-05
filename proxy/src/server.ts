@@ -69,18 +69,14 @@ const routes: Route[] = [
     path: '/proxy',
     methods: ['GET'],
     handler: ProxyServer,
-    middlewares: isDev
-      ? [BinaryTyper, Compressor, CORS, RequestLogger]
-      : [BinaryTyper, CORS, RequestLogger],
-    services: [loggerOpts, proxyServerOpts]
+    middlewares: isDev ? [BinaryTyper, Compressor, CORS] : [BinaryTyper, CORS],
+    services: [proxyServerOpts]
   },
   {
     path: '/NEW HAMPSHIRE',
     methods: ['GET'],
     handler: GeoServer,
-    middlewares: isDev
-      ? [Compressor, CORS, RequestLogger]
-      : [CORS, RequestLogger],
+    middlewares: isDev ? [Compressor, CORS] : [CORS],
     services: [loggerOpts, geoServerOpts]
   },
   {

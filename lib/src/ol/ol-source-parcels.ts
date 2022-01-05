@@ -63,7 +63,15 @@ export class OLSourceParcelsComponent implements OnInit {
     private map: OLMapComponent,
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.olVector = new OLVector({
+      attributions: [attribution],
+      format: new GeoJSON(),
+      loader: this.#loader.bind(this),
+      strategy: bbox
+    });
+    this.layer.olLayer.setSource(this.olVector);
+  }
 
   #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): Set<ParcelID> {
     const removed = this.parcelsState.parcelsRemoved(parcels);
@@ -118,16 +126,6 @@ export class OLSourceParcelsComponent implements OnInit {
         }
         this.#success?.(features);
       });
-  }
-
-  #initialize(): void {
-    this.olVector = new OLVector({
-      attributions: [attribution],
-      format: new GeoJSON(),
-      loader: this.#loader.bind(this),
-      strategy: bbox
-    });
-    this.layer.olLayer.setSource(this.olVector);
   }
 
   #insertAddedFeatures(geojson: Features, parcels: Parcel[]): Set<ParcelID> {
@@ -211,7 +209,6 @@ export class OLSourceParcelsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.#initialize();
     this.#handleStreams$();
   }
 }

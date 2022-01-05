@@ -16,6 +16,7 @@ import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { tap } from 'rxjs';
 
+import chalk from 'chalk';
 import fetch from 'node-fetch';
 import hash from 'object-hash';
 import md5File from 'md5-file';
@@ -102,7 +103,15 @@ export class ProxyServer extends Handler {
                   // cached pipe
                   const cached$ = of(hash).pipe(
                     tap(() => (response.statusCode = 304)),
-                    mapTo(message)
+                    mapTo(message),
+                    tap(() => {
+                      console.log(
+                        chalk.yellow(request.method),
+                        request.path,
+                        chalk.green(response.statusCode),
+                        chalk.green('STASHED+CACHED')
+                      );
+                    })
                   );
                   // not cached pipe
                   const notCached$ = of(hash).pipe(
@@ -112,6 +121,14 @@ export class ProxyServer extends Handler {
                     tap((buffer: Buffer) => {
                       response.body = buffer;
                       response.statusCode = 200;
+                    }),
+                    tap(() => {
+                      console.log(
+                        chalk.yellow(request.method),
+                        request.path,
+                        chalk.green(response.statusCode),
+                        chalk.blue('STASHED')
+                      );
                     })
                   );
                   return cached ? cached$ : notCached$;
@@ -151,6 +168,14 @@ export class ProxyServer extends Handler {
                       if (path) fs.writeFile(fpath, buffer, () => {});
                     });
                   }
+                }),
+                tap(() => {
+                  console.log(
+                    chalk.yellow(request.method),
+                    request.path,
+                    chalk.green(response.statusCode),
+                    chalk.red('FETCHED')
+                  );
                 })
               );
             }

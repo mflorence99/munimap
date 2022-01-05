@@ -64,6 +64,7 @@ import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
 import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parcelproperties';
 import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
+import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -139,6 +140,7 @@ const COMPONENTS = [
   OLPopupParcelPropertiesComponent,
   OLPopupSelectionComponent,
   OLSourceBoundaryComponent,
+  OLSourceBoundaryGridComponent,
   OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,

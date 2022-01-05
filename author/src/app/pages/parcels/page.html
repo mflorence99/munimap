@@ -129,9 +129,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <!-- 📦 we can't print stonewalls because the API will only deliver
-           4000 and there are more than that on the entire extent of the map -->
-        <app-ol-layer-vector *ngIf="!olMap.printing">
+        <app-ol-layer-vector>
           <app-ol-style-stonewalls></app-ol-style-stonewalls>
           <app-ol-source-stonewalls></app-ol-source-stonewalls>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -188,6 +186,13 @@
           <app-ol-style-polygons></app-ol-style-polygons>
           <app-ol-source-boundary></app-ol-source-boundary>
           <app-ol-interaction-boundary></app-ol-interaction-boundary>
+        </app-ol-layer-vector>
+
+        <!-- 📦 BOUNDARY GRID LAYER (testing only) -->
+
+        <app-ol-layer-vector>
+          <app-ol-style-polygons></app-ol-style-polygons>
+          <app-ol-source-boundarygrid></app-ol-source-boundarygrid>
         </app-ol-layer-vector>
 
         <!-- 📦 SELECTION LAYER (not printed) -->
