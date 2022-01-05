@@ -54,5 +54,6 @@
 
 import './zone-flags';
 
+import 'elm-pep';
 import 'globalthis/auto';
 import 'zone.js/dist/zone';

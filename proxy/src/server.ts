@@ -40,12 +40,12 @@ const dir = argv['dir'] ?? isDev ? './data' : '/mnt/efs/MuniMap/proxy';
 
 const fileServerOpts = {
   provide: FILE_SERVER_OPTS,
-  useValue: { maxAge: 60 * 10 /* 👈 10 minutes */, root: dir }
+  useValue: { maxAge: 24 * 60 * 60 /* 👈 1 day */, root: dir }
 };
 
 const geoServerOpts = {
   provide: GEO_SERVER_OPTS,
-  useValue: { maxAge: 60 * 10 /* 👈 10 minutes */, root: dir }
+  useValue: { maxAge: 24 * 60 * 60 /* 👈 1 day */, root: dir }
 };
 
 const loggerOpts = {

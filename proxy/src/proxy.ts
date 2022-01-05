@@ -19,7 +19,6 @@ import { tap } from 'rxjs';
 import chalk from 'chalk';
 import fetch from 'node-fetch';
 import hash from 'object-hash';
-import md5File from 'md5-file';
 
 // 👇 proxy server options
 
@@ -56,9 +55,6 @@ export class ProxyServer extends Handler {
       mergeMap((message: Message): Observable<Message> => {
         const { request, response } = message;
 
-        // 👉 Etag is the file hash
-        const etag = request.headers['If-None-Match'];
-
         // 👉 proxied URL is in the query param
         let url = request.query.get('url');
 
@@ -81,107 +77,82 @@ export class ProxyServer extends Handler {
         );
         const fpath = path.join(fdir, `${fname}.proxy`);
 
-        // 👉 see if we've stashed result
+        // 👉 see if we've cached the result
         let stat;
         try {
           stat = fs.statSync(fpath);
         } catch (error) {}
         const maxAge = this.#opts.maxAge;
-        const isStashed = stat?.mtimeMs > Date.now() - maxAge * 1000;
+        const isCached = stat?.mtimeMs > Date.now() - maxAge * 1000;
 
-        return of(message).pipe(
-          mergeMap(() => {
-            // 👉 read from file system if cached
-            if (isStashed) {
-              return from(md5File(fpath)).pipe(
-                tap((hash: string) => {
-                  response.headers['Cache-Control'] = `max-age=${maxAge}`;
-                  response.headers['Etag'] = hash;
-                }),
-                mergeMap((hash: string) => {
-                  const cached = etag === hash;
-                  // cached pipe
-                  const cached$ = of(hash).pipe(
-                    tap(() => (response.statusCode = 304)),
-                    mapTo(message),
-                    tap(() => {
-                      console.log(
-                        chalk.yellow(request.method),
-                        request.path,
-                        chalk.green(response.statusCode),
-                        chalk.green('STASHED+CACHED')
-                      );
-                    })
-                  );
-                  // not cached pipe
-                  const notCached$ = of(hash).pipe(
-                    mergeMap(() =>
-                      fromReadableStream(fs.createReadStream(fpath))
-                    ),
-                    tap((buffer: Buffer) => {
-                      response.body = buffer;
-                      response.statusCode = 200;
-                    }),
-                    tap(() => {
-                      console.log(
-                        chalk.yellow(request.method),
-                        request.path,
-                        chalk.green(response.statusCode),
-                        chalk.blue('STASHED')
-                      );
-                    })
-                  );
-                  return cached ? cached$ : notCached$;
-                })
-              );
-            }
+        // 👇 because we set maxAge tobthe exact time that we discard the
+        //    disk copy of the proxied data, we never have to bother
+        //    with returning a 304 status
 
-            // 👉 use FETCH to GET the proxied URL if not cached
-            else {
-              return from(
-                // 👇 DO proxy the referer (yes, that misspelling is correct!)
-                //    and the user-agent to satisy API domain rstrictions
-                fetch(url, {
-                  headers: {
-                    /* eslint-disable @typescript-eslint/naming-convention */
-                    'Referer': request.headers['Referer'] as string,
-                    'User-Agent': request.headers['User-Agent'] as string
-                    /* eslint-enable @typescript-eslint/naming-convention */
-                  }
-                })
-              ).pipe(
-                tap((resp) => {
-                  // 👇 DON'T proxy content-encoding, because fetch will
-                  //    have already decoded the response and we can't
-                  //    decode it again
-                  for (const key of resp.headers.keys()) {
-                    if (!['content-encoding'].includes(key.toLowerCase()))
-                      response.headers[key] = resp.headers.get(key);
-                  }
-                }),
-                tap((resp) => (response.statusCode = resp.status)),
-                mergeMap((resp) => from(resp.buffer())),
-                tap((buffer) => (response.body = buffer)),
-                tap((buffer) => {
-                  if (response.statusCode === 200) {
-                    fs.mkdir(fdir, { recursive: true }, (err, path) => {
-                      if (path) fs.writeFile(fpath, buffer, () => {});
-                    });
-                  }
-                }),
-                tap(() => {
-                  console.log(
-                    chalk.yellow(request.method),
-                    request.path,
-                    chalk.green(response.statusCode),
-                    chalk.red('FETCHED')
-                  );
-                })
+        // 👉 read from file system if cached
+        if (isCached) {
+          return fromReadableStream(fs.createReadStream(fpath)).pipe(
+            tap((buffer: Buffer) => {
+              response.body = buffer;
+              response.headers['Cache-Control'] = `max-age=${maxAge}`;
+              response.statusCode = 200;
+            }),
+            tap(() => {
+              console.log(
+                chalk.yellow(request.method),
+                request.path,
+                chalk.green(response.statusCode),
+                stat?.mtime,
+                chalk.blue('CACHED')
               );
-            }
-          }),
-          mapTo(message)
-        );
+            }),
+            mapTo(message)
+          );
+        }
+
+        // 👉 use FETCH to GET the proxied URL if not cached
+        else {
+          return from(
+            // 👇 DO proxy the referer (yes, that misspelling is correct!)
+            //    and the user-agent to satisy API domain rstrictions
+            fetch(url, {
+              headers: {
+                /* eslint-disable @typescript-eslint/naming-convention */
+                'Referer': request.headers['Referer'] as string,
+                'User-Agent': request.headers['User-Agent'] as string
+                /* eslint-enable @typescript-eslint/naming-convention */
+              }
+            })
+          ).pipe(
+            tap((resp) => {
+              // 👇 DON'T proxy content-encoding, because fetch will
+              //    have already decoded the response and we can't
+              //    decode it again
+              for (const key of resp.headers.keys()) {
+                if (!['content-encoding'].includes(key.toLowerCase()))
+                  response.headers[key] = resp.headers.get(key);
+              }
+            }),
+            tap((resp) => (response.statusCode = resp.status)),
+            mergeMap((resp) => from(resp.buffer())),
+            tap((buffer) => (response.body = buffer)),
+            tap((buffer) => {
+              if (response.statusCode === 200) {
+                fs.mkdirSync(fdir, { recursive: true });
+                fs.writeFile(fpath, buffer, () => {});
+              }
+            }),
+            tap(() => {
+              console.log(
+                chalk.yellow(request.method),
+                request.path,
+                chalk.green(response.statusCode),
+                chalk.red('FETCHED')
+              );
+            }),
+            mapTo(message)
+          );
+        }
       })
     );
   }

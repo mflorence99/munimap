@@ -21,11 +21,15 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
-import { bbox } from 'ol/loadingstrategy';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
+import { merge } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
+import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
+import booleanIntersects from '@turf/boolean-intersects';
 import copy from 'fast-copy';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
@@ -48,6 +52,8 @@ export class OLSourceParcelsComponent implements OnInit {
   #geojson$ = new Subject<Features>();
   #success: Function;
 
+  @Input() maxRequests = 8;
+
   olVector: OLVector<any>;
 
   @Select(OverlayState) overlay$: Observable<OverlayProperty[]>;
@@ -68,7 +74,7 @@ export class OLSourceParcelsComponent implements OnInit {
       attributions: [attribution],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: bbox
+      strategy: bboxStrategy
     });
     this.layer.olLayer.setSource(this.olVector);
   }
@@ -85,6 +91,19 @@ export class OLSourceParcelsComponent implements OnInit {
       (feature) => !removed.has(feature.id)
     );
     return removed;
+  }
+
+  #gridsFromExtent(extent: Coordinate, projection: OLProjection): Coordinate[] {
+    const visible = bboxPolygon(
+      transformExtent(
+        extent,
+        projection,
+        this.map.featureProjection
+      ) as GeoJSON.BBox
+    );
+    return this.map.boundaryGrid.features
+      .filter((feature) => booleanIntersects(visible, feature))
+      .map((feature) => bbox(feature));
   }
 
   #handleStreams$(): void {
@@ -116,8 +135,11 @@ export class OLSourceParcelsComponent implements OnInit {
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.map.projection
         }) as OLFeature<any>[];
-        // 👉 refresh each feature
-        this.olVector.addFeatures(features);
+        // 👉 add each feature not already present
+        features.forEach((feature) => {
+          if (!this.olVector.hasFeature(feature))
+            this.olVector.addFeature(feature);
+        });
         // 👉 reselect selected features b/c we've potentially removed them
         if (this.map.selector) {
           const selectedIDs = this.map.selector.selectedIDs;
@@ -148,17 +170,22 @@ export class OLSourceParcelsComponent implements OnInit {
     projection: OLProjection,
     success: Function
   ): void {
-    const bbox = transformExtent(
-      extent,
-      projection,
-      this.map.featureProjection
+    // 👇 one request for each grid square covered by the extent
+    //    this way requests are repeatable and cachable
+    const grids = this.#gridsFromExtent(extent, projection);
+    const requests = grids.map((grid) =>
+      this.geoJSON.loadByIndex(
+        this.route,
+        this.path ?? this.map.path,
+        'parcels',
+        grid
+      )
     );
-    this.geoJSON
-      .loadByIndex(this.route, this.path ?? this.map.path, 'parcels', bbox)
-      .subscribe((geojson: Features) => {
-        this.#success = success;
-        this.#geojson$.next(geojson);
-      });
+    // 👇 run the requests with a maximum concurrency
+    merge(...requests, this.maxRequests).subscribe((geojson: Features) => {
+      this.#success = success;
+      this.#geojson$.next(geojson);
+    });
   }
 
   #overrideFeaturesWithParcels(geojson: Features, parcels: Parcel[]): void {

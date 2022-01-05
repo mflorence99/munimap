@@ -97,6 +97,7 @@
     "chalk": "^4",
     "comlink": "^4",
     "debounce-decorator": "^1",
+    "elm-pep": "^1",
     "fast-copy": "^2",
     "fast-equals": "^2",
     "file-saver": "^2",
