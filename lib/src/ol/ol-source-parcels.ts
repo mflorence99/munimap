@@ -52,7 +52,7 @@ export class OLSourceParcelsComponent implements OnInit {
   #geojson$ = new Subject<Features>();
   #success: Function;
 
-  @Input() maxRequests = 8;
+  @Input() maxRequests = 4;
 
   olVector: OLVector<any>;
 

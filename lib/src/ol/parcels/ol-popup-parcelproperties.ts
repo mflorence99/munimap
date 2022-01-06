@@ -170,8 +170,10 @@ export class OLPopupParcelPropertiesComponent {
 
   onClose(): void {
     this.snackBar.dismiss();
-    this.#subToAbutters?.unsubscribe();
-    this.#subToSelection?.unsubscribe();
+    this.map.selector?.unselectParcels();
+    // 🔥  this doesn't seem to work
+    // this.#subToAbutters?.unsubscribe();
+    // this.#subToSelection?.unsubscribe();
   }
 
   sum(array: number[]): number {

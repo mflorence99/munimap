@@ -30,7 +30,7 @@ export class OLSourceFloodplainComponent extends OLSourceArcGISComponent {
   }
 
   getFeatureID(feature: GeoJSON.Feature<any>): string {
-    return feature.properties.NWI_ID;
+    return feature.properties.OBJECTID;
   }
 
   getProxyPath(): string {

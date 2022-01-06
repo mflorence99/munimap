@@ -16,6 +16,7 @@ import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { toArray } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
 import bbox from '@turf/bbox';
@@ -28,7 +29,9 @@ import OLVector from 'ol/source/Vector';
 
 @Component({ template: '' })
 export abstract class OLSourceArcGISComponent {
-  @Input() maxRequests = 8;
+  #cache = new Map<string, Features>();
+
+  @Input() maxRequests = 4;
 
   olVector: OLVector<any>;
 
@@ -77,27 +80,46 @@ export abstract class OLSourceArcGISComponent {
     projection: OLProjection,
     success: Function
   ): void {
-    // 👇 one request for each grid square covered by the extent
+    // 👇 one URL for each grid square covered by the extent
     //    this way requests are repeatable and cachable
     const grids = this.#gridsFromExtent(extent, projection);
-    const requests = grids.map((grid) =>
-      this.http.get(
+    const urls = grids.map(
+      (grid) =>
         `${
           environment.endpoints.proxy
         }/proxy/${this.getProxyPath()}?url=${encodeURIComponent(
           this.getURL(grid)
         )}`
-      )
     );
+    // 👇 we cache responses by URL
+    const requests = urls.map((url) => {
+      const cached = this.#cache.get(url);
+      return cached
+        ? of(cached)
+        : this.http.get(url).pipe(
+            catchError(() => of({ features: [] })),
+            map((arcgis: any): Features => arcgisToGeoJSON(arcgis)),
+            tap((geojson: Features) => {
+              geojson.features.forEach(
+                (feature) => (feature.id = this.getFeatureID(feature))
+              );
+              this.#cache.set(url, geojson);
+            })
+          );
+    });
     // 👇 run the requests with a maximum concurrency
     merge(...requests, this.maxRequests)
       .pipe(
-        catchError(() => of({ features: [] })),
-        map((arcgis: any): Features => arcgisToGeoJSON(arcgis)),
-        tap((geojson: Features) => {
-          geojson.features.forEach(
-            (feature) => (feature.id = this.getFeatureID(feature))
-          );
+        toArray(),
+        map((geojsons: Features[]) => {
+          const hash = geojsons.reduce((acc, geojson) => {
+            geojson.features.forEach((feature) => (acc[feature.id] = feature));
+            return acc;
+          }, {});
+          return {
+            features: Object.values(hash),
+            type: 'FeatureCollection'
+          } as Features;
         })
       )
       .subscribe((geojson: Features) => {

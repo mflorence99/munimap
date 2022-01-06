@@ -255,4 +255,8 @@ export class OLInteractionSelectParcelsComponent
       size: this.map.olMap.getSize()
     });
   }
+
+  unselectParcels(): void {
+    this.#selectParcels([]);
+  }
 }

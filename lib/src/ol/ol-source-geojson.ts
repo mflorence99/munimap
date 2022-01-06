@@ -32,7 +32,7 @@ const attribution =
 export class OLSourceGeoJSONComponent {
   @Input() layerKey: string;
 
-  @Input() maxRequests = 8;
+  @Input() maxRequests = 4;
 
   olVector: OLVector<any>;
 
