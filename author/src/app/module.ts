@@ -94,13 +94,13 @@ import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
+import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
 import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from '@lib/ol/ol-style-boundary';
 import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
 import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
-import { OLStyleLakesComponent } from '@lib/ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
@@ -110,6 +110,7 @@ import { OLStyleRiversComponent } from '@lib/ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
+import { OLStyleWaterbodiesComponent } from '@lib/ol/ol-style-waterbodies';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayState } from '@lib/state/overlay';
@@ -197,13 +198,13 @@ const COMPONENTS = [
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
   OLSourceStoneWallsComponent,
+  OLSourceWaterbodiesComponent,
   OLSourceWetlandComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
   OLStyleBuildingsComponent,
   OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,
-  OLStyleLakesComponent,
   OLStyleParcelsComponent,
   OLStylePatternDirective,
   OLStylePlacesComponent,
@@ -213,6 +214,7 @@ const COMPONENTS = [
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
   OLStyleTrailsComponent,
+  OLStyleWaterbodiesComponent,
   OLStyleWetlandComponent,
   ParcelIDValidator,
   ParcelPropertiesComponent,

@@ -12,13 +12,12 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-style-lakes',
+  selector: 'app-ol-style-waterbodies',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleLakesComponent implements OLStyleComponent {
-  @Input() opacity = 0.5;
-  // @Input() pattern: OLFillPatternType = 'wave';
+export class OLStyleWaterbodiesComponent implements OLStyleComponent {
+  @Input() opacity = 1;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -29,16 +28,9 @@ export class OLStyleLakesComponent implements OLStyleComponent {
 
   style(): OLStyleFunction {
     return (): OLStyle => {
-      const fill = this.map.vars['--map-lake-fill'];
-      // 🔥 the wave pattern doesn't really add anything
-      // const waves = this.map.vars['--map-lake-waves'];
+      const fill = this.map.vars['--map-waterbody-fill'];
       return new OLStyle({
         fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-        // fill: new OLFillPattern({
-        //   color: `rgba(${waves}, 1)`,
-        //   fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-        //   pattern: this.pattern
-        // }),
         stroke: null
       });
     };
