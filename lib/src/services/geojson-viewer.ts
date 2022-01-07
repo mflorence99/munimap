@@ -1,3 +1,4 @@
+import { CacheService } from '../services/cache';
 import { Features } from '../geojson';
 import { GeoJSONService } from './geojson';
 import { Index } from '../geojson';
@@ -21,16 +22,14 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GeoJSONViewerService extends GeoJSONService {
-  #cache = new Map<string, Features>();
-
-  constructor(private http: HttpClient) {
+  constructor(private cache: CacheService, private http: HttpClient) {
     super();
   }
 
   #load(layerKey: string): Observable<Features> {
     return this.http.get<Features>(`assets/${layerKey}.geojson`).pipe(
       catchError(() => of(emptyFeatures)),
-      tap((geojson) => this.#cache.set(layerKey, geojson))
+      tap((geojson) => this.cache.set(layerKey, geojson))
     );
   }
 
@@ -40,7 +39,7 @@ export class GeoJSONViewerService extends GeoJSONService {
     layerKey: string,
     extent: Coordinate = []
   ): Observable<Features> {
-    const cached = this.#cache.get(layerKey);
+    const cached = this.cache.get(layerKey);
     return (cached ? of(cached) : this.#load(layerKey)).pipe(
       map((geojson) => this.filter(geojson, extent))
     );

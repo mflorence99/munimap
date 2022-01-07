@@ -1,3 +1,4 @@
+import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
@@ -18,11 +19,12 @@ const attribution =
 })
 export class OLSourcePeatlandComponent extends OLSourceArcGISComponent {
   constructor(
+    cache: CacheService,
     map: OLMapComponent,
     http: HttpClient,
     layer: OLLayerVectorComponent
   ) {
-    super(http, layer, map);
+    super(cache, http, layer, map);
   }
 
   getAttribution(): string {

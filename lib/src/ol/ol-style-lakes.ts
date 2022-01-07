@@ -9,7 +9,6 @@ import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFill from 'ol/style/Fill';
-import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStyle from 'ol/style/Style';
 
 @Component({
@@ -32,13 +31,15 @@ export class OLStyleLakesComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (): OLStyle => {
       const fill = this.map.vars['--map-lake-fill'];
-      const waves = this.map.vars['--map-lake-waves'];
+      // 🔥 the wave pattern doesn't really add anything
+      // const waves = this.map.vars['--map-lake-waves'];
       return new OLStyle({
-        fill: new OLFillPattern({
-          color: `rgba(${waves}, 1)`,
-          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-          pattern: this.pattern
-        }),
+        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+        // fill: new OLFillPattern({
+        //   color: `rgba(${waves}, 1)`,
+        //   fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+        //   pattern: this.pattern
+        // }),
         stroke: null
       });
     };

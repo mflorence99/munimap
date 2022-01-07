@@ -239,24 +239,26 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
       ? overlayFill.join(',')
       : this.map.vars[`--map-parcel-fill-u${props.usage}`];
     let patterns;
-    // 👉 current use pattern comes from the use field (CUUH etc)
-    if (props.usage === '190') {
-      const color = this.map.vars[`--map-parcel-stroke-${props.use}`];
-      const icon = this.#iconForUse(props.use);
-      // not all current usages have a pattern
-      if (color && icon) {
-        patterns = [
-          new OLFill({
-            color: `rgba(${fill}, ${this.opacity})`
-          }),
-          new OLFillPattern({ image: icon })
-        ];
+    if (this.map.olView.getZoomForResolution(resolution) >= 15) {
+      // 👉 current use pattern comes from the use field (CUUH etc)
+      if (props.usage === '190') {
+        const color = this.map.vars[`--map-parcel-stroke-${props.use}`];
+        const icon = this.#iconForUse(props.use);
+        // not all current usages have a pattern
+        if (color && icon) {
+          patterns = [
+            new OLFill({
+              color: `rgba(${fill}, ${this.opacity})`
+            }),
+            new OLFillPattern({ image: icon })
+          ];
+        }
       }
-    }
-    // 👉 town forest uses standard symbol to match OSM etc
-    else if (props.usage === '501') {
-      const icon = this.#iconForUse('forest');
-      patterns = [new OLFillPattern({ image: icon })];
+      // 👉 town forest uses standard symbol to match OSM etc
+      else if (props.usage === '501') {
+        const icon = this.#iconForUse('forest');
+        patterns = [new OLFillPattern({ image: icon })];
+      }
     }
     // 👉 otherwise just use a generic pattern for texture
     if (!patterns) {

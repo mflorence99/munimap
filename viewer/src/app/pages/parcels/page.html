@@ -1,7 +1,7 @@
 <app-ol-map
   *ngIf="(map$ | async) as map"
   #olMap
-  [minZoom]="15"
+  [minZoom]="13"
   [maxZoom]="22"
   [path]="map.path"
   class="content"
@@ -30,7 +30,7 @@
     <ng-container *ngIf="!(satelliteView$ | async)">
       <!-- 📦 BG LAYER (outside town)-->
 
-      <app-ol-layer-tile>
+      <app-ol-layer-tile *ngIf="(zoom$ | async) >= 15">
         <app-ol-source-xyz
           [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
           ><app-ol-attribution
@@ -52,7 +52,7 @@
 
       <!-- 📦 HILLSHADE LAYER  -->
 
-      <app-ol-layer-tile [opacity]="1">
+      <app-ol-layer-tile *ngIf="(zoom$ | async) >= 15" [opacity]="1">
         <app-ol-source-xyz
           [maxZoom]="17"
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
@@ -93,19 +93,19 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-trails></app-ol-style-trails>
         <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-stonewalls></app-ol-style-stonewalls>
         <app-ol-source-stonewalls></app-ol-source-stonewalls>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-peatland></app-ol-style-peatland>
         <app-ol-source-peatland></app-ol-source-peatland>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -117,13 +117,13 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-wetland></app-ol-style-wetland>
         <app-ol-source-wetland></app-ol-source-wetland>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-buildings></app-ol-style-buildings>
         <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -137,12 +137,12 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-parcels [showLabels]="true"></app-ol-style-parcels>
         <app-ol-source-parcels> </app-ol-source-parcels>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-places></app-ol-style-places>
         <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -166,7 +166,9 @@
       ></app-ol-filter-crop2selected>
     </app-ol-layer-tile>
 
-    <app-ol-layer-vector *ngIf="satelliteView$ | async">
+    <app-ol-layer-vector
+      *ngIf="(satelliteView$ | async) && (zoom$ | async) >= 15"
+    >
       <app-ol-style-parcels
         [showBorder]="true"
         [showLabelContrast]="true"
@@ -184,7 +186,7 @@
 
     <!-- 📦 SELECTION LAYER -->
 
-    <app-ol-layer-vector>
+    <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
       <app-ol-style-parcels
         [showAbutters]="true"
         [showDimensions]="true"
@@ -205,6 +207,8 @@
 
     <!-- 📦 OVERLAY FOR GPS -->
 
-    <app-ol-overlay-gps *ngIf="gps$ | async"></app-ol-overlay-gps>
+    <app-ol-overlay-gps
+      *ngIf="(gps$ | async) && (zoom$ | async) >= 15"
+    ></app-ol-overlay-gps>
   </ng-container>
 </app-ol-map>

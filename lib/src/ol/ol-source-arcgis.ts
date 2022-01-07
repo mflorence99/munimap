@@ -1,3 +1,4 @@
+import { CacheService } from '../services/cache';
 import { Features } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -30,13 +31,12 @@ import OLVector from 'ol/source/Vector';
 
 @Component({ template: '' })
 export abstract class OLSourceArcGISComponent {
-  #cache = new Map<string, Features>();
-
   @Input() maxRequests = 8;
 
   olVector: OLVector<any>;
 
   constructor(
+    private cache: CacheService,
     private http: HttpClient,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -94,7 +94,7 @@ export abstract class OLSourceArcGISComponent {
     );
     // 👇 we cache responses by URL
     const requests = urls.map((url) => {
-      const cached = this.#cache.get(url);
+      const cached = this.cache.get(url);
       return cached
         ? of(cached)
         : this.http.get(url).pipe(
@@ -104,7 +104,7 @@ export abstract class OLSourceArcGISComponent {
               geojson.features.forEach(
                 (feature) => (feature.id = this.getFeatureID(feature))
               );
-              this.#cache.set(url, geojson);
+              this.cache.set(url, geojson);
             })
           );
     });

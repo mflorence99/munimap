@@ -1,3 +1,4 @@
+import { CacheService } from '../services/cache';
 import { CountyIndex } from '../geojson';
 import { Features } from '../geojson';
 import { GeoJSONService } from './geojson';
@@ -25,9 +26,7 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GeoJSONAuthorService extends GeoJSONService {
-  #cache = new Map<string, Features>();
-
-  constructor(private http: HttpClient) {
+  constructor(private cache: CacheService, private http: HttpClient) {
     super();
   }
 
@@ -42,12 +41,12 @@ export class GeoJSONAuthorService extends GeoJSONService {
   }
 
   #load(path: string, extent: Coordinate = []): Observable<Features> {
-    const cached = this.#cache.get(path);
+    const cached = this.cache.get(path);
     const stream$ = cached
       ? of(cached)
       : this.http.get<Features>(`${environment.endpoints.proxy}${path}`).pipe(
           catchError(() => of(emptyFeatures)),
-          tap((geojson) => this.#cache.set(path, geojson))
+          tap((geojson) => this.cache.set(path, geojson))
         );
     return stream$.pipe(map((geojson) => this.filter(geojson, extent)));
   }
