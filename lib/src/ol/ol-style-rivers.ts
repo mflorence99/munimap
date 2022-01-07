@@ -38,7 +38,8 @@ export class OLStyleRiversComponent implements OLStyleComponent {
 
   #drawLine(props: RiverProperties, resolution: number): OLStroke {
     const color = this.map.vars['--map-river-line-color'];
-    const riverWidth = this.#riverWidth(resolution);
+    let riverWidth = this.#riverWidth(resolution);
+    if (props.type === 'stream') riverWidth /= 2;
     return new OLStroke({
       color: `rgba(${color}, ${this.opacity})`,
       width: riverWidth
@@ -49,7 +50,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
     const fontSize = this.#fontSize(resolution);
     // 👉 if the river label would be too small to see, don't show it
     if (fontSize < this.minFontSize) return null;
-    else {
+    else if (props.name) {
       const color = this.map.vars['--map-river-text-color'];
       return new OLText({
         fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
@@ -59,7 +60,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
           color: `rgba(255, 255, 255, ${this.opacity})`,
           width: 3
         }),
-        text: props.section
+        text: props.name
       });
     }
   }

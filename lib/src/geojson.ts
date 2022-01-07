@@ -197,6 +197,7 @@ export interface RiverProperties {
   name: string;
   section: string;
   town: string;
+  type: 'river' | 'stream';
 }
 
 export interface RoadProperties {

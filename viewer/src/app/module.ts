@@ -69,6 +69,7 @@ import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
+import { OLSourceRiversComponent } from '@lib/ol/ol-source-rivers';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
 import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
@@ -144,6 +145,7 @@ const COMPONENTS = [
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
+  OLSourceRiversComponent,
   OLSourceStoneWallsComponent,
   OLSourceWaterbodiesComponent,
   OLSourceWetlandComponent,

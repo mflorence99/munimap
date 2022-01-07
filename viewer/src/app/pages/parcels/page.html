@@ -75,15 +75,15 @@
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
-        <app-ol-style-waterbodies></app-ol-style-waterbodies>
-        <app-ol-source-waterbodies></app-ol-source-waterbodies>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+        <app-ol-style-rivers></app-ol-style-rivers>
+        <app-ol-source-rivers></app-ol-source-rivers>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-rivers></app-ol-style-rivers>
-        <app-ol-source-geojson [layerKey]="'rivers'"></app-ol-source-geojson>
+        <app-ol-style-waterbodies></app-ol-style-waterbodies>
+        <app-ol-source-waterbodies></app-ol-source-waterbodies>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
