@@ -38,7 +38,7 @@ const ICONS: {
   civil: '\uf041',
   cliff: '\uf041',
   crossing: '\uf00d',
-  dam: '\uf041',
+  dam: '\uf773',
   falls: '\uf041',
   flat: '\uf041',
   forest: '\uf1bb',
@@ -129,7 +129,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
         color: `rgba(255, 255, 255, ${this.opacity})`,
         width: 3
       }),
-      text: props.name.replace(/ /g, '\n'),
+      text: this.#titleCase(props.name).replace(/ /g, '\n'),
       textAlign: this.textAlign,
       textBaseline: this.textBaseline
     });
@@ -140,6 +140,13 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     //    but no bigger than the max size specified
     const nominal = Math.min(this.maxFontSize, this.fontSize / resolution);
     return props.type === 'lake' ? nominal * 3 : nominal;
+  }
+
+  #titleCase(text: string): string {
+    return text.replace(
+      /\w\S*/g,
+      (str) => str.charAt(0).toUpperCase() + str.substring(1).toLowerCase()
+    );
   }
 
   style(): OLStyleFunction {

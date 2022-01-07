@@ -6,7 +6,9 @@ import { OLLayerVectorTileComponent } from './ol-layer-vectortile';
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Optional } from '@angular/core';
 
 import Colorize from 'ol-ext/filter/Colorize';
@@ -17,10 +19,14 @@ import Colorize from 'ol-ext/filter/Colorize';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLFilterGrayscaleComponent implements AfterContentInit, OnDestroy {
+export class OLFilterGrayscaleComponent
+  implements AfterContentInit, OnDestroy, OnInit
+{
   #layer: any;
 
   olFilter: typeof Colorize;
+
+  @Input() value = 1;
 
   constructor(
     @Optional() layer1: OLLayerMapboxComponent,
@@ -34,8 +40,7 @@ export class OLFilterGrayscaleComponent implements AfterContentInit, OnDestroy {
     this.olFilter = new Colorize({
       active: true,
       operation: 'hue',
-      color: [0, 0, 0],
-      value: 1
+      color: [255, 255, 255]
     });
   }
 
@@ -47,5 +52,9 @@ export class OLFilterGrayscaleComponent implements AfterContentInit, OnDestroy {
   ngOnDestroy(): void {
     // 👇 ol-ext has monkey-patched removeFilter
     this.#layer.olLayer['removeFilter'](this.olFilter);
+  }
+
+  ngOnInit(): void {
+    this.olFilter.setValue(this.value);
   }
 }

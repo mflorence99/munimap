@@ -89,6 +89,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
+import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -194,6 +195,7 @@ const COMPONENTS = [
   OLOverlayParcelLabelComponent,
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
+  OLSourceDamsComponent,
   OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,

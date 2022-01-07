@@ -40,6 +40,7 @@
             ></app-ol-attribution
           ></app-ol-source-xyz
         >
+        <app-ol-filter-grayscale [value]="0.75"></app-ol-filter-grayscale>
       </app-ol-layer-tile>
 
       <!-- 📦 BG LAYER (lays down a texture inside town)-->
@@ -139,6 +140,12 @@
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
         <app-ol-style-places></app-ol-style-places>
         <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+        <app-ol-style-places></app-ol-style-places>
+        <app-ol-source-dams></app-ol-source-dams>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
     </ng-container>

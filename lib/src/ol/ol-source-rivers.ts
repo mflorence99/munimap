@@ -27,6 +27,10 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
     super(cache, http, layer, map);
   }
 
+  // 👇 see RiverProperties
+  //    we replaced rivers.geojson with this data source, as it has a
+  //    LOT more data -- we just need to adapt the properties to match
+
   filter(arcgis: any): any {
     arcgis.features.forEach((feature) => {
       feature.attributes.name = feature.attributes.GNIS_Name;

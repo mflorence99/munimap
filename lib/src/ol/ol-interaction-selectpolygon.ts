@@ -19,6 +19,7 @@ import { unByKey } from 'ol/Observable';
 
 import OLFeature from 'ol/Feature';
 import OLSelect from 'ol/interaction/Select';
+
 export type FilterFunction = (feature: OLFeature<any>) => boolean;
 
 @Component({

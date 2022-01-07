@@ -53,7 +53,7 @@ import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-sear
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
-import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
+import { OLFilterGrayscaleComponent } from '@lib/ol/ol-filter-grayscale';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
@@ -65,6 +65,7 @@ import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parce
 import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
+import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -129,7 +130,7 @@ const COMPONENTS = [
   OLControlZoomToExtentComponent,
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2SelectedComponent,
-  OLFilterPencilComponent,
+  OLFilterGrayscaleComponent,
   OLInteractionSelectParcelsComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
@@ -141,6 +142,7 @@ const COMPONENTS = [
   OLPopupSelectionComponent,
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
+  OLSourceDamsComponent,
   OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,

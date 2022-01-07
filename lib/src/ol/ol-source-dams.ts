@@ -8,8 +8,6 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
-import copy from 'fast-copy';
-
 // 👇 we replaced lakes.geojson with this data source
 //    as it has a LOT more data
 
@@ -18,11 +16,11 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-waterbodies',
+  selector: 'app-ol-source-dams',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
+export class OLSourceDamsComponent extends OLSourceArcGISComponent {
   constructor(
     cache: CacheService,
     map: OLMapComponent,
@@ -32,22 +30,16 @@ export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
     super(cache, http, layer, map);
   }
 
+  // 👇 see PlaceProperties
+  //    places.geojson does contain dams, but ony major ones
+  //    so we augment it with this data source
+
   filter(arcgis: any): any {
-    // 🔥 keep this b/c it helps see what's in the raw data
-    // const unique = new Set();
-    // arcgis.features.forEach((feature: any) =>
-    //   unique.add(feature.attributes.FType)
-    // );
-    // console.log(Array.from(unique).sort());
-    // 👇 these waterbody types don't add anything to the map b/c
-    //    other features like floodplain already show what
-    //    needs to be shown
-    const filtered = copy(arcgis);
-    const exclude = [466 /* 👈 swamp/marsh */];
-    filtered.features = arcgis.features.filter(
-      (feature) => !exclude.includes(feature.attributes.FType)
-    );
-    return filtered;
+    arcgis.features.forEach((feature) => {
+      feature.attributes.name = feature.attributes.NAME;
+      feature.attributes.type = 'dam';
+    });
+    return arcgis;
   }
 
   getAttribution(): string {
@@ -59,11 +51,11 @@ export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'waterbodies';
+    return 'dams';
   }
 
   getURL(extent: Coordinate): string {
     const [minX, minY, maxX, maxY] = extent;
-    return `https://nhgeodata.unh.edu/nhgeodata/rest/services/IWR/WaterResources/MapServer/9/query?f=json&returnIdsOnly=false&returnCountOnly=false&where=1=1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
+    return `https://nhgeodata.unh.edu/nhgeodata/rest/services/IWR/Dams/MapServer/0/query?f=json&returnIdsOnly=false&returnCountOnly=false&where=1=1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
   }
 }
