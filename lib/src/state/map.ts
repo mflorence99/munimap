@@ -64,6 +64,7 @@ export class MapState {
     action: DeleteMap
   ): void {
     ctx.setState(null);
+    console.log(`%cFirestore delete: maps ${action.id}`, 'color: crimson');
     this.#maps.doc(action.id).delete();
   }
 
@@ -74,6 +75,7 @@ export class MapState {
     // 👇 there's no map until there is one
     //    we can't use the old one!
     ctx.setState(null);
+    console.log(`%cFirestore get: maps ${action.id}`, 'color: goldenrod');
     this.#maps
       .doc(action.id)
       .get()
@@ -95,6 +97,7 @@ export class MapState {
     action: UpdateMap
   ): void {
     if (action.map.isDflt) {
+      console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
       this.#maps
         .doc(action.map.id)
         .get()
@@ -111,6 +114,10 @@ export class MapState {
           }
         });
     } else {
+      console.log(
+        `%cFirestore set: maps ${action.map.id} ${JSON.stringify(action.map)}`,
+        'color: chocolate'
+      );
       this.#maps
         .doc(action.map.id)
         .set(action.map, { merge: true })

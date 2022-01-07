@@ -72,6 +72,10 @@ export class AnonState implements NgxsOnInit {
     ctx: StateContext<AnonStateModel>,
     action: LoadProfile
   ): void {
+    console.log(
+      `%cFirestore get: profiles ${action.email}`,
+      'color: goldenrod'
+    );
     this.#profiles
       .doc(action.email)
       .get()

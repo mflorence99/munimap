@@ -49,6 +49,12 @@ export class NavigatorComponent implements OnInit {
           const workgroup = AuthState.workgroup(profile);
           const query = (ref): any =>
             ref.where('owner', 'in', workgroup).orderBy('name');
+          console.log(
+            `%cFirestore query: maps where owner in ${JSON.stringify(
+              workgroup
+            )} orderBy name`,
+            'color: goldenrod'
+          );
           return this.firestore.collection<Map>('maps', query).valueChanges();
         }
       })

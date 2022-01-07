@@ -138,6 +138,10 @@ export class AuthState implements NgxsOnInit {
       .pipe(
         // 👉 combine the user with its corresponding profile
         mergeMap((user) => {
+          console.log(
+            `%cFirestore get: profiles ${user?.email}`,
+            'color: goldenrod'
+          );
           const profile$ = user
             ? this.#profiles.doc(user.email).get()
             : of(null);
@@ -187,6 +191,12 @@ export class AuthState implements NgxsOnInit {
     action: UpdateProfile
   ): void {
     const user = ctx.getState().user;
+    console.log(
+      `%cFirestore set: profiles ${user.email} ${JSON.stringify(
+        action.profile
+      )}`,
+      'color: chocolate'
+    );
     this.#profiles
       .doc(user.email)
       .set(AuthState.profileProps(action.profile), { merge: true })

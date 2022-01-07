@@ -188,8 +188,13 @@ export class ParcelsState implements NgxsOnInit {
     const undos: Parcel[] = [];
     undoStack.push(undos);
     const promises = action.parcels.map((parcel) => {
+      const normalized = this.#normalize(parcel);
+      console.log(
+        `%cFirestore add: parcels ${JSON.stringify(normalized)}`,
+        'color: chocolate'
+      );
       return this.#parcels
-        .add(this.#normalize(parcel))
+        .add(normalized)
         .then((ref) => undos.push({ ...copy(parcel), $id: ref.id }));
     });
     // TODO 🔥 we have a great opportunity here to "cull"
@@ -261,21 +266,30 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 "redo" the parcels"
     const batch = this.firestore.firestore.batch();
     const promises = redos.map((parcel) => {
+      let promise;
       switch (parcel.action) {
         case 'added':
           delete parcel.$id;
           parcel.action = 'removed';
-          return this.#parcels.add(parcel).then(() => undos.push(parcel));
+          promise = this.#parcels.add(parcel).then(() => undos.push(parcel));
+          break;
         case 'modified':
           delete parcel.$id;
-          return this.#parcels
+          promise = this.#parcels
             .add(parcel)
             .then((ref) => undos.push({ ...copy(parcel), $id: ref.id }));
+          break;
         case 'removed':
           delete parcel.$id;
           parcel.action = 'added';
-          return this.#parcels.add(parcel).then(() => undos.push(parcel));
+          promise = this.#parcels.add(parcel).then(() => undos.push(parcel));
+          break;
       }
+      console.log(
+        `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
+        'color: chocolate'
+      );
+      return promise;
     });
     batch.commit();
     Promise.all(promises).then(() => {
@@ -305,21 +319,30 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 "undo" the parcels
     const batch = this.firestore.firestore.batch();
     const promises = undos.map((parcel) => {
+      let promise;
       switch (parcel.action) {
         case 'added':
           delete parcel.$id;
           parcel.action = 'removed';
-          return this.#parcels.add(parcel).then(() => redos.push(parcel));
+          promise = this.#parcels.add(parcel).then(() => redos.push(parcel));
+          break;
         case 'modified':
-          return this.#parcels
+          promise = this.#parcels
             .doc(parcel.$id)
             .delete()
             .then(() => redos.push(parcel));
+          break;
         case 'removed':
           delete parcel.$id;
           parcel.action = 'added';
-          return this.#parcels.add(parcel).then(() => redos.push(parcel));
+          promise = this.#parcels.add(parcel).then(() => redos.push(parcel));
+          break;
       }
+      console.log(
+        `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
+        'color: chocolate'
+      );
+      return promise;
     });
     batch.commit();
     Promise.all(promises).then(() => {
