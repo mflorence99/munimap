@@ -2,6 +2,7 @@ import { Features } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
+import { dedupe } from '../geojson';
 import { environment } from '../environment';
 
 import { Component } from '@angular/core';
@@ -31,7 +32,7 @@ import OLVector from 'ol/source/Vector';
 export abstract class OLSourceArcGISComponent {
   #cache = new Map<string, Features>();
 
-  @Input() maxRequests = 4;
+  @Input() maxRequests = 8;
 
   olVector: OLVector<any>;
 
@@ -111,16 +112,7 @@ export abstract class OLSourceArcGISComponent {
     merge(...requests, this.maxRequests)
       .pipe(
         toArray(),
-        map((geojsons: Features[]) => {
-          const hash = geojsons.reduce((acc, geojson) => {
-            geojson.features.forEach((feature) => (acc[feature.id] = feature));
-            return acc;
-          }, {});
-          return {
-            features: Object.values(hash),
-            type: 'FeatureCollection'
-          } as Features;
-        })
+        map((geojsons: Features[]) => dedupe(geojsons))
       )
       .subscribe((geojson: Features) => {
         // 👉 convert features into OL format

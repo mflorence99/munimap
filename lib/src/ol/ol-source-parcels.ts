@@ -23,13 +23,9 @@ import { Subject } from 'rxjs';
 
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
-import { merge } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
-import bbox from '@turf/bbox';
-import bboxPolygon from '@turf/bbox-polygon';
-import booleanIntersects from '@turf/boolean-intersects';
 import copy from 'fast-copy';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
@@ -91,19 +87,6 @@ export class OLSourceParcelsComponent implements OnInit {
       (feature) => !removed.has(feature.id)
     );
     return removed;
-  }
-
-  #gridsFromExtent(extent: Coordinate, projection: OLProjection): Coordinate[] {
-    const visible = bboxPolygon(
-      transformExtent(
-        extent,
-        projection,
-        this.map.featureProjection
-      ) as GeoJSON.BBox
-    );
-    return this.map.boundaryGrid.features
-      .filter((feature) => booleanIntersects(visible, feature))
-      .map((feature) => bbox(feature));
   }
 
   #handleStreams$(): void {
@@ -170,22 +153,17 @@ export class OLSourceParcelsComponent implements OnInit {
     projection: OLProjection,
     success: Function
   ): void {
-    // 👇 one request for each grid square covered by the extent
-    //    this way requests are repeatable and cachable
-    const grids = this.#gridsFromExtent(extent, projection);
-    const requests = grids.map((grid) =>
-      this.geoJSON.loadByIndex(
-        this.route,
-        this.path ?? this.map.path,
-        'parcels',
-        grid
-      )
+    const bbox = transformExtent(
+      extent,
+      projection,
+      this.map.featureProjection
     );
-    // 👇 run the requests with a maximum concurrency
-    merge(...requests, this.maxRequests).subscribe((geojson: Features) => {
-      this.#success = success;
-      this.#geojson$.next(geojson);
-    });
+    this.geoJSON
+      .loadByIndex(this.route, this.path ?? this.map.path, 'parcels', bbox)
+      .subscribe((geojson: Features) => {
+        this.#success = success;
+        this.#geojson$.next(geojson);
+      });
   }
 
   #overrideFeaturesWithParcels(geojson: Features, parcels: Parcel[]): void {

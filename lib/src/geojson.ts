@@ -3,6 +3,7 @@ import { point } from '@turf/helpers';
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bearing from '@turf/bearing';
+import copy from 'fast-copy';
 import distance from '@turf/distance';
 import firebase from 'firebase/app';
 import length from '@turf/length';
@@ -385,6 +386,16 @@ function calculateSqarcity(
   const perimeter =
     lengths.reduce((sum, length) => sum + length) / 3.28084; /* 👈 to meters */
   return (area(polygon) / Math.pow(perimeter, 2)) * 4 * Math.PI;
+}
+
+export function dedupe(geojsons: Features[]): Features {
+  const hash = geojsons.reduce((acc, geojson) => {
+    geojson.features.forEach((feature) => (acc[feature.id] = feature));
+    return acc;
+  }, {});
+  const deduped = copy(emptyFeatures);
+  deduped.features = Object.values(hash);
+  return deduped;
 }
 
 export function deserialize(parcel: Parcel): void {

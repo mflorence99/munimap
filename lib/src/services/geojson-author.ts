@@ -16,13 +16,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 // 👇 this implementation of GeoJSONService has access to the entire
 //    catalog of geojson data for authoring
 
 @Injectable()
 export class GeoJSONAuthorService extends GeoJSONService {
+  #cache = new Map<string, Features>();
+
   constructor(private http: HttpClient) {
     super();
   }
@@ -38,19 +42,14 @@ export class GeoJSONAuthorService extends GeoJSONService {
   }
 
   #load(path: string, extent: Coordinate = []): Observable<Features> {
-    let params = '';
-    if (extent.length === 4) {
-      // 👉 we're going to quantize the extent to 2DPs
-      //    so that we can cache the result
-      const minX = (Math.floor(extent[0] * 100) / 100).toFixed(2);
-      const minY = (Math.floor(extent[1] * 100) / 100).toFixed(2);
-      const maxX = (Math.ceil(extent[2] * 100) / 100).toFixed(2);
-      const maxY = (Math.ceil(extent[3] * 100) / 100).toFixed(2);
-      params = `?minX=${minX}&minY=${minY}&maxX=${maxX}&maxY=${maxY}`;
-    }
-    return this.http
-      .get<Features>(`${environment.endpoints.proxy}${path}${params}`)
-      .pipe(catchError(() => of(emptyFeatures)));
+    const cached = this.#cache.get(path);
+    const stream$ = cached
+      ? of(cached)
+      : this.http.get<Features>(`${environment.endpoints.proxy}${path}`).pipe(
+          catchError(() => of(emptyFeatures)),
+          tap((geojson) => this.#cache.set(path, geojson))
+        );
+    return stream$.pipe(map((geojson) => this.filter(geojson, extent)));
   }
 
   #loadFromIndex(
