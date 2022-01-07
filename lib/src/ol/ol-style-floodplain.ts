@@ -9,7 +9,6 @@ import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFill from 'ol/style/Fill';
-import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLStyle from 'ol/style/Style';
 
 @Component({
@@ -19,7 +18,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleFloodplainComponent implements OLStyleComponent {
-  @Input() opacity = 0;
+  @Input() opacity = 0.1;
   @Input() pattern: OLFillPatternType = 'flooded';
 
   constructor(
@@ -32,13 +31,8 @@ export class OLStyleFloodplainComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (): OLStyle => {
       const fill = this.map.vars['--map-floodplain-fill'];
-      const flooded = this.map.vars['--map-floodplain-flooded'];
       return new OLStyle({
-        fill: new OLFillPattern({
-          color: `rgba(${flooded}, 1)`,
-          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-          pattern: this.pattern
-        }),
+        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
         stroke: null
       });
     };

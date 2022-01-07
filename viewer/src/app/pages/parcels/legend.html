@@ -56,19 +56,8 @@
           DES
 
           <figure class="key">
-            <div
-              [style.backgroundImage]="'url(\'' + floodplain.getImage().toDataURL() +  '\')'"
-              class="icon"
-            ></div>
+            <div [style.backgroundColor]="floodplain" class="icon"></div>
             <figcaption>FEMA Floodplain</figcaption>
-          </figure>
-
-          <figure class="key">
-            <div
-              [style.backgroundImage]="'url(\'' + peatland.getImage().toDataURL() +  '\')'"
-              class="icon"
-            ></div>
-            <figcaption>Peatland</figcaption>
           </figure>
 
           <figure class="key">

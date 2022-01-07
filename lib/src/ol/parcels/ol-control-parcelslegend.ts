@@ -57,7 +57,6 @@ interface Override {
   styleUrls: ['./ol-control-parcelslegend.scss']
 })
 export class OLControlParcelsLegendComponent implements Mapable, OnInit {
-  #boundary$ = new Subject<Features>();
   #geojson$ = new Subject<Features>();
 
   areaByUsage: Record<string, number> = {};
@@ -70,14 +69,9 @@ export class OLControlParcelsLegendComponent implements Mapable, OnInit {
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast
   //    with a white background
-  iconFloodplain = new OLFillPattern({ color: '#0d47a1', pattern: 'flooded' });
-  iconPeatland = new OLFillPattern({
-    color: '#1b5e20',
-    pattern: 'scrub',
-    scale: 0.66
-  });
+  iconFloodplain = '#0d47a180';
   iconWetland = new OLFillPattern({
-    color: '#004d40',
+    color: '#0d47a1',
     pattern: 'swamp',
     scale: 0.66
   });
@@ -116,12 +110,6 @@ export class OLControlParcelsLegendComponent implements Mapable, OnInit {
   //    the data available -- so countables are degenerate parcels with
   //    just area, usage and use
 
-  #handleBoundary$(): void {
-    this.geoJSON
-      .loadByIndex(this.route, this.map.path, 'boundary')
-      .subscribe((boundary: Features) => this.#boundary$.next(boundary));
-  }
-
   #handleGeoJSON$(): void {
     this.geoJSON
       .loadByIndex(this.route, this.map.path, 'countables')
@@ -130,9 +118,9 @@ export class OLControlParcelsLegendComponent implements Mapable, OnInit {
 
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
-    combineLatest([this.#boundary$, this.#geojson$, this.parcels$])
+    combineLatest([this.#geojson$, this.parcels$])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([boundary, original, parcels]) => {
+      .subscribe(([original, parcels]) => {
         // 👉 take a copy of the geojson before we change it
         const geojson = copy(original);
         // 👉 build aggregate data structures
@@ -157,7 +145,8 @@ export class OLControlParcelsLegendComponent implements Mapable, OnInit {
           acc[use] += area;
           return acc;
         }, {});
-        this.areaOfTown = area(boundary) * 0.000247105; /* 👈 to acres */
+        this.areaOfTown =
+          area(this.map.boundary) * 0.000247105; /* 👈 to acres */
         this.areaOfParcels = Object.values(this.areaByUsage).reduce(
           (p, q) => p + q
         );
@@ -203,7 +192,6 @@ export class OLControlParcelsLegendComponent implements Mapable, OnInit {
 
   ngOnInit(): void {
     this.olControl = new Legend({ element: this.legend.nativeElement });
-    this.#handleBoundary$();
     this.#handleGeoJSON$();
     this.#handleStreams$();
   }

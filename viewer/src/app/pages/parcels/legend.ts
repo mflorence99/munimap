@@ -16,9 +16,8 @@ export class ParcelsLegendComponent {
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast
   //    with a black background
-  floodplain = new OLFillPattern({ color: '#03a9f4', pattern: 'flooded' });
-  peatland = new OLFillPattern({ color: '#66bb6a', pattern: 'scrub' });
-  wetland = new OLFillPattern({ color: '#009688', pattern: 'swamp' });
+  floodplain = '#03a9f480';
+  wetland = new OLFillPattern({ color: '#03a9f4', pattern: 'swamp' });
 
   constructor(public registry: TypeRegistry, private version: VersionService) {}
 

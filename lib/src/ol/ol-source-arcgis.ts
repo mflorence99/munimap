@@ -99,7 +99,9 @@ export abstract class OLSourceArcGISComponent {
         ? of(cached)
         : this.http.get(url).pipe(
             catchError(() => of({ features: [] })),
-            map((arcgis: any): Features => arcgisToGeoJSON(arcgis)),
+            map(
+              (arcgis: any): Features => arcgisToGeoJSON(this.filter(arcgis))
+            ),
             tap((geojson: Features) => {
               geojson.features.forEach(
                 (feature) => (feature.id = this.getFeatureID(feature))
@@ -126,6 +128,10 @@ export abstract class OLSourceArcGISComponent {
         });
         success(features);
       });
+  }
+
+  filter(arcgis: any): any {
+    return arcgis;
   }
 
   abstract getAttribution(): string;

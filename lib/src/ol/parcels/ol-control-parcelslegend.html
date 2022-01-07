@@ -69,19 +69,8 @@
         <td class="des">
           <article class="keys">
             <figure class="key">
-              <div
-                [style.backgroundImage]="'url(\'' + iconFloodplain.getImage().toDataURL() +  '\')'"
-                class="icon"
-              ></div>
+              <div [style.backgroundColor]="iconFloodplain" class="icon"></div>
               <figcaption>FEMA Floodplain</figcaption>
-            </figure>
-
-            <figure class="key">
-              <div
-                [style.backgroundImage]="'url(\'' + iconPeatland.getImage().toDataURL() +  '\')'"
-                class="icon"
-              ></div>
-              <figcaption>Peatland</figcaption>
             </figure>
 
             <figure class="key">

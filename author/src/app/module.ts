@@ -93,7 +93,6 @@ import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
-import { OLSourcePeatlandComponent } from '@lib/ol/ol-source-peatland';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
@@ -104,7 +103,6 @@ import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleLakesComponent } from '@lib/ol/ol-style-lakes';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
-import { OLStylePeatlandComponent } from '@lib/ol/ol-style-peatland';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
 import { OLStylePolygonsComponent } from '@lib/ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
@@ -198,7 +196,6 @@ const COMPONENTS = [
   OLSourceGeoJSONComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
-  OLSourcePeatlandComponent,
   OLSourceStoneWallsComponent,
   OLSourceWetlandComponent,
   OLSourceXYZComponent,
@@ -209,7 +206,6 @@ const COMPONENTS = [
   OLStyleLakesComponent,
   OLStyleParcelsComponent,
   OLStylePatternDirective,
-  OLStylePeatlandComponent,
   OLStylePlacesComponent,
   OLStylePolygonsComponent,
   OLStylePowerlinesComponent,

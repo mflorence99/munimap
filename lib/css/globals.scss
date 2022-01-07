@@ -135,9 +135,6 @@ $dark-app-theme: mat-dark-theme(
   --map-parcel-stroke-CUFL: var(--rgb-green-500);
   --map-parcel-stroke-CUWL: var(--rgb-blue-500);
 
-  --map-peatland-fill: var(--rgb-light-green-900);
-  --map-peatland-scrub: var(--rgb-green-900);
-
   --map-powerline-icon-color: var(--rgb-yellow-500);
   --map-powerline-line-color: var(--rgb-gray-900);
 
@@ -178,8 +175,7 @@ $dark-app-theme: mat-dark-theme(
   --map-trail-line-color: var(--rgb-brown-600);
   --map-trail-text-color: var(--rgb-brown-600);
 
-  --map-wetland-fill: var(--rgb-teal-400);
-  --map-wetland-swamp: var(--rgb-teal-900);
+  --map-wetland-swamp: var(--rgb-blue-900);
 }
 
 // 👉 base styles

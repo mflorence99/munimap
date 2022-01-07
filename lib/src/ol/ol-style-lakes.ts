@@ -1,4 +1,3 @@
-import { OLFillPatternType } from './ol-style';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
@@ -19,7 +18,7 @@ import OLStyle from 'ol/style/Style';
 })
 export class OLStyleLakesComponent implements OLStyleComponent {
   @Input() opacity = 0.5;
-  @Input() pattern: OLFillPatternType = 'wave';
+  // @Input() pattern: OLFillPatternType = 'wave';
 
   constructor(
     private layer: OLLayerVectorComponent,

@@ -105,12 +105,6 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
-        <app-ol-style-peatland></app-ol-style-peatland>
-        <app-ol-source-peatland></app-ol-source-peatland>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
       <app-ol-layer-vector>
         <app-ol-style-floodplain></app-ol-style-floodplain>
         <app-ol-source-floodplain></app-ol-source-floodplain>
