@@ -13,7 +13,7 @@ function workgroupValidatorFactory(): ValidatorFn {
     if (!value) return null;
 
     // 👉 error if more than 10 emails
-    const emails = value.split('\n');
+    const emails = value.split(/[\n ;]+/g).filter((email) => !!email);
     if (emails.length > 10)
       return {
         tooMany: {

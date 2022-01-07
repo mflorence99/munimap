@@ -64,6 +64,8 @@ export class ParcelsPage implements OnInit {
   @ViewChild(OLOverlayParcelLabelComponent)
   overlayLabel: OLOverlayParcelLabelComponent;
 
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+
   constructor(
     private actions$: Actions,
     private authState: AuthState,

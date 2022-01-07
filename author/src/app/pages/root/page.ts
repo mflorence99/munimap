@@ -17,11 +17,13 @@ import { Redo } from '@lib/state/parcels';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { Select } from '@ngxs/store';
+import { SetSatelliteView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Undo } from '@lib/state/parcels';
 import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
 import { ViewChild } from '@angular/core';
+import { ViewState } from '@lib/state/view';
 
 import { moveFromLeftFade } from 'ngx-router-animations';
 import { ofActionSuccessful } from '@ngxs/store';
@@ -51,6 +53,8 @@ export class RootPage implements OnInit {
   @ViewChild(RouterOutlet) outlet;
 
   @Select(AuthState.profile) profile$: Observable<Profile>;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   title: string;
 
@@ -107,6 +111,10 @@ export class RootPage implements OnInit {
   ngOnInit(): void {
     this.#handleActions$();
     this.#handleRouterEvents$();
+  }
+
+  onSatelliteViewToggle(state: boolean): void {
+    this.store.dispatch(new SetSatelliteView(state));
   }
 
   redo(): void {

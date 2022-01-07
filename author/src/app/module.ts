@@ -40,6 +40,7 @@ import { InitializerService } from '@lib/services/initializer';
 import { LocationStrategy } from '@angular/common';
 import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -134,6 +135,7 @@ import { faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
@@ -288,6 +290,7 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
     FormsModule,
     HttpClientModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatCardModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -361,6 +364,7 @@ export class RootModule {
       faDrawPolygon,
       faExclamationTriangle,
       faExpandArrows,
+      faGlobeAmericas,
       faInfoCircle,
       faLayerGroup,
       faLayerPlus,

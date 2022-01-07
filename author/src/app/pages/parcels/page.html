@@ -56,129 +56,164 @@
 
         <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
 
-        <!-- 📦 BG LAYER (outside town)-->
+        <!-- 📦 NORMAL (not satellite) LAYERS -->
 
-        <app-ol-layer-tile>
-          <app-ol-source-xyz
-            [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-            ><app-ol-attribution
-              >©
-              <a href="https://mapbox.com" target="_blank"
-                >Mapbox</a
-              ></app-ol-attribution
-            ></app-ol-source-xyz
-          >
-        </app-ol-layer-tile>
+        <ng-container *ngIf="!(satelliteView$ | async)">
+          <!-- 📦 BG LAYER (outside town)-->
 
-        <!-- 📦 BG LAYER (lays down a texture inside town)-->
-
-        <app-ol-layer-vector>
-          <app-ol-style-boundary></app-ol-style-boundary>
-          <app-ol-source-boundary></app-ol-source-boundary>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-
-        <!-- 📦 HILLSHADE LAYER =-->
-
-        <app-ol-layer-tile [opacity]="1">
-          <app-ol-source-xyz
-            [maxZoom]="17"
-            [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
-          >
-            <app-ol-attribution
-              >Powered by
-              <a href="https://www.esri.com" target="_blank"
-                >Esri</a
-              ></app-ol-attribution
+          <app-ol-layer-tile>
+            <app-ol-source-xyz
+              [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+              ><app-ol-attribution
+                >©
+                <a href="https://mapbox.com" target="_blank"
+                  >Mapbox</a
+                ></app-ol-attribution
+              ></app-ol-source-xyz
             >
-          </app-ol-source-xyz>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-tile>
+          </app-ol-layer-tile>
 
-        <!-- 📦 NH GranIT VECTOR LAYERS -->
+          <!-- 📦 BG LAYER (lays down a texture inside town)-->
 
-        <app-ol-layer-vector>
-          <app-ol-style-parcels
-            [showBackground]="true"
-            [showBorder]="true"
-          ></app-ol-style-parcels>
-          <app-ol-source-parcels></app-ol-source-parcels>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-boundary></app-ol-style-boundary>
+            <app-ol-source-boundary></app-ol-source-boundary>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-lakes></app-ol-style-lakes>
-          <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <!-- 📦 HILLSHADE LAYER =-->
 
-        <app-ol-layer-vector>
-          <app-ol-style-rivers></app-ol-style-rivers>
-          <app-ol-source-geojson [layerKey]="'rivers'"></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-tile [opacity]="1">
+            <app-ol-source-xyz
+              [maxZoom]="17"
+              [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+            >
+              <app-ol-attribution
+                >Powered by
+                <a href="https://www.esri.com" target="_blank"
+                  >Esri</a
+                ></app-ol-attribution
+              >
+            </app-ol-source-xyz>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-tile>
 
-        <app-ol-layer-vector>
-          <app-ol-style-roads></app-ol-style-roads>
-          <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <!-- 📦 NH GranIT VECTOR LAYERS -->
 
-        <app-ol-layer-vector>
-          <app-ol-style-trails></app-ol-style-trails>
-          <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-parcels
+              [showBackground]="true"
+              [showBorder]="true"
+            ></app-ol-style-parcels>
+            <app-ol-source-parcels></app-ol-source-parcels>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-stonewalls></app-ol-style-stonewalls>
-          <app-ol-source-stonewalls></app-ol-source-stonewalls>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-lakes></app-ol-style-lakes>
+            <app-ol-source-geojson [layerKey]="'lakes'"></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-peatland></app-ol-style-peatland>
-          <app-ol-source-peatland></app-ol-source-peatland>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-rivers></app-ol-style-rivers>
+            <app-ol-source-geojson
+              [layerKey]="'rivers'"
+            ></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-floodplain></app-ol-style-floodplain>
-          <app-ol-source-floodplain></app-ol-source-floodplain>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-roads></app-ol-style-roads>
+            <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-wetland></app-ol-style-wetland>
-          <app-ol-source-wetland></app-ol-source-wetland>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-trails></app-ol-style-trails>
+            <app-ol-source-geojson
+              [layerKey]="'trails'"
+            ></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-buildings></app-ol-style-buildings>
-          <app-ol-source-geojson
-            [layerKey]="'buildings'"
-          ></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-stonewalls></app-ol-style-stonewalls>
+            <app-ol-source-stonewalls></app-ol-source-stonewalls>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-powerlines></app-ol-style-powerlines>
-          <app-ol-source-geojson
-            [layerKey]="'powerlines'"
-          ></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-peatland></app-ol-style-peatland>
+            <app-ol-source-peatland></app-ol-source-peatland>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-parcels [showLabels]="true"></app-ol-style-parcels>
-          <app-ol-source-parcels> </app-ol-source-parcels>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-floodplain></app-ol-style-floodplain>
+            <app-ol-source-floodplain></app-ol-source-floodplain>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-style-places></app-ol-style-places>
-          <app-ol-source-geojson [layerKey]="'places'"></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+          <app-ol-layer-vector>
+            <app-ol-style-wetland></app-ol-style-wetland>
+            <app-ol-source-wetland></app-ol-source-wetland>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-style-buildings></app-ol-style-buildings>
+            <app-ol-source-geojson
+              [layerKey]="'buildings'"
+            ></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-style-powerlines></app-ol-style-powerlines>
+            <app-ol-source-geojson
+              [layerKey]="'powerlines'"
+            ></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-style-parcels [showLabels]="true"></app-ol-style-parcels>
+            <app-ol-source-parcels> </app-ol-source-parcels>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-style-places></app-ol-style-places>
+            <app-ol-source-geojson
+              [layerKey]="'places'"
+            ></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
+        </ng-container>
+
+        <!-- 📦 SATELLITE LAYERS  -->
+
+        <ng-container *ngIf="satelliteView$ | async">
+          <app-ol-layer-tile>
+            <app-ol-source-xyz
+              [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+              ><app-ol-attribution
+                >©
+                <a href="https://mapbox.com" target="_blank"
+                  >Mapbox</a
+                ></app-ol-attribution
+              ></app-ol-source-xyz
+            >
+          </app-ol-layer-tile>
+
+          <app-ol-layer-vector>
+            <app-ol-style-parcels
+              [showBorder]="true"
+              [showLabelContrast]="true"
+              [showLabels]="true"
+            ></app-ol-style-parcels>
+            <app-ol-source-parcels></app-ol-source-parcels>
+          </app-ol-layer-vector>
+        </ng-container>
 
         <!-- 📦 BOUNDARY LAYER -->
 
@@ -201,6 +236,7 @@
           <app-ol-style-parcels
             [showDimensions]="true"
             [showLabels]="true"
+            [showLabelContrast]="satelliteView$ | async"
             [showSelection]="true"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>

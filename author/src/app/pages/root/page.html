@@ -12,7 +12,13 @@
       <ng-container *ngIf="title"> {{ title }} </ng-container>
     </h1>
 
-    <div class="filler"></div>
+    <mat-button-toggle
+      #satelliteViewToggle
+      (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
+      [checked]="satelliteView$ | async"
+    >
+      <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
+    </mat-button-toggle>
 
     <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
       <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
