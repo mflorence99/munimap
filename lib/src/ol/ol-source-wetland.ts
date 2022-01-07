@@ -39,12 +39,14 @@ export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
     // 👇 these wetland types don't add anything to the map b/c
     //    other features like streams and lakes already show what
     //    needs to be shown
-    const filtered = copy(arcgis);
-    const exclude = ['Freshwater Pond', 'Lake', 'Riverine'];
-    filtered.features = arcgis.features.filter(
-      (feature) => !exclude.includes(feature.attributes.WETLAND_TY)
-    );
-    return filtered;
+    if (arcgis) {
+      const filtered = copy(arcgis);
+      const exclude = ['Freshwater Pond', 'Lake', 'Riverine'];
+      filtered.features = arcgis.features.filter(
+        (feature) => !exclude.includes(feature.attributes.WETLAND_TY)
+      );
+      return filtered;
+    } else return super.filter(arcgis);
   }
 
   getAttribution(): string {

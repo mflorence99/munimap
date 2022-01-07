@@ -42,12 +42,14 @@ export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
     // 👇 these waterbody types don't add anything to the map b/c
     //    other features like floodplain already show what
     //    needs to be shown
-    const filtered = copy(arcgis);
-    const exclude = [466 /* 👈 swamp/marsh */];
-    filtered.features = arcgis.features.filter(
-      (feature) => !exclude.includes(feature.attributes.FType)
-    );
-    return filtered;
+    if (arcgis) {
+      const filtered = copy(arcgis);
+      const exclude = [466 /* 👈 swamp/marsh */];
+      filtered.features = arcgis.features.filter(
+        (feature) => !exclude.includes(feature.attributes.FType)
+      );
+      return filtered;
+    } else return super.filter(arcgis);
   }
 
   getAttribution(): string {

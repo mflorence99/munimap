@@ -35,11 +35,13 @@ export class OLSourceDamsComponent extends OLSourceArcGISComponent {
   //    so we augment it with this data source
 
   filter(arcgis: any): any {
-    arcgis.features.forEach((feature) => {
-      feature.attributes.name = feature.attributes.NAME;
-      feature.attributes.type = 'dam';
-    });
-    return arcgis;
+    if (arcgis) {
+      arcgis.features.forEach((feature) => {
+        feature.attributes.name = feature.attributes.NAME;
+        feature.attributes.type = 'dam';
+      });
+      return arcgis;
+    } else return super.filter(arcgis);
   }
 
   getAttribution(): string {

@@ -32,12 +32,14 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
   //    LOT more data -- we just need to adapt the properties to match
 
   filter(arcgis: any): any {
-    arcgis.features.forEach((feature) => {
-      feature.attributes.name = feature.attributes.GNIS_Name;
-      feature.attributes.type =
-        feature.attributes.FType === 460 ? 'stream' : 'river';
-    });
-    return arcgis;
+    if (arcgis) {
+      arcgis.features.forEach((feature) => {
+        feature.attributes.name = feature.attributes.GNIS_Name;
+        feature.attributes.type =
+          feature.attributes.FType === 460 ? 'stream' : 'river';
+      });
+      return arcgis;
+    } else return super.filter(arcgis);
   }
 
   getAttribution(): string {

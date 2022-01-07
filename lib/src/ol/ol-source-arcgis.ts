@@ -131,7 +131,7 @@ export abstract class OLSourceArcGISComponent {
   }
 
   filter(arcgis: any): any {
-    return arcgis;
+    return arcgis ?? { features: [] };
   }
 
   abstract getAttribution(): string;
