@@ -17,6 +17,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -47,7 +48,8 @@ export class GeoJSONAuthorService extends GeoJSONService {
   #load(path: string, extent: Coordinate = []): Observable<Features> {
     const cached = this.cache.get(path);
     const stream$ = cached
-      ? of(cached)
+      ? // 👇 preserve "next tick" semantics of HTTP GET
+        of(cached).pipe(delay(0))
       : this.http
           .get<Features>(`${environment.endpoints.proxy}${path}`, {
             params: this.#cacheBuster

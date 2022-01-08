@@ -13,6 +13,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -49,9 +50,12 @@ export class GeoJSONViewerService extends GeoJSONService {
     extent: Coordinate = []
   ): Observable<Features> {
     const cached = this.cache.get(layerKey);
-    return (cached ? of(cached) : this.#load(layerKey)).pipe(
-      map((geojson) => this.filter(geojson, extent))
-    );
+    return (
+      cached
+        ? // 👇 preserve "next tick" semantics of HTTP GET
+          of(cached).pipe(delay(0))
+        : this.#load(layerKey)
+    ).pipe(map((geojson) => this.filter(geojson, extent)));
   }
 
   // 👇 we don't need an index for a singular town, so we create a dummy

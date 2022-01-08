@@ -14,6 +14,7 @@ import { Input } from '@angular/core';
 import { arcgisToGeoJSON } from '@terraformer/arcgis';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { catchError } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { of } from 'rxjs';
@@ -96,7 +97,8 @@ export abstract class OLSourceArcGISComponent {
     const requests = urls.map((url) => {
       const cached = this.cache.get(url);
       return cached
-        ? of(cached)
+        ? // 👇 preserve "next tick" semantics of HTTP GET
+          of(cached).pipe(delay(0))
         : this.http.get(url).pipe(
             catchError(() => of({ features: [] })),
             map(
