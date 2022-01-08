@@ -175,6 +175,14 @@ export class ParcelsPage implements OnInit {
     return this.#can(event, this.olMap.selector?.selectedIDs.length === 1);
   }
 
+  // 🔥 this is a horrible HACK
+  //    we now get dams from ol-source-dams, so we need to
+  //    eliminate the duplicates in places.geojson
+
+  filterDams(feature: any): boolean {
+    return feature.properties.type !== 'dam';
+  }
+
   ngOnInit(): void {
     this.#handleActions$();
     this.#loadMap();

@@ -1,3 +1,4 @@
+import { Feature } from '../geojson';
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
@@ -10,12 +11,16 @@ import { Coordinate } from 'ol/coordinate';
 import { Input } from '@angular/core';
 
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+import { map } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
+import copy from 'fast-copy';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
+
+export type FilterFunction = (feature: Feature) => boolean;
 
 const attribution =
   'Powered by <a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
@@ -27,6 +32,8 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceGeoJSONComponent {
+  @Input() filter: FilterFunction;
+
   @Input() layerKey: string;
 
   olVector: OLVector<any>;
@@ -61,6 +68,17 @@ export class OLSourceGeoJSONComponent {
     );
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
+      .pipe(
+        map((geojson: Features) => {
+          if (this.filter) {
+            const filtered = copy(geojson);
+            filtered.features = geojson.features.filter((feature) =>
+              this.filter(feature)
+            );
+            return filtered;
+          } else return geojson;
+        })
+      )
       .subscribe((geojson: Features) => {
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {

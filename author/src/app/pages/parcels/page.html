@@ -67,7 +67,7 @@
         <ng-container *ngIf="!(satelliteView$ | async)">
           <!-- 📦 BG LAYER (outside town)-->
 
-          <app-ol-layer-tile>
+          <app-ol-layer-tile *ngIf="olMap.printing">
             <app-ol-source-xyz
               [maxZoom]="19"
               url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -186,6 +186,7 @@
           <app-ol-layer-vector>
             <app-ol-style-places></app-ol-style-places>
             <app-ol-source-geojson
+              [filter]="filterDams"
               [layerKey]="'places'"
             ></app-ol-source-geojson>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
