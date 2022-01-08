@@ -54,15 +54,15 @@ export class BuilderComponent {
   }
 
   currentCounty(): string {
-    return this.path.split(':')[1];
+    return this.path?.split(':')[1];
   }
 
   currentState(): string {
-    return this.path.split(':')[0];
+    return this.path?.split(':')[0];
   }
 
   currentTown(): string {
-    return this.path.split(':')[2];
+    return this.path?.split(':')[2];
   }
 
   reset(): void {
