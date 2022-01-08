@@ -38,14 +38,18 @@ const isDev = argv['port'];
 
 const dir = argv['dir'] ?? isDev ? './data' : '/mnt/efs/MuniMap/proxy';
 
+// 👇 we cache bust geojson requests with the caller's version number
+//    so we can effectively cache this data forever -- as long as we deploy
+//    a new client version whenever we change it
+
 const fileServerOpts = {
   provide: FILE_SERVER_OPTS,
-  useValue: { maxAge: 24 * 60 * 60 /* 👈 1 day */, root: dir }
+  useValue: { maxAge: 365 * 24 * 60 * 60 /* 👈 1 year */, root: dir }
 };
 
 const geoServerOpts = {
   provide: GEO_SERVER_OPTS,
-  useValue: { maxAge: 24 * 60 * 60 /* 👈 1 day */, root: dir }
+  useValue: { maxAge: 365 * 24 * 60 * 60 /* 👈 1 year */, root: dir }
 };
 
 const loggerOpts = {

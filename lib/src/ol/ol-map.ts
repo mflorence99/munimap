@@ -62,6 +62,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   featureProjection = 'EPSG:4326';
 
   @Input() fitToBounds = false;
+  @Input() gridRequired = false;
 
   initialized = false;
 
@@ -136,10 +137,10 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       this.featureProjection,
       this.projection
     );
-    // 👉 precompute boundary grid, but only for towns
+    // 👉 precompute boundary grid, but only if needed
     //    we need to make sure that the bounding box is an even
     //    multiple of the cell size for complete grid coverage
-    if (this.currentTown()) {
+    if (this.gridRequired) {
       const [minX, minY, maxX, maxY] = bbox;
       const floored: GeoJSON.BBox = [
         Math.floor(minX * 10) / 10,
@@ -154,8 +155,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     }
     // 👉 create view
     this.olView = new OLView({
-      // 🔥 see ol-control-print if you ever change this
-      constrainResolution: true /* 👈 to maximize tile caching */,
       extent: this.boundaryExtent,
       maxZoom: this.maxZoom,
       minZoom: this.minZoom,

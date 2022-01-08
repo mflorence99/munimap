@@ -1,6 +1,7 @@
 <app-ol-map
   *ngIf="(map$ | async) as map"
   #olMap
+  [gridRequired]="true"
   [minZoom]="13"
   [maxZoom]="22"
   [path]="map.path"
@@ -30,13 +31,14 @@
     <ng-container *ngIf="!(satelliteView$ | async)">
       <!-- 📦 BG LAYER (outside town)-->
 
-      <app-ol-layer-tile *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-tile>
         <app-ol-source-xyz
-          [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+          [maxZoom]="19"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           ><app-ol-attribution
             >©
-            <a href="https://mapbox.com" target="_blank"
-              >Mapbox</a
+            <a href="https://www.openstreetmap.org/copyright" target="_blank"
+              >© OpenStreetMap contributors</a
             ></app-ol-attribution
           ></app-ol-source-xyz
         >
@@ -67,6 +69,8 @@
         </app-ol-source-xyz>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
+
+      <!-- 📦 NH GranIT VECTOR LAYERS -->
 
       <app-ol-layer-vector>
         <app-ol-style-parcels
@@ -148,35 +152,50 @@
         <app-ol-source-dams></app-ol-source-dams>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
+
+      <!-- 📦 SATELLITE OVERLAY FOR SELECTION  -->
+
+      <app-ol-layer-tile *ngIf="olMap.selector?.selected?.length">
+        <app-ol-source-xyz
+          [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+          ><app-ol-attribution
+            >©
+            <a href="https://mapbox.com" target="_blank"
+              >Mapbox</a
+            ></app-ol-attribution
+          ></app-ol-source-xyz
+        >
+        <app-ol-filter-crop2selected></app-ol-filter-crop2selected>
+      </app-ol-layer-tile>
     </ng-container>
 
     <!-- 📦 SATELLITE LAYERS  -->
 
-    <app-ol-layer-tile>
-      <app-ol-source-xyz
-        [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-        ><app-ol-attribution
-          >©
-          <a href="https://mapbox.com" target="_blank"
-            >Mapbox</a
-          ></app-ol-attribution
-        ></app-ol-source-xyz
-      >
-      <app-ol-filter-crop2selected
+    <ng-container *ngIf="satelliteView$ | async">
+      <app-ol-layer-tile>
+        <app-ol-source-xyz
+          [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+          ><app-ol-attribution
+            >©
+            <a href="https://mapbox.com" target="_blank"
+              >Mapbox</a
+            ></app-ol-attribution
+          ></app-ol-source-xyz
+        >
+        <!-- <app-ol-filter-crop2selected
         *ngIf="!(satelliteView$ | async)"
-      ></app-ol-filter-crop2selected>
-    </app-ol-layer-tile>
+      ></app-ol-filter-crop2selected> -->
+      </app-ol-layer-tile>
 
-    <app-ol-layer-vector
-      *ngIf="(satelliteView$ | async) && (zoom$ | async) >= 15"
-    >
-      <app-ol-style-parcels
-        [showBorder]="true"
-        [showLabelContrast]="true"
-        [showLabels]="true"
-      ></app-ol-style-parcels>
-      <app-ol-source-parcels></app-ol-source-parcels>
-    </app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+        <app-ol-style-parcels
+          [showBorder]="true"
+          [showLabelContrast]="true"
+          [showLabels]="true"
+        ></app-ol-style-parcels>
+        <app-ol-source-parcels></app-ol-source-parcels>
+      </app-ol-layer-vector>
+    </ng-container>
 
     <!-- 📦 BOUNDARY LAYER -->
 

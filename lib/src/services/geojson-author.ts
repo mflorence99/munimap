@@ -26,6 +26,10 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GeoJSONAuthorService extends GeoJSONService {
+  #cacheBuster = {
+    version: environment.package.version
+  };
+
   constructor(private cache: CacheService, private http: HttpClient) {
     super();
   }
@@ -44,10 +48,14 @@ export class GeoJSONAuthorService extends GeoJSONService {
     const cached = this.cache.get(path);
     const stream$ = cached
       ? of(cached)
-      : this.http.get<Features>(`${environment.endpoints.proxy}${path}`).pipe(
-          catchError(() => of(emptyFeatures)),
-          tap((geojson) => this.cache.set(path, geojson))
-        );
+      : this.http
+          .get<Features>(`${environment.endpoints.proxy}${path}`, {
+            params: this.#cacheBuster
+          })
+          .pipe(
+            catchError(() => of(emptyFeatures)),
+            tap((geojson) => this.cache.set(path, geojson))
+          );
     return stream$.pipe(map((geojson) => this.filter(geojson, extent)));
   }
 
@@ -74,6 +82,8 @@ export class GeoJSONAuthorService extends GeoJSONService {
   }
 
   loadIndex(): Observable<Index> {
-    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`);
+    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
+      params: this.#cacheBuster
+    });
   }
 }

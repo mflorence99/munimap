@@ -545,7 +545,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     resolution: number,
     numPolygons: number,
     whenRedrawn = false,
-    whenSelected = false
+    whenSelected = false,
+    whenAbutted = false
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
     if (
@@ -553,18 +554,18 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     // 👉 special stroke if selected or abutter
-    const borderWidth = this.#borderWidth(resolution);
+    const borderWidth =
+      this.#borderWidth(resolution) * this.borderWidthSelectRatio;
     let outline = null;
     if (whenSelected) outline = this.map.vars['--map-parcel-select'];
     if (whenRedrawn) outline = this.map.vars['--map-parcel-redraw'];
-    // 🔥 for now, showing abutters same as selected
-    if (this.showAbutters && this.map.selector?.abutterIDs?.includes(props.id))
-      outline = this.map.vars['--map-parcel-select'];
+    if (whenAbutted) outline = this.map.vars['--map-parcel-select'];
     // 👉 necessary so we can select
     const fill = new OLFill({ color: [0, 0, 0, 0] });
     const stroke = new OLStroke({
       color: `rgb(${outline})`,
-      width: borderWidth * this.borderWidthSelectRatio
+      lineDash: whenAbutted ? [borderWidth, borderWidth * 4] : null,
+      width: borderWidth
     });
     return [new OLStyle({ fill, stroke: outline ? stroke : null })];
   }
@@ -573,7 +574,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     feature: OLFeature<any>,
     resolution: number,
     whenRedrawn = false,
-    whenSelected = false
+    whenSelected = false,
+    whenAbutted = false
   ): OLStyle[] {
     let numPolygons = 1;
     if (feature.getGeometry().getType() === 'MultiPolygon')
@@ -630,7 +632,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         resolution,
         numPolygons,
         whenRedrawn,
-        whenSelected
+        whenSelected,
+        whenAbutted
       );
       if (strokes) styles.push(...strokes);
     }
@@ -639,14 +642,33 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
 
   style(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      return this.#theStyles(feature, resolution);
+      const props = feature.getProperties() as ParcelProperties;
+      const whenRedrawn = false;
+      const whenSelected = false;
+      const whenAbutted =
+        this.showAbutters && this.map.selector?.abutterIDs?.includes(props.id);
+      return this.#theStyles(
+        feature,
+        resolution,
+        whenRedrawn,
+        whenSelected,
+        whenAbutted
+      );
     };
   }
 
   styleWhenSelected(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
       const whenRedrawn = !!feature.get('ol-interaction-redraw');
-      return this.#theStyles(feature, resolution, whenRedrawn, true);
+      const whenSelected = true;
+      const whenAbutted = false;
+      return this.#theStyles(
+        feature,
+        resolution,
+        whenRedrawn,
+        whenSelected,
+        whenAbutted
+      );
     };
   }
 }

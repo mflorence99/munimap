@@ -4,6 +4,7 @@ import { GeoJSONService } from './geojson';
 import { Index } from '../geojson';
 
 import { emptyFeatures } from '../geojson';
+import { environment } from '../environment';
 
 import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';
@@ -22,15 +23,23 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GeoJSONViewerService extends GeoJSONService {
+  #cacheBuster = {
+    version: environment.package.version
+  };
+
   constructor(private cache: CacheService, private http: HttpClient) {
     super();
   }
 
   #load(layerKey: string): Observable<Features> {
-    return this.http.get<Features>(`assets/${layerKey}.geojson`).pipe(
-      catchError(() => of(emptyFeatures)),
-      tap((geojson) => this.cache.set(layerKey, geojson))
-    );
+    return this.http
+      .get<Features>(`assets/${layerKey}.geojson`, {
+        params: this.#cacheBuster
+      })
+      .pipe(
+        catchError(() => of(emptyFeatures)),
+        tap((geojson) => this.cache.set(layerKey, geojson))
+      );
   }
 
   loadByIndex(

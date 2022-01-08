@@ -13,7 +13,6 @@ import { from } from 'rxjs';
 import { fromReadableStream } from 'serverx-ts';
 import { mapTo } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { tap } from 'rxjs';
 
 import chalk from 'chalk';
@@ -85,7 +84,7 @@ export class ProxyServer extends Handler {
         const maxAge = this.#opts.maxAge;
         const isCached = stat?.mtimeMs > Date.now() - maxAge * 1000;
 
-        // 👇 because we set maxAge tobthe exact time that we discard the
+        // 👇 because we set maxAge to the exact time that we discard the
         //    disk copy of the proxied data, we never have to bother
         //    with returning a 304 status
 
@@ -100,7 +99,7 @@ export class ProxyServer extends Handler {
             tap(() => {
               console.log(
                 chalk.yellow(request.method),
-                request.path,
+                x && y && z ? `${request.path}/${x}/${y}/${z}` : request.path,
                 chalk.green(response.statusCode),
                 stat?.mtime,
                 chalk.blue('CACHED')
@@ -145,7 +144,7 @@ export class ProxyServer extends Handler {
             tap(() => {
               console.log(
                 chalk.yellow(request.method),
-                request.path,
+                x && y && z ? `${request.path}/${x}/${y}/${z}` : request.path,
                 chalk.green(response.statusCode),
                 chalk.red('FETCHED')
               );

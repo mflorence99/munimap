@@ -85,8 +85,6 @@ export class OLControlPrintComponent {
 
   #setup(): void {
     this.#center = this.map.olView.getCenter();
-    // 🔥 OL doesn't expose this!!
-    // this.#constrainResolution = this.map.olView.getConstrainResolution();
     this.#zoom = this.map.olView.getZoom();
     this.map.olView.setConstrainResolution(false);
     // 👉 calculate extent of full map
@@ -131,9 +129,6 @@ export class OLControlPrintComponent {
     element.style.overflow = 'hidden';
     element.style.width = ``;
     this.map.olMap.updateSize();
-    // 🔥 HACK because we "know" that we setup the view this way
-    //    OL doesn't have a getConstrainResolution() API
-    this.map.olView.setConstrainResolution(true);
     this.map.olView.setCenter(this.#center);
     this.map.olView.setZoom(this.#zoom);
     // 👉 controls map configuration
