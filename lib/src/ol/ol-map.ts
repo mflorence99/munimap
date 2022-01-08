@@ -33,6 +33,7 @@ import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
 
+import centerOfMass from '@turf/center-of-mass';
 import OLMap from 'ol/Map';
 import OLMapBrowserEvent from 'ol/MapBrowserEvent';
 import OLView from 'ol/View';
@@ -90,6 +91,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   selector: OLInteractionSelectParcelsComponent;
 
   vars: Record<string, string> = {};
+
+  @Input() zoom = 15;
 
   @Output() zoomChange = new EventEmitter<number>();
 
@@ -165,10 +168,15 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     // 👉 if center, zoom available use them else fit to bounds
     const viewState =
       this.store.selectSnapshot(ViewState).viewByPath[this.path];
-    if (!this.fitToBounds && viewState?.center && viewState?.zoom) {
+    if (this.fitToBounds) this.zoomToBounds();
+    else if (viewState?.center && viewState?.zoom) {
       this.olView.setCenter(fromLonLat(viewState.center));
       this.olView.setZoom(viewState.zoom);
-    } else this.zoomToBounds();
+    } else {
+      const center = centerOfMass(this.boundary).geometry.coordinates;
+      this.olView.setCenter(fromLonLat(center));
+      this.olView.setZoom(this.zoom);
+    }
     // 👉 handle events
     this.#changeKey = this.olView.on('change', this.#onChange.bind(this));
   }
