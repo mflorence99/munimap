@@ -27,6 +27,12 @@
         mapControlPrint
       ></app-ol-control-print>
 
+      <app-ol-control-exportparcels
+        *ngIf="map.name && isPrivileged()"
+        [fileName]="map.id + '-parcels'"
+        mapControlExport
+      ></app-ol-control-exportparcels>
+
       <app-ol-control-zoom2extent
         mapControlZoomToExtent
       ></app-ol-control-zoom2extent>
@@ -229,7 +235,9 @@
         <app-ol-layer-vector>
           <app-ol-style-polygons></app-ol-style-polygons>
           <app-ol-source-boundary></app-ol-source-boundary>
-          <app-ol-interaction-boundary></app-ol-interaction-boundary>
+          <app-ol-interaction-boundary
+            *ngIf="isPrivileged()"
+          ></app-ol-interaction-boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 BOUNDARY GRID LAYER (testing only) -->

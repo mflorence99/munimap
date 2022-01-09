@@ -1,4 +1,3 @@
-import { AuthState } from '../state/auth';
 import { DestroyService } from '../services/destroy';
 import { Features } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
@@ -15,7 +14,6 @@ import { click } from 'ol/events/condition';
 import { merge } from 'rxjs';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
-import { transformExtent } from 'ol/proj';
 
 import OLCollection from 'ol/Collection';
 import OLFeature from 'ol/Feature';
@@ -41,7 +39,6 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
   olModify: OLModify;
 
   constructor(
-    private authState: AuthState,
     private destroy$: DestroyService,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -97,12 +94,10 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
   // 👇 this makes the interaction work only for me
 
   ngOnInit(): void {
-    if (this.authState.currentProfile().email === 'mflo999@gmail.com') {
-      // 🔥 horrible hack but OK as this is just a backdoor
-      setTimeout(() => {
-        this.#handleStreams$();
-        this.#setBoundary();
-      }, 1000);
-    }
+    // 🔥 horrible hack but OK as this is just a backdoor
+    setTimeout(() => {
+      this.#handleStreams$();
+      this.#setBoundary();
+    }, 1000);
   }
 }

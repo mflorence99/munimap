@@ -213,6 +213,17 @@ export class OLSourceParcelsComponent implements OnInit {
     });
   }
 
+  // 👇 special backdoor to support "export parcels" functionality
+
+  export(
+    extent: Coordinate,
+    resolution: number,
+    projection: OLProjection,
+    success: Function
+  ): void {
+    this.#loader(extent, resolution, projection, success);
+  }
+
   ngOnInit(): void {
     this.#handleStreams$();
   }

@@ -183,6 +183,12 @@ export class ParcelsPage implements OnInit {
     return feature.properties.type !== 'dam';
   }
 
+  // 🔥 a very hacked up definition of privileged!
+
+  isPrivileged(): boolean {
+    return this.authState.currentProfile().email === 'mflo999@gmail.com';
+  }
+
   ngOnInit(): void {
     this.#handleActions$();
     this.#loadMap();

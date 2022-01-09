@@ -63,6 +63,7 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
+import { OLControlExportParcelsComponent } from '@lib/ol/parcels/ol-control-exportparcels';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
 import { OLControlMousePositionComponent } from '@lib/ol/ol-control-mouseposition';
 import { OLControlParcelsLegendComponent } from '@lib/ol/parcels/ol-control-parcelslegend';
@@ -133,6 +134,7 @@ import { WorkgroupValidator } from '@lib/validators/workgroup';
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
@@ -169,6 +171,7 @@ const COMPONENTS = [
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,
+  OLControlExportParcelsComponent,
   OLControlGraticuleComponent,
   OLControlMousePositionComponent,
   OLControlParcelsLegendComponent,
@@ -363,6 +366,7 @@ export class RootModule {
     library.addIcons(
       faBars,
       faCrosshairs,
+      faDownload,
       faDrawPolygon,
       faExclamationTriangle,
       faExpandArrows,

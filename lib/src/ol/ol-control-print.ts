@@ -48,7 +48,7 @@ export class OLControlPrintComponent {
   //    sounds countr-intuitive until you draw out what it looks like!
 
   #padding(cx: number, cy: number): [number, number] {
-    const nominal = (cx + cy) / 84; /* 👈 magic number is paper size 36 x 48 */
+    const nominal = (cx + cy) / 95; /* 🔥 magic number is paper size 45 x 60 */
     const ar = cx / cy;
     return ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
   }
