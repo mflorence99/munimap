@@ -5,6 +5,8 @@ import { OLMapComponent } from '../ol-map';
 import { OLSourceParcelsComponent } from '../ol-source-parcels';
 import { ParcelsState } from '../../state/parcels';
 
+import { simplify } from '../../geojson';
+
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -60,7 +62,7 @@ export class OLControlExportParcelsComponent {
       feature.bbox = bbox(feature);
       return feature;
     });
-    const blob = new Blob([JSON.stringify(geojson, null, '  ')], {
+    const blob = new Blob([JSON.stringify(simplify(geojson))], {
       type: 'text/plain;charset=utf-8'
     });
     saveAs(blob, `${this.fileName}.geojson`);
