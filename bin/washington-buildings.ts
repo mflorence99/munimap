@@ -14,7 +14,8 @@ const gpx = new xmldom.DOMParser().parseFromString(
   readFileSync('./proxy/assets/washington-buildings.gpx', 'utf8')
 );
 
-// 👉 Washington is special as we have already curated the bildings
+// ⚠️ this program is obsolete, as we no longer use the data
+//    captured for the old washington-app
 
 const dist = './data';
 
@@ -47,10 +48,10 @@ buildings.features.forEach((building) => {
 
 // 👉 one file for Washington
 console.log(
-  chalk.green(`... writing ${theState}/${county}/${town}/buildings.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/XXXXXX.geojson`)
 );
 mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 writeFileSync(
-  `${dist}/${theState}/${county}/${town}/buildings.geojson`,
+  `${dist}/${theState}/${county}/${town}/XXXXXX.geojson`,
   JSON.stringify(simplify(geojson))
 );

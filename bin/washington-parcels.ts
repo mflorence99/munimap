@@ -10,7 +10,8 @@ import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 
-// 👉 Washington is special as we have already curated the lots
+// ⚠️ this program is obsolete, as we no longer use the data
+//    captured for the old washington-app
 
 const dist = './data';
 
@@ -73,7 +74,7 @@ PARCELS.lots.forEach((lot) => {
 
 // 👉 one file for Washington
 console.log(
-  chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/XXXXXX.geojson`)
 );
 const geojson: GeoJSON.FeatureCollection = {
   features: allLots,
@@ -81,7 +82,7 @@ const geojson: GeoJSON.FeatureCollection = {
 };
 mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 writeFileSync(
-  `${dist}/${theState}/${county}/${town}/parcels.geojson`,
+  `${dist}/${theState}/${county}/${town}/XXXXXX.geojson`,
   JSON.stringify(simplify(geojson))
 );
 
@@ -90,11 +91,11 @@ writeFileSync(
 //    the data available
 
 console.log(
-  chalk.green(`... writing ${theState}/${county}/${town}/searchables.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/XXXXXX.geojson`)
 );
 mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
-// 👉 now do this again, converting the real parcels into searchables
+// 👉 now do this again, converting the real parcels into
 geojson.features = allLots.map((feature: any): any => ({
   bbox: feature.bbox,
   id: feature.id,
@@ -106,7 +107,7 @@ geojson.features = allLots.map((feature: any): any => ({
   type: 'Feature'
 }));
 writeFileSync(
-  `${dist}/${theState}/${county}/${town}/searchables.geojson`,
+  `${dist}/${theState}/${county}/${town}/XXXXXX.geojson`,
   JSON.stringify(simplify(geojson))
 );
 
@@ -115,7 +116,7 @@ writeFileSync(
 //    the data available
 
 console.log(
-  chalk.green(`... writing ${theState}/${county}/${town}/countables.geojson`)
+  chalk.green(`... writing ${theState}/${county}/${town}/XXXXXX.geojson`)
 );
 mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
@@ -130,6 +131,6 @@ geojson.features = allLots.map((feature: any): any => ({
   type: 'Feature'
 }));
 writeFileSync(
-  `${dist}/${theState}/${county}/${town}/countables.geojson`,
+  `${dist}/${theState}/${county}/${town}/XXXXXX.geojson`,
   JSON.stringify(simplify(geojson))
 );
