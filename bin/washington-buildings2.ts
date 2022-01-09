@@ -18,8 +18,6 @@ const geojson = JSON.parse(
   readFileSync('./proxy/assets/washington-buildings.geojson').toString()
 );
 
-console.log(chalk.green(`... writing ${theState}/buildings.geojson`));
-
 console.log(
   chalk.green(`... writing ${theState}/${county}/${town}/buildings.geojson`)
 );

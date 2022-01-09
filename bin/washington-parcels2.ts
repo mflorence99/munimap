@@ -18,8 +18,6 @@ const geojson = JSON.parse(
   readFileSync('./proxy/assets/washington-parcels.geojson').toString()
 );
 
-console.log(chalk.green(`... writing ${theState}/parcels.geojson`));
-
 console.log(
   chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
 );
@@ -40,7 +38,7 @@ mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
 // 👉 now do this again, converting the real parcels into searchables
 const searchables: GeoJSON.FeatureCollection = {
-  features: geojson.map((feature: any): any => ({
+  features: geojson.features.map((feature: any): any => ({
     bbox: feature.bbox,
     id: feature.id,
     properties: {
@@ -68,7 +66,7 @@ mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
 // 👉 now do this again, converting the real parcels into countables
 const countables: GeoJSON.FeatureCollection = {
-  features: geojson.map((feature: any): any => ({
+  features: geojson.features.map((feature: any): any => ({
     id: feature.id,
     properties: {
       area: feature.properties.area,
