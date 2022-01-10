@@ -66,7 +66,7 @@ interface Label {
     <img appPattern src="assets/CUUO.svg" />
     <img appPattern src="assets/CUUW.svg" />
     <img appPattern src="assets/CUWL.svg" />
-    <img appPattern src="assets/forest.png" />
+    <img appPattern src="assets/forest.svg" />
     <ng-content></ng-content>
   `,
   styles: [':host { display: none }']
@@ -238,40 +238,32 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     const fill = overlayFill
       ? overlayFill.join(',')
       : this.map.vars[`--map-parcel-fill-u${props.usage}`];
-    let patterns;
+    const patterns = [];
     if (this.map.olView.getZoomForResolution(resolution) >= 15) {
       // 👉 current use pattern comes from the use field (CUUH etc)
       if (props.usage === '190') {
-        const color = this.map.vars[`--map-parcel-stroke-${props.use}`];
         const icon = this.#iconForUse(props.use);
         // not all current usages have a pattern
-        if (color && icon) {
-          patterns = [
-            new OLFill({
-              color: `rgba(${fill}, ${this.opacity})`
-            }),
-            new OLFillPattern({ image: icon })
-          ];
+        if (icon) {
+          patterns.push(new OLFillPattern({ image: icon }));
         }
       }
-      // 👉 town forest uses standard symbol to match OSM etc
+      // 👉 town forest uses specil symbol
       else if (props.usage === '501') {
         const icon = this.#iconForUse('forest');
-        patterns = [new OLFillPattern({ image: icon })];
+        patterns.push(new OLFillPattern({ image: icon }));
       }
     }
     // 👉 otherwise just use a generic pattern for texture
-    if (!patterns) {
-      patterns = [
-        new OLFillPattern({
-          color: `rgba(${fill}, ${this.opacity})`,
-          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-          pattern: 'dot',
-          size: 2,
-          spacing: 4
-        })
-      ];
-    }
+    patterns.push(
+      new OLFillPattern({
+        color: `rgba(${fill}, ${this.opacity})`,
+        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+        pattern: 'dot',
+        size: 2,
+        spacing: 4
+      })
+    );
     return patterns.map((pattern) => new OLStyle({ fill: pattern }));
   }
 

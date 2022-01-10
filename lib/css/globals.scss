@@ -117,20 +117,11 @@ $dark-app-theme: mat-dark-theme(
   --map-parcel-fill-u260: var(--rgb-red-700);
   --map-parcel-fill-u261: var(--rgb-purple-700);
   --map-parcel-fill-u300: var(--rgb-cyan-700);
-  --map-parcel-fill-u400: var(--rgb-teal-700);
-  // 👇 these need to match the colors from OpenStreetMap
-  --map-parcel-fill-u500: 190, 219, 75; // #BEDBAF
-  --map-parcel-fill-u501: 173, 209, 158; // #ADD19E
-  --map-parcel-fill-u502: var(--rgb-green-700);
+  --map-parcel-fill-u400: var(--rgb-indigo-700);
+  --map-parcel-fill-u500: var(--rgb-green-700);
+  --map-parcel-fill-u501: var(--rgb-light-green-700);
+  --map-parcel-fill-u502: var(--rgb-lime-800);
   --map-parcel-fill-u999: var(--rgb-gray-700);
-
-  --map-parcel-stroke-u501: var(--rgb-green-900);
-  --map-parcel-stroke-CUMH: var(--rgb-brown-500);
-  --map-parcel-stroke-CUMW: var(--rgb-brown-500);
-  --map-parcel-stroke-CUUH: var(--rgb-brown-500);
-  --map-parcel-stroke-CUUW: var(--rgb-brown-500);
-  --map-parcel-stroke-CUFL: var(--rgb-green-500);
-  --map-parcel-stroke-CUWL: var(--rgb-blue-500);
 
   --map-powerline-icon-color: var(--rgb-yellow-500);
   --map-powerline-line-color: var(--rgb-gray-900);
