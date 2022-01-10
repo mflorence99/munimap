@@ -113,6 +113,7 @@ import { faMapMarkerAlt } from '@fortawesome/pro-duotone-svg-icons';
 import { faMinus } from '@fortawesome/pro-light-svg-icons';
 import { faPalette } from '@fortawesome/pro-duotone-svg-icons';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -295,6 +296,7 @@ export class RootModule {
       faMinus,
       faPalette,
       faPlus,
+      faQuestionCircle,
       faSearch,
       faSync,
       faTimes
