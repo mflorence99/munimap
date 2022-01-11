@@ -31,7 +31,7 @@
     <ng-container *ngIf="!(satelliteView$ | async)">
       <!-- 📦 BG LAYER (outside town)-->
 
-      <app-ol-layer-tile *ngIf="(zoom$ | async) <= 14">
+      <app-ol-layer-tile *ngIf="(zoom$ | async) < olMap.minUsefulZoom">
         <app-ol-source-xyz
           [maxZoom]="19"
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -55,7 +55,10 @@
 
       <!-- 📦 HILLSHADE LAYER  -->
 
-      <app-ol-layer-tile *ngIf="(zoom$ | async) >= 15" [opacity]="1">
+      <app-ol-layer-tile
+        *ngIf="(zoom$ | async) >= olMap.minUsefulZoom"
+        [opacity]="1"
+      >
         <app-ol-source-xyz
           [maxZoom]="17"
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
@@ -80,7 +83,7 @@
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-rivers></app-ol-style-rivers>
         <app-ol-source-rivers></app-ol-source-rivers>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -98,13 +101,13 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-trails></app-ol-style-trails>
         <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-stonewalls></app-ol-style-stonewalls>
         <app-ol-source-stonewalls></app-ol-source-stonewalls>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -116,13 +119,13 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-wetland></app-ol-style-wetland>
         <app-ol-source-wetland></app-ol-source-wetland>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-buildings></app-ol-style-buildings>
         <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -136,12 +139,12 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-parcels [showLabels]="true"></app-ol-style-parcels>
         <app-ol-source-parcels> </app-ol-source-parcels>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-places></app-ol-style-places>
         <app-ol-source-geojson
           [filter]="filterDams"
@@ -150,7 +153,7 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-places></app-ol-style-places>
         <app-ol-source-dams></app-ol-source-dams>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -190,7 +193,7 @@
       ></app-ol-filter-crop2selected> -->
       </app-ol-layer-tile>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-parcels
           [showBorder]="true"
           [showLabelContrast]="true"
@@ -209,7 +212,7 @@
 
     <!-- 📦 SELECTION LAYER -->
 
-    <app-ol-layer-vector *ngIf="(zoom$ | async) >= 15">
+    <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
       <app-ol-style-parcels
         [showAbutters]="true"
         [showDimensions]="true"
@@ -231,7 +234,7 @@
     <!-- 📦 OVERLAY FOR GPS -->
 
     <app-ol-overlay-gps
-      *ngIf="(gps$ | async) && (zoom$ | async) >= 15"
+      *ngIf="(gps$ | async) && (zoom$ | async) >= olMap.minUsefulZoom"
     ></app-ol-overlay-gps>
   </ng-container>
 </app-ol-map>

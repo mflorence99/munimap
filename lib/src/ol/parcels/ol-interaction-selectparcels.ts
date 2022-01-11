@@ -247,9 +247,14 @@ export class OLInteractionSelectParcelsComponent
     this.#featuresLoadEndKey = this.layer.olLayer
       .getSource()
       .once('featuresloadend', () => this.#selectParcels(ids));
-    // 👇 zoom to the extent of all the selected  parcels and select them
+    // 👇 zoom to the extent of all the selected parcels and select them
+    const minZoom = this.map.olView.getMinZoom();
+    this.map.olView.setMinZoom(this.map.minUsefulZoom);
     this.map.olView.fit(extent, {
-      callback: () => this.#selectParcels(ids),
+      callback: () => {
+        this.map.olView.setMinZoom(minZoom);
+        this.#selectParcels(ids);
+      },
       duration: this.zoomAnimationDuration,
       maxZoom: this.map.maxZoom,
       size: this.map.olMap.getSize()

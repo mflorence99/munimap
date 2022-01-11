@@ -71,6 +71,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   mapables$: QueryList<any>;
 
   @Input() maxZoom;
+  @Input() minUsefulZoom = 15;
   @Input() minZoom;
 
   olMap: OLMap;
@@ -91,8 +92,6 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   selector: OLInteractionSelectParcelsComponent;
 
   vars: Record<string, string> = {};
-
-  @Input() zoom = 15;
 
   @Output() zoomChange = new EventEmitter<number>();
 
@@ -175,7 +174,7 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     } else {
       const center = centerOfMass(this.boundary).geometry.coordinates;
       this.olView.setCenter(fromLonLat(center));
-      this.olView.setZoom(this.zoom);
+      this.olView.setZoom(this.minUsefulZoom);
     }
     // 👉 handle events
     this.#changeKey = this.olView.on('change', this.#onChange.bind(this));

@@ -3,6 +3,7 @@
 
   <input
     #theSearcher
+    (focus)="onSearch($event.srcElement.value)"
     (input)="onSearch($event.srcElement.value)"
     class="searcher"
     placeholder="Search by parcel, address or owner"
