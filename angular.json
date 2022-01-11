@@ -63,7 +63,6 @@
             "sourceMap": true,
             "styles": [
               "lib/css/globals.scss",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/ol/ol.css"
             ],
@@ -153,7 +152,6 @@
             "sourceMap": true,
             "styles": [
               "lib/css/globals.scss",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/ol/ol.css"
             ],

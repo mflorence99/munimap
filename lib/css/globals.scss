@@ -15,6 +15,20 @@
   src: url('../assets/Carnevalee Freakshow.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Font Awesome';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fa-regular-400.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Font Awesome';
+  font-style: normal;
+  font-weight: bold;
+  src: url('../assets/fa-solid-900.ttf') format('truetype');
+}
+
 @include mat-core();
 
 $light-app-theme: mat-light-theme(
@@ -85,6 +99,12 @@ $dark-app-theme: mat-dark-theme(
   //    style components will figure opacity
 
   --map-boundary-fill: var(--rgb-gray-300);
+
+  --map-bridge-red-icon-color: 163, 83, 82;
+  --map-bridge-yellow-icon-color: 197, 204, 71;
+  --map-bridge-green-icon-color: 68, 130, 94;
+  --map-bridge-blue-icon-color: 68, 100, 130;
+  --map-bridge-line-color: var(--rgb-gray-900);
 
   --map-building-fill: var(--rgb-gray-600);
   --map-building-outline: var(--rgb-gray-700);

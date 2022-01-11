@@ -21,6 +21,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStylePowerlinesComponent implements OLStyleComponent {
+  @Input() iconSize = 15;
   @Input() maxPowerLineWidth = 3;
   @Input() opacity = 1;
   @Input() powerLineWidth = 3;
@@ -53,16 +54,16 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
               geometry: new OLPoint(end),
               image: new OLFontSymbol({
                 color: `rgba(${iconColor}, ${this.opacity})`,
-                font: `'Font Awesome 5 Free'`,
+                font: `'Font Awesome'`,
                 fontStyle: 'bold',
                 form: 'none',
-                radius: 15 / resolution,
+                radius: this.iconSize / resolution,
                 rotation: -rotation,
                 stroke: new OLStroke({
                   color: `rgba(${lineColor}, ${this.opacity})`,
                   width: 1
                 }),
-                text: '\uf0e7'
+                text: '\uf0e7' /* 👈 bolt */
               })
             })
           );

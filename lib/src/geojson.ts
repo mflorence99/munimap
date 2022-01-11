@@ -28,6 +28,10 @@ export const emptyFeatures: Features = {
   type: 'FeatureCollection'
 };
 
+export interface BridgeProperties {
+  rygb: 'red' | 'yellow' | 'green' | 'blue';
+}
+
 export interface LakeProperties {
   county: string;
   name: string;

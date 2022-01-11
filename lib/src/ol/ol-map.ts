@@ -238,14 +238,19 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     }
     // 👉 now create the new
     if (!this.olView) {
-      this.geoJSON
-        .loadByIndex(this.route, path, 'boundary')
-        .subscribe((boundary: Features) => {
-          this.#createView(boundary);
-          this.initialized = true;
-          this.#onChange();
-          this.cdf.markForCheck();
-        });
+      // 🔥 this seems like a hack
+      //    we know we use Font Awesome to show map icons and
+      //    it must be loaded before we proceed
+      document.fonts.load(`normal bold 10px 'Font Awesome`).then(() => {
+        this.geoJSON
+          .loadByIndex(this.route, path, 'boundary')
+          .subscribe((boundary: Features) => {
+            this.#createView(boundary);
+            this.initialized = true;
+            this.#onChange();
+            this.cdf.markForCheck();
+          });
+      });
     }
     return path;
   }

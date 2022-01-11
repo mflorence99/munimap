@@ -65,6 +65,7 @@ import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parce
 import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
+import { OLSourceBridgesComponent } from '@lib/ol/ol-source-bridges';
 import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
@@ -76,6 +77,7 @@ import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
 import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from '@lib/ol/ol-style-boundary';
+import { OLStyleBridgesComponent } from '@lib/ol/ol-style-bridges';
 import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
 import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
@@ -143,6 +145,7 @@ const COMPONENTS = [
   OLPopupSelectionComponent,
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
+  OLSourceBridgesComponent,
   OLSourceDamsComponent,
   OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,
@@ -154,6 +157,7 @@ const COMPONENTS = [
   OLSourceWetlandComponent,
   OLSourceXYZComponent,
   OLStyleBoundaryComponent,
+  OLStyleBridgesComponent,
   OLStyleBuildingsComponent,
   OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,

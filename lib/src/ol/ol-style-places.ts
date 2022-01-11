@@ -106,7 +106,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     const fontSize = this.#fontSize(props, resolution);
     return new OLFontSymbol({
       color: `rgba(${color}, ${this.opacity})`,
-      font: `'Font Awesome 5 Free'`,
+      font: `'Font Awesome'`,
       fontStyle: 'bold',
       form: 'none',
       radius: fontSize,
