@@ -83,5 +83,6 @@
 
 .wrapper {
   max-height: 240px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }

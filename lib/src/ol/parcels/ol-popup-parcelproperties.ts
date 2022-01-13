@@ -81,7 +81,7 @@ export class OLPopupParcelPropertiesComponent {
         ),
         // 👉 only show abutters if there's room
         map((abutters: Abutter[]): Abutter[] =>
-          window.innerWidth * window.innerHeight >= 1024 * 768 ? abutters : []
+          window.innerWidth >= 480 ? abutters : []
         )
       )
       .subscribe((abutters: Abutter[]) => {

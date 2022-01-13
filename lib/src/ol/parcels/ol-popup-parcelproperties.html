@@ -63,25 +63,12 @@
           <td>Area</td>
           <ng-container *ngFor="let property of properties">
             <td>
-              <span *ngIf="property.area >= 4"
-                >{{ property.area | number:'1.0-2' }} ac ({{ sum(property.areas)
-                | number:'1.0-2' }} ac)<span
-                  class="reference"
-                  matTooltip="Calculated from perimeter and may not match
-  survey"
-                  matTooltipPosition="right"
-                  >*</span
-                >
-              </span>
-              <span *ngIf="property.area < 4"
-                >{{ property.area * 43560 | number:'1.0-0' }} sq ft ({{
-                sum(property.areas) * 43560 | number:'1.0-0' }} sq ft)<span
-                  class="reference"
-                  matTooltip="Calculated from perimeter and may not match
-  survey"
-                  matTooltipPosition="right"
-                  >*</span
-                ></span
+              {{ property.area | number:'1.0-2' }} ac ({{ sum(property.areas) |
+              number:'1.0-2' }} ac)<span
+                class="reference"
+                matTooltip="Calculated from perimeter and may not match survey"
+                matTooltipPosition="right"
+                >*</span
               >
             </td>
           </ng-container>
