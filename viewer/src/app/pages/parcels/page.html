@@ -55,10 +55,7 @@
 
       <!-- 📦 HILLSHADE LAYER  -->
 
-      <app-ol-layer-tile
-        *ngIf="(zoom$ | async) >= olMap.minUsefulZoom"
-        [opacity]="1"
-      >
+      <app-ol-layer-tile [opacity]="1">
         <app-ol-source-xyz
           [maxZoom]="17"
           [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
@@ -71,7 +68,7 @@
           >
         </app-ol-source-xyz>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        <app-ol-filter-enhance [value]="0.4"></app-ol-filter-enhance>
+        <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance>
       </app-ol-layer-tile>
 
       <!-- 📦 NH GranIT VECTOR LAYERS -->
