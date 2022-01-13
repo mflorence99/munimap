@@ -14,11 +14,13 @@ import Colorize from 'ol-ext/filter/Colorize';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-filter-grayscale',
+  selector: 'app-ol-filter-luminosity',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLFilterGrayscaleComponent implements AfterContentInit, OnDestroy {
+export class OLFilterLuminosityComponent
+  implements AfterContentInit, OnDestroy
+{
   #layer: any;
 
   olFilter: typeof Colorize;
@@ -38,8 +40,8 @@ export class OLFilterGrayscaleComponent implements AfterContentInit, OnDestroy {
     // 👇 build the filter
     this.olFilter = new Colorize({
       active: true,
-      operation: 'hue',
-      color: [255, 255, 255]
+      operation: 'luminosity',
+      value: 1
     });
   }
 

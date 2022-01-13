@@ -45,7 +45,7 @@ export class OLStyleBridgesComponent implements OLStyleComponent {
             color: `rgba(${lineColor}, ${this.opacity})`,
             width: 0.5
           }),
-          text: '\uf1b9' /* 👈 car */
+          text: '\uf00d' /* 👈 times */
         })
       });
     };

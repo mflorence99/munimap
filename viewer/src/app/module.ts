@@ -53,7 +53,9 @@ import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-sear
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
+import { OLFilterEnhanceComponent } from '@lib/ol/ol-filter-enhance';
 import { OLFilterGrayscaleComponent } from '@lib/ol/ol-filter-grayscale';
+import { OLFilterLuminosityComponent } from '@lib/ol/ol-filter-luminosity';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
@@ -69,6 +71,7 @@ import { OLSourceBridgesComponent } from '@lib/ol/ol-source-bridges';
 import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
+import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
 import { OLSourceRiversComponent } from '@lib/ol/ol-source-rivers';
@@ -133,7 +136,9 @@ const COMPONENTS = [
   OLControlZoomToExtentComponent,
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2SelectedComponent,
+  OLFilterEnhanceComponent,
   OLFilterGrayscaleComponent,
+  OLFilterLuminosityComponent,
   OLInteractionSelectParcelsComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,
@@ -149,6 +154,7 @@ const COMPONENTS = [
   OLSourceDamsComponent,
   OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,
+  OLSourceHillshadeComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
   OLSourceRiversComponent,
