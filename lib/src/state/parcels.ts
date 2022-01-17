@@ -114,6 +114,12 @@ export class ParcelsState implements NgxsOnInit {
                 .where('owner', 'in', workgroup)
                 .where('path', '==', map.path)
                 .orderBy('timestamp', 'desc');
+            console.log(
+              `%cFirestore query: parcels where owner in ${JSON.stringify(
+                workgroup
+              )} and path == "${map.path}" orderBy timestamp desc`,
+              'color: goldenrod'
+            );
             return this.firestore
               .collection<Parcel>('parcels', query)
               .valueChanges({ idField: '$id' });
