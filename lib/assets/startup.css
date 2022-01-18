@@ -42,7 +42,7 @@
   width: 64px;
 }
 
-app-home:empty + .startup-loading {
+app-root:empty + .startup-loading {
   opacity: 1;
   z-index: 1;
 }
