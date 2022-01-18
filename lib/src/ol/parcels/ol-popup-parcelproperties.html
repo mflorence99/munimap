@@ -125,7 +125,9 @@
 
       <tbody>
         <tr *ngFor="let abutter of abutters">
-          <td>{{ abutter.id }}</td>
+          <td>
+            <a (click)="onSelect(abutter.id)">{{ abutter.id }}</a>
+          </td>
           <td>{{ abutter.owner ?? abutter.address }}</td>
         </tr>
       </tbody>

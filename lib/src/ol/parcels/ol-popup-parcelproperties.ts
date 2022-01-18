@@ -176,6 +176,10 @@ export class OLPopupParcelPropertiesComponent {
     // this.#subToSelection?.unsubscribe();
   }
 
+  onSelect(abutterID: ParcelID): void {
+    this.map.selector?.reselectParcels([abutterID]);
+  }
+
   sum(array: number[]): number {
     return array.reduce((acc, val) => acc + val);
   }
