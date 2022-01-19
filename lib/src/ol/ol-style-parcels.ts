@@ -245,25 +245,34 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
         const icon = this.#iconForUse(props.use);
         // not all current usages have a pattern
         if (icon) {
-          patterns.push(new OLFillPattern({ image: icon }));
+          try {
+            // 🐛 FillPattern sometimes throws InvalidStateError
+            patterns.push(new OLFillPattern({ image: icon }));
+          } catch (ignored) {}
         }
       }
-      // 👉 town forest uses specil symbol
+      // 👉 town forest uses special symbol
       else if (props.usage === '501') {
         const icon = this.#iconForUse('forest');
-        patterns.push(new OLFillPattern({ image: icon }));
+        try {
+          // 🐛 FillPattern sometimes throws InvalidStateError
+          patterns.push(new OLFillPattern({ image: icon }));
+        } catch (ignored) {}
       }
     }
     // 👉 otherwise just use a generic pattern for texture
-    patterns.push(
-      new OLFillPattern({
-        color: `rgba(${fill}, ${this.opacity})`,
-        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-        pattern: 'dot',
-        size: 2,
-        spacing: 4
-      })
-    );
+    try {
+      // 🐛 FillPattern sometimes throws InvalidStateError
+      patterns.push(
+        new OLFillPattern({
+          color: `rgba(${fill}, ${this.opacity})`,
+          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+          pattern: 'dot',
+          size: 2,
+          spacing: 4
+        })
+      );
+    } catch (ignored) {}
     return patterns.map((pattern) => new OLStyle({ fill: pattern }));
   }
 

@@ -31,13 +31,18 @@ export class OLStyleWetlandComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (): OLStyle => {
       const swamp = this.map.vars['--map-wetland-swamp'];
-      return new OLStyle({
-        fill: new OLFillPattern({
-          color: `rgba(${swamp}, ${this.opacity})`,
-          pattern: this.pattern
-        }),
-        stroke: null
-      });
+      // 🐛 FillPattern sometimes throws InvalidStateError
+      try {
+        return new OLStyle({
+          fill: new OLFillPattern({
+            color: `rgba(${swamp}, ${this.opacity})`,
+            pattern: this.pattern
+          }),
+          stroke: null
+        });
+      } catch (ignored) {
+        return null;
+      }
     };
   }
 }

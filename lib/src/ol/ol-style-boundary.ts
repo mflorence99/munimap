@@ -31,13 +31,19 @@ export class OLStyleBoundaryComponent implements OLStyleComponent {
 
   style(): OLStyleFunction {
     return (): OLStyle => {
-      const fill = this.map.vars['--map-boundary-fill'];
-      return new OLStyle({
-        fill: new OLFillPattern({
-          color: `rgba(${fill}, 1)`,
-          fill: new OLFill({ color: `rgba(255, 255, 255, ${this.opacity})` }),
+      const gravel = this.map.vars['--map-boundary-fill'];
+      // 🐛 FillPattern sometimes throws InvalidStateError
+      let fill = new OLFill({ color: `rgba(255, 255, 255, ${this.opacity})` });
+      try {
+        fill = new OLFillPattern({
+          color: `rgba(${gravel}, 1)`,
+          fill: fill,
           pattern: this.pattern
-        }),
+        });
+      } catch (ignored) {}
+      // 👉 add texture to background inside boundary
+      return new OLStyle({
+        fill: fill,
         stroke: null
       });
     };
