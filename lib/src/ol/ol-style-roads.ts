@@ -63,19 +63,26 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     const edge = this.map.vars[`--map-road-edge-${props.class ?? '0'}`];
     const lane = this.map.vars[`--map-road-lane-${props.class ?? '0'}`];
     const width = this.#roadWidth(props, resolution);
-    return props.class === 'VI'
-      ? new OLStrokePattern({
-          color: `rgba(${edge}, 1)`,
-          fill: new OLFill({ color: `rgba(${lane}, 1)` }),
-          pattern: 'conglomerate',
-          scale: 0.66,
-          width: width * 0.9
-        })
-      : new OLStroke({
-          color: `rgba(${lane}, 1)`,
-          lineCap: 'butt',
-          width: width * 0.9
-        });
+    // 👉 works for all road classifications
+    const dflt = new OLStroke({
+      color: `rgba(${lane}, 1)`,
+      lineCap: 'butt',
+      width: width * 0.9
+    });
+    // 🐛 StrokePattern can throw InvalidState exception
+    try {
+      return props.class === 'VI'
+        ? new OLStrokePattern({
+            color: `rgba(${edge}, 1)`,
+            fill: new OLFill({ color: `rgba(${lane}, 1)` }),
+            pattern: 'conglomerate',
+            scale: 0.66,
+            width: width * 0.9
+          })
+        : dflt;
+    } catch (ignored) {
+      return dflt;
+    }
   }
 
   #fontSize(resolution: number): number {

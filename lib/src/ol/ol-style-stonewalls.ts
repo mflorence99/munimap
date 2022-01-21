@@ -46,15 +46,20 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
       else {
         const fill = this.map.vars['--map-stonewall-fill'];
         const rocks = this.map.vars['--map-stonewall-rocks'];
-        return new OLStyle({
-          stroke: new OLStrokePattern({
-            color: `rgba(${rocks}, ${this.opacity})`,
-            fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-            pattern: this.pattern,
-            scale: 2,
-            width: wallWidth
-          })
-        });
+        // 🐛 StrokePattern can throw InvalidState exception
+        try {
+          return new OLStyle({
+            stroke: new OLStrokePattern({
+              color: `rgba(${rocks}, ${this.opacity})`,
+              fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+              pattern: this.pattern,
+              scale: 2,
+              width: wallWidth
+            })
+          });
+        } catch (ignored) {
+          return null;
+        }
       }
     };
   }
