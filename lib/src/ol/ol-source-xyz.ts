@@ -19,7 +19,7 @@ import OLImageTile from 'ol/ImageTile';
 import OLXYZ from 'ol/source/XYZ';
 
 const backoffInitialInterval = 1000;
-const backoffMaxInterval = 5000;
+const backoffMaxInterval = 2500;
 const backoffMaxRetries = 10;
 
 @Component({
@@ -40,7 +40,7 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
 
   constructor(private http: HttpClient, private layer: OLLayerTileComponent) {}
 
-  // 👀 https://gis.stackexchange.com/questions/401266/openlayers-fallback-tiles-on-error-errortileurlfunction
+  // 🔥 temporarily disabled
 
   #loader(tile: OLImageTile, src: string): void {
     const img = tile.getImage() as HTMLImageElement;
