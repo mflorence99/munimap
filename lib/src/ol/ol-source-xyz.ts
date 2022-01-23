@@ -80,7 +80,8 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
     this.olXYZ = new OLXYZ({
       crossOrigin: 'anonymous',
       maxZoom: this.maxZoom,
-      tileLoadFunction: this.#loader.bind(this),
+      // 🔥 temporarily disable retry logic
+      // tileLoadFunction: this.#loader.bind(this),
       url: `${environment.endpoints.proxy}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
     });
   }
