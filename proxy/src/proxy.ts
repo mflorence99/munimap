@@ -82,7 +82,8 @@ export class ProxyServer extends Handler {
           stat = fs.statSync(fpath);
         } catch (error) {}
         const maxAge = this.#opts.maxAge;
-        const isCached = stat?.mtimeMs > Date.now() - maxAge * 1000;
+        const isCached =
+          stat && stat.size > 0 && stat.mtimeMs > Date.now() - maxAge * 1000;
 
         // 👇 because we set maxAge to the exact time that we discard the
         //    disk copy of the proxied data, we never have to bother
@@ -101,7 +102,8 @@ export class ProxyServer extends Handler {
                 chalk.yellow(request.method),
                 x && y && z ? `${request.path}/${x}/${y}/${z}` : request.path,
                 chalk.green(response.statusCode),
-                stat?.mtime,
+                stat.mtime,
+                stat.size,
                 chalk.blue('CACHED')
               );
             }),
@@ -136,16 +138,20 @@ export class ProxyServer extends Handler {
             mergeMap((resp) => from(resp.buffer())),
             tap((buffer) => (response.body = buffer)),
             tap((buffer) => {
-              if (response.statusCode === 200) {
+              if (
+                response.statusCode === 200 &&
+                Buffer.byteLength(buffer) > 0
+              ) {
                 fs.mkdirSync(fdir, { recursive: true });
                 fs.writeFile(fpath, buffer, () => {});
               }
             }),
-            tap(() => {
+            tap((buffer) => {
               console.log(
                 chalk.yellow(request.method),
                 x && y && z ? `${request.path}/${x}/${y}/${z}` : request.path,
                 chalk.green(response.statusCode),
+                Buffer.byteLength(buffer),
                 chalk.red('FETCHED')
               );
             }),
