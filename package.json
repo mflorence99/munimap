@@ -131,6 +131,7 @@
     "serverx-ts": "^0.0.41",
     "shpjs": "4",
     "tslib": "^2",
+    "typeface-roboto": "^1",
     "ua-parser-js": "^1",
     "unzipper": "^0.10.11",
     "url-parse": "^1",
