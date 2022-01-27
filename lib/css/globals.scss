@@ -206,11 +206,14 @@ $dark-app-theme: mat-dark-theme(
 
 // 👉 base styles
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 ::-webkit-input-placeholder {
   color: var(--mat-gray-600);
 }
@@ -289,6 +292,25 @@ html {
 ol,
 ul {
   list-style-type: none;
+}
+
+option {
+  background-color: white;
+  color: black;
+}
+
+select {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  cursor: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0 1em 0 0;
+  width: 100%;
 }
 
 // 👉 Angular Material styles

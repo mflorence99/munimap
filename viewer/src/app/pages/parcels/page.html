@@ -183,15 +183,23 @@
 
     <ng-container *ngIf="satelliteView$ | async">
       <app-ol-layer-tile>
-        <app-ol-source-xyz
-          [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-          ><app-ol-attribution
-            >©
-            <a href="https://mapbox.com" target="_blank"
-              >Mapbox</a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
+        <ng-container *ngIf="{ satelliteYear: satelliteYear$ | async } as ctx">
+          <app-ol-source-xyz
+            *ngIf="!ctx.satelliteYear"
+            [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+            ><app-ol-attribution
+              >©
+              <a href="https://mapbox.com" target="_blank"
+                >Mapbox</a
+              ></app-ol-attribution
+            ></app-ol-source-xyz
+          >
+
+          <app-ol-source-satellite
+            *ngIf="ctx.satelliteYear"
+            [year]="ctx.satelliteYear"
+          ></app-ol-source-satellite>
+        </ng-container>
       </app-ol-layer-tile>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">

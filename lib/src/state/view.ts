@@ -19,6 +19,11 @@ export class SetSatelliteView {
   constructor(public satelliteView: boolean) {}
 }
 
+export class SetSatelliteYear {
+  static readonly type = '[View] SetSatelliteYear';
+  constructor(public satelliteYear: string) {}
+}
+
 export class UpdateView {
   static readonly type = '[View] UpdateView';
   constructor(public path: Path, public view: View) {}
@@ -35,6 +40,7 @@ export interface ViewStateModel {
   gps: boolean;
   recentPath: string;
   satelliteView: boolean;
+  satelliteYear: string;
   viewByPath: Record<Path, View>;
 }
 
@@ -44,6 +50,7 @@ export interface ViewStateModel {
     gps: false,
     recentPath: null,
     satelliteView: false,
+    satelliteYear: '',
     viewByPath: {
       [theState]: { center: null, zoom: null }
     }
@@ -59,6 +66,10 @@ export class ViewState {
 
   @Selector() static satelliteView(state: ViewStateModel): boolean {
     return state.satelliteView;
+  }
+
+  @Selector() static satelliteYear(state: ViewStateModel): string {
+    return state.satelliteYear || '' /* 👈 b/c satelliteYear was added later */;
   }
 
   recentPath(): string {
@@ -77,6 +88,13 @@ export class ViewState {
     action: SetSatelliteView
   ): void {
     ctx.setState(patch({ satelliteView: action.satelliteView }));
+  }
+
+  @Action(SetSatelliteYear) setSatelliteYear(
+    ctx: StateContext<ViewStateModel>,
+    action: SetSatelliteYear
+  ): void {
+    ctx.setState(patch({ satelliteYear: action.satelliteYear }));
   }
 
   @Action(UpdateView) updateView(

@@ -27,6 +27,8 @@ export class ParcelsPage implements OnInit {
 
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
+  @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
+
   @Select(ViewState) view$: Observable<ViewStateModel>;
 
   zoom$: Observable<number>;

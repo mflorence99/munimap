@@ -1,4 +1,5 @@
 import { OLMapComponent } from './ol-map';
+
 import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -29,7 +30,7 @@ export class OLControlAttributionComponent {
     if (!this.collapsed) {
       this.attributions = [];
       this.map.olMap.getLayers().forEach((layer: any) => {
-        (layer as OLLayer<any>)
+        (layer as OLLayer<any, any>)
           ?.getSource()
           ?.getAttributions?.()?.()
           ?.forEach((attribution) => {

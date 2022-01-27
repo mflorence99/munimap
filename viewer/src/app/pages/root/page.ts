@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SetGPS } from '@lib/state/view';
 import { SetSatelliteView } from '@lib/state/view';
+import { SetSatelliteYear } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
@@ -23,6 +24,7 @@ import { VersionService } from '@lib/services/version';
 import { ViewState } from '@lib/state/view';
 
 import { filter } from 'rxjs/operators';
+import { satelliteYears } from '@lib/ol/ol-source-satellite';
 import { takeUntil } from 'rxjs/operators';
 
 import urlParse from 'url-parse';
@@ -42,6 +44,12 @@ export class RootPage implements OnInit {
   @Select(MapState) map$: Observable<Map>;
 
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+
+  @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
+
+  get satelliteYears(): string[] {
+    return ['', ...satelliteYears.slice().reverse()];
+  }
 
   title: string;
 
@@ -108,6 +116,10 @@ export class RootPage implements OnInit {
       });
   }
 
+  eatMe(event: Event): void {
+    event.stopPropagation();
+  }
+
   ngOnInit(): void {
     this.#handleMap$();
     this.#handleUser$();
@@ -119,5 +131,9 @@ export class RootPage implements OnInit {
 
   onSatelliteViewToggle(state: boolean): void {
     this.store.dispatch(new SetSatelliteView(state));
+  }
+
+  onSatelliteYear(year: string): void {
+    this.store.dispatch(new SetSatelliteYear(year));
   }
 }
