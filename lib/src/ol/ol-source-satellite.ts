@@ -79,7 +79,7 @@ export class OLSourceSatelliteComponent {
     const bbox = parsed.searchParams.get('BBOX');
     const url = `${
       environment.endpoints.proxy
-    }/proxy/hillshade?url=${encodeURIComponent(
+    }/proxy/satellite?url=${encodeURIComponent(
       urls[this.year].replace('XXXXXX', bbox)
     )}`;
     img.src = url;
