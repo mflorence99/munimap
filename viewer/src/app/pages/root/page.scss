@@ -43,4 +43,9 @@
   padding: 0 0.5rem !important;
   position: absolute;
   width: 100%;
+
+  option {
+    background-color: var(--mat-gray-800);
+    color: var(--text-color);
+  }
 }

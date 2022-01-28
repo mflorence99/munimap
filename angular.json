@@ -64,7 +64,8 @@
             "styles": [
               "lib/css/globals.scss",
               "node_modules/firebaseui/dist/firebaseui.css",
-              "node_modules/ol/ol.css"
+              "node_modules/ol/ol.css",
+              "node_modules/ol-ext/dist/ol-ext.css"
             ],
             "tsConfig": "author/src/tsconfig.json",
             "vendorChunk": true,
@@ -150,7 +151,11 @@
             "polyfills": "viewer/src/polyfills.ts",
             "serviceWorker": true,
             "sourceMap": true,
-            "styles": ["lib/css/globals.scss", "node_modules/ol/ol.css"],
+            "styles": [
+              "lib/css/globals.scss",
+              "node_modules/ol/ol.css",
+              "node_modules/ol-ext/dist/ol-ext.css"
+            ],
             "tsConfig": "viewer/src/tsconfig.json",
             "vendorChunk": true,
             "webWorkerTsConfig": "worker/src/tsconfig.json"
