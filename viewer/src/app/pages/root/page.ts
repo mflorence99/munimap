@@ -116,6 +116,10 @@ export class RootPage implements OnInit {
       });
   }
 
+  canPickSatelliteYear(): boolean {
+    return window.innerWidth >= 480;
+  }
+
   eatMe(event: Event): void {
     event.stopPropagation();
   }

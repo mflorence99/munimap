@@ -14,21 +14,23 @@
       [checked]="satelliteView$ | async"
     >
       <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
-      &nbsp;
-      <select
-        (change)="onSatelliteYear($event.target.value)"
-        (click)="eatMe($event)"
-        [disabled]="!(satelliteView$ | async)"
-      >
-        <ng-container *ngFor="let year of satelliteYears">
-          <option
-            [attr.selected]="year === (satelliteYear$ | async) ? 'true' : null"
-            [value]="year"
-          >
-            {{ year || 'Latest' }}
-          </option>
-        </ng-container>
-      </select>
+      <ng-container *ngIf="canPickSatelliteYear()">
+        &nbsp;
+        <select
+          (change)="onSatelliteYear($event.target.value)"
+          (click)="eatMe($event)"
+          [disabled]="!(satelliteView$ | async)"
+        >
+          <ng-container *ngFor="let year of satelliteYears">
+            <option
+              [attr.selected]="year === (satelliteYear$ | async) ? 'true' : null"
+              [value]="year"
+            >
+              {{ year || 'Latest' }}
+            </option>
+          </ng-container>
+        </select>
+      </ng-container>
     </mat-button-toggle>
 
     <mat-button-toggle
