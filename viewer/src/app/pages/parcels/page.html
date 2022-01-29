@@ -182,10 +182,33 @@
     <!-- 📦 SATELLITE LAYERS  -->
 
     <ng-container *ngIf="satelliteView$ | async">
-      <app-ol-layer-tile>
-        <ng-container *ngIf="{ satelliteYear: satelliteYear$ | async } as ctx">
+      <ng-container *ngIf="{ satelliteYear: satelliteYear$ | async } as ctx">
+        <!-- 👇 split screen if year selected  -->
+
+        <app-ol-control-splitscreen *ngIf="ctx.satelliteYear">
+          <app-ol-layer-tile #left>
+            <app-ol-source-xyz
+              [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+              ><app-ol-attribution
+                >©
+                <a href="https://mapbox.com" target="_blank"
+                  >Mapbox</a
+                ></app-ol-attribution
+              ></app-ol-source-xyz
+            >
+          </app-ol-layer-tile>
+
+          <app-ol-layer-tile #right>
+            <app-ol-source-satellite
+              [year]="ctx.satelliteYear"
+            ></app-ol-source-satellite>
+          </app-ol-layer-tile>
+        </app-ol-control-splitscreen>
+
+        <!-- 👇 otherwise, just show latest  -->
+
+        <app-ol-layer-tile *ngIf="!ctx.satelliteYear">
           <app-ol-source-xyz
-            *ngIf="!ctx.satelliteYear"
             [url]="'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
             ><app-ol-attribution
               >©
@@ -194,22 +217,17 @@
               ></app-ol-attribution
             ></app-ol-source-xyz
           >
+        </app-ol-layer-tile>
 
-          <app-ol-source-satellite
-            *ngIf="ctx.satelliteYear"
-            [year]="ctx.satelliteYear"
-          ></app-ol-source-satellite>
-        </ng-container>
-      </app-ol-layer-tile>
-
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-parcels
-          [showBorder]="true"
-          [showLabelContrast]="true"
-          [showLabels]="true"
-        ></app-ol-style-parcels>
-        <app-ol-source-parcels></app-ol-source-parcels>
-      </app-ol-layer-vector>
+        <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
+          <app-ol-style-parcels
+            [showBorder]="true"
+            [showLabelContrast]="true"
+            [showLabels]="true"
+          ></app-ol-style-parcels>
+          <app-ol-source-parcels></app-ol-source-parcels>
+        </app-ol-layer-vector>
+      </ng-container>
     </ng-container>
 
     <!-- 📦 BOUNDARY LAYER -->

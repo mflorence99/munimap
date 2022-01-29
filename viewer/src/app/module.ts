@@ -50,6 +50,7 @@ import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
 import { OLControlPlusMinusComponent } from '@lib/ol/ol-control-plusminus';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
+import { OLControlSplitScreenComponent } from '@lib/ol/ol-control-splitscreen';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
@@ -133,6 +134,7 @@ const COMPONENTS = [
   OLControlPlusMinusComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
+  OLControlSplitScreenComponent,
   OLControlZoomToExtentComponent,
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2SelectedComponent,
