@@ -19,7 +19,7 @@
       *ngFor="let map of allMaps$ | async; trackBy: trackByID"
       (click)="close()"
       class="item"
-      routerLink="/parcels/{{ map.id }}"
+      routerLink="/{{ map.type }}/{{ map.id }}"
     >
       <fa-icon
         [class.selected]="title === map.name"

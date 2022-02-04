@@ -6,9 +6,11 @@ import { Component } from '@angular/core';
 import { FilterFunction } from '@lib/ol/ol-interaction-selectpolygon';
 import { GeoJSONService } from '@lib/services/geojson';
 import { Index } from '@lib/geojson';
+import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { Path } from '@lib/state/view';
 import { Router } from '@angular/router';
 import { TownIndex } from '@lib/geojson';
+import { ViewChild } from '@angular/core';
 
 import { environment } from '@lib/environment';
 import { theState } from '@lib/geojson';
@@ -25,6 +27,10 @@ export class CreatePage {
   env = environment;
   index: Index;
   path: Path;
+
+  @ViewChild('selectables') selectables: OLLayerVectorComponent;
+
+  type = 'parcels';
 
   constructor(
     private geoJSON: GeoJSONService,
@@ -67,7 +73,7 @@ export class CreatePage {
         const townIndex = this.index[this.currentState()][this.currentCounty()][
           feature.getId()
         ] as TownIndex;
-        return townIndex.layers.parcels.available;
+        return this.type !== 'parcels' || townIndex.layers.parcels.available;
       } else return true;
     };
   }
@@ -83,7 +89,11 @@ export class CreatePage {
   }
 
   onPathSelected(path: string): void {
-    // 🔥 change "parcels" to type of map when we have culverts etc
-    this.router.navigate(['/parcels/0'], { queryParams: { path } });
+    this.router.navigate([`/${this.type}/0`], { queryParams: { path } });
+  }
+
+  onTypeChanged(type: string): void {
+    this.type = type;
+    if (this.selectables) this.selectables.olLayer.getSource().refresh();
   }
 }

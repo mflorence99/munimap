@@ -25,6 +25,10 @@ export class BuilderComponent {
   @Output() pathChanged = new EventEmitter<Path>();
   @Output() pathSelected = new EventEmitter<Path>();
 
+  @Input() type: string;
+
+  @Output() typeChanged = new EventEmitter<string>();
+
   constructor(private geoJSON: GeoJSONService, private route: ActivatedRoute) {
     this.index = this.geoJSON.findIndex(this.route);
   }
@@ -44,10 +48,10 @@ export class BuilderComponent {
     return (
       Object.keys(this.index[state][county] ?? {})
         .filter(isIndex)
-        // 👉 parcels MUST be available
+        // 👉 parcels MUST be available for parcels map
         .filter((town) => {
           const townIndex = this.index[state][county][town] as TownIndex;
-          return townIndex.layers.parcels.available;
+          return this.type !== 'parcels' || townIndex.layers.parcels.available;
         })
         .sort()
     );
@@ -63,6 +67,10 @@ export class BuilderComponent {
 
   currentTown(): string {
     return this.path?.split(':')[2];
+  }
+
+  currentType(): string {
+    return this.type;
   }
 
   reset(): void {
@@ -85,6 +93,11 @@ export class BuilderComponent {
     this.pathChanged.emit(
       `${this.currentState()}:${this.currentCounty()}:${town}`
     );
+  }
+
+  switchType(type: string): void {
+    this.type = type;
+    this.typeChanged.emit(this.currentType());
   }
 
   trackByItem(ix: number, item: string): string {

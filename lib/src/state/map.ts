@@ -43,7 +43,7 @@ export interface Map {
   name: string;
   owner: string;
   path: string;
-  type: 'parcels' | 'topo';
+  type: string;
 }
 
 export type MapStateModel = Map;

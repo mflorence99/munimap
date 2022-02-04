@@ -1,0 +1,178 @@
+<ng-container *ngIf="(mapState$ | async) as map">
+  <app-ol-map
+    #olMap
+    [gridRequired]="true"
+    [minZoom]="15"
+    [maxZoom]="22"
+    [path]="map.path"
+  >
+    <app-properties [map]="map" class="setup" mapControlPanel1></app-properties>
+
+    <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
+
+    <app-ol-control-print
+      *ngIf="map.name"
+      [fileName]="map.name"
+      mapControlPrint
+    ></app-ol-control-print>
+
+    <app-ol-control-zoom2extent
+      mapControlZoomToExtent
+    ></app-ol-control-zoom2extent>
+
+    <app-ol-control-attribution
+      mapControlAttribution
+    ></app-ol-control-attribution>
+
+    <ng-container *ngIf="olMap.initialized">
+      <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+
+      <app-ol-control-graticule
+        ><app-ol-style-graticule></app-ol-style-graticule
+      ></app-ol-control-graticule>
+
+      <app-ol-control-scaleline
+        *ngIf="olMap.printing"
+        [printing]="olMap.printing"
+      ></app-ol-control-scaleline>
+
+      <app-ol-control-scaleline
+        *ngIf="!olMap.printing"
+      ></app-ol-control-scaleline>
+
+      <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
+      <!-- 📦 BG LAYER (outside town)-->
+
+      <app-ol-layer-tile *ngIf="olMap.printing">
+        <app-ol-source-xyz
+          [maxZoom]="19"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          ><app-ol-attribution
+            >©
+            <a href="https://www.openstreetmap.org/copyright" target="_blank"
+              >© OpenStreetMap contributors</a
+            ></app-ol-attribution
+          ></app-ol-source-xyz
+        >
+        <app-ol-filter-grayscale [value]="0.9"></app-ol-filter-grayscale>
+      </app-ol-layer-tile>
+
+      <!-- 📦 BG LAYER (lays down a texture inside town)-->
+
+      <app-ol-layer-vector>
+        <app-ol-style-boundary></app-ol-style-boundary>
+        <app-ol-source-boundary></app-ol-source-boundary>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <!-- 📦 HILLSHADE LAYER =-->
+
+      <app-ol-layer-tile [opacity]="1">
+        <app-ol-source-xyz
+          [maxZoom]="17"
+          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+        >
+          <app-ol-attribution
+            >Powered by
+            <a href="https://www.esri.com" target="_blank"
+              >Esri</a
+            ></app-ol-attribution
+          >
+        </app-ol-source-xyz>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        <app-ol-filter-enhance [value]="1"></app-ol-filter-enhance>
+      </app-ol-layer-tile>
+
+      <!-- 📦 NH GranIT VECTOR LAYERS -->
+
+      <app-ol-layer-vector>
+        <app-ol-style-rivers></app-ol-style-rivers>
+        <app-ol-source-rivers></app-ol-source-rivers>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-waterbodies></app-ol-style-waterbodies>
+        <app-ol-source-waterbodies></app-ol-source-waterbodies>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-trails></app-ol-style-trails>
+        <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-stonewalls></app-ol-style-stonewalls>
+        <app-ol-source-stonewalls></app-ol-source-stonewalls>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-floodplain></app-ol-style-floodplain>
+        <app-ol-source-floodplain></app-ol-source-floodplain>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-wetland></app-ol-style-wetland>
+        <app-ol-source-wetland></app-ol-source-wetland>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-bridges></app-ol-style-bridges>
+        <app-ol-source-bridges></app-ol-source-bridges>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-buildings></app-ol-style-buildings>
+        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-powerlines></app-ol-style-powerlines>
+        <app-ol-source-geojson
+          [layerKey]="'powerlines'"
+        ></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-places></app-ol-style-places>
+        <app-ol-source-geojson
+          [filter]="filterDams"
+          [layerKey]="'places'"
+        ></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-places></app-ol-style-places>
+        <app-ol-source-dams></app-ol-source-dams>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <!-- 📦 BOUNDARY LAYER -->
+
+      <app-ol-layer-vector>
+        <app-ol-style-polygons></app-ol-style-polygons>
+        <app-ol-source-boundary></app-ol-source-boundary>
+        <app-ol-interaction-boundary
+          *ngIf="isPrivileged()"
+        ></app-ol-interaction-boundary>
+      </app-ol-layer-vector>
+    </ng-container>
+
+    <!-- 📦 CONTROLS -->
+  </app-ol-map>
+</ng-container>

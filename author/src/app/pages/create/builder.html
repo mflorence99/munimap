@@ -16,6 +16,18 @@
       spellcheck="false"
     >
       <mat-form-field>
+        <mat-label>Select Map Type</mat-label>
+        <mat-select
+          (selectionChange)="switchType($event.value)"
+          [disabled]="currentTown()"
+          [value]="currentType()"
+        >
+          <mat-option value="parcels">Parcels</mat-option>
+          <mat-option value="topo">Topographic</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- <mat-form-field>
         <mat-label>Select a State</mat-label>
         <mat-select
           [disabled]="true"
@@ -29,7 +41,7 @@
             {{ state }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-form-field>
         <mat-label>Select a County</mat-label>

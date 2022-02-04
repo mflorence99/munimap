@@ -11,6 +11,7 @@ import { ProfileComponent } from './pages/root/profile';
 import { PropertiesComponent } from './pages/properties';
 import { RootPage } from './pages/root/page';
 import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
+import { TopoPage } from './pages/topo/page';
 
 import * as Sentry from '@sentry/angular';
 
@@ -255,7 +256,7 @@ const COMPONENTS = [
 
 const DIRECTIVES = [ContextMenuHostDirective, WorkgroupValidator];
 
-const PAGES = [LoginPage, CreatePage, ParcelsPage, RootPage];
+const PAGES = [LoginPage, CreatePage, ParcelsPage, RootPage, TopoPage];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -286,6 +287,11 @@ const ROUTES = [
         path: 'parcels/:id',
         component: ParcelsPage,
         data: { state: 'parcels' }
+      },
+      {
+        path: 'topo/:id',
+        component: TopoPage,
+        data: { state: 'topo' }
       },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
     ]
