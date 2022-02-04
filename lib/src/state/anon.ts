@@ -2,11 +2,11 @@ import { AuthState } from './auth';
 import { AuthStateModel } from './auth';
 import { Profile } from './auth';
 import { User } from './auth';
+import { User as FirebaseUser } from './auth';
 
 import { Action } from '@ngxs/store';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { NgxsOnInit } from '@ngxs/store';
 import { Selector } from '@ngxs/store';
@@ -14,7 +14,9 @@ import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 
-import firebase from 'firebase/app';
+import { doc } from '@angular/fire/firestore';
+import { getDoc } from '@angular/fire/firestore';
+import { signInAnonymously } from '@angular/fire/auth';
 
 export class LoadProfile {
   static readonly type = '[Anon] LoadProfile';
@@ -28,7 +30,7 @@ export class SetProfile {
 
 export class SetUser {
   static readonly type = '[Anon] SetUser';
-  constructor(public user: firebase.User | User | null) {}
+  constructor(public user: FirebaseUser | User | null) {}
 }
 
 export type AnonStateModel = AuthStateModel;
@@ -42,15 +44,11 @@ export type AnonStateModel = AuthStateModel;
 })
 @Injectable()
 export class AnonState implements NgxsOnInit {
-  #profiles: AngularFirestoreCollection<Profile>;
-
   constructor(
-    private fireauth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    private fireauth: Auth,
+    private firestore: Firestore,
     private store: Store
-  ) {
-    this.#profiles = this.firestore.collection<Profile>('profiles');
-  }
+  ) {}
 
   @Selector() static profile(state: AnonStateModel): Profile {
     return state.profile;
@@ -76,17 +74,14 @@ export class AnonState implements NgxsOnInit {
       `%cFirestore get: profiles ${action.email}`,
       'color: goldenrod'
     );
-    this.#profiles
-      .doc(action.email)
-      .get()
-      .subscribe((doc) => {
-        ctx.dispatch(new SetProfile(doc.data()));
-      });
+    const docRef = doc(this.firestore, 'profiles', action.email);
+    getDoc(docRef).then((doc) => {
+      ctx.dispatch(new SetProfile(doc.data() as Profile));
+    });
   }
 
   ngxsOnInit(ctx: StateContext<AnonStateModel>): void {
-    this.fireauth
-      .signInAnonymously()
+    signInAnonymously(this.fireauth)
       .then(() => {
         ctx.dispatch(new SetUser({} as User));
       })

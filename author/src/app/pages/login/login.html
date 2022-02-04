@@ -1,1 +1,174 @@
-<firebase-ui></firebase-ui>
+<!-- 📦 INITIAL STATE - REQUEST EMAIL -->
+
+<mat-card *ngIf="state === 'initial'" class="card">
+  <mat-card-header>
+    <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
+    <mat-card-title>Please Login or Signup</mat-card-title>
+    <mat-card-subtitle>First, enter your email address</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form #loginForm="ngForm" class="form" novalidate spellcheck="false">
+      <mat-form-field>
+        <mat-label>Email Address</mat-label>
+        <input
+          #emailAddress="ngModel"
+          [(ngModel)]="login.emailAddress"
+          appEmailAddress
+          autocomplete="off"
+          matInput
+          name="emailAddress"
+          required
+          type="text"
+        />
+        <mat-error *ngIf="emailAddress.errors"
+          >Email address is required and must be valid
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions class="actions">
+    <button
+      (click)="checkUserExists()"
+      [disabled]="loginForm.invalid || !loginForm.dirty"
+      color="primary"
+      mat-flat-button
+    >
+      NEXT
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<!-- 📦 LOGIN STATE -->
+
+<mat-card *ngIf="state === 'login'" class="card">
+  <mat-card-header>
+    <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
+    <mat-card-title>Please Login</mat-card-title>
+    <mat-card-subtitle>Next, enter your password</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form #loginForm="ngForm" class="form" novalidate spellcheck="false">
+      <mat-form-field>
+        <mat-label>Email Address</mat-label>
+        <input
+          #emailAddress="ngModel"
+          [(ngModel)]="login.emailAddress"
+          appEmailAddress
+          autocomplete="off"
+          matInput
+          name="emailAddress"
+          required
+          type="text"
+        />
+        <mat-error *ngIf="emailAddress.errors"
+          >Email address is required and must be valid
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input
+          #emailAddress="ngModel"
+          [(ngModel)]="login.password"
+          autocomplete="off"
+          matInput
+          name="password"
+          required
+          type="password"
+        />
+        <mat-hint *ngIf="errorMessage">{{ errorMessage }}</mat-hint>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions class="actions">
+    <a (click)="reset()" mat-flat-button> Start Over </a>
+
+    <div class="filler"></div>
+
+    <button
+      (click)="logIn()"
+      [disabled]="loginForm.invalid || !loginForm.dirty"
+      color="primary"
+      mat-flat-button
+    >
+      LOGIN
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<!-- 📦 SIGNUP STATE -->
+
+<mat-card *ngIf="state === 'signup'" class="card">
+  <mat-card-header>
+    <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
+    <mat-card-title>Signup for a New Account</mat-card-title>
+    <mat-card-subtitle>Enter your account details</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form #loginForm="ngForm" class="form" novalidate spellcheck="false">
+      <mat-form-field>
+        <mat-label>Email Address</mat-label>
+        <input
+          #emailAddress="ngModel"
+          [(ngModel)]="login.emailAddress"
+          appEmailAddress
+          autocomplete="off"
+          matInput
+          name="emailAddress"
+          required
+          type="text"
+        />
+        <mat-error *ngIf="emailAddress.errors"
+          >Email address is required and must be valid
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Display Name</mat-label>
+        <input
+          #emailAddress="ngModel"
+          [(ngModel)]="login.displayName"
+          autocomplete="off"
+          matInput
+          name="displayName"
+          required
+          type="text"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input
+          #emailAddress="ngModel"
+          [(ngModel)]="login.password"
+          autocomplete="off"
+          matInput
+          name="password"
+          required
+          type="password"
+        />
+        <mat-hint *ngIf="errorMessage">{{ errorMessage }}</mat-hint>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions class="actions">
+    <a (click)="reset()" mat-flat-button> Start Over </a>
+
+    <div class="filler"></div>
+
+    <button
+      (click)="signUp()"
+      [disabled]="loginForm.invalid || !loginForm.dirty"
+      color="primary"
+      mat-flat-button
+    >
+      SIGNUP
+    </button>
+  </mat-card-actions>
+</mat-card>

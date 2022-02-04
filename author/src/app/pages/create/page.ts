@@ -83,7 +83,7 @@ export class CreatePage {
   }
 
   onPathSelected(path: string): void {
-    // 🔥 change "parcels"to type of map when we have culverts etc
+    // 🔥 change "parcels" to type of map when we have culverts etc
     this.router.navigate(['/parcels/0'], { queryParams: { path } });
   }
 }

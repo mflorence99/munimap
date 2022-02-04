@@ -1,10 +1,14 @@
 import { Action } from '@ngxs/store';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+
+import { deleteDoc } from '@angular/fire/firestore';
+import { doc } from '@angular/fire/firestore';
+import { getDoc } from '@angular/fire/firestore';
+import { setDoc } from '@angular/fire/firestore';
 
 import copy from 'fast-copy';
 
@@ -39,6 +43,7 @@ export interface Map {
   name: string;
   owner: string;
   path: string;
+  type: 'parcels' | 'topo';
 }
 
 export type MapStateModel = Map;
@@ -49,11 +54,7 @@ export type MapStateModel = Map;
 })
 @Injectable()
 export class MapState {
-  #maps: AngularFirestoreCollection<Map>;
-
-  constructor(private firestore: AngularFirestore, private store: Store) {
-    this.#maps = this.firestore.collection<Map>('maps');
-  }
+  constructor(private firestore: Firestore, private store: Store) {}
 
   currentMap(): Map {
     return this.store.snapshot().map;
@@ -65,7 +66,8 @@ export class MapState {
   ): void {
     ctx.setState(null);
     console.log(`%cFirestore delete: maps ${action.id}`, 'color: crimson');
-    this.#maps.doc(action.id).delete();
+    const docRef = doc(this.firestore, 'maps', action.id);
+    deleteDoc(docRef);
   }
 
   @Action(LoadMap) loadMap(
@@ -76,13 +78,13 @@ export class MapState {
     //    we can't use the old one!
     ctx.setState(null);
     console.log(`%cFirestore get: maps ${action.id}`, 'color: goldenrod');
-    this.#maps
-      .doc(action.id)
-      .get()
-      .subscribe((doc) => {
-        const map = doc.exists ? doc.data() : { ...action.dflt, isDflt: true };
-        ctx.dispatch(new SetMap(map));
-      });
+    const docRef = doc(this.firestore, 'maps', action.id);
+    getDoc(docRef).then((doc) => {
+      const map = doc.exists()
+        ? (doc.data() as Map)
+        : { ...action.dflt, isDflt: true };
+      ctx.dispatch(new SetMap(map));
+    });
   }
 
   @Action(SetMap) setMap(
@@ -98,30 +100,28 @@ export class MapState {
   ): void {
     if (action.map.isDflt) {
       console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
-      this.#maps
-        .doc(action.map.id)
-        .get()
-        .subscribe((doc) => {
-          if (doc.exists) {
-            const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
-            ctx.dispatch(new UpdateMapError(message));
-          } else {
-            const map = { ...action.map, isDflt: false };
-            this.#maps
-              .doc(action.map.id)
-              .set(map, { merge: true })
-              .then(() => ctx.dispatch(new SetMap(action.map)));
-          }
-        });
+      const docRef = doc(this.firestore, 'maps', action.map.id);
+      getDoc(docRef).then((doc) => {
+        if (doc.exists()) {
+          const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
+          ctx.dispatch(new UpdateMapError(message));
+        } else {
+          setDoc(
+            docRef,
+            { ...action.map, isDflt: false },
+            { merge: true }
+          ).then(() => ctx.dispatch(new SetMap(action.map)));
+        }
+      });
     } else {
       console.log(
         `%cFirestore set: maps ${action.map.id} ${JSON.stringify(action.map)}`,
         'color: chocolate'
       );
-      this.#maps
-        .doc(action.map.id)
-        .set(action.map, { merge: true })
-        .then(() => ctx.dispatch(new SetMap(action.map)));
+      const docRef = doc(this.firestore, 'maps', action.map.id);
+      setDoc(docRef, action.map, { merge: true }).then(() =>
+        ctx.dispatch(new SetMap(action.map))
+      );
     }
   }
 

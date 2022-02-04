@@ -1,11 +1,11 @@
 import { point } from '@turf/helpers';
+import { serverTimestamp } from 'firebase/firestore';
 
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bearing from '@turf/bearing';
 import copy from 'fast-copy';
 import distance from '@turf/distance';
-import firebase from 'firebase/app';
 import length from '@turf/length';
 import polylabel from 'polylabel';
 import transformRotate from '@turf/transform-rotate';
@@ -490,6 +490,5 @@ export function simplify(
 }
 
 export function timestamp(parcel: Parcel): void {
-  if (!parcel.timestamp)
-    parcel.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  if (!parcel.timestamp) parcel.timestamp = serverTimestamp();
 }

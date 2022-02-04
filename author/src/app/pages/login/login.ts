@@ -1,5 +1,14 @@
+import { Auth } from '@angular/fire/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { UpdateUser } from '@lib/state/auth';
+import { ViewChild } from '@angular/core';
+
+import { createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { signInWithEmailAndPassword } from '@angular/fire/auth';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -7,4 +16,92 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.scss'],
   templateUrl: './login.html'
 })
-export class LoginPage {}
+export class LoginPage {
+  errorMessage = '';
+
+  login = {
+    displayName: '',
+    emailAddress: '',
+    password: ''
+  };
+
+  @ViewChild('loginForm', { static: true }) loginForm: NgForm;
+
+  state: 'initial' | 'login' | 'signup' = 'initial';
+
+  constructor(
+    private cdf: ChangeDetectorRef,
+    private fireauth: Auth,
+    private store: Store
+  ) {}
+
+  #extractFirebaseMessage(message: any): string {
+    const match = message.match(/^Firebase: ([^(]*)/);
+    return match ? match[1] : message;
+  }
+
+  // 👇 trial login with impossible password to see if user exists
+  checkUserExists(): void {
+    signInWithEmailAndPassword(
+      this.fireauth,
+      this.login.emailAddress,
+      String(Math.random())
+    )
+      .then(() => console.error('Should not happen!'))
+      .catch((error) => {
+        if (error.code === 'auth/user-not-found') this.state = 'signup';
+        else this.state = 'login';
+        this.cdf.detectChanges();
+      });
+  }
+
+  logIn(): void {
+    signInWithEmailAndPassword(
+      this.fireauth,
+      this.login.emailAddress,
+      this.login.password
+    )
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(
+          `%cFirestore auth: login ${user.email}`,
+          'color: goldenrod'
+        );
+      })
+      .catch((error) => {
+        this.errorMessage = this.#extractFirebaseMessage(error.message);
+        this.cdf.detectChanges();
+      });
+  }
+
+  reset(): void {
+    this.state = 'initial';
+  }
+
+  signUp(): void {
+    this.errorMessage = null;
+    createUserWithEmailAndPassword(
+      this.fireauth,
+      this.login.emailAddress,
+      this.login.password
+    )
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(
+          `%cFirestore auth: signup ${user.email}`,
+          'color: goldenrod'
+        );
+        this.store.dispatch(
+          new UpdateUser({
+            ...user,
+            displayName: this.login.displayName,
+            photoURL: ''
+          })
+        );
+      })
+      .catch((error) => {
+        this.errorMessage = this.#extractFirebaseMessage(error.message);
+        this.cdf.detectChanges();
+      });
+  }
+}

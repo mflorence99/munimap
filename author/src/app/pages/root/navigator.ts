@@ -1,8 +1,9 @@
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { CollectionReference } from '@angular/fire/firestore';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
+import { Firestore } from '@angular/fire/firestore';
 import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -12,10 +13,15 @@ import { Profile } from '@lib/state/auth';
 import { Select } from '@ngxs/store';
 import { VersionService } from '@lib/services/version';
 
+import { collection } from '@angular/fire/firestore';
+import { collectionData } from '@angular/fire/firestore';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { orderBy } from '@angular/fire/firestore';
+import { query } from '@angular/fire/firestore';
 import { takeUntil } from 'rxjs/operators';
 import { theState } from '@lib/geojson';
+import { where } from '@angular/fire/firestore';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,7 +42,7 @@ export class NavigatorComponent implements OnInit {
   constructor(
     private destroy$: DestroyService,
     private drawer: MatDrawer,
-    private firestore: AngularFirestore,
+    private firestore: Firestore,
     private version: VersionService
   ) {}
 
@@ -47,15 +53,19 @@ export class NavigatorComponent implements OnInit {
         if (!profile?.email) return of([]);
         else {
           const workgroup = AuthState.workgroup(profile);
-          const query = (ref): any =>
-            ref.where('owner', 'in', workgroup).orderBy('name');
           console.log(
             `%cFirestore query: maps where owner in ${JSON.stringify(
               workgroup
             )} orderBy name`,
             'color: goldenrod'
           );
-          return this.firestore.collection<Map>('maps', query).valueChanges();
+          return collectionData<Map>(
+            query(
+              collection(this.firestore, 'maps') as CollectionReference<Map>,
+              where('owner', 'in', workgroup),
+              orderBy('name')
+            )
+          );
         }
       })
     );

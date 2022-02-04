@@ -63,7 +63,6 @@
             "sourceMap": true,
             "styles": [
               "lib/css/globals.scss",
-              "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/ol/ol.css",
               "node_modules/ol-ext/dist/ol-ext.css"
             ],

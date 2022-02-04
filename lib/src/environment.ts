@@ -3,23 +3,9 @@ import PACKAGE from '../../package.json';
 
 import { UAParser } from 'ua-parser-js';
 
-import { firebase } from 'firebaseui-angular';
-import { firebaseui } from 'firebaseui-angular';
-
 const isDev = ['localhost', '127.0.0.1'].includes(location.hostname);
 
 export const environment = {
-  auth: {
-    credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-    signInFlow: 'popup',
-    signInOptions: [
-      {
-        requireDisplayName: true,
-        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
-      }
-    ]
-  },
-
   build: {
     id: BUILD.id,
     date: BUILD.date

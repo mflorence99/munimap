@@ -1,14 +1,13 @@
 import { environment } from '../environment';
 
-import 'firebase/analytics';
-
 import * as Sentry from '@sentry/angular';
 
 import { EMPTY } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import firebase from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 
 export function initializeAppProvider(
   initializer: InitializerService
@@ -38,17 +37,12 @@ export class InitializerService {
 
     // 👉 initialize analytics
     //    just tracking access to the app for now
-    if (environment.production) firebase.analytics().logEvent('login');
-
-    // 👉 initialize firestore
-    firebase
-      .firestore()
-      // 🐛 Failed to obtain exclusive access to the persistence layer
-      .enablePersistence({ synchronizeTabs: true })
-      .catch((error) => {
-        console.error(error);
-        Sentry.captureException(error);
+    if (environment.production) {
+      const analytics = getAnalytics();
+      logEvent(analytics, 'app_launch', {
+        version: environment.package.version
       });
+    }
 
     return EMPTY;
   }

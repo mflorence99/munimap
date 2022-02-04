@@ -116,7 +116,8 @@ export class ParcelsPage implements OnInit {
       id: null,
       name: null,
       owner: owner,
-      path: path ?? recentPath
+      path: path ?? recentPath,
+      type: 'parcels'
     };
     // 👉 load up the requested (or default) map
     this.store.dispatch(new LoadMap(id, dflt));

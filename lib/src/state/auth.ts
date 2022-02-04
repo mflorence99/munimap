@@ -1,7 +1,6 @@
 import { Action } from '@ngxs/store';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { NgxsOnInit } from '@ngxs/store';
@@ -10,12 +9,14 @@ import { Selector } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+import { User as FirebaseUser } from '@angular/fire/auth';
 
-import { forkJoin } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
-
-import firebase from 'firebase/app';
+import { doc } from '@angular/fire/firestore';
+import { getDoc } from '@angular/fire/firestore';
+import { setDoc } from '@angular/fire/firestore';
+import { signOut } from '@angular/fire/auth';
+import { updateProfile } from '@angular/fire/auth';
+import { user } from '@angular/fire/auth';
 
 export class Logout {
   static readonly type = '[Auth] Logout';
@@ -28,7 +29,7 @@ export class SetProfile {
 
 export class SetUser {
   static readonly type = '[Auth] SetUser';
-  constructor(public user: firebase.User | User | null) {}
+  constructor(public user: FirebaseUser | User | null) {}
 }
 
 export class UpdateProfile {
@@ -67,17 +68,13 @@ export interface AuthStateModel {
 })
 @Injectable()
 export class AuthState implements NgxsOnInit {
-  #profiles: AngularFirestoreCollection<Profile>;
-
   constructor(
-    private fireauth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    private fireauth: Auth,
+    private firestore: Firestore,
     private location: Location,
     private store: Store,
     private router: Router
-  ) {
-    this.#profiles = this.firestore.collection<Profile>('profiles');
-  }
+  ) {}
 
   @Selector() static profile(state: AuthStateModel): Profile {
     return state.profile;
@@ -121,10 +118,9 @@ export class AuthState implements NgxsOnInit {
   }
 
   @Action(Logout) logout(): void {
-    this.fireauth.signOut();
     // 👉 we relaod the app to cancel all the subscriptions
     //    that rely on a logged-in user
-    setTimeout(() => location.reload(), 100);
+    signOut(this.fireauth).then(() => location.reload());
   }
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
@@ -132,36 +128,31 @@ export class AuthState implements NgxsOnInit {
     const lastRoute = this.store.snapshot().router?.state.url;
     // 👇 don't try to use ?? here, because deepLink and lastRoute
     //    are blank when empty, not null or undefined
-    const forwardTo = deepLink || lastRoute || '/map_create';
+    const forwardTo = deepLink || lastRoute || '/create';
     // 👉 the user will be NULL on logout!
-    this.fireauth.user
-      .pipe(
-        // 👉 combine the user with its corresponding profile
-        mergeMap((user) => {
-          console.log(
-            `%cFirestore get: profiles ${user?.email}`,
-            'color: goldenrod'
-          );
-          const profile$ = user
-            ? this.#profiles.doc(user.email).get()
-            : of(null);
-          const user$ = of(user);
-          return forkJoin([user$, profile$]);
-        })
-      )
-      .subscribe(([user, doc]) => {
-        ctx.dispatch(new SetUser(user));
-        if (user) {
-          // 👉 set the profile corresponding to the User
-          //    or an empty one if none found
-          if (doc.exists) ctx.dispatch(new SetProfile(doc.data()));
+    user(this.fireauth).subscribe((user) => {
+      ctx.dispatch(new SetUser(user));
+      if (user) {
+        console.log(
+          `%cFirestore get: profiles ${user.email}`,
+          'color: goldenrod'
+        );
+        // 👉 set the profile corresponding to the User
+        //    or an empty one if none found
+        const docRef = doc(this.firestore, 'profiles', user.email);
+        getDoc(docRef).then((doc) => {
+          if (doc.exists()) ctx.dispatch(new SetProfile(doc.data() as Profile));
           else
             ctx.dispatch(
               new UpdateProfile({ email: user.email, workgroup: '' })
             );
-          this.router.navigateByUrl(forwardTo);
-        }
-      });
+        });
+        // 👉 no point in going to login if we're logged in!
+        this.router.navigateByUrl(
+          forwardTo === '/login' ? '/create' : forwardTo
+        );
+      }
+    });
   }
 
   @Action(SetProfile) setProfile(
@@ -197,19 +188,19 @@ export class AuthState implements NgxsOnInit {
       )}`,
       'color: chocolate'
     );
-    this.#profiles
-      .doc(user.email)
-      .set(AuthState.profileProps(action.profile), { merge: true })
-      .then(() => ctx.dispatch(new SetProfile(action.profile)));
+    const docRef = doc(this.firestore, 'profiles', user.email);
+    setDoc(docRef, AuthState.profileProps(action.profile), {
+      merge: true
+    }).then(() => ctx.dispatch(new SetProfile(action.profile)));
   }
 
   @Action(UpdateUser) updateUser(
     ctx: StateContext<AuthStateModel>,
     action: UpdateUser
   ): void {
-    this.fireauth.currentUser.then((user) => {
-      user.updateProfile(AuthState.userProps(action.user));
-      ctx.dispatch(new SetUser(action.user));
-    });
+    updateProfile(
+      this.fireauth.currentUser,
+      AuthState.userProps(action.user)
+    ).then(() => ctx.dispatch(new SetUser(action.user)));
   }
 }

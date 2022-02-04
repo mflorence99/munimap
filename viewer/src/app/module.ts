@@ -5,8 +5,6 @@ import { RootPage } from './pages/root/page';
 
 import * as Sentry from '@sentry/angular';
 
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireModule } from '@angular/fire';
 import { AnonState } from '@lib/state/anon';
 import { APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -102,11 +100,12 @@ import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
-import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
 
+import { connectAuthEmulator } from '@angular/fire/auth';
+import { connectFirestoreEmulator } from '@angular/fire/firestore';
+import { enableMultiTabIndexedDbPersistence } from '@angular/fire/firestore';
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
 import { faClipboard } from '@fortawesome/pro-regular-svg-icons';
@@ -123,7 +122,21 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { getAnalytics } from '@angular/fire/analytics';
+import { getAuth } from '@angular/fire/auth';
+import { getFirestore } from '@angular/fire/firestore';
+import { initializeApp } from '@angular/fire/app';
 import { initializeAppProvider } from '@lib/services/initializer';
+import { provideAnalytics } from '@angular/fire/analytics';
+import { provideAuth } from '@angular/fire/auth';
+import { provideFirebaseApp } from '@angular/fire/app';
+import { provideFirestore } from '@angular/fire/firestore';
+
+let resolvePersistenceEnabled: (enabled: boolean) => void;
+
+export const persistenceEnabled = new Promise<boolean>((resolve) => {
+  resolvePersistenceEnabled = resolve;
+});
 
 const COMPONENTS = [
   ConfirmDialogComponent,
@@ -226,8 +239,6 @@ const STATES_SAVED = [OverlayState, ViewState];
   entryComponents: [],
 
   imports: [
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
     BrowserAnimationsModule,
     BrowserModule,
     ColorPickerModule,
@@ -256,6 +267,29 @@ const STATES_SAVED = [OverlayState, ViewState];
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'
+    }),
+    // 👇 Firebase modules
+    provideAnalytics(() => getAnalytics()),
+    provideAuth(() => {
+      const auth = getAuth();
+      if (!environment.production) {
+        connectAuthEmulator(auth, 'http://localhost:9099', {
+          disableWarnings: true
+        });
+      }
+      return auth;
+    }),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      if (!environment.production) {
+        connectFirestoreEmulator(firestore, 'localhost', 8080);
+      }
+      enableMultiTabIndexedDbPersistence(firestore).then(
+        () => resolvePersistenceEnabled(true),
+        () => resolvePersistenceEnabled(false)
+      );
+      return firestore;
     })
   ],
 
@@ -282,15 +316,7 @@ const STATES_SAVED = [OverlayState, ViewState];
         ? GeolocationService
         : GeosimulatorService
     },
-    { provide: LocationStrategy, useClass: PathLocationStrategy },
-    {
-      provide: USE_AUTH_EMULATOR,
-      useValue: !environment.production ? ['localhost', 9099] : null
-    },
-    {
-      provide: USE_FIRESTORE_EMULATOR,
-      useValue: !environment.production ? ['localhost', 8080] : null
-    }
+    { provide: LocationStrategy, useClass: PathLocationStrategy }
   ]
 })
 export class RootModule {

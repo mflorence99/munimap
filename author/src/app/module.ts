@@ -14,10 +14,8 @@ import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
 
 import * as Sentry from '@sentry/angular';
 
-import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireModule } from '@angular/fire';
 import { APP_INITIALIZER } from '@angular/core';
+import { AuthGuard } from '@angular/fire/auth-guard';
 import { AuthPipe } from '@angular/fire/auth-guard';
 import { AuthState } from '@lib/state/auth';
 import { AvatarModule } from 'ngx-avatar';
@@ -27,9 +25,9 @@ import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { DecimalPipe } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { EmailAddressValidator } from '@lib/validators/emailaddress';
 import { ErrorHandler } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { FirebaseUIModule } from 'firebaseui-angular';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { GeoJSONAuthorService } from '@lib/services/geojson-author';
@@ -128,12 +126,13 @@ import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SubdivisionIDValidator } from '@lib/validators/subdivisionid';
-import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
-import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
 import { WorkgroupValidator } from '@lib/validators/workgroup';
 
+import { connectAuthEmulator } from '@angular/fire/auth';
+import { connectFirestoreEmulator } from '@angular/fire/firestore';
+import { enableMultiTabIndexedDbPersistence } from '@angular/fire/firestore';
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faCrosshairs } from '@fortawesome/free-solid-svg-icons';
@@ -155,19 +154,35 @@ import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/pro-duotone-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSignIn } from '@fortawesome/pro-duotone-svg-icons';
 import { faSync } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fadTasks } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fasTasks } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faUndo } from '@fortawesome/pro-duotone-svg-icons';
+import { getAnalytics } from '@angular/fire/analytics';
+import { getAuth } from '@angular/fire/auth';
+import { getFirestore } from '@angular/fire/firestore';
+import { initializeApp } from '@angular/fire/app';
 import { initializeAppProvider } from '@lib/services/initializer';
+import { provideAnalytics } from '@angular/fire/analytics';
+import { provideAuth } from '@angular/fire/auth';
+import { provideFirebaseApp } from '@angular/fire/app';
+import { provideFirestore } from '@angular/fire/firestore';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+
+let resolvePersistenceEnabled: (enabled: boolean) => void;
+
+export const persistenceEnabled = new Promise<boolean>((resolve) => {
+  resolvePersistenceEnabled = resolve;
+});
 
 const COMPONENTS = [
   AddParcelComponent,
   BuilderComponent,
   ConfirmDialogComponent,
+  EmailAddressValidator,
   MergeParcelsComponent,
   MessageDialogComponent,
   NavigatorComponent,
@@ -250,12 +265,12 @@ const ROUTES = [
   {
     path: 'login',
     component: LoginPage,
-    canActivate: [AngularFireAuthGuard],
+    canActivate: [AuthGuard],
     data: { authGuardPipe: redirectLoggedInToMaps, state: 'login' }
   },
   {
     path: '',
-    canActivate: [AngularFireAuthGuard],
+    canActivate: [AuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin },
     resolve: {
       index: IndexResolver,
@@ -289,14 +304,11 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
   entryComponents: [],
 
   imports: [
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
     AvatarModule,
     BrowserAnimationsModule,
     BrowserModule,
     CommonModule,
     DragDropModule,
-    FirebaseUIModule.forRoot(environment.auth),
     FontAwesomeModule,
     FormsModule,
     HttpClientModule,
@@ -336,6 +348,29 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'
+    }),
+    // 👇 Firebase modules
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAnalytics(() => getAnalytics()),
+    provideAuth(() => {
+      const auth = getAuth();
+      if (!environment.production) {
+        connectAuthEmulator(auth, 'http://localhost:9099', {
+          disableWarnings: true
+        });
+      }
+      return auth;
+    }),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      if (!environment.production) {
+        connectFirestoreEmulator(firestore, 'localhost', 8080);
+      }
+      enableMultiTabIndexedDbPersistence(firestore).then(
+        () => resolvePersistenceEnabled(true),
+        () => resolvePersistenceEnabled(false)
+      );
+      return firestore;
     })
   ],
 
@@ -355,15 +390,7 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
       })
     },
     { provide: GeoJSONService, useClass: GeoJSONAuthorService },
-    { provide: LocationStrategy, useClass: PathLocationStrategy },
-    {
-      provide: USE_AUTH_EMULATOR,
-      useValue: !environment.production ? ['localhost', 9099] : null
-    },
-    {
-      provide: USE_FIRESTORE_EMULATOR,
-      useValue: !environment.production ? ['localhost', 8080] : null
-    }
+    { provide: LocationStrategy, useClass: PathLocationStrategy }
   ]
 })
 export class RootModule {
@@ -390,6 +417,7 @@ export class RootModule {
       faQuestionCircle,
       faRedo,
       faSearch,
+      faSignIn,
       faSync,
       fadTasks,
       fasTasks,
