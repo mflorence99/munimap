@@ -1,16 +1,16 @@
-import { AddParcelComponent } from './contextmenu/add-parcel';
+import { AddParcelComponent } from './pages/parcels/add-parcel';
 import { BuilderComponent } from './pages/create/builder';
-import { ContextMenuHostDirective } from './contextmenu/contextmenu-host';
+import { ContextMenuHostDirective } from './pages/parcels/contextmenu-host';
 import { CreatePage } from './pages/create/page';
 import { LoginPage } from './pages/login/login';
-import { MergeParcelsComponent } from './contextmenu/merge-parcels';
+import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
-import { ParcelPropertiesComponent } from './contextmenu/parcel-properties';
+import { ParcelPropertiesComponent } from './pages/parcels/parcel-properties';
 import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
 import { PropertiesComponent } from './pages/properties';
 import { RootPage } from './pages/root/page';
-import { SubdivideParcelComponent } from './contextmenu/subdivide-parcel';
+import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
 import { TopoPage } from './pages/topo/page';
 
 import * as Sentry from '@sentry/angular';

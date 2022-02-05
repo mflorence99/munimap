@@ -1,11 +1,11 @@
 import { AbstractMapPage } from '../abstract-map';
-import { AddParcelComponent } from '../../contextmenu/add-parcel';
-import { ContextMenuComponent } from '../../contextmenu/contextmenu-component';
-import { ContextMenuHostDirective } from '../../contextmenu/contextmenu-host';
-import { MergeParcelsComponent } from '../../contextmenu/merge-parcels';
-import { ParcelPropertiesComponent } from '../../contextmenu/parcel-properties';
+import { AddParcelComponent } from './add-parcel';
+import { ContextMenuComponent } from './contextmenu-component';
+import { ContextMenuHostDirective } from './contextmenu-host';
+import { MergeParcelsComponent } from './merge-parcels';
+import { ParcelPropertiesComponent } from './parcel-properties';
 import { RootPage } from '../root/page';
-import { SubdivideParcelComponent } from '../../contextmenu/subdivide-parcel';
+import { SubdivideParcelComponent } from './subdivide-parcel';
 
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
