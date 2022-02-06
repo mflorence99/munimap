@@ -31,6 +31,11 @@ export const environment = {
       'sk.eyJ1IjoibWZsbzk5OSIsImEiOiJja3VmbGFrZmUxdmxhMnFxcDc0YzFoMHB4In0.nzf2uxMbBt5J2KVvjIRbnA'
   },
 
+  maptiler: {
+    // 👇 don't panic! domain protected
+    apiKey: 'S6FkuJie61kmHmarJE1V'
+  },
+
   package: {
     author: PACKAGE.author,
     name: PACKAGE.name,

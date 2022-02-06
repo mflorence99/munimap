@@ -77,8 +77,7 @@
             <app-ol-source-xyz
               [maxZoom]="19"
               url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-              ><app-ol-attribution
-                >©
+              ><app-ol-attribution>
                 <a
                   href="https://www.openstreetmap.org/copyright"
                   target="_blank"
@@ -98,6 +97,12 @@
           </app-ol-layer-vector>
 
           <!-- 📦 HILLSHADE LAYER =-->
+
+          <!-- <app-ol-layer-tile [opacity]="1">
+            <app-ol-source-hillshade> </app-ol-source-hillshade>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+            <app-ol-filter-luminosity [value]="0.15"></app-ol-filter-luminosity>
+          </app-ol-layer-tile> -->
 
           <app-ol-layer-tile [opacity]="1">
             <app-ol-source-xyz

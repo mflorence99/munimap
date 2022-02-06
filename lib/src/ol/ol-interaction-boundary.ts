@@ -11,7 +11,6 @@ import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { click } from 'ol/events/condition';
-import { merge } from 'rxjs';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 
@@ -60,14 +59,12 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
     navigator.clipboard.writeText(JSON.stringify(simplify(geojson), null, ' '));
   }
 
-  // 👇 the idea is that a selection change or ESC accepts the redraw
+  // 👇 the idea is that ESC accepts the redraw
 
   #handleStreams$(): void {
-    merge(this.map.escape$, this.map.selector?.featuresSelected)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.#emitBoundary();
-      });
+    this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.#emitBoundary();
+    });
   }
 
   #setBoundary(): void {
