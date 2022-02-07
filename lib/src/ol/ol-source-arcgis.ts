@@ -11,7 +11,7 @@ import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 
-import { arcgisToGeoJSON } from '@terraformer/arcgis';
+import { arcgisToGeoJSON } from '@esri/arcgis-to-geojson-utils';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { catchError } from 'rxjs/operators';
 import { delay } from 'rxjs/operators';
