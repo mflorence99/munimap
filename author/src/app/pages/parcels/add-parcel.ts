@@ -33,7 +33,7 @@ interface Addition {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-add-parcel',
-  styleUrls: ['./add-parcel.scss', '../../../../lib/css/sidebar.scss'],
+  styleUrls: ['./add-parcel.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './add-parcel.html'
 })
 export class AddParcelComponent implements ContextMenuComponent, OnInit {
