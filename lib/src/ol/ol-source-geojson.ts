@@ -1,4 +1,3 @@
-import { Feature } from '../geojson';
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
@@ -20,8 +19,6 @@ import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
 
-export type FilterFunction = (feature: Feature) => boolean;
-
 const attribution =
   'Powered by <a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
 
@@ -32,7 +29,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceGeoJSONComponent {
-  @Input() filter: FilterFunction;
+  @Input() exclude: string[];
 
   @Input() layerKey: string;
 
@@ -70,10 +67,13 @@ export class OLSourceGeoJSONComponent {
       .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
       .pipe(
         map((geojson: Features) => {
-          if (this.filter) {
+          if (this.exclude) {
             const filtered = copy(geojson);
-            filtered.features = geojson.features.filter((feature) =>
-              this.filter(feature)
+            // 🔥 this is a hack implementation but is easily expanded
+            //    if necessary to support include and/or filtering
+            //    on a field other than "type"
+            filtered.features = geojson.features.filter(
+              (feature: any) => !this.exclude.includes(feature.properties.type)
             );
             return filtered;
           } else return geojson;

@@ -33,14 +33,6 @@ export class ParcelsPage implements OnInit {
 
   zoom$: Observable<number>;
 
-  // 🔥 this is a horrible HACK
-  //    we now get dams from ol-source-dams, so we need to
-  //    eliminate the duplicates in places.geojson
-
-  filterDams(feature: any): boolean {
-    return feature.properties.type !== 'dam';
-  }
-
   ngOnInit(): void {
     this.zoom$ = combineLatest([this.map$, this.view$]).pipe(
       map(([map, view]) => view.viewByPath[map.path].zoom)

@@ -85,14 +85,6 @@ export abstract class AbstractMapPage implements OnInit {
     this.root.setTitle(path);
   }
 
-  // 🔥 this is a horrible HACK
-  //    we now get dams from ol-source-dams, so we need to
-  //    eliminate the duplicates in places.geojson
-
-  filterDams(feature: any): boolean {
-    return feature.properties.type !== 'dam';
-  }
-
   // 🔥 a very hacked up definition of privileged!
   isPrivileged(): boolean {
     return this.authState.currentProfile().email === 'mflo999@gmail.com';

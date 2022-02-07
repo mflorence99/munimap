@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
+import { Input } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -23,6 +24,8 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
+  @Input() exclude: string[];
+
   constructor(
     cache: CacheService,
     map: OLMapComponent,
@@ -39,14 +42,10 @@ export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
     //   unique.add(feature.attributes.FType)
     // );
     // console.log(Array.from(unique).sort());
-    // 👇 these waterbody types don't add anything to the map b/c
-    //    other features like floodplain already show what
-    //    needs to be shown
-    if (arcgis) {
+    if (arcgis && this.exclude) {
       const filtered = copy(arcgis);
-      const exclude = [466 /* 👈 swamp/marsh */];
       filtered.features = arcgis.features.filter(
-        (feature) => !exclude.includes(feature.attributes.FType)
+        (feature) => !this.exclude.includes(feature.attributes.FType)
       );
       return filtered;
     } else return super.filter(arcgis);

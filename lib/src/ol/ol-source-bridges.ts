@@ -28,9 +28,7 @@ export class OLSourceBridgesComponent extends OLSourceArcGISComponent {
   }
 
   // 👇 see BridgeProperties
-  //    we don't actually have a geojson source for bridges
-  //    but we make it appear as if we do
-
+  
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {

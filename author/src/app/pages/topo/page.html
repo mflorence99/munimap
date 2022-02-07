@@ -81,6 +81,15 @@
       <!-- 📦 NH GranIT VECTOR LAYERS -->
 
       <app-ol-layer-vector>
+        <app-ol-style-wetland></app-ol-style-wetland>
+        <!-- 👇 these excluded b/c "rivers" & "waterbodies" below does it better -->
+        <app-ol-source-wetland
+          [exclude]="['Freshwater Pond', 'Lake', 'Riverine']"
+        ></app-ol-source-wetland>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
         <app-ol-style-rivers></app-ol-style-rivers>
         <app-ol-source-rivers></app-ol-source-rivers>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -88,13 +97,10 @@
 
       <app-ol-layer-vector>
         <app-ol-style-waterbodies></app-ol-style-waterbodies>
-        <app-ol-source-waterbodies></app-ol-source-waterbodies>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-style-roads></app-ol-style-roads>
-        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
+        <app-ol-source-waterbodies
+          [exclude]="[466]"
+        ></app-ol-source-waterbodies>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -117,8 +123,30 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-wetland></app-ol-style-wetland>
-        <app-ol-source-wetland></app-ol-source-wetland>
+        <app-ol-style-buildings></app-ol-style-buildings>
+        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-places></app-ol-style-places>
+        <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
+        <app-ol-source-geojson
+          [exclude]="'dam'"
+          [layerKey]="'places'"
+        ></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-places></app-ol-style-places>
+        <app-ol-source-dams></app-ol-source-dams>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -129,31 +157,10 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-buildings></app-ol-style-buildings>
-        <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
         <app-ol-style-powerlines></app-ol-style-powerlines>
         <app-ol-source-geojson
           [layerKey]="'powerlines'"
         ></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-style-places></app-ol-style-places>
-        <app-ol-source-geojson
-          [filter]="filterDams"
-          [layerKey]="'places'"
-        ></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-style-places></app-ol-style-places>
-        <app-ol-source-dams></app-ol-source-dams>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 

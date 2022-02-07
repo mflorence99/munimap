@@ -26,7 +26,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   @Input() maxFontSize = 20;
   @Input() maxRiverWidth = 8;
   @Input() minFontSize = 8;
-  @Input() opacity = 0.9;
+  @Input() opacity = 1;
   @Input() riverWidth = 8;
 
   constructor(

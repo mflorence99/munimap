@@ -31,7 +31,7 @@ export class OLSourceDamsComponent extends OLSourceArcGISComponent {
   }
 
   // 👇 see PlaceProperties
-  //    places.geojson does contain dams, but ony major ones
+  //    places.geojson does contain dams, but only major ones
   //    so we augment it with this data source
 
   filter(arcgis: any): any {

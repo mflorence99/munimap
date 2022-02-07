@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
+import { Input } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -20,6 +21,8 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
+  @Input() exclude: string[];
+
   constructor(
     cache: CacheService,
     map: OLMapComponent,
@@ -36,14 +39,10 @@ export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
     //   unique.add(feature.attributes.WETLAND_TY)
     // );
     // console.log(Array.from(unique).sort());
-    // 👇 these wetland types don't add anything to the map b/c
-    //    other features like streams and lakes already show what
-    //    needs to be shown
-    if (arcgis) {
+    if (arcgis && this.exclude) {
       const filtered = copy(arcgis);
-      const exclude = ['Freshwater Pond', 'Lake', 'Riverine'];
       filtered.features = arcgis.features.filter(
-        (feature) => !exclude.includes(feature.attributes.WETLAND_TY)
+        (feature) => !this.exclude.includes(feature.attributes.WETLAND_TY)
       );
       return filtered;
     } else return super.filter(arcgis);
