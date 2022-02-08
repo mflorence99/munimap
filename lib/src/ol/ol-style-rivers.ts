@@ -13,6 +13,12 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
+// 🔥 ol-source-rivers is great at drawing centerlines and labels,
+//    but not as good as ol-source-waterbodies at drawing the actual extent
+//    of open water -- also ol-source-waterbodies does NOT include
+//    the river/stream name -- hence the experimentalLabelsOnly flag
+//    here to suppress the center line -- not ideal, but ... ?
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-style-rivers',
@@ -20,6 +26,7 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleRiversComponent implements OLStyleComponent {
+  @Input() experimentalLabelsOnly = false;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -81,7 +88,9 @@ export class OLStyleRiversComponent implements OLStyleComponent {
     return (river: any, resolution: number): OLStyle => {
       const props = river.getProperties() as RiverProperties;
       return new OLStyle({
-        stroke: this.#drawLine(props, resolution),
+        stroke: this.experimentalLabelsOnly
+          ? null
+          : this.#drawLine(props, resolution),
         text: this.#drawText(props, resolution)
       });
     };

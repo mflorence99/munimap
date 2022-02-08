@@ -7,9 +7,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
-import { Input } from '@angular/core';
-
-import copy from 'fast-copy';
 
 const attribution =
   'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
@@ -21,8 +18,6 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
-  @Input() exclude: string[];
-
   constructor(
     cache: CacheService,
     map: OLMapComponent,
@@ -32,19 +27,20 @@ export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
     super(cache, http, layer, map);
   }
 
+  // 👇 see WetlandProperties
+
   filter(arcgis: any): any {
-    // 🔥 keep this b/c it helps see what's in the raw data
-    // const unique = new Set();
-    // arcgis.features.forEach((feature: any) =>
-    //   unique.add(feature.attributes.WETLAND_TY)
-    // );
-    // console.log(Array.from(unique).sort());
-    if (arcgis && this.exclude) {
-      const filtered = copy(arcgis);
-      filtered.features = arcgis.features.filter(
-        (feature) => !this.exclude.includes(feature.attributes.WETLAND_TY)
-      );
-      return filtered;
+    if (arcgis) {
+      arcgis.features.forEach((feature) => {
+        feature.attributes.type = [
+          'Freshwater Pond',
+          'Lake',
+          'Riverine'
+        ].includes(feature.attributes.WETLAND_TY)
+          ? 'water'
+          : 'marsh';
+      });
+      return arcgis;
     } else return super.filter(arcgis);
   }
 

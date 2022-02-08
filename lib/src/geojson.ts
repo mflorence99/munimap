@@ -222,6 +222,10 @@ export interface TrailProperties {
   town: string;
 }
 
+export interface WetlandProperties {
+  type: 'water' | 'marsh';
+}
+
 export interface CountyIndex {
   [town: string]: TownIndex | Record<string, Layer>;
   layers: {

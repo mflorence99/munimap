@@ -82,15 +82,15 @@
 
       <app-ol-layer-vector>
         <app-ol-style-wetland></app-ol-style-wetland>
-        <!-- 👇 these excluded b/c "rivers" & "waterbodies" below does it better -->
-        <app-ol-source-wetland
-          [exclude]="['Freshwater Pond', 'Lake', 'Riverine']"
-        ></app-ol-source-wetland>
+        <app-ol-source-wetland></app-ol-source-wetland>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-rivers></app-ol-style-rivers>
+        <!-- 👇 b/c waterbodies below does it better -->
+        <app-ol-style-rivers
+          [experimentalLabelsOnly]="true"
+        ></app-ol-style-rivers>
         <app-ol-source-rivers></app-ol-source-rivers>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>

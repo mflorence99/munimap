@@ -2,6 +2,8 @@ import { OLFillPatternType } from './ol-style';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
+import { OLStyleWaterbodiesComponent } from './ol-style-waterbodies';
+import { WetlandProperties } from '../geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -18,6 +20,8 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleWetlandComponent implements OLStyleComponent {
+  #waterbodiesStyleFn: OLStyleFunction;
+
   @Input() opacity = 0.5;
   @Input() pattern: OLFillPatternType = 'swamp';
 
@@ -25,24 +29,35 @@ export class OLStyleWetlandComponent implements OLStyleComponent {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
+    // 👇 alternate style for wetlands we want to depict just like waterbodies
+    this.#waterbodiesStyleFn = new OLStyleWaterbodiesComponent(
+      this.layer,
+      this.map
+    ).style();
     this.layer.setStyle(this);
   }
 
   style(): OLStyleFunction {
-    return (): OLStyle => {
-      const swamp = this.map.vars['--map-wetland-swamp'];
-      // 🐛 FillPattern sometimes throws InvalidStateError
-      try {
-        return new OLStyle({
-          fill: new OLFillPattern({
-            color: `rgba(${swamp}, ${this.opacity})`,
-            pattern: this.pattern
-          }),
-          stroke: null
-        });
-      } catch (ignored) {
-        return null;
+    return (wetland: any, resolution: number): OLStyle => {
+      const props = wetland.getProperties() as WetlandProperties;
+      if (props.type === 'marsh') {
+        const swamp = this.map.vars['--map-wetland-swamp'];
+        // 🐛 FillPattern sometimes throws InvalidStateError
+        try {
+          return new OLStyle({
+            fill: new OLFillPattern({
+              color: `rgba(${swamp}, ${this.opacity})`,
+              pattern: this.pattern
+            }),
+            stroke: null
+          });
+        } catch (ignored) {
+          return null;
+        }
       }
+      // 👇 alternate style for wetlands we want to depict just like waterbodies
+      else if (props.type === 'water')
+        return this.#waterbodiesStyleFn(wetland, resolution) as OLStyle;
     };
   }
 }
