@@ -143,7 +143,7 @@ import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-icons';

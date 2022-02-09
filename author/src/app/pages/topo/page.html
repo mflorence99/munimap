@@ -72,6 +72,11 @@
 
       <app-ol-layer-tile [opacity]="1">
         <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
+        <!-- <app-ol-filter-colorize
+          [color]="[58, 201, 101]"
+          [operation]="'color'"
+          [value]="0.33"
+        ></app-ol-filter-colorize> -->
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
