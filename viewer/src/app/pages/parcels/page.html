@@ -41,7 +41,11 @@
             ></app-ol-attribution
           ></app-ol-source-xyz
         >
-        <app-ol-filter-grayscale [value]="0.9"></app-ol-filter-grayscale>
+        <app-ol-filter-colorize
+          [color]="[255, 255, 255]"
+          [operation]="'hue'"
+          [value]="0.9"
+        ></app-ol-filter-colorize>
       </app-ol-layer-tile>
 
       <!-- 📦 BG LAYER (lays down a texture inside town)-->
@@ -67,7 +71,10 @@
           >
         </app-ol-source-xyz>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance>
+        <app-ol-filter-colorize
+          [operation]="'enhance'"
+          [value]="0.33"
+        ></app-ol-filter-colorize>
       </app-ol-layer-tile>
 
       <!-- 📦 NH GranIT VECTOR LAYERS -->

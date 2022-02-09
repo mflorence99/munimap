@@ -72,11 +72,9 @@ import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
+import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
-import { OLFilterEnhanceComponent } from '@lib/ol/ol-filter-enhance';
-import { OLFilterGrayscaleComponent } from '@lib/ol/ol-filter-grayscale';
-import { OLFilterLuminosityComponent } from '@lib/ol/ol-filter-luminosity';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
 import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
@@ -145,7 +143,7 @@ import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-icons';
@@ -202,11 +200,9 @@ const COMPONENTS = [
   OLControlSearchParcelsComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
+  OLFilterColorizeComponent,
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2SelectedComponent,
-  OLFilterEnhanceComponent,
-  OLFilterGrayscaleComponent,
-  OLFilterLuminosityComponent,
   OLFilterPencilComponent,
   OLInteractionBoundaryComponent,
   OLInteractionRedrawParcelComponent,

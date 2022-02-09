@@ -53,7 +53,11 @@
             ></app-ol-attribution
           ></app-ol-source-xyz
         >
-        <app-ol-filter-grayscale [value]="0.9"></app-ol-filter-grayscale>
+        <app-ol-filter-colorize
+          [color]="[255, 255, 255]"
+          [operation]="'hue'"
+          [value]="0.9"
+        ></app-ol-filter-colorize>
       </app-ol-layer-tile>
 
       <!-- 📦 BG LAYER (lays down a texture inside town)-->

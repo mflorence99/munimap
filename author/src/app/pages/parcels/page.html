@@ -85,7 +85,11 @@
                 ></app-ol-attribution
               ></app-ol-source-xyz
             >
-            <app-ol-filter-grayscale [value]="0.9"></app-ol-filter-grayscale>
+            <app-ol-filter-colorize
+              [color]="[255, 255, 255]"
+              [operation]="'hue'"
+              [value]="0.9"
+            ></app-ol-filter-colorize>
           </app-ol-layer-tile>
 
           <!-- 📦 BG LAYER (lays down a texture inside town)-->
@@ -97,12 +101,6 @@
           </app-ol-layer-vector>
 
           <!-- 📦 HILLSHADE LAYER =-->
-
-          <!-- <app-ol-layer-tile [opacity]="1">
-            <app-ol-source-hillshade> </app-ol-source-hillshade>
-            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-            <app-ol-filter-luminosity [value]="0.15"></app-ol-filter-luminosity>
-          </app-ol-layer-tile> -->
 
           <app-ol-layer-tile [opacity]="1">
             <app-ol-source-xyz
@@ -117,7 +115,10 @@
               >
             </app-ol-source-xyz>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-            <app-ol-filter-enhance [value]="0.33"></app-ol-filter-enhance>
+            <app-ol-filter-colorize
+              [operation]="'enhance'"
+              [value]="0.33"
+            ></app-ol-filter-colorize>
           </app-ol-layer-tile>
 
           <!-- 📦 NH GranIT VECTOR LAYERS -->
@@ -131,14 +132,15 @@
 
           <app-ol-layer-vector>
             <app-ol-style-wetland></app-ol-style-wetland>
-            <app-ol-source-wetland
-            ></app-ol-source-wetland>
+            <app-ol-source-wetland></app-ol-source-wetland>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
             <!-- 👇 b/c waterbodies below does it better -->
-            <app-ol-style-rivers [experimentalLabelsOnly]="true"></app-ol-style-rivers>
+            <app-ol-style-rivers
+              [experimentalLabelsOnly]="true"
+            ></app-ol-style-rivers>
             <app-ol-source-rivers></app-ol-source-rivers>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
