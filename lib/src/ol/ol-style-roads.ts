@@ -26,6 +26,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
   @Input() minFontSize = 6;
+  @Input() minWidth = 6;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -67,6 +68,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     const dflt = new OLStroke({
       color: `rgba(${lane}, 1)`,
       lineCap: 'round',
+      lineJoin: 'bevel',
       width: width * 0.9
     });
     // 🐛 StrokePattern can throw InvalidState exception
@@ -93,8 +95,8 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
 
   #roadWidth(props: RoadProperties, resolution: number): number {
     // 👉 roadway width is in feet, resolution is pixels / meter
-    //    minimum width 15', multiply that for the right-of-way
-    return (Math.max(props.width, 15) / (resolution * 3.28084)) * 3;
+    //    multiply that for the right-of-way
+    return (Math.max(props.width, this.minWidth) / (resolution * 3.28084)) * 3;
   }
 
   #strokeEdge(props: RoadProperties, resolution: number): OLStroke {
@@ -103,6 +105,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     return new OLStroke({
       color: `rgba(${edge}, 1)`,
       lineCap: 'butt',
+      lineJoin: 'bevel',
       width: roadWidth
     });
   }

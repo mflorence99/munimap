@@ -8,8 +8,6 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import OLFeature from 'ol/Feature';
-import OLMultiLineString from 'ol/geom/MultiLineString';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 
@@ -20,9 +18,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleRailroadsComponent implements OLStyleComponent {
-  @Input() maxRailroadWidth = 3;
-  @Input() opacity = 1;
-  @Input() railroadWidth = 3;
+  @Input() trackWidth = 15;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -31,32 +27,51 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #drawLine(
-    railroad: OLFeature<OLMultiLineString>,
-    resolution: number
-  ): OLStyle {
-    const props = railroad.getProperties() as RailroadProperties;
-    const lineColor = props.active
+  #color(props: RailroadProperties): string {
+    return props.active
       ? this.map.vars['--map-railroad-active-color']
       : this.map.vars['--map-railroad-inactive-color'];
-    const railroadWidth = this.#railroadWidth(resolution);
-    return new OLStyle({
-      stroke: new OLStroke({
-        color: `rgba(${lineColor}, ${this.opacity})`,
-        width: railroadWidth
-      })
+  }
+
+  #fillTrack(props: RailroadProperties, resolution: number): OLStroke {
+    const trackWidth = this.#trackWidth(resolution);
+    return new OLStroke({
+      color: `rgba(255, 255, 255, 1)`,
+      lineCap: 'butt',
+      lineDash: [trackWidth / 2, trackWidth],
+      lineJoin: 'bevel',
+      width: trackWidth * 0.66
     });
   }
 
-  #railroadWidth(resolution: number): number {
-    // 👉 railroadWidth is proportional to the resolution,
-    //    but no bigger than the max size specified
-    return Math.min(this.maxRailroadWidth, this.railroadWidth / resolution);
+  #strokeEdge(props: RailroadProperties, resolution: number): OLStroke {
+    const edge = this.#color(props);
+    const trackWidth = this.#trackWidth(resolution);
+    return new OLStroke({
+      color: `rgba(${edge}, 1)`,
+      lineCap: 'butt',
+      lineJoin: 'bevel',
+      width: trackWidth
+    });
   }
 
+  #trackWidth(resolution: number): number {
+    // 👉 track width is in feet, resolution is pixels / meter
+    return Math.min(this.trackWidth, this.trackWidth / (resolution * 3.28084));
+  }
   style(): OLStyleFunction {
     return (railroad: any, resolution: number): OLStyle[] => {
-      return [this.#drawLine(railroad, resolution)];
+      const props = railroad.getProperties() as RailroadProperties;
+      return [
+        new OLStyle({
+          fill: null,
+          stroke: this.#strokeEdge(props, resolution)
+        }),
+        new OLStyle({
+          fill: null,
+          stroke: this.#fillTrack(props, resolution)
+        })
+      ];
     };
   }
 }
