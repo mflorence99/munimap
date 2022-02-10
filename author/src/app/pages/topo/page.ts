@@ -7,7 +7,9 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ViewState } from '@lib/state/view';
 
@@ -19,6 +21,8 @@ import { ViewState } from '@lib/state/view';
   templateUrl: './page.html'
 })
 export class TopoPage extends AbstractMapPage {
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+
   constructor(
     protected actions$: Actions,
     protected authState: AuthState,
