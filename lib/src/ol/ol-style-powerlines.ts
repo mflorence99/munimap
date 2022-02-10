@@ -22,9 +22,9 @@ import OLStyle from 'ol/style/Style';
 })
 export class OLStylePowerlinesComponent implements OLStyleComponent {
   @Input() iconSize = 15;
-  @Input() maxPowerLineWidth = 3;
+  @Input() maxPowerlineWidth = 3;
   @Input() opacity = 1;
-  @Input() powerLineWidth = 3;
+  @Input() powerlineWidth = 3;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -73,30 +73,30 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
   }
 
   #drawLine(
-    powerLine: OLFeature<OLMultiLineString>,
+    powerline: OLFeature<OLMultiLineString>,
     resolution: number
   ): OLStyle {
     const lineColor = this.map.vars['--map-powerline-line-color'];
-    const powerLineWidth = this.#powerLineWidth(resolution);
+    const powerlineWidth = this.#powerlineWidth(resolution);
     return new OLStyle({
       stroke: new OLStroke({
         color: `rgba(${lineColor}, ${this.opacity})`,
-        width: powerLineWidth
+        width: powerlineWidth
       })
     });
   }
 
-  #powerLineWidth(resolution: number): number {
-    // 👉 powerLineWidth is proportional to the resolution,
+  #powerlineWidth(resolution: number): number {
+    // 👉 powerlineWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxPowerLineWidth, this.powerLineWidth / resolution);
+    return Math.min(this.maxPowerlineWidth, this.powerlineWidth / resolution);
   }
 
   style(): OLStyleFunction {
-    return (powerLine: any, resolution: number): OLStyle[] => {
+    return (powerline: any, resolution: number): OLStyle[] => {
       return [
-        this.#drawLine(powerLine, resolution),
-        ...this.#drawIcons(powerLine, resolution)
+        this.#drawLine(powerline, resolution),
+        ...this.#drawIcons(powerline, resolution)
       ];
     };
   }

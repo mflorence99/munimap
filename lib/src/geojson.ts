@@ -196,6 +196,10 @@ export interface PowerlineProperties {
   town: string;
 }
 
+export interface RailroadProperties {
+  active: boolean;
+}
+
 export interface RiverProperties {
   county: string;
   name: string;

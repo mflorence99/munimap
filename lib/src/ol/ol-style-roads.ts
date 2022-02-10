@@ -66,7 +66,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     // 👉 works for all road classifications
     const dflt = new OLStroke({
       color: `rgba(${lane}, 1)`,
-      lineCap: 'butt',
+      lineCap: 'round',
       width: width * 0.9
     });
     // 🐛 StrokePattern can throw InvalidState exception

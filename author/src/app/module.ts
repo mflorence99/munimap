@@ -96,6 +96,7 @@ import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
+import { OLSourceRailroadsComponent } from '@lib/ol/ol-source-railroads';
 import { OLSourceRiversComponent } from '@lib/ol/ol-source-rivers';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
@@ -111,6 +112,7 @@ import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
 import { OLStylePolygonsComponent } from '@lib/ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
+import { OLStyleRailroadsComponent } from '@lib/ol/ol-style-railroads';
 import { OLStyleRiversComponent } from '@lib/ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
@@ -224,6 +226,7 @@ const COMPONENTS = [
   OLSourceHillshadeComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
+  OLSourceRailroadsComponent,
   OLSourceRiversComponent,
   OLSourceStoneWallsComponent,
   OLSourceWaterbodiesComponent,
@@ -239,6 +242,7 @@ const COMPONENTS = [
   OLStylePlacesComponent,
   OLStylePolygonsComponent,
   OLStylePowerlinesComponent,
+  OLStyleRailroadsComponent,
   OLStyleRiversComponent,
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
