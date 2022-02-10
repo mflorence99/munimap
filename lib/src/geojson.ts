@@ -198,6 +198,7 @@ export interface PowerlineProperties {
 
 export interface RailroadProperties {
   active: boolean;
+  name: string;
 }
 
 export interface RiverProperties {

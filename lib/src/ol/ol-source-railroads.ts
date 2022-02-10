@@ -43,6 +43,7 @@ export class OLSourceRailroadsComponent extends OLSourceArcGISComponent {
     // console.log(Array.from(unique).sort());
     if (arcgis) {
       arcgis.features.forEach((feature) => {
+        feature.attributes.name = feature.attributes.NAME;
         feature.attributes.active = feature.attributes.STATUS === 'Active';
       });
       return arcgis;
