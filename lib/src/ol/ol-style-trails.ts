@@ -24,7 +24,7 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
-  @Input() maxTrailWidth = 3;
+  @Input() maxTrailPixels = 3;
   @Input() minFontSize = 8;
   @Input() trailWidth = 3;
 
@@ -37,14 +37,14 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
 
   #drawLine(props: TrailProperties, resolution: number): OLStroke {
     const color = this.map.vars['--map-trail-line-color'];
-    const trailWidth = this.#trailWidth(resolution);
+    const trailPixels = this.#trailPixels(resolution);
     return new OLStroke({
       color: `rgba(${color}, 1)`,
       lineDash:
-        trailWidth > 1
-          ? [trailWidth, trailWidth * 2]
-          : [trailWidth * 2, trailWidth],
-      width: trailWidth
+        trailPixels > 1
+          ? [trailPixels, trailPixels * 2]
+          : [trailPixels * 2, trailPixels],
+      width: trailPixels
     });
   }
 
@@ -74,10 +74,10 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
     return Math.min(this.maxFontSize, this.fontSize / resolution);
   }
 
-  #trailWidth(resolution: number): number {
+  #trailPixels(resolution: number): number {
     // 👉 trailWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxTrailWidth, this.trailWidth / resolution);
+    return Math.min(this.maxTrailPixels, this.trailWidth / resolution);
   }
 
   style(): OLStyleFunction {

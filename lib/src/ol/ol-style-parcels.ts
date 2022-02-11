@@ -80,9 +80,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @Input() dimensionsFontSize = 20;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
-  @Input() maxBorderWidth = 3;
+  @Input() maxBorderPixels = 3;
   @Input() maxFontSize = 40;
-  @Input() minBorderWidth = 1;
   @Input() minFontSize = 6;
   @Input() opacity = 0.25;
   @Input() showAbutters = false;
@@ -103,10 +102,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #borderWidth(resolution: number): number {
+  #borderPixels(resolution: number): number {
     // 👉 borderWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxBorderWidth, this.borderWidth / resolution);
+    return Math.min(this.maxBorderPixels, this.borderWidth / resolution);
   }
 
   #dimensions(
@@ -137,7 +136,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
                 color: `rgba(${outline}, 1)`,
                 width: Math.min(
                   fontSizes[dimension.ix] / 8,
-                  this.maxBorderWidth
+                  this.maxBorderPixels
                 )
               }),
               text: `${Math.round(dimension.length)}`
@@ -383,7 +382,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           stroke: this.showLabelContrast
             ? new OLStroke({
                 color: `rgba(${outline}, 1)`,
-                width: Math.min(label.fontSize / 8, this.maxBorderWidth)
+                width: Math.min(label.fontSize / 8, this.maxBorderPixels)
               })
             : null,
           text: label.text
@@ -512,7 +511,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     else {
-      const borderWidth = this.#borderWidth(resolution);
+      const borderPixels = this.#borderPixels(resolution);
       const outline = overlayStroke
         ? overlayStroke.join(',')
         : this.map.vars['--map-parcel-outline'];
@@ -522,7 +521,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
           stroke: new OLStroke({
             color: 'white',
             lineCap: 'square',
-            width: borderWidth
+            width: borderPixels
           })
         }),
         new OLStyle({
@@ -531,10 +530,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
             color: `rgb(${outline})`,
             lineCap: 'square',
             lineDash:
-              borderWidth > 1
-                ? [borderWidth, borderWidth * 2]
-                : [borderWidth * 2, borderWidth],
-            width: borderWidth
+              borderPixels > 1
+                ? [borderPixels, borderPixels * 2]
+                : [borderPixels * 2, borderPixels],
+            width: borderPixels
           })
         })
       ];
@@ -555,8 +554,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     )
       return null;
     // 👉 special stroke if selected or abutter
-    const borderWidth =
-      this.#borderWidth(resolution) * this.borderWidthSelectRatio;
+    const borderPixels =
+      this.#borderPixels(resolution) * this.borderWidthSelectRatio;
     let outline = null;
     if (whenSelected) outline = this.map.vars['--map-parcel-select'];
     if (whenRedrawn) outline = this.map.vars['--map-parcel-redraw'];
@@ -565,8 +564,8 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
     const fill = new OLFill({ color: [0, 0, 0, 0] });
     const stroke = new OLStroke({
       color: `rgb(${outline})`,
-      lineDash: whenAbutted ? [borderWidth, borderWidth * 4] : null,
-      width: borderWidth
+      lineDash: whenAbutted ? [borderPixels, borderPixels * 4] : null,
+      width: borderPixels
     });
     return [new OLStyle({ fill, stroke: outline ? stroke : null })];
   }

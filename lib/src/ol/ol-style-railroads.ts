@@ -24,9 +24,9 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
-  @Input() maxTrackWidth = 15;
+  @Input() maxTrackPixels = 15;
   @Input() minFontSize = 8;
-  @Input() minTrackWidth = 3;
+  @Input() minTrackPixels = 3;
   @Input() trackWidth = 15;
 
   constructor(
@@ -63,13 +63,13 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
   }
 
   #fillTrack(props: RailroadProperties, resolution: number): OLStroke {
-    const trackWidth = this.#trackWidth(resolution);
+    const trackPixels = this.#trackPixels(resolution);
     return new OLStroke({
       color: `rgba(255, 255, 255, 1)`,
       lineCap: 'butt',
-      lineDash: [trackWidth * 4, trackWidth * 4],
+      lineDash: [trackPixels * 4, trackPixels * 4],
       lineJoin: 'bevel',
-      width: trackWidth * 0.66
+      width: trackPixels * 0.66
     });
   }
 
@@ -81,20 +81,20 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
 
   #strokeEdge(props: RailroadProperties, resolution: number): OLStroke {
     const edge = this.#color(props);
-    const trackWidth = this.#trackWidth(resolution);
+    const trackPixels = this.#trackPixels(resolution);
     return new OLStroke({
       color: `rgba(${edge}, 1)`,
       lineCap: 'butt',
       lineJoin: 'bevel',
-      width: trackWidth
+      width: trackPixels
     });
   }
 
-  #trackWidth(resolution: number): number {
+  #trackPixels(resolution: number): number {
     // 👉 track width is in feet, resolution is pixels / meter
     return Math.max(
-      this.minTrackWidth,
-      Math.min(this.maxTrackWidth, this.trackWidth / (resolution * 3.28084))
+      this.minTrackPixels,
+      Math.min(this.maxTrackPixels, this.trackWidth / (resolution * 3.28084))
     );
   }
   style(): OLStyleFunction {

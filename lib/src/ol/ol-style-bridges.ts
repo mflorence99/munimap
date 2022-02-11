@@ -19,8 +19,8 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleBridgesComponent implements OLStyleComponent {
-  @Input() iconSize = 15;
-  @Input() opacity = 0.75;
+  @Input() bridgeWidth = 48;
+  @Input() minBridgePixels = 6;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -34,20 +34,26 @@ export class OLStyleBridgesComponent implements OLStyleComponent {
       const props = place.getProperties() as BridgeProperties;
       const iconColor = this.map.vars[`--map-bridge-${props.rygb}-icon-color`];
       const lineColor = this.map.vars['--map-bridge-line-color'];
-      return new OLStyle({
-        image: new OLFontSymbol({
-          color: `rgba(${iconColor}, ${this.opacity})`,
-          font: `'Font Awesome'`,
-          fontStyle: 'bold',
-          form: 'none',
-          radius: this.iconSize / resolution,
-          stroke: new OLStroke({
-            color: `rgba(${lineColor}, ${this.opacity})`,
-            width: 0.5
-          }),
-          text: '\uf00d' /* 👈 times */
-        })
-      });
+      // 👉 bridge width is in feet, resolution is pixels / meter
+      const bridgeWidth = this.bridgeWidth / (resolution * 3.28084);
+      // 👉 if bridge is too small to show, don't
+      if (bridgeWidth < this.minBridgePixels) return null;
+      else {
+        return new OLStyle({
+          image: new OLFontSymbol({
+            color: `rgba(${iconColor}, 1)`,
+            font: `'Font Awesome'`,
+            fontStyle: 'bold',
+            form: 'none',
+            radius: bridgeWidth,
+            stroke: new OLStroke({
+              color: `rgba(${lineColor}, 1)`,
+              width: 0.5
+            }),
+            text: '\uf00d' /* 👈 times */
+          })
+        });
+      }
     };
   }
 }

@@ -61,13 +61,13 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   ): OLStroke | OLStrokePattern {
     const edge = this.map.vars[`--map-road-edge-${props.class ?? '0'}`];
     const lane = this.map.vars[`--map-road-lane-${props.class ?? '0'}`];
-    const width = this.#roadWidth(props, resolution);
+    const roadPixels = this.#roadPixels(props, resolution);
     // 👉 works for all road classifications
     const dflt = new OLStroke({
       color: `rgba(${lane}, 1)`,
       lineCap: 'round',
       lineJoin: 'bevel',
-      width: width * 0.9
+      width: roadPixels * 0.9
     });
     // 🐛 StrokePattern can throw InvalidState exception
     try {
@@ -77,7 +77,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
             fill: new OLFill({ color: `rgba(${lane}, 1)` }),
             pattern: 'conglomerate',
             scale: 0.66,
-            width: width * 0.9
+            width: roadPixels * 0.9
           })
         : dflt;
     } catch (ignored) {
@@ -91,7 +91,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     return Math.min(this.maxFontSize, this.fontSize / resolution);
   }
 
-  #roadWidth(props: RoadProperties, resolution: number): number {
+  #roadPixels(props: RoadProperties, resolution: number): number {
     // 👉 roadway width is in feet, resolution is pixels / meter
     //    multiply that for the right-of-way
     return (
@@ -101,12 +101,12 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
 
   #strokeEdge(props: RoadProperties, resolution: number): OLStroke {
     const edge = this.map.vars[`--map-road-edge-${props.class ?? '0'}`];
-    const roadWidth = this.#roadWidth(props, resolution);
+    const roadPixels = this.#roadPixels(props, resolution);
     return new OLStroke({
       color: `rgba(${edge}, 1)`,
       lineCap: 'butt',
       lineJoin: 'bevel',
-      width: roadWidth
+      width: roadPixels
     });
   }
 

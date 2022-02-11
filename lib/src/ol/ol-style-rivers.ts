@@ -31,7 +31,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
-  @Input() maxRiverWidth = 8;
+  @Input() maxRiverPixels = 8;
   @Input() minFontSize = 8;
   @Input() riverWidth = 8;
 
@@ -44,11 +44,11 @@ export class OLStyleRiversComponent implements OLStyleComponent {
 
   #drawLine(props: RiverProperties, resolution: number): OLStroke {
     const color = this.map.vars['--map-river-line-color'];
-    let riverWidth = this.#riverWidth(resolution);
-    if (props.type === 'stream') riverWidth /= 2;
+    let riverPixels = this.#riverPixels(resolution);
+    if (props.type === 'stream') riverPixels /= 2;
     return new OLStroke({
       color: `rgba(${color}, 1)`,
-      width: riverWidth
+      width: riverPixels
     });
   }
 
@@ -77,10 +77,10 @@ export class OLStyleRiversComponent implements OLStyleComponent {
     return Math.min(this.maxFontSize, this.fontSize / resolution);
   }
 
-  #riverWidth(resolution: number): number {
+  #riverPixels(resolution: number): number {
     // 👉 riverWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxRiverWidth, this.riverWidth / resolution);
+    return Math.min(this.maxRiverPixels, this.riverWidth / resolution);
   }
 
   style(): OLStyleFunction {

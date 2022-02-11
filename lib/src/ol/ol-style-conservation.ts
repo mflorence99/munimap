@@ -20,7 +20,7 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleConservationComponent implements OLStyleComponent {
-  @Input() borderWidth = 2;
+  @Input() borderPixels = 2;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -81,7 +81,7 @@ export class OLStyleConservationComponent implements OLStyleComponent {
         fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
         stroke: new OLStroke({
           color: `rgba(${stroke}, 1)`,
-          width: this.borderWidth
+          width: this.borderPixels
         })
       });
     };

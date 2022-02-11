@@ -25,7 +25,7 @@ import OLGraticule from 'ol-ext/control/Graticule';
   styles: [':host { display: none }']
 })
 export class OLControlGraticuleComponent implements Mapable, OnInit {
-  @Input() borderWidth: number;
+  @Input() borderPixels: number;
   @Input() margin: number;
   @Input() maxZoom: number;
 
@@ -45,7 +45,7 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olControl = new OLGraticule({
-      borderWidth: this.borderWidth,
+      borderWidth: this.borderPixels,
       formatCoord: (coord): string => `${coord.toFixed(2)}°`,
       margin: this.margin,
       maxResolution: this.maxZoom

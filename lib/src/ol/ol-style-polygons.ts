@@ -22,7 +22,7 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
   styles: [':host { display: none }']
 })
 export class OLStylePolygonsComponent implements OLStyleComponent {
-  @Input() borderWidth = 3;
+  @Input() borderPixels = 3;
   @Input() filter: FilterFunction;
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 20;
@@ -49,7 +49,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
         fill: new OLFill({ color }),
         stroke: new OLStroke({
           color: `rgba(${stroke}, 1)`,
-          width: this.borderWidth
+          width: this.borderPixels
         })
       });
     };
@@ -67,7 +67,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
           fill: new OLFill({ color: `rgba(${disabled}, ${this.opacity})` }),
           stroke: new OLStroke({
             color: `rgba(${stroke}, 1)`,
-            width: this.borderWidth
+            width: this.borderPixels
           })
         });
       else
@@ -75,7 +75,7 @@ export class OLStylePolygonsComponent implements OLStyleComponent {
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           stroke: new OLStroke({
             color: `rgba(${stroke}, 1)`,
-            width: this.borderWidth
+            width: this.borderPixels
           }),
           text: new OLText({
             font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,

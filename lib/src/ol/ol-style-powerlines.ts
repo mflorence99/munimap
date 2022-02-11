@@ -22,7 +22,7 @@ import OLStyle from 'ol/style/Style';
 })
 export class OLStylePowerlinesComponent implements OLStyleComponent {
   @Input() iconSize = 15;
-  @Input() maxPowerlineWidth = 3;
+  @Input() maxPowerlinePixels = 3;
   @Input() opacity = 1;
   @Input() powerlineWidth = 3;
 
@@ -77,19 +77,19 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
     resolution: number
   ): OLStyle {
     const lineColor = this.map.vars['--map-powerline-line-color'];
-    const powerlineWidth = this.#powerlineWidth(resolution);
+    const powerlinePixels = this.#powerlinePixels(resolution);
     return new OLStyle({
       stroke: new OLStroke({
         color: `rgba(${lineColor}, ${this.opacity})`,
-        width: powerlineWidth
+        width: powerlinePixels
       })
     });
   }
 
-  #powerlineWidth(resolution: number): number {
+  #powerlinePixels(resolution: number): number {
     // 👉 powerlineWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxPowerlineWidth, this.powerlineWidth / resolution);
+    return Math.min(this.maxPowerlinePixels, this.powerlineWidth / resolution);
   }
 
   style(): OLStyleFunction {

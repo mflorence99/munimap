@@ -19,8 +19,8 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleStoneWallsComponent implements OLStyleComponent {
-  @Input() maxWallWidth = 6;
-  @Input() minWallWidth = 3;
+  @Input() maxWallPixels = 6;
+  @Input() minWallPixels = 3;
   @Input() opacity = 0.33;
   @Input() pattern: OLStrokePatternType = 'rocks';
   @Input() wallWidth = 7;
@@ -32,17 +32,17 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  #wallWidth(resolution: number): number {
+  #wallPixels(resolution: number): number {
     // 👉 wallWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxWallWidth, this.wallWidth / resolution);
+    return Math.min(this.maxWallPixels, this.wallWidth / resolution);
   }
 
   style(): OLStyleFunction {
     return (stonewall: any, resolution: number): OLStyle => {
-      const wallWidth = this.#wallWidth(resolution);
+      const wallPixels = this.#wallPixels(resolution);
       // 👉 if the wall would be too small to see, don't show anything
-      if (wallWidth < this.minWallWidth) return null;
+      if (wallPixels < this.minWallPixels) return null;
       else {
         const fill = this.map.vars['--map-stonewall-fill'];
         const rocks = this.map.vars['--map-stonewall-rocks'];
@@ -54,7 +54,7 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
               fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
               pattern: this.pattern,
               scale: 2,
-              width: wallWidth
+              width: wallPixels
             })
           });
         } catch (ignored) {
