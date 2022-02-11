@@ -24,7 +24,9 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
-  @Input() minFontSize = 6;
+  @Input() maxTrackWidth = 15;
+  @Input() minFontSize = 8;
+  @Input() minTrackWidth = 3;
   @Input() trackWidth = 15;
 
   constructor(
@@ -91,7 +93,10 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
 
   #trackWidth(resolution: number): number {
     // 👉 track width is in feet, resolution is pixels / meter
-    return Math.min(this.trackWidth, this.trackWidth / (resolution * 3.28084));
+    return Math.max(
+      this.minTrackWidth,
+      Math.min(this.maxTrackWidth, this.trackWidth / (resolution * 3.28084))
+    );
   }
   style(): OLStyleFunction {
     return (railroad: any, resolution: number): OLStyle[] => {

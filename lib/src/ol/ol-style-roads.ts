@@ -25,8 +25,8 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
-  @Input() minFontSize = 6;
-  @Input() minWidth = 6;
+  @Input() minFontSize = 8;
+  @Input() minRoadWidth = 6;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -96,7 +96,9 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   #roadWidth(props: RoadProperties, resolution: number): number {
     // 👉 roadway width is in feet, resolution is pixels / meter
     //    multiply that for the right-of-way
-    return (Math.max(props.width, this.minWidth) / (resolution * 3.28084)) * 3;
+    return (
+      (Math.max(props.width, this.minRoadWidth) / (resolution * 3.28084)) * 3
+    );
   }
 
   #strokeEdge(props: RoadProperties, resolution: number): OLStroke {

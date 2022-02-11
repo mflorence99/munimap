@@ -28,12 +28,11 @@ import OLText from 'ol/style/Text';
 export class OLStyleRiversComponent implements OLStyleComponent {
   @Input() experimentalLabelsOnly = false;
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 20;
+  @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
-  @Input() maxFontSize = 20;
+  @Input() maxFontSize = 24;
   @Input() maxRiverWidth = 8;
   @Input() minFontSize = 8;
-  @Input() opacity = 1;
   @Input() riverWidth = 8;
 
   constructor(
@@ -48,7 +47,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
     let riverWidth = this.#riverWidth(resolution);
     if (props.type === 'stream') riverWidth /= 2;
     return new OLStroke({
-      color: `rgba(${color}, ${this.opacity})`,
+      color: `rgba(${color}, 1)`,
       width: riverWidth
     });
   }
@@ -60,11 +59,11 @@ export class OLStyleRiversComponent implements OLStyleComponent {
     else if (props.name) {
       const color = this.map.vars['--map-river-text-color'];
       return new OLText({
-        fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
+        fill: new OLFill({ color: `rgba(${color}, 1)` }),
         font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
         placement: 'line',
         stroke: new OLStroke({
-          color: `rgba(255, 255, 255, ${this.opacity})`,
+          color: `rgba(255, 255, 255, 1)`,
           width: 3
         }),
         text: props.name

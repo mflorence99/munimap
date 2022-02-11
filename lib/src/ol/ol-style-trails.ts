@@ -21,12 +21,11 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleTrailsComponent implements OLStyleComponent {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 20;
+  @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
-  @Input() maxFontSize = 20;
+  @Input() maxFontSize = 24;
   @Input() maxTrailWidth = 3;
   @Input() minFontSize = 8;
-  @Input() opacity = 0.9;
   @Input() trailWidth = 3;
 
   constructor(
@@ -40,7 +39,7 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
     const color = this.map.vars['--map-trail-line-color'];
     const trailWidth = this.#trailWidth(resolution);
     return new OLStroke({
-      color: `rgba(${color}, ${this.opacity})`,
+      color: `rgba(${color}, 1)`,
       lineDash:
         trailWidth > 1
           ? [trailWidth, trailWidth * 2]
@@ -56,11 +55,11 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
     else {
       const color = this.map.vars['--map-trail-text-color'];
       return new OLText({
-        fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
+        fill: new OLFill({ color: `rgba(${color}, 1)` }),
         font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
         placement: 'line',
         stroke: new OLStroke({
-          color: `rgba(255, 255, 255, ${this.opacity})`,
+          color: `rgba(255, 255, 255, 1)`,
           width: 3
         }),
         text: props.name
