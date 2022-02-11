@@ -12,15 +12,9 @@ import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { QueryList } from '@angular/core';
 
-import { retryBackoff } from 'backoff-rxjs';
-
 import OLERROR from 'ol/TileState';
 import OLImageTile from 'ol/ImageTile';
 import OLXYZ from 'ol/source/XYZ';
-
-const backoffInitialInterval = 1000;
-const backoffMaxInterval = 2500;
-const backoffMaxRetries = 10;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,27 +34,15 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
 
   constructor(private http: HttpClient, private layer: OLLayerTileComponent) {}
 
-  // 🔥 temporarily disabled
-
   #loader(tile: OLImageTile, src: string): void {
     const img = tile.getImage() as HTMLImageElement;
-    this.http
-      .get(src, { responseType: 'blob' })
-      .pipe(
-        retryBackoff({
-          initialInterval: backoffInitialInterval,
-          maxInterval: backoffMaxInterval,
-          maxRetries: backoffMaxRetries,
-          resetOnSuccess: true
-        })
-      )
-      .subscribe({
-        error: () => tile.setState(OLERROR),
-        next: (blob) => {
-          const objectURL = URL.createObjectURL(blob);
-          img.src = objectURL;
-        }
-      });
+    this.http.get(src, { responseType: 'blob' }).subscribe({
+      error: () => tile.setState(OLERROR),
+      next: (blob) => {
+        const objectURL = URL.createObjectURL(blob);
+        img.src = objectURL;
+      }
+    });
   }
 
   ngAfterContentInit(): void {
@@ -80,8 +62,7 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
     this.olXYZ = new OLXYZ({
       crossOrigin: 'anonymous',
       maxZoom: this.maxZoom,
-      // 🔥 temporarily disable retry logic
-      // tileLoadFunction: this.#loader.bind(this),
+      tileLoadFunction: this.#loader.bind(this),
       url: `${environment.endpoints.proxy}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
     });
   }
