@@ -101,6 +101,10 @@ export abstract class OLSourceArcGISComponent {
           of(cached).pipe(delay(0))
         : this.http.get(url).pipe(
             catchError(() => of({ features: [] })),
+            // 👇 arcgis can return just an "error" which we ignore
+            map((arcgis: any): any =>
+              arcgis?.features ? arcgis : { features: [] }
+            ),
             map(
               (arcgis: any): Features => arcgisToGeoJSON(this.filter(arcgis))
             ),
