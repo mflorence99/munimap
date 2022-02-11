@@ -49,10 +49,9 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
     else {
       const color = this.#color(props);
       return new OLText({
-        font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
         fill: new OLFill({ color: `rgba(${color}, 1)` }),
-        // 👇 false b/c road segments can be very short
-        overflow: false,
+        font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
+        offsetY: -fontSize,
         placement: 'line',
         stroke: new OLStroke({
           color: `rgba(255, 255, 255, 1)`,
