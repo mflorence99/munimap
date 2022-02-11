@@ -45,8 +45,6 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
       return new OLText({
         font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
         fill: new OLFill({ color: `rgba(${color}, 1)` }),
-        // 👇 false b/c road segments can be very short
-        overflow: false,
         placement: 'line',
         stroke: new OLStroke({
           color: `rgba(255, 255, 255, 1)`,

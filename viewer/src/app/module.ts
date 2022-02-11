@@ -65,6 +65,7 @@ import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
 import { OLSourceBridgesComponent } from '@lib/ol/ol-source-bridges';
+import { OLSourceConservationComponent } from '@lib/ol/ol-source-conservation';
 import { OLSourceContoursComponent } from '@lib/ol/ol-source-contours';
 import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
@@ -82,6 +83,7 @@ import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
 import { OLStyleBoundaryComponent } from '@lib/ol/ol-style-boundary';
 import { OLStyleBridgesComponent } from '@lib/ol/ol-style-bridges';
 import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
+import { OLStyleConservationComponent } from '@lib/ol/ol-style-conservation';
 import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
@@ -166,6 +168,7 @@ const COMPONENTS = [
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
   OLSourceBridgesComponent,
+  OLSourceConservationComponent,
   OLSourceContoursComponent,
   OLSourceDamsComponent,
   OLSourceFloodplainComponent,
@@ -183,6 +186,7 @@ const COMPONENTS = [
   OLStyleBoundaryComponent,
   OLStyleBridgesComponent,
   OLStyleBuildingsComponent,
+  OLStyleConservationComponent,
   OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,
   OLStyleParcelsComponent,

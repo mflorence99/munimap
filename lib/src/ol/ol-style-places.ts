@@ -85,7 +85,6 @@ export class OLStylePlacesComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 10;
   @Input() minFontSize = 8;
-  @Input() opacity = 0.75;
   @Input() textAlign = 'center';
   @Input() textBaseline = 'bottom';
 
@@ -105,7 +104,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     const color = this.map.vars['--map-place-icon-color'];
     const fontSize = this.#fontSize(props, resolution);
     return new OLFontSymbol({
-      color: `rgba(${color}, ${this.opacity})`,
+      color: `rgba(${color}, 1)`,
       font: `'Font Awesome'`,
       fontStyle: 'bold',
       form: 'none',
@@ -121,12 +120,12 @@ export class OLStylePlacesComponent implements OLStyleComponent {
         : this.map.vars['--map-place-text-color'];
     const fontSize = this.#fontSize(props, resolution);
     return new OLText({
-      fill: new OLFill({ color: `rgba(${color}, ${this.opacity})` }),
+      fill: new OLFill({ color: `rgba(${color}, 1)` }),
       font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
       offsetY: -fontSize,
       placement: 'point',
       stroke: new OLStroke({
-        color: `rgba(255, 255, 255, ${this.opacity})`,
+        color: `rgba(255, 255, 255, 1)`,
         width: 3
       }),
       text: this.#titleCase(props.name).replace(/ /g, '\n'),

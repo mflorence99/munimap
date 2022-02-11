@@ -94,6 +94,12 @@
         <!-- 📦 NH GranIT VECTOR LAYERS -->
 
         <app-ol-layer-vector>
+          <app-ol-style-conservation></app-ol-style-conservation>
+          <app-ol-source-conservation></app-ol-source-conservation>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
           <app-ol-style-wetland></app-ol-style-wetland>
           <app-ol-source-wetland></app-ol-source-wetland>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -138,22 +144,6 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-style-places></app-ol-style-places>
-          <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
-          <app-ol-source-geojson
-            [exclude]="'dam'"
-            [layerKey]="'places'"
-          ></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-style-places></app-ol-style-places>
-          <app-ol-source-dams></app-ol-source-dams>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
           <app-ol-style-railroads></app-ol-style-railroads>
           <app-ol-source-railroads></app-ol-source-railroads>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -174,6 +164,22 @@
         <app-ol-layer-vector>
           <app-ol-style-bridges></app-ol-style-bridges>
           <app-ol-source-bridges></app-ol-source-bridges>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-places></app-ol-style-places>
+          <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
+          <app-ol-source-geojson
+            [exclude]="'dam'"
+            [layerKey]="'places'"
+          ></app-ol-source-geojson>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-places></app-ol-style-places>
+          <app-ol-source-dams></app-ol-source-dams>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 

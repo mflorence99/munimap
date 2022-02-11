@@ -32,6 +32,10 @@ export interface BridgeProperties {
   rygb: 'red' | 'yellow' | 'green' | 'blue';
 }
 
+export interface ConservationProperties {
+  name: string;
+}
+
 export interface LakeProperties {
   county: string;
   name: string;

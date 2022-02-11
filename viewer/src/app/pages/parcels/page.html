@@ -127,22 +127,6 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-places></app-ol-style-places>
-        <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
-        <app-ol-source-geojson
-          [exclude]="['dam']"
-          [layerKey]="'places'"
-        ></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-places></app-ol-style-places>
-        <app-ol-source-dams></app-ol-source-dams>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-parcels
           [showBorder]="true"
           [showLabels]="true"
@@ -171,6 +155,22 @@
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-bridges></app-ol-style-bridges>
         <app-ol-source-bridges></app-ol-source-bridges>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
+        <app-ol-style-places></app-ol-style-places>
+        <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
+        <app-ol-source-geojson
+          [exclude]="['dam']"
+          [layerKey]="'places'"
+        ></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
+        <app-ol-style-places></app-ol-style-places>
+        <app-ol-source-dams></app-ol-source-dams>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 

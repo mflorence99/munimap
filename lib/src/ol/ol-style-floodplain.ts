@@ -1,4 +1,3 @@
-import { OLFillPatternType } from './ol-style';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStyleComponent } from './ol-style';
@@ -19,7 +18,6 @@ import OLStyle from 'ol/style/Style';
 })
 export class OLStyleFloodplainComponent implements OLStyleComponent {
   @Input() opacity = 0.1;
-  @Input() pattern: OLFillPatternType = 'flooded';
 
   constructor(
     private layer: OLLayerVectorComponent,
