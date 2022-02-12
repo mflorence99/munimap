@@ -115,7 +115,7 @@
     "ngx-avatar": "^4",
     "ngx-color-picker": "^12",
     "ngx-pipes": "^3",
-    "ngx-router-animations": "^11",
+    "ngx-router-animations": "^13",
     "node-fetch": "^2",
     "object-hash": "^2",
     "ol": "^6",
