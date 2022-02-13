@@ -30,8 +30,8 @@ export class OLStyleBridgesComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (place: any, resolution: number): OLStyle => {
-      const props = place.getProperties() as BridgeProperties;
+    return (bridge: any, resolution: number): OLStyle => {
+      const props = bridge.getProperties() as BridgeProperties;
       const iconColor = this.map.vars[`--map-bridge-${props.rygb}-icon-color`];
       const lineColor = this.map.vars['--map-bridge-line-color'];
       // 👉 bridge width is in feet, resolution is pixels / meter

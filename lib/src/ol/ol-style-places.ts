@@ -9,12 +9,20 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import { getCenter } from 'ol/extent';
+
 import OLFill from 'ol/style/Fill';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
 import OLImage from 'ol/style/Image';
+import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
+
+// 👇 notice how we treaks lakes and parks specially
+//    there's always a big old space to show the label,
+//    so we show it bigly -- we really want to see it
+//    also -- the icon is redundant, so we drop it
 
 const ICONS: {
   [key in PlacePropertiesType]?: string;
@@ -47,12 +55,12 @@ const ICONS: {
   harbor: '\uf21a',
   hospital: '\uf47e',
   island: '\uf041',
-  lake: '\uf773',
+  lake: null,
   locale: '\uf041',
   military: '\uf041',
   mine: '\uf041',
   other: '\uf041',
-  park: '\uf1bb',
+  park: null,
   pillar: '\uf041',
   po: '\uf674',
   range: '\uf041',
@@ -84,7 +92,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
   @Input() fontSize = 12;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 10;
-  @Input() minFontSize = 8;
+  @Input() minFontSize = 4;
   @Input() textAlign = 'center';
   @Input() textBaseline = 'bottom';
 
@@ -95,22 +103,19 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
-  // 👇 notice how we treaks lakes specially
-  //    there's always a big old space to show the label,
-  //    so we show it bigly -- we really want to see it
-  //    also -- the icon is redundant, so we drop it
-
   #drawIcon(props: PlaceProperties, resolution: number): OLImage {
     const color = this.map.vars['--map-place-icon-color'];
     const fontSize = this.#fontSize(props, resolution);
-    return new OLFontSymbol({
-      color: `rgba(${color}, 1)`,
-      font: `'Font Awesome'`,
-      fontStyle: 'bold',
-      form: 'none',
-      radius: fontSize,
-      text: ICONS[props.type]
-    });
+    if (!ICONS[props.type]) return null;
+    else
+      return new OLFontSymbol({
+        color: `rgba(${color}, 1)`,
+        font: `'Font Awesome'`,
+        fontStyle: 'bold',
+        form: 'none',
+        radius: fontSize,
+        text: ICONS[props.type]
+      });
   }
 
   #drawText(props: PlaceProperties, resolution: number): OLText {
@@ -138,7 +143,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     // 👉 fontSize is proportional to the resolution,
     //    but no bigger than the max size specified
     const nominal = Math.min(this.maxFontSize, this.fontSize / resolution);
-    return props.type === 'lake' ? nominal * 3 : nominal;
+    return ICONS[props.type] ? nominal : nominal * 3;
   }
 
   #titleCase(text: string): string {
@@ -157,12 +162,12 @@ export class OLStylePlacesComponent implements OLStyleComponent {
       // 🔥 HACK -- this entry appears to be noise -- it only
       //    marks the geographical center of town, which is meaningless
       else if (props.name.endsWith(', Town of')) return null;
-      else if (!ICONS[props.type] || ICONS[props.type] === '\u0000')
-        return null;
+      // 👉 don't show anything we don't know about
+      else if (ICONS[props.type] === undefined) return null;
       else {
         return new OLStyle({
-          image:
-            props.type === 'lake' ? null : this.#drawIcon(props, resolution),
+          geometry: new OLPoint(getCenter(place.getGeometry().getExtent())),
+          image: this.#drawIcon(props, resolution),
           text: this.#drawText(props, resolution)
         });
       }

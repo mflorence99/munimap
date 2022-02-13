@@ -38,7 +38,7 @@ export class OLControlPrintComponent {
 
   @Input() fileName: string;
 
-  @Input() resolution = 2 /* 👈 controls pixel density of print image */;
+  @Input() resolution = 1.75 /* 👈 controls pixel density of print image */;
 
   constructor(private dialog: MatDialog, private map: OLMapComponent) {}
 
@@ -54,33 +54,29 @@ export class OLControlPrintComponent {
   }
 
   #printImpl(): void {
-    // 👉 tripped when print is complete
-    this.#renderCompleteKey = this.map.olMap.once('rendercomplete', () => {
-      html2canvas(this.map.olMap.getViewport(), {
-        height: this.#py,
-        width: this.#px
-      }).then((viewport) => {
-        // 👉 compute padding and draw it around viewport
-        const padding = this.#padding(this.#px, this.#py);
-        const printout = this.canvas.nativeElement;
-        printout.height = this.#py + padding[1];
-        printout.width = this.#px + padding[0];
-        const ctx = printout.getContext('2d');
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, printout.width, printout.height);
-        ctx.drawImage(viewport, padding[0] / 2, padding[1] / 2);
-        // 👉 now render printer as image
-        printout.toBlob(
-          (blob) => {
-            saveAs(blob, `${this.fileName}.jpeg`);
-            this.#teardown();
-          },
-          'image/jpeg',
-          0.95 /* 👈 juggle quality with resolution to get best image */
-        );
-      });
+    html2canvas(this.map.olMap.getViewport(), {
+      height: this.#py,
+      width: this.#px
+    }).then((viewport) => {
+      // 👉 compute padding and draw it around viewport
+      const padding = this.#padding(this.#px, this.#py);
+      const printout = this.canvas.nativeElement;
+      printout.height = this.#py + padding[1];
+      printout.width = this.#px + padding[0];
+      const ctx = printout.getContext('2d');
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, printout.width, printout.height);
+      ctx.drawImage(viewport, padding[0] / 2, padding[1] / 2);
+      // 👉 now render printer as image
+      printout.toBlob(
+        (blob) => {
+          saveAs(blob, `${this.fileName}.jpeg`);
+          this.#teardown();
+        },
+        'image/jpeg',
+        0.95 /* 👈 juggle quality with resolution to get best image */
+      );
     });
-    this.#setup();
   }
 
   #setup(): void {
@@ -101,9 +97,11 @@ export class OLControlPrintComponent {
       data,
       disableClose: true
     });
-    this.#progressRef.afterClosed().subscribe(() => {
-      if (this.#renderCompleteKey) unByKey(this.#renderCompleteKey);
-      this.#teardown();
+    this.#progressRef.afterClosed().subscribe((result: string) => {
+      unByKey(this.#renderCompleteKey);
+      // 👉 CANCEL or (in an emergency) PRINT AS-IS
+      if (result === 'CANCEL') this.#teardown();
+      else if (result === 'PRINT') this.#printImpl();
     });
     // 👇 https://openlayers.org/en/latest/examples/print-to-scale.html
     //    also -- we want the dialog to show quickly, before the map
@@ -146,7 +144,12 @@ export class OLControlPrintComponent {
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
-        if (result) this.#printImpl();
+        if (result) {
+          this.#renderCompleteKey = this.map.olMap.once('rendercomplete', () =>
+            this.#printImpl()
+          );
+          this.#setup();
+        }
       });
   }
 }

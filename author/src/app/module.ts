@@ -95,6 +95,7 @@ import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
+import { OLSourceLabelsComponent } from '@lib/ol/ol-source-labels';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
 import { OLSourceRailroadsComponent } from '@lib/ol/ol-source-railroads';
@@ -227,6 +228,7 @@ const COMPONENTS = [
   OLSourceFloodplainComponent,
   OLSourceGeoJSONComponent,
   OLSourceHillshadeComponent,
+  OLSourceLabelsComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
   OLSourceRailroadsComponent,

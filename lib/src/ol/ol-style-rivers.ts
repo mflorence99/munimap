@@ -32,7 +32,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
   @Input() maxRiverPixels = 8;
-  @Input() minFontSize = 8;
+  @Input() minFontSize = 4;
   @Input() riverWidth = 8;
 
   constructor(

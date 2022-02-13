@@ -212,7 +212,7 @@
             <app-ol-style-places></app-ol-style-places>
             <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
             <app-ol-source-geojson
-              [exclude]="['dam']"
+              [exclude]="['dam', 'park']"
               [layerKey]="'places'"
             ></app-ol-source-geojson>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>

@@ -25,7 +25,7 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
   @Input() maxTrailPixels = 3;
-  @Input() minFontSize = 8;
+  @Input() minFontSize = 4;
   @Input() trailWidth = 3;
 
   constructor(

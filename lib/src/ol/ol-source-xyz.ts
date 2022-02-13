@@ -12,8 +12,6 @@ import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { QueryList } from '@angular/core';
 
-import OLERROR from 'ol/TileState';
-import OLImageTile from 'ol/ImageTile';
 import OLXYZ from 'ol/source/XYZ';
 
 @Component({
@@ -34,17 +32,6 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
 
   constructor(private http: HttpClient, private layer: OLLayerTileComponent) {}
 
-  #loader(tile: OLImageTile, src: string): void {
-    const img = tile.getImage() as HTMLImageElement;
-    this.http.get(src, { responseType: 'blob' }).subscribe({
-      error: () => tile.setState(OLERROR),
-      next: (blob) => {
-        const objectURL = URL.createObjectURL(blob);
-        img.src = objectURL;
-      }
-    });
-  }
-
   ngAfterContentInit(): void {
     // 👉 note that we're saying we don't expect
     //    the list of attributions to change
@@ -62,7 +49,6 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
     this.olXYZ = new OLXYZ({
       crossOrigin: 'anonymous',
       maxZoom: this.maxZoom,
-      tileLoadFunction: this.#loader.bind(this),
       url: `${environment.endpoints.proxy}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
     });
   }

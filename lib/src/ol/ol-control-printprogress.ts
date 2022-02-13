@@ -50,6 +50,18 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
     this.cdf.markForCheck();
   }
 
+  isComplete(): boolean {
+    return this.numLoaded > 0 && this.numLoading === this.numLoaded;
+  }
+
+  isRunning(): boolean {
+    return this.numLoaded > 0 && this.numLoading !== this.numLoaded;
+  }
+
+  isStarting(): boolean {
+    return this.numLoaded === 0;
+  }
+
   ngOnDestroy(): void {
     this.#eventKeys.forEach((key) => unByKey(key));
   }

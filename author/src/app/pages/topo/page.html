@@ -2,8 +2,8 @@
   <app-ol-map
     #olMap
     [gridRequired]="true"
-    [minZoom]="15"
-    [maxZoom]="22"
+    [minZoom]="13"
+    [maxZoom]="20"
     [path]="map.path"
   >
     <app-properties [map]="map" class="setup" mapControlPanel1></app-properties>
@@ -76,11 +76,6 @@
 
         <app-ol-layer-tile [opacity]="1">
           <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
-          <!-- <app-ol-filter-colorize
-          [color]="[58, 201, 101]"
-          [operation]="'color'"
-          [value]="0.33"
-        ></app-ol-filter-colorize> -->
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-tile>
 
@@ -95,7 +90,7 @@
 
         <app-ol-layer-vector>
           <app-ol-style-conservation></app-ol-style-conservation>
-          <app-ol-source-conservation></app-ol-source-conservation>
+          <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
@@ -171,7 +166,7 @@
           <app-ol-style-places></app-ol-style-places>
           <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
           <app-ol-source-geojson
-            [exclude]="'dam'"
+            [exclude]="['dam', 'park']"
             [layerKey]="'places'"
           ></app-ol-source-geojson>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -180,6 +175,14 @@
         <app-ol-layer-vector>
           <app-ol-style-places></app-ol-style-places>
           <app-ol-source-dams></app-ol-source-dams>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-places></app-ol-style-places>
+          <app-ol-source-labels
+            [labelsFor]="'conservation'"
+          ></app-ol-source-labels>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 

@@ -25,7 +25,7 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
   @Input() maxTrackPixels = 15;
-  @Input() minFontSize = 8;
+  @Input() minFontSize = 4;
   @Input() minTrackPixels = 3;
   @Input() trackWidth = 15;
 

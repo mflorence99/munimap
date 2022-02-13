@@ -21,8 +21,13 @@ import hash from 'object-hash';
 
 // 👇 proxy server options
 
+// 🔥 some proxies return a short error response with a 200 status code
+//    looking at you, nhgeodata.unh.edu! -- we don't know how to generally
+//    deal with this, so we'll just ignore it and return a 404
+
 export interface ProxyServerOpts {
   maxAge?: number;
+  minSize?: number;
   root?: string;
 }
 
@@ -32,6 +37,7 @@ export const PROXY_SERVER_OPTS = new InjectionToken<ProxyServerOpts>(
 
 export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
   maxAge: 600,
+  minSize: 256,
   root: '/tmp'
 };
 
@@ -82,8 +88,12 @@ export class ProxyServer extends Handler {
           stat = fs.statSync(fpath);
         } catch (error) {}
         const maxAge = this.#opts.maxAge;
+        // 👇 if the data is smaller than the minumum size,
+        //    treat it as a cache miss
         const isCached =
-          stat && stat.size > 0 && stat.mtimeMs > Date.now() - maxAge * 1000;
+          stat &&
+          stat.size > this.#opts.minSize &&
+          stat.mtimeMs > Date.now() - maxAge * 1000;
 
         // 👇 because we set maxAge to the exact time that we discard the
         //    disk copy of the proxied data, we never have to bother
@@ -138,12 +148,13 @@ export class ProxyServer extends Handler {
             mergeMap((resp) => from(resp.buffer())),
             tap((buffer) => (response.body = buffer)),
             tap((buffer) => {
-              if (
-                response.statusCode === 200 &&
-                Buffer.byteLength(buffer) > 0
-              ) {
-                fs.mkdirSync(fdir, { recursive: true });
-                fs.writeFile(fpath, buffer, () => {});
+              if (response.statusCode === 200) {
+                // 👇 if the data is smaller than the minumum size,
+                //    treat it as an error
+                if (Buffer.byteLength(buffer) >= this.#opts.minSize) {
+                  fs.mkdirSync(fdir, { recursive: true });
+                  fs.writeFile(fpath, buffer, () => {});
+                } else response.statusCode = 404;
               }
             }),
             tap((buffer) => {
