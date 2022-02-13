@@ -5,6 +5,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { Inject } from '@angular/core';
+import { Input } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
@@ -28,7 +29,9 @@ export interface PrintProgressData {
 })
 export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   #eventKeys: OLEventsKey[];
-  #olSources: OLUrlTile[];
+  #timestamp: number;
+
+  @Input() giveUpAfter = 20 * 1000 /* 👈 20 seconds */;
 
   numLoaded = 0;
   numLoading = 0;
@@ -36,17 +39,42 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: PrintProgressData,
     private cdf: ChangeDetectorRef
-  ) {
-    this.#olSources = data.map.olMap
+  ) {}
+
+  #handleEvents(): void {
+    const sources = this.data.map.olMap
       .getLayers()
       .getArray()
       .filter((layer: any) => layer.getSource() instanceof OLUrlTile)
       .map((layer: any) => layer.getSource());
+    this.#eventKeys = sources.flatMap((olSource) => [
+      olSource.on('tileloadstart', this.#progress.bind(this)),
+      olSource.on('tileloadend', this.#progress.bind(this))
+    ]);
+  }
+
+  #monitorActivity(): void {
+    const interval = setInterval(() => {
+      // console.log({
+      //   complete: this.isComplete(),
+      //   timestamp: this.#timestamp + this.giveUpAfter,
+      //   now: Date.now(),
+      //   giveUp: this.#timestamp + this.giveUpAfter < Date.now()
+      // });
+      if (
+        this.isComplete() &&
+        this.#timestamp + this.giveUpAfter < Date.now()
+      ) {
+        clearInterval(interval);
+        this.data.map.olMap.dispatchEvent('rendercomplete');
+      }
+    }, 1000);
   }
 
   #progress(event: OLTileSourceEvent): void {
     if (event.type === 'tileloadstart') this.numLoading += 1;
     else if (event.type === 'tileloadend') this.numLoaded += 1;
+    this.#timestamp = Date.now();
     this.cdf.markForCheck();
   }
 
@@ -67,9 +95,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.#eventKeys = this.#olSources.flatMap((olSource) => [
-      olSource.on('tileloadstart', this.#progress.bind(this)),
-      olSource.on('tileloadend', this.#progress.bind(this))
-    ]);
+    this.#handleEvents();
+    this.#monitorActivity();
   }
 }

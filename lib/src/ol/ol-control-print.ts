@@ -97,11 +97,9 @@ export class OLControlPrintComponent {
       data,
       disableClose: true
     });
-    this.#progressRef.afterClosed().subscribe((result: string) => {
+    this.#progressRef.afterClosed().subscribe(() => {
       unByKey(this.#renderCompleteKey);
-      // 👉 CANCEL or (in an emergency) PRINT AS-IS
-      if (result === 'CANCEL') this.#teardown();
-      else if (result === 'PRINT') this.#printImpl();
+      this.#teardown();
     });
     // 👇 https://openlayers.org/en/latest/examples/print-to-scale.html
     //    also -- we want the dialog to show quickly, before the map

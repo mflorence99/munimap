@@ -433,10 +433,18 @@ color-picker {
 //    is only ever printed, we want to see it on the screen
 //    for degugging
 
+// 🔥 all this crap to negate the ol-ext ol-legend style
+
 .ol-legend {
-  left: 20rem;
-  position: absolute;
-  top: 20rem;
+  bottom: unset !important;
+  left: 20rem !important;
+  max-height: unset !important;
+  max-width: unset !important;
+  overflow-x: unset !important;
+  overflow-y: unset !important;
+  max-width: unset !important;
+  position: absolute !important;
+  top: 20rem !important;
 }
 
 .ol-legend-print {
