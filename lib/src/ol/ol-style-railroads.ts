@@ -27,7 +27,7 @@ export class OLStyleRailroadsComponent implements OLStyleComponent {
   @Input() maxTrackPixels = 15;
   @Input() minFontSize = 4;
   @Input() minTrackPixels = 3;
-  @Input() trackWidth = 15;
+  @Input() trackWidth = 15 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,

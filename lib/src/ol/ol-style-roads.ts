@@ -26,7 +26,7 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
   @Input() minFontSize = 4;
-  @Input() minRoadWidth = 6;
+  @Input() minRoadWidth = 6 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,

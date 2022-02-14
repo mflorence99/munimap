@@ -19,7 +19,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleBridgesComponent implements OLStyleComponent {
-  @Input() bridgeWidth = 48;
+  @Input() bridgeWidth = 48 /* 👈 feet */;
   @Input() minBridgePixels = 6;
 
   constructor(

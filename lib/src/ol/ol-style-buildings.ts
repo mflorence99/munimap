@@ -8,6 +8,7 @@ import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLFill from 'ol/style/Fill';
+import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 
@@ -18,7 +19,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleBuildingsComponent implements OLStyleComponent {
-  @Input() opacity = 0.66;
+  @Input() shadowLength = 10 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -28,16 +29,27 @@ export class OLStyleBuildingsComponent implements OLStyleComponent {
   }
 
   style(): OLStyleFunction {
-    return (): OLStyle => {
+    return (building: any): OLStyle[] => {
       const fill = this.map.vars['--map-building-fill'];
       const outline = this.map.vars['--map-building-outline'];
-      return new OLStyle({
-        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-        stroke: new OLStroke({
-          color: `rgba(${outline}, ${this.opacity})`,
-          width: 1
+      const shadow = new OLPolygon(building.getGeometry().getCoordinates());
+      // 👉 shadow length is in feet, translation units are meters
+      const shadowLength = this.shadowLength / 3.28084;
+      shadow.translate(shadowLength, -shadowLength);
+      return [
+        new OLStyle({
+          fill: new OLFill({ color: `rgba(${outline}, 0.75)` }),
+          geometry: shadow,
+          stroke: null
+        }),
+        new OLStyle({
+          fill: new OLFill({ color: `rgba(${fill}, 1)` }),
+          stroke: new OLStroke({
+            color: `rgba(${outline}, 1)`,
+            width: 1
+          })
         })
-      });
+      ];
     };
   }
 }
