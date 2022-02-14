@@ -33,7 +33,7 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   @Input() maxFontSize = 24;
   @Input() maxRiverPixels = 8;
   @Input() minFontSize = 4;
-  @Input() riverWidth = 8;
+  @Input() riverWidth = 25 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -80,7 +80,10 @@ export class OLStyleRiversComponent implements OLStyleComponent {
   #riverPixels(resolution: number): number {
     // 👉 riverWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxRiverPixels, this.riverWidth / resolution);
+    return Math.min(
+      this.maxRiverPixels,
+      this.riverWidth / (resolution * 3.28084)
+    );
   }
 
   style(): OLStyleFunction {

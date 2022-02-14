@@ -162,6 +162,10 @@ $dark-app-theme: mat-dark-theme(
   --map-parcel-fill-u502: var(--rgb-lime-800);
   --map-parcel-fill-u999: var(--rgb-gray-700);
 
+  --map-place-icon-color: var(--rgb-brown-900);
+  --map-place-text-color: var(--rgb-brown-900);
+  --map-place-lake-color: var(--rgb-blue-700);
+
   --map-powerline-icon-color: var(--rgb-yellow-500);
   --map-powerline-line-color: var(--rgb-gray-900);
 
@@ -171,9 +175,7 @@ $dark-app-theme: mat-dark-theme(
   --map-river-line-color: var(--rgb-blue-200);
   --map-river-text-color: var(--rgb-blue-400);
 
-  --map-place-icon-color: var(--rgb-brown-900);
-  --map-place-text-color: var(--rgb-brown-900);
-  --map-place-lake-color: var(--rgb-blue-700);
+  --map-riverbank-rocks: var(--rgb-brown-600);
 
   --map-road-text-color-I: var(--rgb-blue-gray-850);
   --map-road-text-color-II: var(--rgb-blue-gray-850);
@@ -448,7 +450,7 @@ color-picker {
 }
 
 .ol-legend-print {
-  transform: scale(2.5);
+  transform: scale(3);
   transform-origin: left top;
 }
 

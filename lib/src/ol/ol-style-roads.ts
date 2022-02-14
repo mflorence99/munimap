@@ -26,7 +26,8 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
   @Input() maxFontSize = 24;
   @Input() minFontSize = 4;
-  @Input() minRoadWidth = 6 /* 👈 feet */;
+  @Input() minRoadWidth = 10 /* 👈 feet */;
+  @Input() rightOfWayRatio = 3;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -95,7 +96,8 @@ export class OLStyleRoadsComponent implements OLStyleComponent {
     // 👉 roadway width is in feet, resolution is pixels / meter
     //    multiply that for the right-of-way
     return (
-      (Math.max(props.width, this.minRoadWidth) / (resolution * 3.28084)) * 3
+      (Math.max(props.width, this.minRoadWidth) / (resolution * 3.28084)) *
+      this.rightOfWayRatio
     );
   }
 

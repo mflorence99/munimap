@@ -26,7 +26,7 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
   @Input() maxFontSize = 24;
   @Input() maxTrailPixels = 3;
   @Input() minFontSize = 4;
-  @Input() trailWidth = 3;
+  @Input() trailWidth = 10 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -77,7 +77,10 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
   #trailPixels(resolution: number): number {
     // 👉 trailWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxTrailPixels, this.trailWidth / resolution);
+    return Math.min(
+      this.maxTrailPixels,
+      this.trailWidth / (resolution * 3.28084)
+    );
   }
 
   style(): OLStyleFunction {

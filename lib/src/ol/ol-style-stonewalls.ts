@@ -23,7 +23,7 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
   @Input() minWallPixels = 3;
   @Input() opacity = 0.33;
   @Input() pattern: OLStrokePatternType = 'rocks';
-  @Input() wallWidth = 7;
+  @Input() wallWidth = 25 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -35,7 +35,10 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
   #wallPixels(resolution: number): number {
     // 👉 wallWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxWallPixels, this.wallWidth / resolution);
+    return Math.min(
+      this.maxWallPixels,
+      this.wallWidth / (resolution * 3.28084)
+    );
   }
 
   style(): OLStyleFunction {
@@ -45,12 +48,12 @@ export class OLStyleStoneWallsComponent implements OLStyleComponent {
       if (wallPixels < this.minWallPixels) return null;
       else {
         const fill = this.map.vars['--map-stonewall-fill'];
-        const rocks = this.map.vars['--map-stonewall-rocks'];
+        const stroke = this.map.vars['--map-stonewall-rocks'];
         // 🐛 StrokePattern can throw InvalidState exception
         try {
           return new OLStyle({
             stroke: new OLStrokePattern({
-              color: `rgba(${rocks}, ${this.opacity})`,
+              color: `rgba(${stroke}, ${this.opacity})`,
               fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
               pattern: this.pattern,
               scale: 2,

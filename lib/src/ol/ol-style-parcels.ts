@@ -75,7 +75,7 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 
-  @Input() borderWidth = 3;
+  @Input() borderWidth = 10 /* 👈 feet */;
   @Input() borderWidthSelectRatio = 2;
   @Input() dimensionsFontSize = 20;
   @Input() fontFamily = 'Roboto';
@@ -105,7 +105,10 @@ export class OLStyleParcelsComponent implements OLStyleComponent {
   #borderPixels(resolution: number): number {
     // 👉 borderWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxBorderPixels, this.borderWidth / resolution);
+    return Math.min(
+      this.maxBorderPixels,
+      this.borderWidth / (resolution * 3.28084)
+    );
   }
 
   #dimensions(

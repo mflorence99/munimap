@@ -23,7 +23,7 @@ import OLStyle from 'ol/style/Style';
 export class OLStylePowerlinesComponent implements OLStyleComponent {
   @Input() iconSize = 15;
   @Input() maxPowerlinePixels = 3;
-  @Input() powerlineWidth = 3;
+  @Input() powerlineWidth = 10 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -88,7 +88,10 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
   #powerlinePixels(resolution: number): number {
     // 👉 powerlineWidth is proportional to the resolution,
     //    but no bigger than the max size specified
-    return Math.min(this.maxPowerlinePixels, this.powerlineWidth / resolution);
+    return Math.min(
+      this.maxPowerlinePixels,
+      this.powerlineWidth / (resolution * 3.28084)
+    );
   }
 
   style(): OLStyleFunction {
