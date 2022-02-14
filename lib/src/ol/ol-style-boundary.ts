@@ -19,7 +19,6 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleBoundaryComponent implements OLStyleComponent {
-  @Input() opacity = 1;
   @Input() pattern: OLFillPatternType = 'gravel';
 
   constructor(
@@ -33,7 +32,7 @@ export class OLStyleBoundaryComponent implements OLStyleComponent {
     return (): OLStyle => {
       const gravel = this.map.vars['--map-boundary-fill'];
       // 🐛 FillPattern sometimes throws InvalidStateError
-      let fill = new OLFill({ color: `rgba(255, 255, 255, ${this.opacity})` });
+      let fill = new OLFill({ color: `rgba(255, 255, 255, 1)` });
       try {
         fill = new OLFillPattern({
           color: `rgba(${gravel}, 1)`,

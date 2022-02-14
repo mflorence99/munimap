@@ -23,7 +23,6 @@ import OLStyle from 'ol/style/Style';
 export class OLStylePowerlinesComponent implements OLStyleComponent {
   @Input() iconSize = 15;
   @Input() maxPowerlinePixels = 3;
-  @Input() opacity = 1;
   @Input() powerlineWidth = 3;
 
   constructor(
@@ -53,14 +52,14 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
             new OLStyle({
               geometry: new OLPoint(end),
               image: new OLFontSymbol({
-                color: `rgba(${iconColor}, ${this.opacity})`,
+                color: `rgba(${iconColor}, 1)`,
                 font: `'Font Awesome'`,
                 fontStyle: 'bold',
                 form: 'none',
                 radius: this.iconSize / resolution,
                 rotation: -rotation,
                 stroke: new OLStroke({
-                  color: `rgba(${lineColor}, ${this.opacity})`,
+                  color: `rgba(${lineColor}, 1)`,
                   width: 1
                 }),
                 text: '\uf0e7' /* 👈 bolt */
@@ -80,7 +79,7 @@ export class OLStylePowerlinesComponent implements OLStyleComponent {
     const powerlinePixels = this.#powerlinePixels(resolution);
     return new OLStyle({
       stroke: new OLStroke({
-        color: `rgba(${lineColor}, ${this.opacity})`,
+        color: `rgba(${lineColor}, 1)`,
         width: powerlinePixels
       })
     });
