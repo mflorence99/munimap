@@ -11,12 +11,21 @@ import { Input } from '@angular/core';
 
 import copy from 'fast-copy';
 
-type LabelLayerType = 'conservation';
+type LabelLayerType = 'conservation' | 'stream';
 
 const LABELS: {
-  [key in LabelLayerType]?: { layer: number; place: string };
+  [key in LabelLayerType]?: { place: string; url: string };
 } = {
-  conservation: { layer: 21, place: 'park' }
+  conservation: {
+    url: 'https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_Labels/MapServer/21/query',
+    place: 'park'
+  },
+  // 🔥 stream labels are really promising but the data coverage
+  //    is too limited -- ol-source-rivers is much better
+  stream: {
+    url: 'https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_ExtractDataLayers/MapServer/17/query',
+    place: 'stream'
+  }
 };
 
 const attribution =
@@ -29,6 +38,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
+  @Input() dedupe: boolean;
   @Input() labelsFor: LabelLayerType;
 
   constructor(
@@ -41,7 +51,6 @@ export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
   }
 
   // 👇 see PlaceProperties
-  // https://tile.openstreetmap.org/16/19642/24029.png
 
   filter(arcgis: any): any {
     if (arcgis) {
@@ -52,11 +61,13 @@ export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
       // 👇 sometimes adjacent features are duplicated
       const unique = new Set();
       const filtered = copy(arcgis);
-      filtered.features = arcgis.features.filter((feature) => {
-        const exists = unique.has(feature.attributes.name);
-        unique.add(feature.attributes.name);
-        return !exists;
-      });
+      filtered.features = arcgis.features
+        .filter((feature) => !!feature.attributes.name)
+        .filter((feature) => {
+          const exists = unique.has(feature.attributes.name);
+          unique.add(feature.attributes.name);
+          return !this.dedupe || !exists;
+        });
       return filtered;
     } else return super.filter(arcgis);
   }
@@ -70,13 +81,13 @@ export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'labels';
+    return `${this.labelsFor}-labels`;
   }
 
   getURL(extent: Coordinate): string {
     const [minX, minY, maxX, maxY] = extent;
-    return `https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_Labels/MapServer/${
-      LABELS[this.labelsFor].layer
+    return `${
+      LABELS[this.labelsFor].url
     }/query?f=json&returnIdsOnly=false&returnCountOnly=false&where=1=1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
   }
 }

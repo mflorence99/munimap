@@ -117,7 +117,6 @@ import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
 import { OLStylePolygonsComponent } from '@lib/ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
 import { OLStyleRailroadsComponent } from '@lib/ol/ol-style-railroads';
-import { OLStyleRiversComponent } from '@lib/ol/ol-style-rivers';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
@@ -251,7 +250,6 @@ const COMPONENTS = [
   OLStylePolygonsComponent,
   OLStylePowerlinesComponent,
   OLStyleRailroadsComponent,
-  OLStyleRiversComponent,
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
   OLStyleTrailsComponent,

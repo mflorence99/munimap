@@ -8,6 +8,8 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
+import copy from 'fast-copy';
+
 const attribution =
   'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
@@ -30,16 +32,19 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
     super(cache, http, layer, map);
   }
 
-  // 👇 see RiverProperties
+  // 👇 see PlaceProperties
 
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         feature.attributes.name = feature.attributes.GNIS_Name;
-        feature.attributes.type =
-          feature.attributes.FType === 460 ? 'stream' : 'river';
+        feature.attributes.type = 'stream';
       });
-      return arcgis;
+      const filtered = copy(arcgis);
+      filtered.features = arcgis.features.filter(
+        (feature) => !!feature.attributes.name
+      );
+      return filtered;
     } else return super.filter(arcgis);
   }
 

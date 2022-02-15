@@ -19,10 +19,42 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 👇 notice how we treaks lakes and parks specially
-//    there's always a big old space to show the label,
-//    so we show it bigly -- we really want to see it
-//    also -- the icon is redundant, so we drop it
+interface PlaceStyleAttributes {
+  colorKey: string;
+  fontSizeRatio: number;
+  placement: 'line' | 'point';
+}
+
+// 👇 most places are drawn like this
+
+const DEFAULT: PlaceStyleAttributes = {
+  colorKey: '--map-place-text-color',
+  fontSizeRatio: 1,
+  placement: 'point'
+};
+
+const EXCEPTIONS: {
+  [key in PlacePropertiesType]?: PlaceStyleAttributes;
+} = {
+  lake: {
+    colorKey: '--map-place-water-color',
+    fontSizeRatio: 3,
+    placement: 'point'
+  },
+  park: {
+    colorKey: '--map-place-text-color',
+    fontSizeRatio: 3,
+    placement: 'point'
+  },
+  stream: {
+    colorKey: '--map-place-water-color',
+    fontSizeRatio: 2,
+    placement: 'line'
+  }
+};
+
+// 👇 place types not in this list are ignored
+//    place types without an icon show onky text
 
 const ICONS: {
   [key in PlacePropertiesType]?: string;
@@ -72,7 +104,7 @@ const ICONS: {
   sea: '\uf773',
   slope: '\uf041',
   spring: '\uf041',
-  stream: '\uf041',
+  stream: null,
   summit: '\uf6fc',
   swamp: '\uf041',
   tower: '\uf041',
@@ -103,11 +135,18 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     this.layer.setStyle(this);
   }
 
+  #attrs(props: PlaceProperties): PlaceStyleAttributes {
+    // 👉 if the place type is in the exceptions list, use that
+    //    otherwise use the default attributes
+    return EXCEPTIONS[props.type] || DEFAULT;
+  }
+
   #drawIcon(props: PlaceProperties, resolution: number): OLImage {
-    const color = this.map.vars['--map-place-icon-color'];
-    const fontSize = this.#fontSize(props, resolution);
     if (!ICONS[props.type]) return null;
-    else
+    else {
+      const attrs = this.#attrs(props);
+      const color = this.map.vars[attrs.colorKey];
+      const fontSize = this.#fontSize(props, resolution) * attrs.fontSizeRatio;
       return new OLFontSymbol({
         color: `rgba(${color}, 1)`,
         font: `'Font Awesome'`,
@@ -116,34 +155,35 @@ export class OLStylePlacesComponent implements OLStyleComponent {
         radius: fontSize,
         text: ICONS[props.type]
       });
+    }
   }
 
   #drawText(props: PlaceProperties, resolution: number): OLText {
-    const color =
-      props.type === 'lake'
-        ? this.map.vars['--map-place-lake-color']
-        : this.map.vars['--map-place-text-color'];
-    const fontSize = this.#fontSize(props, resolution);
+    const attrs = this.#attrs(props);
+    const color = this.map.vars[attrs.colorKey];
+    const fontSize = this.#fontSize(props, resolution) * attrs.fontSizeRatio;
     return new OLText({
       fill: new OLFill({ color: `rgba(${color}, 1)` }),
       font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
-      offsetY: -fontSize,
-      placement: 'point',
+      offsetY: attrs.placement === 'point' ? fontSize : undefined,
+      placement: attrs.placement,
       stroke: new OLStroke({
         color: `rgba(255, 255, 255, 1)`,
         width: 3
       }),
-      text: this.#titleCase(props.name).replace(/ /g, '\n'),
-      textAlign: this.textAlign,
-      textBaseline: this.textBaseline
+      text:
+        attrs.placement === 'point'
+          ? this.#titleCase(props.name).replace(/ /g, '\n')
+          : props.name,
+      textAlign: attrs.placement === 'point' ? this.textAlign : undefined,
+      textBaseline: attrs.placement === 'point' ? this.textBaseline : undefined
     });
   }
 
   #fontSize(props: PlaceProperties, resolution: number): number {
     // 👉 fontSize is proportional to the resolution,
     //    but no bigger than the max size specified
-    const nominal = Math.min(this.maxFontSize, this.fontSize / resolution);
-    return ICONS[props.type] ? nominal : nominal * 3;
+    return Math.min(this.maxFontSize, this.fontSize / resolution);
   }
 
   #titleCase(text: string): string {
@@ -156,6 +196,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
   style(): OLStyleFunction {
     return (place: any, resolution: number): OLStyle => {
       const props = place.getProperties() as PlaceProperties;
+      const attrs = this.#attrs(props);
       const fontSize = this.#fontSize(props, resolution);
       // 👉 if the place label would be too small to see, don't show anything
       if (fontSize < this.minFontSize) return null;
@@ -167,7 +208,10 @@ export class OLStylePlacesComponent implements OLStyleComponent {
       else {
         return new OLStyle({
           // 👇 geometry MUST be set to 'point' or else the icon won't show
-          geometry: new OLPoint(getCenter(place.getGeometry().getExtent())),
+          geometry:
+            attrs.placement === 'point'
+              ? new OLPoint(getCenter(place.getGeometry().getExtent()))
+              : undefined,
           image: this.#drawIcon(props, resolution),
           text: this.#drawText(props, resolution)
         });

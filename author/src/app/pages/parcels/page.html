@@ -137,10 +137,8 @@
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
-            <!-- 👇 b/c waterbodies below does it better -->
-            <app-ol-style-rivers
-              [experimentalLabelsOnly]="true"
-            ></app-ol-style-rivers>
+            <!-- 👇 only drawing labels here - waterbodies draws actual river -->
+            <app-ol-style-places></app-ol-style-places>
             <app-ol-source-rivers></app-ol-source-rivers>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
