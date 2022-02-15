@@ -31,7 +31,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   #eventKeys: OLEventsKey[];
   #timestamp: number;
 
-  @Input() giveUpAfter = 20 * 1000 /* 👈 20 seconds */;
+  @Input() giveUpAfter = 30 * 1000 /* 👈 seconds */;
 
   numLoaded = 0;
   numLoading = 0;

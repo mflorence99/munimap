@@ -24,7 +24,7 @@ export class OLStyleWetlandComponent implements OLStyleComponent {
   @Input() maxRiverbankPixels = 10;
   @Input() minRiverbankPixels = 5;
   @Input() riverbank: OLFillPatternType = 'rocks';
-  @Input() riverbankOpacity = 0.33;
+  @Input() riverbankOpacity = 0.25;
   @Input() riverbankWidth = 25 /* 👈 feet */;
   @Input() swamp: OLFillPatternType = 'swamp';
   @Input() swampOpacity = 0.5;

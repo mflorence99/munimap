@@ -166,6 +166,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
       else if (ICONS[props.type] === undefined) return null;
       else {
         return new OLStyle({
+          // 👇 geometry MUST be set to 'point' or else the icon won't show
           geometry: new OLPoint(getCenter(place.getGeometry().getExtent())),
           image: this.#drawIcon(props, resolution),
           text: this.#drawText(props, resolution)

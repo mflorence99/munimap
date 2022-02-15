@@ -18,15 +18,15 @@ import { forwardRef } from '@angular/core';
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlParcelsLegendComponent)
+      useExisting: forwardRef(() => OLControlTopoLegendComponent)
     },
     DestroyService
   ],
-  selector: 'app-ol-control-parcelslegend',
-  templateUrl: './ol-control-parcelslegend.html',
+  selector: 'app-ol-control-topolegend',
+  templateUrl: './ol-control-topolegend.html',
   styleUrls: ['../ol-control-legend.scss']
 })
-export class OLControlParcelsLegendComponent extends OLControlLegendComponent {
+export class OLControlTopoLegendComponent extends OLControlLegendComponent {
   constructor(
     cdf: ChangeDetectorRef,
     destroy$: DestroyService,
