@@ -3,7 +3,6 @@ import { DestroyService } from '../services/destroy';
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../geojson';
 import { ParcelID } from '../geojson';
@@ -11,7 +10,6 @@ import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
 import { ActivatedRoute } from '@angular/router';
-import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
@@ -24,7 +22,6 @@ import { Subject } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
 import { combineLatest } from 'rxjs';
-import { forwardRef } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import area from '@turf/area';

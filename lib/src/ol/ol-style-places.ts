@@ -165,7 +165,7 @@ export class OLStylePlacesComponent implements OLStyleComponent {
     return new OLText({
       fill: new OLFill({ color: `rgba(${color}, 1)` }),
       font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
-      offsetY: attrs.placement === 'point' ? fontSize : undefined,
+      offsetY: attrs.placement === 'point' ? -fontSize : undefined,
       placement: attrs.placement,
       stroke: new OLStroke({
         color: `rgba(255, 255, 255, 1)`,

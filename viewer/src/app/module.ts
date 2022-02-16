@@ -2,6 +2,8 @@ import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsOverlayComponent } from './pages/parcels/overlay';
 import { ParcelsPage } from './pages/parcels/page';
 import { RootPage } from './pages/root/page';
+import { TopoLegendComponent } from './pages/topo/legend';
+import { TopoPage } from './pages/topo/page';
 
 import * as Sentry from '@sentry/angular';
 
@@ -203,12 +205,13 @@ const COMPONENTS = [
   OLStyleWetlandComponent,
   ParcelsLegendComponent,
   ParcelsOverlayComponent,
+  TopoLegendComponent,
   VersionDialogComponent
 ];
 
 const DIRECTIVES = [];
 
-const PAGES = [ParcelsPage, RootPage];
+const PAGES = [ParcelsPage, RootPage, TopoPage];
 
 const ROUTES = [
   {
@@ -231,6 +234,15 @@ const ROUTES = [
         path: 'parcels-overlay',
         component: ParcelsOverlayComponent,
         outlet: 'rightSidebar'
+      },
+      {
+        path: 'topo',
+        component: TopoPage
+      },
+      {
+        path: 'topo-legend',
+        component: TopoLegendComponent,
+        outlet: 'leftSidebar'
       }
     ]
   }

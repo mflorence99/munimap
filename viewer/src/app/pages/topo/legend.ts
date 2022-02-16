@@ -7,11 +7,11 @@ import { VersionService } from '@lib/services/version';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-parcels-legend',
+  selector: 'app-topo-legend',
   styleUrls: ['../legend.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './legend.html'
 })
-export class ParcelsLegendComponent extends LegendComponent {
+export class TopoLegendComponent extends LegendComponent {
   constructor(registry: TypeRegistry, version: VersionService) {
     super(registry, version);
   }

@@ -73,7 +73,7 @@ export class OLStyleWetlandComponent implements OLStyleComponent {
             stroke: new OLStrokePattern({
               color: `rgba(${stroke}, ${this.riverbankOpacity})`,
               pattern: this.riverbank,
-              scale: 1,
+              scale: 2,
               width: riverbankPixels
             })
           })

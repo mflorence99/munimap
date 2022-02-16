@@ -57,7 +57,7 @@ export class OLStyleTrailsComponent implements OLStyleComponent {
       return new OLText({
         fill: new OLFill({ color: `rgba(${color}, 1)` }),
         font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
-        offsetY: -fontSize,
+        offsetY: +fontSize,
         placement: 'line',
         stroke: new OLStroke({
           color: `rgba(255, 255, 255, 1)`,

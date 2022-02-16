@@ -41,6 +41,9 @@ export class RootPage implements OnInit {
 
   @Select(ViewState.gps) gps$: Observable<boolean>;
 
+  hasLeftSidebar: boolean;
+  hasRightSidebar: boolean;
+
   @Select(MapState) map$: Observable<Map>;
 
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
@@ -89,10 +92,9 @@ export class RootPage implements OnInit {
           // 👉 we don't have to wait until the profile is loaded,
           //    because guards prevent
           //    the page from loading until everything is set
-          this.router.navigateByUrl(
-            `/parcels(leftSidebar:parcels-legend//rightSidebar:parcels-overlay)?id=${map.id}`,
-            { skipLocationChange: true }
-          );
+          this.router.navigateByUrl(this.#makeURL(map), {
+            skipLocationChange: true
+          });
         }
       });
   }
@@ -114,6 +116,36 @@ export class RootPage implements OnInit {
         else id = this.#url.query.id;
         this.store.dispatch(new LoadMap(id, null));
       });
+  }
+
+  // 🔥 obviously kind of generalized but heavily-dependent
+  //    on route structure
+
+  #makeURL(map: Map): string {
+    const parts = [`/${map.type}`];
+    const inner = [];
+    // 👉 is there a left sidebar?
+    let route = this.router.config[0].children.find(
+      (route) =>
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'leftSidebar'
+    );
+    if (route) {
+      inner.push(`leftSidebar:${route.path}`);
+      this.hasLeftSidebar = true;
+    }
+    // 👉 is there a right sidebar?
+    route = this.router.config[0].children.find(
+      (route) =>
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'rightSidebar'
+    );
+    if (route) {
+      inner.push(`rightSidebar:${route.path}`);
+      this.hasRightSidebar = true;
+    }
+    // 👉 maybe no sidebars at all?
+    if (inner.length > 0) parts.push(`(${inner.join('//')})`);
+    parts.push(`?id=${map.id}`);
+    return parts.join('');
   }
 
   canPickSatelliteYear(): boolean {
