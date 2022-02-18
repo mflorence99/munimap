@@ -202,22 +202,25 @@ export class ParcelsState implements NgxsOnInit {
     const batch = writeBatch(this.firestore);
     const undos: Parcel[] = [];
     undoStack.push(undos);
-    action.parcels.forEach((parcel) => {
+    const promises = action.parcels.map((parcel) => {
       const normalized = this.#normalize(parcel);
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(normalized)}`,
         'color: chocolate'
       );
       const collectionRef = collection(this.firestore, 'parcels');
-      addDoc(collectionRef, normalized).then((ref) =>
+      return addDoc(collectionRef, normalized).then((ref) =>
         undos.push({ ...copy(parcel), $id: ref.id })
       );
     });
     // TODO 🔥 we have a great opportunity here to "cull"
     //         extraneous parcels
-    batch.commit().then(() => {
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
-    });
+    batch
+      .commit()
+      .then(() => Promise.all(promises))
+      .then(() => {
+        ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      });
     // 👉 side-effect of handleStreams$ will update state
   }
 
@@ -280,34 +283,43 @@ export class ParcelsState implements NgxsOnInit {
     undoStack.push(undos);
     // 🔥 batch has 500 limit
     const batch = writeBatch(this.firestore);
-    redos.forEach((parcel) => {
+    const promises = redos.map((parcel) => {
       const collectionRef = collection(this.firestore, 'parcels');
+      let promise;
       switch (parcel.action) {
         case 'added':
           delete parcel.$id;
           parcel.action = 'removed';
-          addDoc(collectionRef, parcel).then(() => undos.push(parcel));
+          promise = addDoc(collectionRef, parcel).then(() =>
+            undos.push(parcel)
+          );
           break;
         case 'modified':
           delete parcel.$id;
-          addDoc(collectionRef, parcel).then((ref) =>
+          promise = addDoc(collectionRef, parcel).then((ref) =>
             undos.push({ ...copy(parcel), $id: ref.id })
           );
           break;
         case 'removed':
           delete parcel.$id;
           parcel.action = 'added';
-          addDoc(collectionRef, parcel).then(() => undos.push(parcel));
+          promise = addDoc(collectionRef, parcel).then(() =>
+            undos.push(parcel)
+          );
           break;
       }
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
         'color: chocolate'
       );
+      return promise;
     });
-    batch.commit().then(() => {
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
-    });
+    batch
+      .commit()
+      .then(() => Promise.all(promises))
+      .then(() => {
+        ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      });
     // 👉 side-effect of handleStreams$ will update state
   }
 
@@ -331,32 +343,41 @@ export class ParcelsState implements NgxsOnInit {
     redoStack.push(redos);
     // 🔥 batch has 500 limit
     const batch = writeBatch(this.firestore);
-    undos.forEach((parcel) => {
+    const promises = undos.map((parcel) => {
       const collectionRef = collection(this.firestore, 'parcels');
-      const docRef = doc(this.firestore, 'parcels', parcel.$id);
+      let docRef, promise;
       switch (parcel.action) {
         case 'added':
           delete parcel.$id;
           parcel.action = 'removed';
-          addDoc(collectionRef, parcel).then(() => redos.push(parcel));
+          promise = addDoc(collectionRef, parcel).then(() =>
+            redos.push(parcel)
+          );
           break;
         case 'modified':
-          deleteDoc(docRef).then(() => redos.push(parcel));
+          docRef = doc(this.firestore, 'parcels', parcel.$id);
+          promise = deleteDoc(docRef).then(() => redos.push(parcel));
           break;
         case 'removed':
           delete parcel.$id;
           parcel.action = 'added';
-          addDoc(collectionRef, parcel).then(() => redos.push(parcel));
+          promise = addDoc(collectionRef, parcel).then(() =>
+            redos.push(parcel)
+          );
           break;
       }
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
         'color: chocolate'
       );
+      return promise;
     });
-    batch.commit().then(() => {
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
-    });
+    batch
+      .commit()
+      .then(() => Promise.all(promises))
+      .then(() => {
+        ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      });
     // 👉 side-effect of handleStreams$ will update state
   }
 }
