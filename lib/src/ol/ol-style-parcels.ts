@@ -1,9 +1,10 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
 import { OLStylePatternDirective } from './ol-style-pattern';
 import { OverlayState } from '../state/overlay';
 import { ParcelProperties } from '../geojson';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -14,6 +15,7 @@ import { QueryList } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { ViewChildren } from '@angular/core';
 
+import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getDistance } from 'ol/sphere';
 import { point } from '@turf/helpers';
@@ -53,6 +55,12 @@ interface Label {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleParcelsComponent)
+    }
+  ],
   selector: 'app-ol-style-parcels',
   template: `
     <img appPattern src="assets/CUDE.svg" />
@@ -71,7 +79,7 @@ interface Label {
   `,
   styles: [':host { display: none }']
 })
-export class OLStyleParcelsComponent implements OLStyleComponent {
+export class OLStyleParcelsComponent implements Styler {
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 

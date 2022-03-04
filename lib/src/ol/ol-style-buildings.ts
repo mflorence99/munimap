@@ -1,11 +1,14 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+
+import { forwardRef } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLPolygon from 'ol/geom/Polygon';
@@ -14,11 +17,17 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleBuildingsComponent)
+    }
+  ],
   selector: 'app-ol-style-buildings',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleBuildingsComponent implements OLStyleComponent {
+export class OLStyleBuildingsComponent implements Styler {
   @Input() shadowLength = 10 /* 👈 feet */;
 
   constructor(

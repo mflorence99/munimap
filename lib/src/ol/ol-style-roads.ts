@@ -1,12 +1,15 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
 import { RoadProperties } from '../geojson';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+
+import { forwardRef } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
@@ -16,11 +19,17 @@ import OLText from 'ol/style/Text';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleRoadsComponent)
+    }
+  ],
   selector: 'app-ol-style-roads',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleRoadsComponent implements OLStyleComponent {
+export class OLStyleRoadsComponent implements Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';

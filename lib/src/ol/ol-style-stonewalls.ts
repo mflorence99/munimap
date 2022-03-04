@@ -1,12 +1,15 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStrokePatternType } from './ol-style';
-import { OLStyleComponent } from './ol-style';
+import { OLStrokePatternType } from './ol-styler';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+
+import { forwardRef } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLStrokePattern from 'ol-ext/style/StrokePattern';
@@ -14,11 +17,17 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleStoneWallsComponent)
+    }
+  ],
   selector: 'app-ol-style-stonewalls',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleStoneWallsComponent implements OLStyleComponent {
+export class OLStyleStoneWallsComponent implements Styler {
   @Input() maxWallPixels = 6;
   @Input() minWallPixels = 3;
   @Input() opacity = 0.33;

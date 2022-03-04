@@ -1,12 +1,15 @@
 import { BridgeProperties } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+
+import { forwardRef } from '@angular/core';
 
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
 import OLStroke from 'ol/style/Stroke';
@@ -14,11 +17,17 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleBridgesComponent)
+    }
+  ],
   selector: 'app-ol-style-bridges',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleBridgesComponent implements OLStyleComponent {
+export class OLStyleBridgesComponent implements Styler {
   @Input() bridgeWidth = 48 /* 👈 feet */;
   @Input() minBridgePixels = 6;
 

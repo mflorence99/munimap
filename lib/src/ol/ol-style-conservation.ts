@@ -1,12 +1,15 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
 import { ParcelProperties } from '../geojson';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+
+import { forwardRef } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
@@ -14,11 +17,17 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleConservationComponent)
+    }
+  ],
   selector: 'app-ol-style-conservation',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleConservationComponent implements OLStyleComponent {
+export class OLStyleConservationComponent implements Styler {
   @Input() borderPixels = 1;
   @Input() opacity = 0.25;
 

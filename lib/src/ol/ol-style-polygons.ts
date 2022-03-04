@@ -1,11 +1,14 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+
+import { forwardRef } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
@@ -17,11 +20,17 @@ export type FilterFunction = (feature: OLFeature<any>) => boolean;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStylePolygonsComponent)
+    }
+  ],
   selector: 'app-ol-style-polygons',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStylePolygonsComponent implements OLStyleComponent {
+export class OLStylePolygonsComponent implements Styler {
   @Input() borderPixels = 3;
   @Input() filter: FilterFunction;
   @Input() fontFamily = 'Roboto';

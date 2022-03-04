@@ -1,14 +1,16 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
 import { PlaceProperties } from '../geojson';
 import { PlacePropertiesType } from '../geojson';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import { forwardRef } from '@angular/core';
 import { getCenter } from 'ol/extent';
 
 import OLFill from 'ol/style/Fill';
@@ -115,11 +117,17 @@ const ICONS: {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStylePlacesComponent)
+    }
+  ],
   selector: 'app-ol-style-places',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStylePlacesComponent implements OLStyleComponent {
+export class OLStylePlacesComponent implements Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 12;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';

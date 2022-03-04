@@ -1,11 +1,14 @@
 import { OLControlGraticuleComponent } from './ol-control-graticule';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
+
+import { forwardRef } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
@@ -16,11 +19,17 @@ import OLText from 'ol/style/Text';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleGraticuleComponent)
+    }
+  ],
   selector: 'app-ol-style-graticule',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleGraticuleComponent implements OLStyleComponent, OnInit {
+export class OLStyleGraticuleComponent implements Styler, OnInit {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 8;
   @Input() fontWeight: 'bold' | 'normal' = 'normal';

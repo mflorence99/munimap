@@ -1,13 +1,16 @@
-import { OLFillPatternType } from './ol-style';
+import { OLFillPatternType } from './ol-styler';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OLStyleComponent } from './ol-style';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 import { WetlandProperties } from '../geojson';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+
+import { forwardRef } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
@@ -16,11 +19,17 @@ import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleWetlandComponent)
+    }
+  ],
   selector: 'app-ol-style-wetland',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleWetlandComponent implements OLStyleComponent {
+export class OLStyleWetlandComponent implements Styler {
   @Input() maxRiverbankPixels = 10;
   @Input() minRiverbankPixels = 5;
   @Input() riverbank: OLFillPatternType = 'rocks';
