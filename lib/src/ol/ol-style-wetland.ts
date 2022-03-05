@@ -1,5 +1,4 @@
 import { OLFillPatternType } from './ol-styler';
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
@@ -38,12 +37,7 @@ export class OLStyleWetlandComponent implements Styler {
   @Input() swamp: OLFillPatternType = 'swamp';
   @Input() swampOpacity = 0.5;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
-    this.layer.setStyle(this);
-  }
+  constructor(private map: OLMapComponent) {}
 
   #marsh(): OLStyle[] {
     const fill = this.map.vars['--map-wetland-swamp'];

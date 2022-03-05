@@ -1,4 +1,3 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { ParcelProperties } from '../geojson';
 import { Styler } from './ol-styler';
@@ -31,12 +30,7 @@ export class OLStyleConservationComponent implements Styler {
   @Input() borderPixels = 1;
   @Input() opacity = 0.25;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
-    this.layer.setStyle(this);
-  }
+  constructor(private map: OLMapComponent) {}
 
   style(): OLStyleFunction {
     return (conservation: any): OLStyle => {

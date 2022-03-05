@@ -65,7 +65,7 @@ export class OLInteractionSelectPolygonComponent
         event.type === this.eventType.toLowerCase(),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
-      style: this.layer.style?.styleWhenSelected()
+      style: this.layer.styleWhenSelected()
     });
   }
 

@@ -1,4 +1,3 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { RoadProperties } from '../geojson';
 import { Styler } from './ol-styler';
@@ -38,12 +37,7 @@ export class OLStyleRoadsComponent implements Styler {
   @Input() minRoadWidth = 10 /* 👈 feet */;
   @Input() rightOfWayRatio = 3;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
-    this.layer.setStyle(this);
-  }
+  constructor(private map: OLMapComponent) {}
 
   #drawText(props: RoadProperties, resolution: number): OLText {
     const fontSize = this.#fontSize(resolution);

@@ -1,4 +1,3 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStrokePatternType } from './ol-styler';
 import { Styler } from './ol-styler';
@@ -34,12 +33,7 @@ export class OLStyleStoneWallsComponent implements Styler {
   @Input() pattern: OLStrokePatternType = 'rocks';
   @Input() wallWidth = 25 /* 👈 feet */;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
-    this.layer.setStyle(this);
-  }
+  constructor(private map: OLMapComponent) {}
 
   #wallPixels(resolution: number): number {
     // 👉 wallWidth is proportional to the resolution,

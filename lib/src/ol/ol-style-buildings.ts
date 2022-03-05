@@ -1,4 +1,3 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
@@ -30,12 +29,7 @@ import OLStyle from 'ol/style/Style';
 export class OLStyleBuildingsComponent implements Styler {
   @Input() shadowLength = 10 /* 👈 feet */;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
-    this.layer.setStyle(this);
-  }
+  constructor(private map: OLMapComponent) {}
 
   style(): OLStyleFunction {
     return (building: any): OLStyle[] => {

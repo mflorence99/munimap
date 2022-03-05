@@ -1,4 +1,3 @@
-import { OLControlGraticuleComponent } from './ol-control-graticule';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
@@ -6,7 +5,6 @@ import { StylerComponent } from './ol-styler';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
-import { OnInit } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
@@ -29,17 +27,14 @@ import OLText from 'ol/style/Text';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleGraticuleComponent implements Styler, OnInit {
+export class OLStyleGraticuleComponent implements Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 8;
   @Input() fontWeight: 'bold' | 'normal' = 'normal';
   @Input() lineDash = [2, 2];
   @Input() lineWidth = 0.25;
 
-  constructor(
-    private control: OLControlGraticuleComponent,
-    private map: OLMapComponent
-  ) {}
+  constructor(private map: OLMapComponent) {}
 
   #border(): OLFill {
     // 👉 this is the part ofthe border that isn't the same
@@ -69,10 +64,6 @@ export class OLStyleGraticuleComponent implements Styler, OnInit {
       lineDash: this.lineDash,
       width: this.lineWidth
     });
-  }
-
-  ngOnInit(): void {
-    this.control.setStyle(this);
   }
 
   style(): OLStyle {

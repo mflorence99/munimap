@@ -1,4 +1,3 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { PlaceProperties } from '../geojson';
 import { PlacePropertiesType } from '../geojson';
@@ -136,12 +135,7 @@ export class OLStylePlacesComponent implements Styler {
   @Input() textAlign = 'center';
   @Input() textBaseline = 'bottom';
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
-    this.layer.setStyle(this);
-  }
+  constructor(private map: OLMapComponent) {}
 
   #attrs(props: PlaceProperties): PlaceStyleAttributes {
     // 👉 if the place type is in the exceptions list, use that

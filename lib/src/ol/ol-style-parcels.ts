@@ -1,4 +1,3 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
 import { OverlayState } from '../state/overlay';
@@ -103,12 +102,9 @@ export class OLStyleParcelsComponent implements Styler {
 
   constructor(
     private decimal: DecimalPipe,
-    private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private overlayState: OverlayState
-  ) {
-    this.layer.setStyle(this);
-  }
+  ) {}
 
   #borderPixels(resolution: number): number {
     // 👉 borderWidth is proportional to the resolution,

@@ -1,4 +1,3 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { RailroadProperties } from '../geojson';
 import { Styler } from './ol-styler';
@@ -38,12 +37,7 @@ export class OLStyleRailroadsComponent implements Styler {
   @Input() minTrackPixels = 3;
   @Input() trackWidth = 15 /* 👈 feet */;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
-    this.layer.setStyle(this);
-  }
+  constructor(private map: OLMapComponent) {}
 
   #color(props: RailroadProperties): string {
     return props.active

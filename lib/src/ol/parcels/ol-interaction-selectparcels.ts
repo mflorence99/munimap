@@ -102,7 +102,7 @@ export class OLInteractionSelectParcelsComponent
         event.type === this.eventType.toLowerCase(),
       layers: [this.layer.olLayer],
       multi: true,
-      style: this.layer.style?.styleWhenSelected()
+      style: this.layer.styleWhenSelected()
     });
     // 👉 one to rule them all
     this.#format = new OLGeoJSON({

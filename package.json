@@ -13,7 +13,7 @@
     "build:author": "npm run lint && ng build author --configuration production",
     "build:proxy": "npm run lint && npm run compile:proxy && cp proxy/package.json dist/proxy && npm --prefix dist/proxy i",
     "build:viewer:washington": "npm run lint && npm run assets:viewer:washington && ng build viewer --configuration production",
-    "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm install",
+    "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm install && npm outdated",
     "compile:proxy": "rm -rf dist/proxy/node_modules && rm -f dist/proxy/package-lock.json && tsc -p proxy/src",
     "deploy:aws:author": "./author/deploy-aws.sh",
     "deploy:aws:proxy": "npm run build:proxy && cp proxy/serverless.yml dist/proxy && cd dist/proxy && serverless deploy",
@@ -119,7 +119,7 @@
     "object-hash": "^3",
     "ol": "^6",
     "ol-ext": "^3",
-    "ol-mapbox-style": "^6",
+    "ol-mapbox-style": "^7",
     "polylabel": "^1",
     "proj4": "^2",
     "request": "^2",
@@ -135,7 +135,7 @@
     "uuid": "^8",
     "xmldom": "^0.6.0",
     "yargs": "^17",
-    "zone.js": "^0.11.4"
+    "zone.js": "^0.11.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^13",
