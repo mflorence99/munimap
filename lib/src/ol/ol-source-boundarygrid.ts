@@ -1,7 +1,6 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
-import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
@@ -14,7 +13,7 @@ import OLVector from 'ol/source/Vector';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceBoundaryGridComponent implements AfterContentInit {
+export class OLSourceBoundaryGridComponent {
   olVector: OLVector<any>;
 
   constructor(
@@ -22,9 +21,6 @@ export class OLSourceBoundaryGridComponent implements AfterContentInit {
     private map: OLMapComponent
   ) {
     this.olVector = new OLVector();
-  }
-
-  ngAfterContentInit(): void {
     this.olVector.addFeatures(
       new GeoJSON().readFeatures(this.map.boundaryGrid, {
         featureProjection: this.map.projection

@@ -38,7 +38,6 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
     this.olXYZ.setAttributions(
       this.attributions.map((attribution) => attribution.getAttribution())
     );
-    this.layer.olLayer.setSource(this.olXYZ);
   }
 
   ngOnInit(): void {
@@ -51,5 +50,6 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
       maxZoom: this.maxZoom,
       url: `${environment.endpoints.proxy}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
     });
+    this.layer.olLayer.setSource(this.olXYZ);
   }
 }
