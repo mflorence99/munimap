@@ -1,9 +1,10 @@
-import { DestroyService } from '../services/destroy';
-import { OLLayerMapboxComponent } from './ol-layer-mapbox';
-import { OLLayerTileComponent } from './ol-layer-tile';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLLayerVectorTileComponent } from './ol-layer-vectortile';
-import { OLMapComponent } from './ol-map';
+import { DestroyService } from '../../services/destroy';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
+import { OLLayerMapboxComponent } from '../ol-layer-mapbox';
+import { OLLayerTileComponent } from '../ol-layer-tile';
+import { OLLayerVectorComponent } from '../ol-layer-vector';
+import { OLLayerVectorTileComponent } from '../ol-layer-vectortile';
+import { OLMapComponent } from '../ol-map';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -21,11 +22,11 @@ import union from '@turf/union';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-filter-crop2selected',
+  selector: 'app-ol-filter-crop2selectedparcels',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLFilterCrop2SelectedComponent
+export class OLFilterCrop2SelectedParcelsComponent
   implements AfterContentInit, OnDestroy, OnInit
 {
   #format: OLGeoJSON;
@@ -53,8 +54,9 @@ export class OLFilterCrop2SelectedComponent
     // 👉 remove prior filter
     if (this.olFilter) this.#layer.olLayer['removeFilter'](this.olFilter);
     // 👇 build a new filter as the union of all the selected parcels
-    if (this.map.selector?.selected?.length > 0) {
-      const geojsons = this.map.selector.selected.map((feature) =>
+    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    if (selector.selected?.length > 0) {
+      const geojsons = selector.selected.map((feature) =>
         JSON.parse(this.#format.writeFeature(feature))
       );
       const merged: any = {

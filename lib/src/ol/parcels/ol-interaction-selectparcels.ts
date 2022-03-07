@@ -5,6 +5,8 @@ import { MapableComponent } from '../ol-mapable';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
 import { ParcelID } from '../../geojson';
+import { Selector } from '../ol-selector';
+import { SelectorComponent } from '../ol-selector';
 
 import * as Comlink from 'comlink';
 
@@ -42,6 +44,10 @@ import OLSelect from 'ol/interaction/Select';
       provide: MapableComponent,
       useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
     },
+    {
+      provide: SelectorComponent,
+      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
+    },
     DestroyService
   ],
   selector: 'app-ol-interaction-selectparcels',
@@ -49,7 +55,7 @@ import OLSelect from 'ol/interaction/Select';
   styleUrls: ['./ol-interaction-selectparcels.scss']
 })
 export class OLInteractionSelectParcelsComponent
-  implements AfterContentInit, Mapable, OnDestroy, OnInit
+  implements AfterContentInit, Mapable, OnDestroy, OnInit, Selector
 {
   #abuttersWorker: any /* 👈 TypeScript no help here */;
   #featuresLoadEndKey: OLEventsKey;
@@ -109,8 +115,6 @@ export class OLInteractionSelectParcelsComponent
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
-    // 👉 register this selector with the map
-    this.map.selector = this;
   }
 
   #createAbuttersWorker(): void {

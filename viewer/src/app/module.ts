@@ -54,7 +54,7 @@ import { OLControlSplitScreenComponent } from '@lib/ol/ol-control-splitscreen';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
-import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
+import { OLFilterCrop2SelectedParcelsComponent } from '@lib/ol/parcels/ol-filter-crop2selectedparcels';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
@@ -157,7 +157,7 @@ const COMPONENTS = [
   OLControlZoomToExtentComponent,
   OLFilterColorizeComponent,
   OLFilterCrop2BoundaryComponent,
-  OLFilterCrop2SelectedComponent,
+  OLFilterCrop2SelectedParcelsComponent,
   OLInteractionSelectParcelsComponent,
   OLLayerMapboxComponent,
   OLLayerTileComponent,

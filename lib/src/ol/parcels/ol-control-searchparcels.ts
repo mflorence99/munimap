@@ -2,10 +2,13 @@ import { DestroyService } from '../../services/destroy';
 import { Feature } from '../../geojson';
 import { Features } from '../../geojson';
 import { GeoJSONService } from '../../services/geojson';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../geojson';
 import { ParcelID } from '../../geojson';
 import { ParcelsState } from '../../state/parcels';
+import { Searcher } from '../ol-searcher';
+import { SearcherComponent } from '../ol-searcher';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -17,6 +20,7 @@ import { Select } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
+import { forwardRef } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
@@ -30,12 +34,18 @@ interface Override {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
+  providers: [
+    {
+      provide: SearcherComponent,
+      useExisting: forwardRef(() => OLControlSearchParcelsComponent)
+    },
+    DestroyService
+  ],
   selector: 'app-ol-control-searchparcels',
   templateUrl: './ol-control-searchparcels.html',
   styleUrls: ['./ol-control-searchparcels.scss']
 })
-export class OLControlSearchParcelsComponent implements OnInit {
+export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   #geojson$ = new Subject<Features>();
 
   #overridesByID: Record<ParcelID, Override> = {};
@@ -64,7 +74,7 @@ export class OLControlSearchParcelsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     // 👉 register searcher with map
-    this.map.searcher = this;
+    // this.map.searcher = this;
   }
 
   #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
@@ -194,7 +204,8 @@ export class OLControlSearchParcelsComponent implements OnInit {
       this.matches = [];
       const ids = searchables.map((searchable) => searchable.id).join(', ');
       console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
-      this.map.selector?.selectParcels(
+      const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+      selector?.selectParcels(
         searchables.map((searchable) => {
           const override = this.#overridesByID[searchable.id];
           if (override?.bbox) return { ...searchable, bbox: override.bbox };

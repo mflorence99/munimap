@@ -75,7 +75,6 @@ import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
-import { OLFilterCrop2SelectedComponent } from '@lib/ol/ol-filter-crop2selected';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
 import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
@@ -208,7 +207,6 @@ const COMPONENTS = [
   OLControlZoomToExtentComponent,
   OLFilterColorizeComponent,
   OLFilterCrop2BoundaryComponent,
-  OLFilterCrop2SelectedComponent,
   OLFilterPencilComponent,
   OLInteractionBoundaryComponent,
   OLInteractionRedrawParcelComponent,

@@ -1,9 +1,11 @@
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
-import { OLControlSearchParcelsComponent } from './parcels/ol-control-searchparcels';
-import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
 import { Path } from '../state/view';
+import { Searcher } from './ol-searcher';
+import { SearcherComponent } from './ol-searcher';
+import { Selector } from './ol-selector';
+import { SelectorComponent } from './ol-selector';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
 
@@ -13,6 +15,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { ContentChild } from '@angular/core';
 import { ContentChildren } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
@@ -88,8 +91,8 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   printing = false;
   projection = 'EPSG:3857';
 
-  searcher: OLControlSearchParcelsComponent;
-  selector: OLInteractionSelectParcelsComponent;
+  @ContentChild(SearcherComponent) searcher: Searcher;
+  @ContentChild(SelectorComponent) selector: Selector;
 
   vars: Record<string, string> = {};
 

@@ -1,6 +1,7 @@
 import { DestroyService } from '../services/destroy';
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
+import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OverlayProperty } from '../state/overlay';
@@ -125,9 +126,10 @@ export class OLSourceParcelsComponent implements OnInit {
         });
         // 👉 reselect selected features b/c we've potentially removed them
         if (this.map.selector) {
-          const selectedIDs = this.map.selector.selectedIDs;
-          if (selectedIDs.length > 0)
-            this.map.selector.reselectParcels(selectedIDs);
+          const selector = this.map
+            .selector as OLInteractionSelectParcelsComponent;
+          const selectedIDs = selector.selectedIDs;
+          if (selectedIDs.length > 0) selector.reselectParcels(selectedIDs);
         }
         this.#success?.(features);
       });

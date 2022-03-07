@@ -1,4 +1,5 @@
 import { Feature } from '../../geojson';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLMapComponent } from '../ol-map';
 import { ParcelID } from '../../geojson';
 import { ParcelProperties } from '../../geojson';
@@ -68,7 +69,8 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleAbuttersFound$(): void {
-    /* 🔥 this.#subToAbutters = */ this.map.selector?.abuttersFound
+    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    /* 🔥 this.#subToAbutters = */ selector?.abuttersFound
       .pipe(
         map((features: Feature[]): Abutter[] =>
           features
@@ -91,7 +93,8 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleFeaturesSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.map.selector?.featuresSelected
+    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    /* 🔥 this.#subToSelection = */ selector?.featuresSelected
       .pipe(
         map((features: OLFeature<any>[]): ParcelProperties[] =>
           features.map((feature) => feature.getProperties())
@@ -170,14 +173,16 @@ export class OLPopupParcelPropertiesComponent {
 
   onClose(): void {
     this.snackBar.dismiss();
-    this.map.selector?.unselectParcels();
+    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    selector?.unselectParcels();
     // 🔥  this doesn't seem to work
     // this.#subToAbutters?.unsubscribe();
     // this.#subToSelection?.unsubscribe();
   }
 
   onSelect(abutterID: ParcelID): void {
-    this.map.selector?.reselectParcels([abutterID]);
+    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    selector?.reselectParcels([abutterID]);
   }
 
   sum(array: number[]): number {

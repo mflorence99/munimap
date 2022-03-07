@@ -1,3 +1,4 @@
+import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
 import { OverlayState } from '../state/overlay';
@@ -652,8 +653,9 @@ export class OLStyleParcelsComponent implements Styler {
       const props = feature.getProperties() as ParcelProperties;
       const whenRedrawn = false;
       const whenSelected = false;
+      const selector = this.map.selector as OLInteractionSelectParcelsComponent;
       const whenAbutted =
-        this.showAbutters && this.map.selector?.abutterIDs?.includes(props.id);
+        this.showAbutters && selector?.abutterIDs?.includes(props.id);
       return this.#theStyles(
         feature,
         resolution,
