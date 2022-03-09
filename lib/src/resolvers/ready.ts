@@ -11,6 +11,7 @@ import { filter } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ReadyResolver implements Resolve<boolean> {
@@ -25,6 +26,10 @@ export class ReadyResolver implements Resolve<boolean> {
     return either$.pipe(
       map((profile) => !!profile),
       filter((ready) => ready),
+      tap(() => {
+        const root = document.querySelector('app-root');
+        root.classList.add('ready');
+      }),
       take(1)
     );
   }

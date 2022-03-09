@@ -11,11 +11,12 @@
   height: 100%;
   justify-content: center;
   margin: 0;
-  opacity: 0;
+  opacity: 1;
   position: absolute;
+  top: 0;
   transition: opacity 1s ease-in-out;
   width: 100%;
-  z-index: -99999;
+  z-index: 1;
 }
 
 .startup-caption,
@@ -42,9 +43,18 @@
   width: 64px;
 }
 
-app-root:empty + .startup-loading {
-  opacity: 1;
-  z-index: 1;
+/* 👇 author UI is visible as soon as app is loaded */
+
+app-root.author:not(:empty) + .startup-loading {
+  opacity: 0;
+  z-index: -1;
+}
+
+/* 👇 but we hide the viewer until the anon login is complete */
+
+app-root.viewer.ready + .startup-loading {
+  opacity: 0;
+  z-index: -1;
 }
 
 @keyframes startup-wiggler {
