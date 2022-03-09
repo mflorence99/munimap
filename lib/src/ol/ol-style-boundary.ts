@@ -33,12 +33,13 @@ export class OLStyleBoundaryComponent implements Styler {
 
   style(): OLStyleFunction {
     return (): OLStyle => {
-      const gravel = this.map.vars['--map-boundary-fill'];
+      const color = this.map.vars['--map-boundary-fill'];
+      const shaded = this.map.vars['--map-boundary-shaded'];
       // 🐛 FillPattern sometimes throws InvalidStateError
-      let fill = new OLFill({ color: `rgba(255, 255, 255, 1)` });
+      let fill = new OLFill({ color: `rgba(${color}, 1)` });
       try {
         fill = new OLFillPattern({
-          color: `rgba(${gravel}, 1)`,
+          color: `rgba(${shaded}, 1)`,
           fill: fill,
           pattern: this.pattern
         });

@@ -10,6 +10,7 @@ import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
 import { PropertiesComponent } from './pages/properties';
 import { RootPage } from './pages/root/page';
+import { StreetsPage } from './pages/streets/page';
 import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
 import { TopoPage } from './pages/topo/page';
 
@@ -264,7 +265,14 @@ const COMPONENTS = [
 
 const DIRECTIVES = [ContextMenuHostDirective, WorkgroupValidator];
 
-const PAGES = [LoginPage, CreatePage, ParcelsPage, RootPage, TopoPage];
+const PAGES = [
+  LoginPage,
+  CreatePage,
+  ParcelsPage,
+  RootPage,
+  StreetsPage,
+  TopoPage
+];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -295,6 +303,11 @@ const ROUTES = [
         path: 'parcels/:id',
         component: ParcelsPage,
         data: { state: 'parcels' }
+      },
+      {
+        path: 'streets/:id',
+        component: StreetsPage,
+        data: { state: 'streets' }
       },
       {
         path: 'topo/:id',
