@@ -3,7 +3,10 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import OLStyle from 'ol/style/Style';
 
+// 👇 https://sambleckley.com/writing/angular-mixed-type-contentchildren-that-share-an-interface.html
+
 // 👇 https://stackoverflow.com/questions/27522973
+
 export interface Styler {
   style: () => OLStyleFunction | OLStyle | OLStyle[];
   styleWhenSelected?: () => OLStyleFunction | OLStyle | OLStyle[];
