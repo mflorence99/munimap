@@ -28,6 +28,7 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
 
   olXYZ: OLXYZ;
 
+  @Input() s: string[] = [];
   @Input() url: string;
 
   constructor(private http: HttpClient, private layer: OLLayerTileComponent) {}
@@ -48,7 +49,9 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
     this.olXYZ = new OLXYZ({
       crossOrigin: 'anonymous',
       maxZoom: this.maxZoom,
-      url: `${environment.endpoints.proxy}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
+      url: `${environment.endpoints.proxy}/proxy/${
+        parsed.hostname
+      }?url=${encoded}&x={x}&y={y}&z={z}&s=${this.s.join(',')}`
     });
     this.layer.olLayer.setSource(this.olXYZ);
   }

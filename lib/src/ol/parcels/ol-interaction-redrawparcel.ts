@@ -17,6 +17,7 @@ import { Store } from '@ngxs/store';
 
 import { click } from 'ol/events/condition';
 import { merge } from 'rxjs';
+import { of } from 'rxjs';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
@@ -63,7 +64,7 @@ export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
   // 👇 the idea is that a selection change or ESC accepts the redraw
 
   #handleStreams$(): void {
-    merge(this.map.escape$, this.map.selector?.featuresSelected)
+    merge(this.map.escape$, this.map.selector?.featuresSelected ?? of<any>())
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.#touched) this.#saveRedraw();
@@ -114,7 +115,9 @@ export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.#handleStreams$();
+    // 🔥 CRAP can't use the selector here because it's not ready
+    //    until map's AfterContentInit
+    setTimeout(() => this.#handleStreams$(), 0);
   }
 
   // 👉 setFeature is called by the contextmenu code to initiate

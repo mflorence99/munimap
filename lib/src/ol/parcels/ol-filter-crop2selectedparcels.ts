@@ -106,6 +106,8 @@ export class OLFilterCrop2SelectedParcelsComponent
   }
 
   ngOnInit(): void {
-    this.#handleFeaturesSelected$();
+    // 🔥 CRAP can't use the selector here because it's not ready
+    //    until map's AfterContentInit
+    setTimeout(() => this.#handleFeaturesSelected$(), 0);
   }
 }

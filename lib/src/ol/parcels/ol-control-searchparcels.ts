@@ -72,10 +72,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     private map: OLMapComponent,
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
-  ) {
-    // 👉 register searcher with map
-    // this.map.searcher = this;
-  }
+  ) {}
 
   #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);

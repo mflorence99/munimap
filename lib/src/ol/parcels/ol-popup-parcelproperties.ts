@@ -64,8 +64,10 @@ export class OLPopupParcelPropertiesComponent {
     private utils: UtilsService
   ) {
     // 👉 see above, no ngOnInit where we'd normally do this
-    this.#handleAbuttersFound$();
-    this.#handleFeaturesSelected$();
+    setTimeout(() => {
+      this.#handleAbuttersFound$();
+      this.#handleFeaturesSelected$();
+    }, 0);
   }
 
   #handleAbuttersFound$(): void {

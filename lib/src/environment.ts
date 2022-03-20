@@ -25,6 +25,11 @@ export const environment = {
     measurementId: 'G-NZNZ5E4EV7'
   },
 
+  google: {
+    // 👇 don't panic! domain protected
+    apiKey: 'AIzaSyCAYavpwIUZOayj72XA3AZYJeYjlVscqvk'
+  },
+
   mapbox: {
     // 👇 don't panic! domain protected
     apiKey:
