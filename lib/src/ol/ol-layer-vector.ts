@@ -1,7 +1,6 @@
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
-import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -12,8 +11,8 @@ import { QueryList } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
-import OLStyle from 'ol/style/Style';
 
+import OLStyle from 'ol/style/Style';
 import OLVector from 'ol/layer/Vector';
 
 @Component({
@@ -45,20 +44,20 @@ export class OLLayerVectorComponent implements Mapable {
   constructor(private map: OLMapComponent) {
     this.olLayer = new OLVector({
       source: null,
-      style: this.#style()
+      style: this.style()
     });
   }
 
-  #style(): OLStyleFunction {
+  addToMap(): void {
+    this.map.olMap.addLayer(this.olLayer);
+  }
+
+  style(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] =>
       this.stylers$
         .map((styler) => styler.style()(feature, resolution))
         .flat()
         .filter((style) => !!style);
-  }
-
-  addToMap(): void {
-    this.map.olMap.addLayer(this.olLayer);
   }
 
   styleWhenSelected(): OLStyleFunction {
