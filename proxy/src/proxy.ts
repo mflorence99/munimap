@@ -150,11 +150,11 @@ export class ProxyServer extends Handler {
             tap((buffer) => {
               if (response.statusCode === 200) {
                 // 👇 if the data is smaller than the minumum size,
-                //    treat it as an error
+                //    don't cache it
                 if (Buffer.byteLength(buffer) >= this.#opts.minSize) {
                   fs.mkdirSync(fdir, { recursive: true });
                   fs.writeFile(fpath, buffer, () => {});
-                } else response.statusCode = 404;
+                }
               }
             }),
             tap((buffer) => {
