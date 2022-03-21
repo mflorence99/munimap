@@ -64,15 +64,12 @@ export class OLPopupParcelPropertiesComponent {
     private utils: UtilsService
   ) {
     // 👉 see above, no ngOnInit where we'd normally do this
-    setTimeout(() => {
-      this.#handleAbuttersFound$();
-      this.#handleFeaturesSelected$();
-    }, 0);
+    this.#handleAbuttersFound$();
+    this.#handleFeaturesSelected$();
   }
 
   #handleAbuttersFound$(): void {
-    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    /* 🔥 this.#subToAbutters = */ selector?.abuttersFound
+    /* 🔥 this.#subToAbutters = */ this.map.abuttersFound
       .pipe(
         map((features: Feature[]): Abutter[] =>
           features
@@ -95,8 +92,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleFeaturesSelected$(): void {
-    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    /* 🔥 this.#subToSelection = */ selector?.featuresSelected
+    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
       .pipe(
         map((features: OLFeature<any>[]): ParcelProperties[] =>
           features.map((feature) => feature.getProperties())
@@ -175,16 +171,18 @@ export class OLPopupParcelPropertiesComponent {
 
   onClose(): void {
     this.snackBar.dismiss();
+    // 👉 there HAS to be a selector, or else we couldn't be here
     const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    selector?.unselectParcels();
+    selector.unselectParcels();
     // 🔥  this doesn't seem to work
     // this.#subToAbutters?.unsubscribe();
     // this.#subToSelection?.unsubscribe();
   }
 
   onSelect(abutterID: ParcelID): void {
+    // 👉 there HAS to be a selector, or else we couldn't be here
     const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    selector?.reselectParcels([abutterID]);
+    selector.reselectParcels([abutterID]);
   }
 
   sum(array: number[]): number {

@@ -20,6 +20,7 @@ import { DestroyService } from '@lib/services/destroy';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
+import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
@@ -79,8 +80,9 @@ export class ParcelsPage extends AbstractMapPage {
     comp.drawer = this.drawer;
     comp.map = this.olMap;
     // 👉 there HAS to be a selector, or else we couldn't be here
-    const source = this.olMap.selector.layer.olLayer.getSource();
-    comp.selectedIDs = this.olMap.selector.selectedIDs;
+    const selector = this.olMap.selector as OLInteractionSelectParcelsComponent;
+    const source = selector.layer.olLayer.getSource();
+    comp.selectedIDs = selector.selectedIDs;
     comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
     // 👉 watch for delta in features
     const key = source.on('featuresloadend', () => {
@@ -97,27 +99,27 @@ export class ParcelsPage extends AbstractMapPage {
   }
 
   canAddParcel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector?.selectedIDs.length === 0);
+    return this.#can(event, this.olMap.selectedIDs.length === 0);
   }
 
   canMergeParcels(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector?.selectedIDs.length > 1);
+    return this.#can(event, this.olMap.selectedIDs.length > 1);
   }
 
   canParcelProperties(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector?.selectedIDs.length > 0);
+    return this.#can(event, this.olMap.selectedIDs.length > 0);
   }
 
   canRecenterLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector?.selectedIDs.length === 1);
+    return this.#can(event, this.olMap.selectedIDs.length === 1);
   }
 
   canRedrawBoundary(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector?.selectedIDs.length === 1);
+    return this.#can(event, this.olMap.selectedIDs.length === 1);
   }
 
   canSubdivideParcel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selector?.selectedIDs.length === 1);
+    return this.#can(event, this.olMap.selectedIDs.length === 1);
   }
 
   getType(): string {
@@ -139,10 +141,10 @@ export class ParcelsPage extends AbstractMapPage {
         cFactory = this.resolver.resolveComponentFactory(MergeParcelsComponent);
         break;
       case 'recenter-label':
-        this.overlayLabel.setFeature(this.olMap.selector.selected[0]);
+        this.overlayLabel.setFeature(this.olMap.selected[0]);
         break;
       case 'redraw-boundary':
-        this.interactionRedraw.setFeature(this.olMap.selector.selected[0]);
+        this.interactionRedraw.setFeature(this.olMap.selected[0]);
         break;
       case 'subdivide-parcel':
         cFactory = this.resolver.resolveComponentFactory(

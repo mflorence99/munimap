@@ -182,7 +182,7 @@
 
       <!-- 📦 SATELLITE OVERLAY FOR SELECTION  -->
 
-      <app-ol-layer-tile *ngIf="olMap.selector?.selected?.length">
+      <app-ol-layer-tile *ngIf="olMap.selected.length">
         <app-ol-source-xyz
           [s]="['mt0', 'mt1', 'mt2', 'mt3']"
           [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"

@@ -1,6 +1,8 @@
+import { Feature } from '../geojson';
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
+import { ParcelID } from '../geojson';
 import { Path } from '../state/view';
 import { Searcher } from './ol-searcher';
 import { SearcherComponent } from './ol-searcher';
@@ -29,6 +31,7 @@ import { Output } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
@@ -37,6 +40,7 @@ import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
 
 import centerOfMass from '@turf/center-of-mass';
+import OLFeature from 'ol/Feature';
 import OLMap from 'ol/Map';
 import OLMapBrowserEvent from 'ol/MapBrowserEvent';
 import OLView from 'ol/View';
@@ -48,10 +52,20 @@ import squareGrid from '@turf/square-grid';
   templateUrl: './ol-map.html',
   styleUrls: ['./ol-map.scss']
 })
-export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
+export class OLMapComponent
+  implements AfterContentInit, OnDestroy, OnInit, Searcher, Selector
+{
   #changeKey: OLEventsKey;
   #clickKey: OLEventsKey;
+  #origControls: string[];
+  #origInteractions: string[];
+  #origLayers: string[];
   #path: Path;
+  #subToAbuttersFound: Subscription;
+  #subToFeaturesSelected: Subscription;
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  abuttersFound = new EventEmitter<Feature[]>();
 
   boundary: Features;
   boundaryExtent: Coordinate;
@@ -64,6 +78,9 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   escape$ = new Subject<KeyboardEvent>();
 
   featureProjection = 'EPSG:4326';
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() fitToBounds = false;
   @Input() gridRequired = false;
@@ -92,6 +109,17 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   projection = 'EPSG:3857';
 
   @ContentChild(SearcherComponent) searcher: Searcher;
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  get selected(): OLFeature<any>[] {
+    return this.selector?.selected ?? [];
+  }
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  get selectedIDs(): ParcelID[] {
+    return this.selector?.selectedIDs ?? [];
+  }
+
   @ContentChild(SelectorComponent) selector: Selector;
 
   vars: Record<string, string> = {};
@@ -113,6 +141,19 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
       target: null,
       view: null
     });
+    // 👉 capture the original contents of the map
+    this.#origControls = this.olMap
+      .getControls()
+      .getArray()
+      .map((control) => control.constructor.name);
+    this.#origInteractions = this.olMap
+      .getInteractions()
+      .getArray()
+      .map((interaction) => interaction.constructor.name);
+    this.#origLayers = this.olMap
+      .getLayers()
+      .getArray()
+      .map((layer) => layer.constructor.name);
     // 👉 get these up front, all at once,
     //    meaning we don't expect them to change
     this.vars = this.#findAllCustomVariables();
@@ -121,16 +162,24 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
   // 👇 https://stackoverflow.com/questions/40862706
   #cleanMap(): void {
     const controls = [...this.olMap.getControls().getArray()];
-    controls.forEach((control) => this.olMap.removeControl(control));
+    controls.forEach((control) => {
+      // 👇 this should never happen, as there are no default controls
+      if (!this.#origControls.includes(control.constructor.name))
+        this.olMap.removeControl(control);
+    });
     const interactions = [...this.olMap.getInteractions().getArray()];
     interactions.forEach((interaction) => {
-      // 🔥 OL adds a bunch of interactions of its own
+      // 👇 OL adds a bunch of interactions of its own
       //    that we don't want to remove
-      if ([this.selector?.olSelect].includes(interaction as any))
+      if (!this.#origInteractions.includes(interaction.constructor.name))
         this.olMap.removeInteraction(interaction);
     });
     const layers = [...this.olMap.getLayers().getArray()];
-    layers.forEach((layer) => this.olMap.removeLayer(layer));
+    layers.forEach((layer) => {
+      // 👇 this should never happen, as there are no default layers
+      if (!this.#origLayers.includes(layer.constructor.name))
+        this.olMap.removeLayer(layer);
+    });
   }
 
   #createView(boundary: Features): void {
@@ -229,6 +278,17 @@ export class OLMapComponent implements AfterContentInit, OnDestroy, OnInit {
     this.mapables$.changes.subscribe((list) => {
       this.#cleanMap();
       list.forEach((mapable) => mapable.addToMap());
+      // 👉 proxy any selector events
+      this.#subToAbuttersFound?.unsubscribe();
+      this.#subToAbuttersFound = this.selector?.abuttersFound.subscribe(
+        (abutters) => this.abuttersFound.emit(abutters)
+      );
+      this.#subToFeaturesSelected?.unsubscribe();
+      this.#subToFeaturesSelected = this.selector?.featuresSelected.subscribe(
+        (features) => {
+          this.featuresSelected.emit(features);
+        }
+      );
     });
   }
 

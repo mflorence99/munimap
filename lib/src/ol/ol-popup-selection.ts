@@ -31,7 +31,7 @@ export class OLPopupSelectionComponent implements OnInit {
   ) {}
 
   #handleFeaturesSelected$(): void {
-    this.map.selector?.featuresSelected
+    this.map.featuresSelected
       .pipe(takeUntil(this.destroy$))
       .subscribe((features) => {
         // 👇 the idea here is to keep the popup open until it is
@@ -45,8 +45,6 @@ export class OLPopupSelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 🔥 CRAP can't use the selector here because it's not ready
-    //    until map's AfterContentInit
-    setTimeout(() => this.#handleFeaturesSelected$(), 0);
+    this.#handleFeaturesSelected$();
   }
 }

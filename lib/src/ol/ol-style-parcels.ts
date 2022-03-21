@@ -653,9 +653,10 @@ export class OLStyleParcelsComponent implements Styler {
       const props = feature.getProperties() as ParcelProperties;
       const whenRedrawn = false;
       const whenSelected = false;
+      // 👉 there HAS to be a selector, or else we couldn't be here
       const selector = this.map.selector as OLInteractionSelectParcelsComponent;
       const whenAbutted =
-        this.showAbutters && selector?.abutterIDs?.includes(props.id);
+        this.showAbutters && selector.abutterIDs?.includes(props.id);
       return this.#theStyles(
         feature,
         resolution,

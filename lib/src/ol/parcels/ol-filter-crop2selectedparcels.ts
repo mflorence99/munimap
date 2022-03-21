@@ -53,8 +53,9 @@ export class OLFilterCrop2SelectedParcelsComponent
   #addFilter(): void {
     // 👉 remove prior filter
     if (this.olFilter) this.#layer.olLayer['removeFilter'](this.olFilter);
-    // 👇 build a new filter as the union of all the selected parcels
+    // 👉 there HAS to be a selector, or else we couldn't be here
     const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    // 👇 build a new filter as the union of all the selected parcels
     if (selector.selected?.length > 0) {
       const geojsons = selector.selected.map((feature) =>
         JSON.parse(this.#format.writeFeature(feature))
@@ -91,7 +92,7 @@ export class OLFilterCrop2SelectedParcelsComponent
   }
 
   #handleFeaturesSelected$(): void {
-    this.map.selector?.featuresSelected
+    this.map.featuresSelected
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.#addFilter());
   }
@@ -106,8 +107,6 @@ export class OLFilterCrop2SelectedParcelsComponent
   }
 
   ngOnInit(): void {
-    // 🔥 CRAP can't use the selector here because it's not ready
-    //    until map's AfterContentInit
-    setTimeout(() => this.#handleFeaturesSelected$(), 0);
+    this.#handleFeaturesSelected$();
   }
 }

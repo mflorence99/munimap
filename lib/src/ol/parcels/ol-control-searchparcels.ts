@@ -201,8 +201,9 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       this.matches = [];
       const ids = searchables.map((searchable) => searchable.id).join(', ');
       console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
+      // 👉 there HAS to be a selector, or else we couldn't be here
       const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-      selector?.selectParcels(
+      selector.selectParcels(
         searchables.map((searchable) => {
           const override = this.#overridesByID[searchable.id];
           if (override?.bbox) return { ...searchable, bbox: override.bbox };
