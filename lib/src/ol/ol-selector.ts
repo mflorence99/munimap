@@ -1,5 +1,5 @@
 import { Feature } from '../geojson';
-import { ParcelID } from '../geojson';
+import { FeatureID } from '../geojson';
 
 import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
@@ -12,7 +12,7 @@ export interface Selector {
   abuttersFound?: EventEmitter<Feature[]>;
   featuresSelected: EventEmitter<OLFeature<any>[]>;
   selected: OLFeature<any>[];
-  selectedIDs: ParcelID[];
+  selectedIDs: FeatureID[];
 }
 
 @Injectable()

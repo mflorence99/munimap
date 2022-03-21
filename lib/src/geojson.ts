@@ -18,6 +18,8 @@ export type Feature = GeoJSON.Feature<
   ParcelProperties
 >;
 
+export type FeatureID = string | number;
+
 export type Features = GeoJSON.FeatureCollection<
   GeoJSON.Polygon | GeoJSON.MultiPolygon,
   ParcelProperties
@@ -53,7 +55,7 @@ export interface Parcel extends Partial<Feature> {
 
 export type ParcelAction = 'added' | 'modified' | 'removed';
 
-export type ParcelID = string | number;
+export type ParcelID = FeatureID;
 
 // 👉 https://stackoverflow.com/questions/43909566
 

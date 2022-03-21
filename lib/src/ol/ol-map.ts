@@ -1,8 +1,8 @@
 import { Feature } from '../geojson';
+import { FeatureID } from '../geojson';
 import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
-import { ParcelID } from '../geojson';
 import { Path } from '../state/view';
 import { Searcher } from './ol-searcher';
 import { SearcherComponent } from './ol-searcher';
@@ -116,7 +116,7 @@ export class OLMapComponent
   }
 
   // 👉 proxy this from the real selector (if any) to ensure safe access
-  get selectedIDs(): ParcelID[] {
+  get selectedIDs(): FeatureID[] {
     return this.selector?.selectedIDs ?? [];
   }
 
