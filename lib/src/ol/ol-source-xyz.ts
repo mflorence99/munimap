@@ -10,6 +10,7 @@ import { ContentChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { Optional } from '@angular/core';
 import { QueryList } from '@angular/core';
 
 import OLXYZ from 'ol/source/XYZ';
@@ -31,7 +32,10 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
   @Input() s: string[] = [];
   @Input() url: string;
 
-  constructor(private http: HttpClient, private layer: OLLayerTileComponent) {}
+  constructor(
+    private http: HttpClient,
+    @Optional() private layer: OLLayerTileComponent
+  ) {}
 
   ngAfterContentInit(): void {
     // 👉 note that we're saying we don't expect
@@ -53,6 +57,6 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
         parsed.hostname
       }?url=${encoded}&x={x}&y={y}&z={z}&s=${this.s.join(',')}`
     });
-    this.layer.olLayer.setSource(this.olXYZ);
+    this.layer?.olLayer.setSource(this.olXYZ);
   }
 }

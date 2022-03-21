@@ -3,6 +3,7 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Optional } from '@angular/core';
 
 import GeoJSON from 'ol/format/GeoJSON';
 import OLVector from 'ol/source/Vector';
@@ -20,7 +21,7 @@ export class OLSourceBoundaryComponent {
   olVector: OLVector<any>;
 
   constructor(
-    private layer: OLLayerVectorComponent,
+    @Optional() private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
     this.olVector = new OLVector({ attributions: [attribution] });
@@ -29,6 +30,6 @@ export class OLSourceBoundaryComponent {
         featureProjection: this.map.projection
       })
     );
-    this.layer.olLayer.setSource(this.olVector);
+    this.layer?.olLayer.setSource(this.olVector);
   }
 }

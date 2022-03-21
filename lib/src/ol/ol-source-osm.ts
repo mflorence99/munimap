@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { Optional } from '@angular/core';
 
 import OLOSM from 'ol/source/OSM';
 
@@ -18,12 +19,12 @@ export class OLSourceOSMComponent implements OnInit {
 
   olOSM: OLOSM;
 
-  constructor(private layer: OLLayerTileComponent) {}
+  constructor(@Optional() private layer: OLLayerTileComponent) {}
 
   ngOnInit(): void {
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olOSM = new OLOSM({ maxZoom: this.maxZoom });
-    this.layer.olLayer.setSource(this.olOSM);
+    this.layer?.olLayer.setSource(this.olOSM);
   }
 }

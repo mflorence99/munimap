@@ -8,6 +8,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { Input } from '@angular/core';
+import { Optional } from '@angular/core';
 
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { map } from 'rxjs/operators';
@@ -39,7 +40,7 @@ export class OLSourceGeoJSONComponent {
 
   constructor(
     private geoJSON: GeoJSONService,
-    private layer: OLLayerVectorComponent,
+    @Optional() private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
@@ -49,7 +50,7 @@ export class OLSourceGeoJSONComponent {
       loader: this.#loader.bind(this),
       strategy: bboxStrategy
     });
-    this.layer.olLayer.setSource(this.olVector);
+    this.layer?.olLayer.setSource(this.olVector);
   }
 
   #loader(

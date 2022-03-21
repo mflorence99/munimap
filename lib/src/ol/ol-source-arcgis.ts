@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
+import { Optional } from '@angular/core';
 
 import { arcgisToGeoJSON } from '@esri/arcgis-to-geojson-utils';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
@@ -39,7 +40,7 @@ export abstract class OLSourceArcGISComponent {
   constructor(
     private cache: CacheService,
     private http: HttpClient,
-    private layer: OLLayerVectorComponent,
+    @Optional() private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
     this.olVector = new OLVector({
@@ -48,7 +49,7 @@ export abstract class OLSourceArcGISComponent {
       loader: this.#loader.bind(this),
       strategy: bboxStrategy
     });
-    this.layer.olLayer.setSource(this.olVector);
+    this.layer?.olLayer.setSource(this.olVector);
   }
 
   #gridsFromExtent(extent: Coordinate, projection: OLProjection): Coordinate[] {

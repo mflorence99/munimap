@@ -5,6 +5,7 @@ import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Optional } from '@angular/core';
 
 import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
@@ -24,7 +25,7 @@ export class OLSourceContoursComponent {
     'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256';
 
   constructor(
-    private layer: OLLayerTileComponent,
+    @Optional() private layer: OLLayerTileComponent,
     private map: OLMapComponent
   ) {
     this.olTileWMS = new OLTileWMS({
@@ -35,7 +36,7 @@ export class OLSourceContoursComponent {
       tileLoadFunction: this.#loader.bind(this),
       url: 'http://dummy.com'
     });
-    this.layer.olLayer.setSource(this.olTileWMS);
+    this.layer?.olLayer.setSource(this.olTileWMS);
   }
 
   #loader(tile: OLImageTile, src: string): void {

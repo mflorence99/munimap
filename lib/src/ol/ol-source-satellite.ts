@@ -6,6 +6,7 @@ import { environment } from '../environment';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { Optional } from '@angular/core';
 
 import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
@@ -59,7 +60,7 @@ export class OLSourceSatelliteComponent {
   }
 
   constructor(
-    private layer: OLLayerTileComponent,
+    @Optional() private layer: OLLayerTileComponent,
     private map: OLMapComponent
   ) {
     this.olTileWMS = new OLTileWMS({
@@ -70,7 +71,7 @@ export class OLSourceSatelliteComponent {
       tileLoadFunction: this.#loader.bind(this),
       url: 'http://dummy.com'
     });
-    this.layer.olLayer.setSource(this.olTileWMS);
+    this.layer?.olLayer.setSource(this.olTileWMS);
   }
 
   #loader(tile: OLImageTile, src: string): void {
