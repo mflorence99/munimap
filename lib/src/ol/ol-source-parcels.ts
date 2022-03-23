@@ -19,7 +19,6 @@ import { Coordinate } from 'ol/coordinate';
 import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Optional } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
@@ -63,7 +62,7 @@ export class OLSourceParcelsComponent implements OnInit {
   constructor(
     private destroy$: DestroyService,
     private geoJSON: GeoJSONService,
-    @Optional() private layer: OLLayerVectorComponent,
+    private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
@@ -74,7 +73,7 @@ export class OLSourceParcelsComponent implements OnInit {
       loader: this.#loader.bind(this),
       strategy: bboxStrategy
     });
-    this.layer?.olLayer.setSource(this.olVector);
+    this.layer.olLayer.setSource(this.olVector);
   }
 
   #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): Set<ParcelID> {
