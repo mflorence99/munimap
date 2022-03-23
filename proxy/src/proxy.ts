@@ -73,17 +73,6 @@ export class ProxyServer extends Handler {
           url = url.replace(/\{z\}/, z);
         }
 
-        // 👉 decode any S parameter
-        let rpath = request.path; /* 👈 for logging */
-        const s = request.query.get('s');
-        if (s) {
-          const ss = s.split(',');
-          // 👇 https://stackoverflow.com/questions/5915096/get-a-random-item-from-a-javascript-array
-          const r = Math.floor(Math.random() * ss.length);
-          rpath = rpath.replace(/\{s\}/, ss[r]);
-          url = url.replace(/\{s\}/, ss[r]);
-        }
-
         // 👉 use the first 4 characters of the hash as a directory index
         const fname = hash.MD5(url);
         const fdir = path.join(
@@ -121,7 +110,7 @@ export class ProxyServer extends Handler {
             tap(() => {
               console.log(
                 chalk.yellow(request.method),
-                x && y && z ? `${rpath}/${x}/${y}/${z}` : rpath,
+                x && y && z ? `${request.path}/${x}/${y}/${z}` : request.path,
                 chalk.green(response.statusCode),
                 stat.mtime,
                 stat.size,
@@ -134,6 +123,15 @@ export class ProxyServer extends Handler {
 
         // 👉 use FETCH to GET the proxied URL if not cached
         else {
+          // 👉 decode any S parameter
+          const s = request.query.get('s');
+          if (s) {
+            const ss = s.split(',');
+            // 👇 https://stackoverflow.com/questions/5915096/get-a-random-item-from-a-javascript-array
+            const r = Math.floor(Math.random() * ss.length);
+            url = url.replace(/\{s\}/, ss[r]);
+          }
+
           return from(
             // 👇 DO proxy the referer (yes, that misspelling is correct!)
             //    and the user-agent to satisy API domain rstrictions
@@ -171,7 +169,7 @@ export class ProxyServer extends Handler {
             tap((buffer) => {
               console.log(
                 chalk.yellow(request.method),
-                x && y && z ? `${rpath}/${x}/${y}/${z}` : rpath,
+                x && y && z ? `${request.path}/${x}/${y}/${z}` : request.path,
                 chalk.green(response.statusCode),
                 Buffer.byteLength(buffer),
                 chalk.red('FETCHED')
