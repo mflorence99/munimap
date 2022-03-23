@@ -4,7 +4,8 @@ import { writeFileSync } from 'fs';
 import chalk from 'chalk';
 import DBFParser from 'node-dbf';
 
-// 👇 process the avitar database
+// 🔥 only washington has an avitar.dbf
+//    we'll have to change this a lot for others
 
 const avitarByID: Record<string, any> = {};
 

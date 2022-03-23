@@ -22,6 +22,9 @@ const towns = loadem(
 //    them with the boundaries of the border parcels
 
 const overrides = {
+  MERRIMACK: {
+    HENNIKER: loadem('./proxy/assets/henniker-boundary.geojson')
+  },
   SULLIVAN: {
     WASHINGTON: loadem('./proxy/assets/washington-boundary.geojson')
   }
