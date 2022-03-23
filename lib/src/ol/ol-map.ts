@@ -289,6 +289,11 @@ export class OLMapComponent
           this.featuresSelected.emit(features);
         }
       );
+      // 👉 when there's no selector, there are no features selected
+      if (!this.selector) {
+        this.abuttersFound.emit([]);
+        this.featuresSelected.emit([]);
+      }
     });
   }
 

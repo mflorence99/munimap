@@ -79,16 +79,22 @@ export class ParcelsPage extends AbstractMapPage {
     const comp = cRef.instance;
     comp.drawer = this.drawer;
     comp.map = this.olMap;
-    // 👉 there HAS to be a selector, or else we couldn't be here
+    // 👉 there really should be a selector, or else we couldn't be here
+    let key;
     const selector = this.olMap.selector as OLInteractionSelectParcelsComponent;
-    const source = selector.layer.olLayer.getSource();
-    comp.selectedIDs = selector.selectedIDs;
-    comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
-    // 👉 watch for delta in features
-    const key = source.on('featuresloadend', () => {
+    if (selector) {
+      const source = selector.layer.olLayer.getSource();
+      comp.selectedIDs = selector.selectedIDs;
       comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
-      comp.refresh();
-    });
+      // 👉 watch for delta in features
+      key = source.on('featuresloadend', () => {
+        comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+        comp.refresh();
+      });
+    } else {
+      comp.selectedIDs = [];
+      comp.features = [];
+    }
     // 👉 when the sidebar closes, clear the undo/redo stacks if
     //    they're populated from the sidebar, or else we'll be undoing
     //    operations that are invisible to the user
