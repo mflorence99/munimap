@@ -54,6 +54,13 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
+      <!-- 📦 HILLSHADE LAYER =-->
+
+      <app-ol-layer-tile [opacity]="0.66">
+        <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-tile>
+
       <!-- 📦 NH GranIT VECTOR LAYERS -->
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
