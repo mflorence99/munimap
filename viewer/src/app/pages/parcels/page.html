@@ -80,7 +80,9 @@
       <!-- 📦 NH GranIT VECTOR LAYERS -->
 
       <app-ol-layer-vector>
-        <app-ol-style-parcels [showBackground]="true"></app-ol-style-parcels>
+        <app-ol-style-parcels
+          [showBackground]="'always'"
+        ></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
 
@@ -122,14 +124,6 @@
         <app-ol-style-buildings></app-ol-style-buildings>
         <app-ol-source-geojson [layerKey]="'buildings'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-parcels
-          [showBorder]="true"
-          [showLabels]="true"
-        ></app-ol-style-parcels>
-        <app-ol-source-parcels> </app-ol-source-parcels>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
@@ -238,15 +232,6 @@
             ></app-ol-source-xyz
           >
         </app-ol-layer-tile>
-
-        <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-          <app-ol-style-parcels
-            [showBorder]="true"
-            [showLabelContrast]="true"
-            [showLabels]="true"
-          ></app-ol-style-parcels>
-          <app-ol-source-parcels></app-ol-source-parcels>
-        </app-ol-layer-vector>
       </ng-container>
     </ng-container>
 
@@ -261,11 +246,12 @@
 
     <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
       <app-ol-style-parcels
-        [showAbutters]="true"
-        [showDimensions]="true"
-        [showLabelContrast]="true"
-        [showLabels]="true"
-        [showSelection]="true"
+        [showAbutters]="'whenAbutted'"
+        [showBorder]="'always'"
+        [showDimensions]="'whenSelected'"
+        [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'whenSelected'"
+        [showLabels]="'always'"
+        [showSelection]="'always'"
       ></app-ol-style-parcels>
       <app-ol-source-parcels></app-ol-source-parcels>
       <app-ol-interaction-selectparcels

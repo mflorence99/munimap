@@ -53,6 +53,8 @@ interface Label {
   text: string;
 }
 
+type ShowStatus = 'always' | 'never' | 'whenAbutted' | 'whenSelected';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -92,13 +94,13 @@ export class OLStyleParcelsComponent implements Styler {
   @Input() maxFontSize = 40;
   @Input() minFontSize = 6;
   @Input() opacity = 0.25;
-  @Input() showAbutters = false;
-  @Input() showBackground = false;
-  @Input() showBorder = false;
-  @Input() showDimensions = false;
-  @Input() showLabelContrast = false;
-  @Input() showLabels = false;
-  @Input() showSelection = false;
+  @Input() showAbutters: ShowStatus = 'never';
+  @Input() showBackground: ShowStatus = 'never';
+  @Input() showBorder: ShowStatus = 'never';
+  @Input() showDimensions: ShowStatus = 'never';
+  @Input() showLabelContrast: ShowStatus = 'never';
+  @Input() showLabels: ShowStatus = 'never';
+  @Input() showSelection: ShowStatus = 'never';
   @Input() straightLineTolerance = 15;
 
   constructor(
@@ -119,43 +121,35 @@ export class OLStyleParcelsComponent implements Styler {
   #dimensions(
     props: ParcelProperties,
     resolution: number,
-    polygons: OLPolygon[],
-    whenSelected = false
+    polygons: OLPolygon[]
   ): OLStyle[] {
-    // 👇 only if selected when built for selection
-    if (this.showSelection && !whenSelected) return null;
-    else {
-      // 👉 we will draw the length of each "straight" line in each polygon
-      const color = this.map.vars['--map-parcel-text-inverse'];
-      const outline = this.map.vars['--map-parcel-text-color'];
-      const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
-      // 👉 get the fointSizes up front for each polygon
-      const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
-      return (
-        dimensions
-          // 👉 dont't try to draw the dimension if we can't see it
-          .filter((dimension) => fontSizes[dimension.ix] >= this.minFontSize)
-          .map((dimension) => {
-            const text = new OLText({
-              font: `bold ${fontSizes[dimension.ix]}px '${this.fontFamily}'`,
-              fill: new OLFill({ color: `rgba(${color}, 1)` }),
-              placement: 'line',
-              stroke: new OLStroke({
-                color: `rgba(${outline}, 1)`,
-                width: Math.min(
-                  fontSizes[dimension.ix] / 8,
-                  this.maxBorderPixels
-                )
-              }),
-              text: `${Math.round(dimension.length)}`
-            });
-            const geometry = new OLLineString(
-              dimension.path.map((p) => fromLonLat(p))
-            );
-            return new OLStyle({ geometry, text });
-          })
-      );
-    }
+    // 👉 we will draw the length of each "straight" line in each polygon
+    const color = this.map.vars['--map-parcel-text-inverse'];
+    const outline = this.map.vars['--map-parcel-text-color'];
+    const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
+    // 👉 get the fointSizes up front for each polygon
+    const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
+    return (
+      dimensions
+        // 👉 dont't try to draw the dimension if we can't see it
+        .filter((dimension) => fontSizes[dimension.ix] >= this.minFontSize)
+        .map((dimension) => {
+          const text = new OLText({
+            font: `bold ${fontSizes[dimension.ix]}px '${this.fontFamily}'`,
+            fill: new OLFill({ color: `rgba(${color}, 1)` }),
+            placement: 'line',
+            stroke: new OLStroke({
+              color: `rgba(${outline}, 1)`,
+              width: Math.min(fontSizes[dimension.ix] / 8, this.maxBorderPixels)
+            }),
+            text: `${Math.round(dimension.length)}`
+          });
+          const geometry = new OLLineString(
+            dimension.path.map((p) => fromLonLat(p))
+          );
+          return new OLStyle({ geometry, text, zIndex: 100 });
+        })
+    );
   }
 
   #dimensionsAnalyze(
@@ -360,20 +354,18 @@ export class OLStyleParcelsComponent implements Styler {
     props: ParcelProperties,
     resolution: number,
     numPolygons: number,
-    whenSelected = false
+    contrast: boolean
   ): OLStyle[] {
-    // 👇 only if selected when built for selection
-    if (this.showSelection && !whenSelected) return null;
     // 👇 only if feature's label will be visible
-    else if (
+    if (
       this.#labelFontSizeMax(props, resolution, numPolygons) < this.minFontSize
     )
       return null;
     else {
-      const color = this.showLabelContrast
+      const color = contrast
         ? this.map.vars['--map-parcel-text-inverse']
         : this.map.vars['--map-parcel-text-color'];
-      const outline = !this.showLabelContrast
+      const outline = !contrast
         ? this.map.vars['--map-parcel-text-inverse']
         : this.map.vars['--map-parcel-text-color'];
       // 👉 we need to draw a label in each polygon of a multi-polygon
@@ -387,7 +379,7 @@ export class OLStyleParcelsComponent implements Styler {
           offsetY: label.offsetY,
           overflow: true,
           rotation: label.rotation,
-          stroke: this.showLabelContrast
+          stroke: contrast
             ? new OLStroke({
                 color: `rgba(${outline}, 1)`,
                 width: Math.min(label.fontSize / 8, this.maxBorderPixels)
@@ -565,17 +557,22 @@ export class OLStyleParcelsComponent implements Styler {
     const borderPixels =
       this.#borderPixels(resolution) * this.borderWidthSelectRatio;
     let outline = null;
+    if (whenAbutted) outline = this.map.vars['--map-parcel-abutter'];
     if (whenSelected) outline = this.map.vars['--map-parcel-select'];
     if (whenRedrawn) outline = this.map.vars['--map-parcel-redraw'];
-    if (whenAbutted) outline = this.map.vars['--map-parcel-select'];
     // 👉 necessary so we can select
     const fill = new OLFill({ color: [0, 0, 0, 0] });
     const stroke = new OLStroke({
       color: `rgb(${outline})`,
-      lineDash: whenAbutted ? [borderPixels, borderPixels * 4] : null,
       width: borderPixels
     });
-    return [new OLStyle({ fill, stroke: outline ? stroke : null })];
+    return [
+      new OLStyle({
+        fill,
+        stroke: outline ? stroke : null,
+        zIndex: whenSelected ? 2 : 1
+      })
+    ];
   }
 
   #theStyles(
@@ -596,12 +593,18 @@ export class OLStyleParcelsComponent implements Styler {
     const { fill: overlayFill, stroke: overlayStroke } =
       this.overlayState.makeOverlayForParcelProperties(props);
     // 👇 background
-    if (this.showBackground) {
+    if (
+      this.showBackground === 'always' ||
+      (whenSelected && this.showBackground === 'whenSelected')
+    ) {
       const fills = this.#fill(props, resolution, numPolygons, overlayFill);
       if (fills) styles.push(...fills);
     }
     // 👇 border
-    if (this.showBorder) {
+    if (
+      this.showBorder === 'always' ||
+      (whenSelected && this.showBorder === 'whenSelected')
+    ) {
       const strokes = this.#strokeBorder(
         props,
         resolution,
@@ -611,30 +614,32 @@ export class OLStyleParcelsComponent implements Styler {
       if (strokes) styles.push(...strokes);
     }
     // 👉 make the coordinates look like they're always multi
-    if (this.showDimensions) {
+    if (
+      this.showDimensions === 'always' ||
+      (whenSelected && this.showDimensions === 'whenSelected')
+    ) {
       let polygons = [feature.getGeometry()];
       if (feature.getGeometry().getType() === 'MultiPolygon')
         polygons = feature.getGeometry().getPolygons();
-      const dimensions = this.#dimensions(
-        props,
-        resolution,
-        polygons,
-        whenSelected
-      );
+      const dimensions = this.#dimensions(props, resolution, polygons);
       if (dimensions) styles.push(...dimensions);
     }
     // 👇 lot labels
-    if (this.showLabels) {
-      const lotLabels = this.#labels(
-        props,
-        resolution,
-        numPolygons,
-        whenSelected
-      );
+    if (
+      this.showLabels === 'always' ||
+      (whenSelected && this.showLabels === 'whenSelected')
+    ) {
+      const contrast =
+        this.showLabelContrast === 'always' ||
+        (whenSelected && this.showLabelContrast === 'whenSelected');
+      const lotLabels = this.#labels(props, resolution, numPolygons, contrast);
       if (lotLabels) styles.push(...lotLabels);
     }
     // 👇 selection
-    if (this.showSelection) {
+    if (
+      this.showSelection === 'always' ||
+      (whenSelected && this.showSelection === 'whenSelected')
+    ) {
       const strokes = this.#strokeSelect(
         props,
         resolution,
@@ -656,7 +661,8 @@ export class OLStyleParcelsComponent implements Styler {
       // 👉 there HAS to be a selector, or else we couldn't be here
       const selector = this.map.selector as OLInteractionSelectParcelsComponent;
       const whenAbutted =
-        this.showAbutters && selector.abutterIDs?.includes(props.id);
+        this.showAbutters === 'whenAbutted' &&
+        selector.abutterIDs?.includes(props.id);
       return this.#theStyles(
         feature,
         resolution,

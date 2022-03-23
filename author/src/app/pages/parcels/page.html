@@ -125,7 +125,7 @@
 
           <app-ol-layer-vector>
             <app-ol-style-parcels
-              [showBackground]="true"
+              [showBackground]="'always'"
             ></app-ol-style-parcels>
             <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
@@ -170,14 +170,6 @@
               [layerKey]="'buildings'"
             ></app-ol-source-geojson>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-          </app-ol-layer-vector>
-
-          <app-ol-layer-vector>
-            <app-ol-style-parcels
-              [showBorder]="true"
-              [showLabels]="true"
-            ></app-ol-style-parcels>
-            <app-ol-source-parcels> </app-ol-source-parcels>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
@@ -246,15 +238,6 @@
               ></app-ol-source-xyz
             >
           </app-ol-layer-tile>
-
-          <app-ol-layer-vector>
-            <app-ol-style-parcels
-              [showBorder]="true"
-              [showLabelContrast]="true"
-              [showLabels]="true"
-            ></app-ol-style-parcels>
-            <app-ol-source-parcels></app-ol-source-parcels>
-          </app-ol-layer-vector>
         </ng-container>
 
         <!-- 📦 BOUNDARY LAYER -->
@@ -278,10 +261,11 @@
 
         <app-ol-layer-vector *ngIf="!olMap.printing">
           <app-ol-style-parcels
-            [showDimensions]="true"
-            [showLabels]="true"
-            [showLabelContrast]="satelliteView$ | async"
-            [showSelection]="true"
+            [showBorder]="'always'"
+            [showDimensions]="'whenSelected'"
+            [showLabels]="'always'"
+            [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'never'"
+            [showSelection]="'always'"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-interaction-selectparcels [eventType]="'click'">
