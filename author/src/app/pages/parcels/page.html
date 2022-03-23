@@ -177,16 +177,16 @@
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
-            <app-ol-style-trails></app-ol-style-trails>
-            <app-ol-source-geojson
-              [layerKey]="'trails'"
-            ></app-ol-source-geojson>
+            <app-ol-style-roads></app-ol-style-roads>
+            <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
-            <app-ol-style-roads></app-ol-style-roads>
-            <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+            <app-ol-style-trails></app-ol-style-trails>
+            <app-ol-source-geojson
+              [layerKey]="'trails'"
+            ></app-ol-source-geojson>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
@@ -254,6 +254,16 @@
           <app-ol-style-polygons></app-ol-style-polygons>
           <app-ol-source-boundarygrid></app-ol-source-boundarygrid>
         </app-ol-layer-vector> -->
+
+        <!-- 📦 LOT LINE LAYER (printed) -->
+
+        <app-ol-layer-vector *ngIf="olMap.printing">
+          <app-ol-style-parcels
+            [showBorder]="'always'"
+            [showLabels]="'always'"
+          ></app-ol-style-parcels>
+          <app-ol-source-parcels></app-ol-source-parcels>
+        </app-ol-layer-vector>
 
         <!-- 📦 SELECTION LAYER (not printed) -->
 

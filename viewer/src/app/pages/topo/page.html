@@ -122,15 +122,15 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-trails></app-ol-style-trails>
-        <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
       <app-ol-layer-vector>
         <app-ol-style-roads></app-ol-style-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
+        <app-ol-style-trails></app-ol-style-trails>
+        <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
