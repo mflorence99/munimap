@@ -31,6 +31,15 @@
         ><app-ol-style-graticule></app-ol-style-graticule
       ></app-ol-control-graticule>
 
+      <app-ol-control-streetslegend
+        *ngIf="map.name && olMap.printing"
+        [county]="map.path.split(':')[1]"
+        [id]="map.id"
+        [printing]="olMap.printing"
+        [state]="map.path.split(':')[0]"
+        [title]="map.name"
+      ></app-ol-control-streetslegend>
+
       <app-ol-control-scaleline
         *ngIf="olMap.printing"
         [printing]="olMap.printing"

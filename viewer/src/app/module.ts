@@ -2,6 +2,8 @@ import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsOverlayComponent } from './pages/parcels/overlay';
 import { ParcelsPage } from './pages/parcels/page';
 import { RootPage } from './pages/root/page';
+import { StreetsLegendComponent } from './pages/streets/legend';
+import { StreetsPage } from './pages/streets/page';
 import { TopoLegendComponent } from './pages/topo/legend';
 import { TopoPage } from './pages/topo/page';
 
@@ -205,13 +207,14 @@ const COMPONENTS = [
   OLStyleWetlandComponent,
   ParcelsLegendComponent,
   ParcelsOverlayComponent,
+  StreetsLegendComponent,
   TopoLegendComponent,
   VersionDialogComponent
 ];
 
 const DIRECTIVES = [];
 
-const PAGES = [ParcelsPage, RootPage, TopoPage];
+const PAGES = [ParcelsPage, RootPage, StreetsPage, TopoPage];
 
 const ROUTES = [
   {
@@ -234,6 +237,15 @@ const ROUTES = [
         path: 'parcels-overlay',
         component: ParcelsOverlayComponent,
         outlet: 'rightSidebar'
+      },
+      {
+        path: 'streets',
+        component: StreetsPage
+      },
+      {
+        path: 'streets-legend',
+        component: StreetsLegendComponent,
+        outlet: 'leftSidebar'
       },
       {
         path: 'topo',
