@@ -12,12 +12,7 @@ import booleanIntersects from '@turf/boolean-intersects';
 import chalk from 'chalk';
 import copy from 'fast-copy';
 
-// 👇 sucks we have to read the data from this downloaded file
-//    but NH doesn't have anything useful and we downloaded this
-//    from the URL below -- perhaps the PUC has something?
-//    we can't commit thus file because it is too large
-
-// 👉 https://hifld-geoplatform.opendata.arcgis.com/datasets/electric-power-transmission-lines/explore
+// 🔥 you need to run powerlines2.ts at least once first
 
 const dist = './data';
 

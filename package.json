@@ -47,7 +47,7 @@
     "proxy:parcels:sullivan": "ts-node --dir bin parcels.ts --county SULLIVAN",
     "proxy:places": "ts-node --dir bin places.ts",
     "proxy:powerlines": "ts-node --dir bin powerlines.ts",
-    "proxy:powerlines2": "ts-node --dir bin powerlines2.ts",
+    "proxy:powerlines:prepare": "ts-node --dir bin powerlines-prepare.ts",
     "proxy:railroads": "ts-node --dir bin railroads.ts",
     "proxy:rivers": "ts-node --dir bin rivers.ts",
     "proxy:roads": "ts-node --dir bin roads.ts",

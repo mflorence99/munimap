@@ -6,6 +6,16 @@ import { writeFileSync } from 'fs';
 
 import booleanIntersects from '@turf/boolean-intersects';
 
+// 🔥 this is NOT the code to create the powerlines.geojson files
+//    it simply extracts the NH data from the national dataset
+
+// 👇 sucks we have to read the data from this downloaded file
+//    but NH doesn't have anything useful and we downloaded this
+//    from the URL below -- perhaps the PUC has something?
+//    we can't commit this file because it is too large
+
+// 👉 https://hifld-geoplatform.opendata.arcgis.com/datasets/electric-power-transmission-lines/explore
+
 const powerlines = JSON.parse(
   readFileSync(
     '/home/mflo/Downloads/Electric_Power_Transmission_Lines.geojson'
