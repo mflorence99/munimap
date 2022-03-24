@@ -2,6 +2,7 @@ import { AddParcelComponent } from './pages/parcels/add-parcel';
 import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuHostDirective } from './pages/parcels/contextmenu-host';
 import { CreatePage } from './pages/create/page';
+import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
@@ -151,6 +152,8 @@ import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
+import { faLocationPlus as fadLocationPlus } from '@fortawesome/pro-duotone-svg-icons';
+import { faLocationPlus as fasLocationPlus } from '@fortawesome/pro-solid-svg-icons';
 import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-icons';
 import { faObjectUngroup as fadObjectUngroup } from '@fortawesome/pro-duotone-svg-icons';
@@ -189,6 +192,7 @@ const COMPONENTS = [
   AddParcelComponent,
   BuilderComponent,
   ConfirmDialogComponent,
+  CreatePropertyMapComponent,
   EmailAddressValidator,
   MergeParcelsComponent,
   MessageDialogComponent,
@@ -436,6 +440,8 @@ export class RootModule {
       faInfoCircle,
       faLayerGroup,
       faLayerPlus,
+      fadLocationPlus,
+      fasLocationPlus,
       fadObjectGroup,
       fasObjectGroup,
       fadObjectUngroup,

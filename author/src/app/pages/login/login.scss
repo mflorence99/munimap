@@ -24,8 +24,7 @@
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1rem;
 
   .mat-form-field {

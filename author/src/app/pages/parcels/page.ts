@@ -2,6 +2,7 @@ import { AbstractMapPage } from '../abstract-map';
 import { AddParcelComponent } from './add-parcel';
 import { ContextMenuComponent } from './contextmenu-component';
 import { ContextMenuHostDirective } from './contextmenu-host';
+import { CreatePropertyMapComponent } from './create-propertymap';
 import { MergeParcelsComponent } from './merge-parcels';
 import { ParcelPropertiesComponent } from './parcel-properties';
 import { RootPage } from '../root/page';
@@ -17,6 +18,7 @@ import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
+import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
@@ -108,6 +110,10 @@ export class ParcelsPage extends AbstractMapPage {
     return this.#can(event, this.olMap.selectedIDs.length === 0);
   }
 
+  canCreatePropertyMap(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selectedIDs.length >= 1);
+  }
+
   canMergeParcels(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selectedIDs.length > 1);
   }
@@ -128,7 +134,7 @@ export class ParcelsPage extends AbstractMapPage {
     return this.#can(event, this.olMap.selectedIDs.length === 1);
   }
 
-  getType(): string {
+  getType(): MapType {
     return 'parcels';
   }
 
@@ -137,6 +143,11 @@ export class ParcelsPage extends AbstractMapPage {
     switch (key) {
       case 'add-parcel':
         cFactory = this.resolver.resolveComponentFactory(AddParcelComponent);
+        break;
+      case 'create-propertymap':
+        cFactory = this.resolver.resolveComponentFactory(
+          CreatePropertyMapComponent
+        );
         break;
       case 'parcel-properties':
         cFactory = this.resolver.resolveComponentFactory(

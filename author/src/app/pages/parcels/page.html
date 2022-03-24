@@ -383,6 +383,26 @@
           ></em>
         </p>
       </li>
+
+      <li
+        (click)="canCreatePropertyMap($event) && onContextMenu('create-propertymap')"
+        [class.disabled]="!canCreatePropertyMap()"
+        class="item"
+      >
+        <fa-icon
+          [fixedWidth]="true"
+          [icon]="['fas', 'location-plus']"
+        ></fa-icon>
+        <p>
+          Create property map &hellip;
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Adjust the window to the desired extent and select the property's parcels"
+            ></fa-icon
+          ></em>
+        </p>
+      </li>
     </ul>
   </nav>
 </ng-template>

@@ -7,6 +7,7 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
+import { MapType } from '@lib/state/map';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
@@ -36,7 +37,7 @@ export class TopoPage extends AbstractMapPage {
     super(actions$, authState, destroy$, root, route, router, store, viewState);
   }
 
-  getType(): string {
+  getType(): MapType {
     return 'topo';
   }
 }

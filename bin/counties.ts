@@ -1,4 +1,4 @@
-import { bboxByAspectRatio } from './bbox';
+import { bboxByAspectRatio } from '../lib/src/geojson';
 import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 

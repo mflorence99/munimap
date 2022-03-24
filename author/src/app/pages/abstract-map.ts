@@ -8,6 +8,7 @@ import { DestroyService } from '@lib/services/destroy';
 import { LoadMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
+import { MapType } from '@lib/state/map';
 import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
@@ -95,5 +96,5 @@ export abstract class AbstractMapPage implements OnInit {
     this.#loadMap();
   }
 
-  abstract getType(): string;
+  abstract getType(): MapType;
 }

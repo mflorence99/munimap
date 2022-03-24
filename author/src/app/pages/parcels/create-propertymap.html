@@ -1,0 +1,85 @@
+<header class="header">
+  <figure class="icon">
+    <fa-icon [icon]="['fad', 'location-plus']" size="2x"></fa-icon>
+  </figure>
+
+  <p class="title">Create property map</p>
+  <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
+</header>
+
+<form
+  #createForm="ngForm"
+  autocomplete="off"
+  class="form"
+  novalidate
+  spellcheck="false"
+>
+  <p class="instructions">Blah blah.</p>
+
+  <mat-form-field>
+    <mat-label>Give your map a name</mat-label>
+    <input
+      #name="ngModel"
+      [(ngModel)]="record.name"
+      autocomplete="off"
+      matInput
+      name="name"
+      placeholder="eg: My Huge Estate"
+      required
+    />
+    <mat-error *ngIf="name.errors">A map name is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Assign an unique ID to your map</mat-label>
+    <input
+      #id="ngModel"
+      [(ngModel)]="record.id"
+      autocomplete="off"
+      matInput
+      name="id"
+      pattern="[a-z0-9]+"
+      placeholder="eg: rockefeller"
+      required
+    />
+    <mat-error *ngIf="id.errors"
+      >Use only lowercase letters and numbers</mat-error
+    >
+    <mat-hint *ngIf="!id.errors"
+      >Viewer app URL: <em>https://{{ record.id }}.munimap.online</em></mat-hint
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Property's parcels</mat-label>
+    <textarea
+      #parcelIDs="ngModel"
+      [(ngModel)]="record.parcelIDs"
+      autocomplete="off"
+      cdkTextareaAutosize
+      matInput
+      name="parcelIDs"
+      required
+    ></textarea>
+    <mat-error *ngIf="parcelIDs.errors"
+      >At least one parcel is required</mat-error
+    >
+    <mat-hint *ngIf="!parcelIDs.errors"
+      >Give the ids of the parcels in your property, each on a new
+      line.</mat-hint
+    >
+  </mat-form-field>
+</form>
+
+<article class="actions">
+  <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+  <button
+    (click)="save(record)"
+    [disabled]="createForm.invalid || !createForm.dirty"
+    color="primary"
+    mat-flat-button
+  >
+    SAVE
+  </button>
+</article>

@@ -8,6 +8,8 @@ import copy from 'fast-copy';
 import distance from '@turf/distance';
 import length from '@turf/length';
 import polylabel from 'polylabel';
+import rhumbDestination from '@turf/rhumb-destination';
+import rhumbDistance from '@turf/rhumb-distance';
 import transformRotate from '@turf/transform-rotate';
 
 // 👇 we currently only support one state
@@ -285,6 +287,97 @@ export interface StateIndex {
 }
 
 export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
+
+// 👉 calculate bbox based on desired dimensions
+
+export function bboxByDimensions(
+  geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
+  cxDesired: number,
+  cyDesired: number
+): GeoJSON.BBox {
+  // 👉 calculate bbox dimensions
+  const [minX, minY, maxX, maxY] = Array.isArray(geojson)
+    ? geojson
+    : bbox(geojson);
+  const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+  // 👉 calculate amount of expansion needed
+  const cxDelta = (cxDesired - cx) / 2;
+  if (cxDelta < 0) console.error(`🔥 cx -ve ${cxDelta}`);
+  const cyDelta = (cyDesired - cy) / 2;
+  if (cyDelta < 0) console.error(`🔥 cy -ve ${cyDelta}`);
+  // 👉 calculate new extermities
+  const newMinX = rhumbDestination([minX, minY], cxDelta, -90);
+  const newMaxX = rhumbDestination([maxX, minY], cxDelta, 90);
+  const newMinY = rhumbDestination([minX, minY], cyDelta, 180);
+  const newMaxY = rhumbDestination([minX, maxY], cyDelta, 0);
+  // 👉 now we have the expanded bbox
+  return [
+    cxDelta ? newMinX.geometry.coordinates[0] : minX,
+    cyDelta ? newMinY.geometry.coordinates[1] : minY,
+    cxDelta ? newMaxX.geometry.coordinates[0] : maxX,
+    cyDelta ? newMaxY.geometry.coordinates[1] : maxY
+  ];
+}
+
+// 👉 calculate bbox based on desired aspect ratio
+//    we'll pick the best (inverting if necessary)
+//    then expand to the nearest whole "units"
+
+// 👇 function split in two to enable debug logging
+
+export function bboxByAspectRatio(
+  geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
+  x: number,
+  y: number
+): GeoJSON.BBox {
+  if (x < y) console.error(`🔥 x(${x}) must be greater than y${y})`);
+  const [minX, minY, maxX, maxY] = bboxByAspectRatioImpl(geojson, x, y);
+  return [minX, minY, maxX, maxY];
+}
+
+function bboxByAspectRatioImpl(
+  geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
+  x: number,
+  y: number,
+  b = 0.5 /* 👈 buffer in km */
+): GeoJSON.BBox {
+  // 👉 calculate bbox dimensions
+  const [minX, minY, maxX, maxY] = Array.isArray(geojson)
+    ? geojson
+    : bbox(geojson);
+  const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+  // 👉 compare aspect ratios and pick best one
+  const ar = cx / cy;
+  // 👉 bias square or nearly square to landscape (4:3)
+  if (ar < 0.9) [y, x] = [x, y];
+  // 👉 try 3:4 where cy is larger than cx
+  let z = (cx * y) / x;
+  if (z > cy) {
+    // note buffer
+    return bboxByDimensions(geojson, cx + (b + y / x), z + b);
+  }
+  // 👉 OK, must be 4:3 where cx is larger than cy
+  else {
+    z = (cy * x) / y;
+    // note buffer
+    return bboxByDimensions(geojson, z + b, cy + (b + y / x));
+  }
+}
+
+export function bboxDistance(
+  minX: number,
+  minY: number,
+  maxX: number,
+  maxY: number
+): [number, number] {
+  const cx = rhumbDistance([minX, minY], [maxX, minY], {
+    units: 'kilometers'
+  });
+  const cy = rhumbDistance([minX, minY], [minX, maxY], {
+    units: 'kilometers'
+  });
+  return [cx, cy];
+}
 
 export function calculate(parcel: Parcel): void {
   if (parcel.geometry) {

@@ -6,6 +6,9 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { Event } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
+import { MessageDialogData } from '@lib/components/message-dialog';
 import { NavigationCancel } from '@angular/router';
 import { NavigationEnd } from '@angular/router';
 import { NavigationError } from '@angular/router';
@@ -20,6 +23,7 @@ import { Select } from '@ngxs/store';
 import { SetSatelliteView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Undo } from '@lib/state/parcels';
+import { UpdateMapError } from '@lib/state/map';
 import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
 import { ViewChild } from '@angular/core';
@@ -64,18 +68,20 @@ export class RootPage implements OnInit {
     private actions$: Actions,
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
+    private dialog: MatDialog,
     private router: Router,
     private store: Store,
     _version: VersionService /* 👈 just to get it loaded */
   ) {}
 
-  #handleActions$(): void {
+  #handleMapErrorActions$(): void {
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionSuccessful(CanDo))
-      .subscribe((action: CanDo) => {
-        this.canRedo = action.canRedo;
-        this.canUndo = action.canUndo;
-        this.cdf.markForCheck();
+      .pipe(ofActionSuccessful(UpdateMapError), takeUntil(this.destroy$))
+      .subscribe((action: UpdateMapError) => {
+        const data: MessageDialogData = {
+          message: action.error
+        };
+        this.dialog.open(MessageDialogComponent, { data });
       });
   }
 
@@ -104,12 +110,23 @@ export class RootPage implements OnInit {
       });
   }
 
+  #handleUndoActions$(): void {
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionSuccessful(CanDo))
+      .subscribe((action: CanDo) => {
+        this.canRedo = action.canRedo;
+        this.canUndo = action.canUndo;
+        this.cdf.markForCheck();
+      });
+  }
+
   getState(): any {
     return this.outlet?.activatedRouteData?.state;
   }
 
   ngOnInit(): void {
-    this.#handleActions$();
+    this.#handleMapErrorActions$();
+    this.#handleUndoActions$();
     this.#handleRouterEvents$();
   }
 

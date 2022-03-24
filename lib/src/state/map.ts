@@ -1,6 +1,8 @@
 import { Action } from '@ngxs/store';
+import { Coordinate } from 'ol/coordinate';
 import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
+import { ParcelID } from '@lib/geojson';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
@@ -37,13 +39,17 @@ export class UpdateMapError {
   constructor(public error: string) {}
 }
 
+export type MapType = 'parcels' | 'topo' | 'streets' | 'property';
+
 export interface Map {
+  bbox?: Coordinate;
   id: string;
   isDflt?: boolean;
   name: string;
   owner: string;
+  parcelIDs?: ParcelID[];
   path: string;
-  type: string;
+  type: MapType;
 }
 
 export type MapStateModel = Map;

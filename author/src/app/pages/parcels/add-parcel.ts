@@ -101,7 +101,6 @@ export class AddParcelComponent implements ContextMenuComponent, OnInit {
       Math.sqrt(addition.area * 43560 /* 👈 to sq ft */) /
       2 /* 👈 diameter to radius */ /
       5280; /* 👈 to miles */
-    console.log(this.#contextMenuAt);
     const geojson = bboxPolygon(
       bbox(circle(this.#contextMenuAt, r, { steps: 16, units: 'miles' }))
     );
