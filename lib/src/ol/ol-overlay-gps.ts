@@ -61,6 +61,12 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
     });
   }
 
+  #currentPositionOutsideMap(): void {
+    this.snackBar.open('👉 GPS position is outside of map', null, {
+      duration: 5000
+    });
+  }
+
   #handleGeolocation$(): void {
     this.geolocation$
       .pipe(
@@ -96,19 +102,32 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
   }
 
   #handleGeolocationPosition(position: GeolocationPosition): void {
-    // 👉 what is interval between last reading?
-    const interval = this.#lastTimestamp
-      ? position.timestamp - this.#lastTimestamp
-      : 0;
-    this.#lastTimestamp = position.timestamp;
-    const style = document.body.style;
-    style.setProperty('--ol-overlay-animate-duration', `${interval}`);
-    // 👇 we need to use removeClass b/c OL has yanked
-    //    the tracker out of the DOM
-    this.tracker.nativeElement.classList.remove('disabled');
-    this.olOverlay.setPosition(
-      fromLonLat([position.coords.longitude, position.coords.latitude])
-    );
+    if (this.#isInsideMap(position)) {
+      // 👉 what is interval between last reading?
+      const interval = this.#lastTimestamp
+        ? position.timestamp - this.#lastTimestamp
+        : 0;
+      this.#lastTimestamp = position.timestamp;
+      const style = document.body.style;
+      style.setProperty('--ol-overlay-animate-duration', `${interval}`);
+      // 👇 we need to use removeClass b/c OL has yanked
+      //    the tracker out of the DOM
+      this.tracker.nativeElement.classList.remove('disabled');
+      this.olOverlay.setPosition(
+        fromLonLat([position.coords.longitude, position.coords.latitude])
+      );
+    } else {
+      this.#currentPositionOutsideMap();
+      this.store.dispatch(new SetGPS(false));
+    }
+  }
+
+  #isInsideMap(position: GeolocationPosition): boolean {
+    const x = position.coords.longitude;
+    const y = position.coords.latitude;
+    const [left, bottom, right, top] = this.map.boundary.features[0].bbox;
+    // 👉 https://gamedev.stackexchange.com/questions/586
+    return !(x > right || x < left || y < bottom || y > top);
   }
 
   ngOnDestroy(): void {
