@@ -46,12 +46,14 @@ export class OLSourceHillshadeComponent {
     const parsed = new URL(src);
     const bbox = parsed.searchParams.get('BBOX');
     const renderingRule = this.colorize
-      ? '{"rasterFunction":"Hillshade Elevation Tinted"}'
-      : '{"rasterFunction":"Hillshade Gray"}';
+      ? { rasterFunction: 'Hillshade Elevation Tinted' }
+      : { rasterFunction: 'Hillshade Gray' };
     const url = `${
       environment.endpoints.proxy
     }/proxy/hillshade?url=${encodeURIComponent(
-      this.url.replace('XXXXXX', bbox).replace('YYYYYY', renderingRule)
+      this.url
+        .replace('XXXXXX', bbox)
+        .replace('YYYYYY', JSON.stringify(renderingRule))
     )}`;
     img.src = url;
   }

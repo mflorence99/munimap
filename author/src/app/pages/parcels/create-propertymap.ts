@@ -84,7 +84,7 @@ export class CreatePropertyMapComponent
       this.map.projection,
       this.map.featureProjection
     );
-    this.record.bbox = bboxByAspectRatio(extent, 4, 3);
+    this.record.bbox = bboxByAspectRatio(extent, 4, 3, 0);
     this.record.parcelIDs = this.selectedIDs.join('\n');
   }
 
@@ -95,7 +95,7 @@ export class CreatePropertyMapComponent
       isDflt: record.isDflt,
       name: record.name,
       owner: this.authState.currentProfile().email,
-      parcelIDs: record.parcelIDs.split('[\n, ]+'),
+      parcelIDs: record.parcelIDs.split(/[\n, ]+/g),
       path: this.map.path,
       type: 'property'
     };

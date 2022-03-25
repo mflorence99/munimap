@@ -328,10 +328,11 @@ export function bboxByDimensions(
 export function bboxByAspectRatio(
   geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
   x: number,
-  y: number
+  y: number,
+  b = 0.5 /* 👈 buffer in km */
 ): GeoJSON.BBox {
   if (x < y) console.error(`🔥 x(${x}) must be greater than y${y})`);
-  const [minX, minY, maxX, maxY] = bboxByAspectRatioImpl(geojson, x, y);
+  const [minX, minY, maxX, maxY] = bboxByAspectRatioImpl(geojson, x, y, b);
   return [minX, minY, maxX, maxY];
 }
 
@@ -339,7 +340,7 @@ function bboxByAspectRatioImpl(
   geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
   x: number,
   y: number,
-  b = 0.5 /* 👈 buffer in km */
+  b: number
 ): GeoJSON.BBox {
   // 👉 calculate bbox dimensions
   const [minX, minY, maxX, maxY] = Array.isArray(geojson)

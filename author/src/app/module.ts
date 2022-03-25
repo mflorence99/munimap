@@ -10,6 +10,7 @@ import { ParcelPropertiesComponent } from './pages/parcels/parcel-properties';
 import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
 import { PropertiesComponent } from './pages/properties';
+import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { StreetsPage } from './pages/streets/page';
 import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
@@ -70,6 +71,7 @@ import { OLControlMousePositionComponent } from '@lib/ol/ol-control-mousepositio
 import { OLControlParcelsLegendComponent } from '@lib/ol/parcels/ol-control-parcelslegend';
 import { OLControlPrintComponent } from '@lib/ol/ol-control-print';
 import { OLControlPrintProgressComponent } from '@lib/ol/ol-control-printprogress';
+import { OLControlPropertyLegendComponent } from '@lib/ol/property/ol-control-propertylegend';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OLControlStreetsLegendComponent } from '@lib/ol/streets/ol-control-streetslegend';
@@ -78,6 +80,7 @@ import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
+import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
 import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
@@ -206,6 +209,7 @@ const COMPONENTS = [
   OLControlParcelsLegendComponent,
   OLControlPrintComponent,
   OLControlPrintProgressComponent,
+  OLControlPropertyLegendComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
   OLControlStreetsLegendComponent,
@@ -214,6 +218,7 @@ const COMPONENTS = [
   OLControlZoomToExtentComponent,
   OLFilterColorizeComponent,
   OLFilterCrop2BoundaryComponent,
+  OLFilterCrop2PropertyParcelsComponent,
   OLFilterPencilComponent,
   OLInteractionBoundaryComponent,
   OLInteractionRedrawParcelComponent,
@@ -275,6 +280,7 @@ const PAGES = [
   LoginPage,
   CreatePage,
   ParcelsPage,
+  PropertyPage,
   RootPage,
   StreetsPage,
   TopoPage
@@ -309,6 +315,11 @@ const ROUTES = [
         path: 'parcels/:id',
         component: ParcelsPage,
         data: { state: 'parcels' }
+      },
+      {
+        path: 'property/:id',
+        component: PropertyPage,
+        data: { state: 'property' }
       },
       {
         path: 'streets/:id',

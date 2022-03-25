@@ -67,6 +67,8 @@ export class OLMapComponent
   // 👉 proxy this from the real selector (if any) to ensure safe access
   abuttersFound = new EventEmitter<Feature[]>();
 
+  @Input() bbox: Coordinate /* 👈 option circumscibes map */;
+
   boundary: Features;
   boundaryExtent: Coordinate;
   boundaryGrid: Features;
@@ -185,7 +187,7 @@ export class OLMapComponent
   #createView(boundary: Features): void {
     // 👉 precompute boundary extent
     this.boundary = boundary;
-    const bbox = boundary.features[0].bbox;
+    const bbox = this.bbox ?? boundary.features[0].bbox;
     this.boundaryExtent = transformExtent(
       bbox,
       this.featureProjection,

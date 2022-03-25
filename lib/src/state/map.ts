@@ -1,8 +1,9 @@
+import { ParcelID } from '../geojson';
+
 import { Action } from '@ngxs/store';
 import { Coordinate } from 'ol/coordinate';
 import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
-import { ParcelID } from '@lib/geojson';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
