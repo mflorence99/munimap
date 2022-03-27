@@ -1,6 +1,5 @@
 import { ContextMenuComponent } from './contextmenu-component';
 
-import { Actions } from '@ngxs/store';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -8,7 +7,6 @@ import { Coordinate } from 'ol/coordinate';
 import { DestroyService } from '@lib/services/destroy';
 import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
-import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -19,9 +17,10 @@ import { UpdateMap } from '@lib/state/map';
 import { ViewChild } from '@angular/core';
 
 import { bboxByAspectRatio } from '@lib/geojson';
-import { transformExtent } from 'ol/proj';
 
 import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
+import union from '@turf/union';
 
 interface PropertyMapRecord {
   bbox: Coordinate;
@@ -62,31 +61,32 @@ export class CreatePropertyMapComponent
 
   @Input() selectedIDs: ParcelID[];
 
-  constructor(
-    private actions$: Actions,
-    private authState: AuthState,
-    private destroy$: DestroyService,
-    private dialog: MatDialog,
-    private store: Store
-  ) {}
+  constructor(private authState: AuthState, private store: Store) {}
 
   cancel(): void {
     this.drawer.close();
   }
 
   ngOnInit(): void {
-    this.refresh();
-  }
-
-  refresh(): void {
-    const extent = transformExtent(
-      this.map.olMap.getView().calculateExtent(),
-      this.map.projection,
-      this.map.featureProjection
+    // 👉 union all the selected features to get the bbox
+    const format = new OLGeoJSON({
+      dataProjection: this.map.featureProjection,
+      featureProjection: this.map.projection
+    });
+    const geojsons = this.features.map((feature) =>
+      JSON.parse(format.writeFeature(feature))
     );
-    this.record.bbox = bboxByAspectRatio(extent, 4, 3, 0);
+    const merged: any = {
+      geometry: geojsons.reduce((acc, geojson) => union(acc, geojson)).geometry,
+      properties: {},
+      type: 'Feature'
+    };
+    const border = 200 * 0.0003048; /* 👈 feet to kilometers */
+    this.record.bbox = bboxByAspectRatio(merged, 4, 3, border);
     this.record.parcelIDs = this.selectedIDs.join('\n');
   }
+
+  refresh(): void {}
 
   save(record): void {
     const map: Map = {

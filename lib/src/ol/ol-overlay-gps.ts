@@ -125,7 +125,7 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
   #isInsideMap(position: GeolocationPosition): boolean {
     const x = position.coords.longitude;
     const y = position.coords.latitude;
-    const [left, bottom, right, top] = this.map.boundary.features[0].bbox;
+    const [left, bottom, right, top] = this.map.bbox;
     // 👉 https://gamedev.stackexchange.com/questions/586
     return !(x > right || x < left || y < bottom || y > top);
   }

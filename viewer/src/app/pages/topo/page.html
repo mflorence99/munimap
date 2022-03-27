@@ -1,7 +1,7 @@
 <app-ol-map
   *ngIf="(map$ | async) as map"
   #olMap
-  [gridRequired]="true"
+  [loadingStrategy]="'bbox'"
   [minZoom]="13"
   [maxZoom]="20"
   [path]="map.path"
@@ -115,7 +115,10 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-roads></app-ol-style-roads>
+        <app-ol-style-roads
+          [showRoadLane]="true"
+          [showRoadName]="true"
+        ></app-ol-style-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>

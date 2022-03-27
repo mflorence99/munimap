@@ -55,6 +55,7 @@ import squareGrid from '@turf/square-grid';
 export class OLMapComponent
   implements AfterContentInit, OnDestroy, OnInit, Searcher, Selector
 {
+  #bbox: Coordinate;
   #changeKey: OLEventsKey;
   #clickKey: OLEventsKey;
   #origControls: string[];
@@ -67,7 +68,13 @@ export class OLMapComponent
   // 👉 proxy this from the real selector (if any) to ensure safe access
   abuttersFound = new EventEmitter<Feature[]>();
 
-  @Input() bbox: Coordinate /* 👈 option circumscibes map */;
+  @Input() // 👈 optionally circumscibes map
+  get bbox(): Coordinate {
+    return this.#bbox ?? this.boundary.features[0].bbox;
+  }
+  set bbox(bbox: Coordinate) {
+    this.#bbox = bbox;
+  }
 
   boundary: Features;
   boundaryExtent: Coordinate;
@@ -85,9 +92,10 @@ export class OLMapComponent
   featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() fitToBounds = false;
-  @Input() gridRequired = false;
 
   initialized = false;
+
+  @Input() loadingStrategy: 'all' | 'bbox';
 
   @ContentChildren(MapableComponent, { descendants: true })
   mapables$: QueryList<any>;
@@ -187,17 +195,16 @@ export class OLMapComponent
   #createView(boundary: Features): void {
     // 👉 precompute boundary extent
     this.boundary = boundary;
-    const bbox = this.bbox ?? boundary.features[0].bbox;
     this.boundaryExtent = transformExtent(
-      bbox,
+      this.bbox,
       this.featureProjection,
       this.projection
     );
     // 👉 precompute boundary grid, but only if needed
     //    we need to make sure that the bounding box is an even
     //    multiple of the cell size for complete grid coverage
-    if (this.gridRequired) {
-      const [minX, minY, maxX, maxY] = bbox;
+    if (this.loadingStrategy === 'bbox') {
+      const [minX, minY, maxX, maxY] = this.bbox;
       const floored: GeoJSON.BBox = [
         Math.floor(minX * 10) / 10,
         Math.floor(minY * 10) / 10,

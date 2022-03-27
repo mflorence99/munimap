@@ -18,6 +18,8 @@ import { Optional } from '@angular/core';
 import { unByKey } from 'ol/Observable';
 
 import Crop from 'ol-ext/filter/Crop';
+import Mask from 'ol-ext/filter/Mask';
+import OLFill from 'ol/style/Fill';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import union from '@turf/union';
 
@@ -37,9 +39,13 @@ export class OLFilterCrop2PropertyParcelsComponent
 
   olFilter: typeof Crop;
 
+  @Input() opacity = 0.33;
+
   @Input() parcelIDs: ParcelID[];
 
   @Input() source: OLSourceParcelsComponent;
+
+  @Input() type: 'crop' | 'mask';
 
   constructor(
     private destroy$: DestroyService,
@@ -60,31 +66,48 @@ export class OLFilterCrop2PropertyParcelsComponent
   #addFilter(): void {
     // 👉 remove prior filter
     if (this.olFilter) this.#layer.olLayer['removeFilter'](this.olFilter);
-    const geojsons = this.source.olVector
-      .getFeatures()
-      .filter((feature) => this.parcelIDs.includes(feature.getId()))
-      .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
-    const merged: any = {
-      geometry: geojsons.reduce((acc, geojson) => union(acc, geojson)).geometry,
-      properties: {},
-      type: 'Feature'
-    };
-    this.olFilter = new Crop({
-      active: true,
-      feature: this.#format.readFeature(merged),
-      inner: false
-    });
-    // 👇 ol-ext has monkey-patched addFilter
-    this.#layer.olLayer['addFilter'](this.olFilter);
+    const features = this.source.olVector.getFeatures();
+    if (features.length > 0) {
+      // 👉 union all features to make crop/mask
+      const geojsons = features
+        .filter((feature) => this.parcelIDs.includes(feature.getId()))
+        .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
+      const merged: any = {
+        geometry: geojsons.reduce((acc, geojson) => union(acc, geojson))
+          .geometry,
+        properties: {},
+        type: 'Feature'
+      };
+      // 👇 crop or mask?
+      if (this.type === 'crop') {
+        this.olFilter = new Crop({
+          active: true,
+          feature: this.#format.readFeature(merged),
+          inner: false
+        });
+      }
+      // 👇 crop or mask?
+      else if (this.type === 'mask') {
+        this.olFilter = new Mask({
+          active: true,
+          feature: this.#format.readFeature(merged),
+          fill: new OLFill({ color: [128, 128, 128, this.opacity] }),
+          inner: false
+        });
+      }
+      // 👇 ol-ext has monkey-patched addFilter
+      this.#layer.olLayer['addFilter'](this.olFilter);
+    }
   }
 
   ngOnDestroy(): void {
     if (this.#featuresLoadedKey) unByKey(this.#featuresLoadedKey);
     // 👇 ol-ext has monkey-patched removeFilter
-    this.#layer.olLayer['removeFilter'](this.olFilter);
+    if (this.olFilter) this.#layer.olLayer['removeFilter'](this.olFilter);
   }
 
   ngOnInit(): void {
+    this.#addFilter();
     this.#featuresLoadedKey = this.source.olVector.on('featuresloadend', () => {
       this.#addFilter();
     });

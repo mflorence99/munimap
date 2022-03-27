@@ -22,6 +22,7 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
+import { all as allStrategy } from 'ol/loadingstrategy';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -67,11 +68,14 @@ export class OLSourceParcelsComponent implements OnInit {
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
   ) {
+    let strategy;
+    if (this.map.loadingStrategy === 'all') strategy = allStrategy;
+    else if (this.map.loadingStrategy === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: bboxStrategy
+      strategy: strategy
     });
     this.layer.olLayer.setSource(this.olVector);
   }
@@ -154,11 +158,12 @@ export class OLSourceParcelsComponent implements OnInit {
     projection: OLProjection,
     success: Function
   ): void {
-    const bbox = transformExtent(
-      extent,
-      projection,
-      this.map.featureProjection
-    );
+    let bbox;
+    // 👉 get everything at once
+    if (this.map.loadingStrategy === 'all') bbox = this.map.bbox;
+    // 👉 or just get what's visible
+    else if (this.map.loadingStrategy === 'bbox')
+      bbox = transformExtent(extent, projection, this.map.featureProjection);
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, 'parcels', bbox)
       .subscribe((geojson: Features) => {

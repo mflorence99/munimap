@@ -38,7 +38,7 @@ export class OLControlPrintComponent {
 
   @Input() fileName: string;
 
-  @Input() resolution = 1.75 /* 👈 controls pixel density of print image */;
+  @Input() resolution: number /* 👈 controls pixel density of print image */;
 
   constructor(private dialog: MatDialog, private map: OLMapComponent) {}
 
@@ -84,7 +84,7 @@ export class OLControlPrintComponent {
     this.#zoom = this.map.olView.getZoom();
     this.map.olView.setConstrainResolution(false);
     // 👉 calculate extent of full map
-    const [minX, minY, maxX, maxY] = this.map.boundary.features[0].bbox;
+    const [minX, minY, maxX, maxY] = this.map.bbox;
     this.#px = getDistance([minX, minY], [maxX, minY]) / this.resolution;
     this.#py = getDistance([minX, minY], [minX, maxY]) / this.resolution;
     // 👉 the progress dialog allows the print to be cancelled

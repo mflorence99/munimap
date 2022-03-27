@@ -2,7 +2,7 @@
   <mat-drawer-content class="content">
     <app-ol-map
       #olMap
-      [gridRequired]="true"
+      [loadingStrategy]="'bbox'"
       [minZoom]="15"
       [maxZoom]="22"
       [path]="map.path"
@@ -24,6 +24,7 @@
       <app-ol-control-print
         *ngIf="map.name"
         [fileName]="map.name"
+        [resolution]="1.75"
         mapControlPrint
       ></app-ol-control-print>
 
@@ -177,7 +178,7 @@
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
-            <app-ol-style-roads></app-ol-style-roads>
+            <app-ol-style-roads [showRoadLane]="true"></app-ol-style-roads>
             <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
@@ -284,6 +285,14 @@
             </mat-menu>
           </app-ol-interaction-selectparcels>
           <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
+        </app-ol-layer-vector>
+
+        <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+
+        <app-ol-layer-vector *ngIf="!(satelliteView$ | async)">
+          <app-ol-style-roads [showRoadName]="true"></app-ol-style-roads>
+          <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->

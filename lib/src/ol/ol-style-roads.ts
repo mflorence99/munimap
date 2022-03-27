@@ -36,6 +36,8 @@ export class OLStyleRoadsComponent implements Styler {
   @Input() minFontSize = 4;
   @Input() minRoadWidth = 10 /* 👈 feet */;
   @Input() rightOfWayRatio = 3;
+  @Input() showRoadLane = false;
+  @Input() showRoadName = false;
 
   constructor(private map: OLMapComponent) {}
 
@@ -118,17 +120,30 @@ export class OLStyleRoadsComponent implements Styler {
   style(): OLStyleFunction {
     return (road: any, resolution: number): OLStyle[] => {
       const props = road.getProperties() as RoadProperties;
-      return [
-        new OLStyle({
-          fill: null,
-          stroke: this.#strokeEdge(props, resolution)
-        }),
-        new OLStyle({
-          fill: null,
-          stroke: this.#fillLane(props, resolution),
-          text: this.#drawText(props, resolution)
-        })
-      ];
+      // 👇 when we show lot lines, we may want to show the roadway
+      //    and its name separately, because we want the lot lines
+      //    to overlay the road but not the road name
+      const styles: OLStyle[] = [];
+      if (this.showRoadLane) {
+        styles.push(
+          new OLStyle({
+            stroke: this.#strokeEdge(props, resolution)
+          })
+        );
+        styles.push(
+          new OLStyle({
+            stroke: this.#fillLane(props, resolution)
+          })
+        );
+      }
+      if (this.showRoadName) {
+        styles.push(
+          new OLStyle({
+            text: this.#drawText(props, resolution)
+          })
+        );
+      }
+      return styles;
     };
   }
 }

@@ -2,7 +2,7 @@
   <app-ol-map
     #olMap
     [bbox]="map.bbox"
-    [gridRequired]="true"
+    [loadingStrategy]="'all'"
     [minZoom]="13"
     [maxZoom]="20"
     [path]="map.path"
@@ -14,6 +14,7 @@
     <app-ol-control-print
       *ngIf="map.name"
       [fileName]="map.name"
+      [resolution]="0.33"
       mapControlPrint
     ></app-ol-control-print>
 
@@ -32,15 +33,6 @@
         ><app-ol-style-graticule></app-ol-style-graticule
       ></app-ol-control-graticule>
 
-      <app-ol-control-propertylegend
-        *ngIf="map.name && olMap.printing"
-        [county]="map.path.split(':')[1]"
-        [id]="map.id"
-        [printing]="olMap.printing"
-        [state]="map.path.split(':')[0]"
-        [title]="map.name"
-      ></app-ol-control-propertylegend>
-
       <app-ol-control-scaleline
         *ngIf="olMap.printing"
         [printing]="olMap.printing"
@@ -52,7 +44,7 @@
 
       <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
 
-      <!-- 📦 NORMAL (not satellite) LAYERS -->
+      <!-- 📦 TERRAIN LAYERS -->
 
       <ng-container *ngIf="!(satelliteView$ | async)">
         <!-- 📦 BG LAYER (outside parcels)-->
@@ -67,6 +59,11 @@
               ></app-ol-attribution
             ></app-ol-source-xyz
           >
+          <app-ol-filter-colorize
+            [color]="[255, 255, 255]"
+            [operation]="'color'"
+            [value]="0.5"
+          ></app-ol-filter-colorize>
         </app-ol-layer-tile>
 
         <!-- 📦 HILLSHADE LAYER =-->
@@ -76,6 +73,7 @@
           <app-ol-filter-crop2propertyparcels
             [parcelIDs]="map.parcelIDs"
             [source]="parcels"
+            [type]="'crop'"
           ></app-ol-filter-crop2propertyparcels>
         </app-ol-layer-tile>
 
@@ -129,7 +127,7 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-style-roads></app-ol-style-roads>
+          <app-ol-style-roads [showRoadLane]="true"></app-ol-style-roads>
           <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         </app-ol-layer-vector>
 
@@ -163,6 +161,22 @@
             [layerKey]="'powerlines'"
           ></app-ol-source-geojson>
         </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-parcels
+            [showBorder]="'always'"
+            [showLabels]="'always'"
+            [showLabelContrast]="'never'"
+          ></app-ol-style-parcels>
+          <app-ol-source-parcels #parcels></app-ol-source-parcels>
+        </app-ol-layer-vector>
+
+        <!-- 👇 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+        <app-ol-layer-vector>
+          <app-ol-style-roads [showRoadName]="true"></app-ol-style-roads>
+          <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
       </ng-container>
 
       <!-- 📦 SATELLITE LAYER  -->
@@ -179,19 +193,23 @@
               ></app-ol-attribution
             ></app-ol-source-xyz
           >
+          <app-ol-filter-crop2propertyparcels
+            [opacity]="0.33"
+            [parcelIDs]="map.parcelIDs"
+            [source]="parcels"
+            [type]="'mask'"
+          ></app-ol-filter-crop2propertyparcels>
         </app-ol-layer-tile>
+
+        <app-ol-layer-vector>
+          <app-ol-style-parcels
+            [showBorder]="'always'"
+            [showLabels]="'always'"
+            [showLabelContrast]="'always'"
+          ></app-ol-style-parcels>
+          <app-ol-source-parcels #parcels></app-ol-source-parcels>
+        </app-ol-layer-vector>
       </ng-container>
-
-      <!-- 📦 LOT LINE LAYER -->
-
-      <app-ol-layer-vector>
-        <app-ol-style-parcels
-          [showBorder]="'always'"
-          [showLabels]="'always'"
-          [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'never'"
-        ></app-ol-style-parcels>
-        <app-ol-source-parcels #parcels></app-ol-source-parcels>
-      </app-ol-layer-vector>
 
       <!-- 📦 BOUNDARY LAYER -->
 

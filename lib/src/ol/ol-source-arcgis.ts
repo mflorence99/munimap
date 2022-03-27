@@ -11,6 +11,7 @@ import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 
+import { all as allStrategy } from 'ol/loadingstrategy';
 import { arcgisToGeoJSON } from '@esri/arcgis-to-geojson-utils';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { catchError } from 'rxjs/operators';
@@ -42,13 +43,25 @@ export abstract class OLSourceArcGISComponent {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
+    let strategy;
+    if (this.map.loadingStrategy === 'all') strategy = allStrategy;
+    else if (this.map.loadingStrategy === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: bboxStrategy
+      strategy: strategy
     });
     this.layer.olLayer.setSource(this.olVector);
+  }
+
+  #gridsFromBBox(projection: OLProjection): Coordinate[] {
+    const visible = transformExtent(
+      this.map.bbox,
+      this.map.featureProjection,
+      projection
+    ) as GeoJSON.BBox;
+    return [visible];
   }
 
   #gridsFromExtent(extent: Coordinate, projection: OLProjection): Coordinate[] {
@@ -82,9 +95,14 @@ export abstract class OLSourceArcGISComponent {
     projection: OLProjection,
     success: Function
   ): void {
+    let grids: Coordinate[];
+    // 👇 get everyrhing at once
+    if (this.map.loadingStrategy === 'all')
+      grids = this.#gridsFromBBox(projection);
     // 👇 one URL for each grid square covered by the extent
     //    this way requests are repeatable and cachable
-    const grids = this.#gridsFromExtent(extent, projection);
+    else if (this.map.loadingStrategy === 'bbox')
+      grids = this.#gridsFromExtent(extent, projection);
     const urls = grids.map(
       (grid) =>
         `${

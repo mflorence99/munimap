@@ -9,6 +9,7 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { Input } from '@angular/core';
 
+import { all as allStrategy } from 'ol/loadingstrategy';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { map } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
@@ -43,11 +44,14 @@ export class OLSourceGeoJSONComponent {
     private map: OLMapComponent,
     private route: ActivatedRoute
   ) {
+    let strategy;
+    if (this.map.loadingStrategy === 'all') strategy = allStrategy;
+    else if (this.map.loadingStrategy === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: bboxStrategy
+      strategy: strategy
     });
     this.layer.olLayer.setSource(this.olVector);
   }
@@ -58,11 +62,12 @@ export class OLSourceGeoJSONComponent {
     projection: OLProjection,
     success: Function
   ): void {
-    const bbox = transformExtent(
-      extent,
-      projection,
-      this.map.featureProjection
-    );
+    let bbox;
+    // 👉 get everything at once
+    if (this.map.loadingStrategy === 'all') bbox = this.map.bbox;
+    // 👉 or just get what's visible
+    else if (this.map.loadingStrategy === 'bbox')
+      bbox = transformExtent(extent, projection, this.map.featureProjection);
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
       .pipe(

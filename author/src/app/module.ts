@@ -71,7 +71,6 @@ import { OLControlMousePositionComponent } from '@lib/ol/ol-control-mousepositio
 import { OLControlParcelsLegendComponent } from '@lib/ol/parcels/ol-control-parcelslegend';
 import { OLControlPrintComponent } from '@lib/ol/ol-control-print';
 import { OLControlPrintProgressComponent } from '@lib/ol/ol-control-printprogress';
-import { OLControlPropertyLegendComponent } from '@lib/ol/property/ol-control-propertylegend';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OLControlStreetsLegendComponent } from '@lib/ol/streets/ol-control-streetslegend';
@@ -209,7 +208,6 @@ const COMPONENTS = [
   OLControlParcelsLegendComponent,
   OLControlPrintComponent,
   OLControlPrintProgressComponent,
-  OLControlPropertyLegendComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
   OLControlStreetsLegendComponent,

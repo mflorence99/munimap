@@ -36,7 +36,7 @@ export class OLControlScaleLineComponent implements Mapable, OnInit {
   }
 
   ngOnInit(): void {
-    const [minX, minY, maxX, maxY] = this.map.boundary.features[0].bbox;
+    const [minX, minY, maxX, maxY] = this.map.bbox;
     const resolution = this.map.olView.getResolution();
     const px = getDistance([minX, maxY], [maxX, minY]) / resolution;
     // 👉 we can't follow the normal convention and put this in the
