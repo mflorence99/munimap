@@ -68,7 +68,7 @@
 
         <!-- 📦 HILLSHADE LAYER =-->
 
-        <app-ol-layer-tile [opacity]="1">
+        <app-ol-layer-tile>
           <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
           <app-ol-filter-crop2propertyparcels
             [parcelIDs]="map.parcelIDs"
@@ -79,7 +79,7 @@
 
         <!-- 📦 CONTOURS LAYER =-->
 
-        <app-ol-layer-tile [opacity]="0.33">
+        <app-ol-layer-tile>
           <app-ol-source-contours> </app-ol-source-contours>
         </app-ol-layer-tile>
 

@@ -44,7 +44,7 @@ export class OLControlScaleLineComponent implements Mapable, OnInit {
     this.olControl = new OLScaleLine({
       bar: this.printing,
       className: this.printing ? 'ol-scaleline-bar' : 'ol-scaleline-line',
-      minWidth: this.printing ? px / 20 : undefined,
+      minWidth: this.printing ? px / 10 : undefined,
       steps: this.printing ? 20 : undefined,
       units: 'us'
     });

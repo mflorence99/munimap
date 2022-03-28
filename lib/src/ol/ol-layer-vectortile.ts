@@ -39,5 +39,6 @@ export class OLLayerVectorTileComponent implements Mapable {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
+    this.olLayer.getSource()?.refresh();
   }
 }

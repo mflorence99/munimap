@@ -38,6 +38,7 @@ export class OLLayerMapboxComponent implements Mapable, OnInit {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
+    this.olLayer.getSource()?.refresh();
   }
 
   ngOnInit(): void {

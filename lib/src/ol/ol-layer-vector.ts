@@ -50,6 +50,7 @@ export class OLLayerVectorComponent implements Mapable {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
+    this.olLayer.getSource()?.refresh();
   }
 
   style(): OLStyleFunction {

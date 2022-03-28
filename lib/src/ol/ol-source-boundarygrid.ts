@@ -3,8 +3,13 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
+
+import { all as allStrategy } from 'ol/loadingstrategy';
 
 import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
 
 @Component({
@@ -20,12 +25,30 @@ export class OLSourceBoundaryGridComponent {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
-    this.olVector = new OLVector();
-    this.olVector.addFeatures(
-      new GeoJSON().readFeatures(this.map.boundaryGrid, {
-        featureProjection: this.map.projection
-      })
-    );
+    this.olVector = new OLVector({
+      format: new GeoJSON(),
+      loader: this.#loader.bind(this),
+      strategy: allStrategy
+    });
     this.layer.olLayer.setSource(this.olVector);
+  }
+
+  // 👇 a simple loader allows refresh to be called
+
+  #loader(
+    extent: Coordinate,
+    resolution: number,
+    projection: OLProjection,
+    success: Function
+  ): void {
+    // 👉 convert features into OL format
+    const features = this.olVector
+      .getFormat()
+      .readFeatures(this.map.boundaryGrid, {
+        featureProjection: this.map.projection
+      }) as OLFeature<any>[];
+    // 👉 add feature to source
+    this.olVector.addFeatures(features);
+    success(features);
   }
 }
