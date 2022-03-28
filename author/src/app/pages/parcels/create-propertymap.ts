@@ -4,6 +4,7 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
+import { CreateMap } from '@lib/state/map';
 import { DestroyService } from '@lib/services/destroy';
 import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
@@ -13,7 +14,6 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { ParcelID } from '@lib/geojson';
 import { Store } from '@ngxs/store';
-import { UpdateMap } from '@lib/state/map';
 import { ViewChild } from '@angular/core';
 
 import { bboxByAspectRatio } from '@lib/geojson';
@@ -88,7 +88,7 @@ export class CreatePropertyMapComponent
 
   refresh(): void {}
 
-  save(record): void {
+  save(record: PropertyMapRecord): void {
     const map: Map = {
       bbox: record.bbox,
       id: record.id,
@@ -99,7 +99,7 @@ export class CreatePropertyMapComponent
       path: this.map.path,
       type: 'property'
     };
-    this.store.dispatch(new UpdateMap(map));
+    this.store.dispatch(new CreateMap(map));
     this.drawer.close();
   }
 }

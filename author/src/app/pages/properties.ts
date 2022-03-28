@@ -34,10 +34,15 @@ export class PropertiesComponent {
   }
   set map(map: Map) {
     this.#map = copy(map);
+    this.munged.parcelIDs = this.map.parcelIDs?.join('\n') ?? null;
     // 👉 set the window title every time it changes
     if (map.name) this.root.setTitle(map.name);
     this.rolledup = !!map.id;
   }
+
+  munged = {
+    parcelIDs: null
+  };
 
   rolledup: boolean;
 
@@ -80,7 +85,11 @@ export class PropertiesComponent {
   }
 
   update(map: any): void {
-    this.store.dispatch(new UpdateMap(map));
+    map.parcelIDs = this.munged.parcelIDs?.split(/[\n, ]+/g) ?? null;
+    // 👇 refresh if parcelIDs have changed
+    this.store.dispatch(
+      new UpdateMap(map, this.setupForm.controls['parcelIDs']?.dirty)
+    );
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.setupForm.form.markAsPristine();

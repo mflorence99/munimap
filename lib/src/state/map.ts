@@ -15,6 +15,21 @@ import { setDoc } from '@angular/fire/firestore';
 
 import copy from 'fast-copy';
 
+export class ClearMap {
+  static readonly type = '[Map] ClearMap';
+  constructor() {}
+}
+
+export class CreateMap {
+  static readonly type = '[Map] CreateMap';
+  constructor(public map: Map) {}
+}
+
+export class CreateMapError {
+  static readonly type = '[Map] CreateMapError';
+  constructor(public error: string) {}
+}
+
 export class DeleteMap {
   static readonly type = '[Map] DeleteMap';
   constructor(public id: string) {}
@@ -32,7 +47,7 @@ export class SetMap {
 
 export class UpdateMap {
   static readonly type = '[Map] UpdateMap';
-  constructor(public map: Map) {}
+  constructor(public map: Map, public refresh = false) {}
 }
 
 export class UpdateMapError {
@@ -63,6 +78,36 @@ export type MapStateModel = Map;
 export class MapState {
   constructor(private firestore: Firestore, private store: Store) {}
 
+  @Action(ClearMap) clearMap(
+    ctx: StateContext<MapStateModel>,
+    _action: ClearMap
+  ): void {
+    ctx.setState(null);
+  }
+
+  @Action(CreateMap) createMap(
+    ctx: StateContext<MapStateModel>,
+    action: CreateMap
+  ): void {
+    console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
+    const docRef = doc(this.firestore, 'maps', action.map.id);
+    getDoc(docRef).then((doc) => {
+      if (doc.exists()) {
+        const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
+        ctx.dispatch(new CreateMapError(message));
+      } else {
+        setDoc(docRef, { ...action.map, isDflt: false }, { merge: true });
+      }
+    });
+  }
+
+  @Action(CreateMapError) createMapError(
+    _ctx: StateContext<MapStateModel>,
+    _action: CreateMapError
+  ): void {
+    /* placeholder */
+  }
+
   currentMap(): Map {
     return this.store.snapshot().map;
   }
@@ -71,7 +116,7 @@ export class MapState {
     ctx: StateContext<MapStateModel>,
     action: DeleteMap
   ): void {
-    ctx.setState(null);
+    ctx.dispatch(new ClearMap());
     console.log(`%cFirestore delete: maps ${action.id}`, 'color: crimson');
     const docRef = doc(this.firestore, 'maps', action.id);
     deleteDoc(docRef);
@@ -83,7 +128,7 @@ export class MapState {
   ): void {
     // 👇 there's no map until there is one
     //    we can't use the old one!
-    ctx.setState(null);
+    ctx.dispatch(new ClearMap());
     console.log(`%cFirestore get: maps ${action.id}`, 'color: goldenrod');
     const docRef = doc(this.firestore, 'maps', action.id);
     getDoc(docRef).then((doc) => {
@@ -105,6 +150,7 @@ export class MapState {
     ctx: StateContext<MapStateModel>,
     action: UpdateMap
   ): void {
+    if (action.refresh) ctx.dispatch(new ClearMap());
     if (action.map.isDflt) {
       console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
       const docRef = doc(this.firestore, 'maps', action.map.id);

@@ -4,6 +4,7 @@ import { CanDo } from '@lib/state/parcels';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { CreateMapError } from '@lib/state/map';
 import { DestroyService } from '@lib/services/destroy';
 import { Event } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -76,7 +77,10 @@ export class RootPage implements OnInit {
 
   #handleMapErrorActions$(): void {
     this.actions$
-      .pipe(ofActionSuccessful(UpdateMapError), takeUntil(this.destroy$))
+      .pipe(
+        ofActionSuccessful(CreateMapError, UpdateMapError),
+        takeUntil(this.destroy$)
+      )
       .subscribe((action: UpdateMapError) => {
         const data: MessageDialogData = {
           message: action.error
