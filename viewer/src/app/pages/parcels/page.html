@@ -84,7 +84,6 @@
           [showBackground]="'always'"
         ></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
@@ -236,7 +235,7 @@
       </ng-container>
     </ng-container>
 
-    <!-- 📦 BOUNDARY LAYER -->
+    <!-- 📦 BOUNDARY LAYER (below selection so dimension is not obscured) -->
 
     <app-ol-layer-vector>
       <app-ol-style-polygons></app-ol-style-polygons>
@@ -245,7 +244,10 @@
 
     <!-- 📦 SELECTION LAYER -->
 
-    <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
+    <app-ol-layer-vector
+      *ngIf="(zoom$ | async) >= olMap.minUsefulZoom"
+      [autoRefresh]="true"
+    >
       <app-ol-style-parcels
         [showAbutters]="'whenAbutted'"
         [showBorder]="'always'"
@@ -263,7 +265,6 @@
       <app-ol-popup-selection>
         <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>
       </app-ol-popup-selection>
-      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-vector>
 
     <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->

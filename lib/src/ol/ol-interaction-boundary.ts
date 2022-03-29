@@ -70,14 +70,16 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
   #setBoundary(): void {
     // 👉 the one and only feature is the boundary
     this.#boundary = this.layer.olLayer.getSource().getFeatures()[0];
-    const features = new OLCollection([this.#boundary]);
-    this.olModify = new OLModify({
-      deleteCondition: (event): boolean =>
-        click(event) && platformModifierKeyOnly(event),
-      features,
-      hitDetection: this.layer.olLayer
-    });
-    this.map.olMap.addInteraction(this.olModify);
+    if (this.#boundary) {
+      const features = new OLCollection([this.#boundary]);
+      this.olModify = new OLModify({
+        deleteCondition: (event): boolean =>
+          click(event) && platformModifierKeyOnly(event),
+        features,
+        hitDetection: this.layer.olLayer
+      });
+      this.map.olMap.addInteraction(this.olModify);
+    }
   }
 
   #unsetBoundary(): void {
@@ -95,6 +97,6 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
     setTimeout(() => {
       this.#handleStreams$();
       this.#setBoundary();
-    }, 1000);
+    }, 1500 /* 👈 not always long enough, hence check in #setBoundary */);
   }
 }

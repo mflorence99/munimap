@@ -23,6 +23,8 @@ import OLVectorTile from 'ol/layer/VectorTile';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerVectorTileComponent implements Mapable {
+  @Input() autoRefresh = false;
+
   olLayer: OLVectorTile;
 
   @Input() set maxZoom(maxZoom: number) {
@@ -39,6 +41,6 @@ export class OLLayerVectorTileComponent implements Mapable {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
-    this.olLayer.getSource()?.refresh();
+    if (this.autoRefresh) this.olLayer.getSource()?.refresh();
   }
 }

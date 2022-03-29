@@ -26,6 +26,8 @@ import OLMapbox from 'ol/layer/MapboxVector';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerMapboxComponent implements Mapable, OnInit {
+  @Input() autoRefresh = false;
+
   @Input() maxZoom: number;
 
   olLayer: OLMapbox;
@@ -38,7 +40,7 @@ export class OLLayerMapboxComponent implements Mapable, OnInit {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
-    this.olLayer.getSource()?.refresh();
+    if (this.autoRefresh) this.olLayer.getSource()?.refresh();
   }
 
   ngOnInit(): void {

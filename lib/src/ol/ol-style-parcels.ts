@@ -101,6 +101,7 @@ export class OLStyleParcelsComponent implements Styler {
   @Input() showLabelContrast: ShowStatus = 'never';
   @Input() showLabels: ShowStatus = 'never';
   @Input() showSelection: ShowStatus = 'never';
+  @Input() showStolen: ShowStatus = 'never';
   @Input() straightLineTolerance = 15;
 
   constructor(
@@ -127,7 +128,7 @@ export class OLStyleParcelsComponent implements Styler {
     const color = this.map.vars['--map-parcel-text-inverse'];
     const outline = this.map.vars['--map-parcel-text-color'];
     const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
-    // 👉 get the fointSizes up front for each polygon
+    // 👉 get the fontSizes up front for each polygon
     const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
     return (
       dimensions
@@ -653,38 +654,56 @@ export class OLStyleParcelsComponent implements Styler {
     return styles;
   }
 
+  // 🔥 the whole notion of "stolen" parcels to support multi-town
+  //    property maps is a possibly temporary hack, so we don't mind
+  //    for now the secret handshake that their parcel IDs are
+  //    wrapped in parentheses as in (12-4)
+
   style(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      const props = feature.getProperties() as ParcelProperties;
-      const whenRedrawn = false;
-      const whenSelected = false;
-      // 👉 the selector MAY not be present
-      const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-      const whenAbutted =
-        this.showAbutters === 'whenAbutted' &&
-        selector?.abutterIDs?.includes(props.id);
-      return this.#theStyles(
-        feature,
-        resolution,
-        whenRedrawn,
-        whenSelected,
-        whenAbutted
-      );
+      // 👉 stolen parcels
+      if (feature.getId().startsWith('(') && this.showStolen === 'never')
+        return null;
+      // 👉 normal parcels
+      else {
+        const props = feature.getProperties() as ParcelProperties;
+        const whenRedrawn = false;
+        const whenSelected = false;
+        // 👉 the selector MAY not be present
+        const selector = this.map
+          .selector as OLInteractionSelectParcelsComponent;
+        const whenAbutted =
+          this.showAbutters === 'whenAbutted' &&
+          selector?.abutterIDs?.includes(props.id);
+        return this.#theStyles(
+          feature,
+          resolution,
+          whenRedrawn,
+          whenSelected,
+          whenAbutted
+        );
+      }
     };
   }
 
   styleWhenSelected(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      const whenRedrawn = !!feature.get('ol-interaction-redraw');
-      const whenSelected = true;
-      const whenAbutted = false;
-      return this.#theStyles(
-        feature,
-        resolution,
-        whenRedrawn,
-        whenSelected,
-        whenAbutted
-      );
+      // 👉 stolen parcels
+      if (feature.getId().startsWith('(') && this.showStolen === 'never')
+        return null;
+      // 👉 normal parcels
+      else {
+        const whenRedrawn = !!feature.get('ol-interaction-redraw');
+        const whenSelected = true;
+        const whenAbutted = false;
+        return this.#theStyles(
+          feature,
+          resolution,
+          whenRedrawn,
+          whenSelected,
+          whenAbutted
+        );
+      }
     };
   }
 }

@@ -125,11 +125,9 @@
           <app-ol-layer-vector>
             <app-ol-style-parcels
               [showBackground]="'always'"
+              [showStolen]="isPrivileged() ? 'always' : 'never'"
             ></app-ol-style-parcels>
             <app-ol-source-parcels></app-ol-source-parcels>
-            <app-ol-filter-crop2boundary
-              *ngIf="!isPrivileged"
-            ></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
@@ -242,14 +240,11 @@
           </app-ol-layer-tile>
         </ng-container>
 
-        <!-- 📦 BOUNDARY LAYER -->
+        <!-- 📦 BOUNDARY LAYER (below selection so dimension is not obscured) -->
 
-        <app-ol-layer-vector>
+        <app-ol-layer-vector *ngIf="!isPrivileged()">
           <app-ol-style-polygons></app-ol-style-polygons>
           <app-ol-source-boundary></app-ol-source-boundary>
-          <app-ol-interaction-boundary
-            *ngIf="isPrivileged()"
-          ></app-ol-interaction-boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 BOUNDARY GRID LAYER (testing only) -->
@@ -265,22 +260,21 @@
           <app-ol-style-parcels
             [showBorder]="'always'"
             [showLabels]="'always'"
+            [showStolen]="isPrivileged() ? 'always' : 'never'"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
-          <app-ol-filter-crop2boundary
-            *ngIf="!isPrivileged"
-          ></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 SELECTION LAYER (not printed) -->
 
-        <app-ol-layer-vector *ngIf="!olMap.printing">
+        <app-ol-layer-vector *ngIf="!olMap.printing" [autoRefresh]="true">
           <app-ol-style-parcels
             [showBorder]="'always'"
             [showDimensions]="'whenSelected'"
             [showLabels]="'always'"
             [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'never'"
             [showSelection]="'always'"
+            [showStolen]="isPrivileged() ? 'always' : 'never'"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-interaction-selectparcels [eventType]="'click'">
@@ -291,9 +285,6 @@
             </mat-menu>
           </app-ol-interaction-selectparcels>
           <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
-          <app-ol-filter-crop2boundary
-            *ngIf="!isPrivileged"
-          ></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
@@ -302,6 +293,14 @@
           <app-ol-style-roads [showRoadName]="true"></app-ol-style-roads>
           <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <!-- 📦 BOUNDARY LAYER (above selection so we can interact with it) -->
+
+        <app-ol-layer-vector *ngIf="isPrivileged()">
+          <app-ol-style-polygons></app-ol-style-polygons>
+          <app-ol-source-boundary></app-ol-source-boundary>
+          <app-ol-interaction-boundary></app-ol-interaction-boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->

@@ -23,6 +23,8 @@ import OLTile from 'ol/layer/Tile';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerTileComponent implements Mapable {
+  @Input() autoRefresh = false;
+
   olLayer: OLTile<any>;
 
   @Input() set maxZoom(maxZoom: number) {
@@ -39,6 +41,6 @@ export class OLLayerTileComponent implements Mapable {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
-    this.olLayer.getSource()?.refresh();
+    if (this.autoRefresh) this.olLayer.getSource()?.refresh();
   }
 }
