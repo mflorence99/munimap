@@ -1,6 +1,6 @@
 {
   "name": "munimap",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "MuniMap",
   "license": "MIT",
   "repository": {
@@ -9,14 +9,17 @@
   },
   "author": "Mark Florence",
   "scripts": {
+    "assets:viewer:henniker": "cp ./data/'NEW HAMPSHIRE'/MERRIMACK/HENNIKER/*.geojson ./viewer/assets",
     "assets:viewer:washington": "cp ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/*.geojson ./viewer/assets",
     "build:author": "npm run lint && ng build author --configuration production",
     "build:proxy": "npm run lint && npm run compile:proxy && cp proxy/package.json dist/proxy && npm --prefix dist/proxy i",
+    "build:viewer:henniker": "npm run lint && npm run assets:viewer:henniker && ng build viewer --configuration production",
     "build:viewer:washington": "npm run lint && npm run assets:viewer:washington && ng build viewer --configuration production",
     "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm install && npm outdated",
     "compile:proxy": "rm -rf dist/proxy/node_modules && rm -f dist/proxy/package-lock.json && tsc -p proxy/src",
     "deploy:aws:author": "./author/deploy-aws.sh",
     "deploy:aws:proxy": "npm run build:proxy && cp proxy/serverless.yml dist/proxy && cd dist/proxy && serverless deploy",
+    "deploy:aws:viewer:henniker": "./viewer/deploy-aws-henniker.sh",
     "deploy:aws:viewer:washington": "./viewer/deploy-aws-washington.sh",
     "firebase:backup": "ts-node --dir bin firebase-backup.ts",
     "firebase:emulators": "firebase emulators:start",
@@ -59,6 +62,7 @@
     "serve:author": "ng serve author --port 4200 --allowed-hosts admin.lots.online",
     "serve:author:ssl": "ws -p 8100 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/author --log.format dev",
     "serve:proxy": "npm run compile:proxy && node dist/proxy/server.js --port 4201",
+    "serve:viewer:henniker": "npm run assets:viewer:henniker && ng serve viewer --port 4202 --allowed-hosts henniker.lots.online",
     "serve:viewer:ssl": "ws -p 8102 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/viewer --log.format dev",
     "serve:viewer:washington": "npm run assets:viewer:washington && ng serve viewer --port 4202 --allowed-hosts washington.lots.online",
     "xxx": "npm run assets:viewer:washington && ng build viewer --watch",

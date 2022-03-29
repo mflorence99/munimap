@@ -1,6 +1,8 @@
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsOverlayComponent } from './pages/parcels/overlay';
 import { ParcelsPage } from './pages/parcels/page';
+import { PropertyLegendComponent } from './pages/property/legend';
+import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { StreetsLegendComponent } from './pages/streets/legend';
 import { StreetsPage } from './pages/streets/page';
@@ -56,6 +58,7 @@ import { OLControlSplitScreenComponent } from '@lib/ol/ol-control-splitscreen';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
+import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterCrop2SelectedParcelsComponent } from '@lib/ol/parcels/ol-filter-crop2selectedparcels';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
@@ -159,6 +162,7 @@ const COMPONENTS = [
   OLControlZoomToExtentComponent,
   OLFilterColorizeComponent,
   OLFilterCrop2BoundaryComponent,
+  OLFilterCrop2PropertyParcelsComponent,
   OLFilterCrop2SelectedParcelsComponent,
   OLInteractionSelectParcelsComponent,
   OLLayerMapboxComponent,
@@ -207,6 +211,7 @@ const COMPONENTS = [
   OLStyleWetlandComponent,
   ParcelsLegendComponent,
   ParcelsOverlayComponent,
+  PropertyLegendComponent,
   StreetsLegendComponent,
   TopoLegendComponent,
   VersionDialogComponent
@@ -214,7 +219,7 @@ const COMPONENTS = [
 
 const DIRECTIVES = [];
 
-const PAGES = [ParcelsPage, RootPage, StreetsPage, TopoPage];
+const PAGES = [ParcelsPage, PropertyPage, RootPage, StreetsPage, TopoPage];
 
 const ROUTES = [
   {
@@ -237,6 +242,15 @@ const ROUTES = [
         path: 'parcels-overlay',
         component: ParcelsOverlayComponent,
         outlet: 'rightSidebar'
+      },
+      {
+        path: 'property',
+        component: PropertyPage
+      },
+      {
+        path: 'property-legend',
+        component: PropertyLegendComponent,
+        outlet: 'leftSidebar'
       },
       {
         path: 'streets',

@@ -25,6 +25,7 @@ interface Steal {
   owner: string;
   stolen: StolenParcel[];
   toPath: string;
+  uid: number;
 }
 
 const steals: Steal[] = [
@@ -47,7 +48,8 @@ const steals: Steal[] = [
         parcelID: '12-4'
       }
     ],
-    toPath: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
+    toPath: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    uid: 1
   },
   {
     fromPath: 'NEW HAMPSHIRE:HILLSBOROUGH:DEERING',
@@ -72,7 +74,8 @@ const steals: Steal[] = [
         parcelID: '202-6'
       }
     ],
-    toPath: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER'
+    toPath: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
+    uid: 2
   },
   {
     fromPath: 'NEW HAMPSHIRE:HILLSBOROUGH:WEARE',
@@ -124,7 +127,8 @@ const steals: Steal[] = [
         parcelID: '401-36'
       }
     ],
-    toPath: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER'
+    toPath: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
+    uid: 3
   }
 ];
 
@@ -168,7 +172,7 @@ async function main(): Promise<void> {
       console.log(chalk.yellow(`...... stealing parcel ${stolen.parcelID}`));
 
       // 👉 delete any prior steal
-      const docID = `STEAL (${stolen.parcelID})`;
+      const docID = `STEAL #${steal.uid} (${stolen.parcelID})`;
       await parcels.doc(docID).delete();
 
       // 👉 steal the parcel from the "from" path
