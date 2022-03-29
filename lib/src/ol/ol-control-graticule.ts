@@ -57,11 +57,12 @@ export class OLControlGraticuleComponent
   }
 
   ngOnInit(): void {
+    const dps = String(this.step).split('.')[1].length;
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olControl = new OLGraticule({
       borderWidth: this.borderPixels,
-      formatCoord: (coord): string => `${coord.toFixed(2)}°`,
+      formatCoord: (coord): string => `${coord.toFixed(dps)}°`,
       margin: this.margin,
       maxResolution: this.maxZoom
         ? this.map.olView.getResolutionForZoom(this.maxZoom)

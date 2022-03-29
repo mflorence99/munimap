@@ -29,10 +29,12 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleGraticuleComponent implements Styler {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 8;
+  @Input() fontSize = 9;
   @Input() fontWeight: 'bold' | 'normal' = 'normal';
   @Input() lineDash = [2, 2];
   @Input() lineWidth = 0.25;
+
+  @Input() printing: boolean;
 
   constructor(private map: OLMapComponent) {}
 
@@ -46,11 +48,17 @@ export class OLStyleGraticuleComponent implements Styler {
   #coords(): OLText {
     const color = this.map.vars['--map-graticule-text-color'];
     const outline = this.map.vars['--map-graticule-text-inverse'];
+    let fontSize = this.fontSize;
+    // 👇 when we are printing, we want the lat/lon to be visible
+    if (this.printing) {
+      const element = this.map.olMap.getTargetElement();
+      fontSize = element.clientHeight / 250;
+    }
     return new OLText({
-      font: `${this.fontWeight} ${this.fontSize}px '${this.fontFamily}'`,
+      font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
       fill: new OLFill({ color: `rgba(${color}, 1)` }),
       stroke: new OLStroke({
-        color: `rgba(${outline}, 2)`,
+        color: `rgba(${outline}, 3)`,
         width: 1
       })
     });

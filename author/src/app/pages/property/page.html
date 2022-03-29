@@ -29,13 +29,22 @@
     <ng-container *ngIf="olMap.initialized">
       <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-      <app-ol-control-graticule
+      <app-ol-control-title
+        *ngIf="olMap.printing"
+        [title]="map.name"
+      ></app-ol-control-title>
+
+      <app-ol-control-graticule *ngIf="olMap.printing" [step]="0.0025"
+        ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
+      ></app-ol-control-graticule>
+
+      <app-ol-control-graticule *ngIf="!olMap.printing" [step]="0.0025"
         ><app-ol-style-graticule></app-ol-style-graticule
       ></app-ol-control-graticule>
 
       <app-ol-control-scaleline
         *ngIf="olMap.printing"
-        [printing]="olMap.printing"
+        [printing]="true"
       ></app-ol-control-scaleline>
 
       <app-ol-control-scaleline
@@ -139,6 +148,16 @@
         <app-ol-layer-vector>
           <app-ol-style-bridges></app-ol-style-bridges>
           <app-ol-source-bridges></app-ol-source-bridges>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-style-places></app-ol-style-places>
+          <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
+          <app-ol-source-geojson
+            [exclude]="['dam', 'park']"
+            [layerKey]="'places'"
+          ></app-ol-source-geojson>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>

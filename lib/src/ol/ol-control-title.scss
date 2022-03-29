@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.title {
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 5%;
+
+  .header {
+    color: var(--background-color);
+    font-family: 'Bentham Regular', sans-serif;
+    font-weight: bold;
+    font-size: 10%;
+    text-align: center;
+  }
+}

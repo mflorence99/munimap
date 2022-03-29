@@ -28,7 +28,11 @@
     <ng-container *ngIf="olMap.initialized">
       <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-      <app-ol-control-graticule
+      <app-ol-control-graticule *ngIf="olMap.printing"
+        ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
+      ></app-ol-control-graticule>
+
+      <app-ol-control-graticule *ngIf="!olMap.printing"
         ><app-ol-style-graticule></app-ol-style-graticule
       ></app-ol-control-graticule>
 
@@ -43,7 +47,7 @@
 
       <app-ol-control-scaleline
         *ngIf="olMap.printing"
-        [printing]="olMap.printing"
+        [printing]="true"
       ></app-ol-control-scaleline>
 
       <app-ol-control-scaleline

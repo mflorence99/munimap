@@ -74,6 +74,7 @@ import { OLControlPrintProgressComponent } from '@lib/ol/ol-control-printprogres
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OLControlStreetsLegendComponent } from '@lib/ol/streets/ol-control-streetslegend';
+import { OLControlTitleComponent } from '@lib/ol/ol-control-title';
 import { OLControlTopoLegendComponent } from '@lib/ol/topo/ol-control-topolegend';
 import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
@@ -211,6 +212,7 @@ const COMPONENTS = [
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
   OLControlStreetsLegendComponent,
+  OLControlTitleComponent,
   OLControlTopoLegendComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,

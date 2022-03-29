@@ -11,6 +11,8 @@ import { forwardRef } from '@angular/core';
 
 import OLAttribution from 'ol/control/Attribution';
 
+// 🔥 this control is designed ONLY to be printed on the map
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -42,6 +44,13 @@ export class OLControlCreditsComponent implements AfterViewInit, Mapable {
     setTimeout(() => {
       const credits = document.querySelector('.ol-credits');
       credits?.prepend(this.host.nativeElement.innerText);
+      // 👇 set the font and position proportional to the map size
+      const element = this.map.olMap.getTargetElement();
+      const style = (credits as any).style;
+      const dim = `${element.clientHeight / 150}px`;
+      style.bottom = dim;
+      style.fontSize = dim;
+      style.right = dim;
     }, 0);
   }
 }

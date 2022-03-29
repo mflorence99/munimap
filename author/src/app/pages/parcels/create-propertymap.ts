@@ -43,6 +43,8 @@ interface PropertyMapRecord {
 export class CreatePropertyMapComponent
   implements ContextMenuComponent, OnInit
 {
+  @Input() border = 500 /* 👈 feet */;
+
   @ViewChild('createForm', { static: true }) createForm: NgForm;
 
   @Input() drawer: MatDrawer;
@@ -81,7 +83,7 @@ export class CreatePropertyMapComponent
       properties: {},
       type: 'Feature'
     };
-    const border = 300 * 0.0003048; /* 👈 feet to kilometers */
+    const border = this.border * 0.0003048; /* 👈 feet to kilometers */
     this.record.bbox = bboxByAspectRatio(merged, 4, 3, border);
     this.record.parcelIDs = this.selectedIDs.join('\n');
   }
