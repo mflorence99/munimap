@@ -127,6 +127,9 @@
               [showBackground]="'always'"
             ></app-ol-style-parcels>
             <app-ol-source-parcels></app-ol-source-parcels>
+            <app-ol-filter-crop2boundary
+              *ngIf="!isPrivileged"
+            ></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
@@ -264,6 +267,9 @@
             [showLabels]="'always'"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
+          <app-ol-filter-crop2boundary
+            *ngIf="!isPrivileged"
+          ></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 SELECTION LAYER (not printed) -->
@@ -285,6 +291,9 @@
             </mat-menu>
           </app-ol-interaction-selectparcels>
           <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
+          <app-ol-filter-crop2boundary
+            *ngIf="!isPrivileged"
+          ></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
         <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->

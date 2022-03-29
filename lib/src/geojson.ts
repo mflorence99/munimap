@@ -349,17 +349,27 @@ function bboxByAspectRatioImpl(
   const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
   // 👉 compare aspect ratios and pick best one
   const ar = cx / cy;
-  // 👉 bias square or nearly square to landscape
-  if (ar < 0.9) {
+  // 👉 aspect ration less than 1 means portrait
+  if (ar < 1) {
     const z = (cy * y) / x;
-    // note buffer
-    return bboxByDimensions(geojson, z + b, cy + (b * x) / y);
+    // account for buffer
+    const bx = b;
+    const by = (b * x) / y;
+    // can't make cx smaller!
+    const dx = Math.max(cx - z, 0);
+    const dy = (dx * x) / y;
+    return bboxByDimensions(geojson, z + bx + dx, cy + by + dy);
   }
   // 👉 OK, must be landscape
   else {
     const z = (cx * y) / x;
-    // note buffer
-    return bboxByDimensions(geojson, cx + (b * x) / y, z + b);
+    // account for buffer
+    const by = b;
+    const bx = (by * x) / y;
+    // can't make cy smaller!
+    const dy = Math.max(cy - z, 0);
+    const dx = (dy * x) / y;
+    return bboxByDimensions(geojson, cx + bx + dx, z + by + dy);
   }
 }
 

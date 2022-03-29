@@ -20,6 +20,8 @@
     "deploy:aws:viewer:washington": "./viewer/deploy-aws-washington.sh",
     "firebase:backup": "ts-node --dir bin firebase-backup.ts",
     "firebase:emulators": "firebase emulators:start",
+    "firebase:parcel:stealer:prod": "ts-node --dir bin parcel-stealer.ts",
+    "firebase:parcel:stealer:test": "ts-node --dir bin parcel-stealer.ts --useEmulator",
     "lint": "eslint --ext ts ./",
     "patcher": "ts-node --dir bin patcher.ts",
     "postinstall": "npm run patcher",

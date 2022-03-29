@@ -84,6 +84,7 @@
           [showBackground]="'always'"
         ></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
@@ -262,6 +263,7 @@
       <app-ol-popup-selection>
         <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>
       </app-ol-popup-selection>
+      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     </app-ol-layer-vector>
 
     <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->

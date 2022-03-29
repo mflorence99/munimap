@@ -1,6 +1,12 @@
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
 
+// 👇 https://github.com/firebase/firebase-admin-node/issues/776
+
+const useEmulator = false;
+
+if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
+
 // 👇 https://stackoverflow.com/questions/49691215/cloud-functions-how-to-copy-firestore-collection-to-a-new-document
 
 firebase.initializeApp({
