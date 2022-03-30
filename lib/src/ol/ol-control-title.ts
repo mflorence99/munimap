@@ -41,6 +41,8 @@ export class OLControlTitleComponent implements Mapable, OnInit {
 
   olControl: OLControl;
 
+  @Input() showTitleContrast: boolean;
+
   @Input() title: string;
 
   @ViewChild('titleRef', { static: true }) titleRef: ElementRef;

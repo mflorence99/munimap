@@ -31,6 +31,7 @@
 
       <app-ol-control-title
         *ngIf="olMap.printing"
+        [showTitleContrast]="satelliteView$ | async"
         [title]="map.name"
       ></app-ol-control-title>
 

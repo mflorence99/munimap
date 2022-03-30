@@ -49,6 +49,7 @@ export class OLControlCreditsComponent implements AfterViewInit, Mapable {
       const style = (credits as any).style;
       const dim = `${element.clientHeight / 150}px`;
       style.bottom = dim;
+      style.height = dim;
       style.fontSize = dim;
       style.right = dim;
     }, 0);
