@@ -271,7 +271,7 @@
 
         <!-- 📦 SELECTION LAYER (not printed) -->
 
-        <app-ol-layer-vector *ngIf="!olMap.printing" [autoRefresh]="true">
+        <app-ol-layer-vector *ngIf="!olMap.printing">
           <app-ol-style-parcels
             [showBorder]="'always'"
             [showDimensions]="'whenSelected'"

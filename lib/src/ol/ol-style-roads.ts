@@ -1,3 +1,4 @@
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { RoadProperties } from '../geojson';
 import { Styler } from './ol-styler';
@@ -6,6 +7,8 @@ import { StylerComponent } from './ol-styler';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
@@ -28,7 +31,7 @@ import OLText from 'ol/style/Text';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleRoadsComponent implements Styler {
+export class OLStyleRoadsComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -39,7 +42,10 @@ export class OLStyleRoadsComponent implements Styler {
   @Input() showRoadLane = false;
   @Input() showRoadName = false;
 
-  constructor(private map: OLMapComponent) {}
+  constructor(
+    private layer: OLLayerVectorComponent,
+    private map: OLMapComponent
+  ) {}
 
   #drawText(props: RoadProperties, resolution: number): OLText {
     const fontSize = this.#fontSize(resolution);
@@ -115,6 +121,12 @@ export class OLStyleRoadsComponent implements Styler {
       lineJoin: 'bevel',
       width: roadPixels
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
   }
 
   style(): OLStyleFunction {

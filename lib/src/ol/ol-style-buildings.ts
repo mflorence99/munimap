@@ -1,3 +1,4 @@
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
@@ -5,6 +6,8 @@ import { StylerComponent } from './ol-styler';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
@@ -26,10 +29,19 @@ import OLStyle from 'ol/style/Style';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleBuildingsComponent implements Styler {
+export class OLStyleBuildingsComponent implements OnChanges, Styler {
   @Input() shadowLength = 10 /* 👈 feet */;
 
-  constructor(private map: OLMapComponent) {}
+  constructor(
+    private layer: OLLayerVectorComponent,
+    private map: OLMapComponent
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
+  }
 
   style(): OLStyleFunction {
     return (building: any): OLStyle[] => {

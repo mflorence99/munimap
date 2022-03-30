@@ -1,3 +1,4 @@
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { PlaceProperties } from '../geojson';
 import { PlacePropertiesType } from '../geojson';
@@ -7,6 +8,8 @@ import { StylerComponent } from './ol-styler';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
@@ -126,7 +129,7 @@ const ICONS: {
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStylePlacesComponent implements Styler {
+export class OLStylePlacesComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 12;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -135,7 +138,10 @@ export class OLStylePlacesComponent implements Styler {
   @Input() textAlign = 'center';
   @Input() textBaseline = 'bottom';
 
-  constructor(private map: OLMapComponent) {}
+  constructor(
+    private layer: OLLayerVectorComponent,
+    private map: OLMapComponent
+  ) {}
 
   #attrs(props: PlaceProperties): PlaceStyleAttributes {
     // 👉 if the place type is in the exceptions list, use that
@@ -193,6 +199,12 @@ export class OLStylePlacesComponent implements Styler {
       /\w\S*/g,
       (str) => str.charAt(0).toUpperCase() + str.substring(1).toLowerCase()
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
   }
 
   style(): OLStyleFunction {

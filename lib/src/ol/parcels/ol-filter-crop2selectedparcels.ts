@@ -1,9 +1,7 @@
 import { DestroyService } from '../../services/destroy';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
-import { OLLayerMapboxComponent } from '../ol-layer-mapbox';
 import { OLLayerTileComponent } from '../ol-layer-tile';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
-import { OLLayerVectorTileComponent } from '../ol-layer-vectortile';
 import { OLMapComponent } from '../ol-map';
 
 import { AfterContentInit } from '@angular/core';
@@ -36,10 +34,8 @@ export class OLFilterCrop2SelectedParcelsComponent
 
   constructor(
     private destroy$: DestroyService,
-    @Optional() layer1: OLLayerMapboxComponent,
-    @Optional() layer2: OLLayerTileComponent,
-    @Optional() layer3: OLLayerVectorComponent,
-    @Optional() layer4: OLLayerVectorTileComponent,
+    @Optional() layer1: OLLayerTileComponent,
+    @Optional() layer2: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
     this.#format = new OLGeoJSON({
@@ -47,7 +43,7 @@ export class OLFilterCrop2SelectedParcelsComponent
       featureProjection: this.map.projection
     });
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2 ?? layer3 ?? layer4;
+    this.#layer = layer1 ?? layer2;
   }
 
   #addFilter(): void {

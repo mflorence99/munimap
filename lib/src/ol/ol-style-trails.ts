@@ -1,3 +1,4 @@
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
@@ -6,6 +7,8 @@ import { TrailProperties } from '../geojson';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
@@ -27,7 +30,7 @@ import OLText from 'ol/style/Text';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleTrailsComponent implements Styler {
+export class OLStyleTrailsComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -36,7 +39,10 @@ export class OLStyleTrailsComponent implements Styler {
   @Input() minFontSize = 4;
   @Input() trailWidth = 10 /* 👈 feet */;
 
-  constructor(private map: OLMapComponent) {}
+  constructor(
+    private layer: OLLayerVectorComponent,
+    private map: OLMapComponent
+  ) {}
 
   #drawLine(props: TrailProperties, resolution: number): OLStroke {
     const color = this.map.vars['--map-trail-line-color'];
@@ -84,6 +90,12 @@ export class OLStyleTrailsComponent implements Styler {
       this.maxTrailPixels,
       this.trailWidth / (resolution * 3.28084)
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
   }
 
   style(): OLStyleFunction {

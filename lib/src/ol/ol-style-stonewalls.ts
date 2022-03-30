@@ -1,3 +1,4 @@
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStrokePatternType } from './ol-styler';
 import { Styler } from './ol-styler';
@@ -6,6 +7,8 @@ import { StylerComponent } from './ol-styler';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
@@ -26,14 +29,17 @@ import OLStyle from 'ol/style/Style';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleStoneWallsComponent implements Styler {
+export class OLStyleStoneWallsComponent implements OnChanges, Styler {
   @Input() maxWallPixels = 6;
   @Input() minWallPixels = 3;
   @Input() opacity = 0.33;
   @Input() pattern: OLStrokePatternType = 'rocks';
   @Input() wallWidth = 25 /* 👈 feet */;
 
-  constructor(private map: OLMapComponent) {}
+  constructor(
+    private layer: OLLayerVectorComponent,
+    private map: OLMapComponent
+  ) {}
 
   #wallPixels(resolution: number): number {
     // 👉 wallWidth is proportional to the resolution,
@@ -42,6 +48,12 @@ export class OLStyleStoneWallsComponent implements Styler {
       this.maxWallPixels,
       this.wallWidth / (resolution * 3.28084)
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
   }
 
   style(): OLStyleFunction {

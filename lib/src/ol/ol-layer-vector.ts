@@ -28,8 +28,6 @@ import OLVector from 'ol/layer/Vector';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerVectorComponent implements Mapable {
-  @Input() autoRefresh = false;
-
   olLayer: OLVector<any>;
 
   @ContentChildren(StylerComponent, { descendants: true })
@@ -52,7 +50,6 @@ export class OLLayerVectorComponent implements Mapable {
 
   addToMap(): void {
     this.map.olMap.addLayer(this.olLayer);
-    if (this.autoRefresh) this.olLayer.getSource()?.refresh();
   }
 
   style(): OLStyleFunction {

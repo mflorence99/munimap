@@ -86,10 +86,8 @@ import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary'
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLInteractionSelectPolygonComponent } from '@lib/ol/ol-interaction-selectpolygon';
-import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
-import { OLLayerVectorTileComponent } from '@lib/ol/ol-layer-vectortile';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
@@ -224,10 +222,8 @@ const COMPONENTS = [
   OLInteractionRedrawParcelComponent,
   OLInteractionSelectParcelsComponent,
   OLInteractionSelectPolygonComponent,
-  OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
-  OLLayerVectorTileComponent,
   OLMapComponent,
   OLOverlayParcelLabelComponent,
   OLSourceBoundaryComponent,

@@ -244,12 +244,9 @@
 
     <!-- 📦 SELECTION LAYER -->
 
-    <app-ol-layer-vector
-      *ngIf="(zoom$ | async) >= olMap.minUsefulZoom"
-      [autoRefresh]="true"
-    >
+    <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
       <app-ol-style-parcels
-        [showAbutters]="'whenAbutted'"
+        [showAbutters]="'whenSelected'"
         [showBorder]="'always'"
         [showDimensions]="'whenSelected'"
         [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'whenSelected'"

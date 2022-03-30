@@ -1,3 +1,4 @@
+import { OLControlGraticuleComponent } from './ol-control-graticule';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
@@ -29,14 +30,17 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleGraticuleComponent implements Styler {
   @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 9;
+  @Input() fontSize = 10;
   @Input() fontWeight: 'bold' | 'normal' = 'normal';
   @Input() lineDash = [2, 2];
   @Input() lineWidth = 0.25;
 
   @Input() printing: boolean;
 
-  constructor(private map: OLMapComponent) {}
+  constructor(
+    private graticue: OLControlGraticuleComponent /* 👈 enforce container */,
+    private map: OLMapComponent
+  ) {}
 
   #border(): OLFill {
     // 👉 this is the part ofthe border that isn't the same

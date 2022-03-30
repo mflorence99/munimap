@@ -1,3 +1,4 @@
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { RailroadProperties } from '../geojson';
 import { Styler } from './ol-styler';
@@ -6,6 +7,8 @@ import { StylerComponent } from './ol-styler';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
@@ -27,7 +30,7 @@ import OLText from 'ol/style/Text';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleRailroadsComponent implements Styler {
+export class OLStyleRailroadsComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize = 24;
   @Input() fontWeight: 'bold' | 'normal' = 'bold';
@@ -37,7 +40,10 @@ export class OLStyleRailroadsComponent implements Styler {
   @Input() minTrackPixels = 3;
   @Input() trackWidth = 15 /* 👈 feet */;
 
-  constructor(private map: OLMapComponent) {}
+  constructor(
+    private layer: OLLayerVectorComponent,
+    private map: OLMapComponent
+  ) {}
 
   #color(props: RailroadProperties): string {
     return props.active
@@ -100,6 +106,13 @@ export class OLStyleRailroadsComponent implements Styler {
       Math.min(this.maxTrackPixels, this.trackWidth / (resolution * 3.28084))
     );
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
+  }
+
   style(): OLStyleFunction {
     return (railroad: any, resolution: number): OLStyle[] => {
       const props = railroad.getProperties() as RailroadProperties;

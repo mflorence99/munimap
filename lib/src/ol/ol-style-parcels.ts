@@ -1,4 +1,5 @@
 import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
 import { OverlayState } from '../state/overlay';
@@ -11,7 +12,9 @@ import { Component } from '@angular/core';
 import { Coordinate as OLCoordinate } from 'ol/coordinate';
 import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
 import { QueryList } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { ViewChildren } from '@angular/core';
 
@@ -81,7 +84,7 @@ type ShowStatus = 'always' | 'never' | 'whenAbutted' | 'whenSelected';
   `,
   styles: [':host { display: none }']
 })
-export class OLStyleParcelsComponent implements Styler {
+export class OLStyleParcelsComponent implements OnChanges, Styler {
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 
@@ -106,6 +109,7 @@ export class OLStyleParcelsComponent implements Styler {
 
   constructor(
     private decimal: DecimalPipe,
+    private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private overlayState: OverlayState
   ) {}
@@ -654,6 +658,12 @@ export class OLStyleParcelsComponent implements Styler {
     return styles;
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
+  }
+
   // 🔥 the whole notion of "stolen" parcels to support multi-town
   //    property maps is a possibly temporary hack, so we don't mind
   //    for now the secret handshake that their parcel IDs are
@@ -673,7 +683,7 @@ export class OLStyleParcelsComponent implements Styler {
         const selector = this.map
           .selector as OLInteractionSelectParcelsComponent;
         const whenAbutted =
-          this.showAbutters === 'whenAbutted' &&
+          this.showAbutters === 'whenSelected' &&
           selector?.abutterIDs?.includes(props.id);
         return this.#theStyles(
           feature,

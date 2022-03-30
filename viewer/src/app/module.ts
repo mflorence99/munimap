@@ -61,10 +61,8 @@ import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary'
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterCrop2SelectedParcelsComponent } from '@lib/ol/parcels/ol-filter-crop2selectedparcels';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
-import { OLLayerMapboxComponent } from '@lib/ol/ol-layer-mapbox';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
-import { OLLayerVectorTileComponent } from '@lib/ol/ol-layer-vectortile';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
 import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parcelproperties';
@@ -165,10 +163,8 @@ const COMPONENTS = [
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterCrop2SelectedParcelsComponent,
   OLInteractionSelectParcelsComponent,
-  OLLayerMapboxComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
-  OLLayerVectorTileComponent,
   OLMapComponent,
   OLOverlayGPSComponent,
   OLPopupParcelPropertiesComponent,
