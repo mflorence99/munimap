@@ -144,7 +144,10 @@
 
       <app-ol-layer-vector>
         <app-ol-style-parcels
+          [parcelIDs]="map.parcelIDs"
           [showBorder]="'always'"
+          [showDimensionContrast]="'always'"
+          [showDimensions]="'onlyParcelIDs'"
           [showLabels]="'always'"
           [showLabelContrast]="'never'"
           [showStolen]="'always'"
@@ -222,7 +225,9 @@
 
         <app-ol-layer-vector>
           <app-ol-style-parcels
+            [parcelIDs]="map.parcelIDs"
             [showBorder]="'always'"
+            [showDimensions]="'onlyParcelIDs'"
             [showLabels]="'always'"
             [showLabelContrast]="'always'"
             [showStolen]="'always'"

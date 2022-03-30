@@ -3,6 +3,7 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
 import { OverlayState } from '../state/overlay';
+import { ParcelID } from '../geojson';
 import { ParcelProperties } from '../geojson';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
@@ -56,7 +57,7 @@ interface Label {
   text: string;
 }
 
-type ShowStatus = 'always' | 'never' | 'whenAbutted' | 'whenSelected';
+type ShowStatus = 'always' | 'never' | 'onlyParcelIDs' | 'whenSelected';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,9 +98,11 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() maxFontSize = 40;
   @Input() minFontSize = 6;
   @Input() opacity = 0.25;
+  @Input() parcelIDs: ParcelID[];
   @Input() showAbutters: ShowStatus = 'never';
   @Input() showBackground: ShowStatus = 'never';
   @Input() showBorder: ShowStatus = 'never';
+  @Input() showDimensionContrast: ShowStatus = 'never';
   @Input() showDimensions: ShowStatus = 'never';
   @Input() showLabelContrast: ShowStatus = 'never';
   @Input() showLabels: ShowStatus = 'never';
@@ -123,14 +126,32 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     );
   }
 
+  #canShow(
+    feature: OLFeature<any>,
+    showStatus: ShowStatus,
+    whenSelected: boolean
+  ): boolean {
+    return (
+      showStatus === 'always' ||
+      (showStatus === 'whenSelected' && whenSelected) ||
+      (showStatus === 'onlyParcelIDs' &&
+        this.parcelIDs?.includes(feature.getId()))
+    );
+  }
+
   #dimensions(
     props: ParcelProperties,
     resolution: number,
-    polygons: OLPolygon[]
+    polygons: OLPolygon[],
+    contrast: boolean
   ): OLStyle[] {
     // 👉 we will draw the length of each "straight" line in each polygon
-    const color = this.map.vars['--map-parcel-text-inverse'];
-    const outline = this.map.vars['--map-parcel-text-color'];
+    const color = !contrast
+      ? this.map.vars['--map-parcel-text-inverse']
+      : this.map.vars['--map-parcel-text-color'];
+    const outline = contrast
+      ? this.map.vars['--map-parcel-text-inverse']
+      : this.map.vars['--map-parcel-text-color'];
     const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
     // 👉 get the fontSizes up front for each polygon
     const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
@@ -598,18 +619,12 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     const { fill: overlayFill, stroke: overlayStroke } =
       this.overlayState.makeOverlayForParcelProperties(props);
     // 👇 background
-    if (
-      this.showBackground === 'always' ||
-      (whenSelected && this.showBackground === 'whenSelected')
-    ) {
+    if (this.#canShow(feature, this.showBackground, whenSelected)) {
       const fills = this.#fill(props, resolution, numPolygons, overlayFill);
       if (fills) styles.push(...fills);
     }
     // 👇 border
-    if (
-      this.showBorder === 'always' ||
-      (whenSelected && this.showBorder === 'whenSelected')
-    ) {
+    if (this.#canShow(feature, this.showBorder, whenSelected)) {
       const strokes = this.#strokeBorder(
         props,
         resolution,
@@ -618,33 +633,37 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       );
       if (strokes) styles.push(...strokes);
     }
-    // 👉 make the coordinates look like they're always multi
-    if (
-      this.showDimensions === 'always' ||
-      (whenSelected && this.showDimensions === 'whenSelected')
-    ) {
+    // 👇 dimensions
+    if (this.#canShow(feature, this.showDimensions, whenSelected)) {
+      // 👉 make the coordinates look like they're always multi
       let polygons = [feature.getGeometry()];
       if (feature.getGeometry().getType() === 'MultiPolygon')
         polygons = feature.getGeometry().getPolygons();
-      const dimensions = this.#dimensions(props, resolution, polygons);
+      const contrast = this.#canShow(
+        feature,
+        this.showDimensionContrast,
+        whenSelected
+      );
+      const dimensions = this.#dimensions(
+        props,
+        resolution,
+        polygons,
+        contrast
+      );
       if (dimensions) styles.push(...dimensions);
     }
     // 👇 lot labels
-    if (
-      this.showLabels === 'always' ||
-      (whenSelected && this.showLabels === 'whenSelected')
-    ) {
-      const contrast =
-        this.showLabelContrast === 'always' ||
-        (whenSelected && this.showLabelContrast === 'whenSelected');
+    if (this.#canShow(feature, this.showLabels, whenSelected)) {
+      const contrast = this.#canShow(
+        feature,
+        this.showLabelContrast,
+        whenSelected
+      );
       const lotLabels = this.#labels(props, resolution, numPolygons, contrast);
       if (lotLabels) styles.push(...lotLabels);
     }
     // 👇 selection
-    if (
-      this.showSelection === 'always' ||
-      (whenSelected && this.showSelection === 'whenSelected')
-    ) {
+    if (this.#canShow(feature, this.showSelection, whenSelected)) {
       const strokes = this.#strokeSelect(
         props,
         resolution,
