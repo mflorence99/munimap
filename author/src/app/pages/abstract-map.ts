@@ -78,6 +78,7 @@ export abstract class AbstractMapPage implements OnInit {
       name: null,
       owner: owner,
       path: path ?? recentPath,
+      printSize: [45, 60],
       type: this.getType()
     };
     // 👉 load up the requested (or default) map

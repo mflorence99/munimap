@@ -12,8 +12,8 @@
     <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
     <app-ol-control-print
-      *ngIf="map.name"
       [fileName]="map.name"
+      [printSize]="map.printSize"
       [resolution]="0.33"
       mapControlPrint
     ></app-ol-control-print>

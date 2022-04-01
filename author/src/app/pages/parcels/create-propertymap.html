@@ -53,25 +53,28 @@
     >
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Property's parcels</mat-label>
-    <textarea
-      #parcelIDs="ngModel"
-      [(ngModel)]="record.parcelIDs"
-      autocomplete="off"
-      cdkTextareaAutosize
-      matInput
-      name="parcelIDs"
-      required
-    ></textarea>
-    <mat-error *ngIf="parcelIDs.errors"
-      >At least one parcel is required</mat-error
+  <p class="instructions">
+    Choose the size at which the map will be printed. The aspect ratio
+    determines the map's boundary box. These sizes are all available via the
+    <a href="https://www.posterburner.com/makecustomposters" target="_blank">
+      PosterBurner</a
     >
-    <mat-hint *ngIf="!parcelIDs.errors"
-      >Give the ids of the parcels in your property, each on a new
-      line.</mat-hint
+    print service.
+  </p>
+
+  <mat-radio-group
+    [(ngModel)]="record.printSize"
+    class="print-sizes"
+    name="printSize"
+    required
+  >
+    <mat-radio-button
+      *ngFor="let printSize of printSizes; trackBy: trackByID"
+      [value]="printSize"
     >
-  </mat-form-field>
+      {{ printSize }}
+    </mat-radio-button>
+  </mat-radio-group>
 </form>
 
 <article class="actions">

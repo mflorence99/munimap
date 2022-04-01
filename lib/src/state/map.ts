@@ -65,6 +65,7 @@ export interface Map {
   owner: string;
   parcelIDs?: ParcelID[];
   path: string;
+  printSize: number[];
   type: MapType;
 }
 

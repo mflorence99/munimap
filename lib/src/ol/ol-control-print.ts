@@ -38,6 +38,8 @@ export class OLControlPrintComponent {
 
   @Input() fileName: string;
 
+  @Input() printSize: number[];
+
   @Input() resolution: number /* 👈 controls pixel density of print image */;
 
   constructor(private dialog: MatDialog, private map: OLMapComponent) {}
@@ -48,7 +50,7 @@ export class OLControlPrintComponent {
   //    sounds countr-intuitive until you draw out what it looks like!
 
   #padding(cx: number, cy: number): [number, number] {
-    const nominal = (cx + cy) / 95; /* 🔥 magic number is paper size 45 x 60 */
+    const nominal = (cx + cy) / (this.printSize[0] + this.printSize[1]);
     const ar = cx / cy;
     return ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
   }
@@ -134,8 +136,7 @@ export class OLControlPrintComponent {
 
   print(): void {
     const data: ConfirmDialogData = {
-      content:
-        'The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce.',
+      content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize[0]}" x ${this.printSize[1]}" paper.`,
       title: 'Please confirm map print'
     };
     this.dialog
