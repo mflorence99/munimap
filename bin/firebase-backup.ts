@@ -20,13 +20,11 @@ async function main(): Promise<void> {
   const backup = db.collection('parcels-backup');
   const parcels = db.collection('parcels');
 
-  const query = parcels
-    .where('owner', 'in', [
-      'mflo999@gmail.com',
-      'kchidester@washingtonnh.org',
-      'nick@mnassessing.com'
-    ])
-    .where('path', '==', 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON');
+  const query = parcels.where('owner', 'in', [
+    'mflo999@gmail.com',
+    'kchidester@washingtonnh.org',
+    'nick@mnassessing.com'
+  ]);
 
   const snapshot = await query.get();
   let numCopied = 0;
