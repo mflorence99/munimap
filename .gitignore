@@ -2,6 +2,7 @@
 /data
 /dist
 /node_modules
+/viewer/assets/*.geojsonxxx
 **/*.log
 firebase-admin.json
 .eslintcache
