@@ -37,7 +37,7 @@ export const PROXY_SERVER_OPTS = new InjectionToken<ProxyServerOpts>(
 
 export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
   maxAge: 600,
-  minSize: 256,
+  minSize: 255,
   root: '/tmp'
 };
 
