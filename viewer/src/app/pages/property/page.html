@@ -30,7 +30,7 @@
     <ng-container *ngIf="!(satelliteView$ | async)">
       <!-- 📦 BG LAYER (outside parcels)-->
 
-      <app-ol-layer-tile *ngIf="(zoom$ | async) < olMap.minUsefulZoom">
+      <app-ol-layer-tile>
         <app-ol-source-xyz
           [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
           ><app-ol-attribution
