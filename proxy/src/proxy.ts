@@ -27,6 +27,7 @@ import hash from 'object-hash';
 
 export interface ProxyServerOpts {
   maxAge?: number;
+  minSize?: number;
   root?: string;
 }
 
@@ -36,6 +37,7 @@ export const PROXY_SERVER_OPTS = new InjectionToken<ProxyServerOpts>(
 
 export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
   maxAge: 600,
+  minSize: 256,
   root: '/tmp'
 };
 
@@ -86,7 +88,12 @@ export class ProxyServer extends Handler {
           stat = fs.statSync(fpath);
         } catch (error) {}
         const maxAge = this.#opts.maxAge;
-        const isCached = stat && stat.mtimeMs > Date.now() - maxAge * 1000;
+        // 👇 if the data is smaller than the minumum size,
+        //    treat it as a cache miss
+        const isCached =
+          stat &&
+          stat.size > this.#opts.minSize &&
+          stat.mtimeMs > Date.now() - maxAge * 1000;
 
         // 👇 because we set maxAge to the exact time that we discard the
         //    disk copy of the proxied data, we never have to bother
@@ -151,8 +158,12 @@ export class ProxyServer extends Handler {
             tap((buffer) => (response.body = buffer)),
             tap((buffer) => {
               if (response.statusCode === 200) {
-                fs.mkdirSync(fdir, { recursive: true });
-                fs.writeFile(fpath, buffer, () => {});
+                // 👇 if the data is smaller than the minumum size,
+                //    don't cache it
+                if (Buffer.byteLength(buffer) >= this.#opts.minSize) {
+                  fs.mkdirSync(fdir, { recursive: true });
+                  fs.writeFile(fpath, buffer, () => {});
+                }
               }
             }),
             tap((buffer) => {
