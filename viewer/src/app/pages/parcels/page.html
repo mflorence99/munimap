@@ -249,8 +249,9 @@
         [showAbutters]="'whenSelected'"
         [showBorder]="'always'"
         [showDimensions]="'whenSelected'"
-        [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'whenSelected'"
+        [showDimensionContrast]="'always'"
         [showLabels]="'always'"
+        [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'whenSelected'"
         [showSelection]="'always'"
       ></app-ol-style-parcels>
       <app-ol-source-parcels></app-ol-source-parcels>

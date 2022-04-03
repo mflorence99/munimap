@@ -276,6 +276,7 @@
           <app-ol-style-parcels
             [showBorder]="'always'"
             [showDimensions]="'whenSelected'"
+            [showDimensionContrast]="(satelliteView$ | async) ? 'always' : 'never'"
             [showLabels]="'always'"
             [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'never'"
             [showSelection]="'always'"

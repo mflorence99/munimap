@@ -22,10 +22,12 @@ import { ViewChildren } from '@angular/core';
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getDistance } from 'ol/sphere';
+import { lineString } from '@turf/helpers';
 import { point } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
 
 import bearing from '@turf/bearing';
+import booleanClockwise from '@turf/boolean-clockwise';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
@@ -40,6 +42,7 @@ import OLText from 'ol/style/Text';
 class Dimension {
   constructor(
     public ix: number /* 👈 polygon index */,
+    public clockwise: boolean,
     public angle = 0,
     public length = 0,
     public path: OLCoordinate[] = []
@@ -94,6 +97,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() dimensionsFontSize = 20;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
+  @Input() fontSizeDimensionRatio = 0.5;
   @Input() maxBorderPixels = 3;
   @Input() maxFontSize = 40;
   @Input() minFontSize = 6;
@@ -146,12 +150,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     contrast: boolean
   ): OLStyle[] {
     // 👉 we will draw the length of each "straight" line in each polygon
-    const color = !contrast
-      ? this.map.vars['--map-parcel-text-inverse']
-      : this.map.vars['--map-parcel-text-color'];
-    const outline = contrast
-      ? this.map.vars['--map-parcel-text-inverse']
-      : this.map.vars['--map-parcel-text-color'];
+    const color = contrast
+      ? this.map.vars['--map-parcel-dimension-inverse']
+      : this.map.vars['--map-parcel-dimension-color'];
     const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
     // 👉 get the fontSizes up front for each polygon
     const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
@@ -160,14 +161,24 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         // 👉 dont't try to draw the dimension if we can't see it
         .filter((dimension) => fontSizes[dimension.ix] >= this.minFontSize)
         .map((dimension) => {
+          // 👉 OL is going to draw the text left-to-right,
+          //    compensating for the direction of the line
+          //    so we need to understand that to properly calculate the offset
+          const ltr =
+            dimension.path[0][0] < dimension.path[dimension.path.length - 1][0];
           const text = new OLText({
-            font: `bold ${fontSizes[dimension.ix]}px '${this.fontFamily}'`,
+            font: `italic ${fontSizes[dimension.ix]}px '${this.fontFamily}'`,
             fill: new OLFill({ color: `rgba(${color}, 1)` }),
+            offsetY:
+              fontSizes[dimension.ix] *
+              (ltr ? -1 : 1) *
+              (dimension.clockwise ? -1 : 1) *
+              0.75,
             placement: 'line',
-            stroke: new OLStroke({
-              color: `rgba(${outline}, 1)`,
-              width: Math.min(fontSizes[dimension.ix] / 8, this.maxBorderPixels)
-            }),
+            // stroke: new OLStroke({
+            //   color: `rgba(${outline}, 1)`,
+            //   width: Math.min(fontSizes[dimension.ix] / 8, this.maxBorderPixels)
+            // }),
             text: `${Math.round(dimension.length)}`
           });
           const geometry = new OLLineString(
@@ -189,7 +200,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       // 👉 remember, we made Polygons look like MultiPolygons
       //    also, only interested in outer ring
       const coords = polygons[ix].getCoordinates()[0];
-      let dimension = new Dimension(ix);
+      const ring = lineString(coords);
+      const clockwise = booleanClockwise(ring);
+      let dimension = new Dimension(ix, clockwise);
       // 👉 we're going to coalesce the lengths of "straight" lines
       lengths.reduce((acc, length, iy) => {
         const p = toLonLat(coords[iy]);
@@ -204,7 +217,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           // 👉 if the segment is straight enough, record it
           if (!this.#isStraight(angle, dimension.angle)) {
             acc.push(dimension);
-            dimension = new Dimension(ix);
+            dimension = new Dimension(ix, clockwise);
           }
           // 👉 setup for next time
           dimension.angle = angle;
@@ -232,7 +245,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       //    but no bigger than the size of the label
       return Math.min(
         Math.min(
-          labelFontSize * this.fontSizeAcreageRatio,
+          labelFontSize * this.fontSizeDimensionRatio,
           this.dimensionsFontSize
         ),
         this.dimensionsFontSize / resolution
