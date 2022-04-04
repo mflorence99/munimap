@@ -2,8 +2,8 @@
 import { Features } from '../lib/src/geojson';
 import { Parcel } from '../lib/src/geojson';
 
-import { calculate } from '../lib/src/geojson';
-import { normalize } from '../lib/src/geojson';
+import { calculateParcel } from '../lib/src/geojson';
+import { normalizeParcel } from '../lib/src/geojson';
 import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
@@ -159,8 +159,8 @@ async function main(): Promise<void> {
         //    code with MuniMap -- there' a better way but this will do
         //    for now
 
-        calculate(parcel);
-        normalize(parcel);
+        calculateParcel(parcel);
+        normalizeParcel(parcel);
 
         // 👉 gather town's parcels together for later
         countByTown[town] += 1;

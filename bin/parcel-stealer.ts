@@ -1,9 +1,9 @@
 import { Features } from '../lib/src/geojson';
 import { Parcel } from '../lib/src/geojson';
 
-import { calculate } from '../lib/src/geojson';
-import { normalize } from '../lib/src/geojson';
-import { serialize } from '../lib/src/geojson';
+import { calculateParcel } from '../lib/src/geojson';
+import { normalizeParcel } from '../lib/src/geojson';
+import { serializeParcel } from '../lib/src/geojson';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
@@ -203,9 +203,9 @@ async function main(): Promise<void> {
       };
 
       // 👉 normalize the parcel
-      calculate(parcel);
-      normalize(parcel);
-      serialize(parcel);
+      calculateParcel(parcel);
+      normalizeParcel(parcel);
+      serializeParcel(parcel);
       // 👁️ https://titanwolf.org/Network/Articles/Article?AID=c2f8e1f8-31d8-4b5a-9a73-1c50f7614057
       parcel.timestamp = firestore.FieldValue.serverTimestamp();
 

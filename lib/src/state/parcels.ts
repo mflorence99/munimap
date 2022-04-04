@@ -7,11 +7,11 @@ import { ParcelAction } from '../geojson';
 import { ParcelID } from '../geojson';
 import { Profile } from './auth';
 
-import { calculate } from '../geojson';
-import { deserialize } from '../geojson';
-import { normalize } from '../geojson';
-import { serialize } from '../geojson';
-import { timestamp } from '../geojson';
+import { calculateParcel } from '../geojson';
+import { deserializeParcel } from '../geojson';
+import { normalizeParcel } from '../geojson';
+import { serializeParcel } from '../geojson';
+import { timestampParcel } from '../geojson';
 
 import { Action } from '@ngxs/store';
 import { Actions } from '@ngxs/store';
@@ -157,7 +157,7 @@ export class ParcelsState implements NgxsOnInit {
           }
         }),
         map((parcels: Parcel[]) => {
-          parcels.forEach((parcel) => deserialize(parcel));
+          parcels.forEach((parcel) => deserializeParcel(parcel));
           return parcels;
         }),
         // 👉 cut down on noise
@@ -202,10 +202,10 @@ export class ParcelsState implements NgxsOnInit {
   }
 
   #normalize(parcel: Parcel): Parcel {
-    calculate(parcel);
-    normalize(parcel);
-    serialize(parcel);
-    timestamp(parcel);
+    calculateParcel(parcel);
+    normalizeParcel(parcel);
+    serializeParcel(parcel);
+    timestampParcel(parcel);
     return parcel;
   }
 

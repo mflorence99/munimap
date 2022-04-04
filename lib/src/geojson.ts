@@ -12,6 +12,9 @@ import rhumbDestination from '@turf/rhumb-destination';
 import rhumbDistance from '@turf/rhumb-distance';
 import transformRotate from '@turf/transform-rotate';
 
+// 🔥 we need to share this code with the "bin" programs
+//    that's why it isn't an Angular service, for example
+
 // 👇 we currently only support one state
 export const theState = 'NEW HAMPSHIRE';
 
@@ -100,7 +103,7 @@ export const parcelProperties = Object.keys(modelParcel);
 // 👉 Firebase doesn't alllow nested arrays, so we must serialize
 //    and deserialize these properties
 
-const serializedProperties = Object.keys(modelParcel).filter(
+const serializedParcelProperties = Object.keys(modelParcel).filter(
   (prop) => Array.isArray(modelParcel[prop]) && modelParcel[prop].length > 0
 );
 
@@ -388,7 +391,7 @@ export function bboxDistance(
   return [cx, cy];
 }
 
-export function calculate(parcel: Parcel): void {
+export function calculateParcel(parcel: Parcel): void {
   if (parcel.geometry) {
     // 👉 convert MultiPolygons into an array of Polygons
     let polygons: GeoJSON.Feature<GeoJSON.Polygon>[] = [parcel as any];
@@ -520,17 +523,17 @@ export function dedupe(geojsons: Features[]): Features {
   return deduped;
 }
 
-export function deserialize(parcel: Parcel): void {
+export function deserializeParcel(parcel: Parcel): void {
   if (parcel.geometry) parcel.geometry = JSON.parse(parcel.geometry as any);
   if (parcel.properties) {
-    serializedProperties.forEach((prop) => {
+    serializedParcelProperties.forEach((prop) => {
       if (parcel.properties[prop])
         parcel.properties[prop] = JSON.parse(parcel.properties[prop]);
     });
   }
 }
 
-export function normalize(parcel: Parcel): void {
+export function normalizeParcel(parcel: Parcel): void {
   if (parcel.properties) {
     normalizeAddress(parcel);
     normalizeOwner(parcel);
@@ -567,10 +570,10 @@ function normalizeOwner(parcel: Parcel): void {
   }
 }
 
-export function serialize(parcel: Parcel): void {
+export function serializeParcel(parcel: Parcel): void {
   if (parcel.geometry) parcel.geometry = JSON.stringify(parcel.geometry) as any;
   if (parcel.properties) {
-    serializedProperties.forEach((prop) => {
+    serializedParcelProperties.forEach((prop) => {
       if (parcel.properties[prop])
         parcel.properties[prop] = JSON.stringify(parcel.properties[prop]);
     });
@@ -606,6 +609,6 @@ export function simplify(
   return geojson;
 }
 
-export function timestamp(parcel: Parcel): void {
+export function timestampParcel(parcel: Parcel): void {
   if (!parcel.timestamp) parcel.timestamp = serverTimestamp();
 }
