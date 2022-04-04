@@ -115,7 +115,8 @@ $dark-app-theme: mat-dark-theme(
   //    style components will figure opacity
 
   --map-boundary-fill: var(--rgb-gray-50);
-  --map-boundary-shaded: var(--rgb-gray-300);
+  --map-boundary-outline: var(--rgb-blue-gray-700);
+  --map-boundary-pattern: var(--rgb-gray-300);
 
   --map-bridge-red-icon-color: var(--rgb-deep-orange-200);
   --map-bridge-yellow-icon-color: var(--rgb-yellow-200);

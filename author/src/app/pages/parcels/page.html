@@ -99,7 +99,9 @@
           <!-- 📦 BG LAYER (lays down a texture inside town)-->
 
           <app-ol-layer-vector>
-            <app-ol-style-boundary></app-ol-style-boundary>
+            <app-ol-style-boundary
+              [showInterior]="true"
+            ></app-ol-style-boundary>
             <app-ol-source-boundary></app-ol-source-boundary>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
@@ -245,20 +247,6 @@
           </app-ol-layer-tile>
         </ng-container>
 
-        <!-- 📦 BOUNDARY LAYER (below selection so dimension is not obscured) -->
-
-        <app-ol-layer-vector *ngIf="!isPrivileged()">
-          <app-ol-style-polygons></app-ol-style-polygons>
-          <app-ol-source-boundary></app-ol-source-boundary>
-        </app-ol-layer-vector>
-
-        <!-- 📦 BOUNDARY GRID LAYER (testing only) -->
-
-        <!-- <app-ol-layer-vector>
-          <app-ol-style-polygons></app-ol-style-polygons>
-          <app-ol-source-boundarygrid></app-ol-source-boundarygrid>
-        </app-ol-layer-vector> -->
-
         <!-- 📦 LOT LINE LAYER (printed) -->
 
         <app-ol-layer-vector *ngIf="olMap.printing">
@@ -303,8 +291,8 @@
 
         <!-- 📦 BOUNDARY LAYER (above selection so we can interact with it) -->
 
-        <app-ol-layer-vector *ngIf="isPrivileged()">
-          <app-ol-style-polygons></app-ol-style-polygons>
+        <app-ol-layer-vector>
+          <app-ol-style-boundary [showBorder]="true"></app-ol-style-boundary>
           <app-ol-source-boundary></app-ol-source-boundary>
           <app-ol-interaction-boundary></app-ol-interaction-boundary>
         </app-ol-layer-vector>

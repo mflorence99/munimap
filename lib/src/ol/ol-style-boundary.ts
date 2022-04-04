@@ -15,6 +15,7 @@ import { forwardRef } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
+import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 
 @Component({
@@ -30,7 +31,11 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleBoundaryComponent implements OnChanges, Styler {
+  @Input() borderPixels = 5;
+  @Input() opacity = 0.5;
   @Input() pattern: OLFillPatternType = 'gravel';
+  @Input() showBorder = false;
+  @Input() showInterior = false;
 
   constructor(
     private layer: OLLayerVectorComponent,
@@ -44,23 +49,43 @@ export class OLStyleBoundaryComponent implements OnChanges, Styler {
   }
 
   style(): OLStyleFunction {
-    return (): OLStyle => {
-      const color = this.map.vars['--map-boundary-fill'];
-      const shaded = this.map.vars['--map-boundary-shaded'];
-      // 🐛 FillPattern sometimes throws InvalidStateError
-      let fill = new OLFill({ color: `rgba(${color}, 1)` });
-      try {
-        fill = new OLFillPattern({
-          color: `rgba(${shaded}, 1)`,
-          fill: fill,
-          pattern: this.pattern
-        });
-      } catch (ignored) {}
-      // 👉 add texture to background inside boundary
-      return new OLStyle({
-        fill: fill,
-        stroke: null
-      });
+    return (): OLStyle[] => {
+      const styles: OLStyle[] = [];
+      // 👇 we can draw a border around the boundary
+      if (this.showBorder) {
+        const stroke = this.map.vars['--map-boundary-outline'];
+        styles.push(
+          new OLStyle({
+            // 👇 need this so we can click on the feature
+            stroke: new OLStroke({
+              color: `rgba(${stroke}, ${this.opacity})`,
+              width: this.borderPixels
+            })
+          })
+        );
+      }
+      // 👇 we can fill the interior of the boundary
+      if (this.showInterior) {
+        const color = this.map.vars['--map-boundary-fill'];
+        const shaded = this.map.vars['--map-boundary-pattern'];
+        // 🐛 FillPattern sometimes throws InvalidStateError
+        let fill = new OLFill({ color: `rgba(${color}, 1)` });
+        try {
+          fill = new OLFillPattern({
+            color: `rgba(${shaded}, 1)`,
+            fill: fill,
+            pattern: this.pattern
+          });
+        } catch (ignored) {}
+        // 👉 add texture to background inside boundary
+        styles.push(
+          new OLStyle({
+            fill: fill,
+            stroke: null
+          })
+        );
+      }
+      return styles;
     };
   }
 }
