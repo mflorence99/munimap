@@ -94,7 +94,7 @@ export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
             path: this.map.path,
             type: 'Feature'
           };
-          this.store.dispatch(new AddParcels([redrawnParcel], 'fromMap'));
+          this.store.dispatch(new AddParcels([redrawnParcel]));
         }
         // 👉 on CANCEL, reset geometry
         else this.#resetRedraw();

@@ -106,7 +106,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       },
       type: 'Feature'
     };
-    this.store.dispatch(new AddParcels([recenteredParcel], 'fromMap'));
+    this.store.dispatch(new AddParcels([recenteredParcel]));
     this.olOverlay.setPosition([0, 0]);
     // 👉 https://stackoverflow.com/questions/61157528
     event.source._dragRef.reset();

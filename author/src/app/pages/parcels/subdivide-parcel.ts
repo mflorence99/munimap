@@ -148,7 +148,7 @@ export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
     });
     // that's it!
     this.store.dispatch(
-      new AddParcels([...removedParcels, ...subdividedParcels], 'fromMap')
+      new AddParcels([...removedParcels, ...subdividedParcels])
     );
     this.drawer.close();
   }

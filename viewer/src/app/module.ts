@@ -109,6 +109,7 @@ import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { UndoState } from '@lib/state/undo';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
 
@@ -270,7 +271,14 @@ const ROUTES = [
   }
 ];
 
-const STATES = [AnonState, MapState, OverlayState, ParcelsState, ViewState];
+const STATES = [
+  AnonState,
+  MapState,
+  OverlayState,
+  ParcelsState,
+  UndoState,
+  ViewState
+];
 const STATES_SAVED = [OverlayState, ViewState];
 
 @NgModule({

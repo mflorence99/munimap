@@ -51,7 +51,10 @@ const editables = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ValuesPipe],
   selector: 'app-parcel-properties',
-  styleUrls: ['./parcel-properties.scss', '../../../../../lib/css/sidebar.scss'],
+  styleUrls: [
+    './parcel-properties.scss',
+    '../../../../../lib/css/sidebar.scss'
+  ],
   templateUrl: './parcel-properties.html'
 })
 export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
@@ -142,7 +145,7 @@ export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
       // 👉 only save if at least one property override
       if (Object.keys(parcel.properties).length > 0) parcels.push(parcel);
     });
-    this.store.dispatch(new AddParcels(parcels, 'fromSidebar'));
+    this.store.dispatch(new AddParcels(parcels));
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.propertiesForm.form.markAsPristine();

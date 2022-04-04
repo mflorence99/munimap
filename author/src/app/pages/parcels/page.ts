@@ -12,7 +12,6 @@ import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { ClearStacks } from '@lib/state/parcels';
 import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
@@ -97,12 +96,9 @@ export class ParcelsPage extends AbstractMapPage {
       comp.selectedIDs = [];
       comp.features = [];
     }
-    // 👉 when the sidebar closes, clear the undo/redo stacks if
-    //    they're populated from the sidebar, or else we'll be undoing
-    //    operations that are invisible to the user
+    // 👉 when the sidebar closes, stop listening
     this.drawer.closedStart.subscribe(() => {
       unByKey(key);
-      this.store.dispatch(new ClearStacks('fromSidebar'));
     });
   }
 

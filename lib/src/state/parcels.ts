@@ -14,15 +14,20 @@ import { serialize } from '../geojson';
 import { timestamp } from '../geojson';
 
 import { Action } from '@ngxs/store';
+import { Actions } from '@ngxs/store';
+import { CanDo } from '@lib/state/undo';
+import { ClearStacks as ClearStacksProxy } from '@lib/state/undo';
 import { CollectionReference } from '@angular/fire/firestore';
 import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { NgxsOnInit } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { Redo as RedoProxy } from '@lib/state/undo';
 import { Select } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+import { Undo as UndoProxy } from '@lib/state/undo';
 
 import { addDoc } from '@angular/fire/firestore';
 import { collection } from '@angular/fire/firestore';
@@ -35,6 +40,7 @@ import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ofActionSuccessful } from '@ngxs/store';
 import { orderBy } from '@angular/fire/firestore';
 import { query } from '@angular/fire/firestore';
 import { where } from '@angular/fire/firestore';
@@ -43,21 +49,14 @@ import { writeBatch } from '@angular/fire/firestore';
 import copy from 'fast-copy';
 import hash from 'object-hash';
 
-export type ActionSource = 'fromMap' | 'fromSidebar';
-
 export class AddParcels {
   static readonly type = '[Parcels] AddParcels';
-  constructor(public parcels: Parcel[], public actionSource: ActionSource) {}
-}
-
-export class CanDo {
-  static readonly type = '[Parcels] CanDo';
-  constructor(public canUndo: boolean, public canRedo: boolean) {}
+  constructor(public parcels: Parcel[]) {}
 }
 
 export class ClearStacks {
   static readonly type = '[Parcels] ClearStacks';
-  constructor(public actionSource: ActionSource) {}
+  constructor() {}
 }
 
 export class Redo {
@@ -82,7 +81,6 @@ export type ParcelsStateModel = Parcel[];
 //    to prevent an undo or redo operation in an area no longer
 //    visible to the user
 
-let actionSource = null;
 const maxStackSize = 7;
 const redoStack: Parcel[][] = [];
 const undoStack: Parcel[][] = [];
@@ -101,7 +99,31 @@ export class ParcelsState implements NgxsOnInit {
   @Select(AnonState.profile) profile1$: Observable<Profile>;
   @Select(AuthState.profile) profile2$: Observable<Profile>;
 
-  constructor(private firestore: Firestore, private store: Store) {}
+  constructor(
+    private actions$: Actions,
+    private firestore: Firestore,
+    private store: Store
+  ) {}
+
+  // 👇 listen for "undo" actions directed at the proxy
+
+  #handleActions$(): void {
+    this.actions$
+      .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
+      .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
+        switch (action.constructor.name) {
+          case ClearStacksProxy.name:
+            this.store.dispatch(new ClearStacks());
+            break;
+          case RedoProxy.name:
+            this.store.dispatch(new Redo());
+            break;
+          case UndoProxy.name:
+            this.store.dispatch(new Undo());
+            break;
+        }
+      });
+  }
 
   #handleStreams$(): void {
     const either$ = merge(this.profile1$, this.profile2$);
@@ -195,9 +217,7 @@ export class ParcelsState implements NgxsOnInit {
     ctx.dispatch(new CanDo(false, false));
     // 👉 reset the stacks as required
     redoStack.length = 0;
-    if (action.actionSource !== actionSource) undoStack.length = 0;
     while (undoStack.length >= maxStackSize) undoStack.shift();
-    actionSource = action.actionSource;
     // 🔥 batch has 500 limit
     const batch = writeBatch(this.firestore);
     const undos: Parcel[] = [];
@@ -224,25 +244,17 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 side-effect of handleStreams$ will update state
   }
 
-  @Action(CanDo) canDo(
-    _ctx: StateContext<ParcelsStateModel>,
-    _action: CanDo
-  ): void {
-    /* placeholder */
-  }
-
   @Action(ClearStacks) clearStacks(
     ctx: StateContext<ParcelsStateModel>,
-    action: ClearStacks
+    _action: ClearStacks
   ): void {
-    if (action.actionSource === actionSource) {
-      redoStack.length = 0;
-      undoStack.length = 0;
-      ctx.dispatch(new CanDo(false, false));
-    }
+    redoStack.length = 0;
+    undoStack.length = 0;
+    ctx.dispatch(new CanDo(false, false));
   }
 
   ngxsOnInit(): void {
+    this.#handleActions$();
     this.#handleStreams$();
   }
 

@@ -89,9 +89,7 @@ export class MergeParcelsComponent implements ContextMenuComponent {
       union(acc, geojson)
     ).geometry;
     // 👉 that's it!
-    this.store.dispatch(
-      new AddParcels([mergedParcel, ...removedParcels], 'fromMap')
-    );
+    this.store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
     this.drawer.close();
   }
 

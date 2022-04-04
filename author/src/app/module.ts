@@ -135,6 +135,7 @@ import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SubdivisionIDValidator } from '@lib/validators/subdivisionid';
+import { UndoState } from '@lib/state/undo';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
 import { WorkgroupValidator } from '@lib/validators/workgroup';
@@ -333,7 +334,14 @@ const ROUTES = [
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
-const STATES = [AuthState, MapState, OverlayState, ParcelsState, ViewState];
+const STATES = [
+  AuthState,
+  MapState,
+  OverlayState,
+  ParcelsState,
+  UndoState,
+  ViewState
+];
 const STATES_SAVED = [OverlayState, RouterState, ViewState];
 
 @NgModule({

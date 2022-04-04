@@ -126,7 +126,7 @@ export class AddParcelComponent implements ContextMenuComponent, OnInit {
       type: 'Feature'
     };
     // that's it!
-    this.store.dispatch(new AddParcels([addedParcel], 'fromMap'));
+    this.store.dispatch(new AddParcels([addedParcel]));
     this.drawer.close();
   }
 }

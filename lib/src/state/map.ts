@@ -102,13 +102,6 @@ export class MapState {
     });
   }
 
-  @Action(CreateMapError) createMapError(
-    _ctx: StateContext<MapStateModel>,
-    _action: CreateMapError
-  ): void {
-    /* placeholder */
-  }
-
   currentMap(): Map {
     return this.store.snapshot().map;
   }
@@ -177,12 +170,5 @@ export class MapState {
         ctx.dispatch(new SetMap(action.map))
       );
     }
-  }
-
-  @Action(UpdateMapError) updateMapError(
-    _ctx: StateContext<MapStateModel>,
-    _action: UpdateMapError
-  ): void {
-    /* placeholder */
   }
 }

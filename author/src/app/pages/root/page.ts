@@ -1,8 +1,9 @@
 import { Actions } from '@ngxs/store';
 import { AuthState } from '@lib/state/auth';
-import { CanDo } from '@lib/state/parcels';
+import { CanDo } from '@lib/state/undo';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
+import { ClearStacks } from '@lib/state/undo';
 import { Component } from '@angular/core';
 import { CreateMapError } from '@lib/state/map';
 import { DestroyService } from '@lib/services/destroy';
@@ -17,13 +18,13 @@ import { NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Profile } from '@lib/state/auth';
-import { Redo } from '@lib/state/parcels';
+import { Redo } from '@lib/state/undo';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SetSatelliteView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
-import { Undo } from '@lib/state/parcels';
+import { Undo } from '@lib/state/undo';
 import { UpdateMapError } from '@lib/state/map';
 import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
@@ -81,7 +82,7 @@ export class RootPage implements OnInit {
         ofActionSuccessful(CreateMapError, UpdateMapError),
         takeUntil(this.destroy$)
       )
-      .subscribe((action: UpdateMapError) => {
+      .subscribe((action: CreateMapError | UpdateMapError) => {
         const data: MessageDialogData = {
           message: action.error
         };
@@ -105,6 +106,8 @@ export class RootPage implements OnInit {
             // 👇 see https://stackoverflow.com/questions/59552387/how-to-reload-a-page-in-angular-8-the-proper-way
             this.router.navigated = false;
             this.loading = false;
+            // 👉 clear the "undo" stacks on a page transition
+            this.store.dispatch(new ClearStacks());
             break;
           }
           default: {
