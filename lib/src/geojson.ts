@@ -436,17 +436,23 @@ export function calculateParcel(parcel: Parcel): void {
   }
 }
 
-function calculateArea(polygon: GeoJSON.Feature<GeoJSON.Polygon>): number {
+export function calculateArea(
+  polygon: GeoJSON.Feature<GeoJSON.Polygon>
+): number {
   return area(polygon) * 0.000247105; /* 👈 to acres */
 }
 
-function calculateCenter(polygon: GeoJSON.Feature<GeoJSON.Polygon>): number[] {
+export function calculateCenter(
+  polygon: GeoJSON.Feature<GeoJSON.Polygon>
+): number[] {
   // 👉 we only want the polygon's outer ring
   const points = polygon.geometry.coordinates[0];
   return polylabel([points]);
 }
 
-function calculateLengths(polygon: GeoJSON.Feature<GeoJSON.Polygon>): number[] {
+export function calculateLengths(
+  polygon: GeoJSON.Feature<GeoJSON.Polygon>
+): number[] {
   const lengths = [];
   // 👉 we only want the polygon's outer ring
   const points = polygon.geometry.coordinates[0];
@@ -466,7 +472,7 @@ function calculateLengths(polygon: GeoJSON.Feature<GeoJSON.Polygon>): number[] {
   return lengths;
 }
 
-function calculateMinWidth(
+export function calculateMinWidth(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>,
   orientation: number
 ): number {
@@ -479,7 +485,7 @@ function calculateMinWidth(
   );
 }
 
-function calculateOrientation(
+export function calculateOrientation(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>
 ): number {
   let angle = 0;
@@ -504,7 +510,7 @@ function calculateOrientation(
   return angle - 90;
 }
 
-function calculateSqarcity(
+export function calculateSqarcity(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>,
   lengths: number[]
 ): number {
@@ -540,7 +546,7 @@ export function normalizeParcel(parcel: Parcel): void {
   }
 }
 
-function normalizeAddress(parcel: Parcel): void {
+export function normalizeAddress(parcel: Parcel): void {
   if (parcel.properties.address) {
     let normalized = parcel.properties.address.trim().toUpperCase();
     normalized = normalized.replace(/\bCIR\b/, ' CIRCLE ');
@@ -563,7 +569,7 @@ function normalizeAddress(parcel: Parcel): void {
   }
 }
 
-function normalizeOwner(parcel: Parcel): void {
+export function normalizeOwner(parcel: Parcel): void {
   if (parcel.properties.owner) {
     const normalized = parcel.properties.owner.trim().toUpperCase();
     parcel.properties.owner = normalized;

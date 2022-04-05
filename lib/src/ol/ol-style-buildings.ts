@@ -30,7 +30,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLStyleBuildingsComponent implements OnChanges, Styler {
-  @Input() shadowLength = 10 /* 👈 feet */;
+  @Input() shadowLength = 6 /* 👈 feet */;
 
   constructor(
     private layer: OLLayerVectorComponent,
