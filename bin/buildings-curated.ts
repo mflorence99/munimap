@@ -4,7 +4,6 @@ import { Feature } from '../lib/src/geojson';
 import { Features } from '../lib/src/geojson';
 
 import { calculateOrientation } from '../lib/src/geojson';
-import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
 
 import { getCoords } from '@turf/invariant';
@@ -34,23 +33,23 @@ const curated = {
 
 const dist = './data';
 
-const testFeature = {
-  type: 'Feature',
-  properties: { name: '' },
-  geometry: {
-    type: 'Polygon',
-    coordinates: [
-      [
-        [-72.02944, 43.20403],
-        [-72.02942, 43.20415],
-        [-72.02957, 43.20416],
-        [-72.02958, 43.20403],
-        [-72.02944, 43.20403]
-      ]
-    ]
-  },
-  id: 'f5f283e159b3125ff5d2bacd745422d2'
-} as any;
+// const testFeature = {
+//   type: 'Feature',
+//   properties: { name: '' },
+//   geometry: {
+//     type: 'Polygon',
+//     coordinates: [
+//       [
+//         [-72.02988, 43.2042],
+//         [-72.02978, 43.20426],
+//         [-72.02984, 43.20431],
+//         [-72.02994, 43.20425],
+//         [-72.02988, 43.2042]
+//       ]
+//     ]
+//   },
+//   id: 'f5f283e159b3125ff5d2bacd745422d2'
+// } as any;
 
 function isHandDrawn(feature: Feature): boolean {
   return (
@@ -66,6 +65,7 @@ function isSquared(feature: Feature): boolean {
   for (let i = 0; i < coords.length - 2; i++) {
     let theta = Math.round(angle(coords[i], coords[i + 1], coords[i + 2]));
     if (theta > 180) theta = 360 - theta;
+    // console.log({ theta });
     if (theta > 90 || theta < 90) {
       isSquared = false;
       break;
@@ -80,28 +80,28 @@ Object.keys(curated).forEach((county) => {
   Object.keys(curated[county]).forEach((town) => {
     const geojson = curated[county][town];
 
-    let feature = testFeature;
+    geojson.features.forEach((feature) => {
+      if (isHandDrawn(feature) && !isSquared(feature)) {
+        // 👇 calculate the orientation of the building outline
+        const theta = calculateOrientation(feature);
 
-    // geojson.features.forEach((feature) => {
-    if (isHandDrawn(feature) && !isSquared(feature)) {
-      // 👇 calculate the orientation of the building outline
-      const theta = calculateOrientation(feature);
+        // 👇 rotate it level, expand to bbox, then rotate it back
+        let munged = transformRotate(feature, theta * -1);
+        munged = bboxPolygon(bbox(munged));
+        munged = transformRotate(munged, theta);
+        feature.geometry.coordinates = munged.geometry.coordinates;
+        // console.log(feature.geometry.coordinates);
+      }
+    });
 
-      // 👇 rotate it level, expand to bbox, then rotate it back
-      let munged = transformRotate(feature, theta * -1);
-      munged = bboxPolygon(bbox(munged));
-      munged = transformRotate(munged, theta);
-      feature.geometry.coordinates = munged.geometry.coordinates;
-    }
-    // });
-
-    // console.log(
-    //   chalk.green(`... writing ${theState}/${county}/${town}/buildings.geojson`)
-    // );
-    // mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
-    // writeFileSync(
-    //   `${dist}/${theState}/${county}/${town}/buildings.geojson`,
-    //   JSON.stringify(simplify(geojson))
-    // );
+    console.log(
+      chalk.green(`... writing ${theState}/${county}/${town}/buildings.geojson`)
+    );
+    mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
+    // 👎 CANNOT use simplify due to accuracy needed in buildings
+    writeFileSync(
+      `${dist}/${theState}/${county}/${town}/buildings.geojson`,
+      JSON.stringify(geojson)
+    );
   });
 });

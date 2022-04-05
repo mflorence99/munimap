@@ -63,6 +63,8 @@ export class OLStyleBuildingsComponent implements OnChanges, Styler {
             color: `rgba(${outline}, 1)`,
             width: 1
           })
+          // 🔥 TESTING
+          // text: new OLText({ overflow: true, text: building.getId() })
         })
       ];
     };
