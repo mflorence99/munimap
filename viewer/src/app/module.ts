@@ -31,6 +31,7 @@ import { GeosimulatorService } from '@lib/services/geosimulator';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
+import { LandmarksState } from '@lib/state/landmarks';
 import { LocationStrategy } from '@angular/common';
 import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
@@ -77,6 +78,7 @@ import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
 import { OLSourceLabelsComponent } from '@lib/ol/ol-source-labels';
+import { OLSourceLandmarksComponent } from '@lib/ol/ol-source-landmarks';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
 import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
 import { OLSourceRailroadsComponent } from '@lib/ol/ol-source-railroads';
@@ -92,6 +94,7 @@ import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
 import { OLStyleConservationComponent } from '@lib/ol/ol-style-conservation';
 import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
+import { OLStyleLandmarksComponent } from '@lib/ol/ol-style-landmarks';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
@@ -180,6 +183,7 @@ const COMPONENTS = [
   OLSourceGeoJSONComponent,
   OLSourceHillshadeComponent,
   OLSourceLabelsComponent,
+  OLSourceLandmarksComponent,
   OLSourceOSMComponent,
   OLSourceParcelsComponent,
   OLSourceRailroadsComponent,
@@ -195,6 +199,7 @@ const COMPONENTS = [
   OLStyleConservationComponent,
   OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,
+  OLStyleLandmarksComponent,
   OLStyleParcelsComponent,
   OLStylePatternDirective,
   OLStylePlacesComponent,
@@ -273,6 +278,7 @@ const ROUTES = [
 
 const STATES = [
   AnonState,
+  LandmarksState,
   MapState,
   OverlayState,
   ParcelsState,

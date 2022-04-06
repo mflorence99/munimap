@@ -50,8 +50,6 @@ export class OLSourceParcelsComponent implements OnInit {
   #geojson$ = new Subject<Parcels>();
   #success: Function;
 
-  @Input() maxRequests = 4;
-
   olVector: OLVector<any>;
 
   @Select(OverlayState) overlay$: Observable<OverlayProperty[]>;

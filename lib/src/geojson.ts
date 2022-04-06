@@ -17,13 +17,6 @@ import transformRotate from '@turf/transform-rotate';
 // 👇 we currently only support one state
 export const theState = 'NEW HAMPSHIRE';
 
-export type Bridge = GeoJSON.Feature<GeoJSON.Point, BridgeProperties>;
-
-export type Bridges = GeoJSON.FeatureCollection<
-  GeoJSON.Point,
-  BridgeProperties
->;
-
 export interface BridgeProperties {
   rygb: 'red' | 'yellow' | 'green' | 'blue';
 }
@@ -48,19 +41,17 @@ export interface LakeProperties {
 }
 
 export interface Landmark
-  extends Partial<
-    GeoJSON.Feature<
-      | GeoJSON.Point
-      | GeoJSON.MultiPoint
-      | GeoJSON.LineString
-      | GeoJSON.MultiLineString
-      | GeoJSON.Polygon
-      | GeoJSON.MultiPolygon,
-      LandmarkProperties
-    >
+  extends GeoJSON.Feature<
+    | GeoJSON.Point
+    | GeoJSON.MultiPoint
+    | GeoJSON.LineString
+    | GeoJSON.MultiLineString
+    | GeoJSON.Polygon
+    | GeoJSON.MultiPolygon,
+    LandmarkProperties
   > {
   $id?: string /* 👈 optional only because we'll complete it */;
-  id: LandmarkID /* 👈 in Feature, also here just to remind us */;
+  curated?: boolean;
   owner: string;
   path: string;
 }
@@ -74,8 +65,6 @@ export type Landmarks = GeoJSON.FeatureCollection<
   | GeoJSON.MultiPolygon,
   LandmarkProperties
 >;
-
-export type LandmarkID = string | number;
 
 class LandmarkPropertiesClass {
   constructor(public name: string = '') {}
@@ -585,6 +574,17 @@ export function dedupe(geojsons: Buildings[]): Buildings {
     features: Object.values(hash),
     type: 'FeatureCollection'
   };
+}
+
+export function deserializeLandmark(landmark: Landmark): void {
+  if (landmark.geometry)
+    landmark.geometry = JSON.parse(landmark.geometry as any);
+  if (landmark.properties) {
+    serializedLandmarkProperties.forEach((prop) => {
+      if (landmark.properties[prop])
+        landmark.properties[prop] = JSON.parse(landmark.properties[prop]);
+    });
+  }
 }
 
 export function deserializeParcel(parcel: Parcel): void {

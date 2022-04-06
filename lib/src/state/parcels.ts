@@ -1,11 +1,15 @@
 import { AnonState } from './anon';
 import { AuthState } from './auth';
+import { CanDo } from './undo';
+import { ClearStacks as ClearStacksProxy } from './undo';
 import { Map } from './map';
 import { MapState } from './map';
 import { Parcel } from '../geojson';
 import { ParcelAction } from '../geojson';
 import { ParcelID } from '../geojson';
 import { Profile } from './auth';
+import { Redo as RedoProxy } from './undo';
+import { Undo as UndoProxy } from './undo';
 
 import { calculateParcel } from '../geojson';
 import { deserializeParcel } from '../geojson';
@@ -15,19 +19,15 @@ import { timestampParcel } from '../geojson';
 
 import { Action } from '@ngxs/store';
 import { Actions } from '@ngxs/store';
-import { CanDo } from '@lib/state/undo';
-import { ClearStacks as ClearStacksProxy } from '@lib/state/undo';
 import { CollectionReference } from '@angular/fire/firestore';
 import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { NgxsOnInit } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Redo as RedoProxy } from '@lib/state/undo';
 import { Select } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
-import { Undo as UndoProxy } from '@lib/state/undo';
 
 import { addDoc } from '@angular/fire/firestore';
 import { collection } from '@angular/fire/firestore';
@@ -76,10 +76,7 @@ export class Undo {
 
 export type ParcelsStateModel = Parcel[];
 
-// 👇 each item in the undo/redo stack is an array of atomic
-//    parcel actions -- the action source must be homogenous
-//    to prevent an undo or redo operation in an area no longer
-//    visible to the user
+// 👇 each item in the undo/redo stack is an array of atomic parcel actions
 
 const maxStackSize = 7;
 const redoStack: Parcel[][] = [];
