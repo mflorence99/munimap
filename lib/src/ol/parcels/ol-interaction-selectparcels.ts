@@ -79,6 +79,8 @@ export class OLInteractionSelectParcelsComponent
 
   @Input() findAbutters = false;
 
+  @Input() maxZoom = 19;
+
   menuPosition = {
     x: 0,
     y: 0
@@ -260,7 +262,7 @@ export class OLInteractionSelectParcelsComponent
         this.#selectParcels(ids);
       },
       duration: this.zoomAnimationDuration,
-      maxZoom: this.map.maxZoom,
+      maxZoom: this.maxZoom ?? this.map.maxZoom,
       size: this.map.olMap.getSize()
     });
   }
