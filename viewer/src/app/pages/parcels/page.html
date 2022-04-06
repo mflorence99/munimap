@@ -9,7 +9,10 @@
 >
   <!-- 📦 CONTROLS -->
 
-  <app-ol-control-searchparcels mapControlSearch></app-ol-control-searchparcels>
+  <app-ol-control-searchparcels
+    *ngIf="(zoom$ | async) >= olMap.minUsefulZoom"
+    mapControlSearch
+  ></app-ol-control-searchparcels>
 
   <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
