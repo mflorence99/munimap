@@ -38,6 +38,26 @@ export class OLStyleBridgesComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
+  #drawBridge(bridge: any, bridgeWidth: number): OLStyle {
+    const props = bridge.getProperties() as BridgeProperties;
+    const iconColor = this.map.vars[`--map-bridge-${props.rygb}-icon-color`];
+    const lineColor = this.map.vars['--map-bridge-line-color'];
+    return new OLStyle({
+      image: new OLFontSymbol({
+        color: `rgba(${iconColor}, 1)`,
+        font: `'Font Awesome'`,
+        fontStyle: 'bold',
+        form: 'none',
+        radius: bridgeWidth,
+        stroke: new OLStroke({
+          color: `rgba(${lineColor}, 1)`,
+          width: 0.5
+        }),
+        text: '\uf00d' /* 👈 times */
+      })
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
       this.layer.olLayer.getSource().refresh();
@@ -46,29 +66,11 @@ export class OLStyleBridgesComponent implements OnChanges, Styler {
 
   style(): OLStyleFunction {
     return (bridge: any, resolution: number): OLStyle => {
-      const props = bridge.getProperties() as BridgeProperties;
-      const iconColor = this.map.vars[`--map-bridge-${props.rygb}-icon-color`];
-      const lineColor = this.map.vars['--map-bridge-line-color'];
       // 👉 bridge width is in feet, resolution is pixels / meter
       const bridgeWidth = this.bridgeWidth / (resolution * 3.28084);
       // 👉 if bridge is too small to show, don't
       if (bridgeWidth < this.minBridgePixels) return null;
-      else {
-        return new OLStyle({
-          image: new OLFontSymbol({
-            color: `rgba(${iconColor}, 1)`,
-            font: `'Font Awesome'`,
-            fontStyle: 'bold',
-            form: 'none',
-            radius: bridgeWidth,
-            stroke: new OLStroke({
-              color: `rgba(${lineColor}, 1)`,
-              width: 0.5
-            }),
-            text: '\uf00d' /* 👈 times */
-          })
-        });
-      }
+      else return this.#drawBridge(bridge, bridgeWidth);
     };
   }
 }

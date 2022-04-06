@@ -38,6 +38,18 @@ export class OLStyleConservationComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
+  #drawConservation(props: ParcelProperties): OLStyle {
+    const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
+    const stroke = this.map.vars['--map-conservation-outline'];
+    return new OLStyle({
+      fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+      stroke: new OLStroke({
+        color: `rgba(${stroke}, 0)`,
+        width: this.borderPixels
+      })
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
       this.layer.olLayer.getSource().refresh();
@@ -51,15 +63,7 @@ export class OLStyleConservationComponent implements OnChanges, Styler {
       //    in which case we'll show all data
       if (props.usage && !['500', '501', '502'].includes(props.usage))
         return null;
-      const fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
-      const stroke = this.map.vars['--map-conservation-outline'];
-      return new OLStyle({
-        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-        stroke: new OLStroke({
-          color: `rgba(${stroke}, 0)`,
-          width: this.borderPixels
-        })
-      });
+      else return this.#drawConservation(props);
     };
   }
 }

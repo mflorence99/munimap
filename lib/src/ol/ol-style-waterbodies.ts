@@ -32,6 +32,14 @@ export class OLStyleWaterbodiesComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
+  #drawWaterbody(): OLStyle {
+    const fill = this.map.vars['--map-waterbody-fill'];
+    return new OLStyle({
+      fill: new OLFill({ color: `rgba(${fill}, 1)` }),
+      stroke: null
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
       this.layer.olLayer.getSource().refresh();
@@ -39,12 +47,6 @@ export class OLStyleWaterbodiesComponent implements OnChanges, Styler {
   }
 
   style(): OLStyleFunction {
-    return (): OLStyle => {
-      const fill = this.map.vars['--map-waterbody-fill'];
-      return new OLStyle({
-        fill: new OLFill({ color: `rgba(${fill}, 1)` }),
-        stroke: null
-      });
-    };
+    return (): OLStyle => this.#drawWaterbody();
   }
 }

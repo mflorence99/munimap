@@ -37,6 +37,31 @@ export class OLStyleBuildingsComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
+  #drawBuilding(building: any): OLStyle[] {
+    const fill = this.map.vars['--map-building-fill'];
+    const outline = this.map.vars['--map-building-outline'];
+    const shadow = new OLPolygon(building.getGeometry().getCoordinates());
+    // 👉 shadow length is in feet, translation units are meters
+    const shadowLength = this.shadowLength / 3.28084;
+    shadow.translate(shadowLength, -shadowLength);
+    return [
+      new OLStyle({
+        fill: new OLFill({ color: `rgba(${outline}, 0.75)` }),
+        geometry: shadow,
+        stroke: null
+      }),
+      new OLStyle({
+        fill: new OLFill({ color: `rgba(${fill}, 1)` }),
+        stroke: new OLStroke({
+          color: `rgba(${outline}, 1)`,
+          width: 1
+        })
+        // 🔥 TESTING
+        // text: new OLText({ overflow: true, text: building.getId() })
+      })
+    ];
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
       this.layer.olLayer.getSource().refresh();
@@ -45,28 +70,7 @@ export class OLStyleBuildingsComponent implements OnChanges, Styler {
 
   style(): OLStyleFunction {
     return (building: any): OLStyle[] => {
-      const fill = this.map.vars['--map-building-fill'];
-      const outline = this.map.vars['--map-building-outline'];
-      const shadow = new OLPolygon(building.getGeometry().getCoordinates());
-      // 👉 shadow length is in feet, translation units are meters
-      const shadowLength = this.shadowLength / 3.28084;
-      shadow.translate(shadowLength, -shadowLength);
-      return [
-        new OLStyle({
-          fill: new OLFill({ color: `rgba(${outline}, 0.75)` }),
-          geometry: shadow,
-          stroke: null
-        }),
-        new OLStyle({
-          fill: new OLFill({ color: `rgba(${fill}, 1)` }),
-          stroke: new OLStroke({
-            color: `rgba(${outline}, 1)`,
-            width: 1
-          })
-          // 🔥 TESTING
-          // text: new OLText({ overflow: true, text: building.getId() })
-        })
-      ];
+      return this.#drawBuilding(building);
     };
   }
 }

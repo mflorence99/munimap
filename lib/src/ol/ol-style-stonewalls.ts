@@ -41,6 +41,25 @@ export class OLStyleStoneWallsComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
+  #drawWall(wallPixels: number): OLStyle {
+    const fill = this.map.vars['--map-stonewall-fill'];
+    const stroke = this.map.vars['--map-stonewall-rocks'];
+    // 🐛 StrokePattern can throw InvalidState exception
+    try {
+      return new OLStyle({
+        stroke: new OLStrokePattern({
+          color: `rgba(${stroke}, ${this.opacity})`,
+          fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+          pattern: this.pattern,
+          scale: 2,
+          width: wallPixels
+        })
+      });
+    } catch (ignored) {
+      return null;
+    }
+  }
+
   #wallPixels(resolution: number): number {
     // 👉 wallWidth is proportional to the resolution,
     //    but no bigger than the max size specified
@@ -61,24 +80,7 @@ export class OLStyleStoneWallsComponent implements OnChanges, Styler {
       const wallPixels = this.#wallPixels(resolution);
       // 👉 if the wall would be too small to see, don't show anything
       if (wallPixels < this.minWallPixels) return null;
-      else {
-        const fill = this.map.vars['--map-stonewall-fill'];
-        const stroke = this.map.vars['--map-stonewall-rocks'];
-        // 🐛 StrokePattern can throw InvalidState exception
-        try {
-          return new OLStyle({
-            stroke: new OLStrokePattern({
-              color: `rgba(${stroke}, ${this.opacity})`,
-              fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-              pattern: this.pattern,
-              scale: 2,
-              width: wallPixels
-            })
-          });
-        } catch (ignored) {
-          return null;
-        }
-      }
+      else return this.#drawWall(wallPixels);
     };
   }
 }

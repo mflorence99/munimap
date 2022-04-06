@@ -35,6 +35,14 @@ export class OLStyleFloodplainComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
+  #drawFloodplain(): OLStyle {
+    const fill = this.map.vars['--map-floodplain-fill'];
+    return new OLStyle({
+      fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
+      stroke: null
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
       this.layer.olLayer.getSource().refresh();
@@ -42,12 +50,6 @@ export class OLStyleFloodplainComponent implements OnChanges, Styler {
   }
 
   style(): OLStyleFunction {
-    return (): OLStyle => {
-      const fill = this.map.vars['--map-floodplain-fill'];
-      return new OLStyle({
-        fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
-        stroke: null
-      });
-    };
+    return (): OLStyle => this.#drawFloodplain();
   }
 }

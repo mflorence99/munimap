@@ -42,6 +42,36 @@ export class OLStyleBoundaryComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
+  #drawBorder(): OLStyle {
+    const stroke = this.map.vars['--map-boundary-outline'];
+    return new OLStyle({
+      // 👇 need this so we can click on the feature
+      stroke: new OLStroke({
+        color: `rgba(${stroke}, ${this.opacity})`,
+        width: this.borderPixels
+      })
+    });
+  }
+
+  #fillInterior(): OLStyle {
+    const color = this.map.vars['--map-boundary-fill'];
+    const shaded = this.map.vars['--map-boundary-pattern'];
+    // 🐛 FillPattern sometimes throws InvalidStateError
+    let fill = new OLFill({ color: `rgba(${color}, 1)` });
+    try {
+      fill = new OLFillPattern({
+        color: `rgba(${shaded}, 1)`,
+        fill: fill,
+        pattern: this.pattern
+      });
+    } catch (ignored) {}
+    // 👉 add texture to background inside boundary
+    return new OLStyle({
+      fill: fill,
+      stroke: null
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
       this.layer.olLayer.getSource().refresh();
@@ -52,39 +82,9 @@ export class OLStyleBoundaryComponent implements OnChanges, Styler {
     return (): OLStyle[] => {
       const styles: OLStyle[] = [];
       // 👇 we can draw a border around the boundary
-      if (this.showBorder) {
-        const stroke = this.map.vars['--map-boundary-outline'];
-        styles.push(
-          new OLStyle({
-            // 👇 need this so we can click on the feature
-            stroke: new OLStroke({
-              color: `rgba(${stroke}, ${this.opacity})`,
-              width: this.borderPixels
-            })
-          })
-        );
-      }
+      if (this.showBorder) styles.push(this.#drawBorder());
       // 👇 we can fill the interior of the boundary
-      if (this.showInterior) {
-        const color = this.map.vars['--map-boundary-fill'];
-        const shaded = this.map.vars['--map-boundary-pattern'];
-        // 🐛 FillPattern sometimes throws InvalidStateError
-        let fill = new OLFill({ color: `rgba(${color}, 1)` });
-        try {
-          fill = new OLFillPattern({
-            color: `rgba(${shaded}, 1)`,
-            fill: fill,
-            pattern: this.pattern
-          });
-        } catch (ignored) {}
-        // 👉 add texture to background inside boundary
-        styles.push(
-          new OLStyle({
-            fill: fill,
-            stroke: null
-          })
-        );
-      }
+      if (this.showInterior) styles.push(this.#fillInterior());
       return styles;
     };
   }
