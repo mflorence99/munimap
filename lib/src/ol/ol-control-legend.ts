@@ -1,11 +1,11 @@
 import { Descriptor } from '../services/typeregistry';
 import { DestroyService } from '../services/destroy';
-import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { Mapable } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../geojson';
 import { ParcelID } from '../geojson';
+import { Parcels } from '../geojson';
 import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 
@@ -44,7 +44,7 @@ interface Override {
   template: ''
 })
 export abstract class OLControlLegendComponent implements Mapable, OnInit {
-  #geojson$ = new Subject<Features>();
+  #geojson$ = new Subject<Parcels>();
 
   areaByUsage: Record<string, number> = {};
   areaByUse: Record<string, number> = {};
@@ -85,7 +85,7 @@ export abstract class OLControlLegendComponent implements Mapable, OnInit {
     private route: ActivatedRoute
   ) {}
 
-  #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
+  #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
       (feature) => !removed.has(feature.id)
@@ -100,7 +100,7 @@ export abstract class OLControlLegendComponent implements Mapable, OnInit {
   #handleGeoJSON$(): void {
     this.geoJSON
       .loadByIndex(this.route, this.map.path, 'countables')
-      .subscribe((geojson: Features) => this.#geojson$.next(geojson));
+      .subscribe((geojson: Parcels) => this.#geojson$.next(geojson));
   }
 
   #handleStreams$(): void {
@@ -141,7 +141,7 @@ export abstract class OLControlLegendComponent implements Mapable, OnInit {
       });
   }
 
-  #insertAddedFeatures(geojson: Features, parcels: Parcel[]): void {
+  #insertAddedFeatures(geojson: Parcels, parcels: Parcel[]): void {
     const added = this.parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
     added.forEach((id) => {

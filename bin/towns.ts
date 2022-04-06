@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { Features } from '../lib/src/geojson';
-
 import { bboxByAspectRatio } from '../lib/src/geojson';
 import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
@@ -12,7 +10,8 @@ import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 
-const loadem = (fn): Features => JSON.parse(readFileSync(fn).toString());
+const loadem = (fn): GeoJSON.FeatureCollection =>
+  JSON.parse(readFileSync(fn).toString());
 
 const towns = loadem(
   './proxy/assets/New_Hampshire_Political_Boundaries.geojson'

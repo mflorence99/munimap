@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { Feature } from '../lib/src/geojson';
-import { Features } from '../lib/src/geojson';
+import { Building } from '../lib/src/geojson';
+import { Buildings } from '../lib/src/geojson';
 
 import { calculateOrientation } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
@@ -17,7 +17,7 @@ import bboxPolygon from '@turf/bbox-polygon';
 import chalk from 'chalk';
 import transformRotate from '@turf/transform-rotate';
 
-const loadem = (fn): Features => JSON.parse(readFileSync(fn).toString());
+const loadem = (fn): Buildings => JSON.parse(readFileSync(fn).toString());
 
 // console.log(
 //   angle([-72.09239, 43.17331], [-72.09237, 43.17332], [-72.09235, 43.17329])
@@ -51,7 +51,7 @@ const dist = './data';
 //   id: 'f5f283e159b3125ff5d2bacd745422d2'
 // } as any;
 
-function isHandDrawn(feature: Feature): boolean {
+function isHandDrawn(feature: Building): boolean {
   return (
     feature.geometry.type === 'Polygon' &&
     feature.geometry.coordinates[0].length >= 5 &&
@@ -59,7 +59,7 @@ function isHandDrawn(feature: Feature): boolean {
   );
 }
 
-function isSquared(feature: Feature): boolean {
+function isSquared(feature: Building): boolean {
   let isSquared = true;
   const coords = getCoords(feature)[0];
   for (let i = 0; i < coords.length - 2; i++) {

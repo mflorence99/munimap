@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Features } from '../lib/src/geojson';
 import { Parcel } from '../lib/src/geojson';
+import { Parcels } from '../lib/src/geojson';
 
 import { calculateParcel } from '../lib/src/geojson';
 import { normalizeParcel } from '../lib/src/geojson';
@@ -104,7 +104,7 @@ async function main(): Promise<void> {
 
   const countByTown: Record<string, number> = {};
   const dupesByTown: Record<string, Set<string>> = {};
-  const parcelsByTown: Record<string, Features> = {};
+  const parcelsByTown: Record<string, Parcels> = {};
   const zeroAreaByTown: Record<string, number> = {};
 
   parcels.features

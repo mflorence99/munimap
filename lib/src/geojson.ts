@@ -4,7 +4,6 @@ import { serverTimestamp } from 'firebase/firestore';
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bearing from '@turf/bearing';
-import copy from 'fast-copy';
 import distance from '@turf/distance';
 import length from '@turf/length';
 import polylabel from 'polylabel';
@@ -18,26 +17,25 @@ import transformRotate from '@turf/transform-rotate';
 // 👇 we currently only support one state
 export const theState = 'NEW HAMPSHIRE';
 
-export type Feature = GeoJSON.Feature<
-  GeoJSON.Polygon | GeoJSON.MultiPolygon,
-  ParcelProperties
+export type Bridge = GeoJSON.Feature<GeoJSON.Point, BridgeProperties>;
+
+export type Bridges = GeoJSON.FeatureCollection<
+  GeoJSON.Point,
+  BridgeProperties
 >;
-
-export type FeatureID = string | number;
-
-export type Features = GeoJSON.FeatureCollection<
-  GeoJSON.Polygon | GeoJSON.MultiPolygon,
-  ParcelProperties
->;
-
-export const emptyFeatures: Features = {
-  features: [],
-  type: 'FeatureCollection'
-};
 
 export interface BridgeProperties {
   rygb: 'red' | 'yellow' | 'green' | 'blue';
 }
+
+export type Building = GeoJSON.Feature<GeoJSON.Polygon, BuildingProperties>;
+
+export type Buildings = GeoJSON.FeatureCollection<
+  GeoJSON.Polygon,
+  BuildingProperties
+>;
+
+export interface BuildingProperties {}
 
 export interface ConservationProperties {
   name: string;
@@ -49,7 +47,57 @@ export interface LakeProperties {
   town: string;
 }
 
-export interface Parcel extends Partial<Feature> {
+export interface Landmark
+  extends Partial<
+    GeoJSON.Feature<
+      | GeoJSON.Point
+      | GeoJSON.MultiPoint
+      | GeoJSON.LineString
+      | GeoJSON.MultiLineString
+      | GeoJSON.Polygon
+      | GeoJSON.MultiPolygon,
+      LandmarkProperties
+    >
+  > {
+  $id?: string /* 👈 optional only because we'll complete it */;
+  id: LandmarkID /* 👈 in Feature, also here just to remind us */;
+  owner: string;
+  path: string;
+}
+
+export type Landmarks = GeoJSON.FeatureCollection<
+  | GeoJSON.Point
+  | GeoJSON.MultiPoint
+  | GeoJSON.LineString
+  | GeoJSON.MultiLineString
+  | GeoJSON.Polygon
+  | GeoJSON.MultiPolygon,
+  LandmarkProperties
+>;
+
+export type LandmarkID = string | number;
+
+class LandmarkPropertiesClass {
+  constructor(public name: string = '') {}
+}
+
+export interface LandmarkProperties extends Partial<LandmarkPropertiesClass> {}
+
+const modelLandmark = new LandmarkPropertiesClass();
+
+export const landmarkProperties = Object.keys(modelLandmark);
+
+// 👉 Firebase doesn't alllow nested arrays, so we must serialize
+//    and deserialize these properties
+
+const serializedLandmarkProperties = Object.keys(modelLandmark).filter(
+  (prop) => Array.isArray(modelLandmark[prop]) && modelLandmark[prop].length > 0
+);
+
+export interface Parcel
+  extends Partial<
+    GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon, ParcelProperties>
+  > {
   $id?: string /* 👈 optional only because we'll complete it */;
   action: ParcelAction;
   id: ParcelID /* 👈 in Feature, also here just to remind us */;
@@ -58,9 +106,18 @@ export interface Parcel extends Partial<Feature> {
   timestamp?: any /* 👈 optional only because we'll complete it */;
 }
 
+export type SearchableParcel = Partial<Parcel>;
+
+export type Parcels = GeoJSON.FeatureCollection<
+  GeoJSON.Polygon | GeoJSON.MultiPolygon,
+  ParcelProperties
+>;
+
+export type SearchableParcels = Partial<Parcels>;
+
 export type ParcelAction = 'added' | 'modified' | 'removed';
 
-export type ParcelID = FeatureID;
+export type ParcelID = string | number;
 
 // 👉 https://stackoverflow.com/questions/43909566
 
@@ -519,14 +576,15 @@ export function calculateSqarcity(
   return (area(polygon) / Math.pow(perimeter, 2)) * 4 * Math.PI;
 }
 
-export function dedupe(geojsons: Features[]): Features {
+export function dedupe(geojsons: Buildings[]): Buildings {
   const hash = geojsons.reduce((acc, geojson) => {
     geojson.features.forEach((feature) => (acc[feature.id] = feature));
     return acc;
   }, {});
-  const deduped = copy(emptyFeatures);
-  deduped.features = Object.values(hash);
-  return deduped;
+  return {
+    features: Object.values(hash),
+    type: 'FeatureCollection'
+  };
 }
 
 export function deserializeParcel(parcel: Parcel): void {
@@ -573,6 +631,17 @@ export function normalizeOwner(parcel: Parcel): void {
   if (parcel.properties.owner) {
     const normalized = parcel.properties.owner.trim().toUpperCase();
     parcel.properties.owner = normalized;
+  }
+}
+
+export function serializeLandmark(landmark: Landmark): void {
+  if (landmark.geometry)
+    landmark.geometry = JSON.stringify(landmark.geometry) as any;
+  if (landmark.properties) {
+    serializedLandmarkProperties.forEach((prop) => {
+      if (landmark.properties[prop])
+        landmark.properties[prop] = JSON.stringify(landmark.properties[prop]);
+    });
   }
 }
 

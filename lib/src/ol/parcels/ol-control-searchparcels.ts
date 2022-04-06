@@ -1,12 +1,12 @@
 import { DestroyService } from '../../services/destroy';
-import { Feature } from '../../geojson';
-import { Features } from '../../geojson';
 import { GeoJSONService } from '../../services/geojson';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../geojson';
 import { ParcelID } from '../../geojson';
 import { ParcelsState } from '../../state/parcels';
+import { SearchableParcel } from '../../geojson';
+import { SearchableParcels } from '../../geojson';
 import { Searcher } from '../ol-searcher';
 import { SearcherComponent } from '../ol-searcher';
 
@@ -46,7 +46,7 @@ interface Override {
   styleUrls: ['./ol-control-searchparcels.scss']
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
-  #geojson$ = new Subject<Features>();
+  #geojson$ = new Subject<SearchableParcels>();
 
   #overridesByID: Record<ParcelID, Override> = {};
 
@@ -62,9 +62,9 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
 
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
-  searchablesByAddress: Record<string, Feature[]> = {};
-  searchablesByID: Record<ParcelID, Feature[]> = {};
-  searchablesByOwner: Record<string, Feature[]> = {};
+  searchablesByAddress: Record<string, SearchableParcel[]> = {};
+  searchablesByID: Record<ParcelID, SearchableParcel[]> = {};
+  searchablesByOwner: Record<string, SearchableParcel[]> = {};
 
   constructor(
     private destroy$: DestroyService,
@@ -74,7 +74,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     private route: ActivatedRoute
   ) {}
 
-  #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): void {
+  #filterRemovedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
       (feature) => !removed.has(feature.id)
@@ -82,9 +82,9 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   }
 
   #groupSearchablesByProperty(
-    searchables: Feature[],
+    searchables: SearchableParcel[],
     prop: string
-  ): Record<string, Feature[]> {
+  ): Record<string, any> {
     return searchables.reduce((acc, searchable) => {
       const props = searchable.properties;
       const override = this.#overridesByID[searchable.id];
@@ -105,7 +105,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   #handleGeoJSON$(): void {
     this.geoJSON
       .loadByIndex(this.route, this.map.path, 'searchables')
-      .subscribe((geojson: Features) => this.#geojson$.next(geojson));
+      .subscribe((geojson: SearchableParcels) => this.#geojson$.next(geojson));
   }
 
   #handleStreams$(): void {
@@ -135,7 +135,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       });
   }
 
-  #insertAddedFeatures(geojson: Features, parcels: Parcel[]): void {
+  #insertAddedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
     const added = this.parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
     added.forEach((id) => {
@@ -170,7 +170,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     }, {});
   }
 
-  #makeSearchTargets(searchables: Feature[]): any[] {
+  #makeSearchTargets(searchables: SearchableParcel[]): any[] {
     const keys = new Set<ParcelID>();
     searchables.forEach((searchable) => {
       const props = searchable.properties;
@@ -204,7 +204,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       // 👉 the selector MAY not be present
       const selector = this.map.selector as OLInteractionSelectParcelsComponent;
       selector?.selectParcels(
-        searchables.map((searchable) => {
+        searchables.map((searchable): any => {
           const override = this.#overridesByID[searchable.id];
           if (override?.bbox) return { ...searchable, bbox: override.bbox };
           else return searchable;

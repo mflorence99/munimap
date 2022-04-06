@@ -1,5 +1,4 @@
 import { DestroyService } from '../services/destroy';
-import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
@@ -8,6 +7,7 @@ import { OverlayProperty } from '../state/overlay';
 import { OverlayState } from '../state/overlay';
 import { Parcel } from '../geojson';
 import { ParcelID } from '../geojson';
+import { Parcels } from '../geojson';
 import { ParcelsState } from '../state/parcels';
 
 import { parcelProperties } from '../geojson';
@@ -47,7 +47,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceParcelsComponent implements OnInit {
-  #geojson$ = new Subject<Features>();
+  #geojson$ = new Subject<Parcels>();
   #success: Function;
 
   @Input() maxRequests = 4;
@@ -80,7 +80,7 @@ export class OLSourceParcelsComponent implements OnInit {
     this.layer.olLayer.setSource(this.olVector);
   }
 
-  #filterRemovedFeatures(geojson: Features, parcels: Parcel[]): Set<ParcelID> {
+  #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): Set<ParcelID> {
     const removed = this.parcelsState.parcelsRemoved(parcels);
     // 👉 remove them from the layer in case they're already there
     removed.forEach((id) => {
@@ -138,7 +138,7 @@ export class OLSourceParcelsComponent implements OnInit {
       });
   }
 
-  #insertAddedFeatures(geojson: Features, parcels: Parcel[]): Set<ParcelID> {
+  #insertAddedFeatures(geojson: Parcels, parcels: Parcel[]): Set<ParcelID> {
     const added = this.parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
     added.forEach((id) => {
@@ -166,13 +166,13 @@ export class OLSourceParcelsComponent implements OnInit {
       bbox = transformExtent(extent, projection, this.map.featureProjection);
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, 'parcels', bbox)
-      .subscribe((geojson: Features) => {
+      .subscribe((geojson: Parcels) => {
         this.#success = success;
         this.#geojson$.next(geojson);
       });
   }
 
-  #overrideFeaturesWithParcels(geojson: Features, parcels: Parcel[]): void {
+  #overrideFeaturesWithParcels(geojson: Parcels, parcels: Parcel[]): void {
     const modified = this.parcelsState.parcelsModified(parcels);
     geojson.features = geojson.features.map((feature) => {
       const parcels = modified[feature.id];

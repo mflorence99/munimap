@@ -1,6 +1,6 @@
-import { Feature } from '../../geojson';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLMapComponent } from '../ol-map';
+import { Parcel } from '../../geojson';
 import { ParcelID } from '../../geojson';
 import { ParcelProperties } from '../../geojson';
 import { TypeRegistry } from '../../services/typeregistry';
@@ -71,7 +71,7 @@ export class OLPopupParcelPropertiesComponent {
   #handleAbuttersFound$(): void {
     /* 🔥 this.#subToAbutters = */ this.map.abuttersFound
       .pipe(
-        map((features: Feature[]): Abutter[] =>
+        map((features: Parcel[]): Abutter[] =>
           features
             .map((feature) => ({
               address: feature.properties.address,

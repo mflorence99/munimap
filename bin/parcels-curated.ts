@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { Features } from '../lib/src/geojson';
+import { Parcels } from '../lib/src/geojson';
 
 import { simplify } from '../lib/src/geojson';
 import { theState } from '../lib/src/geojson';
@@ -11,7 +11,7 @@ import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 
-const loadem = (fn): Features => JSON.parse(readFileSync(fn).toString());
+const loadem = (fn): Parcels => JSON.parse(readFileSync(fn).toString());
 
 // 👇 some towns have curated parcels
 

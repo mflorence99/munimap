@@ -1,9 +1,9 @@
 import { DestroyService } from '../../services/destroy';
-import { Feature } from '../../geojson';
 import { Mapable } from '../ol-mapable';
 import { MapableComponent } from '../ol-mapable';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
+import { Parcel } from '../../geojson';
 import { ParcelID } from '../../geojson';
 import { Selector } from '../ol-selector';
 import { SelectorComponent } from '../ol-selector';
@@ -62,9 +62,9 @@ export class OLInteractionSelectParcelsComponent
   #format: OLGeoJSON;
   #selectKey: OLEventsKey;
 
-  abutters: Feature[] = [];
+  abutters: Parcel[] = [];
 
-  @Output() abuttersFound = new EventEmitter<Feature[]>();
+  @Output() abuttersFound = new EventEmitter<Parcel[]>();
 
   get abutterIDs(): ParcelID[] {
     return this.abutters.map((feature) => feature.id);
@@ -234,7 +234,7 @@ export class OLInteractionSelectParcelsComponent
     this.#selectParcels(ids);
   }
 
-  @Debounce(250) selectParcels(parcels: Feature[]): void {
+  @Debounce(250) selectParcels(parcels: Parcel[]): void {
     // 👇 assume these parcels are degenerate and that all we have
     //    available is ID and bbox
     const bbox = parcels.reduce(

@@ -1,12 +1,10 @@
-import { Features } from '../geojson';
-
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class CacheService {
-  #cache = new Map<string, Features>();
+  #cache = new Map<string, any>();
 
-  get(key: string): Features {
+  get(key: string): any {
     return this.#cache.get(key);
   }
 

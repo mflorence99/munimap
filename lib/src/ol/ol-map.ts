@@ -1,8 +1,6 @@
-import { Feature } from '../geojson';
-import { FeatureID } from '../geojson';
-import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
+import { Parcel } from '../geojson';
 import { Path } from '../state/view';
 import { Searcher } from './ol-searcher';
 import { SearcherComponent } from './ol-searcher';
@@ -66,7 +64,7 @@ export class OLMapComponent
   #subToFeaturesSelected: Subscription;
 
   // 👉 proxy this from the real selector (if any) to ensure safe access
-  abuttersFound = new EventEmitter<Feature[]>();
+  abuttersFound = new EventEmitter<Parcel[]>();
 
   @Input() // 👈 optionally circumscibes map
   get bbox(): Coordinate {
@@ -76,9 +74,9 @@ export class OLMapComponent
     this.#bbox = bbox;
   }
 
-  boundary: Features;
+  boundary: GeoJSON.FeatureCollection<any, any>;
   boundaryExtent: Coordinate;
-  boundaryGrid: Features;
+  boundaryGrid: GeoJSON.FeatureCollection<any, any>;
 
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
 
@@ -126,7 +124,7 @@ export class OLMapComponent
   }
 
   // 👉 proxy this from the real selector (if any) to ensure safe access
-  get selectedIDs(): FeatureID[] {
+  get selectedIDs(): any[] {
     return this.selector?.selectedIDs ?? [];
   }
 
@@ -192,7 +190,7 @@ export class OLMapComponent
     });
   }
 
-  #createView(boundary: Features): void {
+  #createView(boundary: GeoJSON.FeatureCollection<any, any>): void {
     // 👉 precompute boundary extent
     this.boundary = boundary;
     this.boundaryExtent = transformExtent(
@@ -321,7 +319,7 @@ export class OLMapComponent
       document.fonts.load(`normal bold 10px 'Font Awesome`).then(() => {
         this.geoJSON
           .loadByIndex(this.route, path, 'boundary')
-          .subscribe((boundary: Features) => {
+          .subscribe((boundary: GeoJSON.FeatureCollection<any, any>) => {
             this.#createView(boundary);
             this.initialized = true;
             this.#onChange();

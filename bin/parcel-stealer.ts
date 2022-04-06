@@ -1,5 +1,5 @@
-import { Features } from '../lib/src/geojson';
 import { Parcel } from '../lib/src/geojson';
+import { Parcels } from '../lib/src/geojson';
 
 import { calculateParcel } from '../lib/src/geojson';
 import { normalizeParcel } from '../lib/src/geojson';
@@ -148,7 +148,7 @@ firebase.initializeApp({
 const db = firestore.getFirestore();
 const parcels = db.collection('parcels');
 
-function loadGeoJSON(path: string): Features {
+function loadGeoJSON(path: string): Parcels {
   const [state, county, town] = path.split(':');
   const fn = `${dist}/${state}/${county}/${town}/parcels.geojson`;
   return JSON.parse(readFileSync(fn).toString());

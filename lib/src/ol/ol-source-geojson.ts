@@ -1,4 +1,3 @@
-import { Features } from '../geojson';
 import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -71,7 +70,7 @@ export class OLSourceGeoJSONComponent {
     this.geoJSON
       .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
       .pipe(
-        map((geojson: Features) => {
+        map((geojson: GeoJSON.FeatureCollection<any, any>) => {
           if (this.exclude) {
             const filtered = copy(geojson);
             // 🔥 this is a hack implementation but is easily expanded
@@ -84,7 +83,7 @@ export class OLSourceGeoJSONComponent {
           } else return geojson;
         })
       )
-      .subscribe((geojson: Features) => {
+      .subscribe((geojson: GeoJSON.FeatureCollection<any, any>) => {
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.map.projection

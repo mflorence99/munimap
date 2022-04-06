@@ -1,9 +1,7 @@
 import { CacheService } from '../services/cache';
-import { Features } from '../geojson';
 import { GeoJSONService } from './geojson';
 import { Index } from '../geojson';
 
-import { emptyFeatures } from '../geojson';
 import { environment } from '../environment';
 
 import { ActivatedRoute } from '@angular/router';
@@ -32,13 +30,13 @@ export class GeoJSONViewerService extends GeoJSONService {
     super();
   }
 
-  #load(layerKey: string): Observable<Features> {
+  #load(layerKey: string): Observable<GeoJSON.FeatureCollection<any, any>> {
     return this.http
-      .get<Features>(`assets/${layerKey}.geojson`, {
+      .get<GeoJSON.FeatureCollection<any, any>>(`assets/${layerKey}.geojson`, {
         params: this.#cacheBuster
       })
       .pipe(
-        catchError(() => of(emptyFeatures)),
+        catchError(() => of(this.empty)),
         tap((geojson) => this.cache.set(layerKey, geojson))
       );
   }
@@ -48,7 +46,7 @@ export class GeoJSONViewerService extends GeoJSONService {
     path: string,
     layerKey: string,
     extent: Coordinate = []
-  ): Observable<Features> {
+  ): Observable<GeoJSON.FeatureCollection> {
     const cached = this.cache.get(layerKey);
     return (
       cached

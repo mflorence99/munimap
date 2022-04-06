@@ -1,5 +1,4 @@
 import { CacheService } from '../services/cache';
-import { Features } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
@@ -124,9 +123,10 @@ export abstract class OLSourceArcGISComponent {
               arcgis?.features ? arcgis : { features: [] }
             ),
             map(
-              (arcgis: any): Features => arcgisToGeoJSON(this.filter(arcgis))
+              (arcgis: any): GeoJSON.FeatureCollection<any, any> =>
+                arcgisToGeoJSON(this.filter(arcgis))
             ),
-            tap((geojson: Features) => {
+            tap((geojson: GeoJSON.FeatureCollection<any, any>) => {
               geojson.features.forEach(
                 (feature) => (feature.id = this.getFeatureID(feature))
               );
@@ -138,9 +138,11 @@ export abstract class OLSourceArcGISComponent {
     merge(...requests, this.maxRequests)
       .pipe(
         toArray(),
-        map((geojsons: Features[]) => dedupe(geojsons))
+        map((geojsons: GeoJSON.FeatureCollection<any, any>[]) =>
+          dedupe(geojsons)
+        )
       )
-      .subscribe((geojson: Features) => {
+      .subscribe((geojson: GeoJSON.FeatureCollection<any, any>) => {
         // 👉 convert features into OL format
         const features = this.olVector
           .getFormat()

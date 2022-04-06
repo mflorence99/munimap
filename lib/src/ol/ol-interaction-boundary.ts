@@ -1,5 +1,4 @@
 import { DestroyService } from '../services/destroy';
-import { Features } from '../geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
@@ -49,7 +48,7 @@ export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
   }
 
   #emitBoundary(): void {
-    const geojson: Features = {
+    const geojson: GeoJSON.FeatureCollection = {
       features: [JSON.parse(this.#format.writeFeature(this.#boundary))],
       type: 'FeatureCollection'
     };
