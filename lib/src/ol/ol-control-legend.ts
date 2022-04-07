@@ -3,9 +3,9 @@ import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { Mapable } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
-import { Parcel } from '../geojson';
-import { ParcelID } from '../geojson';
-import { Parcels } from '../geojson';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { Parcels } from '../common';
 import { ParcelsState } from '../state/parcels';
 import { TypeRegistry } from '../services/typeregistry';
 

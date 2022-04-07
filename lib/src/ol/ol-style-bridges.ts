@@ -1,4 +1,4 @@
-import { BridgeProperties } from '../geojson';
+import { BridgeProperties } from '../common';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';

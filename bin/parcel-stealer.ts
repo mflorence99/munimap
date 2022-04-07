@@ -1,9 +1,9 @@
-import { Parcel } from '../lib/src/geojson';
-import { Parcels } from '../lib/src/geojson';
+import { Parcel } from '../lib/src/common';
+import { Parcels } from '../lib/src/common';
 
-import { calculateParcel } from '../lib/src/geojson';
-import { normalizeParcel } from '../lib/src/geojson';
-import { serializeParcel } from '../lib/src/geojson';
+import { calculateParcel } from '../lib/src/common';
+import { normalizeParcel } from '../lib/src/common';
+import { serializeParcel } from '../lib/src/common';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';

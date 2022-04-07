@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { simplify } from '../lib/src/geojson';
-import { theState } from '../lib/src/geojson';
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
 import * as turf from '@turf/turf';
 

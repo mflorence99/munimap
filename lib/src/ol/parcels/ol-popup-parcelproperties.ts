@@ -1,8 +1,8 @@
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../geojson';
-import { ParcelID } from '../../geojson';
-import { ParcelProperties } from '../../geojson';
+import { Parcel } from '../../common';
+import { ParcelID } from '../../common';
+import { ParcelProperties } from '../../common';
 import { TypeRegistry } from '../../services/typeregistry';
 import { UtilsService } from '../../services/utils';
 

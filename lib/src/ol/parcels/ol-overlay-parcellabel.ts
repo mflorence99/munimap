@@ -2,8 +2,8 @@ import { AddParcels } from '../../state/parcels';
 import { AuthState } from '../../state/auth';
 import { DestroyService } from '../../services/destroy';
 import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../geojson';
-import { ParcelID } from '../../geojson';
+import { Parcel } from '../../common';
+import { ParcelID } from '../../common';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';

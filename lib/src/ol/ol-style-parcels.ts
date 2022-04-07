@@ -3,8 +3,8 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
 import { OverlayState } from '../state/overlay';
-import { ParcelID } from '../geojson';
-import { ParcelProperties } from '../geojson';
+import { ParcelID } from '../common';
+import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
 

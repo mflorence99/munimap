@@ -1,5 +1,5 @@
 import { DestroyService } from '../services/destroy';
-import { Landmark } from '../geojson';
+import { Landmark } from '../common';
 import { LandmarksState } from '../state/landmarks';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';

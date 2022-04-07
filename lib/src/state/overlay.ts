@@ -1,4 +1,4 @@
-import { ParcelProperties } from '../geojson';
+import { ParcelProperties } from '../common';
 
 import { Action } from '@ngxs/store';
 import { Injectable } from '@angular/core';

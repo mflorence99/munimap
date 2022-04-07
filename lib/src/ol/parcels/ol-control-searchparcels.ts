@@ -2,11 +2,11 @@ import { DestroyService } from '../../services/destroy';
 import { GeoJSONService } from '../../services/geojson';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../geojson';
-import { ParcelID } from '../../geojson';
+import { Parcel } from '../../common';
+import { ParcelID } from '../../common';
 import { ParcelsState } from '../../state/parcels';
-import { SearchableParcel } from '../../geojson';
-import { SearchableParcels } from '../../geojson';
+import { SearchableParcel } from '../../common';
+import { SearchableParcels } from '../../common';
 import { Searcher } from '../ol-searcher';
 import { SearcherComponent } from '../ol-searcher';
 

@@ -1,6 +1,7 @@
-import { Landmark } from '../lib/src/geojson';
+import { Landmark } from '../lib/src/common';
+import { LandmarkProperties } from '../lib/src/common';
 
-import { serializeLandmark } from '../lib/src/geojson';
+import { serializeLandmark } from '../lib/src/common';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
@@ -23,6 +24,7 @@ interface Curation {
   landmarks: CuratedLandmark[];
   owner: string;
   path: string;
+  properties: LandmarkProperties;
 }
 
 const curations: Curation[] = [
@@ -34,7 +36,8 @@ const curations: Curation[] = [
       }
     ],
     owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    properties: {}
   }
 ];
 
@@ -100,6 +103,7 @@ async function main(): Promise<void> {
           owner: curation.owner,
           path: curation.path,
           properties: {
+            ...curation.properties,
             name: feature.properties.name
           },
           type: 'Feature'

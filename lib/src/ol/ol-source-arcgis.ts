@@ -2,7 +2,7 @@ import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
-import { dedupe } from '../geojson';
+import { dedupe } from '../common';
 import { environment } from '../environment';
 
 import { Component } from '@angular/core';

@@ -1,4 +1,4 @@
-import { theState } from '../geojson';
+import { theState } from '../common';
 
 import { Action } from '@ngxs/store';
 import { Injectable } from '@angular/core';

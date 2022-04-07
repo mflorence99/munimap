@@ -1,5 +1,5 @@
-import { simplify } from '../lib/src/geojson';
-import { theState } from '../lib/src/geojson';
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';

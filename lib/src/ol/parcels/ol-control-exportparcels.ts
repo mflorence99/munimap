@@ -5,7 +5,7 @@ import { OLMapComponent } from '../ol-map';
 import { OLSourceParcelsComponent } from '../ol-source-parcels';
 import { ParcelsState } from '../../state/parcels';
 
-import { simplify } from '../../geojson';
+import { simplify } from '../../common';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';

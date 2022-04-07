@@ -10,11 +10,11 @@ import { Map } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { ParcelID } from '@lib/geojson';
+import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
-import { bboxByAspectRatio } from '@lib/geojson';
+import { bboxByAspectRatio } from '@lib/common';
 
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { Building } from '../lib/src/geojson';
-import { Buildings } from '../lib/src/geojson';
+import { Building } from '../lib/src/common';
+import { Buildings } from '../lib/src/common';
 
-import { calculateOrientation } from '../lib/src/geojson';
-import { theState } from '../lib/src/geojson';
+import { calculateOrientation } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
 import { getCoords } from '@turf/invariant';
 import { mkdirSync } from 'fs';

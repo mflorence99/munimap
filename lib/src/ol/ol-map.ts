@@ -1,6 +1,6 @@
 import { GeoJSONService } from '../services/geojson';
 import { MapableComponent } from './ol-mapable';
-import { Parcel } from '../geojson';
+import { Parcel } from '../common';
 import { Path } from '../state/view';
 import { Searcher } from './ol-searcher';
 import { SearcherComponent } from './ol-searcher';

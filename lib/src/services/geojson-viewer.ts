@@ -1,6 +1,6 @@
 import { CacheService } from '../services/cache';
 import { GeoJSONService } from './geojson';
-import { Index } from '../geojson';
+import { Index } from '../common';
 
 import { environment } from '../environment';
 

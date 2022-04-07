@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Parcel } from '../lib/src/geojson';
-import { Parcels } from '../lib/src/geojson';
+import { Parcel } from '../lib/src/common';
+import { Parcels } from '../lib/src/common';
 
-import { calculateParcel } from '../lib/src/geojson';
-import { normalizeParcel } from '../lib/src/geojson';
-import { simplify } from '../lib/src/geojson';
-import { theState } from '../lib/src/geojson';
+import { calculateParcel } from '../lib/src/common';
+import { normalizeParcel } from '../lib/src/common';
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
 import * as yargs from 'yargs';
 

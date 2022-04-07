@@ -1,5 +1,5 @@
 import { GeoJSONService } from '../services/geojson';
-import { Index } from '../geojson';
+import { Index } from '../common';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';

@@ -1,4 +1,4 @@
-import { Index } from '../geojson';
+import { Index } from '../common';
 
 import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';

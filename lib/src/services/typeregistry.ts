@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ParcelPropertiesUsage } from '../geojson';
-import { ParcelPropertiesUse } from '../geojson';
+import { ParcelPropertiesUsage } from '../common';
+import { ParcelPropertiesUse } from '../common';
 
 import { Injectable } from '@angular/core';
 

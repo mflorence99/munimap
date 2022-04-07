@@ -1,10 +1,10 @@
 import { CacheService } from '../services/cache';
-import { CountyIndex } from '../geojson';
+import { CountyIndex } from '../common';
 import { GeoJSONService } from './geojson';
-import { Index } from '../geojson';
+import { Index } from '../common';
 import { Path } from '../state/view';
-import { StateIndex } from '../geojson';
-import { TownIndex } from '../geojson';
+import { StateIndex } from '../common';
+import { TownIndex } from '../common';
 
 import { environment } from '../environment';
 

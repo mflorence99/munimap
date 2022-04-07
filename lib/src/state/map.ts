@@ -1,4 +1,4 @@
-import { ParcelID } from '../geojson';
+import { ParcelID } from '../common';
 
 import { Action } from '@ngxs/store';
 import { Coordinate } from 'ol/coordinate';

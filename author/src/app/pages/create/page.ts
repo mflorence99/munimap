@@ -5,15 +5,15 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { FilterFunction } from '@lib/ol/ol-interaction-selectpolygon';
 import { GeoJSONService } from '@lib/services/geojson';
-import { Index } from '@lib/geojson';
+import { Index } from '@lib/common';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { Path } from '@lib/state/view';
 import { Router } from '@angular/router';
-import { TownIndex } from '@lib/geojson';
+import { TownIndex } from '@lib/common';
 import { ViewChild } from '@angular/core';
 
 import { environment } from '@lib/environment';
-import { theState } from '@lib/geojson';
+import { theState } from '@lib/common';
 
 import OLFeature from 'ol/Feature';
 

@@ -3,8 +3,8 @@ import { Mapable } from '../ol-mapable';
 import { MapableComponent } from '../ol-mapable';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../geojson';
-import { ParcelID } from '../../geojson';
+import { Parcel } from '../../common';
+import { ParcelID } from '../../common';
 import { Selector } from '../ol-selector';
 import { SelectorComponent } from '../ol-selector';
 

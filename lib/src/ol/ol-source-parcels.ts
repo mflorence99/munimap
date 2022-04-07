@@ -5,12 +5,12 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OverlayProperty } from '../state/overlay';
 import { OverlayState } from '../state/overlay';
-import { Parcel } from '../geojson';
-import { ParcelID } from '../geojson';
-import { Parcels } from '../geojson';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { Parcels } from '../common';
 import { ParcelsState } from '../state/parcels';
 
-import { parcelProperties } from '../geojson';
+import { parcelProperties } from '../common';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';

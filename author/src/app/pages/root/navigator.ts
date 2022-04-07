@@ -20,7 +20,7 @@ import { of } from 'rxjs';
 import { orderBy } from '@angular/fire/firestore';
 import { query } from '@angular/fire/firestore';
 import { takeUntil } from 'rxjs/operators';
-import { theState } from '@lib/geojson';
+import { theState } from '@lib/common';
 import { where } from '@angular/fire/firestore';
 
 @Component({

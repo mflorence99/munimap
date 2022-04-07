@@ -1,7 +1,7 @@
-import { Index } from '../lib/src/geojson';
-import { Layer } from '../lib/src/geojson';
+import { Index } from '../lib/src/common';
+import { Layer } from '../lib/src/common';
 
-import { theState } from '../lib/src/geojson';
+import { theState } from '../lib/src/common';
 
 import { existsSync } from 'fs';
 import { readFileSync } from 'fs';

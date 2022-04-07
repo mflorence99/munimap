@@ -1,7 +1,7 @@
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { PlaceProperties } from '../geojson';
-import { PlacePropertiesType } from '../geojson';
+import { PlaceProperties } from '../common';
+import { PlacePropertiesType } from '../common';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
 

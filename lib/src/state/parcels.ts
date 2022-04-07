@@ -4,18 +4,18 @@ import { CanDo } from './undo';
 import { ClearStacks as ClearStacksProxy } from './undo';
 import { Map } from './map';
 import { MapState } from './map';
-import { Parcel } from '../geojson';
-import { ParcelAction } from '../geojson';
-import { ParcelID } from '../geojson';
+import { Parcel } from '../common';
+import { ParcelAction } from '../common';
+import { ParcelID } from '../common';
 import { Profile } from './auth';
 import { Redo as RedoProxy } from './undo';
 import { Undo as UndoProxy } from './undo';
 
-import { calculateParcel } from '../geojson';
-import { deserializeParcel } from '../geojson';
-import { normalizeParcel } from '../geojson';
-import { serializeParcel } from '../geojson';
-import { timestampParcel } from '../geojson';
+import { calculateParcel } from '../common';
+import { deserializeParcel } from '../common';
+import { normalizeParcel } from '../common';
+import { serializeParcel } from '../common';
+import { timestampParcel } from '../common';
 
 import { Action } from '@ngxs/store';
 import { Actions } from '@ngxs/store';

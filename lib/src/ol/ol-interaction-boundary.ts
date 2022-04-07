@@ -2,7 +2,7 @@ import { DestroyService } from '../services/destroy';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
-import { simplify } from '../geojson';
+import { simplify } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

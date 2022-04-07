@@ -67,7 +67,11 @@ export type Landmarks = GeoJSON.FeatureCollection<
 >;
 
 class LandmarkPropertiesClass {
-  constructor(public name: string = '') {}
+  constructor(
+    public name: string = null,
+    public fillColor: string = null,
+    public fillOpacity: number = 0
+  ) {}
 }
 
 export interface LandmarkProperties extends Partial<LandmarkPropertiesClass> {}

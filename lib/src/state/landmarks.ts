@@ -1,14 +1,14 @@
 import { AnonState } from './anon';
 import { AuthState } from './auth';
 import { ClearStacks as ClearStacksProxy } from './undo';
-import { Landmark } from '../geojson';
+import { Landmark } from '../common';
 import { Map } from './map';
 import { MapState } from './map';
 import { Profile } from './auth';
 import { Redo as RedoProxy } from './undo';
 import { Undo as UndoProxy } from './undo';
 
-import { deserializeLandmark } from '../geojson';
+import { deserializeLandmark } from '../common';
 
 import { Action } from '@ngxs/store';
 import { Actions } from '@ngxs/store';
