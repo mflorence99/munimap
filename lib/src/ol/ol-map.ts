@@ -261,12 +261,7 @@ export class OLMapComponent
               (def, rule: any) =>
                 (def =
                   rule.selectorText === ':root'
-                    ? [
-                        ...def,
-                        ...Array.from(rule.style).filter((name: any) =>
-                          name.startsWith('--map')
-                        )
-                      ]
+                    ? [...def, ...Array.from(rule.style)]
                     : def),
               []
             )

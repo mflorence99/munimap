@@ -70,7 +70,10 @@ class LandmarkPropertiesClass {
   constructor(
     public name: string = null,
     public fillColor: string = null,
-    public fillOpacity: number = 0
+    public fillOpacity: number = 0,
+    public strokeColor: string = null,
+    public strokeOpacity: number = 0,
+    public strokeWidth: number = 0
   ) {}
 }
 

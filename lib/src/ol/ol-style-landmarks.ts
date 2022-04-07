@@ -1,3 +1,4 @@
+import { LandmarkProperties } from '../common';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Styler } from './ol-styler';
@@ -31,17 +32,35 @@ export class OLStyleLandmarksComponent implements Styler {
     private map: OLMapComponent
   ) {}
 
-  // 🔥 TEMPORARY
+  #fill(props: LandmarkProperties): OLStyle {
+    const fillColor = this.map.vars[props.fillColor];
+    if (fillColor && props.fillOpacity > 0)
+      return new OLStyle({
+        fill: new OLFill({
+          color: `rgba(${fillColor}, ${props.fillOpacity})`
+        })
+      });
+    else return null;
+  }
+
+  #stroke(props: LandmarkProperties): OLStyle {
+    const strokeColor = this.map.vars[props.strokeColor];
+    if (strokeColor && props.strokeOpacity > 0 && props.strokeWidth > 0)
+      return new OLStyle({
+        stroke: new OLStroke({
+          color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
+          width: props.strokeWidth
+        })
+      });
+    else return null;
+  }
 
   style(): OLStyleFunction {
-    return (): OLStyle[] => {
+    return (landmark: any): OLStyle[] => {
+      const props = landmark.getProperties() as LandmarkProperties;
       const styles: OLStyle[] = [];
-      styles.push(
-        new OLStyle({
-          fill: new OLFill({ color: [255, 0, 0, 0.25] }),
-          stroke: new OLStroke({ color: [255, 0, 0, 1], width: 2 })
-        })
-      );
+      styles.push(this.#fill(props));
+      styles.push(this.#stroke(props));
       return styles;
     };
   }

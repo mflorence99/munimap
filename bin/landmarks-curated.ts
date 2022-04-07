@@ -37,7 +37,10 @@ const curations: Curation[] = [
     ],
     owner: 'mflo999@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    properties: {}
+    properties: {
+      fillColor: '--rgb-yellow-300',
+      fillOpacity: 0.25
+    }
   }
 ];
 
