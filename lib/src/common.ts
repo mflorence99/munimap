@@ -68,12 +68,19 @@ export type Landmarks = GeoJSON.FeatureCollection<
 
 class LandmarkPropertiesClass {
   constructor(
-    public name: string = null,
     public fillColor: string = null,
     public fillOpacity: number = 0,
+    public fontColor: string = null,
+    public fontOpacity: number = 0,
+    public fontOutline: boolean = false,
+    public fontSize: 'large' | 'medium' | 'small' | null = null,
+    public fontStyle: 'normal' | 'bold' | 'italic' | null = null,
+    public name: string = null,
+    public showAcreage: boolean = false,
     public strokeColor: string = null,
     public strokeOpacity: number = 0,
-    public strokeWidth: number = 0
+    public strokeStyle: 'dashed' | 'solid' | null = null,
+    public strokeWidth: 'thick' | 'thin' | null = null
   ) {}
 }
 

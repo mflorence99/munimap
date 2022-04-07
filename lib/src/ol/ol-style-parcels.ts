@@ -94,10 +94,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
 
   @Input() borderWidth = 10 /* 👈 feet */;
   @Input() borderWidthSelectRatio = 2;
-  @Input() dimensionsFontSize = 20;
+  @Input() dimensionsFontSize = 12;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
-  @Input() fontSizeDimensionRatio = 0.5;
   @Input() maxBorderPixels = 3;
   @Input() maxFontSize = 40;
   @Input() minFontSize = 6;
@@ -244,10 +243,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       // 👉 fontSize is proportional to the resolution,
       //    but no bigger than the size of the label
       return Math.min(
-        Math.min(
-          labelFontSize * this.fontSizeDimensionRatio,
-          this.dimensionsFontSize
-        ),
+        Math.min(labelFontSize, this.dimensionsFontSize),
         this.dimensionsFontSize / resolution
       );
     });

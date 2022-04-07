@@ -12,7 +12,7 @@
   <time>2020-10-15T18:39:43Z</time>
   <keywords></keywords>
   <trk>
-    <name>Mow 1</name>
+    <name>Fine Mowing</name>
     <trkseg>
       <trkpt lat="43.203031829227555" lon="-72.030070395175926">
         <ele>318.10299300000003</ele>
@@ -709,7 +709,7 @@
     </trkseg>
   </trk>
   <trk>
-    <name>Mow 2</name>
+    <name>Fine Mowing</name>
     <trkseg>
       <trkpt lat="43.204957683272617" lon="-72.029248409084317">
         <ele>337.52193799999998</ele>
@@ -1018,7 +1018,7 @@
     </trkseg>
   </trk>
   <trk>
-    <name>Mow 3</name>
+    <name>Fine Mowing</name>
     <trkseg>
       <trkpt lat="43.206777495449337" lon="-72.028782152778632">
         <ele>338.75341500000002</ele>

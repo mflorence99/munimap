@@ -17,6 +17,7 @@ import lineToPolygon from '@turf/line-to-polygon';
 
 interface CuratedLandmark {
   geoOp: undefined | 'lineToPolygon';
+  properties: LandmarkProperties;
   source: string;
 }
 
@@ -24,7 +25,6 @@ interface Curation {
   landmarks: CuratedLandmark[];
   owner: string;
   path: string;
-  properties: LandmarkProperties;
 }
 
 const curations: Curation[] = [
@@ -32,15 +32,35 @@ const curations: Curation[] = [
     landmarks: [
       {
         geoOp: 'lineToPolygon',
+        properties: {
+          fontColor: '--rgb-gray-900',
+          fontOpacity: 1,
+          fontSize: 'small',
+          fontStyle: 'bold'
+        },
+        source: './proxy/assets/landmarks/florence/buildings.gpx'
+      },
+      {
+        geoOp: 'lineToPolygon',
+        properties: {
+          fillColor: '--rgb-yellow-300',
+          fillOpacity: 0.25,
+          fontColor: '--rgb-blue-800',
+          fontOpacity: 0.75,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic',
+          showAcreage: true,
+          strokeColor: '--rgb-red-300',
+          strokeOpacity: 0.5,
+          strokeStyle: 'dashed',
+          strokeWidth: 'thick'
+        },
         source: './proxy/assets/landmarks/florence/mow.gpx'
       }
     ],
     owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    properties: {
-      fillColor: '--rgb-yellow-300',
-      fillOpacity: 0.25
-    }
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
   }
 ];
 
@@ -106,7 +126,7 @@ async function main(): Promise<void> {
           owner: curation.owner,
           path: curation.path,
           properties: {
-            ...curation.properties,
+            ...curated.properties,
             name: feature.properties.name
           },
           type: 'Feature'
