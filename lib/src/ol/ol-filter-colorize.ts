@@ -96,11 +96,11 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
 
   ngAfterContentInit(): void {
     // 👇 ol-ext has monkey-patched addFilter
-    this.#layer.olLayer['addFilter'](this.olFilter);
+    this.#layer?.olLayer['addFilter'](this.olFilter);
   }
 
   ngOnDestroy(): void {
     // 👇 ol-ext has monkey-patched removeFilter
-    this.#layer.olLayer['removeFilter'](this.olFilter);
+    this.#layer?.olLayer['removeFilter'](this.olFilter);
   }
 }

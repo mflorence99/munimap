@@ -84,7 +84,7 @@ export class OLFilterCrop2SelectedParcelsComponent
       });
     }
     // 👇 ol-ext has monkey-patched addFilter
-    this.#layer.olLayer['addFilter'](this.olFilter);
+    this.#layer?.olLayer['addFilter'](this.olFilter);
   }
 
   #handleFeaturesSelected$(): void {
@@ -99,7 +99,7 @@ export class OLFilterCrop2SelectedParcelsComponent
 
   ngOnDestroy(): void {
     // 👇 ol-ext has monkey-patched removeFilter
-    this.#layer.olLayer['removeFilter'](this.olFilter);
+    this.#layer?.olLayer['removeFilter'](this.olFilter);
   }
 
   ngOnInit(): void {

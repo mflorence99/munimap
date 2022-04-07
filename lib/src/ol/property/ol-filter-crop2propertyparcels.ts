@@ -1,4 +1,3 @@
-import { DestroyService } from '../../services/destroy';
 import { OLLayerTileComponent } from '../ol-layer-tile';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
@@ -23,7 +22,6 @@ import union from '@turf/union';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
   selector: 'app-ol-filter-crop2propertyparcels',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
@@ -46,7 +44,6 @@ export class OLFilterCrop2PropertyParcelsComponent
   @Input() type: 'crop' | 'mask';
 
   constructor(
-    private destroy$: DestroyService,
     @Optional() layer1: OLLayerTileComponent,
     @Optional() layer2: OLLayerVectorComponent,
     private map: OLMapComponent
@@ -92,14 +89,14 @@ export class OLFilterCrop2PropertyParcelsComponent
         });
       }
       // 👇 ol-ext has monkey-patched addFilter
-      this.#layer.olLayer['addFilter'](this.olFilter);
+      this.#layer?.olLayer['addFilter'](this.olFilter);
     }
   }
 
   ngOnDestroy(): void {
     if (this.#featuresLoadedKey) unByKey(this.#featuresLoadedKey);
     // 👇 ol-ext has monkey-patched removeFilter
-    if (this.olFilter) this.#layer.olLayer['removeFilter'](this.olFilter);
+    if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
   }
 
   ngOnInit(): void {
