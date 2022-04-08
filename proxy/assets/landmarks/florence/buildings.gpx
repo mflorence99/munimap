@@ -6,58 +6,34 @@
   xmlns="http://www.topografix.com/GPX/1/0"
   xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
 >
-  <name>buildings.gpx</name>
+  <name>buildingmarks.gpx</name>
   <author></author>
   <desc></desc>
-  <time>2020-10-20T10:39:15.191683Z</time>
+  <time>2020-10-29T11:49:08.562601Z</time>
   <keywords></keywords>
-  <trk>
+  <wpt lat="43.20409353615244" lon="-72.02950949528214">
     <name>Barn</name>
-    <trkseg>
-      <trkpt lat="43.204143372242356" lon="-72.029501050594334"> </trkpt>
-      <trkpt lat="43.204045615181869" lon="-72.029522508266453"> </trkpt>
-      <trkpt lat="43.204027041571592" lon="-72.029368281248097"> </trkpt>
-      <trkpt lat="43.204124992153531" lon="-72.029346534018032"> </trkpt>
-    </trkseg>
-  </trk>
-  <trk>
+    <time>2020-10-27T14:58:42Z</time>
+  </wpt>
+  <wpt lat="43.203942994580409" lon="-72.029302573085786">
     <name>Garage</name>
-    <trkseg>
-      <trkpt lat="43.203988909487862" lon="-72.029348471233362"> </trkpt>
-      <trkpt lat="43.203931233468069" lon="-72.029353835651392"> </trkpt>
-      <trkpt lat="43.20392634566727" lon="-72.029251911708826"> </trkpt>
-      <trkpt lat="43.203983044132414" lon="-72.029247888395304"> </trkpt>
-      <trkpt lat="43.203985976810202" lon="-72.029345789024347"> </trkpt>
-    </trkseg>
-  </trk>
-  <trk>
+    <time>2020-10-27T14:59:00Z</time>
+  </wpt>
+  <wpt lat="43.20372302314007" lon="-72.02943494421412">
     <name>Gazebo</name>
-    <trkseg>
-      <trkpt lat="43.203719111150491" lon="-72.029448747518543"> </trkpt>
-      <trkpt lat="43.203728347105312" lon="-72.029422641698829"> </trkpt>
-      <trkpt lat="43.203720087403859" lon="-72.029396444442753"> </trkpt>
-      <trkpt lat="43.20370053744081" lon="-72.029396444442753"> </trkpt>
-      <trkpt lat="43.203689488948946" lon="-72.029421635870449"> </trkpt>
-      <trkpt lat="43.203699508979057" lon="-72.029447452132217"> </trkpt>
-    </trkseg>
-  </trk>
-  <trk>
+    <time>2020-10-27T14:59:20Z</time>
+  </wpt>
+  <wpt lat="43.203855991684492" lon="-72.029585546136857">
     <name>House</name>
-    <trkseg>
-      <trkpt lat="43.203924390546845" lon="-72.029715933868403"> </trkpt>
-      <trkpt lat="43.203911682262543" lon="-72.029442348548884"> </trkpt>
-      <trkpt lat="43.203825656883787" lon="-72.029450395175928"> </trkpt>
-      <trkpt lat="43.203839350034656" lon="-72.029726356151585"> </trkpt>
-      <trkpt lat="43.203925368107065" lon="-72.02971727497291"> </trkpt>
-    </trkseg>
-  </trk>
-  <trk>
+    <time>2020-10-27T14:59:37Z</time>
+  </wpt>
+  <wpt lat="43.204459999999997" lon="-72.030125999999996">
+    <name>Old Well</name>
+    <ele>347</ele>
+    <time>2020-10-17T14:43:30Z</time>
+  </wpt>
+  <wpt lat="43.204253492246067" lon="-72.029845457038874">
     <name>Water Temple</name>
-    <trkseg>
-      <trkpt lat="43.204256768716512" lon="-72.029906064155583"> </trkpt>
-      <trkpt lat="43.204216688952314" lon="-72.029883265378956"> </trkpt>
-      <trkpt lat="43.204246015611631" lon="-72.029793411376957"> </trkpt>
-      <trkpt lat="43.204286095356565" lon="-72.029814869049076"> </trkpt>
-    </trkseg>
-  </trk>
+    <time>2020-10-27T14:58:08Z</time>
+  </wpt>
 </gpx>

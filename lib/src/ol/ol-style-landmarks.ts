@@ -15,8 +15,10 @@ import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
+import { fromLonLat } from 'ol/proj';
 
 import OLFill from 'ol/style/Fill';
+import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -42,7 +44,8 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
   @Input() showFill = false;
   @Input() showStroke = false;
   @Input() showText = false;
-  @Input() strokeWidth_thick = 10 /* 👈 feet */;
+  @Input() strokeWidth_medium = 6 /* 👈 feet */;
+  @Input() strokeWidth_thick = 9 /* 👈 feet */;
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
 
   constructor(
@@ -51,7 +54,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     private map: OLMapComponent
   ) {}
 
-  #fill(landmark: any, _resolution: number): OLStyle[] {
+  #fillPolygon(landmark: any, _resolution: number): OLStyle[] {
     const props = landmark.getProperties() as LandmarkProperties;
     const styles: OLStyle[] = [];
     if (props.fillColor && props.fillOpacity > 0) {
@@ -74,7 +77,11 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     return Math.min(pixels, pixels / resolution);
   }
 
-  #stroke(landmark: any, resolution: number): OLStyle[] {
+  #strokeLine(landmark: any, resolution: number): OLStyle[] {
+    return this.#strokePolygon(landmark, resolution);
+  }
+
+  #strokePolygon(landmark: any, resolution: number): OLStyle[] {
     const props = landmark.getProperties() as LandmarkProperties;
     const styles: OLStyle[] = [];
     if (
@@ -114,6 +121,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
               strokePixels > 1
                 ? [strokePixels, strokePixels * 2]
                 : [strokePixels * 2, strokePixels],
+            lineJoin: 'bevel',
             width: strokePixels
           })
         });
@@ -123,7 +131,47 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     return styles;
   }
 
-  #text(landmark: any, resolution: number): OLStyle[] {
+  #textLine(landmark: any, resolution: number): OLStyle[] {
+    const props = landmark.getProperties() as LandmarkProperties;
+    const styles: OLStyle[] = [];
+    if (
+      props.fontColor &&
+      props.fontOpacity > 0 &&
+      props.fontSize &&
+      props.fontStyle &&
+      props.name
+    ) {
+      const fontSize = this.#fontSize(`fontSize_${props.fontSize}`, resolution);
+      // 👇 only show text if font size greater than minimum
+      if (fontSize >= this.minFontSize) {
+        const fontColor = this.map.vars[props.fontColor];
+        const name = new OLStyle({
+          text: new OLText({
+            fill: new OLFill({
+              color: `rgba(${fontColor}, ${props.fontOpacity})`
+            }),
+            font: `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`,
+            placement: 'line',
+            stroke: props.fontOutline
+              ? new OLStroke({
+                  color: `rgba(255, 255, 255, 1)`,
+                  width: fontSize * 0.25
+                })
+              : null,
+            text: props.name
+          })
+        });
+        styles.push(name);
+      }
+    }
+    return styles;
+  }
+
+  #textPoint(landmark: any, resolution: number): OLStyle[] {
+    return this.#textPolygon(landmark, resolution);
+  }
+
+  #textPolygon(landmark: any, resolution: number): OLStyle[] {
     const props = landmark.getProperties() as LandmarkProperties;
     const styles: OLStyle[] = [];
     if (
@@ -143,6 +191,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }
         const name = new OLStyle({
+          geometry: props.center ? new OLPoint(fromLonLat(props.center)) : null,
           text: new OLText({
             fill: new OLFill({
               color: `rgba(${fontColor}, ${props.fontOpacity})`
@@ -152,7 +201,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
             stroke: props.fontOutline
               ? new OLStroke({
                   color: `rgba(255, 255, 255, 1)`,
-                  width: 3
+                  width: fontSize * 0.25
                 })
               : null,
             text: text
@@ -181,9 +230,29 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
   style(): OLStyleFunction {
     return (landmark: any, resolution: number): OLStyle[] => {
       const styles: OLStyle[] = [];
-      if (this.showFill) styles.push(...this.#fill(landmark, resolution));
-      if (this.showStroke) styles.push(...this.#stroke(landmark, resolution));
-      if (this.showText) styles.push(...this.#text(landmark, resolution));
+      switch (landmark.getGeometry().getType()) {
+        case 'Point':
+        case 'MultiPoint':
+          if (this.showText)
+            styles.push(...this.#textPoint(landmark, resolution));
+          break;
+        case 'LineString':
+        case 'MultiLineString':
+          if (this.showStroke)
+            styles.push(...this.#strokeLine(landmark, resolution));
+          if (this.showText)
+            styles.push(...this.#textLine(landmark, resolution));
+          break;
+        case 'Polygon':
+        case 'MultiPolygon':
+          if (this.showFill)
+            styles.push(...this.#fillPolygon(landmark, resolution));
+          if (this.showStroke)
+            styles.push(...this.#strokePolygon(landmark, resolution));
+          if (this.showText)
+            styles.push(...this.#textPolygon(landmark, resolution));
+          break;
+      }
       return styles;
     };
   }

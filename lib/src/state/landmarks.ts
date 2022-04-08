@@ -147,7 +147,7 @@ export class LandmarksState implements NgxsOnInit {
     console.table(
       landmarks.map((landmark) => {
         return {
-          id: landmark.id,
+          id: landmark.$id,
           geometry: landmark.geometry?.type,
           name: landmark.properties?.name
         };

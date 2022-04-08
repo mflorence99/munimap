@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<gpx version="1.0" creator="Viking -- http://viking.sf.net/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  <name>landmarks.gpx</name>
+  <author></author>
+  <desc></desc>
+  <time>2020-10-09T13:49:35Z</time>
+  <keywords></keywords>
+<wpt lat="43.205168411991536" lon="-72.025588149286264">
+  <name>Big Oak Causeway </name>
+  <ele>338</ele>
+  <time>2020-10-09T14:27:23Z</time>
+</wpt>
+<wpt lat="43.204934924778065" lon="-72.026133936753268">
+  <name>Big Rock Junction </name>
+  <ele>344</ele>
+  <time>2020-10-09T14:25:51Z</time>
+</wpt>
+<wpt lat="43.206717450284486" lon="-72.02271412025928">
+  <name>Deer Valley Overlook</name>
+  <ele>366</ele>
+  <time>2020-10-15T13:55:14Z</time>
+</wpt>
+<wpt lat="43.207943731117616" lon="-72.024472776384826">
+  <name>Gorge Overlook</name>
+  <ele>375</ele>
+  <time>2020-10-09T14:03:05Z</time>
+</wpt>
+<wpt lat="43.208693954545893" lon="-72.024339538922305">
+  <name>Hemlock Causeway</name>
+  <ele>378</ele>
+  <time>2020-10-09T14:01:12Z</time>
+</wpt>
+<wpt lat="43.208247" lon="-72.027181999999996">
+  <name>Moose Junction</name>
+  <ele>342</ele>
+  <time>2020-10-09T13:52:35Z</time>
+</wpt>
+<wpt lat="43.206474048446381" lon="-72.026088339200015">
+  <name>Narrow Causeway</name>
+  <ele>350</ele>
+  <time>2020-10-09T14:31:32Z</time>
+</wpt>
+<wpt lat="43.206447006638925" lon="-72.023366407869332">
+  <name>Outer Causeway</name>
+  <ele>360</ele>
+  <time>2020-10-09T14:08:30Z</time>
+</wpt>
+<wpt lat="43.205668078399569" lon="-72.026478600611682">
+  <name>Swamp Causeway </name>
+  <ele>348</ele>
+  <time>2020-10-09T14:30:22Z</time>
+</wpt>
+<wpt lat="43.20564836772963" lon="-72.027515785215371">
+  <name>Washout Causeway </name>
+  <ele>345</ele>
+  <time>2020-10-09T14:37:10Z</time>
+</wpt>
+</gpx>

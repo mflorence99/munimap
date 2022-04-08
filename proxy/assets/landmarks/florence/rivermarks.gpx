@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<gpx
+  version="1.0"
+  creator="Viking -- http://viking.sf.net/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
+>
+  <name>routes.gpx</name>
+  <author></author>
+  <desc></desc>
+  <time>2020-10-30T18:11:14.249881Z</time>
+  <keywords></keywords>
+
+  <trk>
+    <name>River Flo</name>
+    <trkseg>
+      <trkpt lat="43.207605415744155" lon="-72.028536440649034"> </trkpt>
+      <trkpt lat="43.207647448283083" lon="-72.028498889722826"> </trkpt>
+      <trkpt lat="43.207692413292655" lon="-72.028451951065065"> </trkpt>
+      <trkpt lat="43.207747153259568" lon="-72.028426470079424"> </trkpt>
+      <trkpt lat="43.207789185700825" lon="-72.028380872526171"> </trkpt>
+      <trkpt lat="43.20784099308856" lon="-72.02833393386841"> </trkpt>
+      <trkpt lat="43.207885957955462" lon="-72.028299065151216"> </trkpt>
+      <trkpt lat="43.207934832773198" lon="-72.028253467597963"> </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>River Flo</name>
+    <trkseg>
+      <trkpt lat="43.206139101780025" lon="-72.028197268105501"> </trkpt>
+      <trkpt lat="43.206097068201736" lon="-72.028190562582964"> </trkpt>
+      <trkpt lat="43.206056012120563" lon="-72.028170446015352"> </trkpt>
+      <trkpt lat="43.206002248162953" lon="-72.028159717179292"> </trkpt>
+      <trkpt lat="43.205967057183223" lon="-72.028148988343233"> </trkpt>
+      <trkpt lat="43.205958259435114" lon="-72.028132895089144"> </trkpt>
+      <trkpt lat="43.205933821239277" lon="-72.028128871775621"> </trkpt>
+      <trkpt lat="43.205895697634226" lon="-72.028108755208009"> </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>River Flo</name>
+    <trkseg>
+      <trkpt lat="43.204309192499295" lon="-72.028241397657396"> </trkpt>
+      <trkpt lat="43.204273022988232" lon="-72.028256149806978"> </trkpt>
+      <trkpt lat="43.204246629007173" lon="-72.028254808702471"> </trkpt>
+      <trkpt lat="43.204209481903362" lon="-72.028278948583605"> </trkpt>
+      <trkpt lat="43.204165491882762" lon="-72.028292359628679"> </trkpt>
+      <trkpt lat="43.204120524273364" lon="-72.028297724046709"> </trkpt>
+      <trkpt lat="43.204085332208102" lon="-72.028309793987276"> </trkpt>
+      <trkpt lat="43.204043297214653" lon="-72.028297724046709"> </trkpt>
+      <trkpt lat="43.203992464160635" lon="-72.028288336315157"> </trkpt>
+      <trkpt lat="43.203968025177275" lon="-72.02826553753853"> </trkpt>
+      <trkpt lat="43.203942608624196" lon="-72.028246762075426"> </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Swamp Creek</name>
+    <trkseg>
+      <trkpt lat="43.204837069409166" lon="-72.025490792312624"> </trkpt>
+      <trkpt lat="43.204796990026217" lon="-72.025498838939669"> </trkpt>
+      <trkpt lat="43.204751045335328" lon="-72.025474699058535"> </trkpt>
+      <trkpt lat="43.204702167966616" lon="-72.025484086790087"> </trkpt>
+      <trkpt lat="43.204661110946624" lon="-72.025485427894594"> </trkpt>
+      <trkpt lat="43.204609300858152" lon="-72.025496156730654"> </trkpt>
+      <trkpt lat="43.204560423375874" lon="-72.025486768999102"> </trkpt>
+      <trkpt lat="43.204507635651019" lon="-72.025478722372057"> </trkpt>
+      <trkpt lat="43.204464623396987" lon="-72.025504203357698"> </trkpt>
+      <trkpt lat="43.204422588664883" lon="-72.025510908880236"> </trkpt>
+      <trkpt lat="43.204377621245001" lon="-72.025508226671221"> </trkpt>
+      <trkpt lat="43.204343406881577" lon="-72.025484086790087"> </trkpt>
+      <trkpt lat="43.204311147607051" lon="-72.025451900281908"> </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

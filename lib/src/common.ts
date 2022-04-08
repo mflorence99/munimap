@@ -68,6 +68,7 @@ export type Landmarks = GeoJSON.FeatureCollection<
 
 class LandmarkPropertiesClass {
   constructor(
+    public center: [number, number] = null,
     public fillColor: string = null,
     public fillOpacity: number = 0,
     public fontColor: string = null,
@@ -80,7 +81,7 @@ class LandmarkPropertiesClass {
     public strokeColor: string = null,
     public strokeOpacity: number = 0,
     public strokeStyle: 'dashed' | 'solid' | null = null,
-    public strokeWidth: 'thick' | 'thin' | null = null
+    public strokeWidth: 'thick' | 'medium' | 'thin' | null = null
   ) {}
 }
 

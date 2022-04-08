@@ -16,7 +16,8 @@ import chalk from 'chalk';
 import lineToPolygon from '@turf/line-to-polygon';
 
 interface CuratedLandmark {
-  geoOp: undefined | 'lineToPolygon';
+  centers?: [[number, number]];
+  geoOp?: 'lineToPolygon' | null;
   properties: LandmarkProperties;
   source: string;
 }
@@ -31,32 +32,76 @@ const curations: Curation[] = [
   {
     landmarks: [
       {
-        geoOp: 'lineToPolygon',
         properties: {
-          fontColor: '--rgb-gray-900',
+          fontColor: '--map-building-outline',
           fontOpacity: 1,
-          fontSize: 'small',
-          fontStyle: 'bold'
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic'
         },
         source: './proxy/assets/landmarks/florence/buildings.gpx'
       },
       {
+        properties: {
+          fontColor: '--map-place-text-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'large',
+          fontStyle: 'italic'
+        },
+        source: './proxy/assets/landmarks/florence/landmarks.gpx'
+      },
+      {
+        centers: [[-72.029653581079, 43.204750066490675]],
         geoOp: 'lineToPolygon',
         properties: {
-          fillColor: '--rgb-yellow-300',
-          fillOpacity: 0.25,
-          fontColor: '--rgb-blue-800',
-          fontOpacity: 0.75,
-          fontOutline: true,
-          fontSize: 'medium',
-          fontStyle: 'italic',
-          showAcreage: true,
-          strokeColor: '--rgb-red-300',
-          strokeOpacity: 0.5,
-          strokeStyle: 'dashed',
-          strokeWidth: 'thick'
+          fillColor: '--map-parcel-fill-u190',
+          fillOpacity: 0.15,
+          fontColor: '--map-conservation-outline',
+          fontOpacity: 1,
+          fontSize: 'small',
+          fontStyle: 'normal',
+          showAcreage: true
         },
         source: './proxy/assets/landmarks/florence/mow.gpx'
+      },
+      {
+        properties: {
+          fontColor: '--map-trail-text-color',
+          fontOpacity: 1,
+          fontSize: 'medium',
+          fontStyle: 'italic'
+        },
+        source: './proxy/assets/landmarks/florence/trailmarks.gpx'
+      },
+      {
+        properties: {
+          strokeColor: '--map-trail-line-color',
+          strokeOpacity: 1,
+          strokeStyle: 'dashed',
+          strokeWidth: 'medium'
+        },
+        source: './proxy/assets/landmarks/florence/trails.gpx'
+      },
+      {
+        properties: {
+          fontColor: '--map-river-text-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic'
+        },
+        source: './proxy/assets/landmarks/florence/rivermarks.gpx'
+      },
+      {
+        properties: {
+          fontColor: '--map-river-text-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic'
+        },
+        source: './proxy/assets/landmarks/florence/watermarks.gpx'
       }
     ],
     owner: 'mflo999@gmail.com',
@@ -101,7 +146,11 @@ async function main(): Promise<void> {
           'text/xml'
         )
       );
-      for (const feature of geojson.features) {
+
+      // 👉 for each feature ...
+      for (let ix = 0; ix < geojson.features.length; ix++) {
+        const feature = geojson.features[ix];
+
         console.log(
           chalk.yellow(
             `...... adding curated landmark ${feature.properties.name}`
@@ -127,6 +176,7 @@ async function main(): Promise<void> {
           path: curation.path,
           properties: {
             ...curated.properties,
+            center: curated.centers?.[ix] ?? null,
             name: feature.properties.name
           },
           type: 'Feature'
