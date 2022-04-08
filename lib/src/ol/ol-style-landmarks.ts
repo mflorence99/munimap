@@ -18,6 +18,7 @@ import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 
 import OLFill from 'ol/style/Fill';
+import OLFontSymbol from 'ol-ext/style/FontSymbol';
 import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
@@ -44,6 +45,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
   @Input() showFill = false;
   @Input() showStroke = false;
   @Input() showText = false;
+  @Input() strokeWidth_extra = 15 /* 👈 feet */;
   @Input() strokeWidth_medium = 6 /* 👈 feet */;
   @Input() strokeWidth_thick = 9 /* 👈 feet */;
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
@@ -62,7 +64,8 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
       const fill = new OLStyle({
         fill: new OLFill({
           color: `rgba(${fillColor}, ${props.fillOpacity})`
-        })
+        }),
+        zIndex: props.zIndex
       });
       styles.push(fill);
     }
@@ -101,7 +104,8 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
           stroke: new OLStroke({
             color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
             width: strokePixels
-          })
+          }),
+          zIndex: props.zIndex
         });
         styles.push(stroke);
       }
@@ -123,7 +127,8 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
                 : [strokePixels * 2, strokePixels],
             lineJoin: 'bevel',
             width: strokePixels
-          })
+          }),
+          zIndex: props.zIndex
         });
         styles.push(white, dashed);
       }
@@ -175,39 +180,55 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     const props = landmark.getProperties() as LandmarkProperties;
     const styles: OLStyle[] = [];
     if (
-      props.fontColor &&
-      props.fontOpacity > 0 &&
-      props.fontSize &&
-      props.fontStyle &&
+      (props.fontColor &&
+        props.fontOpacity > 0 &&
+        props.fontSize &&
+        props.fontStyle &&
+        props.icon) ||
       props.name
     ) {
       const fontSize = this.#fontSize(`fontSize_${props.fontSize}`, resolution);
       // 👇 only show text if font size greater than minimum
       if (fontSize >= this.minFontSize) {
         const fontColor = this.map.vars[props.fontColor];
-        let text = props.name.replace(/ /g, '\n');
+        let text = props.name?.replace(/ /g, '\n');
+        // 👇 calculate the acreage if requested
         if (props.showAcreage) {
           const acreage = landmark.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }
-        const name = new OLStyle({
+        // 👇 finally build the complete style
+        const style = new OLStyle({
           geometry: props.center ? new OLPoint(fromLonLat(props.center)) : null,
-          text: new OLText({
-            fill: new OLFill({
-              color: `rgba(${fontColor}, ${props.fontOpacity})`
-            }),
-            font: `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`,
-            overflow: true,
-            stroke: props.fontOutline
-              ? new OLStroke({
-                  color: `rgba(255, 255, 255, 1)`,
-                  width: fontSize * 0.25
-                })
-              : null,
-            text: text
-          })
+          image: props.icon
+            ? new OLFontSymbol({
+                color: `rgba(${fontColor}, ${props.fontOpacity})`,
+                font: `'Font Awesome'`,
+                fontStyle: 'bold',
+                form: 'none',
+                radius: fontSize,
+                text: props.icon
+              })
+            : null,
+          text: props.name
+            ? new OLText({
+                fill: new OLFill({
+                  color: `rgba(${fontColor}, ${props.fontOpacity})`
+                }),
+                font: `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`,
+                offsetY: props.icon ? -fontSize * 1.5 : 0,
+                overflow: true,
+                stroke: props.fontOutline
+                  ? new OLStroke({
+                      color: `rgba(255, 255, 255, 1)`,
+                      width: fontSize * 0.25
+                    })
+                  : null,
+                text: text
+              })
+            : null
         });
-        styles.push(name);
+        styles.push(style);
       }
     }
     return styles;

@@ -584,16 +584,6 @@
     </trkseg>
   </trk>
   <trk>
-    <name>Underground</name>
-    <trkseg>
-      <trkpt lat="43.203781745308362" lon="-72.029776083042151"> </trkpt>
-      <trkpt lat="43.203740687668912" lon="-72.02973987322045"> </trkpt>
-      <trkpt lat="43.203694742182492" lon="-72.029700981189734"> </trkpt>
-      <trkpt lat="43.203668347951229" lon="-72.029668794681555"> </trkpt>
-      <trkpt lat="43.203615559454448" lon="-72.029628561546332"> </trkpt>
-    </trkseg>
-  </trk>
-  <trk>
     <name>Upper stream</name>
     <trkseg>
       <trkpt lat="43.20378497198606" lon="-72.029777246032722">

@@ -43,12 +43,44 @@ const curations: Curation[] = [
       },
       {
         properties: {
+          fontColor: '--map-trail-line-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'large',
+          fontStyle: 'normal',
+          icon: '\uf00d' /* 👈 times */
+        },
+        source: './proxy/assets/landmarks/florence/bridges.gpx'
+      },
+      {
+        properties: {
+          fontColor: '--rgb-blue-gray-850',
+          fontOpacity: 0.66,
+          fontOutline: true,
+          fontSize: 'small',
+          fontStyle: 'normal',
+          icon: '\uf1ce' /* 👈 circle-notch */
+        },
+        source: './proxy/assets/landmarks/florence/culverts.gpx'
+      },
+      {
+        properties: {
           strokeColor: '--map-river-line-color',
           strokeOpacity: 1,
           strokeStyle: 'dashed',
           strokeWidth: 'thin'
         },
         source: './proxy/assets/landmarks/florence/ditches.gpx'
+      },
+      {
+        properties: {
+          strokeColor: '--map-road-lane-VI',
+          strokeOpacity: 1,
+          strokeStyle: 'solid',
+          strokeWidth: 'extra',
+          zIndex: 1
+        },
+        source: './proxy/assets/landmarks/florence/driveway.gpx'
       },
       {
         properties: {
@@ -74,7 +106,8 @@ const curations: Curation[] = [
           fontOpacity: 1,
           fontSize: 'small',
           fontStyle: 'normal',
-          showAcreage: true
+          showAcreage: true,
+          zIndex: -1
         },
         source: './proxy/assets/landmarks/florence/mow.gpx'
       },
@@ -109,7 +142,8 @@ const curations: Curation[] = [
           strokeColor: '--map-trail-line-color',
           strokeOpacity: 1,
           strokeStyle: 'dashed',
-          strokeWidth: 'medium'
+          strokeWidth: 'medium',
+          zIndex: 1
         },
         source: './proxy/assets/landmarks/florence/trails.gpx'
       },
@@ -207,7 +241,7 @@ async function main(): Promise<void> {
           properties: {
             ...curated.properties,
             center: curated.centers?.[ix] ?? null,
-            name: feature.properties.name
+            name: feature.properties.name ?? null
           },
           type: 'Feature'
         };

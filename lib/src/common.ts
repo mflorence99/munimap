@@ -76,12 +76,14 @@ class LandmarkPropertiesClass {
     public fontOutline: boolean = false,
     public fontSize: 'large' | 'medium' | 'small' | null = null,
     public fontStyle: 'normal' | 'bold' | 'italic' | null = null,
+    public icon: string = null,
     public name: string = null,
     public showAcreage: boolean = false,
     public strokeColor: string = null,
     public strokeOpacity: number = 0,
     public strokeStyle: 'dashed' | 'solid' | null = null,
-    public strokeWidth: 'thick' | 'medium' | 'thin' | null = null
+    public strokeWidth: 'extra' | 'thick' | 'medium' | 'thin' | null = null,
+    public zIndex: number = 0
   ) {}
 }
 
