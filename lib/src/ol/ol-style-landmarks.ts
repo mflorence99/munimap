@@ -39,8 +39,8 @@ import OLText from 'ol/style/Text';
 export class OLStyleLandmarksComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize_large = 16 /* 👈 pixels */;
-  @Input() fontSize_medium = 12 /* 👈 pixels */;
-  @Input() fontSize_small = 8 /* 👈 pixels */;
+  @Input() fontSize_medium = 13 /* 👈 pixels */;
+  @Input() fontSize_small = 10 /* 👈 pixels */;
   @Input() minFontSize = 4 /* 👈 pixels */;
   @Input() showFill = false;
   @Input() showStroke = false;
@@ -251,28 +251,31 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
   style(): OLStyleFunction {
     return (landmark: any, resolution: number): OLStyle[] => {
       const styles: OLStyle[] = [];
-      switch (landmark.getGeometry().getType()) {
-        case 'Point':
-        case 'MultiPoint':
-          if (this.showText)
-            styles.push(...this.#textPoint(landmark, resolution));
-          break;
-        case 'LineString':
-        case 'MultiLineString':
-          if (this.showStroke)
-            styles.push(...this.#strokeLine(landmark, resolution));
-          if (this.showText)
-            styles.push(...this.#textLine(landmark, resolution));
-          break;
-        case 'Polygon':
-        case 'MultiPolygon':
-          if (this.showFill)
-            styles.push(...this.#fillPolygon(landmark, resolution));
-          if (this.showStroke)
-            styles.push(...this.#strokePolygon(landmark, resolution));
-          if (this.showText)
-            styles.push(...this.#textPolygon(landmark, resolution));
-          break;
+      const props = landmark.getProperties() as LandmarkProperties;
+      if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
+        switch (landmark.getGeometry().getType()) {
+          case 'Point':
+          case 'MultiPoint':
+            if (this.showText)
+              styles.push(...this.#textPoint(landmark, resolution));
+            break;
+          case 'LineString':
+          case 'MultiLineString':
+            if (this.showStroke)
+              styles.push(...this.#strokeLine(landmark, resolution));
+            if (this.showText)
+              styles.push(...this.#textLine(landmark, resolution));
+            break;
+          case 'Polygon':
+          case 'MultiPolygon':
+            if (this.showFill)
+              styles.push(...this.#fillPolygon(landmark, resolution));
+            if (this.showStroke)
+              styles.push(...this.#strokePolygon(landmark, resolution));
+            if (this.showText)
+              styles.push(...this.#textPolygon(landmark, resolution));
+            break;
+        }
       }
       return styles;
     };

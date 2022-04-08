@@ -43,23 +43,13 @@ const curations: Curation[] = [
       },
       {
         properties: {
-          fontColor: '--map-trail-line-color',
+          fontColor: '--rgb-blue-gray-600',
           fontOpacity: 1,
-          fontOutline: true,
-          fontSize: 'large',
-          fontStyle: 'normal',
-          icon: '\uf00d' /* 👈 times */
-        },
-        source: './proxy/assets/landmarks/florence/bridges.gpx'
-      },
-      {
-        properties: {
-          fontColor: '--rgb-blue-gray-850',
-          fontOpacity: 0.66,
           fontOutline: true,
           fontSize: 'small',
           fontStyle: 'normal',
-          icon: '\uf1ce' /* 👈 circle-notch */
+          icon: '\uf1ce' /* 👈 circle-notch */,
+          minZoom: 18
         },
         source: './proxy/assets/landmarks/florence/culverts.gpx'
       },

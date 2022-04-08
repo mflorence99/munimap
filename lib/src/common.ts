@@ -77,6 +77,7 @@ class LandmarkPropertiesClass {
     public fontSize: 'large' | 'medium' | 'small' | null = null,
     public fontStyle: 'normal' | 'bold' | 'italic' | null = null,
     public icon: string = null,
+    public minZoom: number = 0,
     public name: string = null,
     public showAcreage: boolean = false,
     public strokeColor: string = null,

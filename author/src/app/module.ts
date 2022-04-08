@@ -419,11 +419,12 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
       const firestore = getFirestore();
       if (!environment.production) {
         connectFirestoreEmulator(firestore, 'localhost', 8080);
+      } else {
+        enableMultiTabIndexedDbPersistence(firestore).then(
+          () => resolvePersistenceEnabled(true),
+          () => resolvePersistenceEnabled(false)
+        );
       }
-      enableMultiTabIndexedDbPersistence(firestore).then(
-        () => resolvePersistenceEnabled(true),
-        () => resolvePersistenceEnabled(false)
-      );
       return firestore;
     })
   ],
