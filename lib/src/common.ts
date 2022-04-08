@@ -670,14 +670,14 @@ export function serializeParcel(parcel: Parcel): void {
   }
 }
 
-// 👉 trim all coordinates to 5 DP's or ~3ft accuracy
+// 👉 trim all coordinates to 6 DP's
 //    http://wiki.gis.com/wiki/index.php/Decimal_degrees
 export function simplify(
   geojson: GeoJSON.FeatureCollection
 ): GeoJSON.FeatureCollection {
   const trunc = (coords): number[] =>
     coords.map((coord) =>
-      Number((Math.floor(coord * 100000) / 100000).toFixed(5))
+      Number((Math.floor(coord * 1000000) / 1000000).toFixed(6))
     );
 
   const traverse = (array): void => {
