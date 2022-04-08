@@ -1,38 +1,37 @@
 <?xml version="1.0"?>
-<gpx version="1.0" creator="Viking -- http://viking.sf.net/"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<gpx
+  version="1.0"
+  creator="Viking -- http://viking.sf.net/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
+>
   <name>watermarks.gpx</name>
   <author></author>
   <desc></desc>
   <time>2020-10-27T10:59:50.132106Z</time>
   <keywords></keywords>
-<wpt lat="43.207348553632094" lon="-72.028662141555785">
-  <name>Flower Island</name>
-  <ele>344</ele>
-  <time>2020-10-09T13:45:48Z</time>
-</wpt>
-<wpt lat="43.207621974128685" lon="-72.02885554861831">
-  <name>Frog Pond</name>
-  <ele>338</ele>
-  <time>2020-10-09T13:49:35Z</time>
-</wpt>
-<wpt lat="43.206681078498384" lon="-72.028674936176301">
-  <name>Isle O&#x2019;Pie</name>
-  <ele>341</ele>
-  <time>2020-10-09T13:42:57Z</time>
-</wpt>
-<wpt lat="43.206440155942254" lon="-72.025366538692481">
-  <name>Lower Swamp</name>
-  <time>2020-10-27T11:01:01Z</time>
-</wpt>
-<wpt lat="43.202863999999998" lon="-72.028788000000006">
-  <name>Pond</name>
-  <time>2020-10-27T11:01:45Z</time>
-</wpt>
-<wpt lat="43.207757838555921" lon="-72.026424670148856">
-  <name>Upper Swamp</name>
-  <time>2020-10-27T11:00:48Z</time>
-</wpt>
+  <wpt lat="43.207348553632094" lon="-72.028662141555785">
+    <name>Flower Island</name>
+    <ele>344</ele>
+    <time>2020-10-09T13:45:48Z</time>
+  </wpt>
+  <wpt lat="43.207621974128685" lon="-72.02885554861831">
+    <name>Frog Pond</name>
+    <ele>338</ele>
+    <time>2020-10-09T13:49:35Z</time>
+  </wpt>
+  <wpt lat="43.206681078498384" lon="-72.028674936176301">
+    <name>Isle O&#x2019;Pie</name>
+    <ele>341</ele>
+    <time>2020-10-09T13:42:57Z</time>
+  </wpt>
+  <wpt lat="43.206440155942254" lon="-72.025366538692481">
+    <name>Lower Swamp</name>
+    <time>2020-10-27T11:01:01Z</time>
+  </wpt>
+  <wpt lat="43.207757838555921" lon="-72.026424670148856">
+    <name>Upper Swamp</name>
+    <time>2020-10-27T11:00:48Z</time>
+  </wpt>
 </gpx>

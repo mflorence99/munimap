@@ -16,7 +16,7 @@ import chalk from 'chalk';
 import lineToPolygon from '@turf/line-to-polygon';
 
 interface CuratedLandmark {
-  centers?: [[number, number]];
+  centers?: [number, number][];
   geoOp?: 'lineToPolygon' | null;
   properties: LandmarkProperties;
   source: string;
@@ -43,6 +43,15 @@ const curations: Curation[] = [
       },
       {
         properties: {
+          strokeColor: '--map-river-line-color',
+          strokeOpacity: 1,
+          strokeStyle: 'dashed',
+          strokeWidth: 'thin'
+        },
+        source: './proxy/assets/landmarks/florence/ditches.gpx'
+      },
+      {
+        properties: {
           fontColor: '--map-place-text-color',
           fontOpacity: 1,
           fontOutline: true,
@@ -52,7 +61,11 @@ const curations: Curation[] = [
         source: './proxy/assets/landmarks/florence/landmarks.gpx'
       },
       {
-        centers: [[-72.029653581079, 43.204750066490675]],
+        centers: [
+          [-72.029653581079, 43.204750066490675],
+          null,
+          [-72.02846833057752, 43.207956756285625]
+        ],
         geoOp: 'lineToPolygon',
         properties: {
           fillColor: '--map-parcel-fill-u190',
@@ -64,6 +77,23 @@ const curations: Curation[] = [
           showAcreage: true
         },
         source: './proxy/assets/landmarks/florence/mow.gpx'
+      },
+      {
+        geoOp: 'lineToPolygon',
+        properties: {
+          fillColor: '--map-waterbody-fill',
+          fillOpacity: 1
+        },
+        source: './proxy/assets/landmarks/florence/ponds.gpx'
+      },
+      {
+        properties: {
+          strokeColor: '--map-river-line-color',
+          strokeOpacity: 1,
+          strokeStyle: 'solid',
+          strokeWidth: 'medium'
+        },
+        source: './proxy/assets/landmarks/florence/streams.gpx'
       },
       {
         properties: {
