@@ -13,7 +13,6 @@ import { readFileSync } from 'fs';
 
 import bboxPolygon from '@turf/bbox-polygon';
 import chalk from 'chalk';
-import jsome from 'jsome';
 import union from '@turf/union';
 
 const dist = './data';
