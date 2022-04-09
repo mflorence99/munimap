@@ -28,7 +28,7 @@ interface Steal {
   uid: number;
 }
 
-const steals: Steal[] = [
+const STEALS: Steal[] = [
   {
     fromPath: 'NEW HAMPSHIRE:MERRIMACK:BRADFORD',
     owner: 'mflo999@gmail.com',
@@ -157,7 +157,7 @@ function loadGeoJSON(path: string): Parcels {
 }
 
 async function main(): Promise<void> {
-  for (const steal of steals) {
+  for (const steal of STEALS) {
     const [, county, town] = steal.toPath.split(':');
 
     console.log(
@@ -170,6 +170,7 @@ async function main(): Promise<void> {
     const geojson = loadGeoJSON(steal.fromPath);
 
     // 👉 for each parcel feature ...
+    const promises = [];
     for (const stolen of steal.stolen) {
       console.log(chalk.yellow(`...... stealing parcel ${stolen.parcelID}`));
 
@@ -211,8 +212,13 @@ async function main(): Promise<void> {
       // 👁️ https://titanwolf.org/Network/Articles/Article?AID=c2f8e1f8-31d8-4b5a-9a73-1c50f7614057
       parcel.timestamp = firestore.FieldValue.serverTimestamp();
 
-      await parcels.doc(docID).set(parcel);
+      promises.push(parcels.doc(docID).set(parcel));
     }
+
+    await Promise.all(promises);
+    console.log(
+      chalk.blue(`...... waiting for ${promises.length} promises to resolve`)
+    );
   }
 }
 

@@ -28,7 +28,7 @@ interface Curation {
   path: string;
 }
 
-const curations: Curation[] = [
+const CURATIONS: Curation[] = [
   {
     landmarks: [
       {
@@ -158,7 +158,7 @@ const curations: Curation[] = [
         source: './proxy/assets/landmarks/florence/watermarks.gpx'
       }
     ],
-    owner: 'mflo999@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
   }
 ];
@@ -181,11 +181,18 @@ const landmarks = db.collection('landmarks');
 
 async function main(): Promise<void> {
   // 👇 delete all curated Landmarks
+  let numDeleted = 0;
   const curated = await landmarks.where('curated', '==', true).get();
-  curated.forEach((doc): any => doc.ref.delete());
+  for (const doc of curated.docs) {
+    await doc.ref.delete();
+    process.stdout.write('.');
+    numDeleted += 1;
+  }
+
+  console.log(`${numDeleted} previously curated landmarks deleted`);
 
   // 👇 for each curation ...
-  for (const curation of curations) {
+  for (const curation of CURATIONS) {
     console.log(
       chalk.green(
         `... processing curation for ${curation.owner} in ${curation.path}`
@@ -202,6 +209,7 @@ async function main(): Promise<void> {
       );
 
       // 👉 for each feature ...
+      const promises = [];
       for (let ix = 0; ix < geojson.features.length; ix++) {
         const feature = geojson.features[ix];
 
@@ -238,8 +246,13 @@ async function main(): Promise<void> {
 
         // 👇 write out the landmark
         serializeLandmark(landmark);
-        await landmarks.add(landmark);
+        promises.push(landmarks.add(landmark));
       }
+
+      await Promise.all(promises);
+      console.log(
+        chalk.blue(`...... waiting for ${promises.length} promises to resolve`)
+      );
     }
   }
 }

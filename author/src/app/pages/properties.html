@@ -43,12 +43,13 @@
           autocomplete="off"
           matInput
           name="id"
-          pattern="[a-z0-9]+"
+          pattern="[a-z0-9-_]+"
           placeholder="eg: myoldtown"
           required
         />
         <mat-error *ngIf="id.errors"
-          >Use only lowercase letters and numbers</mat-error
+          >Use only lowercase letters and numbers, plus dash and
+          underscore</mat-error
         >
         <mat-hint *ngIf="!id.errors"
           >Viewer app URL:

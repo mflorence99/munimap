@@ -1,9 +1,10 @@
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
+import * as yargs from 'yargs';
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = false;
+const useEmulator = yargs.argv['useEmulator'];
 
 if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
 
@@ -16,25 +17,36 @@ firebase.initializeApp({
 
 const db = firestore.getFirestore();
 
-async function main(): Promise<void> {
-  const backup = db.collection('parcels-backup');
-  const parcels = db.collection('parcels');
+async function backup(nm: string): Promise<void> {
+  const backup = db.collection(`${nm}-backup`);
+  const docs = db.collection(`${nm}`);
 
-  const query = parcels.where('owner', 'in', [
-    'mflo999@gmail.com',
-    'kchidester@washingtonnh.org',
-    'nick@mnassessing.com'
-  ]);
+  // 👇 remove all docs from the backup collection
+  const target = await backup.get();
+  let numDeleted = 0;
+  for (const doc of target.docs) {
+    await doc.ref.delete();
+    process.stdout.write('.');
+    numDeleted += 1;
+  }
+  console.log(`${numDeleted} deleted from ${nm}-backup`);
 
-  const snapshot = await query.get();
+  // 👇 copy all docs from the source collection to the backup collection
+  const source = await docs.get();
   let numCopied = 0;
-  for (const doc of snapshot.docs) {
+  for (const doc of source.docs) {
     await backup.add(doc.data());
     process.stdout.write('.');
     numCopied += 1;
   }
+  console.log(`${numCopied} ${nm} backed up`);
+}
 
-  console.log(`${numCopied} docs backed up`);
+async function main(): Promise<void> {
+  await backup('landmarks');
+  await backup('maps');
+  await backup('parcels');
+  await backup('profiles');
 }
 
 main();

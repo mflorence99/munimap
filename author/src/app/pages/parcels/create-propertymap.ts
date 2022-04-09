@@ -32,6 +32,7 @@ const PRINT_SIZES = {
   '16 x 20 in': [16, 20],
   '18 x 24 in': [18, 24],
   '22 x 28 in': [22, 28],
+  '24 x 24 in': [24, 24],
   '24 x 36 in': [24, 36],
   '30 x 40 in': [30, 40],
   '40 x 60 in': [40, 60],
@@ -49,7 +50,7 @@ const PRINT_SIZES = {
   templateUrl: './create-propertymap.html'
 })
 export class CreatePropertyMapComponent implements ContextMenuComponent {
-  @Input() border = 500 /* 👈 feet */;
+  @Input() border = 100 /* 👈 feet */;
 
   @ViewChild('createForm', { static: true }) createForm: NgForm;
 
