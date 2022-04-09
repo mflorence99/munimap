@@ -1,4 +1,5 @@
 import { AddParcelComponent } from './pages/parcels/add-parcel';
+import { AreaPage } from './pages/area/page';
 import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuHostDirective } from './pages/parcels/contextmenu-host';
 import { CreatePage } from './pages/create/page';
@@ -279,6 +280,7 @@ const COMPONENTS = [
 const DIRECTIVES = [ContextMenuHostDirective, WorkgroupValidator];
 
 const PAGES = [
+  AreaPage,
   LoginPage,
   CreatePage,
   ParcelsPage,
@@ -312,6 +314,11 @@ const ROUTES = [
         path: 'create',
         component: CreatePage,
         data: { state: 'create' }
+      },
+      {
+        path: 'area/:id',
+        component: AreaPage,
+        data: { state: 'area' }
       },
       {
         path: 'parcels/:id',

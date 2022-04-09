@@ -184,7 +184,6 @@ function bboxFromDimensions(map, border: number): number[] {
     ((map.cxFeet / R_EARTH) * RAD2DEG) / Math.cos(map.origin[1] * DEG2RAD);
   const maxY = map.origin[1];
   const bounds = bboxPolygon([minX, minY, maxX, maxY]);
-  jsome(bounds);
   return bboxByAspectRatio(bounds, map.printSize[1], map.printSize[0], border);
 }
 
@@ -234,9 +233,9 @@ async function main(): Promise<void> {
 
     // 👉 calculate bbox with 100ft border
     if (map.type === 'area')
-      map.bbox = bboxFromDimensions(map, 100 /* 👈 feet */);
+      map.bbox = bboxFromDimensions(map, 100 * 0.0003048 /* 👈 km */);
     if (map.type === 'property')
-      map.bbox = await bboxFromParcelIDs(map, 100 /* 👈 feet */);
+      map.bbox = await bboxFromParcelIDs(map, 100 * 0.0003048 /* 👈 km */);
 
     // 👉 create new one
     await maps.doc(map.id).set(map);
