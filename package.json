@@ -24,7 +24,7 @@
     "firebase:backup:prod": "ts-node --dir bin backup.ts",
     "firebase:backup:test": "ts-node --dir bin backup.ts --useEmulator",
     "firebase:emulators": "firebase emulators:start",
-    "firebase:emulators:init": "npm run firebase:users:curated:test && npm run firebase:maps:curated:test  && npm run firebase:landmarks:curated:test  && npm run firebase:parcel:stealer:test",
+    "firebase:emulators:init": "npm run firebase:users:curated:test && npm run firebase:parcel:stealer:test && npm run firebase:maps:curated:test && npm run firebase:landmarks:curated:test",
     "firebase:landmarks:curated:prod": "ts-node --dir bin landmarks-curated.ts",
     "firebase:landmarks:curated:test": "ts-node --dir bin landmarks-curated.ts --useEmulator",
     "firebase:maps:curated:prod": "ts-node --dir bin maps-curated.ts",

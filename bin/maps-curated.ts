@@ -23,7 +23,7 @@ const MAPS = [
     id: 'henniker',
     isDflt: false,
     name: 'Henniker',
-    owner: 'cmoskey@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
     printSize: [45, 60],
     type: 'parcels'
@@ -121,7 +121,18 @@ const MAPS = [
     owner: 'mflo999+flo@gmail.com',
     parcelIDs: ['9-7', '(12-4)'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    printSize: [30, 40],
+    printSize: [18, 24],
+    type: 'property'
+  },
+  {
+    bbox: null,
+    id: 'marshall',
+    isDflt: false,
+    name: 'Marshall Estate',
+    owner: 'marshal@gsinet.net',
+    parcelIDs: ['9-6', '9-28'],
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    printSize: [18, 24],
     type: 'property'
   },
   {

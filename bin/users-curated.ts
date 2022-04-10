@@ -5,20 +5,31 @@ import * as yargs from 'yargs';
 
 const PROFILES = [
   {
+    email: 'mflo999@gmail.com',
+    workgroup: 'nick@mnassessing.com kchidester@washingtonnh.org'
+  },
+  {
     email: 'mflo999+flo@gmail.com',
     workgroup: 'mflo999@gmail.com'
   },
   {
-    email: 'cmoskey@gmail.com',
-    workgroup: 'mflo999@gmail.com'
+    email: 'cmoskey@gmail.com'
+  },
+  {
+    email: 'marshal@gsinet.net'
   }
 ];
 
 const USERS = [
   {
     email: 'mflo999@gmail.com',
-    password: '33Spike44@@',
+    password: '33Buster44@@',
     displayName: 'Mark Florence'
+  },
+  {
+    email: 'mflo999+flo@gmail.com',
+    password: 'password',
+    displayName: 'Marco Polo'
   },
   {
     email: 'cmoskey@gmail.com',
@@ -26,9 +37,9 @@ const USERS = [
     displayName: 'Carl Moskey'
   },
   {
-    email: 'mflo999+flo@gmail.com',
-    password: '33Spike44@@',
-    displayName: 'Marco Polo'
+    email: 'marshal@gsinet.net',
+    password: 'password',
+    displayName: 'Tom Marshall'
   }
 ];
 

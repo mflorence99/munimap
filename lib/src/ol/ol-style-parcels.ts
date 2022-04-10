@@ -152,6 +152,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     const color = contrast
       ? this.map.vars['--map-parcel-dimension-inverse']
       : this.map.vars['--map-parcel-dimension-color'];
+    const outline = !contrast
+      ? this.map.vars['--map-parcel-dimension-inverse']
+      : this.map.vars['--map-parcel-dimension-color'];
     const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
     // 👉 get the fontSizes up front for each polygon
     const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
@@ -174,10 +177,10 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
               (dimension.clockwise ? -1 : 1) *
               0.75,
             placement: 'line',
-            // stroke: new OLStroke({
-            //   color: `rgba(${outline}, 1)`,
-            //   width: Math.min(fontSizes[dimension.ix] / 8, this.maxBorderPixels)
-            // }),
+            stroke: new OLStroke({
+              color: `rgba(${outline}, 1)`,
+              width: fontSizes[dimension.ix] * 0.25
+            }),
             text: `${Math.round(dimension.length)}`
           });
           const geometry = new OLLineString(
