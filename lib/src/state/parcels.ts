@@ -108,17 +108,10 @@ export class ParcelsState implements NgxsOnInit {
     this.actions$
       .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
       .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
-        switch (action.constructor.name) {
-          case ClearStacksProxy.name:
-            this.store.dispatch(new ClearStacks());
-            break;
-          case RedoProxy.name:
-            this.store.dispatch(new Redo());
-            break;
-          case UndoProxy.name:
-            this.store.dispatch(new Undo());
-            break;
-        }
+        if (action instanceof ClearStacksProxy)
+          this.store.dispatch(new ClearStacks());
+        else if (action instanceof RedoProxy) this.store.dispatch(new Redo());
+        else if (action instanceof UndoProxy) this.store.dispatch(new Undo());
       });
   }
 

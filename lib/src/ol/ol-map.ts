@@ -150,42 +150,46 @@ export class OLMapComponent
       view: null
     });
     // 👉 capture the original contents of the map
+    //    https://stackoverflow.com/questions/13613524/
+    //    constructor.name does NOT survive minification
     this.#origControls = this.olMap
       .getControls()
       .getArray()
-      .map((control) => control.constructor.name);
+      .map((control) => control.constructor.toString());
     this.#origInteractions = this.olMap
       .getInteractions()
       .getArray()
-      .map((interaction) => interaction.constructor.name);
+      .map((interaction) => interaction.constructor.toString());
     this.#origLayers = this.olMap
       .getLayers()
       .getArray()
-      .map((layer) => layer.constructor.name);
+      .map((layer) => layer.constructor.toString());
     // 👉 get these up front, all at once,
     //    meaning we don't expect them to change
     this.vars = this.#findAllCustomVariables();
   }
 
   // 👇 https://stackoverflow.com/questions/40862706
+  //    https://stackoverflow.com/questions/13613524/
+  //    constructor.name does NOT survive minification
   #cleanMap(): void {
     const controls = [...this.olMap.getControls().getArray()];
     controls.forEach((control) => {
       // 👇 this should never happen, as there are no default controls
-      if (!this.#origControls.includes(control.constructor.name))
+      if (!this.#origControls.includes(control.constructor.toString()))
         this.olMap.removeControl(control);
     });
     const interactions = [...this.olMap.getInteractions().getArray()];
     interactions.forEach((interaction) => {
       // 👇 OL adds a bunch of interactions of its own
       //    that we don't want to remove
-      if (!this.#origInteractions.includes(interaction.constructor.name))
+      if (!this.#origInteractions.includes(interaction.constructor.toString()))
         this.olMap.removeInteraction(interaction);
     });
     const layers = [...this.olMap.getLayers().getArray()];
     layers.forEach((layer) => {
       // 👇 this should never happen, as there are no default layers
-      if (!this.#origLayers.includes(layer.constructor.name))
+      if (!this.#origLayers.includes(layer.constructor.toString()))
         this.olMap.removeLayer(layer);
     });
   }
