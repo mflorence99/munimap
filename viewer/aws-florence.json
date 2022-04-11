@@ -1,8 +1,8 @@
 {
   "certificateName": "*.munimap.online",
-  "domainName": "washtopo.munimap.online",
+  "domainName": "florence.munimap.online",
   "provider": "aws",
   "region": "us-east-1",
-  "service": "munimap-viewer-washtopo",
+  "service": "munimap-viewer-florence",
   "stage": "dev"
 }
