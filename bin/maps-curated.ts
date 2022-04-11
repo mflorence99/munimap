@@ -117,7 +117,7 @@ const MAPS = [
     bbox: null,
     id: 'florence',
     isDflt: false,
-    name: 'Florence/Henderson Estate',
+    name: 'Florence/Hendrickson Estate',
     owner: 'mflo999+flo@gmail.com',
     parcelIDs: ['9-7', '(12-4)'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
