@@ -16,7 +16,7 @@ import chalk from 'chalk';
 import lineToPolygon from '@turf/line-to-polygon';
 
 interface CuratedLandmark {
-  centers?: [number, number][];
+  fillCenters?: [number, number][];
   geoOp?: 'lineToPolygon' | null;
   properties: LandmarkProperties;
   source: string;
@@ -48,13 +48,14 @@ const CURATIONS: Curation[] = [
           fontOutline: true,
           fontSize: 'small',
           fontStyle: 'normal',
-          icon: '\uf1ce' /* 👈 circle-notch */,
-          minZoom: 18
+          minZoom: 18,
+          textIcon: '\uf1ce' /* 👈 circle-notch */
         },
         source: './proxy/assets/landmarks/florence/culverts.gpx'
       },
       {
         properties: {
+          lineSpline: true,
           strokeColor: '--map-river-line-color',
           strokeOpacity: 1,
           strokeStyle: 'dashed',
@@ -64,11 +65,21 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: {
-          strokeColor: '--map-road-lane-VI',
+          strokeColor: '--map-road-edge-VI',
           strokeOpacity: 1,
           strokeStyle: 'solid',
           strokeWidth: 'extra',
           zIndex: 1
+        },
+        source: './proxy/assets/landmarks/florence/driveway.gpx'
+      },
+      {
+        properties: {
+          strokeColor: '--map-road-lane-VI',
+          strokeOpacity: 1,
+          strokeStyle: 'solid',
+          strokeWidth: 'thick',
+          zIndex: 2
         },
         source: './proxy/assets/landmarks/florence/driveway.gpx'
       },
@@ -83,7 +94,7 @@ const CURATIONS: Curation[] = [
         source: './proxy/assets/landmarks/florence/landmarks.gpx'
       },
       {
-        centers: [
+        fillCenters: [
           [-72.029653581079, 43.204750066490675],
           null,
           [-72.02846833057752, 43.207956756285625]
@@ -96,7 +107,7 @@ const CURATIONS: Curation[] = [
           fontOpacity: 1,
           fontSize: 'small',
           fontStyle: 'normal',
-          showAcreage: true,
+          textShowAcreage: true,
           zIndex: -1
         },
         source: './proxy/assets/landmarks/florence/mow.gpx'
@@ -111,12 +122,32 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: {
+          fontColor: '--map-river-text-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic'
+        },
+        source: './proxy/assets/landmarks/florence/rivermarks.gpx'
+      },
+      {
+        properties: {
+          lineSpline: true,
           strokeColor: '--map-river-line-color',
           strokeOpacity: 1,
           strokeStyle: 'solid',
           strokeWidth: 'medium'
         },
         source: './proxy/assets/landmarks/florence/streams.gpx'
+      },
+      {
+        geoOp: 'lineToPolygon',
+        properties: {
+          fillColor: '--map-wetland-swamp',
+          fillOpacity: 0.5,
+          fillPattern: 'swamp'
+        },
+        source: './proxy/assets/landmarks/florence/swamp.gpx'
       },
       {
         properties: {
@@ -136,16 +167,6 @@ const CURATIONS: Curation[] = [
           zIndex: 1
         },
         source: './proxy/assets/landmarks/florence/trails.gpx'
-      },
-      {
-        properties: {
-          fontColor: '--map-river-text-color',
-          fontOpacity: 1,
-          fontOutline: true,
-          fontSize: 'medium',
-          fontStyle: 'italic'
-        },
-        source: './proxy/assets/landmarks/florence/rivermarks.gpx'
       },
       {
         properties: {
@@ -238,7 +259,7 @@ async function main(): Promise<void> {
           path: curation.path,
           properties: {
             ...curated.properties,
-            center: curated.centers?.[ix] ?? null,
+            fillCenter: curated.fillCenters?.[ix] ?? null,
             name: feature.properties.name ?? null
           },
           type: 'Feature'

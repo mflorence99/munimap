@@ -17,8 +17,12 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 
+import cspline from 'ol-ext/render/Cspline';
 import OLFill from 'ol/style/Fill';
+import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
+import OLGeometry from 'ol/geom/Geometry';
+import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
@@ -62,9 +66,16 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     if (props.fillColor && props.fillOpacity > 0) {
       const fillColor = this.map.vars[props.fillColor];
       const fill = new OLStyle({
-        fill: new OLFill({
-          color: `rgba(${fillColor}, ${props.fillOpacity})`
-        }),
+        fill: props.fillPattern
+          ? // 👉 fill with pattern
+            new OLFillPattern({
+              color: `rgba(${fillColor}, ${props.fillOpacity})`,
+              pattern: props.fillPattern
+            })
+          : // 👉 fill with color
+            new OLFill({
+              color: `rgba(${fillColor}, ${props.fillOpacity})`
+            }),
         zIndex: props.zIndex
       });
       styles.push(fill);
@@ -81,10 +92,24 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
   }
 
   #strokeLine(landmark: any, resolution: number): OLStyle[] {
-    return this.#strokePolygon(landmark, resolution);
+    const props = landmark.getProperties() as LandmarkProperties;
+    // 👇 we may need to create a spline stroke
+    const geometry = props.lineSpline
+      ? new OLLineString(
+          cspline(landmark.getGeometry().getCoordinates(), {
+            tension: 0.5,
+            pointsPerSeg: 3
+          })
+        )
+      : null;
+    return this.#strokePolygon(landmark, resolution, geometry);
   }
 
-  #strokePolygon(landmark: any, resolution: number): OLStyle[] {
+  #strokePolygon(
+    landmark: any,
+    resolution: number,
+    geometry: OLGeometry = null
+  ): OLStyle[] {
     const props = landmark.getProperties() as LandmarkProperties;
     const styles: OLStyle[] = [];
     if (
@@ -101,6 +126,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
       // 👇 a solid stroke is simple
       if (props.strokeStyle === 'solid') {
         const stroke = new OLStyle({
+          geometry: geometry,
           stroke: new OLStroke({
             color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
             width: strokePixels
@@ -112,12 +138,14 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
       // 👇 dashed strokes are a bit more complicated
       else if (props.strokeStyle === 'dashed') {
         const white = new OLStyle({
+          geometry: geometry,
           stroke: new OLStroke({
             color: `rgba(255, 255, 255, ${props.strokeOpacity})`,
             width: strokePixels
           })
         });
         const dashed = new OLStyle({
+          geometry: geometry,
           stroke: new OLStroke({
             color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
             lineCap: 'square',
@@ -184,7 +212,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
         props.fontOpacity > 0 &&
         props.fontSize &&
         props.fontStyle &&
-        props.icon) ||
+        props.textIcon) ||
       props.name
     ) {
       const fontSize = this.#fontSize(`fontSize_${props.fontSize}`, resolution);
@@ -193,21 +221,23 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
         const fontColor = this.map.vars[props.fontColor];
         let text = props.name?.replace(/ /g, '\n');
         // 👇 calculate the acreage if requested
-        if (props.showAcreage) {
+        if (props.textShowAcreage) {
           const acreage = landmark.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }
         // 👇 finally build the complete style
         const style = new OLStyle({
-          geometry: props.center ? new OLPoint(fromLonLat(props.center)) : null,
-          image: props.icon
+          geometry: props.fillCenter
+            ? new OLPoint(fromLonLat(props.fillCenter))
+            : null,
+          image: props.textIcon
             ? new OLFontSymbol({
                 color: `rgba(${fontColor}, ${props.fontOpacity})`,
                 font: `'Font Awesome'`,
                 fontStyle: 'bold',
                 form: 'none',
                 radius: fontSize,
-                text: props.icon
+                text: props.textIcon
               })
             : null,
           text: props.name
@@ -216,7 +246,7 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
                   color: `rgba(${fontColor}, ${props.fontOpacity})`
                 }),
                 font: `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`,
-                offsetY: props.icon ? -fontSize * 1.5 : 0,
+                offsetY: props.textIcon ? -fontSize * 1.5 : 0,
                 overflow: true,
                 stroke: props.fontOutline
                   ? new OLStroke({
