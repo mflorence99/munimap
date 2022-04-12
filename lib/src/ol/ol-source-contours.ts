@@ -27,6 +27,11 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceContoursComponent {
+  #origOpacity: number;
+
+  // 👉 the fallback contours are WAAY to heavy
+  @Input() fallbackOpacity = 0.33;
+
   // 👇 https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer
   @Input() layers = [
     1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18, 21, 22, 25, 26
@@ -34,7 +39,7 @@ export class OLSourceContoursComponent {
 
   olTileWMS: OLTileWMS;
 
-  // 👇 the preferred source for contours us best because it
+  // 👇 the preferred source for contours is best because it
   //    includes an elevation annotation -- but it is unreliable,
   //    often throwing 503 or 504 errors
 
@@ -57,12 +62,14 @@ export class OLSourceContoursComponent {
       url: 'http://dummy.com'
     });
     this.layer.olLayer.setSource(this.olTileWMS);
+    // 👇 capture the original opacity so we can restore it
+    this.#origOpacity = this.layer.olLayer.getOpacity();
   }
 
-  // 👇 all this kind of works because either none of the preferred
-  //    tile loads will fail, or else all of them will
-
   #loader(tile: OLImageTile, src: string): void {
+    // 👇 restore the original layer opacity
+    //    see catchError below
+    this.layer.olLayer.setOpacity(this.#origOpacity);
     const img = tile.getImage() as HTMLImageElement;
     const url = this.#makeURL(src, this.urlPreferred);
     this.http
@@ -70,7 +77,7 @@ export class OLSourceContoursComponent {
       .pipe(
         catchError(() => {
           // 👉 the fallback contours are WAAY to heavy
-          this.layer.olLayer.setOpacity(0.33);
+          this.layer.olLayer.setOpacity(this.fallbackOpacity);
           const url = this.#makeURL(src, this.urlFallback);
           return this.http.get(url, {
             observe: 'response',
