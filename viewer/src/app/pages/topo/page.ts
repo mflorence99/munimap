@@ -35,7 +35,8 @@ export class TopoPage implements OnInit {
 
   ngOnInit(): void {
     this.zoom$ = combineLatest([this.map$, this.view$]).pipe(
-      map(([map, view]) => view.viewByPath[map.path].zoom)
+      // 💣 sometimes triggered by ???
+      map(([map, view]) => view.viewByPath[map.path]?.zoom ?? 15)
     );
   }
 }
