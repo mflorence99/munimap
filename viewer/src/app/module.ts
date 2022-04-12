@@ -94,7 +94,6 @@ import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
 import { OLStyleConservationComponent } from '@lib/ol/ol-style-conservation';
 import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
-import { OLStyleLandmarksComponent } from '@lib/ol/ol-style-landmarks';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
@@ -104,6 +103,7 @@ import { OLStyleRailroadsComponent } from '@lib/ol/ol-style-railroads';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
+import { OLStyleUniversalComponent } from '@lib/ol/ol-style-universal';
 import { OLStyleWaterbodiesComponent } from '@lib/ol/ol-style-waterbodies';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
 import { OverlayState } from '@lib/state/overlay';
@@ -199,7 +199,6 @@ const COMPONENTS = [
   OLStyleConservationComponent,
   OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,
-  OLStyleLandmarksComponent,
   OLStyleParcelsComponent,
   OLStylePatternDirective,
   OLStylePlacesComponent,
@@ -209,6 +208,7 @@ const COMPONENTS = [
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
   OLStyleTrailsComponent,
+  OLStyleUniversalComponent,
   OLStyleWaterbodiesComponent,
   OLStyleWetlandComponent,
   ParcelsLegendComponent,

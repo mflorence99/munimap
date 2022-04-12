@@ -28,19 +28,23 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
+// 🔥 currently only works for landmarks
+//    will change to work via an adadpter for most sources
+//    except special cases like parcels
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: StylerComponent,
-      useExisting: forwardRef(() => OLStyleLandmarksComponent)
+      useExisting: forwardRef(() => OLStyleUniversalComponent)
     }
   ],
-  selector: 'app-ol-style-landmarks',
+  selector: 'app-ol-style-universal',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStyleLandmarksComponent implements OnChanges, Styler {
+export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize_large = 16 /* 👈 pixels */;
   @Input() fontSize_medium = 13 /* 👈 pixels */;
@@ -49,7 +53,6 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
   @Input() showFill = false;
   @Input() showStroke = false;
   @Input() showText = false;
-  @Input() strokeWidth_extra = 15 /* 👈 feet */;
   @Input() strokeWidth_medium = 6 /* 👈 feet */;
   @Input() strokeWidth_thick = 9 /* 👈 feet */;
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
@@ -83,11 +86,10 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     return styles;
   }
 
-  #fontSize(key: string, resolution: number): number {
+  #fontSize(pixels: number, resolution: number): number {
     // 👇 fontSize in pixels is proportional to resolution
     //    but no larger than the a nominal maxmimum which is for
     //    simplicity just the raw number of pixels
-    const pixels = this[key];
     return Math.min(pixels, pixels / resolution);
   }
 
@@ -120,7 +122,9 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     ) {
       const strokeColor = this.map.vars[props.strokeColor];
       const strokePixels = this.#width(
-        `strokeWidth_${props.strokeWidth}`,
+        isNaN(props.strokeWidth as any)
+          ? this[`strokeWidth_${props.strokeWidth}`]
+          : props.strokeWidth,
         resolution
       );
       // 👇 a solid stroke is simple
@@ -174,7 +178,10 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
       props.fontStyle &&
       props.name
     ) {
-      const fontSize = this.#fontSize(`fontSize_${props.fontSize}`, resolution);
+      const fontSize = this.#fontSize(
+        this[`fontSize_${props.fontSize}`],
+        resolution
+      );
       // 👇 only show text if font size greater than minimum
       if (fontSize >= this.minFontSize) {
         const fontColor = this.map.vars[props.fontColor];
@@ -215,7 +222,10 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
         props.textIcon) ||
       props.name
     ) {
-      const fontSize = this.#fontSize(`fontSize_${props.fontSize}`, resolution);
+      const fontSize = this.#fontSize(
+        this[`fontSize_${props.fontSize}`],
+        resolution
+      );
       // 👇 only show text if font size greater than minimum
       if (fontSize >= this.minFontSize) {
         const fontColor = this.map.vars[props.fontColor];
@@ -264,11 +274,10 @@ export class OLStyleLandmarksComponent implements OnChanges, Styler {
     return styles;
   }
 
-  #width(key: string, resolution: number): number {
+  #width(feet: number, resolution: number): number {
     // 👇 width in pixels is proportional to resolution in meters
     //    but no larger than the a nominal maxmimum which is for
     //    simplicity just the raw number of feet
-    const feet = this[key];
     return Math.min(feet, feet / (resolution * 3.28084));
   }
 

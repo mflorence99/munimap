@@ -67,27 +67,33 @@ export type Landmarks = GeoJSON.FeatureCollection<
 >;
 
 class LandmarkPropertiesClass {
-  constructor(
-    public fillCenter: [number, number] = null,
-    public fillColor: string = null,
-    public fillOpacity: number = 0,
-    public fillPattern: string = null /* 👈 should be OLFillPattern */,
-    public fontColor: string = null,
-    public fontOpacity: number = 0,
-    public fontOutline: boolean = false,
-    public fontSize: 'large' | 'medium' | 'small' | null = null,
-    public fontStyle: 'normal' | 'bold' | 'italic' | null = null,
-    public lineSpline: boolean = false,
-    public minZoom: number = 0,
-    public name: string = null,
-    public strokeColor: string = null,
-    public strokeOpacity: number = 0,
-    public strokeStyle: 'dashed' | 'solid' | null = null,
-    public strokeWidth: 'extra' | 'thick' | 'medium' | 'thin' | null = null,
-    public textIcon: string = null,
-    public textShowAcreage: boolean = false,
-    public zIndex: number = 0
-  ) {}
+  public fillCenter: [number, number] = null;
+  public fillColor: string = null;
+  public fillOpacity = 0;
+  public fillPattern: string = null /* 👈 should be OLFillPattern */;
+  public fontColor: string = null;
+  public fontOpacity = 0;
+  public fontOutline = false;
+  public fontSize: 'large' | 'medium' | 'small' | null = null;
+  public fontStyle: 'normal' | 'bold' | 'italic' | null = null;
+  public lineSpline = false;
+  public minZoom = 0;
+  public name: string = null;
+  public strokeColor: string = null;
+  public strokeOpacity = 0;
+  public strokeStyle: 'dashed' | 'solid' | null = null;
+  public strokeWidth:
+    | 'thick'
+    | 'medium'
+    | 'thin'
+    | number /* 👈 feet */
+    | null = null;
+  public textIcon: string = null;
+  public textShowAcreage = false;
+  public zIndex = 0;
+  constructor(opts?: LandmarkProperties) {
+    Object.assign(this, opts ?? {});
+  }
 }
 
 export interface LandmarkProperties extends Partial<LandmarkPropertiesClass> {}
@@ -102,6 +108,32 @@ export const landmarkProperties = Object.keys(modelLandmark);
 const serializedLandmarkProperties = Object.keys(modelLandmark).filter(
   (prop) => Array.isArray(modelLandmark[prop]) && modelLandmark[prop].length > 0
 );
+
+export interface LandmarkStyle {
+  properties: LandmarkProperties[];
+  styleDescription?: string;
+  styleName: string;
+  zIndex: number;
+}
+
+export const landmarkStyles: Record<string, LandmarkStyle> = {
+  trail: {
+    properties: [
+      {
+        fontColor: '--map-trail-text-color',
+        fontOpacity: 1,
+        fontSize: 'medium',
+        fontStyle: 'italic',
+        strokeColor: '--map-trail-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 'medium'
+      }
+    ],
+    styleName: 'Trail',
+    zIndex: 1
+  }
+};
 
 export interface Parcel
   extends Partial<
@@ -131,33 +163,34 @@ export type ParcelID = string | number;
 // 👉 https://stackoverflow.com/questions/43909566
 
 class ParcelPropertiesClass {
-  constructor(
-    public abutters: string[] /* 👈 legacy support */ = [],
-    public address: string = '',
-    public area: number = 0,
-    public areas: number[] = [],
-    public building$: number = null,
-    public callouts: number[][] /* 👈 legacy support */ = [[]],
-    public centers: number[][] = [[]],
-    public county: string = '',
-    public elevations: number[] /* 👈 legacy support */ = [],
-    public id: ParcelID = null,
-    public labels: ParcelPropertiesLabel[] /* 👈 legacy support */ = [],
-    public land$: number = 0,
-    public lengths: number[][] = [[]],
-    public minWidths: number[] = [],
-    public neighborhood: ParcelPropertiesNeighborhood = null,
-    public orientations: number[] = [],
-    public other$: number = 0,
-    public owner: string = '',
-    public perimeters: number[] = [],
-    public sqarcities: number[] = [],
-    public taxed$: number = 0,
-    public town: string = '',
-    public usage: ParcelPropertiesUsage = null,
-    public use: ParcelPropertiesUse = null,
-    public zone: string = ''
-  ) {}
+  public abutters: string[] /* 👈 legacy support */ = [];
+  public address = '';
+  public area = 0;
+  public areas: number[] = [];
+  public building$ = null;
+  public callouts: number[][] /* 👈 legacy support */ = [[]];
+  public centers: number[][] = [[]];
+  public county = '';
+  public elevations: number[] /* 👈 legacy support */ = [];
+  public id: ParcelID = null;
+  public labels: ParcelPropertiesLabel[] /* 👈 legacy support */ = [];
+  public land$ = 0;
+  public lengths: number[][] = [[]];
+  public minWidths: number[] = [];
+  public neighborhood: ParcelPropertiesNeighborhood = null;
+  public orientations: number[] = [];
+  public other$ = 0;
+  public owner = '';
+  public perimeters: number[] = [];
+  public sqarcities: number[] = [];
+  public taxed$ = 0;
+  public town = '';
+  public usage: ParcelPropertiesUsage = null;
+  public use: ParcelPropertiesUse = null;
+  public zone = '';
+  constructor(opts?: ParcelProperties) {
+    Object.assign(this, opts ?? {});
+  }
 }
 
 export interface ParcelProperties extends Partial<ParcelPropertiesClass> {}
@@ -355,7 +388,9 @@ export interface StateIndex {
   };
 }
 
-export const isIndex = (name: string): boolean => /^[A-Z ]*$/.test(name);
+export function isIndex(name: string): boolean {
+  return /^[A-Z ]*$/.test(name);
+}
 
 // 👉 calculate bbox based on desired dimensions
 
