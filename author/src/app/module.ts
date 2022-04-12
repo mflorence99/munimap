@@ -64,6 +64,7 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
@@ -203,6 +204,7 @@ const COMPONENTS = [
   MergeParcelsComponent,
   MessageDialogComponent,
   NavigatorComponent,
+  OLAdaptorTrailsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,

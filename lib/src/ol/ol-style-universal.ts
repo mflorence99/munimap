@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import { Adaptor } from './ol-adaptor';
+import { AdaptorComponent } from './ol-adaptor';
 import { LandmarkProperties } from '../common';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -11,6 +13,7 @@ import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
 import { OnChanges } from '@angular/core';
+import { Optional } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
@@ -18,6 +21,7 @@ import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 
 import cspline from 'ol-ext/render/Cspline';
+import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
@@ -28,7 +32,7 @@ import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 🔥 currently only works for landmarks
+// 🔥 currently only works for landmarks and styles with adaptors
 //    will change to work via an adadpter for most sources
 //    except special cases like parcels
 
@@ -50,6 +54,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontSize_medium = 13 /* 👈 pixels */;
   @Input() fontSize_small = 10 /* 👈 pixels */;
   @Input() minFontSize = 4 /* 👈 pixels */;
+  @Input() showAll = false;
   @Input() showFill = false;
   @Input() showStroke = false;
   @Input() showText = false;
@@ -58,13 +63,17 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
 
   constructor(
+    @Optional() private adaptor: AdaptorComponent,
     private decimal: DecimalPipe,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {}
 
-  #fillPolygon(landmark: any, _resolution: number): OLStyle[] {
-    const props = landmark.getProperties() as LandmarkProperties;
+  #fillPolygon(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    _resolution: number
+  ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (props.fillColor && props.fillOpacity > 0) {
       const fillColor = this.map.vars[props.fillColor];
@@ -93,26 +102,29 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return Math.min(pixels, pixels / resolution);
   }
 
-  #strokeLine(landmark: any, resolution: number): OLStyle[] {
-    const props = landmark.getProperties() as LandmarkProperties;
+  #strokeLine(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    resolution: number
+  ): OLStyle[] {
     // 👇 we may need to create a spline stroke
     const geometry = props.lineSpline
       ? new OLLineString(
-          cspline(landmark.getGeometry().getCoordinates(), {
+          cspline(feature.getGeometry().getCoordinates(), {
             tension: 0.5,
             pointsPerSeg: 3
           })
         )
       : null;
-    return this.#strokePolygon(landmark, resolution, geometry);
+    return this.#strokePolygon(feature, props, resolution, geometry);
   }
 
   #strokePolygon(
-    landmark: any,
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
     resolution: number,
     geometry: OLGeometry = null
   ): OLStyle[] {
-    const props = landmark.getProperties() as LandmarkProperties;
     const styles: OLStyle[] = [];
     if (
       props.strokeColor &&
@@ -140,15 +152,18 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         styles.push(stroke);
       }
       // 👇 dashed strokes are a bit more complicated
-      else if (props.strokeStyle === 'dashed') {
-        const white = new OLStyle({
-          geometry: geometry,
-          stroke: new OLStroke({
-            color: `rgba(255, 255, 255, ${props.strokeOpacity})`,
-            width: strokePixels
-          })
-        });
-        const dashed = new OLStyle({
+      else if (['dashed', 'dashdot'].includes(props.strokeStyle)) {
+        if (props.strokeStyle === 'dashdot') {
+          const dot = new OLStyle({
+            geometry: geometry,
+            stroke: new OLStroke({
+              color: `rgba(255, 255, 255, ${props.strokeOpacity})`,
+              width: strokePixels
+            })
+          });
+          styles.push(dot);
+        }
+        const dash = new OLStyle({
           geometry: geometry,
           stroke: new OLStroke({
             color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
@@ -162,14 +177,17 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           }),
           zIndex: props.zIndex
         });
-        styles.push(white, dashed);
+        styles.push(dash);
       }
     }
     return styles;
   }
 
-  #textLine(landmark: any, resolution: number): OLStyle[] {
-    const props = landmark.getProperties() as LandmarkProperties;
+  #textLine(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    resolution: number
+  ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
       props.fontColor &&
@@ -207,12 +225,19 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return styles;
   }
 
-  #textPoint(landmark: any, resolution: number): OLStyle[] {
-    return this.#textPolygon(landmark, resolution);
+  #textPoint(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    resolution: number
+  ): OLStyle[] {
+    return this.#textPolygon(feature, props, resolution);
   }
 
-  #textPolygon(landmark: any, resolution: number): OLStyle[] {
-    const props = landmark.getProperties() as LandmarkProperties;
+  #textPolygon(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    resolution: number
+  ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
       (props.fontColor &&
@@ -232,7 +257,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         let text = props.name?.replace(/ /g, '\n');
         // 👇 calculate the acreage if requested
         if (props.textShowAcreage) {
-          const acreage = landmark.getGeometry().getArea() * 0.000247105;
+          const acreage = feature.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }
         // 👇 finally build the complete style
@@ -288,32 +313,38 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   }
 
   style(): OLStyleFunction {
-    return (landmark: any, resolution: number): OLStyle[] => {
+    return (feature: OLFeature<any>, resolution: number): OLStyle[] => {
       const styles: OLStyle[] = [];
-      const props = landmark.getProperties() as LandmarkProperties;
-      if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
-        switch (landmark.getGeometry().getType()) {
-          case 'Point':
-          case 'MultiPoint':
-            if (this.showText)
-              styles.push(...this.#textPoint(landmark, resolution));
-            break;
-          case 'LineString':
-          case 'MultiLineString':
-            if (this.showStroke)
-              styles.push(...this.#strokeLine(landmark, resolution));
-            if (this.showText)
-              styles.push(...this.#textLine(landmark, resolution));
-            break;
-          case 'Polygon':
-          case 'MultiPolygon':
-            if (this.showFill)
-              styles.push(...this.#fillPolygon(landmark, resolution));
-            if (this.showStroke)
-              styles.push(...this.#strokePolygon(landmark, resolution));
-            if (this.showText)
-              styles.push(...this.#textPolygon(landmark, resolution));
-            break;
+      // 🔥 TEMPORARY -- we will REQUIRE an adptor soon
+      const propss = this.adaptor
+        ? (this.adaptor as Adaptor).adapt(feature.getProperties())
+        : [feature.getProperties() as LandmarkProperties];
+      // 👇 iterate over all the props
+      for (const props of propss) {
+        if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
+          switch (feature.getGeometry().getType()) {
+            case 'Point':
+            case 'MultiPoint':
+              if (this.showAll || this.showText)
+                styles.push(...this.#textPoint(feature, props, resolution));
+              break;
+            case 'LineString':
+            case 'MultiLineString':
+              if (this.showAll || this.showStroke)
+                styles.push(...this.#strokeLine(feature, props, resolution));
+              if (this.showAll || this.showText)
+                styles.push(...this.#textLine(feature, props, resolution));
+              break;
+            case 'Polygon':
+            case 'MultiPolygon':
+              if (this.showAll || this.showFill)
+                styles.push(...this.#fillPolygon(feature, props, resolution));
+              if (this.showAll || this.showStroke)
+                styles.push(...this.#strokePolygon(feature, props, resolution));
+              if (this.showAll || this.showText)
+                styles.push(...this.#textPolygon(feature, props, resolution));
+              break;
+          }
         }
       }
       return styles;

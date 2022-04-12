@@ -49,6 +49,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
@@ -154,6 +155,7 @@ export const persistenceEnabled = new Promise<boolean>((resolve) => {
 const COMPONENTS = [
   ConfirmDialogComponent,
   MessageDialogComponent,
+  OLAdaptorTrailsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlGraticuleComponent,

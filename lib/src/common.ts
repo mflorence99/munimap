@@ -81,7 +81,7 @@ class LandmarkPropertiesClass {
   public name: string = null;
   public strokeColor: string = null;
   public strokeOpacity = 0;
-  public strokeStyle: 'dashed' | 'solid' | null = null;
+  public strokeStyle: 'dashed' | 'dashdot' | 'solid' | null = null;
   public strokeWidth:
     | 'thick'
     | 'medium'
@@ -122,6 +122,7 @@ export const landmarkStyles: Record<string, LandmarkStyle> = {
       {
         fontColor: '--map-trail-text-color',
         fontOpacity: 1,
+        fontOutline: true,
         fontSize: 'medium',
         fontStyle: 'italic',
         strokeColor: '--map-trail-line-color',
