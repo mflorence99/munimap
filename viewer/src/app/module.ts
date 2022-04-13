@@ -49,6 +49,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
@@ -100,10 +101,8 @@ import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
 import { OLStylePolygonsComponent } from '@lib/ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
-import { OLStyleRailroadsComponent } from '@lib/ol/ol-style-railroads';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
-import { OLStyleTrailsComponent } from '@lib/ol/ol-style-trails';
 import { OLStyleUniversalComponent } from '@lib/ol/ol-style-universal';
 import { OLStyleWaterbodiesComponent } from '@lib/ol/ol-style-waterbodies';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
@@ -155,6 +154,7 @@ export const persistenceEnabled = new Promise<boolean>((resolve) => {
 const COMPONENTS = [
   ConfirmDialogComponent,
   MessageDialogComponent,
+  OLAdaptorRailroadsComponent,
   OLAdaptorTrailsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
@@ -206,10 +206,8 @@ const COMPONENTS = [
   OLStylePlacesComponent,
   OLStylePolygonsComponent,
   OLStylePowerlinesComponent,
-  OLStyleRailroadsComponent,
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
-  OLStyleTrailsComponent,
   OLStyleUniversalComponent,
   OLStyleWaterbodiesComponent,
   OLStyleWetlandComponent,

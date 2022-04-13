@@ -66,7 +66,7 @@ export type Landmarks = GeoJSON.FeatureCollection<
   LandmarkProperties
 >;
 
-class LandmarkPropertiesClass {
+export class LandmarkPropertiesClass {
   public fillCenter: [number, number] = null;
   public fillColor: string = null;
   public fillOpacity = 0;
@@ -76,12 +76,13 @@ class LandmarkPropertiesClass {
   public fontOutline = false;
   public fontSize: 'large' | 'medium' | 'small' | null = null;
   public fontStyle: 'normal' | 'bold' | 'italic' | null = null;
+  public lineDash = [2, 1];
   public lineSpline = false;
   public minZoom = 0;
   public name: string = null;
   public strokeColor: string = null;
   public strokeOpacity = 0;
-  public strokeStyle: 'dashed' | 'dashdot' | 'solid' | null = null;
+  public strokeStyle: 'dashed' | 'solid' | null = null;
   public strokeWidth:
     | 'thick'
     | 'medium'
@@ -113,26 +114,69 @@ export interface LandmarkStyle {
   properties: LandmarkProperties[];
   styleDescription?: string;
   styleName: string;
-  zIndex: number;
 }
 
 export const landmarkStyles: Record<string, LandmarkStyle> = {
+  railroad: {
+    properties: [
+      new LandmarkPropertiesClass({
+        lineSpline: true,
+        strokeColor: '--map-railroad-active-color',
+        strokeOpacity: 1,
+        strokeStyle: 'solid',
+        strokeWidth: 24,
+        zIndex: 1
+      }),
+      new LandmarkPropertiesClass({
+        lineSpline: true,
+        strokeColor: '--rgb-gray-50',
+        strokeOpacity: 1,
+        strokeStyle: 'solid',
+        strokeWidth: 16,
+        zIndex: 2
+      }),
+      new LandmarkPropertiesClass({
+        lineDash: [4, 4],
+        lineSpline: true,
+        strokeColor: '--map-railroad-active-color',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 16,
+        zIndex: 3
+      }),
+      new LandmarkPropertiesClass({
+        fontColor: '--map-railroad-active-color',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'medium',
+        fontStyle: 'italic',
+        lineSpline: true,
+        zIndex: 4
+      })
+    ],
+    styleName: 'Railroad'
+  },
   trail: {
     properties: [
-      {
+      new LandmarkPropertiesClass({
+        lineSpline: true,
+        strokeColor: '--map-trail-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 'medium',
+        zIndex: 1
+      }),
+      new LandmarkPropertiesClass({
         fontColor: '--map-trail-text-color',
         fontOpacity: 1,
         fontOutline: true,
         fontSize: 'medium',
         fontStyle: 'italic',
-        strokeColor: '--map-trail-line-color',
-        strokeOpacity: 1,
-        strokeStyle: 'dashed',
-        strokeWidth: 'medium'
-      }
+        lineSpline: true,
+        zIndex: 2
+      })
     ],
-    styleName: 'Trail',
-    zIndex: 1
+    styleName: 'Trail'
   }
 };
 
@@ -163,7 +207,7 @@ export type ParcelID = string | number;
 
 // 👉 https://stackoverflow.com/questions/43909566
 
-class ParcelPropertiesClass {
+export class ParcelPropertiesClass {
   public abutters: string[] /* 👈 legacy support */ = [];
   public address = '';
   public area = 0;

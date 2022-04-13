@@ -25,7 +25,6 @@ import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
-import OLGeometry from 'ol/geom/Geometry';
 import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
 import OLStroke from 'ol/style/Stroke';
@@ -51,8 +50,8 @@ import OLText from 'ol/style/Text';
 export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize_large = 16 /* 👈 pixels */;
-  @Input() fontSize_medium = 13 /* 👈 pixels */;
-  @Input() fontSize_small = 10 /* 👈 pixels */;
+  @Input() fontSize_medium = 14 /* 👈 pixels */;
+  @Input() fontSize_small = 12 /* 👈 pixels */;
   @Input() minFontSize = 4 /* 👈 pixels */;
   @Input() showAll = false;
   @Input() showFill = false;
@@ -102,13 +101,11 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return Math.min(pixels, pixels / resolution);
   }
 
-  #strokeLine(
+  #lineSpline(
     feature: OLFeature<any>,
-    props: LandmarkProperties,
-    resolution: number
-  ): OLStyle[] {
-    // 👇 we may need to create a spline stroke
-    const geometry = props.lineSpline
+    props: LandmarkProperties
+  ): OLLineString {
+    return props.lineSpline
       ? new OLLineString(
           cspline(feature.getGeometry().getCoordinates(), {
             tension: 0.5,
@@ -116,14 +113,25 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           })
         )
       : null;
-    return this.#strokePolygon(feature, props, resolution, geometry);
+  }
+
+  #measureText(text: string, font: string, resolution: number): number {
+    const metrics = this.map.measureText(text, font);
+    return metrics.width * resolution /* 👈 length of text i  meters */;
+  }
+
+  #strokeLine(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    resolution: number
+  ): OLStyle[] {
+    return this.#strokePolygon(feature, props, resolution);
   }
 
   #strokePolygon(
     feature: OLFeature<any>,
     props: LandmarkProperties,
-    resolution: number,
-    geometry: OLGeometry = null
+    resolution: number
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
@@ -133,52 +141,34 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.strokeWidth
     ) {
       const strokeColor = this.map.vars[props.strokeColor];
+      // 👇 find the stroke width in pixels
       const strokePixels = this.#width(
         isNaN(props.strokeWidth as any)
           ? this[`strokeWidth_${props.strokeWidth}`]
           : props.strokeWidth,
         resolution
       );
-      // 👇 a solid stroke is simple
-      if (props.strokeStyle === 'solid') {
-        const stroke = new OLStyle({
-          geometry: geometry,
-          stroke: new OLStroke({
-            color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
-            width: strokePixels
-          }),
-          zIndex: props.zIndex
-        });
-        styles.push(stroke);
-      }
-      // 👇 dashed strokes are a bit more complicated
-      else if (['dashed', 'dashdot'].includes(props.strokeStyle)) {
-        if (props.strokeStyle === 'dashdot') {
-          const dot = new OLStyle({
-            geometry: geometry,
-            stroke: new OLStroke({
-              color: `rgba(255, 255, 255, ${props.strokeOpacity})`,
-              width: strokePixels
-            })
-          });
-          styles.push(dot);
-        }
-        const dash = new OLStyle({
-          geometry: geometry,
-          stroke: new OLStroke({
-            color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
-            lineCap: 'square',
-            lineDash:
-              strokePixels > 1
-                ? [strokePixels, strokePixels * 2]
-                : [strokePixels * 2, strokePixels],
-            lineJoin: 'bevel',
-            width: strokePixels
-          }),
-          zIndex: props.zIndex
-        });
-        styles.push(dash);
-      }
+      // 👇 develop the lineDash
+      let lineDash;
+      if (props.strokeStyle === 'dashed')
+        lineDash = [
+          strokePixels * props.lineDash[0],
+          strokePixels * props.lineDash[1]
+        ];
+      else if (props.strokeStyle === 'solid') lineDash = null;
+      // 👇 here's the stroke
+      const stroke = new OLStyle({
+        geometry: this.#lineSpline(feature, props),
+        stroke: new OLStroke({
+          color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
+          lineCap: 'butt',
+          lineDash: lineDash,
+          lineJoin: 'bevel',
+          width: strokePixels
+        }),
+        zIndex: props.zIndex
+      });
+      styles.push(stroke);
     }
     return styles;
   }
@@ -196,19 +186,31 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.fontStyle &&
       props.name
     ) {
+      // 👇 find the font size in pixels
       const fontSize = this.#fontSize(
         this[`fontSize_${props.fontSize}`],
         resolution
       );
       // 👇 only show text if font size greater than minimum
       if (fontSize >= this.minFontSize) {
+        const font = `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`;
+        // 🔥 TEMPORARY -- we may need to chunk the text into multiple lines
+        console.log(
+          `${props.name} length: ${this.#measureText(
+            props.name,
+            font,
+            resolution
+          )} meters`
+        );
+        // 🔥 back to our normal programming
         const fontColor = this.map.vars[props.fontColor];
         const name = new OLStyle({
+          geometry: this.#lineSpline(feature, props),
           text: new OLText({
             fill: new OLFill({
               color: `rgba(${fontColor}, ${props.fontOpacity})`
             }),
-            font: `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`,
+            font: font,
             placement: 'line',
             stroke: props.fontOutline
               ? new OLStroke({
@@ -217,7 +219,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 })
               : null,
             text: props.name
-          })
+          }),
+          zIndex: props.zIndex
         });
         styles.push(name);
       }
@@ -291,7 +294,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                   : null,
                 text: text
               })
-            : null
+            : null,
+          zIndex: props.zIndex
         });
         styles.push(style);
       }
@@ -313,7 +317,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   }
 
   style(): OLStyleFunction {
-    return (feature: OLFeature<any>, resolution: number): OLStyle[] => {
+    return (feature: any, resolution: number): OLStyle[] => {
       const styles: OLStyle[] = [];
       // 🔥 TEMPORARY -- we will REQUIRE an adptor soon
       const propss = this.adaptor

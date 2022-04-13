@@ -146,7 +146,9 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-style-railroads></app-ol-style-railroads>
+            <app-ol-adaptor-railroads>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-railroads>
           <app-ol-source-railroads></app-ol-source-railroads>
         </app-ol-layer-vector>
 
@@ -156,7 +158,9 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-style-trails></app-ol-style-trails>
+            <app-ol-adaptor-trails>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-trails>
           <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
         </app-ol-layer-vector>
 

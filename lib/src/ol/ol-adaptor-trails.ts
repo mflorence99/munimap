@@ -28,7 +28,7 @@ export class OLAdaptorTrailsComponent implements Adaptor {
     const base = landmarkStyles['trail'];
     return base.properties.map((props) => ({
       ...props,
-      name: trail.name
+      name: props.fontColor ? trail.name : null
     }));
   }
 }

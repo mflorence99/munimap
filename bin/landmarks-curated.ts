@@ -55,6 +55,7 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: {
+          lineDash: [1, 1],
           lineSpline: true,
           strokeColor: '--map-river-line-color',
           strokeOpacity: 1,
@@ -153,13 +154,11 @@ const CURATIONS: Curation[] = [
         properties: {
           fontColor: '--map-trail-text-color',
           fontOpacity: 1,
+          fontOutline: true,
           fontSize: 'medium',
-          fontStyle: 'italic'
-        },
-        source: './proxy/assets/landmarks/florence/trailmarks.gpx'
-      },
-      {
-        properties: {
+          fontStyle: 'italic',
+          lineDash: [2, 1],
+          lineSpline: true,
           strokeColor: '--map-trail-line-color',
           strokeOpacity: 1,
           strokeStyle: 'dashed',
