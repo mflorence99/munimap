@@ -98,6 +98,7 @@ import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
 import { OLSourceBridgesComponent } from '@lib/ol/ol-source-bridges';
 import { OLSourceConservationComponent } from '@lib/ol/ol-source-conservation';
+import { OLSourceContours2ftComponent } from '@lib/ol/ol-source-contours-2ft';
 import { OLSourceContoursComponent } from '@lib/ol/ol-source-contours';
 import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
 import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
@@ -237,6 +238,7 @@ const COMPONENTS = [
   OLSourceBoundaryGridComponent,
   OLSourceBridgesComponent,
   OLSourceConservationComponent,
+  OLSourceContours2ftComponent,
   OLSourceContoursComponent,
   OLSourceDamsComponent,
   OLSourceFloodplainComponent,
