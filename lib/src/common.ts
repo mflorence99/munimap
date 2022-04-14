@@ -480,7 +480,7 @@ export function bboxByAspectRatio(
   y: number,
   b = 0.5 /* 👈 buffer in km */
 ): GeoJSON.BBox {
-  if (x < y) console.error(`🔥 x(${x}) must be greater than y${y})`);
+  if (x < y) console.error(`🔥 x(${x}) must be greater than y(${y})`);
   const [minX, minY, maxX, maxY] = bboxByAspectRatioImpl(geojson, x, y, b);
   return [minX, minY, maxX, maxY];
 }

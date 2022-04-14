@@ -160,6 +160,20 @@ const MAPS = [
     path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
     printSize: [30, 40],
     type: 'property'
+  },
+  {
+    bbox: null,
+    id: 'moskey-717',
+    isDflt: false,
+    name: 'Moskey Lot 1-717',
+    owner: 'cmoskey@gmail.com',
+    parcelIDs: ['1-717'],
+    path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
+    printSize: [17, 22],
+    properties: {
+      huc: '01070006'
+    },
+    type: 'property'
   }
 ];
 

@@ -97,6 +97,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() dimensionsFontSize = 12;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
+  @Input() forceAbutted = false /* 🔥 experimental */;
+  @Input() forceRedrawn = false /* 🔥 experimental */;
+  @Input() forceSelected = false /* 🔥 experimental */;
   @Input() maxBorderPixels = 3;
   @Input() maxFontSize = 40;
   @Input() minFontSize = 6;
@@ -719,9 +722,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         return this.#theStyles(
           feature,
           resolution,
-          whenRedrawn,
-          whenSelected,
-          whenAbutted
+          whenRedrawn || this.forceRedrawn,
+          whenSelected || this.forceSelected,
+          whenAbutted || this.forceAbutted
         );
       }
     };

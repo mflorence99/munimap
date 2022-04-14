@@ -66,6 +66,7 @@ export interface Map {
   parcelIDs?: ParcelID[];
   path: string;
   printSize: number[];
+  properties?: Record<string, any> /* 👈 experimental ad hoc extensions */;
   type: MapType;
 }
 

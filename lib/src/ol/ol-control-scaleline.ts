@@ -39,13 +39,22 @@ export class OLControlScaleLineComponent implements Mapable, OnInit {
     const [minX, minY, maxX, maxY] = this.map.bbox;
     const resolution = this.map.olView.getResolution();
     const px = getDistance([minX, maxY], [maxX, minY]) / resolution;
+    // 👉 calculate print dimensions
+    let minWidth, steps;
+    if (this.printing) {
+      const nominalStepWidth = 32;
+      // 👉 20 steps, but at least a multiple of 10 at nominal width
+      steps = Math.ceil(Math.min(20, Math.ceil(px / 320)) / 10) * 10;
+      // 👉 nominally 10% of page, but at least wide enouigh for steps
+      minWidth = Math.max(px / 10, steps * nominalStepWidth);
+    }
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olControl = new OLScaleLine({
       bar: this.printing,
       className: this.printing ? 'ol-scaleline-bar' : 'ol-scaleline-line',
-      minWidth: this.printing ? px / 10 : undefined,
-      steps: this.printing ? 20 : undefined,
+      minWidth: minWidth,
+      steps: steps,
       units: 'us'
     });
   }
