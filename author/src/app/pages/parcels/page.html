@@ -99,9 +99,11 @@
           <!-- 📦 BG LAYER (lays down a texture inside town)-->
 
           <app-ol-layer-vector>
-            <app-ol-style-boundary
-              [showInterior]="true"
-            ></app-ol-style-boundary>
+            <app-ol-adaptor-boundary>
+              <app-ol-style-universal
+                [showFill]="true"
+              ></app-ol-style-universal>
+            </app-ol-adaptor-boundary>
             <app-ol-source-boundary></app-ol-source-boundary>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
@@ -296,7 +298,11 @@
         <!-- 📦 BOUNDARY LAYER (above selection so we can interact with it) -->
 
         <app-ol-layer-vector>
-          <app-ol-style-boundary [showBorder]="true"></app-ol-style-boundary>
+          <app-ol-adaptor-boundary
+            ><app-ol-style-universal
+              [showStroke]="true"
+            ></app-ol-style-universal
+          ></app-ol-adaptor-boundary>
           <app-ol-source-boundary></app-ol-source-boundary>
           <app-ol-interaction-boundary></app-ol-interaction-boundary>
         </app-ol-layer-vector>

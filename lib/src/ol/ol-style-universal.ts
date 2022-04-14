@@ -76,20 +76,19 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     const styles: OLStyle[] = [];
     if (props.fillColor && props.fillOpacity > 0) {
       const fillColor = this.map.vars[props.fillColor];
-      const fill = new OLStyle({
-        fill: props.fillPattern
-          ? // 👉 fill with pattern
-            new OLFillPattern({
-              color: `rgba(${fillColor}, ${props.fillOpacity})`,
-              pattern: props.fillPattern
-            })
-          : // 👉 fill with color
-            new OLFill({
-              color: `rgba(${fillColor}, ${props.fillOpacity})`
-            }),
-        zIndex: props.zIndex
+      // 🐛 FillPattern sometimes throws InvalidStateError
+      let fill = new OLFill({
+        color: `rgba(${fillColor}, ${props.fillOpacity})`
       });
-      styles.push(fill);
+      if (props.fillPattern) {
+        try {
+          fill = new OLFillPattern({
+            color: `rgba(${fillColor}, ${props.fillOpacity})`,
+            pattern: props.fillPattern
+          });
+        } catch (ignored) {}
+      }
+      styles.push(new OLStyle({ fill, zIndex: props.zIndex }));
     }
     return styles;
   }
@@ -138,16 +137,19 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.strokeColor &&
       props.strokeOpacity > 0 &&
       props.strokeStyle &&
-      props.strokeWidth
+      (props.strokeFeet || props.strokePixels || props.strokeWidth)
     ) {
       const strokeColor = this.map.vars[props.strokeColor];
       // 👇 find the stroke width in pixels
-      const strokePixels = this.#width(
-        isNaN(props.strokeWidth as any)
-          ? this[`strokeWidth_${props.strokeWidth}`]
-          : props.strokeWidth,
-        resolution
-      );
+      let strokePixels;
+      if (props.strokeFeet)
+        strokePixels = this.#width(props.strokeFeet, resolution);
+      else if (props.strokePixels) strokePixels = props.strokePixels;
+      else if (props.strokeWidth)
+        strokePixels = this.#width(
+          this[`strokeWidth_${props.strokeWidth}`],
+          resolution
+        );
       // 👇 develop the lineDash
       let lineDash;
       if (props.strokeStyle === 'dashed')

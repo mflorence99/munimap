@@ -81,14 +81,11 @@ export class LandmarkPropertiesClass {
   public minZoom = 0;
   public name: string = null;
   public strokeColor: string = null;
+  public strokeFeet: number = null;
   public strokeOpacity = 0;
+  public strokePixels: number = null;
   public strokeStyle: 'dashed' | 'solid' | null = null;
-  public strokeWidth:
-    | 'thick'
-    | 'medium'
-    | 'thin'
-    | number /* 👈 feet */
-    | null = null;
+  public strokeWidth: 'thick' | 'medium' | 'thin' | null = null;
   public textIcon: string = null;
   public textShowAcreage = false;
   public zIndex = 0;
@@ -122,26 +119,26 @@ export const landmarkStyles: Record<string, LandmarkStyle> = {
       new LandmarkPropertiesClass({
         lineSpline: true,
         strokeColor: '--map-railroad-active-color',
+        strokeFeet: 24,
         strokeOpacity: 1,
         strokeStyle: 'solid',
-        strokeWidth: 24,
         zIndex: 1
       }),
       new LandmarkPropertiesClass({
         lineSpline: true,
         strokeColor: '--rgb-gray-50',
+        strokeFeet: 16,
         strokeOpacity: 1,
         strokeStyle: 'solid',
-        strokeWidth: 16,
         zIndex: 2
       }),
       new LandmarkPropertiesClass({
         lineDash: [4, 4],
         lineSpline: true,
         strokeColor: '--map-railroad-active-color',
+        strokeFeet: 16,
         strokeOpacity: 1,
         strokeStyle: 'dashed',
-        strokeWidth: 16,
         zIndex: 3
       }),
       new LandmarkPropertiesClass({

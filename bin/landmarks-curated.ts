@@ -67,9 +67,9 @@ const CURATIONS: Curation[] = [
       {
         properties: {
           strokeColor: '--map-road-edge-VI',
+          strokeFeet: 15 /* 👈 feet */,
           strokeOpacity: 1,
           strokeStyle: 'solid',
-          strokeWidth: 15 /* 👈 feet */,
           zIndex: 1
         },
         source: './proxy/assets/landmarks/florence/driveway.gpx'
@@ -77,9 +77,9 @@ const CURATIONS: Curation[] = [
       {
         properties: {
           strokeColor: '--map-road-lane-VI',
+          strokeFeet: 12 /* 👈 feet */,
           strokeOpacity: 1,
           strokeStyle: 'solid',
-          strokeWidth: 12 /* 👈 feet */,
           zIndex: 2
         },
         source: './proxy/assets/landmarks/florence/driveway.gpx'

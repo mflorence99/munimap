@@ -206,7 +206,9 @@
       <!-- 📦 BOUNDARY LAYER -->
 
       <app-ol-layer-vector>
-        <app-ol-style-boundary [showBorder]="true"></app-ol-style-boundary>
+        <app-ol-adaptor-boundary
+          ><app-ol-style-universal [showStroke]="true"></app-ol-style-universal
+        ></app-ol-adaptor-boundary>
         <app-ol-source-boundary></app-ol-source-boundary>
       </app-ol-layer-vector>
     </ng-container>
