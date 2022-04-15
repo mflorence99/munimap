@@ -48,6 +48,13 @@ export abstract class AbstractMapPage implements OnInit {
     this.actions$
       .pipe(ofActionSuccessful(SetMap), takeUntil(this.destroy$))
       .subscribe((action: SetMap) => {
+        // 👉 when we log in and out on the same computer,
+        //    we could be loading the "last used" map
+        //    which we aren't authorized to see
+        const profile = this.authState.currentProfile();
+        const workgroup = profile.email + ' ' + (profile.workgroup ?? '');
+        if (!workgroup.includes(action.map.owner))
+          this.router.navigate(['/create']);
         // 👉 if we were creating a new map, once that's done rewrite the
         //    URL to the map ID so if we reload we don't enter another
         //    creating state
