@@ -1,5 +1,6 @@
 import { Landmark } from '../lib/src/common';
 import { LandmarkProperties } from '../lib/src/common';
+import { LandmarkPropertiesClass } from '../lib/src/common';
 
 import { serializeLandmark } from '../lib/src/common';
 
@@ -32,66 +33,67 @@ const CURATIONS: Curation[] = [
   {
     landmarks: [
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fontColor: '--map-building-outline',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
           fontStyle: 'italic'
-        },
+        }),
         source: './proxy/assets/landmarks/florence/buildings.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fontColor: '--rgb-blue-gray-600',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'small',
           fontStyle: 'normal',
-          minZoom: 18,
-          textIcon: '\uf1ce' /* 👈 circle-notch */
-        },
+          iconOpacity: 1,
+          iconSymbol: '\uf1ce' /* 👈 circle-notch */,
+          minZoom: 18
+        }),
         source: './proxy/assets/landmarks/florence/culverts.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           lineDash: [1, 1],
           lineSpline: true,
           strokeColor: '--map-river-line-color',
           strokeOpacity: 1,
           strokeStyle: 'dashed',
           strokeWidth: 'thin'
-        },
+        }),
         source: './proxy/assets/landmarks/florence/ditches.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           strokeColor: '--map-road-edge-VI',
           strokeFeet: 15 /* 👈 feet */,
           strokeOpacity: 1,
           strokeStyle: 'solid',
           zIndex: 1
-        },
+        }),
         source: './proxy/assets/landmarks/florence/driveway.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           strokeColor: '--map-road-lane-VI',
           strokeFeet: 12 /* 👈 feet */,
           strokeOpacity: 1,
           strokeStyle: 'solid',
           zIndex: 2
-        },
+        }),
         source: './proxy/assets/landmarks/florence/driveway.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fontColor: '--map-place-text-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'large',
           fontStyle: 'italic'
-        },
+        }),
         source: './proxy/assets/landmarks/florence/landmarks.gpx'
       },
       {
@@ -101,57 +103,57 @@ const CURATIONS: Curation[] = [
           [-72.02846833057752, 43.207956756285625]
         ],
         geoOp: 'lineToPolygon',
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fillColor: '--map-parcel-fill-u190',
           fillOpacity: 0.15,
           fontColor: '--map-conservation-outline',
           fontOpacity: 1,
           fontSize: 'small',
           fontStyle: 'normal',
-          textShowAcreage: true,
+          showAcreage: true,
           zIndex: -1
-        },
+        }),
         source: './proxy/assets/landmarks/florence/mow.gpx'
       },
       {
         geoOp: 'lineToPolygon',
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fillColor: '--map-waterbody-fill',
           fillOpacity: 1
-        },
+        }),
         source: './proxy/assets/landmarks/florence/ponds.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fontColor: '--map-river-text-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
           fontStyle: 'italic'
-        },
+        }),
         source: './proxy/assets/landmarks/florence/rivermarks.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           lineSpline: true,
           strokeColor: '--map-river-line-color',
           strokeOpacity: 1,
           strokeStyle: 'solid',
           strokeWidth: 'medium'
-        },
+        }),
         source: './proxy/assets/landmarks/florence/streams.gpx'
       },
       {
         geoOp: 'lineToPolygon',
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fillColor: '--map-wetland-swamp',
           fillOpacity: 0.5,
           fillPattern: 'swamp'
-        },
+        }),
         source: './proxy/assets/landmarks/florence/swamp.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fontColor: '--map-trail-text-color',
           fontOpacity: 1,
           fontOutline: true,
@@ -164,17 +166,17 @@ const CURATIONS: Curation[] = [
           strokeStyle: 'dashed',
           strokeWidth: 'medium',
           zIndex: 1
-        },
+        }),
         source: './proxy/assets/landmarks/florence/trails.gpx'
       },
       {
-        properties: {
+        properties: new LandmarkPropertiesClass({
           fontColor: '--map-river-text-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
           fontStyle: 'italic'
-        },
+        }),
         source: './proxy/assets/landmarks/florence/watermarks.gpx'
       }
     ],

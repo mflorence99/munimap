@@ -52,7 +52,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontSize_large = 16 /* 👈 pixels */;
   @Input() fontSize_medium = 14 /* 👈 pixels */;
   @Input() fontSize_small = 12 /* 👈 pixels */;
-  @Input() minFontSize = 4 /* 👈 pixels */;
+  @Input() minFontPixels = 4 /* 👈 pixels */;
   @Input() showAll = false;
   @Input() showFill = false;
   @Input() showStroke = false;
@@ -74,7 +74,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     _resolution: number
   ): OLStyle[] {
     const styles: OLStyle[] = [];
-    if (props.fillColor && props.fillOpacity > 0) {
+    if (props.fillColor) {
       const fillColor = this.map.vars[props.fillColor];
       // 🐛 FillPattern sometimes throws InvalidStateError
       let fill = new OLFill({
@@ -135,7 +135,6 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     const styles: OLStyle[] = [];
     if (
       props.strokeColor &&
-      props.strokeOpacity > 0 &&
       props.strokeStyle &&
       (props.strokeFeet || props.strokePixels || props.strokeWidth)
     ) {
@@ -183,19 +182,22 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     const styles: OLStyle[] = [];
     if (
       props.fontColor &&
-      props.fontOpacity > 0 &&
-      props.fontSize &&
+      (props.fontFeet || props.fontPixels || props.fontSize) &&
       props.fontStyle &&
       props.name
     ) {
       // 👇 find the font size in pixels
-      const fontSize = this.#fontSize(
-        this[`fontSize_${props.fontSize}`],
-        resolution
-      );
+      let fontPixels;
+      if (props.fontFeet) fontPixels = this.#width(props.fontFeet, resolution);
+      else if (props.fontPixels) fontPixels = props.fontPixels;
+      else if (props.fontSize)
+        fontPixels = this.#fontSize(
+          this[`fontSize_${props.fontSize}`],
+          resolution
+        );
       // 👇 only show text if font size greater than minimum
-      if (fontSize >= this.minFontSize) {
-        const font = `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`;
+      if (fontPixels >= this.minFontPixels) {
+        const font = `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`;
         // 🔥 TEMPORARY -- we may need to chunk the text into multiple lines
         console.log(
           `${props.name} length: ${this.#measureText(
@@ -206,6 +208,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         );
         // 🔥 back to our normal programming
         const fontColor = this.map.vars[props.fontColor];
+        const fontOutlineColor = this.map.vars[props.fontOutlineColor];
         const name = new OLStyle({
           geometry: this.#lineSpline(feature, props),
           text: new OLText({
@@ -216,8 +219,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             placement: 'line',
             stroke: props.fontOutline
               ? new OLStroke({
-                  color: `rgba(255, 255, 255, 1)`,
-                  width: fontSize * 0.25
+                  color: `rgba(${fontOutlineColor}, 1)`,
+                  width: fontPixels * 0.25
                 })
               : null,
             text: props.name
@@ -245,23 +248,31 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
-      (props.fontColor &&
-        props.fontOpacity > 0 &&
-        props.fontSize &&
-        props.fontStyle &&
-        props.textIcon) ||
-      props.name
+      props.fontColor &&
+      (props.fontFeet || props.fontPixels || props.fontSize) &&
+      props.fontStyle &&
+      (props.iconSymbol || props.name)
     ) {
-      const fontSize = this.#fontSize(
-        this[`fontSize_${props.fontSize}`],
-        resolution
-      );
+      // 👇 find the font size in pixels
+      let fontPixels;
+      if (props.fontFeet) fontPixels = this.#width(props.fontFeet, resolution);
+      else if (props.fontPixels) fontPixels = props.fontPixels;
+      else if (props.fontSize)
+        fontPixels = this.#fontSize(
+          this[`fontSize_${props.fontSize}`],
+          resolution
+        );
       // 👇 only show text if font size greater than minimum
-      if (fontSize >= this.minFontSize) {
+      if (fontPixels >= this.minFontPixels) {
         const fontColor = this.map.vars[props.fontColor];
+        const fontOutlineColor = this.map.vars[props.fontOutlineColor];
+        const iconColor = props.iconColor
+          ? this.map.vars[props.iconColor]
+          : this.map.vars[props.fontColor];
+        const iconOutlineColor = this.map.vars[props.iconOutlineColor];
         let text = props.name?.replace(/ /g, '\n');
         // 👇 calculate the acreage if requested
-        if (props.textShowAcreage) {
+        if (props.showAcreage) {
           const acreage = feature.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }
@@ -270,14 +281,21 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           geometry: props.fillCenter
             ? new OLPoint(fromLonLat(props.fillCenter))
             : null,
-          image: props.textIcon
+          image: props.iconSymbol
             ? new OLFontSymbol({
-                color: `rgba(${fontColor}, ${props.fontOpacity})`,
+                color: `rgba(${iconColor}, ${props.iconOpacity})`,
                 font: `'Font Awesome'`,
                 fontStyle: 'bold',
                 form: 'none',
-                radius: fontSize,
-                text: props.textIcon
+                radius: fontPixels,
+                stroke: props.iconOutline
+                  ? new OLStroke({
+                      // 🔥 this always shows as black!!
+                      color: `rgba(${iconOutlineColor}, 1)`,
+                      width: fontPixels * 0.1
+                    })
+                  : null,
+                text: props.iconSymbol
               })
             : null,
           text: props.name
@@ -285,13 +303,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 fill: new OLFill({
                   color: `rgba(${fontColor}, ${props.fontOpacity})`
                 }),
-                font: `${props.fontStyle} ${fontSize}px '${this.fontFamily}'`,
-                offsetY: props.textIcon ? -fontSize * 1.5 : 0,
+                font: `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`,
+                offsetY: props.iconSymbol ? -fontPixels * 1.5 : 0,
                 overflow: true,
                 stroke: props.fontOutline
                   ? new OLStroke({
-                      color: `rgba(255, 255, 255, 1)`,
-                      width: fontSize * 0.25
+                      color: `rgba(${fontOutlineColor}, 1)`,
+                      width: fontPixels * 0.25
                     })
                   : null,
                 text: text

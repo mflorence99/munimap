@@ -50,6 +50,7 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { OLAdaptorBoundaryComponent } from '@lib/ol/ol-adaptor-boundary';
+import { OLAdaptorBridgesComponent } from '@lib/ol/ol-adaptor-bridges';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
@@ -92,7 +93,6 @@ import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
 import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
-import { OLStyleBridgesComponent } from '@lib/ol/ol-style-bridges';
 import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
 import { OLStyleConservationComponent } from '@lib/ol/ol-style-conservation';
 import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
@@ -156,6 +156,7 @@ const COMPONENTS = [
   ConfirmDialogComponent,
   MessageDialogComponent,
   OLAdaptorBoundaryComponent,
+  OLAdaptorBridgesComponent,
   OLAdaptorRailroadsComponent,
   OLAdaptorTrailsComponent,
   OLAttributionComponent,
@@ -198,7 +199,6 @@ const COMPONENTS = [
   OLSourceWaterbodiesComponent,
   OLSourceWetlandComponent,
   OLSourceXYZComponent,
-  OLStyleBridgesComponent,
   OLStyleBuildingsComponent,
   OLStyleConservationComponent,
   OLStyleFloodplainComponent,
