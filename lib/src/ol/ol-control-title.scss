@@ -14,9 +14,12 @@
     font-weight: bold;
     font-size: 10%;
     text-align: center;
+    -webkit-text-stroke-color: var(--text-color);
+    -webkit-text-stroke-width: 1px;
 
     &.contrast {
       color: var(--text-color);
+      -webkit-text-stroke-color: var(--background-color);
     }
   }
 }

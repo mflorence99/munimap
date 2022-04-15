@@ -409,6 +409,7 @@ color-picker {
 // 👉 ol styles
 
 .ol-credits {
+  // 👇 position set in code
   background-color: rgba(var(--rgb-gray-100), 0.66) !important;
   color: var(--background-color);
   font-family: 'Bentham Regular', sans-serif;
@@ -487,10 +488,7 @@ color-picker {
   }
 }
 
-// 👇 sizes are huge because this designed for large-format print
-
 .ol-scaleline-bar {
-  bottom: 10rem;
-  left: 10rem;
+  // 👇 position set in code
   position: absolute;
 }

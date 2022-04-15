@@ -2,6 +2,7 @@ import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
 
+import { AfterViewInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
@@ -24,7 +25,9 @@ import OLScaleLine from 'ol/control/ScaleLine';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLControlScaleLineComponent implements Mapable, OnInit {
+export class OLControlScaleLineComponent
+  implements AfterViewInit, Mapable, OnInit
+{
   olControl: OLScaleLine;
 
   @Input() printing: boolean;
@@ -33,6 +36,22 @@ export class OLControlScaleLineComponent implements Mapable, OnInit {
 
   addToMap(): void {
     this.map.olMap.addControl(this.olControl);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.printing) {
+      setTimeout(() => {
+        const scaleline = document.querySelector('.ol-scaleline-bar');
+        if (scaleline) {
+          // 👇 set the position proportional to the map size
+          const element = this.map.olMap.getTargetElement();
+          const style = (scaleline as any).style;
+          const dim = `${element.clientHeight / 25}px`;
+          style.bottom = dim;
+          style.left = dim;
+        }
+      }, 0);
+    }
   }
 
   ngOnInit(): void {
