@@ -1,14 +1,12 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
+import { Adaptor } from './ol-adaptor';
+import { AdaptorComponent } from './ol-adaptor';
+import { LandmarkProperties } from '../common';
+import { LandmarkPropertiesClass } from '../common';
 import { OLMapComponent } from './ol-map';
-import { Styler } from './ol-styler';
-import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
-import { OnChanges } from '@angular/core';
-import { SimpleChanges } from '@angular/core';
-import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
 
@@ -23,25 +21,36 @@ import OLStyle from 'ol/style/Style';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
-      provide: StylerComponent,
-      useExisting: forwardRef(() => OLStylePowerlinesComponent)
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorPowerlinesComponent)
     }
   ],
-  selector: 'app-ol-style-powerlines',
+  selector: 'app-ol-adaptor-powerlines',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLStylePowerlinesComponent implements OnChanges, Styler {
+export class OLAdaptorPowerlinesComponent implements Adaptor {
   @Input() iconSize = 15;
-  @Input() maxPowerlinePixels = 3;
-  @Input() powerlineWidth = 10 /* 👈 feet */;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {}
+  constructor(private map: OLMapComponent) {}
 
-  #drawIcons(
+  // 👇 construct LandmarkProperties
+  adapt(): LandmarkProperties[] {
+    return [
+      new LandmarkPropertiesClass({
+        strokeColor: '--map-powerline-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'solid',
+        strokeWidth: 'thick',
+        zIndex: 1
+      })
+    ];
+  }
+
+  // 👇 backdoor for lighning bolt icons we can't parameterize
+  //    declarativelt in LandmarkProperties
+
+  backdoor(
     powerline: OLFeature<OLMultiLineString>,
     resolution: number
   ): OLStyle[] {
@@ -72,49 +81,12 @@ export class OLStylePowerlinesComponent implements OnChanges, Styler {
                   width: 1
                 }),
                 text: '\uf0e7' /* 👈 bolt */
-              })
+              }),
+              zIndex: 2
             })
           );
         });
       });
     return icons;
-  }
-
-  #drawLine(
-    powerline: OLFeature<OLMultiLineString>,
-    resolution: number
-  ): OLStyle {
-    const lineColor = this.map.vars['--map-powerline-line-color'];
-    const powerlinePixels = this.#powerlinePixels(resolution);
-    return new OLStyle({
-      stroke: new OLStroke({
-        color: `rgba(${lineColor}, 1)`,
-        width: powerlinePixels
-      })
-    });
-  }
-
-  #powerlinePixels(resolution: number): number {
-    // 👉 powerlineWidth is proportional to the resolution,
-    //    but no bigger than the max size specified
-    return Math.min(
-      this.maxPowerlinePixels,
-      this.powerlineWidth / (resolution * 3.28084)
-    );
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (Object.values(changes).some((change) => !change.firstChange)) {
-      this.layer.olLayer.getSource().refresh();
-    }
-  }
-
-  style(): OLStyleFunction {
-    return (powerline: any, resolution: number): OLStyle[] => {
-      return [
-        this.#drawLine(powerline, resolution),
-        ...this.#drawIcons(powerline, resolution)
-      ];
-    };
   }
 }

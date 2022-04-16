@@ -56,6 +56,7 @@ import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservation
 import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
 import { OLAdaptorGeoJSONComponent } from '@lib/ol/ol-adaptor-geojson';
 import { OLAdaptorLandmarksComponent } from '@lib/ol/ol-adaptor-landmarks';
+import { OLAdaptorPowerlinesComponent } from '@lib/ol/ol-adaptor-powerlines';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorStoneWallsComponent } from '@lib/ol/ol-adaptor-stonewalls';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
@@ -104,7 +105,6 @@ import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
-import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleUniversalComponent } from '@lib/ol/ol-style-universal';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
@@ -163,6 +163,7 @@ const COMPONENTS = [
   OLAdaptorFloodplainsComponent,
   OLAdaptorGeoJSONComponent,
   OLAdaptorLandmarksComponent,
+  OLAdaptorPowerlinesComponent,
   OLAdaptorRailroadsComponent,
   OLAdaptorStoneWallsComponent,
   OLAdaptorTrailsComponent,
@@ -211,7 +212,6 @@ const COMPONENTS = [
   OLStyleParcelsComponent,
   OLStylePatternDirective,
   OLStylePlacesComponent,
-  OLStylePowerlinesComponent,
   OLStyleRoadsComponent,
   OLStyleUniversalComponent,
   OLStyleWetlandComponent,
