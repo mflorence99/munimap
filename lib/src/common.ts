@@ -70,7 +70,8 @@ export class LandmarkPropertiesClass {
   public fillCenter: [number, number] = null;
   public fillColor: string = null;
   public fillOpacity = 0;
-  public fillPattern: string = null /* 👈 should be OLFillPattern */;
+  public fillPattern: string = null /* 👈 should be OLFillPatternType */;
+  public fillPatternScale = 1;
   public fontColor: string = null;
   public fontFeet: number = null;
   public fontOpacity = 0;
@@ -93,6 +94,8 @@ export class LandmarkPropertiesClass {
   public strokeColor: string = null;
   public strokeFeet: number = null;
   public strokeOpacity = 0;
+  public strokePattern: string = null /* 👈 should be OLStrokePatternType */;
+  public strokePatternScale = 1;
   public strokePixels: number = null;
   public strokeStyle: 'dashed' | 'solid' | null = null;
   public strokeWidth: 'thick' | 'medium' | 'thin' | null = null;

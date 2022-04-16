@@ -95,7 +95,9 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-stonewalls></app-ol-style-stonewalls>
+        <app-ol-adaptor-stonewalls>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-stonewalls>
         <app-ol-source-stonewalls></app-ol-source-stonewalls>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>

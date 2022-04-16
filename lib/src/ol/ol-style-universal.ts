@@ -30,6 +30,7 @@ import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
 import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
+import OLStrokePattern from 'ol-ext/style/StrokePattern';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
@@ -86,20 +87,20 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         try {
           fill = new OLFillPattern({
             color: `rgba(${fillColor}, ${props.fillOpacity})`,
-            pattern: props.fillPattern
+            pattern: props.fillPattern,
+            scale: props.fillPatternScale
           });
         } catch (ignored) {}
       }
-      // 👇 here's the fill
-      styles.push(
-        new OLStyle({
-          fill,
-          geometry: props.offsetFeet
-            ? this.#offsetGeometry(feature, props.offsetFeet)
-            : null,
-          zIndex: props.zIndex
-        })
-      );
+      // 👇 here's the syle
+      const style = new OLStyle({
+        fill: fill,
+        geometry: props.offsetFeet
+          ? this.#offsetGeometry(feature, props.offsetFeet)
+          : null,
+        zIndex: props.zIndex
+      });
+      styles.push(style);
     }
     return styles;
   }
@@ -186,23 +187,35 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           strokePixels * props.lineDash[1]
         ];
       else if (props.strokeStyle === 'solid') lineDash = null;
-      // 👇 here's the stroke
-      const stroke = new OLStyle({
+      // 🐛 StrokePattern sometimes throws InvalidStateError
+      let stroke = new OLStroke({
+        color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
+        lineCap: 'butt',
+        lineDash: lineDash,
+        lineJoin: 'bevel',
+        width: strokePixels
+      });
+      if (props.strokePattern) {
+        try {
+          stroke = new OLStrokePattern({
+            color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
+            pattern: props.strokePattern,
+            scale: props.strokePatternScale,
+            width: strokePixels
+          });
+        } catch (ignored) {}
+      }
+      // 👇 here's the style
+      const style = new OLStyle({
         geometry: props.lineSpline
           ? this.#lineSpline(feature)
           : props.offsetFeet
           ? this.#offsetGeometry(feature, props.offsetFeet)
           : null,
-        stroke: new OLStroke({
-          color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
-          lineCap: 'butt',
-          lineDash: lineDash,
-          lineJoin: 'bevel',
-          width: strokePixels
-        }),
+        stroke: stroke,
         zIndex: props.zIndex
       });
-      styles.push(stroke);
+      styles.push(style);
     }
     return styles;
   }
@@ -271,7 +284,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         // 🔥 back to our normal programming
         const fontColor = this.map.vars[props.fontColor];
         const fontOutlineColor = this.map.vars[props.fontOutlineColor];
-        const name = new OLStyle({
+        // 👇 here's the style
+        const style = new OLStyle({
           geometry: props.lineSpline ? this.#lineSpline(feature) : null,
           text: new OLText({
             fill: new OLFill({
@@ -289,7 +303,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           }),
           zIndex: props.zIndex
         });
-        styles.push(name);
+        styles.push(style);
       }
     }
     return styles;
@@ -330,7 +344,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           const acreage = feature.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }
-        // 👇 finally build the complete style
+        // 👇 here's the style
         const style = new OLStyle({
           geometry: props.fillCenter
             ? new OLPoint(fromLonLat(props.fillCenter))
