@@ -88,6 +88,7 @@ export class LandmarkPropertiesClass {
   public lineSpline = false;
   public minZoom = 0;
   public name: string = null;
+  public offsetFeet: number[] = null;
   public showAcreage = false;
   public strokeColor: string = null;
   public strokeFeet: number = null;

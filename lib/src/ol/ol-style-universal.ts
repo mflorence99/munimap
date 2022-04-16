@@ -25,8 +25,10 @@ import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
+import OLGeometry from 'ol/geom/Geometry';
 import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
+import OLPolygon from 'ol/geom/Polygon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -88,9 +90,30 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           });
         } catch (ignored) {}
       }
-      styles.push(new OLStyle({ fill, zIndex: props.zIndex }));
+      // 👇 here's the fill
+      styles.push(
+        new OLStyle({
+          fill,
+          geometry: props.offsetFeet
+            ? this.#offsetGeometry(feature, props.offsetFeet)
+            : null,
+          zIndex: props.zIndex
+        })
+      );
     }
     return styles;
+  }
+
+  #fontPixels(props: LandmarkProperties, resolution: number): number {
+    let fontPixels;
+    if (props.fontFeet) fontPixels = this.#width(props.fontFeet, resolution);
+    else if (props.fontPixels) fontPixels = props.fontPixels;
+    else if (props.fontSize)
+      fontPixels = this.#fontSize(
+        this[`fontSize_${props.fontSize}`],
+        resolution
+      );
+    return fontPixels;
   }
 
   #fontSize(pixels: number, resolution: number): number {
@@ -100,23 +123,25 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return Math.min(pixels, pixels / resolution);
   }
 
-  #lineSpline(
-    feature: OLFeature<any>,
-    props: LandmarkProperties
-  ): OLLineString {
-    return props.lineSpline
-      ? new OLLineString(
-          cspline(feature.getGeometry().getCoordinates(), {
-            tension: 0.5,
-            pointsPerSeg: 3
-          })
-        )
-      : null;
+  #lineSpline(feature: OLFeature<any>): OLLineString {
+    return new OLLineString(
+      cspline(feature.getGeometry().getCoordinates(), {
+        tension: 0.5,
+        pointsPerSeg: 3
+      })
+    );
   }
 
   #measureText(text: string, font: string, resolution: number): number {
     const metrics = this.map.measureText(text, font);
-    return metrics.width * resolution /* 👈 length of text i  meters */;
+    return metrics.width * resolution /* 👈 length of text in meters */;
+  }
+
+  #offsetGeometry(feature: OLFeature<any>, offsetFeet: number[]): OLGeometry {
+    const offset = new OLPolygon(feature.getGeometry().getCoordinates());
+    // 👉 offset is in feet, translation units are meters
+    offset.translate(offsetFeet[0] / 3.28084, offsetFeet[1] / 3.28084);
+    return offset;
   }
 
   #strokeLine(
@@ -125,6 +150,19 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     resolution: number
   ): OLStyle[] {
     return this.#strokePolygon(feature, props, resolution);
+  }
+
+  #strokePixels(props: LandmarkProperties, resolution: number): number {
+    let strokePixels;
+    if (props.strokeFeet)
+      strokePixels = this.#width(props.strokeFeet, resolution);
+    else if (props.strokePixels) strokePixels = props.strokePixels;
+    else if (props.strokeWidth)
+      strokePixels = this.#width(
+        this[`strokeWidth_${props.strokeWidth}`],
+        resolution
+      );
+    return strokePixels;
   }
 
   #strokePolygon(
@@ -139,16 +177,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       (props.strokeFeet || props.strokePixels || props.strokeWidth)
     ) {
       const strokeColor = this.map.vars[props.strokeColor];
-      // 👇 find the stroke width in pixels
-      let strokePixels;
-      if (props.strokeFeet)
-        strokePixels = this.#width(props.strokeFeet, resolution);
-      else if (props.strokePixels) strokePixels = props.strokePixels;
-      else if (props.strokeWidth)
-        strokePixels = this.#width(
-          this[`strokeWidth_${props.strokeWidth}`],
-          resolution
-        );
+      const strokePixels = this.#strokePixels(props, resolution);
       // 👇 develop the lineDash
       let lineDash;
       if (props.strokeStyle === 'dashed')
@@ -159,7 +188,11 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       else if (props.strokeStyle === 'solid') lineDash = null;
       // 👇 here's the stroke
       const stroke = new OLStyle({
-        geometry: this.#lineSpline(feature, props),
+        geometry: props.lineSpline
+          ? this.#lineSpline(feature)
+          : props.offsetFeet
+          ? this.#offsetGeometry(feature, props.offsetFeet)
+          : null,
         stroke: new OLStroke({
           color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
           lineCap: 'butt',
@@ -186,15 +219,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.fontStyle &&
       props.name
     ) {
-      // 👇 find the font size in pixels
-      let fontPixels;
-      if (props.fontFeet) fontPixels = this.#width(props.fontFeet, resolution);
-      else if (props.fontPixels) fontPixels = props.fontPixels;
-      else if (props.fontSize)
-        fontPixels = this.#fontSize(
-          this[`fontSize_${props.fontSize}`],
-          resolution
-        );
+      const fontPixels = this.#fontPixels(props, resolution);
       // 👇 only show text if font size greater than minimum
       if (fontPixels >= this.minFontPixels) {
         const font = `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`;
@@ -210,7 +235,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         const fontColor = this.map.vars[props.fontColor];
         const fontOutlineColor = this.map.vars[props.fontOutlineColor];
         const name = new OLStyle({
-          geometry: this.#lineSpline(feature, props),
+          geometry: props.lineSpline ? this.#lineSpline(feature) : null,
           text: new OLText({
             fill: new OLFill({
               color: `rgba(${fontColor}, ${props.fontOpacity})`
@@ -253,15 +278,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.fontStyle &&
       (props.iconSymbol || props.name)
     ) {
-      // 👇 find the font size in pixels
-      let fontPixels;
-      if (props.fontFeet) fontPixels = this.#width(props.fontFeet, resolution);
-      else if (props.fontPixels) fontPixels = props.fontPixels;
-      else if (props.fontSize)
-        fontPixels = this.#fontSize(
-          this[`fontSize_${props.fontSize}`],
-          resolution
-        );
+      const fontPixels = this.#fontPixels(props, resolution);
       // 👇 only show text if font size greater than minimum
       if (fontPixels >= this.minFontPixels) {
         const fontColor = this.map.vars[props.fontColor];

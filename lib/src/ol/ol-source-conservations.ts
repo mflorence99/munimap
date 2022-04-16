@@ -9,18 +9,18 @@ import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 
-// 👇 we replaced railroads.geojson with this data source
+// 🔥 we no longer use this source -- we use parcels instead
 
 const attribution =
   'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-conservation',
+  selector: 'app-ol-source-conservations',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceConservationComponent extends OLSourceArcGISComponent {
+export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
   @Input() exclude: string[];
 
   constructor(

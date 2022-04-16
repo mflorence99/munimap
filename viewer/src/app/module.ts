@@ -51,6 +51,8 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { OLAdaptorBoundaryComponent } from '@lib/ol/ol-adaptor-boundary';
 import { OLAdaptorBridgesComponent } from '@lib/ol/ol-adaptor-bridges';
+import { OLAdaptorBuildingsComponent } from '@lib/ol/ol-adaptor-buildings';
+import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservations';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
@@ -75,7 +77,7 @@ import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
 import { OLSourceBridgesComponent } from '@lib/ol/ol-source-bridges';
-import { OLSourceConservationComponent } from '@lib/ol/ol-source-conservation';
+import { OLSourceConservationsComponent } from '@lib/ol/ol-source-conservations';
 import { OLSourceContours2ftComponent } from '@lib/ol/ol-source-contours-2ft';
 import { OLSourceContoursComponent } from '@lib/ol/ol-source-contours';
 import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
@@ -93,8 +95,6 @@ import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
 import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
-import { OLStyleBuildingsComponent } from '@lib/ol/ol-style-buildings';
-import { OLStyleConservationComponent } from '@lib/ol/ol-style-conservation';
 import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
@@ -157,6 +157,8 @@ const COMPONENTS = [
   MessageDialogComponent,
   OLAdaptorBoundaryComponent,
   OLAdaptorBridgesComponent,
+  OLAdaptorBuildingsComponent,
+  OLAdaptorConservationsComponent,
   OLAdaptorRailroadsComponent,
   OLAdaptorTrailsComponent,
   OLAttributionComponent,
@@ -181,7 +183,7 @@ const COMPONENTS = [
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
   OLSourceBridgesComponent,
-  OLSourceConservationComponent,
+  OLSourceConservationsComponent,
   OLSourceContours2ftComponent,
   OLSourceContoursComponent,
   OLSourceDamsComponent,
@@ -199,8 +201,6 @@ const COMPONENTS = [
   OLSourceWaterbodiesComponent,
   OLSourceWetlandComponent,
   OLSourceXYZComponent,
-  OLStyleBuildingsComponent,
-  OLStyleConservationComponent,
   OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,
   OLStyleParcelsComponent,

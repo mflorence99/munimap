@@ -96,7 +96,9 @@
         <!-- 📦 NH GranIT VECTOR LAYERS -->
 
         <app-ol-layer-vector>
-          <app-ol-style-conservation></app-ol-style-conservation>
+          <app-ol-adaptor-conservations>
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+          </app-ol-adaptor-conservations>
           <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
@@ -136,7 +138,9 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-style-buildings></app-ol-style-buildings>
+          <app-ol-adaptor-buildings>
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+          </app-ol-adaptor-buildings>
           <app-ol-source-geojson
             [layerKey]="'buildings'"
           ></app-ol-source-geojson>
