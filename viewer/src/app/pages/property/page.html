@@ -70,11 +70,13 @@
 
       <!-- 📦 USER'S LANDMARKS -->
 
-      <app-ol-layer-vector>
-        <app-ol-style-universal
-          [showFill]="true"
-          [showStroke]="true"
-        ></app-ol-style-universal>
+      <app-ol-layer-vector
+        ><app-ol-adaptor-landmarks>
+          <app-ol-style-universal
+            [showFill]="true"
+            [showStroke]="true"
+          ></app-ol-style-universal
+        ></app-ol-adaptor-landmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
       </app-ol-layer-vector>
 
@@ -192,8 +194,10 @@
 
       <!-- 📦 USER'S LANDMARKS (text, on top of everything else) -->
 
-      <app-ol-layer-vector>
-        <app-ol-style-universal [showText]="true"></app-ol-style-universal>
+      <app-ol-layer-vector
+        ><app-ol-adaptor-landmarks>
+          <app-ol-style-universal [showText]="true"></app-ol-style-universal
+        ></app-ol-adaptor-landmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
       </app-ol-layer-vector>
     </ng-container>

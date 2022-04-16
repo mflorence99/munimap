@@ -42,14 +42,14 @@ export class OLStylePowerlinesComponent implements OnChanges, Styler {
   ) {}
 
   #drawIcons(
-    river: OLFeature<OLMultiLineString>,
+    powerline: OLFeature<OLMultiLineString>,
     resolution: number
   ): OLStyle[] {
     const icons: OLStyle[] = [];
     const iconColor = this.map.vars['--map-powerline-icon-color'];
     const lineColor = this.map.vars['--map-powerline-line-color'];
     // genius!! 👉 https://stackoverflow.com/questions/38391780
-    river
+    powerline
       .getGeometry()
       .getLineStrings()
       .forEach((lineString) => {

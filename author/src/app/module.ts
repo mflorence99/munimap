@@ -70,6 +70,7 @@ import { OLAdaptorBuildingsComponent } from '@lib/ol/ol-adaptor-buildings';
 import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservations';
 import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
 import { OLAdaptorGeoJSONComponent } from '@lib/ol/ol-adaptor-geojson';
+import { OLAdaptorLandmarksComponent } from '@lib/ol/ol-adaptor-landmarks';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorStoneWallsComponent } from '@lib/ol/ol-adaptor-stonewalls';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
@@ -210,6 +211,7 @@ const COMPONENTS = [
   OLAdaptorConservationsComponent,
   OLAdaptorFloodplainsComponent,
   OLAdaptorGeoJSONComponent,
+  OLAdaptorLandmarksComponent,
   OLAdaptorRailroadsComponent,
   OLAdaptorStoneWallsComponent,
   OLAdaptorTrailsComponent,

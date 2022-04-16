@@ -406,10 +406,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   style(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      // 🔥 TEMPORARY -- we will REQUIRE an adaptor soon
-      const propss = this.adaptor
-        ? (this.adaptor as Adaptor).adapt(feature.getProperties())
-        : [feature.getProperties() as LandmarkProperties];
+      const propss = (this.adaptor as Adaptor).adapt(feature.getProperties());
       return this.#styleImpl(feature, resolution, propss);
     };
   }
