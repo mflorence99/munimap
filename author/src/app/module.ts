@@ -72,6 +72,7 @@ import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
 import { OLAdaptorGeoJSONComponent } from '@lib/ol/ol-adaptor-geojson';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
+import { OLAdaptorWaterbodiesComponent } from '@lib/ol/ol-adaptor-waterbodies';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
@@ -128,7 +129,6 @@ import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
 import { OLStyleUniversalComponent } from '@lib/ol/ol-style-universal';
-import { OLStyleWaterbodiesComponent } from '@lib/ol/ol-style-waterbodies';
 import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayState } from '@lib/state/overlay';
@@ -212,6 +212,7 @@ const COMPONENTS = [
   OLAdaptorGeoJSONComponent,
   OLAdaptorRailroadsComponent,
   OLAdaptorTrailsComponent,
+  OLAdaptorWaterbodiesComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,
@@ -268,7 +269,6 @@ const COMPONENTS = [
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
   OLStyleUniversalComponent,
-  OLStyleWaterbodiesComponent,
   OLStyleWetlandComponent,
   ParcelIDValidator,
   ParcelPropertiesComponent,

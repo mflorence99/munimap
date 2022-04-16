@@ -153,7 +153,9 @@
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
-            <app-ol-style-waterbodies></app-ol-style-waterbodies>
+            <app-ol-adaptor-waterbodies>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-waterbodies>
             <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
             <app-ol-source-waterbodies
               [exclude]="[466]"
