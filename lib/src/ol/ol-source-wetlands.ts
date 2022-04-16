@@ -13,11 +13,11 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-wetland',
+  selector: 'app-ol-source-wetlands',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceWetlandComponent extends OLSourceArcGISComponent {
+export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
   constructor(
     cache: CacheService,
     map: OLMapComponent,

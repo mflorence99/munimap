@@ -61,6 +61,7 @@ import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorStoneWallsComponent } from '@lib/ol/ol-adaptor-stonewalls';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAdaptorWaterbodiesComponent } from '@lib/ol/ol-adaptor-waterbodies';
+import { OLAdaptorWetlandsComponent } from '@lib/ol/ol-adaptor-wetlands';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
@@ -99,7 +100,7 @@ import { OLSourceRiversComponent } from '@lib/ol/ol-source-rivers';
 import { OLSourceSatelliteComponent } from '@lib/ol/ol-source-satellite';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
-import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
+import { OLSourceWetlandsComponent } from '@lib/ol/ol-source-wetlands';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
@@ -107,7 +108,6 @@ import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleUniversalComponent } from '@lib/ol/ol-style-universal';
-import { OLStyleWetlandComponent } from '@lib/ol/ol-style-wetland';
 import { OverlayState } from '@lib/state/overlay';
 import { ParcelsState } from '@lib/state/parcels';
 import { PathLocationStrategy } from '@angular/common';
@@ -168,6 +168,7 @@ const COMPONENTS = [
   OLAdaptorStoneWallsComponent,
   OLAdaptorTrailsComponent,
   OLAdaptorWaterbodiesComponent,
+  OLAdaptorWetlandsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlGraticuleComponent,
@@ -206,7 +207,7 @@ const COMPONENTS = [
   OLSourceSatelliteComponent,
   OLSourceStoneWallsComponent,
   OLSourceWaterbodiesComponent,
-  OLSourceWetlandComponent,
+  OLSourceWetlandsComponent,
   OLSourceXYZComponent,
   OLStyleGraticuleComponent,
   OLStyleParcelsComponent,
@@ -214,7 +215,6 @@ const COMPONENTS = [
   OLStylePlacesComponent,
   OLStyleRoadsComponent,
   OLStyleUniversalComponent,
-  OLStyleWetlandComponent,
   ParcelsLegendComponent,
   ParcelsOverlayComponent,
   PropertyLegendComponent,
