@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 
 export interface Adaptor {
   adapt(source: any): LandmarkProperties[];
+  adaptWhenSelected?(source: any): LandmarkProperties[];
 }
 
 @Injectable()

@@ -20,21 +20,21 @@ import { unByKey } from 'ol/Observable';
 import OLFeature from 'ol/Feature';
 import OLSelect from 'ol/interaction/Select';
 
-export type FilterFunction = (feature: OLFeature<any>) => boolean;
+export type FilterFunction = (name: number | string) => boolean;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectPolygonComponent)
+      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
     }
   ],
-  selector: 'app-ol-interaction-selectpolygon',
+  selector: 'app-ol-interaction-selectgeojson',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionSelectPolygonComponent
+export class OLInteractionSelectGeoJSONComponent
   implements Mapable, OnDestroy, OnInit
 {
   #selectKey: OLEventsKey;
@@ -70,7 +70,7 @@ export class OLInteractionSelectPolygonComponent
   }
 
   #filter(feature: OLFeature<any>): boolean {
-    return this.filter ? this.filter(feature) : true;
+    return this.filter ? this.filter(feature.getId()) : true;
   }
 
   #onSelect(_event?: OLSelectEvent): void {

@@ -38,7 +38,7 @@ export class OLStyleGraticuleComponent implements Styler {
   @Input() printing: boolean;
 
   constructor(
-    private graticue: OLControlGraticuleComponent /* 👈 enforce container */,
+    private graticule: OLControlGraticuleComponent /* 👈 enforce container */,
     private map: OLMapComponent
   ) {}
 

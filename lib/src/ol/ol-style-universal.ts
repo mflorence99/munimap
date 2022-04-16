@@ -207,6 +207,43 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return styles;
   }
 
+  #styleImpl(
+    feature: any,
+    resolution: number,
+    propss: LandmarkProperties[]
+  ): OLStyle[] {
+    const styles: OLStyle[] = [];
+    // 👇 iterate over all the props
+    for (const props of propss) {
+      if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
+        switch (feature.getGeometry().getType()) {
+          case 'Point':
+          case 'MultiPoint':
+            if (this.showAll || this.showText)
+              styles.push(...this.#textPoint(feature, props, resolution));
+            break;
+          case 'LineString':
+          case 'MultiLineString':
+            if (this.showAll || this.showStroke)
+              styles.push(...this.#strokeLine(feature, props, resolution));
+            if (this.showAll || this.showText)
+              styles.push(...this.#textLine(feature, props, resolution));
+            break;
+          case 'Polygon':
+          case 'MultiPolygon':
+            if (this.showAll || this.showFill)
+              styles.push(...this.#fillPolygon(feature, props, resolution));
+            if (this.showAll || this.showStroke)
+              styles.push(...this.#strokePolygon(feature, props, resolution));
+            if (this.showAll || this.showText)
+              styles.push(...this.#textPolygon(feature, props, resolution));
+            break;
+        }
+      }
+    }
+    return styles;
+  }
+
   #textLine(
     feature: OLFeature<any>,
     props: LandmarkProperties,
@@ -355,40 +392,22 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   style(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      const styles: OLStyle[] = [];
-      // 🔥 TEMPORARY -- we will REQUIRE an adptor soon
+      // 🔥 TEMPORARY -- we will REQUIRE an adaptor soon
       const propss = this.adaptor
         ? (this.adaptor as Adaptor).adapt(feature.getProperties())
         : [feature.getProperties() as LandmarkProperties];
-      // 👇 iterate over all the props
-      for (const props of propss) {
-        if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
-          switch (feature.getGeometry().getType()) {
-            case 'Point':
-            case 'MultiPoint':
-              if (this.showAll || this.showText)
-                styles.push(...this.#textPoint(feature, props, resolution));
-              break;
-            case 'LineString':
-            case 'MultiLineString':
-              if (this.showAll || this.showStroke)
-                styles.push(...this.#strokeLine(feature, props, resolution));
-              if (this.showAll || this.showText)
-                styles.push(...this.#textLine(feature, props, resolution));
-              break;
-            case 'Polygon':
-            case 'MultiPolygon':
-              if (this.showAll || this.showFill)
-                styles.push(...this.#fillPolygon(feature, props, resolution));
-              if (this.showAll || this.showStroke)
-                styles.push(...this.#strokePolygon(feature, props, resolution));
-              if (this.showAll || this.showText)
-                styles.push(...this.#textPolygon(feature, props, resolution));
-              break;
-          }
-        }
-      }
-      return styles;
+      return this.#styleImpl(feature, resolution, propss);
+    };
+  }
+
+  styleWhenSelected(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      if ((this.adaptor as Adaptor)?.adaptWhenSelected) {
+        const propss = (this.adaptor as Adaptor).adaptWhenSelected(
+          feature.getProperties()
+        );
+        return this.#styleImpl(feature, resolution, propss);
+      } else return [];
     };
   }
 }

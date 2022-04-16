@@ -3,7 +3,7 @@ import { RootPage } from '../root/page';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { FilterFunction } from '@lib/ol/ol-interaction-selectpolygon';
+import { FilterFunction } from '@lib/ol/ol-adaptor-geojson';
 import { GeoJSONService } from '@lib/services/geojson';
 import { Index } from '@lib/common';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
@@ -68,12 +68,12 @@ export class CreatePage {
   }
 
   filter(): FilterFunction {
-    return (feature: OLFeature<any>): boolean => {
+    return (name: string): boolean => {
       if (this.atCountyLevel(this.path)) {
         const townIndex = this.index[this.currentState()][this.currentCounty()][
-          feature.getId()
+          name
         ] as TownIndex;
-        return this.type !== 'parcels' || townIndex.layers.parcels.available;
+        return this.type !== 'parcels' || townIndex?.layers.parcels.available;
       } else return true;
     };
   }

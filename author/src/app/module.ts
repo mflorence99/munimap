@@ -69,6 +69,7 @@ import { OLAdaptorBridgesComponent } from '@lib/ol/ol-adaptor-bridges';
 import { OLAdaptorBuildingsComponent } from '@lib/ol/ol-adaptor-buildings';
 import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservations';
 import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
+import { OLAdaptorGeoJSONComponent } from '@lib/ol/ol-adaptor-geojson';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
@@ -93,8 +94,8 @@ import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filte
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
 import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
+import { OLInteractionSelectGeoJSONComponent } from '@lib/ol/ol-interaction-selectgeojson';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
-import { OLInteractionSelectPolygonComponent } from '@lib/ol/ol-interaction-selectpolygon';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -123,7 +124,6 @@ import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStylePlacesComponent } from '@lib/ol/ol-style-places';
-import { OLStylePolygonsComponent } from '@lib/ol/ol-style-polygons';
 import { OLStylePowerlinesComponent } from '@lib/ol/ol-style-powerlines';
 import { OLStyleRoadsComponent } from '@lib/ol/ol-style-roads';
 import { OLStyleStoneWallsComponent } from '@lib/ol/ol-style-stonewalls';
@@ -209,6 +209,7 @@ const COMPONENTS = [
   OLAdaptorBuildingsComponent,
   OLAdaptorConservationsComponent,
   OLAdaptorFloodplainsComponent,
+  OLAdaptorGeoJSONComponent,
   OLAdaptorRailroadsComponent,
   OLAdaptorTrailsComponent,
   OLAttributionComponent,
@@ -234,7 +235,7 @@ const COMPONENTS = [
   OLInteractionBoundaryComponent,
   OLInteractionRedrawParcelComponent,
   OLInteractionSelectParcelsComponent,
-  OLInteractionSelectPolygonComponent,
+  OLInteractionSelectGeoJSONComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLMapComponent,
@@ -263,7 +264,6 @@ const COMPONENTS = [
   OLStyleParcelsComponent,
   OLStylePatternDirective,
   OLStylePlacesComponent,
-  OLStylePolygonsComponent,
   OLStylePowerlinesComponent,
   OLStyleRoadsComponent,
   OLStyleStoneWallsComponent,
