@@ -53,6 +53,7 @@ import { OLAdaptorBoundaryComponent } from '@lib/ol/ol-adaptor-boundary';
 import { OLAdaptorBridgesComponent } from '@lib/ol/ol-adaptor-bridges';
 import { OLAdaptorBuildingsComponent } from '@lib/ol/ol-adaptor-buildings';
 import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservations';
+import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
@@ -81,7 +82,7 @@ import { OLSourceConservationsComponent } from '@lib/ol/ol-source-conservations'
 import { OLSourceContours2ftComponent } from '@lib/ol/ol-source-contours-2ft';
 import { OLSourceContoursComponent } from '@lib/ol/ol-source-contours';
 import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
-import { OLSourceFloodplainComponent } from '@lib/ol/ol-source-floodplain';
+import { OLSourceFloodplainsComponent } from '@lib/ol/ol-source-floodplains';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
 import { OLSourceLabelsComponent } from '@lib/ol/ol-source-labels';
@@ -95,7 +96,6 @@ import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
 import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
 import { OLSourceWetlandComponent } from '@lib/ol/ol-source-wetland';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
-import { OLStyleFloodplainComponent } from '@lib/ol/ol-style-floodplain';
 import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
@@ -159,6 +159,7 @@ const COMPONENTS = [
   OLAdaptorBridgesComponent,
   OLAdaptorBuildingsComponent,
   OLAdaptorConservationsComponent,
+  OLAdaptorFloodplainsComponent,
   OLAdaptorRailroadsComponent,
   OLAdaptorTrailsComponent,
   OLAttributionComponent,
@@ -187,7 +188,7 @@ const COMPONENTS = [
   OLSourceContours2ftComponent,
   OLSourceContoursComponent,
   OLSourceDamsComponent,
-  OLSourceFloodplainComponent,
+  OLSourceFloodplainsComponent,
   OLSourceGeoJSONComponent,
   OLSourceHillshadeComponent,
   OLSourceLabelsComponent,
@@ -201,7 +202,6 @@ const COMPONENTS = [
   OLSourceWaterbodiesComponent,
   OLSourceWetlandComponent,
   OLSourceXYZComponent,
-  OLStyleFloodplainComponent,
   OLStyleGraticuleComponent,
   OLStyleParcelsComponent,
   OLStylePatternDirective,

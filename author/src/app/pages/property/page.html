@@ -148,8 +148,10 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-style-floodplain></app-ol-style-floodplain>
-          <app-ol-source-floodplain></app-ol-source-floodplain>
+          <app-ol-adaptor-floodplains>
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+          </app-ol-adaptor-floodplains>
+          <app-ol-source-floodplains></app-ol-source-floodplains>
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>

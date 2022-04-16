@@ -13,11 +13,11 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-floodplain',
+  selector: 'app-ol-source-floodplains',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceFloodplainComponent extends OLSourceArcGISComponent {
+export class OLSourceFloodplainsComponent extends OLSourceArcGISComponent {
   constructor(
     cache: CacheService,
     map: OLMapComponent,
