@@ -83,9 +83,9 @@
       <!-- 📦 NH GranIT VECTOR LAYERS -->
 
       <app-ol-layer-vector>
-          <app-ol-adaptor-wetlands>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-wetlands>
+        <app-ol-adaptor-wetlands>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-wetlands>
         <app-ol-source-wetlands></app-ol-source-wetlands>
       </app-ol-layer-vector>
 
@@ -134,7 +134,9 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-style-roads [showRoadLane]="true"></app-ol-style-roads>
+        <app-ol-adaptor-roads>
+          <app-ol-style-universal [showStroke]="true"></app-ol-style-universal
+        ></app-ol-adaptor-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
       </app-ol-layer-vector>
 
@@ -191,7 +193,9 @@
 
       <!-- 👇 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
       <app-ol-layer-vector>
-        <app-ol-style-roads [showRoadName]="true"></app-ol-style-roads>
+        <app-ol-adaptor-roads>
+          <app-ol-style-universal [showText]="true"></app-ol-style-universal
+        ></app-ol-adaptor-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>

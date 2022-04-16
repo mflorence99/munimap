@@ -227,33 +227,35 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     // 👇 iterate over all the props
-    for (const props of propss) {
-      if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
-        switch (feature.getGeometry().getType()) {
-          case 'Point':
-          case 'MultiPoint':
-            if (this.showAll || this.showText)
-              styles.push(...this.#textPoint(feature, props, resolution));
-            break;
-          case 'LineString':
-          case 'MultiLineString':
-            if (this.showAll || this.showStroke)
-              styles.push(...this.#strokeLine(feature, props, resolution));
-            if (this.showAll || this.showText)
-              styles.push(...this.#textLine(feature, props, resolution));
-            break;
-          case 'Polygon':
-          case 'MultiPolygon':
-            if (this.showAll || this.showFill)
-              styles.push(...this.#fillPolygon(feature, props, resolution));
-            if (this.showAll || this.showStroke)
-              styles.push(...this.#strokePolygon(feature, props, resolution));
-            if (this.showAll || this.showText)
-              styles.push(...this.#textPolygon(feature, props, resolution));
-            break;
+    propss
+      .filter((props) => !!props)
+      .forEach((props) => {
+        if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
+          switch (feature.getGeometry().getType()) {
+            case 'Point':
+            case 'MultiPoint':
+              if (this.showAll || this.showText)
+                styles.push(...this.#textPoint(feature, props, resolution));
+              break;
+            case 'LineString':
+            case 'MultiLineString':
+              if (this.showAll || this.showStroke)
+                styles.push(...this.#strokeLine(feature, props, resolution));
+              if (this.showAll || this.showText)
+                styles.push(...this.#textLine(feature, props, resolution));
+              break;
+            case 'Polygon':
+            case 'MultiPolygon':
+              if (this.showAll || this.showFill)
+                styles.push(...this.#fillPolygon(feature, props, resolution));
+              if (this.showAll || this.showStroke)
+                styles.push(...this.#strokePolygon(feature, props, resolution));
+              if (this.showAll || this.showText)
+                styles.push(...this.#textPolygon(feature, props, resolution));
+              break;
+          }
         }
-      }
-    }
+      });
     return styles;
   }
 
