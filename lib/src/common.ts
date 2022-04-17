@@ -84,6 +84,7 @@ export class LandmarkPropertiesClass {
   public iconOutline = false;
   public iconOutlineColor = '--rgb-gray-50';
   public iconSymbol: string = null;
+  public lineChunk = false;
   public lineDash = [2, 1];
   public lineSpline = false;
   public minZoom = 0;
@@ -167,7 +168,7 @@ export const landmarkStyles: Record<string, LandmarkStyle> = {
         fontOutline: true,
         fontSize: 'medium',
         fontStyle: 'italic',
-        lineSpline: true,
+        lineChunk: true,
         zIndex: 4
       })
     ],
@@ -189,7 +190,7 @@ export const landmarkStyles: Record<string, LandmarkStyle> = {
         fontOutline: true,
         fontSize: 'medium',
         fontStyle: 'italic',
-        lineSpline: true,
+        lineChunk: true,
         zIndex: 2
       })
     ],

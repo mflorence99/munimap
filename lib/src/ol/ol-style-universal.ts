@@ -21,11 +21,14 @@ import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getCenter } from 'ol/extent';
 
+import combine from '@turf/combine';
 import cspline from 'ol-ext/render/Cspline';
+import lineChunk from '@turf/line-chunk';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
+import OLGeoJSON from 'ol/format/GeoJSON';
 import OLGeometry from 'ol/geom/Geometry';
 import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
@@ -73,6 +76,21 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {}
+
+  #chunkLine(
+    feature: OLFeature<any>,
+    length: number /* 👈 meters */
+  ): OLFeature<any> {
+    const format = new OLGeoJSON({
+      dataProjection: this.map.featureProjection,
+      featureProjection: this.map.projection
+    });
+    const geojson = JSON.parse(format.writeFeature(feature));
+    const chunks = lineChunk(geojson, length / 1000 /* 👈 km */);
+    const multiline = combine(chunks).features[0];
+    const chunked = format.readFeature(multiline);
+    return chunked;
+  }
 
   #fillPolygon(
     feature: OLFeature<any>,
@@ -127,15 +145,6 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return Math.min(pixels, pixels / resolution);
   }
 
-  #lineSpline(feature: OLFeature<any>): OLLineString {
-    return new OLLineString(
-      cspline(feature.getGeometry().getCoordinates(), {
-        tension: 0.5,
-        pointsPerSeg: 3
-      })
-    );
-  }
-
   #measureText(text: string, font: string, resolution: number): number {
     const metrics = this.map.measureText(text, font);
     return metrics.width * resolution /* 👈 length of text in meters */;
@@ -146,6 +155,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     // 👉 offset is in feet, translation units are meters
     offset.translate(offsetFeet[0] / 3.28084, offsetFeet[1] / 3.28084);
     return offset;
+  }
+
+  #splineLine(feature: OLFeature<any>): OLLineString {
+    return new OLLineString(
+      cspline(feature.getGeometry().getCoordinates(), {
+        tension: 0.5,
+        pointsPerSeg: 3
+      })
+    );
   }
 
   #strokeLine(
@@ -211,7 +229,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       // 👇 here's the style
       const style = new OLStyle({
         geometry: props.lineSpline
-          ? this.#lineSpline(feature)
+          ? this.#splineLine(feature)
           : props.offsetFeet
           ? this.#offsetGeometry(feature, props.offsetFeet)
           : null,
@@ -278,20 +296,22 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       // 👇 only show text if font size greater than minimum
       if (fontPixels >= this.minFontPixels) {
         const font = `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`;
-        // 🔥 TEMPORARY -- we may need to chunk the text into multiple lines
-        console.log(
-          `${props.name} length: ${this.#measureText(
-            props.name,
-            font,
-            resolution
-          )} meters`
-        );
-        // 🔥 back to our normal programming
         const fontColor = this.map.vars[props.fontColor];
         const fontOutlineColor = this.map.vars[props.fontOutlineColor];
+        // 👇 we may need to chunk the text into multiple lines
+        let chunked;
+        if (props.lineChunk) {
+          const textLength = this.#measureText(props.name, font, resolution);
+          chunked = this.#chunkLine(feature, textLength * 5);
+        }
         // 👇 here's the style
         const style = new OLStyle({
-          geometry: props.lineSpline ? this.#lineSpline(feature) : null,
+          // 🔥 lineChunk takes precedence over lineSpline
+          geometry: props.lineChunk
+            ? chunked.getGeometry()
+            : props.lineSpline
+            ? this.#splineLine(feature)
+            : null,
           text: new OLText({
             fill: new OLFill({
               color: `rgba(${fontColor}, ${props.fontOpacity})`

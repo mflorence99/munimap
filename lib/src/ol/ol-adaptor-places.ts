@@ -150,6 +150,7 @@ export class OLAdaptorPlacesComponent implements Adaptor {
           fontStyle: 'bold',
           iconOpacity: 1,
           iconSymbol: ICONS[place.type],
+          lineChunk: attrs.placement === 'line',
           name:
             attrs.placement === 'point'
               ? this.#mungeName(place.name)

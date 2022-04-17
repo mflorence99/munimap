@@ -64,7 +64,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
           })
         : null,
       new LandmarkPropertiesClass({
-        lineSpline: true,
+        lineChunk: true,
         name: road.class === 'VI' ? `${road.name} (Class VI)` : road.name,
         fontColor: `--map-road-text-${road.class ?? '0'}`,
         fontFeet: this.#roadFeet(road) * this.roadLaneRatio,

@@ -70,6 +70,7 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: new LandmarkPropertiesClass({
+          lineSpline: true,
           strokeColor: '--map-road-edge-VI',
           strokeFeet: 15 /* 👈 feet */,
           strokeOpacity: 1,
@@ -80,6 +81,7 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: new LandmarkPropertiesClass({
+          lineSpline: true,
           strokeColor: '--map-road-lane-VI',
           strokeFeet: 12 /* 👈 feet */,
           strokeOpacity: 1,
@@ -161,6 +163,7 @@ const CURATIONS: Curation[] = [
           fontOutline: true,
           fontSize: 'medium',
           fontStyle: 'italic',
+          lineChunk: true,
           lineDash: [2, 1],
           lineSpline: true,
           strokeColor: '--map-trail-line-color',
