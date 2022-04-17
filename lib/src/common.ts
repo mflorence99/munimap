@@ -67,7 +67,6 @@ export type Landmarks = GeoJSON.FeatureCollection<
 >;
 
 export class LandmarkPropertiesClass {
-  public fillCenter: [number, number] = null;
   public fillColor: string = null;
   public fillOpacity = 0;
   public fillPattern: string = null /* 👈 should be OLFillPatternType */;
@@ -78,7 +77,7 @@ export class LandmarkPropertiesClass {
   public fontOutline = false;
   public fontOutlineColor = '--rgb-gray-50';
   public fontPixels: number = null;
-  public fontSize: 'large' | 'medium' | 'small' | null = null;
+  public fontSize: 'huge' | 'large' | 'medium' | 'small' | 'tiny' | null = null;
   public fontStyle: 'normal' | 'bold' | 'italic' | null = null;
   public iconColor: string = null;
   public iconOpacity = 0;
@@ -99,6 +98,16 @@ export class LandmarkPropertiesClass {
   public strokePixels: number = null;
   public strokeStyle: 'dashed' | 'solid' | null = null;
   public strokeWidth: 'thick' | 'medium' | 'thin' | null = null;
+  public textAlign: 'left' | 'center' | 'right' | 'start' | 'end' | null = null;
+  public textBaseline:
+    | 'top'
+    | 'middle'
+    | 'bottom'
+    | 'alphabetic'
+    | 'hanging'
+    | 'ideographic'
+    | null = null;
+  public textLocation: [number, number] = null;
   public zIndex = 0;
   constructor(opts?: LandmarkProperties) {
     Object.assign(this, opts ?? {});

@@ -126,6 +126,20 @@ const MAPS = [
   },
   {
     bbox: null,
+    id: 'florence-topo',
+    isDflt: false,
+    name: 'Florence/Hendrickson Topographical',
+    owner: 'mflo999+flo@gmail.com',
+    parcelIDs: ['9-7', '(12-4)'],
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    printSize: [8.5, 11],
+    properties: {
+      huc: '01070003'
+    },
+    type: 'property'
+  },
+  {
+    bbox: null,
     id: 'marshall',
     isDflt: false,
     name: 'Marshall Estate',
@@ -169,7 +183,7 @@ const MAPS = [
     owner: 'cmoskey@gmail.com',
     parcelIDs: ['1-717'],
     path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
-    printSize: [17, 22],
+    printSize: [8.5, 11],
     properties: {
       huc: '01070006'
     },

@@ -65,7 +65,9 @@
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <!-- 👇 only drawing labels here - waterbodies draws actual river -->
-        <app-ol-style-places></app-ol-style-places>
+        <app-ol-adaptor-places>
+          <app-ol-style-universal [showText]="true"></app-ol-style-universal>
+        </app-ol-adaptor-places>
         <app-ol-source-rivers></app-ol-source-rivers>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
@@ -138,7 +140,9 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-places></app-ol-style-places>
+        <app-ol-adaptor-places>
+          <app-ol-style-universal [showText]="true"></app-ol-style-universal>
+        </app-ol-adaptor-places>
         <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
         <app-ol-source-geojson
           [exclude]="['dam', 'park']"
@@ -148,7 +152,9 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-style-places></app-ol-style-places>
+        <app-ol-adaptor-places>
+          <app-ol-style-universal [showText]="true"></app-ol-style-universal>
+        </app-ol-adaptor-places>
         <app-ol-source-dams></app-ol-source-dams>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>

@@ -19,6 +19,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
+import { getCenter } from 'ol/extent';
 
 import cspline from 'ol-ext/render/Cspline';
 import OLFeature from 'ol/Feature';
@@ -52,9 +53,11 @@ import OLText from 'ol/style/Text';
 })
 export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
+  @Input() fontSize_huge = 32 /* 👈 pixels */;
   @Input() fontSize_large = 16 /* 👈 pixels */;
   @Input() fontSize_medium = 14 /* 👈 pixels */;
   @Input() fontSize_small = 12 /* 👈 pixels */;
+  @Input() fontSize_tiny = 8 /* 👈 pixels */;
   @Input() minFontPixels = 4 /* 👈 pixels */;
   @Input() showAll = false;
   @Input() showFill = false;
@@ -348,9 +351,10 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         }
         // 👇 here's the style
         const style = new OLStyle({
-          geometry: props.fillCenter
-            ? new OLPoint(fromLonLat(props.fillCenter))
-            : null,
+          // 👇 geometry MUST be set to 'point' or else the icon won't show
+          geometry: props.textLocation
+            ? new OLPoint(fromLonLat(props.textLocation))
+            : new OLPoint(getCenter(feature.getGeometry().getExtent())),
           image: props.iconSymbol
             ? new OLFontSymbol({
                 color: `rgba(${iconColor}, ${props.iconOpacity})`,
@@ -374,7 +378,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                   color: `rgba(${fontColor}, ${props.fontOpacity})`
                 }),
                 font: `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`,
-                offsetY: props.iconSymbol ? -fontPixels * 1.5 : 0,
+                offsetY: props.iconSymbol ? -fontPixels : 0,
                 overflow: true,
                 stroke: props.fontOutline
                   ? new OLStroke({
@@ -382,7 +386,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                       width: fontPixels * 0.25
                     })
                   : null,
-                text: text
+                text: text,
+                textAlign: props.textAlign,
+                textBaseline: props.textBaseline
               })
             : null,
           zIndex: props.zIndex

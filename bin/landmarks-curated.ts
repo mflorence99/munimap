@@ -17,10 +17,10 @@ import chalk from 'chalk';
 import lineToPolygon from '@turf/line-to-polygon';
 
 interface CuratedLandmark {
-  fillCenters?: [number, number][];
   geoOp?: 'lineToPolygon' | null;
   properties: LandmarkProperties;
   source: string;
+  textLocations?: [number, number][];
 }
 
 interface Curation {
@@ -51,7 +51,9 @@ const CURATIONS: Curation[] = [
           fontStyle: 'normal',
           iconOpacity: 1,
           iconSymbol: '\uf1ce' /* 👈 circle-notch */,
-          minZoom: 18
+          minZoom: 18,
+          textAlign: 'center',
+          textBaseline: 'bottom'
         }),
         source: './proxy/assets/landmarks/florence/culverts.gpx'
       },
@@ -97,9 +99,9 @@ const CURATIONS: Curation[] = [
         source: './proxy/assets/landmarks/florence/landmarks.gpx'
       },
       {
-        fillCenters: [
+        textLocations: [
           [-72.029653581079, 43.204750066490675],
-          null,
+          [-72.02895441874323, 43.20527435243358],
           [-72.02846833057752, 43.207956756285625]
         ],
         geoOp: 'lineToPolygon',
@@ -260,7 +262,7 @@ async function main(): Promise<void> {
           path: curation.path,
           properties: {
             ...curated.properties,
-            fillCenter: curated.fillCenters?.[ix] ?? null,
+            textLocation: curated.textLocations?.[ix] ?? null,
             name: feature.properties.name ?? null
           },
           type: 'Feature'
