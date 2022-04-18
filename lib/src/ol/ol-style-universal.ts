@@ -61,6 +61,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontSize_medium = 14 /* 👈 pixels */;
   @Input() fontSize_small = 12 /* 👈 pixels */;
   @Input() fontSize_tiny = 8 /* 👈 pixels */;
+  @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
   @Input() minFontPixels = 4 /* 👈 pixels */;
   @Input() showAll = false;
   @Input() showFill = false;
@@ -302,11 +303,17 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         let chunked;
         if (props.lineChunk) {
           const textLength = this.#measureText(props.name, font, resolution);
-          chunked = this.#chunkLine(feature, textLength * 5);
+          const chunkable = props.lineSpline
+            ? new OLFeature({ geometry: this.#splineLine(feature) })
+            : feature;
+          chunked = this.#chunkLine(
+            chunkable,
+            textLength * this.lineChunkRatio
+          );
         }
         // 👇 here's the style
         const style = new OLStyle({
-          // 🔥 lineChunk takes precedence over lineSpline
+          // 👇 line has already been splined above if chunked
           geometry: props.lineChunk
             ? chunked.getGeometry()
             : props.lineSpline

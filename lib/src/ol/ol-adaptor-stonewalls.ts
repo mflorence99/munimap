@@ -43,7 +43,7 @@ export class OLAdaptorStoneWallsComponent implements Adaptor {
         strokePattern: this.pattern,
         strokePatternScale: 2,
         strokeStyle: 'solid',
-        strokeWidth: 'thick',
+        strokeWidth: 'medium',
         zIndex: 2
       })
     ];

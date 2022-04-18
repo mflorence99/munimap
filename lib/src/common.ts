@@ -169,6 +169,7 @@ export const landmarkStyles: Record<string, LandmarkStyle> = {
         fontSize: 'medium',
         fontStyle: 'italic',
         lineChunk: true,
+        lineSpline: true,
         zIndex: 4
       })
     ],
@@ -191,6 +192,7 @@ export const landmarkStyles: Record<string, LandmarkStyle> = {
         fontSize: 'medium',
         fontStyle: 'italic',
         lineChunk: true,
+        lineSpline: true,
         zIndex: 2
       })
     ],
