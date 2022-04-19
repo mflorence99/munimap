@@ -100,7 +100,7 @@ export class RootPage implements OnInit {
   }
 
   // 👉 when we've authenticated anonymously, we can load the map
-  //    we get the map ID from the domain (preferred, used live)
+  //    we get the map ID from the domain (used live)
   //    or from ...?id= (used in testing)
   #handleUser$(): void {
     this.user$
@@ -110,11 +110,13 @@ export class RootPage implements OnInit {
         filter((user) => !!user)
       )
       .subscribe(() => {
-        let id;
+        let fromDomain;
+        const fromParams = this.#url.query.id;
         const parts = this.#url.hostname.split('.');
-        if (parts.length === 3) id = parts[0];
-        else id = this.#url.query.id;
-        this.store.dispatch(new LoadMap(id, null));
+        if (parts.length === 3) fromDomain = parts[0];
+        // 👇 take the map ID from the params first, so that we can
+        //    override it with the domain if necessary
+        this.store.dispatch(new LoadMap(fromParams ?? fromDomain, null));
       });
   }
 

@@ -11,6 +11,7 @@ import { Store } from '@ngxs/store';
 import { deleteDoc } from '@angular/fire/firestore';
 import { doc } from '@angular/fire/firestore';
 import { getDoc } from '@angular/fire/firestore';
+import { serverTimestamp } from 'firebase/firestore';
 import { setDoc } from '@angular/fire/firestore';
 
 import copy from 'fast-copy';
@@ -37,7 +38,7 @@ export class DeleteMap {
 
 export class LoadMap {
   static readonly type = '[Map] LoadMap';
-  constructor(public id: string, public dflt: Map) {}
+  constructor(public id: string, public dflt: Map, public touch = false) {}
 }
 
 export class SetMap {
@@ -67,6 +68,7 @@ export interface Map {
   path: string;
   printSize: number[];
   properties?: Record<string, any> /* 👈 experimental ad hoc extensions */;
+  timestamp?: any /* 👈 optional only because we'll complete it */;
   type: MapType;
 }
 
@@ -98,7 +100,11 @@ export class MapState {
         const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
         ctx.dispatch(new CreateMapError(message));
       } else {
-        setDoc(docRef, { ...action.map, isDflt: false }, { merge: true });
+        setDoc(
+          docRef,
+          { ...action.map, isDflt: false, timestamp: serverTimestamp() },
+          { merge: true }
+        );
       }
     });
   }
@@ -131,6 +137,14 @@ export class MapState {
         ? (doc.data() as Map)
         : { ...action.dflt, isDflt: true };
       ctx.dispatch(new SetMap(map));
+      // 👇 update the last-used timestamp, if this isn't the default map
+      if (!map.isDflt && action.touch) {
+        setDoc(
+          docRef,
+          { ...map, timestamp: serverTimestamp() },
+          { merge: true }
+        );
+      }
     });
   }
 
@@ -156,7 +170,7 @@ export class MapState {
         } else {
           setDoc(
             docRef,
-            { ...action.map, isDflt: false },
+            { ...action.map, isDflt: false, timestamp: serverTimestamp() },
             { merge: true }
           ).then(() => ctx.dispatch(new SetMap(action.map)));
         }

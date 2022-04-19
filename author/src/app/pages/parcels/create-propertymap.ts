@@ -21,6 +21,7 @@ import OLGeoJSON from 'ol/format/GeoJSON';
 import union from '@turf/union';
 
 interface PropertyMapRecord {
+  huc: boolean /* 🔥 this only works for Washington */;
   id: string;
   isDflt: boolean;
   name: string;
@@ -28,6 +29,7 @@ interface PropertyMapRecord {
 }
 
 const PRINT_SIZES = {
+  '8\u00bd x 11 in': [8.5, 11],
   '11 x 17 in': [11, 17],
   '16 x 20 in': [16, 20],
   '18 x 24 in': [18, 24],
@@ -65,6 +67,7 @@ export class CreatePropertyMapComponent implements ContextMenuComponent {
   }
 
   record: PropertyMapRecord = {
+    huc: false,
     id: null,
     isDflt: true,
     name: null,
@@ -108,6 +111,9 @@ export class CreatePropertyMapComponent implements ContextMenuComponent {
       parcelIDs: this.selectedIDs,
       path: this.map.path,
       printSize: printSize,
+      properties: record.huc
+        ? { huc: '01070003' /* 🔥 only works for Washington */ }
+        : null,
       type: 'property'
     };
     this.store.dispatch(new CreateMap(map));

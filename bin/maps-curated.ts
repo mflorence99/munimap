@@ -22,10 +22,11 @@ const MAPS = [
     bbox: null,
     id: 'henniker',
     isDflt: false,
-    name: 'Henniker',
+    name: 'Town of Henniker',
     owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
     printSize: [45, 60],
+    timestamp: null,
     type: 'parcels'
   },
   {
@@ -36,6 +37,7 @@ const MAPS = [
     owner: 'mflo999@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [45, 60],
+    timestamp: null,
     type: 'parcels'
   },
   {
@@ -46,9 +48,10 @@ const MAPS = [
     isDflt: false,
     name: 'Town Center',
     origin: [-72.13330520983168, 43.18490951655938],
-    owner: 'mflo999@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [24, 36],
+    timestamp: null,
     type: 'area'
   },
   {
@@ -59,9 +62,10 @@ const MAPS = [
     isDflt: false,
     name: 'East Washington',
     origin: [-72.04833282823988, 43.21047135814069],
-    owner: 'mflo999@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [24, 24],
+    timestamp: null,
     type: 'area'
   },
   {
@@ -72,9 +76,10 @@ const MAPS = [
     isDflt: false,
     name: 'Highland Lake',
     origin: [-72.10798515673109, 43.157376566018925],
-    owner: 'mflo999@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [24, 36],
+    timestamp: null,
     type: 'area'
   },
   {
@@ -85,9 +90,10 @@ const MAPS = [
     isDflt: false,
     name: 'Island Pond',
     origin: [-72.07845939989515, 43.188444997708324],
-    owner: 'mflo999@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [24, 24],
+    timestamp: null,
     type: 'area'
   },
   {
@@ -98,9 +104,10 @@ const MAPS = [
     isDflt: false,
     name: 'Lake Ashuelot Estates',
     origin: [-72.17305139671191, 43.17727946502029],
-    owner: 'mflo999@gmail.com',
+    owner: 'mflo99+flo9@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [24, 36],
+    timestamp: null,
     type: 'area'
   },
   {
@@ -111,6 +118,7 @@ const MAPS = [
     owner: 'mflo999@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [45, 60],
+    timestamp: null,
     type: 'topo'
   },
   {
@@ -122,13 +130,14 @@ const MAPS = [
     parcelIDs: ['9-7', '(12-4)'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [18, 24],
+    timestamp: null,
     type: 'property'
   },
   {
     bbox: null,
-    id: 'florence-topo',
+    id: 'florence-2ft',
     isDflt: false,
-    name: 'Florence/Hendrickson Topographical',
+    name: 'Florence/Hendrickson Survey',
     owner: 'mflo999+flo@gmail.com',
     parcelIDs: ['9-7', '(12-4)'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
@@ -136,6 +145,7 @@ const MAPS = [
     properties: {
       huc: '01070003'
     },
+    timestamp: null,
     type: 'property'
   },
   {
@@ -147,6 +157,22 @@ const MAPS = [
     parcelIDs: ['9-6', '9-28'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [18, 24],
+    timestamp: null,
+    type: 'property'
+  },
+  {
+    bbox: null,
+    id: 'marshall-2ft',
+    isDflt: false,
+    name: 'Marshall Survey',
+    owner: 'marshal@gsinet.net',
+    parcelIDs: ['9-6', '9-28'],
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    printSize: [8.5, 11],
+    properties: {
+      huc: '01070003'
+    },
+    timestamp: null,
     type: 'property'
   },
   {
@@ -173,6 +199,7 @@ const MAPS = [
     ],
     path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
     printSize: [30, 40],
+    timestamp: null,
     type: 'property'
   },
   {
@@ -187,6 +214,7 @@ const MAPS = [
     properties: {
       huc: '01070006'
     },
+    timestamp: null,
     type: 'property'
   }
 ];
@@ -274,6 +302,9 @@ async function main(): Promise<void> {
       map.bbox = bboxFromDimensions(map, 100 * 0.0003048 /* 👈 km */);
     if (map.type === 'property')
       map.bbox = await bboxFromParcelIDs(map, 100 * 0.0003048 /* 👈 km */);
+
+    // 👁️ https://titanwolf.org/Network/Articles/Article?AID=c2f8e1f8-31d8-4b5a-9a73-1c50f7614057
+    map.timestamp = firestore.FieldValue.serverTimestamp();
 
     // 👉 create new one
     await maps.doc(map.id).set(map);

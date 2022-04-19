@@ -89,7 +89,7 @@ export abstract class AbstractMapPage implements OnInit {
       type: this.getType()
     };
     // 👉 load up the requested (or default) map
-    this.store.dispatch(new LoadMap(id, dflt));
+    this.store.dispatch(new LoadMap(id, dflt, /* touch = */ true));
     // 👉 set the window title to something we know for now
     this.root.setTitle(path);
   }

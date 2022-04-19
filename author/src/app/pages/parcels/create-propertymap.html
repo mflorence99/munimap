@@ -54,6 +54,18 @@
     >
   </mat-form-field>
 
+  <p class="instructions">Choose the format of the map.</p>
+
+  <mat-radio-group
+    [(ngModel)]="record.huc"
+    class="map-format"
+    name="huc"
+    required
+  >
+    <mat-radio-button [value]="false">Hillshade</mat-radio-button>
+    <mat-radio-button [value]="true">2ft contours</mat-radio-button>
+  </mat-radio-group>
+
   <p class="instructions">
     Choose the size at which the map will be printed. The aspect ratio
     determines the map's boundary box. These sizes are all available via the

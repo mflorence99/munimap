@@ -29,7 +29,8 @@ export interface PrintProgressData {
 })
 export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   #eventKeys: OLEventsKey[];
-  #timestamp: number;
+  #interval: any;
+  #timestamp = Date.now();
 
   @Input() giveUpAfter = 30 * 1000 /* 👈 seconds */;
 
@@ -54,18 +55,19 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   }
 
   #monitorActivity(): void {
-    const interval = setInterval(() => {
+    this.#interval = setInterval(() => {
       // console.log({
+      //   starting: this.isStarting(),
       //   complete: this.isComplete(),
       //   timestamp: this.#timestamp + this.giveUpAfter,
       //   now: Date.now(),
       //   giveUp: this.#timestamp + this.giveUpAfter < Date.now()
       // });
       if (
-        this.isComplete() &&
+        (this.isComplete() || this.isStarting()) &&
         this.#timestamp + this.giveUpAfter < Date.now()
       ) {
-        clearInterval(interval);
+        clearInterval(this.#interval);
         this.data.map.olMap.dispatchEvent('rendercomplete');
       }
     }, 1000);
@@ -92,6 +94,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
 
   ngOnDestroy(): void {
     this.#eventKeys.forEach((key) => unByKey(key));
+    clearInterval(this.#interval);
   }
 
   ngOnInit(): void {

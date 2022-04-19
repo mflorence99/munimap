@@ -95,7 +95,7 @@
 
         <app-ol-layer-tile *ngIf="map.properties?.huc">
           <app-ol-source-xyz
-            [url]="'https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_' + map.properties.huc + '_smooth_cached/MapServer/tile/{z}/{y}/{x}'"
+            [url]="'https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_' + map.properties.huc + '_smooth_cached/MapServer/tile/{z}/{y}/{x}?x=y'"
             ><app-ol-attribution
               >Powered by
               <a

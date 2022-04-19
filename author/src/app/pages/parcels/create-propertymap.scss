@@ -1,5 +1,13 @@
+.map-format {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 50% 50%;
+  margin-bottom: 1rem;
+}
+
 .print-sizes {
   display: grid;
   gap: 0.5rem;
   grid-template-columns: 33.3% 33.3% 33.3%;
+  margin-bottom: 1rem;
 }

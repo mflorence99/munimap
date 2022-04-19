@@ -15,6 +15,7 @@ import { VersionService } from '@lib/services/version';
 
 import { collection } from '@angular/fire/firestore';
 import { collectionData } from '@angular/fire/firestore';
+import { limit } from '@angular/fire/firestore';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { orderBy } from '@angular/fire/firestore';
@@ -32,6 +33,8 @@ import { where } from '@angular/fire/firestore';
 })
 export class NavigatorComponent implements OnInit {
   allMaps$: Observable<Map[]>;
+
+  @Input() maxMapCount = 5;
 
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
@@ -52,18 +55,20 @@ export class NavigatorComponent implements OnInit {
       mergeMap((profile) => {
         if (!profile?.email) return of([]);
         else {
+          // 👇 show the N most recently-used maps
           const workgroup = AuthState.workgroup(profile);
           console.log(
             `%cFirestore query: maps where owner in ${JSON.stringify(
               workgroup
-            )} orderBy name`,
+            )} orderBy timestamp desc`,
             'color: goldenrod'
           );
           return collectionData<Map>(
             query(
               collection(this.firestore, 'maps') as CollectionReference<Map>,
               where('owner', 'in', workgroup),
-              orderBy('name')
+              orderBy('timestamp', 'desc'),
+              limit(this.maxMapCount)
             )
           );
         }
