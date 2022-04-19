@@ -1,4 +1,4 @@
-<table class="all-maps" matSort mat-table [dataSource]="dataSource">
+<table matSort mat-table [dataSource]="dataSource">
   <ng-container matColumnDef="name">
     <th mat-header-cell mat-sort-header *matHeaderCellDef>Map Name</th>
     <td mat-cell *matCellDef="let element">{{ element.name }}</td>
@@ -25,5 +25,29 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-  <tr (click)="load(row)" mat-row *matRowDef="let row; columns: columns;"></tr>
+  <tr
+    (click)="onLoadMap(row)"
+    mat-row
+    *matRowDef="let row; columns: columns;"
+  ></tr>
 </table>
+
+<article class="filter">
+  <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+  <input
+    #theSearcher
+    (focus)="onSearch($event.srcElement.value)"
+    (input)="onSearch($event.srcElement.value)"
+    class="searcher"
+    placeholder="Search text"
+  />
+
+  <button
+    (click)="(theSearcher.value = '') || onSearch('')"
+    [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
+    mat-icon-button
+  >
+    <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>
+  </button>
+</article>

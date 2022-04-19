@@ -78,15 +78,19 @@ export class ListPage implements OnInit {
     );
   }
 
-  load(row: any): void {
-    this.router.navigate([`/${row.type}/${row.id}`]);
-  }
-
   ngOnInit(): void {
     this.#handleAllMaps$().subscribe((maps: Map[]) => {
       this.dataSource = new MatTableDataSource(maps);
       this.dataSource.sort = this.sort;
       this.cdf.detectChanges();
     });
+  }
+
+  onLoadMap(map: Map): void {
+    this.router.navigate([`/${map.type}/${map.id}`]);
+  }
+
+  onSearch(str: string): void {
+    this.dataSource.filter = str.trim().toLowerCase();
   }
 }

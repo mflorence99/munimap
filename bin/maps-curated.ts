@@ -104,7 +104,7 @@ const MAPS = [
     isDflt: false,
     name: 'Lake Ashuelot Estates',
     origin: [-72.17305139671191, 43.17727946502029],
-    owner: 'mflo99+flo9@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [24, 36],
     timestamp: null,
