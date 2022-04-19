@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.all-maps {
+  width: 100%;
+}
+
+td.mat-column-id {
+  color: var(--accent-color);
+}
+
+td.mat-column-name {
+  font-size: larger;
+  font-weight: bold;
+}
+
+td.mat-column-path {
+  font-family: monospace;
+}
+
+td.mat-column-type {
+  color: var(--primary-color);
+}
+
+td.mat-column-type:first-letter {
+  text-transform: uppercase;
+}
+
+.mat-row .mat-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+  border-color: var(--text-color);
+}

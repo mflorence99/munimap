@@ -1,0 +1,29 @@
+<table class="all-maps" matSort mat-table [dataSource]="dataSource">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Map Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Unique ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="owner">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Owner</th>
+    <td mat-cell *matCellDef="let element">{{ element.owner }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="type">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Type</th>
+    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="path">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Path</th>
+    <td mat-cell *matCellDef="let element">{{ element.path }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr (click)="load(row)" mat-row *matRowDef="let row; columns: columns;"></tr>
+</table>

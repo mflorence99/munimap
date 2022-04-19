@@ -13,8 +13,13 @@
 
     <hr />
 
+    <li class="item">
+      <div></div>
+      <div class="title">RECENTLY USED MAPS</div>
+    </li>
+
     <li
-      *ngFor="let map of allMaps$ | async; trackBy: trackByID"
+      *ngFor="let map of topMaps$ | async; trackBy: trackByID"
       (click)="close()"
       class="item"
       routerLink="/{{ map.type }}/{{ map.id }}"
@@ -28,6 +33,19 @@
 
       <div class="title">{{ map.name }}</div>
       <div class="subtitle">{{ map.owner }}</div>
+    </li>
+
+    <hr />
+
+    <li (click)="close()" class="item" routerLink="/list">
+      <fa-icon
+        [class.selected]="title === 'All Maps'"
+        [icon]="['fad', 'list']"
+        class="icon"
+        size="2x"
+      ></fa-icon>
+      <div class="title">All Maps</div>
+      <div class="subtitle">Sortable and selectable list of all maps.</div>
     </li>
 
     <hr />

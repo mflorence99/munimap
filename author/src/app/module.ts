@@ -4,6 +4,7 @@ import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuHostDirective } from './pages/parcels/contextmenu-host';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
+import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
@@ -54,6 +55,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
@@ -160,6 +163,7 @@ import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
+import { faList } from '@fortawesome/pro-duotone-svg-icons';
 import { faLocationPlus as fadLocationPlus } from '@fortawesome/pro-duotone-svg-icons';
 import { faLocationPlus as fasLocationPlus } from '@fortawesome/pro-solid-svg-icons';
 import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-icons';
@@ -287,6 +291,7 @@ const PAGES = [
   AreaPage,
   LoginPage,
   CreatePage,
+  ListPage,
   ParcelsPage,
   PropertyPage,
   RootPage,
@@ -315,14 +320,19 @@ const ROUTES = [
     },
     children: [
       {
+        path: 'area/:id',
+        component: AreaPage,
+        data: { state: 'area' }
+      },
+      {
         path: 'create',
         component: CreatePage,
         data: { state: 'create' }
       },
       {
-        path: 'area/:id',
-        component: AreaPage,
-        data: { state: 'area' }
+        path: 'list',
+        component: ListPage,
+        data: { state: 'list' }
       },
       {
         path: 'parcels/:id',
@@ -388,6 +398,8 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
     NgPipesModule,
@@ -473,6 +485,7 @@ export class RootModule {
       faInfoCircle,
       faLayerGroup,
       faLayerPlus,
+      faList,
       fadLocationPlus,
       fasLocationPlus,
       fadObjectGroup,
