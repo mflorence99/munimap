@@ -103,6 +103,7 @@ export class CreatePropertyMapComponent implements ContextMenuComponent {
     const printSize = PRINT_SIZES[record.printSize];
     // 👉 create the new property map
     const map: Map = {
+      // ❗ must be larger dim first (as in 4:3)
       bbox: bboxByAspectRatio(bbox, printSize[1], printSize[0], border),
       contours2ft: record.contours2ft,
       id: record.id,

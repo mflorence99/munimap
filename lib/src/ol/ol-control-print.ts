@@ -14,7 +14,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViewChild } from '@angular/core';
 
-import { getDistance } from 'ol/sphere';
 import { saveAs } from 'file-saver';
 import { unByKey } from 'ol/Observable';
 
@@ -36,23 +35,52 @@ export class OLControlPrintComponent {
 
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
+  @Input() dpi = 300;
+
   @Input() fileName: string;
 
-  @Input() printSize: number[];
+  @Input() maxPrintSize = 12000;
 
-  @Input() resolution: number /* 👈 controls pixel density of print image */;
+  @Input() printSize: number[];
 
   constructor(private dialog: MatDialog, private map: OLMapComponent) {}
 
   // 👇 we want a nomimal half-inch border around the map to accomodate
   //    the safe print area -- to preserve the aspect ratio, the border
   //    is narrower on the long side, wider on the short side -- that
-  //    sounds countr-intuitive until you draw out what it looks like!
+  //    sounds counter-intuitive until you draw out what it looks like!
 
-  #padding(cx: number, cy: number): [number, number] {
-    const nominal = (cx + cy) / (this.printSize[0] + this.printSize[1]);
+  #padding(cx: number, cy: number): number[] {
+    // 👉 no padding for 8.5 x 11, as the print driver takes care
+    //    of the safe area
+    if (this.printSize[0] === 8.8 && this.printSize[1] === 11) return [0, 0];
+    // 👉 other sizes are designed to be printed off-site, like
+    //    posterburner.com, which supports full bleed, which we don't want
+    else {
+      const nominal = (cx + cy) / (this.printSize[0] + this.printSize[1]);
+      const ar = cx / cy;
+      const actual = ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
+      console.log(
+        `%cPrint padding ${actual[0]} x ${actual[1]}`,
+        'color: lightgreen'
+      );
+      return actual;
+    }
+  }
+
+  #printArea(cx: number, cy: number): number[] {
+    const nominal = [cx * this.dpi, cy * this.dpi];
     const ar = cx / cy;
-    return ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
+    const actual = [];
+    if (ar > 1) {
+      actual[0] = Math.min(nominal[0], this.maxPrintSize);
+      actual[1] = actual[0] / ar;
+    } else {
+      actual[1] = Math.min(nominal[1], this.maxPrintSize);
+      actual[0] = actual[1] * ar;
+    }
+    console.log(`%cPrint area ${actual[0]} x ${actual[1]}`, 'color: lightblue');
+    return actual;
   }
 
   #printImpl(): void {
@@ -63,8 +91,8 @@ export class OLControlPrintComponent {
       // 👉 compute padding and draw it around viewport
       const padding = this.#padding(this.#px, this.#py);
       const printout = this.canvas.nativeElement;
-      printout.height = this.#py + padding[1];
       printout.width = this.#px + padding[0];
+      printout.height = this.#py + padding[1];
       const ctx = printout.getContext('2d');
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, printout.width, printout.height);
@@ -86,9 +114,9 @@ export class OLControlPrintComponent {
     this.#zoom = this.map.olView.getZoom();
     this.map.olView.setConstrainResolution(false);
     // 👉 calculate extent of full map
-    const [minX, minY, maxX, maxY] = this.map.bbox;
-    this.#px = getDistance([minX, minY], [maxX, minY]) / this.resolution;
-    this.#py = getDistance([minX, minY], [minX, maxY]) / this.resolution;
+    const printArea = this.#printArea(this.printSize[0], this.printSize[1]);
+    this.#px = printArea[0];
+    this.#py = printArea[1];
     // 👉 the progress dialog allows the print to be cancelled
     const data: PrintProgressData = {
       map: this.map,
