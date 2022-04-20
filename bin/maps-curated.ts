@@ -135,6 +135,7 @@ const MAPS = [
   },
   {
     bbox: null,
+    contours2ft: true,
     id: 'florence-2ft',
     isDflt: false,
     name: 'Florence/Hendrickson Survey',
@@ -142,9 +143,6 @@ const MAPS = [
     parcelIDs: ['9-7', '(12-4)'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [8.5, 11],
-    properties: {
-      huc: '01070003'
-    },
     timestamp: null,
     type: 'property'
   },
@@ -162,6 +160,7 @@ const MAPS = [
   },
   {
     bbox: null,
+    contours2ft: true,
     id: 'marshall-2ft',
     isDflt: false,
     name: 'Marshall Survey',
@@ -169,9 +168,6 @@ const MAPS = [
     parcelIDs: ['9-6', '9-28'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [8.5, 11],
-    properties: {
-      huc: '01070003'
-    },
     timestamp: null,
     type: 'property'
   },
@@ -204,6 +200,7 @@ const MAPS = [
   },
   {
     bbox: null,
+    contours2ft: true,
     id: 'moskey-717',
     isDflt: false,
     name: 'Moskey Lot 1-717',
@@ -211,9 +208,6 @@ const MAPS = [
     parcelIDs: ['1-717'],
     path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
     printSize: [8.5, 11],
-    properties: {
-      huc: '01070006'
-    },
     timestamp: null,
     type: 'property'
   }

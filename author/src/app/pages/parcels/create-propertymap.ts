@@ -21,7 +21,7 @@ import OLGeoJSON from 'ol/format/GeoJSON';
 import union from '@turf/union';
 
 interface PropertyMapRecord {
-  huc: boolean /* 🔥 this only works for Washington */;
+  contours2ft: boolean;
   id: string;
   isDflt: boolean;
   name: string;
@@ -67,7 +67,7 @@ export class CreatePropertyMapComponent implements ContextMenuComponent {
   }
 
   record: PropertyMapRecord = {
-    huc: false,
+    contours2ft: false,
     id: null,
     isDflt: true,
     name: null,
@@ -104,6 +104,7 @@ export class CreatePropertyMapComponent implements ContextMenuComponent {
     // 👉 create the new property map
     const map: Map = {
       bbox: bboxByAspectRatio(bbox, printSize[1], printSize[0], border),
+      contours2ft: record.contours2ft,
       id: record.id,
       isDflt: record.isDflt,
       name: record.name,
@@ -111,9 +112,6 @@ export class CreatePropertyMapComponent implements ContextMenuComponent {
       parcelIDs: this.selectedIDs,
       path: this.map.path,
       printSize: printSize,
-      properties: record.huc
-        ? { huc: '01070003' /* 🔥 only works for Washington */ }
-        : null,
       type: 'property'
     };
     this.store.dispatch(new CreateMap(map));

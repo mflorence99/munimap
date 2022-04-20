@@ -47,9 +47,9 @@
         ></app-ol-filter-colorize>
       </app-ol-layer-tile>
 
-      <!-- 📦 HILLSHADE LAYER - experimental: don't show with 2ft contours -->
+      <!-- 📦 HILLSHADE LAYER -->
 
-      <app-ol-layer-tile *ngIf="!map.properties?.huc">
+      <app-ol-layer-tile *ngIf="!map.contours2ft">
         <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
         <app-ol-filter-crop2propertyparcels
           [parcelIDs]="map.parcelIDs"
@@ -62,23 +62,13 @@
         ></app-ol-filter-colorize>
       </app-ol-layer-tile>
 
-      <!-- 📦 CONTOURS LAYER - experimental: show 2ft contours if requested -->
+      <!-- 📦 CONTOURS LAYER -->
 
-      <app-ol-layer-tile *ngIf="map.properties?.huc">
-        <app-ol-source-xyz
-          [url]="'https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_' + map.properties.huc + '_smooth_cached/MapServer/tile/{z}/{y}/{x}'"
-          ><app-ol-attribution
-            >Powered by
-            <a
-              href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view"
-              target="_blank"
-              >GRANIT<i>View</i></a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
+      <app-ol-layer-tile *ngIf="map.contours2ft">
+        <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
       </app-ol-layer-tile>
 
-      <app-ol-layer-tile *ngIf="!map.properties?.huc">
+      <app-ol-layer-tile *ngIf="!map.contours2ft">
         <app-ol-source-contours> </app-ol-source-contours>
       </app-ol-layer-tile>
 
@@ -200,14 +190,14 @@
 
       <app-ol-layer-vector>
         <app-ol-style-parcels
-          [forceSelected]="map.properties?.huc"
+          [forceSelected]="map.contours2ft"
           [parcelIDs]="map.parcelIDs"
           [showBorder]="'always'"
           [showDimensionContrast]="'never'"
           [showDimensions]="'onlyParcelIDs'"
           [showLabels]="'always'"
           [showLabelContrast]="'never'"
-          [showSelection]="map.properties?.huc ? 'onlyParcelIDs' : 'never'"
+          [showSelection]="map.contours2ft ? 'onlyParcelIDs' : 'never'"
           [showStolen]="'always'"
         ></app-ol-style-parcels>
         <app-ol-source-parcels #parcels></app-ol-source-parcels>

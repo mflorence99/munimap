@@ -7,17 +7,30 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { forkJoin } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { toArray } from 'rxjs/operators';
 
+import OLImageTile from 'ol/ImageTile';
 import OLXYZ from 'ol/source/XYZ';
-
-// 🔥 this ALMOST works, but we can't figure out how to set the
-//    "server" digit (e.g. "1" or "2") in the URL -- /MapServer/???/
 
 const attribution =
   'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
+
+// 🔥 we can't determine the HUC boundaries programmatically because
+//    we just don't know how -- so we do what GRANITView does
+//    and read and composite them all
+
+// 🔥 PROBLEM: HUCs that don't apply for a given XYZ sometimes return
+//    an empty image (good, because we can cahe that) but sometimes
+//    with a 404 (bad, because we can't but want to, as they'll
+//    never work) -- so we may need to "remember" the 404 to reduce
+//    network traffic to the proxy
 
 const HUCS = [
   '01040001',
@@ -34,7 +47,7 @@ const HUCS = [
   '01080104',
   '01080106',
   '01080107',
-  '01080201' /* 👈 Washington */,
+  '01080201' /* 👈 also Washington ?? */,
   '01080202'
 ];
 
@@ -44,8 +57,8 @@ const HUCS = [
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLSourceContours2ftComponent implements OnInit {
-  @Input() maxZoom: number;
+export class OLSourceContours2ftComponent {
+  @Input() maxRequests = 8;
 
   olXYZ: OLXYZ;
 
@@ -53,32 +66,56 @@ export class OLSourceContours2ftComponent implements OnInit {
     private http: HttpClient,
     private layer: OLLayerTileComponent,
     private map: OLMapComponent
-  ) {}
-
-  ngOnInit(): void {
-    const [minX, minY, maxX, maxY] = this.map.boundaryExtent;
-    const url = `https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_XXXXXXXX_smooth_cached/MapServer/4/query?f=json&returnIdsOnly=true&returnCountOnly=true&where=1=1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outSR=102100`;
-    const requests = HUCS.reduce((acc, huc) => {
-      acc[huc] = this.http.get(url.replace('XXXXXXXX', huc));
-      return acc;
-    }, {});
-    forkJoin(requests).subscribe((results: any) => {
-      console.log(results);
-      const huc = Object.keys(results).find((huc) => results[huc].count > 0);
-      const url =
-        'https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_XXXXXXXX_smooth_cached/MapServer/tile/{z}/{y}/{x}'.replace(
-          'XXXXXXXX',
-          huc
-        );
-      const parsed = new URL(url);
-      const encoded = encodeURIComponent(url);
-      this.olXYZ = new OLXYZ({
-        attributions: [attribution],
-        crossOrigin: 'anonymous',
-        maxZoom: this.maxZoom,
-        url: `${environment.endpoints.proxy}/proxy/${parsed.hostname}?url=${encoded}&x={x}&y={y}&z={z}`
-      });
-      this.layer.olLayer.setSource(this.olXYZ);
+  ) {
+    this.olXYZ = new OLXYZ({
+      attributions: [attribution],
+      crossOrigin: 'anonymous',
+      tileLoadFunction: this.#loader.bind(this),
+      url: 'https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_XXXXXXXX_smooth_cached/MapServer/tile/{z}/{y}/{x}'
     });
+    this.layer.olLayer.setSource(this.olXYZ);
+  }
+
+  #createImageBitmap(blob: Blob): Observable<ImageBitmap> {
+    return new Observable<ImageBitmap>((observer) => {
+      createImageBitmap(blob)
+        .then((bitmap) => {
+          observer.next(bitmap);
+          observer.complete();
+        })
+        .catch((err) => observer.error(err));
+    });
+  }
+
+  #loader(tile: OLImageTile, src: string): void {
+    const img = tile.getImage() as HTMLImageElement;
+    // 👇 buid a request for each HUC
+    const requests = HUCS.map((huc) => {
+      const url = `${
+        environment.endpoints.proxy
+      }/proxy/contours2ft?url=${encodeURIComponent(
+        src.replace('XXXXXXXX', huc)
+      )}`;
+      return this.http.get(url, { responseType: 'blob' }).pipe(
+        catchError(() => of(null)),
+        filter((blob) => blob !== null),
+        mergeMap((blob: Blob) => this.#createImageBitmap(blob)),
+        catchError(() => of(null)),
+        filter((bitmap: ImageBitmap) => bitmap !== null)
+      );
+    });
+    // 👇 run the requests with a maximum concurrency
+    merge(...requests, this.maxRequests)
+      .pipe(toArray())
+      .subscribe((bitmaps: ImageBitmap[]) => {
+        // 👇 composite the bitmaps into a single canvas
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 256;
+        canvas.height = 256;
+        bitmaps.forEach((bitmap) => ctx.drawImage(bitmap, 0, 0));
+        // 👇 load the canvas into the tile
+        img.src = canvas.toDataURL();
+      });
   }
 }

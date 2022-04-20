@@ -60,6 +60,7 @@ export type MapType = 'area' | 'parcels' | 'topo' | 'streets' | 'property';
 
 export interface Map {
   bbox?: Coordinate;
+  contours2ft?: boolean;
   id: string;
   isDflt?: boolean;
   name: string;
@@ -67,7 +68,6 @@ export interface Map {
   parcelIDs?: ParcelID[];
   path: string;
   printSize: number[];
-  properties?: Record<string, any> /* 👈 experimental ad hoc extensions */;
   timestamp?: any /* 👈 optional only because we'll complete it */;
   type: MapType;
 }
