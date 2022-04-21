@@ -1,0 +1,73 @@
+<mat-card [class.rolledup]="rolledup" class="card">
+  <mat-card-header>
+    <img
+      (click)="rolledup = !rolledup"
+      mat-card-avatar
+      src="assets/easytrails.png"
+    />
+
+    <mat-card-title
+      >Import from
+      <a href="http://www.easytrailsgps.com/" target="_blank"
+        >EasyTrails</a
+      ></mat-card-title
+    >
+    <mat-card-subtitle>Import landmarks from iPhone app.</mat-card-subtitle>
+    <button
+      *ngIf="!rolledup"
+      (click)="rolledup = !rolledup"
+      class="closer"
+      mat-icon-button
+    >
+      <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
+    </button>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p class="instructions">
+      First, open the EasyTrails app on your iPhone and press the share button,
+      <a
+        href="http://www.easytrailsgps.com/tutorials/how-to-export-and-analyze-tracks/"
+        target="_blank"
+        >as described here</a
+      >. Then enter the sharing URL below.
+    </p>
+
+    <form #sharingForm="ngForm" class="form" novalidate spellcheck="false">
+      <mat-form-field>
+        <mat-label>EasyTrails Sharing URL</mat-label>
+        <input
+          #sharingURL="ngModel"
+          (input)="invalidSharingURL = false"
+          [(ngModel)]="record.sharingURL"
+          autocomplete="off"
+          matInput
+          name="sharingURL"
+          placeholder="eg: http://192.168.1.13"
+          required
+        />
+        <mat-error *ngIf="sharingURL.errors"
+          >The sharing URL is required</mat-error
+        >
+      </mat-form-field>
+    </form>
+
+    <p *ngIf="invalidSharingURL" class="instructions">
+      <fa-icon [icon]="['fad', 'circle-exclamation']"></fa-icon> Unable to
+      connect to URL. Make sure that you have entered it correctly and that your
+      computer is on the exact same network as your iPhone.
+    </p>
+  </mat-card-content>
+
+  <mat-card-actions class="actions">
+    <button (click)="rolledup = !rolledup" mat-flat-button>CANCEL</button>
+    <button
+      (click)="import(record)"
+      [disabled]="sharingForm.invalid || !sharingForm.dirty"
+      color="primary"
+      mat-flat-button
+    >
+      IMPORT
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -22,7 +22,7 @@ import copy from 'fast-copy';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-properties',
-  styleUrls: ['./properties.scss'],
+  styleUrls: ['./controlpanel.scss'],
   templateUrl: './properties.html'
 })
 export class PropertiesComponent {

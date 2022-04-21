@@ -4,6 +4,7 @@ import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuHostDirective } from './pages/parcels/contextmenu-host';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
+import { EasyTrailsComponent } from './pages/easytrails';
 import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
@@ -154,6 +155,7 @@ import { connectFirestoreEmulator } from '@angular/fire/firestore';
 import { enableMultiTabIndexedDbPersistence } from '@angular/fire/firestore';
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation } from '@fortawesome/pro-duotone-svg-icons';
 import { faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
@@ -205,6 +207,7 @@ const COMPONENTS = [
   BuilderComponent,
   ConfirmDialogComponent,
   CreatePropertyMapComponent,
+  EasyTrailsComponent,
   EmailAddressValidator,
   MergeParcelsComponent,
   MessageDialogComponent,
@@ -476,6 +479,7 @@ export class RootModule {
     // 👇 must add icons we use right here
     library.addIcons(
       faBars,
+      faCircleExclamation,
       faCrosshairs,
       faDownload,
       faDrawPolygon,

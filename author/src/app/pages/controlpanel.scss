@@ -5,6 +5,7 @@
 
 .actions {
   display: flex;
+  gap: 1rem;
   justify-content: flex-end;
 }
 
@@ -33,6 +34,10 @@
 .form {
   display: grid;
   gap: 1rem;
+}
+
+.instructions {
+  margin-bottom: 1rem;
 }
 
 .rolledup {
