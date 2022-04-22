@@ -53,7 +53,7 @@ export class OLControlPrintComponent {
   #padding(cx: number, cy: number): number[] {
     // 👉 no padding for 8.5 x 11, as the print driver takes care
     //    of the safe area
-    if (this.printSize[0] === 8.8 && this.printSize[1] === 11) return [0, 0];
+    if (this.printSize[0] === 8.5 && this.printSize[1] === 11) return [0, 0];
     // 👉 other sizes are designed to be printed off-site, like
     //    posterburner.com, which supports full bleed, which we don't want
     else {

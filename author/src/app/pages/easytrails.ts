@@ -1,11 +1,7 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Input } from '@angular/core';
-
-import { from } from 'rxjs';
-import { timeout } from 'rxjs/operators';
+import { EasyTrailsService } from '@lib/services/easytrails';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,33 +10,40 @@ import { timeout } from 'rxjs/operators';
   templateUrl: './easytrails.html'
 })
 export class EasyTrailsComponent {
-  invalidSharingURL = false;
+  invalidURL = false;
 
   record = {
-    sharingURL: ''
+    url: ''
   };
 
   rolledup = true;
+  validating = false;
 
-  @Input() validationTimeout = 250 /* 👈 ms */;
+  constructor(
+    private cdf: ChangeDetectorRef,
+    private easytrails: EasyTrailsService
+  ) {
+    this.record.url = this.easytrails.lastUsedURL;
+  }
 
-  constructor(private cdf: ChangeDetectorRef, private http: HttpClient) {}
+  // 👇 we're just testing the URL here and kicking off the import
+  //    we'll do the actual import in the sidebar
 
-  import(record: any): void {
-    // 👀 https://stackoverflow.com/questions/47345282
-    from(
-      fetch(record.sharingURL, {
-        method: 'GET',
-        mode: 'no-cors'
-      })
-    )
-      .pipe(timeout(this.validationTimeout))
-      .subscribe({
-        error: () => {
-          this.invalidSharingURL = true;
-          this.cdf.markForCheck();
-        },
-        next: () => (this.invalidSharingURL = false)
-      });
+  validate(url: string): void {
+    this.validating = true;
+    this.easytrails.validate(url).subscribe({
+      error: () => {
+        this.invalidURL = true;
+        this.validating = false;
+        this.cdf.markForCheck();
+      },
+      next: () => {
+        this.invalidURL = false;
+        this.validating = false;
+        this.cdf.markForCheck();
+        // 🔥 TESTING
+        this.easytrails.listTracks().subscribe(console.log);
+      }
+    });
   }
 }

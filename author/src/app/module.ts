@@ -106,6 +106,7 @@ import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
 import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
 import { OLInteractionSelectGeoJSONComponent } from '@lib/ol/ol-interaction-selectgeojson';
+import { OLInteractionSelectLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-selectlandmarks';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
@@ -179,6 +180,7 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/pro-duotone-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faSignIn } from '@fortawesome/pro-duotone-svg-icons';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { faSync } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fadTasks } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fasTasks } from '@fortawesome/free-solid-svg-icons';
@@ -249,8 +251,9 @@ const COMPONENTS = [
   OLFilterPencilComponent,
   OLInteractionBoundaryComponent,
   OLInteractionRedrawParcelComponent,
-  OLInteractionSelectParcelsComponent,
   OLInteractionSelectGeoJSONComponent,
+  OLInteractionSelectLandmarksComponent,
+  OLInteractionSelectParcelsComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLMapComponent,
@@ -503,6 +506,7 @@ export class RootModule {
       faRedo,
       faSearch,
       faSignIn,
+      faSpinner,
       faSync,
       fadTasks,
       fasTasks,

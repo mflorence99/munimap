@@ -5,6 +5,7 @@ import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bearing from '@turf/bearing';
 import distance from '@turf/distance';
+import hash from 'object-hash';
 import length from '@turf/length';
 import polylabel from 'polylabel';
 import rhumbDestination from '@turf/rhumb-destination';
@@ -52,6 +53,7 @@ export interface Landmark
   > {
   $id?: string /* 👈 optional only because we'll complete it */;
   curated?: boolean;
+  id: LandmarkID /* 👈 in Feature, also here just to remind us */;
   owner: string;
   path: string;
 }
@@ -65,6 +67,8 @@ export type Landmarks = GeoJSON.FeatureCollection<
   | GeoJSON.MultiPolygon,
   LandmarkProperties
 >;
+
+export type LandmarkID = string;
 
 export class LandmarkPropertiesClass {
   public fillColor: string = null;
@@ -700,6 +704,10 @@ export function deserializeLandmark(landmark: Landmark): void {
   if (landmark.geometry)
     landmark.geometry = JSON.parse(landmark.geometry as any);
   if (landmark.properties) {
+    landmarkProperties.forEach((prop) => {
+      if (!landmark.properties[prop])
+        landmark.properties[prop] = modelLandmark[prop];
+    });
     serializedLandmarkProperties.forEach((prop) => {
       if (landmark.properties[prop])
         landmark.properties[prop] = JSON.parse(landmark.properties[prop]);
@@ -715,6 +723,18 @@ export function deserializeParcel(parcel: Parcel): void {
         parcel.properties[prop] = JSON.parse(parcel.properties[prop]);
     });
   }
+}
+
+export function makeLandmarkID(
+  geometry:
+    | GeoJSON.Point
+    | GeoJSON.MultiPoint
+    | GeoJSON.LineString
+    | GeoJSON.MultiLineString
+    | GeoJSON.Polygon
+    | GeoJSON.MultiPolygon
+): LandmarkID {
+  return hash.MD5(geometry);
 }
 
 export function normalizeParcel(parcel: Parcel): void {
@@ -758,6 +778,10 @@ export function serializeLandmark(landmark: Landmark): void {
   if (landmark.geometry)
     landmark.geometry = JSON.stringify(landmark.geometry) as any;
   if (landmark.properties) {
+    landmarkProperties.forEach((prop) => {
+      if (landmark.properties[prop] === modelLandmark[prop])
+        delete landmark.properties[prop];
+    });
     serializedLandmarkProperties.forEach((prop) => {
       if (landmark.properties[prop])
         landmark.properties[prop] = JSON.stringify(landmark.properties[prop]);

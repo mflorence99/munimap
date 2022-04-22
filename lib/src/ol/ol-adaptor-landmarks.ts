@@ -26,4 +26,13 @@ export class OLAdaptorLandmarksComponent implements Adaptor {
   adapt(landmark: LandmarkProperties): LandmarkProperties[] {
     return [landmark];
   }
+
+  // 👇 tweak LandmarkProperties for selection
+  adaptWhenSelected(landmark: LandmarkProperties): LandmarkProperties[] {
+    const selected = { ...landmark };
+    selected.strokeColor = '--map-landmark-select';
+    if (!(selected.strokeFeet && selected.strokePixels && selected.strokeWidth))
+      selected.strokeWidth = 'thick';
+    return [selected];
+  }
 }

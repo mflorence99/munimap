@@ -1,9 +1,9 @@
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
-import { Selector } from './ol-selector';
-import { SelectorComponent } from './ol-selector';
+import { Mapable } from '../ol-mapable';
+import { MapableComponent } from '../ol-mapable';
+import { OLLayerVectorComponent } from '../ol-layer-vector';
+import { OLMapComponent } from '../ol-map';
+import { Selector } from '../ol-selector';
+import { SelectorComponent } from '../ol-selector';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -21,25 +21,23 @@ import { unByKey } from 'ol/Observable';
 import OLFeature from 'ol/Feature';
 import OLSelect from 'ol/interaction/Select';
 
-export type FilterFunction = (name: number | string) => boolean;
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
+      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
     },
     {
       provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
+      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
     }
   ],
-  selector: 'app-ol-interaction-selectgeojson',
+  selector: 'app-ol-interaction-selectlandmarks',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionSelectGeoJSONComponent
+export class OLInteractionSelectLandmarksComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
   #selectKey: OLEventsKey;
@@ -47,8 +45,6 @@ export class OLInteractionSelectGeoJSONComponent
   @Input() eventType: string;
 
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
-
-  @Input() filter: FilterFunction;
 
   olSelect: OLSelect;
 
@@ -67,14 +63,9 @@ export class OLInteractionSelectGeoJSONComponent
     this.olSelect = new OLSelect({
       condition: (event): boolean =>
         event.type === this.eventType.toLowerCase(),
-      filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
       style: this.layer.styleWhenSelected()
     });
-  }
-
-  #filter(feature: OLFeature<any>): boolean {
-    return this.filter ? this.filter(feature.getId()) : true;
   }
 
   #onSelect(_event?: OLSelectEvent): void {

@@ -286,7 +286,7 @@ export class OLMapComponent
       list.forEach((mapable) => mapable.addToMap());
       // 👉 proxy any selector events
       this.#subToAbuttersFound?.unsubscribe();
-      this.#subToAbuttersFound = this.selector?.abuttersFound.subscribe(
+      this.#subToAbuttersFound = this.selector?.abuttersFound?.subscribe(
         (abutters) => this.abuttersFound.emit(abutters)
       );
       this.#subToFeaturesSelected?.unsubscribe();

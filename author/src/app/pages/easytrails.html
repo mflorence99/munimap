@@ -37,22 +37,20 @@
       <mat-form-field>
         <mat-label>EasyTrails Sharing URL</mat-label>
         <input
-          #sharingURL="ngModel"
-          (input)="invalidSharingURL = false"
-          [(ngModel)]="record.sharingURL"
+          #url="ngModel"
+          (input)="invalidURL = false"
+          [(ngModel)]="record.url"
           autocomplete="off"
           matInput
-          name="sharingURL"
+          name="url"
           placeholder="eg: http://192.168.1.13"
           required
         />
-        <mat-error *ngIf="sharingURL.errors"
-          >The sharing URL is required</mat-error
-        >
+        <mat-error *ngIf="url.errors">The sharing URL is required</mat-error>
       </mat-form-field>
     </form>
 
-    <p *ngIf="invalidSharingURL" class="instructions">
+    <p *ngIf="invalidURL" class="instructions">
       <fa-icon [icon]="['fad', 'circle-exclamation']"></fa-icon> Unable to
       connect to URL. Make sure that you have entered it correctly and that your
       computer is on the exact same network as your iPhone.
@@ -60,14 +58,24 @@
   </mat-card-content>
 
   <mat-card-actions class="actions">
-    <button (click)="rolledup = !rolledup" mat-flat-button>CANCEL</button>
     <button
-      (click)="import(record)"
-      [disabled]="sharingForm.invalid || !sharingForm.dirty"
+      (click)="(invalidURL = false) || (rolledup = !rolledup)"
+      mat-flat-button
+    >
+      CANCEL
+    </button>
+    <button
+      (click)="validate(record.url)"
+      [disabled]="sharingForm.invalid || validating"
       color="primary"
       mat-flat-button
     >
-      IMPORT
+      <fa-icon
+        *ngIf="validating"
+        [icon]="['fas', 'spinner']"
+        [spin]="true"
+      ></fa-icon>
+      <span *ngIf="!validating">IMPORT</span>
     </button>
   </mat-card-actions>
 </mat-card>

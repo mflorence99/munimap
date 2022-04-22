@@ -2,6 +2,7 @@ import { Landmark } from '../lib/src/common';
 import { LandmarkProperties } from '../lib/src/common';
 import { LandmarkPropertiesClass } from '../lib/src/common';
 
+import { makeLandmarkID } from '../lib/src/common';
 import { serializeLandmark } from '../lib/src/common';
 
 import * as firebase from 'firebase-admin/app';
@@ -261,6 +262,7 @@ async function main(): Promise<void> {
         const landmark: Landmark = {
           curated: true,
           geometry: munged,
+          id: makeLandmarkID(munged),
           owner: curation.owner,
           path: curation.path,
           properties: {
@@ -273,7 +275,7 @@ async function main(): Promise<void> {
 
         // 👇 write out the landmark
         serializeLandmark(landmark);
-        promises.push(landmarks.add(landmark));
+        promises.push(landmarks.doc(landmark.id).set(landmark));
       }
 
       await Promise.all(promises);

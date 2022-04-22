@@ -7,6 +7,10 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
+
+  button {
+    min-width: 6rem;
+  }
 }
 
 .card {
