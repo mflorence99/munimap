@@ -112,8 +112,6 @@
             ></app-ol-style-universal
           ></app-ol-adaptor-landmarks>
           <app-ol-source-landmarks></app-ol-source-landmarks>
-          <app-ol-interaction-selectlandmarks [eventType]="'click'">
-          </app-ol-interaction-selectlandmarks>
         </app-ol-layer-vector>
 
         <!-- 📦 NH GranIT VECTOR LAYERS -->
@@ -250,9 +248,16 @@
 
         <app-ol-layer-vector>
           <app-ol-adaptor-landmarks>
-            <app-ol-style-universal [showText]="true"></app-ol-style-universal
+            <app-ol-style-universal
+              [overlaySelectable]="true"
+              [showText]="true"
+            ></app-ol-style-universal
           ></app-ol-adaptor-landmarks>
           <app-ol-source-landmarks></app-ol-source-landmarks>
+          <app-ol-interaction-selectlandmarks [type]="'hover'">
+          </app-ol-interaction-selectlandmarks>
+          <app-ol-interaction-selectlandmarks [type]="'select'">
+          </app-ol-interaction-selectlandmarks>
         </app-ol-layer-vector>
       </ng-container>
 

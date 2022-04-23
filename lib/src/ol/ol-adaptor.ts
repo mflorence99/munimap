@@ -9,6 +9,7 @@ import OLStyle from 'ol/style/Style';
 
 export interface Adaptor {
   adapt(source: any): LandmarkProperties[];
+  adaptWhenHovering?(source: any): LandmarkProperties[];
   adaptWhenSelected?(source: any): LandmarkProperties[];
   backdoor?(feature: OLFeature<any>, resolution: number): OLStyle[];
 }

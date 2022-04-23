@@ -27,12 +27,20 @@ export class OLAdaptorLandmarksComponent implements Adaptor {
     return [landmark];
   }
 
-  // 👇 tweak LandmarkProperties for selection
+  // 👇 tweak LandmarkProperties when hovering
+  adaptWhenHovering(landmark: LandmarkProperties): LandmarkProperties[] {
+    return this.adaptWhenSelected(landmark);
+  }
+
+  // 👇 tweak LandmarkProperties when selected
   adaptWhenSelected(landmark: LandmarkProperties): LandmarkProperties[] {
     const selected = { ...landmark };
+    selected.fontColor = '--map-landmark-select';
     selected.strokeColor = '--map-landmark-select';
+    selected.strokeOpacity = 1;
     if (!(selected.strokeFeet && selected.strokePixels && selected.strokeWidth))
-      selected.strokeWidth = 'thick';
+      selected.strokeWidth = 'medium';
+    if (!selected.strokeStyle) selected.strokeStyle = 'solid';
     return [selected];
   }
 }

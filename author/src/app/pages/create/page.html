@@ -51,13 +51,13 @@
       <app-ol-source-geojson [layerKey]="'selectables'">
       </app-ol-source-geojson>
 
-      <app-ol-interaction-selectgeojson [eventType]="'pointermove'">
+      <app-ol-interaction-selectgeojson [type]="'hover'">
       </app-ol-interaction-selectgeojson>
 
       <app-ol-interaction-selectgeojson
         (featuresSelected)="onFeaturesSelected($event)"
-        [eventType]="'click'"
         [filter]="filter()"
+        [type]="'select'"
       >
       </app-ol-interaction-selectgeojson>
     </app-ol-layer-vector>

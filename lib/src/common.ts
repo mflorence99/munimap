@@ -138,72 +138,6 @@ export interface LandmarkStyle {
   styleName: string;
 }
 
-export const landmarkStyles: Record<string, LandmarkStyle> = {
-  railroad: {
-    properties: [
-      new LandmarkPropertiesClass({
-        lineSpline: true,
-        strokeColor: '--map-railroad-active-color',
-        strokeFeet: 24,
-        strokeOpacity: 1,
-        strokeStyle: 'solid',
-        zIndex: 1
-      }),
-      new LandmarkPropertiesClass({
-        lineSpline: true,
-        strokeColor: '--rgb-gray-50',
-        strokeFeet: 16,
-        strokeOpacity: 1,
-        strokeStyle: 'solid',
-        zIndex: 2
-      }),
-      new LandmarkPropertiesClass({
-        lineDash: [4, 4],
-        lineSpline: true,
-        strokeColor: '--map-railroad-active-color',
-        strokeFeet: 16,
-        strokeOpacity: 1,
-        strokeStyle: 'dashed',
-        zIndex: 3
-      }),
-      new LandmarkPropertiesClass({
-        fontColor: '--map-railroad-active-color',
-        fontOpacity: 1,
-        fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'italic',
-        lineChunk: true,
-        lineSpline: true,
-        zIndex: 4
-      })
-    ],
-    styleName: 'Railroad'
-  },
-  trail: {
-    properties: [
-      new LandmarkPropertiesClass({
-        lineSpline: true,
-        strokeColor: '--map-trail-line-color',
-        strokeOpacity: 1,
-        strokeStyle: 'dashed',
-        strokeWidth: 'medium',
-        zIndex: 1
-      }),
-      new LandmarkPropertiesClass({
-        fontColor: '--map-trail-text-color',
-        fontOpacity: 1,
-        fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'italic',
-        lineChunk: true,
-        lineSpline: true,
-        zIndex: 2
-      })
-    ],
-    styleName: 'Trail'
-  }
-};
-
 export interface Parcel
   extends Partial<
     GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon, ParcelProperties>
@@ -725,16 +659,10 @@ export function deserializeParcel(parcel: Parcel): void {
   }
 }
 
-export function makeLandmarkID(
-  geometry:
-    | GeoJSON.Point
-    | GeoJSON.MultiPoint
-    | GeoJSON.LineString
-    | GeoJSON.MultiLineString
-    | GeoJSON.Polygon
-    | GeoJSON.MultiPolygon
-): LandmarkID {
-  return hash.MD5(geometry);
+// 👇 we use this when landmarks are imported from an external source,
+//    so that they don't get duplicated
+export function makeLandmarkID(landmark: Landmark): LandmarkID {
+  return hash.MD5(landmark.geometry);
 }
 
 export function normalizeParcel(parcel: Parcel): void {

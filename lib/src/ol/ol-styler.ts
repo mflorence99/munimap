@@ -9,6 +9,7 @@ import OLStyle from 'ol/style/Style';
 
 export interface Styler {
   style: () => OLStyleFunction | OLStyle | OLStyle[];
+  styleWhenHovering?: () => OLStyleFunction | OLStyle | OLStyle[];
   styleWhenSelected?: () => OLStyleFunction | OLStyle | OLStyle[];
 }
 

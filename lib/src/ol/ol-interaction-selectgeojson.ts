@@ -44,8 +44,6 @@ export class OLInteractionSelectGeoJSONComponent
 {
   #selectKey: OLEventsKey;
 
-  @Input() eventType: string;
-
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() filter: FilterFunction;
@@ -60,18 +58,12 @@ export class OLInteractionSelectGeoJSONComponent
     return this.selected.map((feature) => feature.getId());
   }
 
+  @Input() type: 'hover' | 'select';
+
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
-  ) {
-    this.olSelect = new OLSelect({
-      condition: (event): boolean =>
-        event.type === this.eventType.toLowerCase(),
-      filter: this.#filter.bind(this),
-      layers: [this.layer.olLayer],
-      style: this.layer.styleWhenSelected()
-    });
-  }
+  ) {}
 
   #filter(feature: OLFeature<any>): boolean {
     return this.filter ? this.filter(feature.getId()) : true;
@@ -92,6 +84,25 @@ export class OLInteractionSelectGeoJSONComponent
   }
 
   ngOnInit(): void {
-    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+    // 👇 we can't do this in the constructor because the type isn't set
+    this.olSelect = new OLSelect({
+      condition: (event): boolean => {
+        let eventType;
+        if (this.type === 'hover') eventType = 'pointermove';
+        else if (this.type === 'select') eventType = 'click';
+        return event.type === eventType;
+      },
+      filter: this.#filter.bind(this),
+      layers: [this.layer.olLayer],
+      style:
+        this.type === 'hover'
+          ? this.layer.styleWhenHovering()
+          : this.type === 'select'
+          ? this.layer.styleWhenSelected()
+          : undefined
+    });
+    // only fire on select, not hover
+    if (this.type === 'select')
+      this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 }

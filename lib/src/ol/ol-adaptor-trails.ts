@@ -1,9 +1,8 @@
 import { Adaptor } from './ol-adaptor';
 import { AdaptorComponent } from './ol-adaptor';
 import { LandmarkProperties } from '../common';
+import { LandmarkPropertiesClass } from '../common';
 import { TrailProperties } from '../common';
-
-import { landmarkStyles } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -25,10 +24,26 @@ import { forwardRef } from '@angular/core';
 export class OLAdaptorTrailsComponent implements Adaptor {
   // 👇 convert a Trail to a Landmark
   adapt(trail: TrailProperties): LandmarkProperties[] {
-    const base = landmarkStyles['trail'];
-    return base.properties.map((props) => ({
-      ...props,
-      name: props.fontColor ? trail.name : null
-    }));
+    return [
+      new LandmarkPropertiesClass({
+        lineSpline: true,
+        strokeColor: '--map-trail-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 'medium',
+        zIndex: 1
+      }),
+      new LandmarkPropertiesClass({
+        fontColor: '--map-trail-text-color',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'medium',
+        fontStyle: 'italic',
+        lineChunk: true,
+        lineSpline: true,
+        name: trail.name,
+        zIndex: 2
+      })
+    ];
   }
 }

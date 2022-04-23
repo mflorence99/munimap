@@ -60,6 +60,14 @@ export class OLLayerVectorComponent implements Mapable {
         .filter((style) => !!style);
   }
 
+  styleWhenHovering(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] =>
+      this.stylers$
+        .map((styler) => styler.styleWhenHovering?.()(feature, resolution))
+        .flat()
+        .filter((style) => !!style);
+  }
+
   styleWhenSelected(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] =>
       this.stylers$

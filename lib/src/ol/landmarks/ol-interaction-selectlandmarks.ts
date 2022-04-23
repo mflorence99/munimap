@@ -42,9 +42,11 @@ export class OLInteractionSelectLandmarksComponent
 {
   #selectKey: OLEventsKey;
 
-  @Input() eventType: string;
-
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
+
+  @Input() set hitTolerance(tolerance: number) {
+    this.olSelect.setHitTolerance(tolerance);
+  }
 
   olSelect: OLSelect;
 
@@ -56,17 +58,12 @@ export class OLInteractionSelectLandmarksComponent
     return this.selected.map((feature) => feature.getId());
   }
 
+  @Input() type: 'hover' | 'select';
+
   constructor(
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
-  ) {
-    this.olSelect = new OLSelect({
-      condition: (event): boolean =>
-        event.type === this.eventType.toLowerCase(),
-      layers: [this.layer.olLayer],
-      style: this.layer.styleWhenSelected()
-    });
-  }
+  ) {}
 
   #onSelect(_event?: OLSelectEvent): void {
     const ids = this.selectedIDs.join(', ');
@@ -83,6 +80,24 @@ export class OLInteractionSelectLandmarksComponent
   }
 
   ngOnInit(): void {
-    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+    // 👇 we can't do this in the constructor because the type isn't set
+    this.olSelect = new OLSelect({
+      condition: (event): boolean => {
+        let eventType;
+        if (this.type === 'hover') eventType = 'pointermove';
+        else if (this.type === 'select') eventType = 'click';
+        return event.type === eventType;
+      },
+      layers: [this.layer.olLayer],
+      style:
+        this.type === 'hover'
+          ? this.layer.styleWhenHovering()
+          : this.type === 'select'
+          ? this.layer.styleWhenSelected()
+          : undefined
+    });
+    // only fire on select, not hover
+    if (this.type === 'select')
+      this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 }

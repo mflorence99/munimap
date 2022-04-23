@@ -44,7 +44,7 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
   }
 
   // 👇 construct LandmarkProperties
-  adaptWhenSelected(source: any): LandmarkProperties[] {
+  adaptWhenHovering(source: any): LandmarkProperties[] {
     const unselectable = this.filter && !this.filter(source.name);
     if (unselectable) {
       return this.adapt(source);
@@ -58,6 +58,23 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
           fontPixels: 20,
           fontStyle: 'bold',
           name: source.name,
+          strokeColor: '--map-feature-outline',
+          strokeOpacity: 1,
+          strokePixels: this.borderPixels,
+          strokeStyle: 'solid'
+        })
+      ];
+    }
+  }
+
+  // 👇 construct LandmarkProperties
+  adaptWhenSelected(source: any): LandmarkProperties[] {
+    const unselectable = this.filter && !this.filter(source.name);
+    if (unselectable) {
+      return this.adapt(source);
+    } else {
+      return [
+        new LandmarkPropertiesClass({
           strokeColor: '--map-feature-outline',
           strokeOpacity: 1,
           strokePixels: this.borderPixels,

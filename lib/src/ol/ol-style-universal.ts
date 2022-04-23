@@ -63,6 +63,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontSize_tiny = 8 /* 👈 pixels */;
   @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
   @Input() minFontPixels = 4 /* 👈 pixels */;
+  @Input() overlaySelectable = false;
   @Input() showAll = false;
   @Input() showFill = false;
   @Input() showStroke = false;
@@ -93,6 +94,43 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return chunked;
   }
 
+  #emptyLine(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    resolution: number
+  ): OLStyle[] {
+    const styles: OLStyle[] = [];
+    // 👇 here's the style
+    const style = new OLStyle({
+      stroke: new OLStroke({
+        // 👇 line must be miniminally opaque to be selectable ??
+        color: [0, 0, 0, 0.01],
+        width: this.#strokePixels(props, resolution)
+      }),
+      zIndex: props.zIndex
+    });
+    styles.push(style);
+    return styles;
+  }
+
+  #emptyPolygon(
+    feature: OLFeature<any>,
+    props: LandmarkProperties,
+    _resolution: number
+  ): OLStyle[] {
+    const styles: OLStyle[] = [];
+    // 👇 here's the style
+    const style = new OLStyle({
+      fill: new OLFill({
+        // 👇 polygon can be totally transparent and still be selectable
+        color: [0, 0, 0, 0]
+      }),
+      zIndex: props.zIndex
+    });
+    styles.push(style);
+    return styles;
+  }
+
   #fillPolygon(
     feature: OLFeature<any>,
     props: LandmarkProperties,
@@ -114,7 +152,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           });
         } catch (ignored) {}
       }
-      // 👇 here's the syle
+      // 👇 here's the style
       const style = new OLStyle({
         fill: fill,
         geometry: props.offsetFeet
@@ -245,7 +283,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   #styleImpl(
     feature: any,
     resolution: number,
-    propss: LandmarkProperties[]
+    propss: LandmarkProperties[],
+    whenHovering = false,
+    whenSelected = false
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     // 👇 iterate over all the props
@@ -256,23 +296,37 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           switch (feature.getGeometry().getType()) {
             case 'Point':
             case 'MultiPoint':
-              if (this.showAll || this.showText)
+              if (this.showAll || this.showText || whenHovering || whenSelected)
                 styles.push(...this.#textPoint(feature, props, resolution));
               break;
             case 'LineString':
             case 'MultiLineString':
-              if (this.showAll || this.showStroke)
+              if (this.overlaySelectable)
+                styles.push(...this.#emptyLine(feature, props, resolution));
+              if (
+                this.showAll ||
+                this.showStroke ||
+                whenHovering ||
+                whenSelected
+              )
                 styles.push(...this.#strokeLine(feature, props, resolution));
-              if (this.showAll || this.showText)
+              if (this.showAll || this.showText || whenHovering || whenSelected)
                 styles.push(...this.#textLine(feature, props, resolution));
               break;
             case 'Polygon':
             case 'MultiPolygon':
-              if (this.showAll || this.showFill)
+              if (this.overlaySelectable)
+                styles.push(...this.#emptyPolygon(feature, props, resolution));
+              if (this.showAll || this.showFill || whenHovering || whenSelected)
                 styles.push(...this.#fillPolygon(feature, props, resolution));
-              if (this.showAll || this.showStroke)
+              if (
+                this.showAll ||
+                this.showStroke ||
+                whenHovering ||
+                whenSelected
+              )
                 styles.push(...this.#strokePolygon(feature, props, resolution));
-              if (this.showAll || this.showText)
+              if (this.showAll || this.showText || whenHovering || whenSelected)
                 styles.push(...this.#textPolygon(feature, props, resolution));
               break;
           }
@@ -450,13 +504,24 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     };
   }
 
+  styleWhenHovering(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      if ((this.adaptor as Adaptor)?.adaptWhenHovering) {
+        const propss = (this.adaptor as Adaptor).adaptWhenHovering(
+          feature.getProperties()
+        );
+        return this.#styleImpl(feature, resolution, propss, true, false);
+      } else return [];
+    };
+  }
+
   styleWhenSelected(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
       if ((this.adaptor as Adaptor)?.adaptWhenSelected) {
         const propss = (this.adaptor as Adaptor).adaptWhenSelected(
           feature.getProperties()
         );
-        return this.#styleImpl(feature, resolution, propss);
+        return this.#styleImpl(feature, resolution, propss, false, true);
       } else return [];
     };
   }

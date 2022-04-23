@@ -72,22 +72,11 @@ const CURATIONS: Curation[] = [
       {
         properties: new LandmarkPropertiesClass({
           lineSpline: true,
-          strokeColor: '--map-road-edge-VI',
+          strokeColor: '--map-road-lane-VI',
           strokeFeet: 15 /* 👈 feet */,
           strokeOpacity: 1,
           strokeStyle: 'solid',
           zIndex: 1
-        }),
-        source: './proxy/assets/landmarks/florence/driveway.gpx'
-      },
-      {
-        properties: new LandmarkPropertiesClass({
-          lineSpline: true,
-          strokeColor: '--map-road-lane-VI',
-          strokeFeet: 12 /* 👈 feet */,
-          strokeOpacity: 1,
-          strokeStyle: 'solid',
-          zIndex: 2
         }),
         source: './proxy/assets/landmarks/florence/driveway.gpx'
       },
@@ -262,7 +251,7 @@ async function main(): Promise<void> {
         const landmark: Landmark = {
           curated: true,
           geometry: munged,
-          id: makeLandmarkID(munged),
+          id: null,
           owner: curation.owner,
           path: curation.path,
           properties: {
@@ -272,6 +261,9 @@ async function main(): Promise<void> {
           },
           type: 'Feature'
         };
+
+        // 👇 so that they can't get duplicated
+        landmark.id = makeLandmarkID(landmark);
 
         // 👇 write out the landmark
         serializeLandmark(landmark);
