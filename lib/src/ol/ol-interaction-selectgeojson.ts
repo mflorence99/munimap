@@ -61,7 +61,8 @@ export class OLInteractionSelectGeoJSONComponent
   @Input() type: 'hover' | 'select';
 
   constructor(
-    private layer: OLLayerVectorComponent,
+    // 👉 we need public access to go through the selector to its layer
+    public layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {}
 

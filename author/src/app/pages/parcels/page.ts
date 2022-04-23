@@ -1,7 +1,7 @@
 import { AbstractMapPage } from '../abstract-map';
 import { AddParcelComponent } from './add-parcel';
-import { ContextMenuComponent } from './contextmenu-component';
-import { ContextMenuHostDirective } from './contextmenu-host';
+import { ContextMenuComponent } from '../contextmenu-component';
+import { ContextMenuHostDirective } from '../contextmenu-host';
 import { CreatePropertyMapComponent } from './create-propertymap';
 import { MergeParcelsComponent } from './merge-parcels';
 import { ParcelPropertiesComponent } from './parcel-properties';
@@ -19,12 +19,10 @@ import { ComponentRef } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
@@ -35,7 +33,7 @@ import { unByKey } from 'ol/Observable';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-parcels',
-  styleUrls: ['./page.scss'],
+  styleUrls: ['../abstract-map.scss'],
   templateUrl: './page.html'
 })
 export class ParcelsPage extends AbstractMapPage {
@@ -49,8 +47,6 @@ export class ParcelsPage extends AbstractMapPage {
 
   @ViewChild(OLOverlayParcelLabelComponent)
   overlayLabel: OLOverlayParcelLabelComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected actions$: Actions,

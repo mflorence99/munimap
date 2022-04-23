@@ -1,4 +1,4 @@
-import { ContextMenuComponent } from './contextmenu-component';
+import { ContextMenuComponent } from '../contextmenu-component';
 
 import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';

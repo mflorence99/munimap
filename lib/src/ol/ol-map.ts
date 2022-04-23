@@ -60,6 +60,7 @@ export class OLMapComponent
   #origInteractions: string[];
   #origLayers: string[];
   #path: Path;
+  #printing = false;
   #subToAbuttersFound: Subscription;
   #subToFeaturesSelected: Subscription;
 
@@ -113,7 +114,14 @@ export class OLMapComponent
     this.#path = this.#initializeView(path);
   }
 
-  printing = false;
+  get printing(): boolean {
+    return this.#printing;
+  }
+  set printing(printing: boolean) {
+    this.#printing = printing;
+    this.cdf.markForCheck();
+  }
+
   projection = 'EPSG:3857';
 
   @ContentChild(SearcherComponent) searcher: Searcher;
@@ -135,7 +143,7 @@ export class OLMapComponent
   @Output() zoomChange = new EventEmitter<number>();
 
   constructor(
-    public cdf: ChangeDetectorRef,
+    private cdf: ChangeDetectorRef,
     private geoJSON: GeoJSONService,
     private host: ElementRef,
     private route: ActivatedRoute,

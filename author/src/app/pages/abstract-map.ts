@@ -33,6 +33,8 @@ export abstract class AbstractMapPage implements OnInit {
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
 
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+
   constructor(
     protected actions$: Actions,
     protected authState: AuthState,

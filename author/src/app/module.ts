@@ -1,7 +1,7 @@
 import { AddParcelComponent } from './pages/parcels/add-parcel';
 import { AreaPage } from './pages/area/page';
 import { BuilderComponent } from './pages/create/builder';
-import { ContextMenuHostDirective } from './pages/parcels/contextmenu-host';
+import { ContextMenuHostDirective } from './pages/contextmenu-host';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
 import { EasyTrailsComponent } from './pages/easytrails';

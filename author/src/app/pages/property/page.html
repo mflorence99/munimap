@@ -1,310 +1,348 @@
-<ng-container *ngIf="(mapState$ | async) as map">
-  <app-ol-map
-    #olMap
-    [bbox]="map.bbox"
-    [loadingStrategy]="'all'"
-    [minZoom]="13"
-    [maxZoom]="20"
-    [path]="map.path"
-  >
-    <app-properties [map]="map" mapControlPanel1></app-properties>
+<mat-drawer-container *ngIf="(mapState$ | async) as map" class="container">
+  <mat-drawer-content class="content">
+    <app-ol-map
+      #olMap
+      [bbox]="map.bbox"
+      [loadingStrategy]="'all'"
+      [minZoom]="13"
+      [maxZoom]="20"
+      [path]="map.path"
+    >
+      <app-properties [map]="map" mapControlPanel1></app-properties>
 
-    <app-easytrails mapControlPanel2></app-easytrails>
+      <app-easytrails mapControlPanel2></app-easytrails>
 
-    <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
+      <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-    <app-ol-control-print
-      [fileName]="map.name"
-      [printSize]="map.printSize"
-      mapControlPrint
-    ></app-ol-control-print>
+      <app-ol-control-print
+        [fileName]="map.name"
+        [printSize]="map.printSize"
+        mapControlPrint
+      ></app-ol-control-print>
 
-    <app-ol-control-zoom2extent
-      mapControlZoomToExtent
-    ></app-ol-control-zoom2extent>
+      <app-ol-control-zoom2extent
+        mapControlZoomToExtent
+      ></app-ol-control-zoom2extent>
 
-    <app-ol-control-attribution
-      mapControlAttribution
-    ></app-ol-control-attribution>
+      <app-ol-control-attribution
+        mapControlAttribution
+      ></app-ol-control-attribution>
 
-    <ng-container *ngIf="olMap.initialized">
-      <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+      <ng-container *ngIf="olMap.initialized">
+        <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-      <app-ol-control-title
-        *ngIf="olMap.printing"
-        [showTitleContrast]="satelliteView$ | async"
-        [title]="map.name"
-      ></app-ol-control-title>
+        <app-ol-control-title
+          *ngIf="olMap.printing"
+          [showTitleContrast]="satelliteView$ | async"
+          [title]="map.name"
+        ></app-ol-control-title>
 
-      <app-ol-control-graticule *ngIf="olMap.printing" [step]="0.0025"
-        ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
-      ></app-ol-control-graticule>
+        <app-ol-control-graticule *ngIf="olMap.printing" [step]="0.0025"
+          ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
+        ></app-ol-control-graticule>
 
-      <app-ol-control-graticule *ngIf="!olMap.printing" [step]="0.0025"
-        ><app-ol-style-graticule></app-ol-style-graticule
-      ></app-ol-control-graticule>
+        <app-ol-control-graticule *ngIf="!olMap.printing" [step]="0.0025"
+          ><app-ol-style-graticule></app-ol-style-graticule
+        ></app-ol-control-graticule>
 
-      <app-ol-control-scaleline
-        *ngIf="olMap.printing"
-        [printing]="true"
-      ></app-ol-control-scaleline>
+        <app-ol-control-scaleline
+          *ngIf="olMap.printing"
+          [printing]="true"
+        ></app-ol-control-scaleline>
 
-      <app-ol-control-scaleline
-        *ngIf="!olMap.printing"
-      ></app-ol-control-scaleline>
+        <app-ol-control-scaleline
+          *ngIf="!olMap.printing"
+        ></app-ol-control-scaleline>
 
-      <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
+        <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
 
-      <!-- 📦 TERRAIN LAYERS -->
+        <!-- 📦 TERRAIN LAYERS -->
 
-      <ng-container *ngIf="!(satelliteView$ | async)">
-        <!-- 📦 BG LAYER (outside parcels)-->
+        <ng-container *ngIf="!(satelliteView$ | async)">
+          <!-- 📦 BG LAYER (outside parcels)-->
 
-        <app-ol-layer-tile>
-          <app-ol-source-xyz
-            [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-            ><app-ol-attribution
-              >©
-              <a href="https://mapbox.com" target="_blank"
-                >Mapbox</a
-              ></app-ol-attribution
-            ></app-ol-source-xyz
-          >
-          <app-ol-filter-colorize
-            [color]="[255, 255, 255]"
-            [operation]="'color'"
-            [value]="0.5"
-          ></app-ol-filter-colorize>
-        </app-ol-layer-tile>
+          <app-ol-layer-tile>
+            <app-ol-source-xyz
+              [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+              ><app-ol-attribution
+                >©
+                <a href="https://mapbox.com" target="_blank"
+                  >Mapbox</a
+                ></app-ol-attribution
+              ></app-ol-source-xyz
+            >
+            <app-ol-filter-colorize
+              [color]="[255, 255, 255]"
+              [operation]="'color'"
+              [value]="0.5"
+            ></app-ol-filter-colorize>
+          </app-ol-layer-tile>
 
-        <!-- 📦 HILLSHADE LAYER -->
+          <!-- 📦 HILLSHADE LAYER -->
 
-        <app-ol-layer-tile *ngIf="!map.contours2ft">
-          <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
-          <app-ol-filter-crop2propertyparcels
-            [parcelIDs]="map.parcelIDs"
-            [source]="parcels"
-            [type]="'crop'"
-          ></app-ol-filter-crop2propertyparcels>
-          <app-ol-filter-colorize
-            [operation]="'enhance'"
-            [value]="0.33"
-          ></app-ol-filter-colorize>
-        </app-ol-layer-tile>
+          <app-ol-layer-tile *ngIf="!map.contours2ft">
+            <app-ol-source-hillshade [colorize]="true">
+            </app-ol-source-hillshade>
+            <app-ol-filter-crop2propertyparcels
+              [parcelIDs]="map.parcelIDs"
+              [source]="parcels"
+              [type]="'crop'"
+            ></app-ol-filter-crop2propertyparcels>
+            <app-ol-filter-colorize
+              [operation]="'enhance'"
+              [value]="0.33"
+            ></app-ol-filter-colorize>
+          </app-ol-layer-tile>
 
-        <!-- 📦 CONTOURS LAYER -->
+          <!-- 📦 CONTOURS LAYER -->
 
-        <app-ol-layer-tile *ngIf="map.contours2ft">
-          <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
-        </app-ol-layer-tile>
+          <app-ol-layer-tile *ngIf="map.contours2ft">
+            <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
+          </app-ol-layer-tile>
 
-        <app-ol-layer-tile *ngIf="!map.contours2ft">
-          <app-ol-source-contours> </app-ol-source-contours>
-        </app-ol-layer-tile>
+          <app-ol-layer-tile *ngIf="!map.contours2ft">
+            <app-ol-source-contours> </app-ol-source-contours>
+          </app-ol-layer-tile>
 
-        <!-- 📦 USER'S LANDMARKS (shapes only) -->
+          <!-- 📦 USER'S LANDMARKS (shapes only) -->
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-landmarks>
+              <app-ol-style-universal
+                [showFill]="true"
+                [showStroke]="true"
+              ></app-ol-style-universal
+            ></app-ol-adaptor-landmarks>
+            <app-ol-source-landmarks></app-ol-source-landmarks>
+          </app-ol-layer-vector>
+
+          <!-- 📦 NH GranIT VECTOR LAYERS -->
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-wetlands>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-wetlands>
+            <app-ol-source-wetlands></app-ol-source-wetlands>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <!-- 👇 only drawing labels here - waterbodies draws actual river -->
+            <app-ol-adaptor-places>
+              <app-ol-style-universal
+                [showText]="true"
+              ></app-ol-style-universal>
+            </app-ol-adaptor-places>
+            <app-ol-source-rivers></app-ol-source-rivers>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-waterbodies>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-waterbodies>
+            <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
+            <app-ol-source-waterbodies
+              [exclude]="[466]"
+            ></app-ol-source-waterbodies>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-stonewalls>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-stonewalls>
+            <app-ol-source-stonewalls></app-ol-source-stonewalls>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-floodplains>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-floodplains>
+            <app-ol-source-floodplains></app-ol-source-floodplains>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-buildings>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-buildings>
+            <app-ol-source-geojson
+              [layerKey]="'buildings'"
+            ></app-ol-source-geojson>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-railroads>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-railroads>
+            <app-ol-source-railroads></app-ol-source-railroads>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-roads>
+              <app-ol-style-universal
+                [showStroke]="true"
+              ></app-ol-style-universal
+            ></app-ol-adaptor-roads>
+            <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-trails>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-trails>
+            <app-ol-source-geojson
+              [layerKey]="'trails'"
+            ></app-ol-source-geojson>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-bridges>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-bridges>
+            <app-ol-source-bridges></app-ol-source-bridges>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-places>
+              <app-ol-style-universal
+                [showText]="true"
+              ></app-ol-style-universal>
+            </app-ol-adaptor-places>
+            <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
+            <app-ol-source-geojson
+              [exclude]="['dam', 'park']"
+              [layerKey]="'places'"
+            ></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-places>
+              <app-ol-style-universal
+                [showText]="true"
+              ></app-ol-style-universal>
+            </app-ol-adaptor-places>
+            <app-ol-source-dams></app-ol-source-dams>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-powerlines
+              ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
+            ></app-ol-adaptor-powerlines>
+            <app-ol-source-geojson
+              [layerKey]="'powerlines'"
+            ></app-ol-source-geojson>
+          </app-ol-layer-vector>
+
+          <app-ol-layer-vector>
+            <app-ol-style-parcels
+              [forceSelected]="map.contours2ft"
+              [parcelIDs]="map.parcelIDs"
+              [showBorder]="'always'"
+              [showDimensions]="'onlyParcelIDs'"
+              [showDimensionContrast]="'never'"
+              [showLabels]="'always'"
+              [showLabelContrast]="'never'"
+              [showSelection]="map.contours2ft ? 'onlyParcelIDs' : 'never'"
+              [showStolen]="'always'"
+            ></app-ol-style-parcels>
+            <app-ol-source-parcels #parcels></app-ol-source-parcels>
+          </app-ol-layer-vector>
+
+          <!-- 👇 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+          <app-ol-layer-vector>
+            <app-ol-adaptor-roads>
+              <app-ol-style-universal [showText]="true"></app-ol-style-universal
+            ></app-ol-adaptor-roads>
+            <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
+            <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+          </app-ol-layer-vector>
+
+          <!-- 📦 USER'S LANDMARKS (text, on top of everything else) -->
+
+          <app-ol-layer-vector>
+            <app-ol-adaptor-landmarks>
+              <app-ol-style-universal
+                [overlaySelectable]="true"
+                [showText]="true"
+              ></app-ol-style-universal
+            ></app-ol-adaptor-landmarks>
+            <app-ol-source-landmarks></app-ol-source-landmarks>
+            <app-ol-interaction-selectlandmarks [type]="'hover'">
+            </app-ol-interaction-selectlandmarks>
+            <app-ol-interaction-selectlandmarks [type]="'select'">
+            </app-ol-interaction-selectlandmarks>
+          </app-ol-layer-vector>
+        </ng-container>
+
+        <!-- 📦 SATELLITE LAYER  -->
+
+        <ng-container *ngIf="satelliteView$ | async">
+          <app-ol-layer-tile>
+            <app-ol-source-xyz
+              [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+              [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
+              ><app-ol-attribution
+                >©
+                <a href="https://google.com" target="_blank"
+                  >Google</a
+                ></app-ol-attribution
+              ></app-ol-source-xyz
+            >
+            <app-ol-filter-crop2propertyparcels
+              [opacity]="0.33"
+              [parcelIDs]="map.parcelIDs"
+              [source]="parcels"
+              [type]="'mask'"
+            ></app-ol-filter-crop2propertyparcels>
+          </app-ol-layer-tile>
+
+          <app-ol-layer-vector>
+            <app-ol-style-parcels
+              [parcelIDs]="map.parcelIDs"
+              [showBorder]="'always'"
+              [showDimensions]="'onlyParcelIDs'"
+              [showDimensionContrast]="'always'"
+              [showLabels]="'always'"
+              [showLabelContrast]="'always'"
+              [showStolen]="'always'"
+            ></app-ol-style-parcels>
+            <app-ol-source-parcels #parcels></app-ol-source-parcels>
+          </app-ol-layer-vector>
+        </ng-container>
+
+        <!-- 📦 BOUNDARY LAYER -->
 
         <app-ol-layer-vector>
-          <app-ol-adaptor-landmarks>
-            <app-ol-style-universal
-              [showFill]="true"
+          <app-ol-adaptor-boundary
+            ><app-ol-style-universal
               [showStroke]="true"
             ></app-ol-style-universal
-          ></app-ol-adaptor-landmarks>
-          <app-ol-source-landmarks></app-ol-source-landmarks>
-        </app-ol-layer-vector>
-
-        <!-- 📦 NH GranIT VECTOR LAYERS -->
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-wetlands>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-wetlands>
-          <app-ol-source-wetlands></app-ol-source-wetlands>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <!-- 👇 only drawing labels here - waterbodies draws actual river -->
-          <app-ol-adaptor-places>
-            <app-ol-style-universal [showText]="true"></app-ol-style-universal>
-          </app-ol-adaptor-places>
-          <app-ol-source-rivers></app-ol-source-rivers>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-waterbodies>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-waterbodies>
-          <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
-          <app-ol-source-waterbodies
-            [exclude]="[466]"
-          ></app-ol-source-waterbodies>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-stonewalls>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-stonewalls>
-          <app-ol-source-stonewalls></app-ol-source-stonewalls>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-floodplains>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-floodplains>
-          <app-ol-source-floodplains></app-ol-source-floodplains>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-buildings>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-buildings>
-          <app-ol-source-geojson
-            [layerKey]="'buildings'"
-          ></app-ol-source-geojson>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-railroads>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-railroads>
-          <app-ol-source-railroads></app-ol-source-railroads>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-roads>
-            <app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-          ></app-ol-adaptor-roads>
-          <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-trails>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-trails>
-          <app-ol-source-geojson [layerKey]="'trails'"></app-ol-source-geojson>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-bridges>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-bridges>
-          <app-ol-source-bridges></app-ol-source-bridges>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-places>
-            <app-ol-style-universal [showText]="true"></app-ol-style-universal>
-          </app-ol-adaptor-places>
-          <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
-          <app-ol-source-geojson
-            [exclude]="['dam', 'park']"
-            [layerKey]="'places'"
-          ></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-places>
-            <app-ol-style-universal [showText]="true"></app-ol-style-universal>
-          </app-ol-adaptor-places>
-          <app-ol-source-dams></app-ol-source-dams>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-powerlines
-            ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
-          ></app-ol-adaptor-powerlines>
-          <app-ol-source-geojson
-            [layerKey]="'powerlines'"
-          ></app-ol-source-geojson>
-        </app-ol-layer-vector>
-
-        <app-ol-layer-vector>
-          <app-ol-style-parcels
-            [forceSelected]="map.contours2ft"
-            [parcelIDs]="map.parcelIDs"
-            [showBorder]="'always'"
-            [showDimensions]="'onlyParcelIDs'"
-            [showDimensionContrast]="'never'"
-            [showLabels]="'always'"
-            [showLabelContrast]="'never'"
-            [showSelection]="map.contours2ft ? 'onlyParcelIDs' : 'never'"
-            [showStolen]="'always'"
-          ></app-ol-style-parcels>
-          <app-ol-source-parcels #parcels></app-ol-source-parcels>
-        </app-ol-layer-vector>
-
-        <!-- 👇 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
-        <app-ol-layer-vector>
-          <app-ol-adaptor-roads>
-            <app-ol-style-universal [showText]="true"></app-ol-style-universal
-          ></app-ol-adaptor-roads>
-          <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
-
-        <!-- 📦 USER'S LANDMARKS (text, on top of everything else) -->
-
-        <app-ol-layer-vector>
-          <app-ol-adaptor-landmarks>
-            <app-ol-style-universal
-              [overlaySelectable]="true"
-              [showText]="true"
-            ></app-ol-style-universal
-          ></app-ol-adaptor-landmarks>
-          <app-ol-source-landmarks></app-ol-source-landmarks>
-          <app-ol-interaction-selectlandmarks [type]="'hover'">
-          </app-ol-interaction-selectlandmarks>
-          <app-ol-interaction-selectlandmarks [type]="'select'">
-          </app-ol-interaction-selectlandmarks>
+          ></app-ol-adaptor-boundary>
+          <app-ol-source-boundary></app-ol-source-boundary>
         </app-ol-layer-vector>
       </ng-container>
+    </app-ol-map>
+  </mat-drawer-content>
 
-      <!-- 📦 SATELLITE LAYER  -->
+  <!-- 📦 DYNAMIC SIDEBAR-->
 
-      <ng-container *ngIf="satelliteView$ | async">
-        <app-ol-layer-tile>
-          <app-ol-source-xyz
-            [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-            [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
-            ><app-ol-attribution
-              >©
-              <a href="https://google.com" target="_blank"
-                >Google</a
-              ></app-ol-attribution
-            ></app-ol-source-xyz
-          >
-          <app-ol-filter-crop2propertyparcels
-            [opacity]="0.33"
-            [parcelIDs]="map.parcelIDs"
-            [source]="parcels"
-            [type]="'mask'"
-          ></app-ol-filter-crop2propertyparcels>
-        </app-ol-layer-tile>
+  <mat-drawer #drawer class="sidebar" mode="over" position="end">
+    <ng-container appContextMenuHost></ng-container>
+  </mat-drawer>
+</mat-drawer-container>
 
-        <app-ol-layer-vector>
-          <app-ol-style-parcels
-            [parcelIDs]="map.parcelIDs"
-            [showBorder]="'always'"
-            [showDimensions]="'onlyParcelIDs'"
-            [showDimensionContrast]="'always'"
-            [showLabels]="'always'"
-            [showLabelContrast]="'always'"
-            [showStolen]="'always'"
-          ></app-ol-style-parcels>
-          <app-ol-source-parcels #parcels></app-ol-source-parcels>
-        </app-ol-layer-vector>
-      </ng-container>
+<!-- 📦 CONTEXT MENU -->
 
-      <!-- 📦 BOUNDARY LAYER -->
+<ng-template #contextmenu>
+  <nav class="contextmenu">
+    <header *ngIf="olMap.selectedIDs.length !== 0" class="header">
+      Parcels {{ olMap.selectedIDs.join(', ') }}
+    </header>
 
-      <app-ol-layer-vector>
-        <app-ol-adaptor-boundary
-          ><app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-        ></app-ol-adaptor-boundary>
-        <app-ol-source-boundary></app-ol-source-boundary>
-      </app-ol-layer-vector>
-    </ng-container>
-  </app-ol-map>
-</ng-container>
+    <ul>
+      <li class="item">
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
+        <p>Test test test &hellip;</p>
+      </li>
+    </ul>
+  </nav>
+</ng-template>

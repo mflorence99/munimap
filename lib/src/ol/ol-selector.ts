@@ -1,3 +1,5 @@
+import { OLLayerVectorComponent } from './ol-layer-vector';
+
 import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
 
@@ -8,6 +10,7 @@ import OLFeature from 'ol/Feature';
 export interface Selector {
   abuttersFound?: EventEmitter<any[]>;
   featuresSelected: EventEmitter<OLFeature<any>[]>;
+  layer?: OLLayerVectorComponent;
   selected: OLFeature<any>[];
   selectedIDs: any[];
 }

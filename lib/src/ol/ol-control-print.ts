@@ -143,7 +143,6 @@ export class OLControlPrintComponent {
       this.map.zoomToBounds();
       // 👉 controls map configuration
       this.map.printing = true;
-      this.map.cdf.markForCheck();
     }, 0);
   }
 
@@ -159,7 +158,6 @@ export class OLControlPrintComponent {
     this.map.olView.setZoom(this.#zoom);
     // 👉 controls map configuration
     this.map.printing = false;
-    this.map.cdf.markForCheck();
   }
 
   print(): void {

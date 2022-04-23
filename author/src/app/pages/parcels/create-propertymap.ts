@@ -1,4 +1,4 @@
-import { ContextMenuComponent } from './contextmenu-component';
+import { ContextMenuComponent } from '../contextmenu-component';
 
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
