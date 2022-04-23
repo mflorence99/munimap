@@ -269,6 +269,11 @@
             <app-ol-interaction-selectlandmarks [type]="'hover'">
             </app-ol-interaction-selectlandmarks>
             <app-ol-interaction-selectlandmarks [type]="'select'">
+              <mat-menu #theContextMenu mapContextMenu>
+                <ng-template matMenuContent>
+                  <ng-template [ngTemplateOutlet]="contextmenu"></ng-template>
+                </ng-template>
+              </mat-menu>
             </app-ol-interaction-selectlandmarks>
           </app-ol-layer-vector>
         </ng-container>
@@ -335,7 +340,7 @@
 <ng-template #contextmenu>
   <nav class="contextmenu">
     <header *ngIf="olMap.selectedIDs.length !== 0" class="header">
-      Parcels {{ olMap.selectedIDs.join(', ') }}
+      {{ olMap.selected[0].get('name') }}
     </header>
 
     <ul>

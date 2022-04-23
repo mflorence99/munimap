@@ -1,14 +1,19 @@
+import { ContextMenuComponent } from './contextmenu-component';
+import { ContextMenuHostDirective } from './contextmenu-host';
 import { RootPage } from './root/page';
 
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
 import { Component } from '@angular/core';
+import { ComponentFactory } from '@angular/core';
+import { ComponentRef } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { LoadMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
@@ -22,10 +27,16 @@ import { ViewState } from '@lib/state/view';
 import { environment } from '@lib/environment';
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
+import { unByKey } from 'ol/Observable';
 
 @Component({ template: '' })
 export abstract class AbstractMapPage implements OnInit {
+  @ViewChild(ContextMenuHostDirective)
+  contextMenuHost: ContextMenuHostDirective;
+
   creating = false;
+
+  @ViewChild('drawer') drawer: MatDrawer;
 
   env = environment;
 
@@ -104,6 +115,37 @@ export abstract class AbstractMapPage implements OnInit {
   ngOnInit(): void {
     this.#handleActions$();
     this.#loadMap();
+  }
+
+  onContextMenuImpl(cFactory: ComponentFactory<ContextMenuComponent>): void {
+    this.drawer.open();
+    this.contextMenuHost.vcRef.clear();
+    const cRef: ComponentRef<ContextMenuComponent> =
+      this.contextMenuHost.vcRef.createComponent(cFactory);
+    // 👉 populate @Input() fields
+    const comp = cRef.instance;
+    comp.drawer = this.drawer;
+    comp.map = this.olMap;
+    // 👉 there really should be a selector, or else we couldn't be here
+    let key;
+    const selector = this.olMap.selector;
+    if (selector) {
+      const source = selector.layer.olLayer.getSource();
+      comp.selectedIDs = selector.selectedIDs;
+      comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+      // 👉 watch for delta in features
+      key = source.on('featuresloadend', () => {
+        comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+        comp.refresh();
+      });
+    } else {
+      comp.selectedIDs = [];
+      comp.features = [];
+    }
+    // 👉 when the sidebar closes, stop listening
+    this.drawer.closedStart.subscribe(() => {
+      unByKey(key);
+    });
   }
 
   abstract getType(): MapType;

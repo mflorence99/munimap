@@ -148,6 +148,8 @@ export class OLInteractionSelectParcelsComponent
     });
   }
 
+  // 🔥 SIMILAR code is in ol-interaction-selectlandmarks -- refactor ??
+
   #handleContextMenu$(): void {
     this.map.contextMenu$
       .pipe(takeUntil(this.destroy$))
