@@ -104,7 +104,7 @@ const CURATIONS: Curation[] = [
           fontOpacity: 1,
           fontSize: 'small',
           fontStyle: 'normal',
-          showAcreage: true,
+          showDimension: true,
           zIndex: -1
         }),
         source: './proxy/assets/landmarks/florence/mow.gpx'
@@ -129,6 +129,12 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: new LandmarkPropertiesClass({
+          fontColor: '--map-river-text-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic',
+          lineChunk: true,
           lineSpline: true,
           strokeColor: '--map-river-line-color',
           strokeOpacity: 1,
@@ -156,6 +162,7 @@ const CURATIONS: Curation[] = [
           lineChunk: true,
           lineDash: [2, 1],
           lineSpline: true,
+          showDimension: true,
           strokeColor: '--map-trail-line-color',
           strokeOpacity: 1,
           strokeStyle: 'dashed',

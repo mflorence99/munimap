@@ -26,14 +26,6 @@ export class OLAdaptorTrailsComponent implements Adaptor {
   adapt(trail: TrailProperties): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        lineSpline: true,
-        strokeColor: '--map-trail-line-color',
-        strokeOpacity: 1,
-        strokeStyle: 'dashed',
-        strokeWidth: 'medium',
-        zIndex: 1
-      }),
-      new LandmarkPropertiesClass({
         fontColor: '--map-trail-text-color',
         fontOpacity: 1,
         fontOutline: true,
@@ -42,7 +34,11 @@ export class OLAdaptorTrailsComponent implements Adaptor {
         lineChunk: true,
         lineSpline: true,
         name: trail.name,
-        zIndex: 2
+        strokeColor: '--map-trail-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 'medium',
+        zIndex: 1
       })
     ];
   }

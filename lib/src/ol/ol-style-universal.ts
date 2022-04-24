@@ -365,6 +365,12 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             textLength * this.lineChunkRatio
           );
         }
+        // 👇 calculate the length if requested
+        let text = props.name;
+        if (props.showDimension) {
+          const length = feature.getGeometry().getLength() * 3.28084;
+          text += ` (${this.decimal.transform(length, '1.0-0')} ft)`;
+        }
         // 👇 here's the style
         const style = new OLStyle({
           // 👇 line has already been splined above if chunked
@@ -385,7 +391,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                   width: fontPixels * 0.25
                 })
               : null,
-            text: props.name
+            text: text
           }),
           zIndex: props.zIndex
         });
@@ -424,9 +430,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           ? this.map.vars[props.iconColor]
           : this.map.vars[props.fontColor];
         const iconOutlineColor = this.map.vars[props.iconOutlineColor];
-        let text = props.name?.replace(/ /g, '\n');
         // 👇 calculate the acreage if requested
-        if (props.showAcreage) {
+        let text = props.name?.replace(/ /g, '\n');
+        if (props.showDimension) {
           const acreage = feature.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }

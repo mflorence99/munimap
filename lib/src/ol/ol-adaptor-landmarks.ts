@@ -29,7 +29,14 @@ export class OLAdaptorLandmarksComponent implements Adaptor {
 
   // 👇 tweak LandmarkProperties when hovering
   adaptWhenHovering(landmark: LandmarkProperties): LandmarkProperties[] {
-    return this.adaptWhenSelected(landmark);
+    const hovering = { ...landmark };
+    hovering.fontColor = '--map-landmark-hover';
+    hovering.strokeColor = '--map-landmark-hover';
+    hovering.strokeOpacity = 1;
+    if (!(hovering.strokeFeet && hovering.strokePixels && hovering.strokeWidth))
+      hovering.strokeWidth = 'medium';
+    if (!hovering.strokeStyle) hovering.strokeStyle = 'solid';
+    return [hovering];
   }
 
   // 👇 tweak LandmarkProperties when selected
