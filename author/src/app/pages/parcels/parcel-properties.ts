@@ -1,4 +1,4 @@
-import { ContextMenuComponent } from '../../components/contextmenu-component';
+import { SidebarComponent } from '../../components/sidebar-component';
 
 import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
@@ -57,7 +57,7 @@ const editables = [
   ],
   templateUrl: './parcel-properties.html'
 })
-export class ParcelPropertiesComponent implements ContextMenuComponent, OnInit {
+export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   @Input() drawer: MatDrawer;
 
   @Input() features: OLFeature<any>[];

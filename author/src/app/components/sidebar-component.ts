@@ -3,7 +3,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 
 import OLFeature from 'ol/Feature';
 
-export interface ContextMenuComponent {
+export interface SidebarComponent {
   drawer: MatDrawer;
   features: OLFeature<any>[];
   map: OLMapComponent;

@@ -1,4 +1,4 @@
-import { ContextMenuComponent } from '../../components/contextmenu-component';
+import { SidebarComponent } from '../../components/sidebar-component';
 
 import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
@@ -33,7 +33,7 @@ interface Subdivision {
   styleUrls: ['./subdivide-parcel.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './subdivide-parcel.html'
 })
-export class SubdivideParcelComponent implements ContextMenuComponent, OnInit {
+export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   #format: OLGeoJSON;
 
   @Input() drawer: MatDrawer;

@@ -1,10 +1,10 @@
 import { AbstractMapPage } from '../abstract-map';
 import { AddParcelComponent } from './add-parcel';
-import { ContextMenuComponent } from '../../components/contextmenu-component';
 import { CreatePropertyMapComponent } from './create-propertymap';
 import { MergeParcelsComponent } from './merge-parcels';
 import { ParcelPropertiesComponent } from './parcel-properties';
 import { RootPage } from '../root/page';
+import { SidebarComponent } from '../../components/sidebar-component';
 import { SubdivideParcelComponent } from './subdivide-parcel';
 
 import { Actions } from '@ngxs/store';
@@ -89,7 +89,7 @@ export class ParcelsPage extends AbstractMapPage {
   }
 
   onContextMenu(key: string): void {
-    let cFactory: ComponentFactory<ContextMenuComponent>;
+    let cFactory: ComponentFactory<SidebarComponent>;
     switch (key) {
       case 'add-parcel':
         cFactory = this.resolver.resolveComponentFactory(AddParcelComponent);

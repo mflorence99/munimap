@@ -1,4 +1,4 @@
-import { ContextMenuComponent } from '../../components/contextmenu-component';
+import { SidebarComponent } from '../../components/sidebar-component';
 
 import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
@@ -36,7 +36,7 @@ interface Addition {
   styleUrls: ['./add-parcel.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './add-parcel.html'
 })
-export class AddParcelComponent implements ContextMenuComponent, OnInit {
+export class AddParcelComponent implements SidebarComponent, OnInit {
   #contextMenuAt: number[];
   #hack: number;
 

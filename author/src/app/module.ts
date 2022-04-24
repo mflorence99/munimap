@@ -1,6 +1,7 @@
 import { AddParcelComponent } from './pages/parcels/add-parcel';
 import { AreaPage } from './pages/area/page';
 import { BuilderComponent } from './pages/create/builder';
+import { ContextMenuComponent } from './components/contextmenu';
 import { ContextMenuHostDirective } from './directives/contextmenu-host';
 import { ControlPanelEasyTrailsComponent } from './components/controlpanel-easytrails';
 import { ControlPanelPropertiesComponent } from './components/controlpanel-properties';
@@ -208,6 +209,7 @@ const COMPONENTS = [
   AddParcelComponent,
   BuilderComponent,
   ConfirmDialogComponent,
+  ContextMenuComponent,
   ControlPanelEasyTrailsComponent,
   ControlPanelPropertiesComponent,
   CreatePropertyMapComponent,

@@ -1,6 +1,6 @@
-import { ContextMenuComponent } from '../components/contextmenu-component';
 import { ContextMenuHostDirective } from '../directives//contextmenu-host';
 import { RootPage } from './root/page';
+import { SidebarComponent } from '../components/sidebar-component';
 
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
@@ -117,10 +117,10 @@ export abstract class AbstractMapPage implements OnInit {
     this.#loadMap();
   }
 
-  onContextMenuImpl(cFactory: ComponentFactory<ContextMenuComponent>): void {
+  onContextMenuImpl(cFactory: ComponentFactory<SidebarComponent>): void {
     this.drawer.open();
     this.contextMenuHost.vcRef.clear();
-    const cRef: ComponentRef<ContextMenuComponent> =
+    const cRef: ComponentRef<SidebarComponent> =
       this.contextMenuHost.vcRef.createComponent(cFactory);
     // 👉 populate @Input() fields
     const comp = cRef.instance;

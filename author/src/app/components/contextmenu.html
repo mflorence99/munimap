@@ -2,7 +2,7 @@
   #trigger
   *ngIf="contextMenu"
   class="trigger"
-  [matMenuTriggerData]="{ selected: selected }"
+  [matMenuTriggerData]="{ selected: map.selected }"
   [matMenuTriggerFor]="contextMenu"
   [style.left.px]="menuPosition.x"
   [style.top.px]="menuPosition.y"

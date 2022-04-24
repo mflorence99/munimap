@@ -1,4 +1,4 @@
-import { ContextMenuComponent } from '../../components/contextmenu-component';
+import { SidebarComponent } from '../../components/sidebar-component';
 
 import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
@@ -27,7 +27,7 @@ interface MergeRecord {
   styleUrls: ['./merge-parcels.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './merge-parcels.html'
 })
-export class MergeParcelsComponent implements ContextMenuComponent {
+export class MergeParcelsComponent implements SidebarComponent {
   @Input() drawer: MatDrawer;
 
   @Input() features: OLFeature<any>[];

@@ -1,4 +1,4 @@
-import { ContextMenuComponent } from '../../components/contextmenu-component';
+import { SidebarComponent } from '../../components/sidebar-component';
 
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -51,7 +51,7 @@ const PRINT_SIZES = {
   ],
   templateUrl: './create-propertymap.html'
 })
-export class CreatePropertyMapComponent implements ContextMenuComponent {
+export class CreatePropertyMapComponent implements SidebarComponent {
   @Input() border = 100 /* 👈 feet */;
 
   @ViewChild('createForm', { static: true }) createForm: NgForm;
