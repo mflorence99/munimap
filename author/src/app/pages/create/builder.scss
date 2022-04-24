@@ -5,12 +5,17 @@
 
 .actions {
   display: flex;
+  flex-direction: row;
   gap: 1rem;
   justify-content: flex-end;
 }
 
 .card {
   width: 25rem;
+}
+
+.filler {
+  flex-grow: 1;
 }
 
 .form {

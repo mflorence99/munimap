@@ -330,6 +330,12 @@
           ></app-ol-adaptor-boundary>
           <app-ol-source-boundary></app-ol-source-boundary>
         </app-ol-layer-vector>
+
+        <!-- 📦 OVERLAY TO MOVE LANDMARK -->
+
+        <app-ol-overlay-movelandmark
+          *ngIf="!olMap.printing"
+        ></app-ol-overlay-movelandmark>
       </ng-container>
     </app-ol-map>
   </mat-drawer-content>
@@ -350,9 +356,30 @@
     </header>
 
     <ul>
-      <li class="item">
-        <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
-        <p>Test test test &hellip;</p>
+      <li
+        (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
+        [class.disabled]="!canMoveLandmark()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
+        <p>
+          Move landmark
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click and drag the target icon to the new position"
+            ></fa-icon
+          ></em>
+        </p>
+      </li>
+
+      <li
+        (click)="canDeleteLandmark($event) && onContextMenu('delete-landmark')"
+        [class.disabled]="!canDeleteLandmark()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
+        <p>Delete landmark</p>
       </li>
     </ul>
   </nav>

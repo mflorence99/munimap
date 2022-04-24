@@ -112,6 +112,7 @@ import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interact
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
+import { OLOverlayMoveLandmarkComponent } from '@lib/ol/landmarks/ol-overlay-movelandmark';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
@@ -186,6 +187,7 @@ import { faSync } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fadTasks } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fasTasks } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faUndo } from '@fortawesome/pro-duotone-svg-icons';
 import { getAnalytics } from '@angular/fire/analytics';
 import { getAuth } from '@angular/fire/auth';
@@ -260,6 +262,7 @@ const COMPONENTS = [
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLMapComponent,
+  OLOverlayMoveLandmarkComponent,
   OLOverlayParcelLabelComponent,
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
@@ -513,6 +516,7 @@ export class RootModule {
       fadTasks,
       fasTasks,
       faTimes,
+      faTrash,
       faUndo
     );
   }

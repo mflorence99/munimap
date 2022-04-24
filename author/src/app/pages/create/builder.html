@@ -77,9 +77,12 @@
   </mat-card-content>
 
   <mat-card-actions class="actions">
-    <button *ngIf="currentCounty()" (click)="reset()" mat-flat-button>
+    <a *ngIf="currentCounty()" (click)="reset()" mat-flat-button>
       Start Over
-    </button>
+    </a>
+
+    <div class="filler"></div>
+
     <button
       (click)="submit()"
       [disabled]="!currentTown()"

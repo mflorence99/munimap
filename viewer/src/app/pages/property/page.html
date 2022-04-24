@@ -214,11 +214,16 @@
 
       <!-- 📦 USER'S LANDMARKS (text, on top of everything else) -->
 
-      <app-ol-layer-vector
-        ><app-ol-adaptor-landmarks>
-          <app-ol-style-universal [showText]="true"></app-ol-style-universal
+      <app-ol-layer-vector>
+        <app-ol-adaptor-landmarks>
+          <app-ol-style-universal
+            [overlaySelectable]="true"
+            [showText]="true"
+          ></app-ol-style-universal
         ></app-ol-adaptor-landmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
+        <app-ol-interaction-selectlandmarks>
+        </app-ol-interaction-selectlandmarks>
       </app-ol-layer-vector>
     </ng-container>
 

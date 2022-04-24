@@ -277,6 +277,8 @@ export class ParcelsState implements NgxsOnInit {
     ctx: StateContext<ParcelsStateModel>,
     _action: Redo
   ): void {
+    // 👉 quick return if nothing to redo
+    if (redoStack.length === 0) return;
     // 👉 block any other undo, redo until this is finished
     ctx.dispatch(new CanDo(false, false));
     // 👉 prepare the stacks
@@ -337,6 +339,8 @@ export class ParcelsState implements NgxsOnInit {
     ctx: StateContext<ParcelsStateModel>,
     _action: Undo
   ): void {
+    // 👉 quick return if nothing to undo
+    if (undoStack.length === 0) return;
     // 👉 block any other undo, redo until this is finished
     ctx.dispatch(new CanDo(false, false));
     // 👉 prepare the stacks

@@ -634,7 +634,7 @@ export function dedupe(geojsons: Buildings[]): Buildings {
   };
 }
 
-export function deserializeLandmark(landmark: Landmark): void {
+export function deserializeLandmark(landmark: Partial<Landmark>): void {
   if (landmark.geometry)
     landmark.geometry = JSON.parse(landmark.geometry as any);
   if (landmark.properties) {
@@ -649,7 +649,7 @@ export function deserializeLandmark(landmark: Landmark): void {
   }
 }
 
-export function deserializeParcel(parcel: Parcel): void {
+export function deserializeParcel(parcel: Partial<Parcel>): void {
   if (parcel.geometry) parcel.geometry = JSON.parse(parcel.geometry as any);
   if (parcel.properties) {
     serializedParcelProperties.forEach((prop) => {
@@ -661,7 +661,7 @@ export function deserializeParcel(parcel: Parcel): void {
 
 // 👇 we use this when landmarks are imported from an external source,
 //    so that they don't get duplicated
-export function makeLandmarkID(landmark: Landmark): LandmarkID {
+export function makeLandmarkID(landmark: Partial<Landmark>): LandmarkID {
   return hash.MD5(landmark.geometry);
 }
 
@@ -702,7 +702,7 @@ export function normalizeOwner(parcel: Parcel): void {
   }
 }
 
-export function serializeLandmark(landmark: Landmark): void {
+export function serializeLandmark(landmark: Partial<Landmark>): void {
   if (landmark.geometry)
     landmark.geometry = JSON.stringify(landmark.geometry) as any;
   if (landmark.properties) {
@@ -717,7 +717,7 @@ export function serializeLandmark(landmark: Landmark): void {
   }
 }
 
-export function serializeParcel(parcel: Parcel): void {
+export function serializeParcel(parcel: Partial<Parcel>): void {
   if (parcel.geometry) parcel.geometry = JSON.stringify(parcel.geometry) as any;
   if (parcel.properties) {
     serializedParcelProperties.forEach((prop) => {
