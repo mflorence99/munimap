@@ -48,6 +48,7 @@ export class OLInteractionSelectGeoJSONComponent
 
   @Input() filter: FilterFunction;
 
+  olHover: OLSelect;
   olSelect: OLSelect;
 
   get selected(): OLFeature<any>[] {
@@ -58,13 +59,24 @@ export class OLInteractionSelectGeoJSONComponent
     return this.selected.map((feature) => feature.getId());
   }
 
-  @Input() type: 'hover' | 'select';
-
   constructor(
     // 👉 we need public access to go through the selector to its layer
     public layer: OLLayerVectorComponent,
     private map: OLMapComponent
-  ) {}
+  ) {
+    this.olHover = new OLSelect({
+      condition: (event): boolean => event.type === 'pointermove',
+      filter: this.#filter.bind(this),
+      layers: [this.layer.olLayer],
+      style: this.layer.styleWhenHovering()
+    });
+    this.olSelect = new OLSelect({
+      condition: (event): boolean => event.type === 'click',
+      filter: this.#filter.bind(this),
+      layers: [this.layer.olLayer],
+      style: this.layer.styleWhenSelected()
+    });
+  }
 
   #filter(feature: OLFeature<any>): boolean {
     return this.filter ? this.filter(feature.getId()) : true;
@@ -77,6 +89,7 @@ export class OLInteractionSelectGeoJSONComponent
   }
 
   addToMap(): void {
+    this.map.olMap.addInteraction(this.olHover);
     this.map.olMap.addInteraction(this.olSelect);
   }
 
@@ -85,25 +98,6 @@ export class OLInteractionSelectGeoJSONComponent
   }
 
   ngOnInit(): void {
-    // 👇 we can't do this in the constructor because the type isn't set
-    this.olSelect = new OLSelect({
-      condition: (event): boolean => {
-        let eventType;
-        if (this.type === 'hover') eventType = 'pointermove';
-        else if (this.type === 'select') eventType = 'click';
-        return event.type === eventType;
-      },
-      filter: this.#filter.bind(this),
-      layers: [this.layer.olLayer],
-      style:
-        this.type === 'hover'
-          ? this.layer.styleWhenHovering()
-          : this.type === 'select'
-          ? this.layer.styleWhenSelected()
-          : undefined
-    });
-    // only fire on select, not hover
-    if (this.type === 'select')
-      this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 }

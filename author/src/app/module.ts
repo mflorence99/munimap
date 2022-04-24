@@ -104,7 +104,7 @@ import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
-import { OLInteractionBoundaryComponent } from '@lib/ol/ol-interaction-boundary';
+import { OLInteractionRedrawBoundaryComponent } from '@lib/ol/ol-interaction-redrawboundary';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
 import { OLInteractionSelectGeoJSONComponent } from '@lib/ol/ol-interaction-selectgeojson';
 import { OLInteractionSelectLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-selectlandmarks';
@@ -252,7 +252,7 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterPencilComponent,
-  OLInteractionBoundaryComponent,
+  OLInteractionRedrawBoundaryComponent,
   OLInteractionRedrawParcelComponent,
   OLInteractionSelectGeoJSONComponent,
   OLInteractionSelectLandmarksComponent,

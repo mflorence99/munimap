@@ -314,8 +314,7 @@
             [showStolen]="isPrivileged() ? 'always' : 'never'"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
-          <app-ol-interaction-selectparcels [eventType]="'click'">
-          </app-ol-interaction-selectparcels>
+          <app-ol-interaction-selectparcels> </app-ol-interaction-selectparcels>
           <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
         </app-ol-layer-vector>
 
@@ -338,7 +337,7 @@
             ></app-ol-style-universal
           ></app-ol-adaptor-boundary>
           <app-ol-source-boundary></app-ol-source-boundary>
-          <app-ol-interaction-boundary></app-ol-interaction-boundary>
+          <app-ol-interaction-redrawboundary></app-ol-interaction-redrawboundary>
         </app-ol-layer-vector>
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->

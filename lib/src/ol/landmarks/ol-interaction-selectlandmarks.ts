@@ -9,7 +9,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
@@ -44,10 +43,7 @@ export class OLInteractionSelectLandmarksComponent
 
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
-  @Input() set hitTolerance(tolerance: number) {
-    this.olSelect.setHitTolerance(tolerance);
-  }
-
+  olHover: OLSelect;
   olSelect: OLSelect;
 
   get selected(): OLFeature<any>[] {
@@ -58,13 +54,22 @@ export class OLInteractionSelectLandmarksComponent
     return this.selected.map((feature) => feature.getId());
   }
 
-  @Input() type: 'hover' | 'select';
-
   constructor(
     // 👉 we need public access to go through the selector to its layer
     public layer: OLLayerVectorComponent,
     private map: OLMapComponent
-  ) {}
+  ) {
+    this.olHover = new OLSelect({
+      condition: (event): boolean => event.type === 'pointermove',
+      layers: [this.layer.olLayer],
+      style: this.layer.styleWhenHovering()
+    });
+    this.olSelect = new OLSelect({
+      condition: (event): boolean => event.type === 'click',
+      layers: [this.layer.olLayer],
+      style: this.layer.styleWhenSelected()
+    });
+  }
 
   #onSelect(_event?: OLSelectEvent): void {
     const ids = this.selectedIDs.join(', ');
@@ -73,6 +78,7 @@ export class OLInteractionSelectLandmarksComponent
   }
 
   addToMap(): void {
+    this.map.olMap.addInteraction(this.olHover);
     this.map.olMap.addInteraction(this.olSelect);
   }
 
@@ -81,24 +87,6 @@ export class OLInteractionSelectLandmarksComponent
   }
 
   ngOnInit(): void {
-    // 👇 we can't do this in the constructor because the type isn't set
-    this.olSelect = new OLSelect({
-      condition: (event): boolean => {
-        let eventType;
-        if (this.type === 'hover') eventType = 'pointermove';
-        else if (this.type === 'select') eventType = 'click';
-        return event.type === eventType;
-      },
-      layers: [this.layer.olLayer],
-      style:
-        this.type === 'hover'
-          ? this.layer.styleWhenHovering()
-          : this.type === 'select'
-          ? this.layer.styleWhenSelected()
-          : undefined
-    });
-    // only fire on select, not hover
-    if (this.type === 'select')
-      this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 }

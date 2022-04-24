@@ -20,17 +20,17 @@ import OLModify from 'ol/interaction/Modify';
 import OLMultiPolygon from 'ol/geom/MultiPolygon';
 import OLPolygon from 'ol/geom/Polygon';
 
-// 🔥 this is a back-door interface onky for me to hack in revised
+// 🔥 this is a back-door interface only for me to hack in revised
 //    town boundaries -- the state supplied geometries do not properly
 //    align with those of the edge parcels and we want to clean them up
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-interaction-boundary',
+  selector: 'app-ol-interaction-redrawboundary',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionBoundaryComponent implements OnDestroy, OnInit {
+export class OLInteractionRedrawBoundaryComponent implements OnDestroy, OnInit {
   #boundary: OLFeature<OLPolygon | OLMultiPolygon>;
   #format: OLGeoJSON;
 

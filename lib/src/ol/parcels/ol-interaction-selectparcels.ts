@@ -61,8 +61,6 @@ export class OLInteractionSelectParcelsComponent
     return this.abutters.map((feature) => feature.id);
   }
 
-  @Input() eventType: string;
-
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() findAbutters = false;
@@ -87,8 +85,7 @@ export class OLInteractionSelectParcelsComponent
     private map: OLMapComponent
   ) {
     this.olSelect = new OLSelect({
-      condition: (event): boolean =>
-        event.type === this.eventType.toLowerCase(),
+      condition: (event): boolean => event.type === 'click',
       layers: [this.layer.olLayer],
       multi: true,
       style: this.layer.styleWhenSelected()
