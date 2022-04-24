@@ -1,5 +1,5 @@
-import { ContextMenuComponent } from './contextmenu-component';
-import { ContextMenuHostDirective } from './contextmenu-host';
+import { ContextMenuComponent } from '../components/contextmenu-component';
+import { ContextMenuHostDirective } from '../directives//contextmenu-host';
 import { RootPage } from './root/page';
 
 import { Actions } from '@ngxs/store';

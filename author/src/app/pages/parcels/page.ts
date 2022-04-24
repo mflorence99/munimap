@@ -1,6 +1,6 @@
 import { AbstractMapPage } from '../abstract-map';
 import { AddParcelComponent } from './add-parcel';
-import { ContextMenuComponent } from '../contextmenu-component';
+import { ContextMenuComponent } from '../../components/contextmenu-component';
 import { CreatePropertyMapComponent } from './create-propertymap';
 import { MergeParcelsComponent } from './merge-parcels';
 import { ParcelPropertiesComponent } from './parcel-properties';

@@ -5,11 +5,11 @@ import { EasyTrailsService } from '@lib/services/easytrails';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-easytrails',
+  selector: 'app-controlpanel-easytrails',
   styleUrls: ['./controlpanel.scss'],
-  templateUrl: './easytrails.html'
+  templateUrl: './controlpanel-easytrails.html'
 })
-export class EasyTrailsComponent {
+export class ControlPanelEasyTrailsComponent {
   invalidURL = false;
 
   record = {

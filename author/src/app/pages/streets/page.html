@@ -6,7 +6,10 @@
     [maxZoom]="20"
     [path]="map.path"
   >
-    <app-properties [map]="map" mapControlPanel1></app-properties>
+    <app-controlpanel-properties
+      [map]="map"
+      mapControlPanel1
+    ></app-controlpanel-properties>
 
     <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 

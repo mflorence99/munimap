@@ -1,10 +1,11 @@
 import { AddParcelComponent } from './pages/parcels/add-parcel';
 import { AreaPage } from './pages/area/page';
 import { BuilderComponent } from './pages/create/builder';
-import { ContextMenuHostDirective } from './pages/contextmenu-host';
+import { ContextMenuHostDirective } from './directives/contextmenu-host';
+import { ControlPanelEasyTrailsComponent } from './components/controlpanel-easytrails';
+import { ControlPanelPropertiesComponent } from './components/controlpanel-properties';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
-import { EasyTrailsComponent } from './pages/easytrails';
 import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
@@ -12,7 +13,6 @@ import { NavigatorComponent } from './pages/root/navigator';
 import { ParcelPropertiesComponent } from './pages/parcels/parcel-properties';
 import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
-import { PropertiesComponent } from './pages/properties';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { StreetsPage } from './pages/streets/page';
@@ -208,8 +208,9 @@ const COMPONENTS = [
   AddParcelComponent,
   BuilderComponent,
   ConfirmDialogComponent,
+  ControlPanelEasyTrailsComponent,
+  ControlPanelPropertiesComponent,
   CreatePropertyMapComponent,
-  EasyTrailsComponent,
   EmailAddressValidator,
   MergeParcelsComponent,
   MessageDialogComponent,
@@ -285,7 +286,6 @@ const COMPONENTS = [
   ParcelIDValidator,
   ParcelPropertiesComponent,
   ProfileComponent,
-  PropertiesComponent,
   SubdivideParcelComponent,
   SubdivisionIDValidator,
   VersionDialogComponent

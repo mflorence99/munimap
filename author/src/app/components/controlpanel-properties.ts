@@ -1,4 +1,4 @@
-import { RootPage } from './root/page';
+import { RootPage } from '../pages//root/page';
 
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -21,11 +21,11 @@ import copy from 'fast-copy';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-properties',
+  selector: 'app-controlpanel-properties',
   styleUrls: ['./controlpanel.scss'],
-  templateUrl: './properties.html'
+  templateUrl: './controlpanel-properties.html'
 })
-export class PropertiesComponent {
+export class ControlPanelPropertiesComponent {
   #map: Map;
 
   @Input()
