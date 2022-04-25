@@ -3,6 +3,7 @@ import { AuthState } from './auth';
 import { CanDo } from './undo';
 import { ClearStacks as ClearStacksProxy } from './undo';
 import { Landmark } from '../common';
+import { LandmarkID } from '../common';
 import { Map } from './map';
 import { MapState } from './map';
 import { Profile } from './auth';
@@ -43,9 +44,19 @@ import { where } from '@angular/fire/firestore';
 import copy from 'fast-copy';
 import hash from 'object-hash';
 
-export class AddLandmark {
+class Undoable {
+  redoneBy: typeof Undoable;
+  undoneBy: typeof Undoable;
+  constructor(public landmark: Partial<Landmark>, public undoable: boolean) {}
+}
+
+export class AddLandmark extends Undoable {
   static readonly type = '[Landmarks] AddLandmark';
-  constructor(public landmark: Partial<Landmark>, public undoable = true) {}
+  constructor(public landmark: Partial<Landmark>, public undoable = true) {
+    super(landmark, undoable);
+    this.redoneBy = AddLandmark;
+    this.undoneBy = DeleteLandmark;
+  }
 }
 
 export class ClearStacks {
@@ -53,9 +64,13 @@ export class ClearStacks {
   constructor() {}
 }
 
-export class DeleteLandmark {
+export class DeleteLandmark extends Undoable {
   static readonly type = '[Landmarks] DeleteLandmark';
-  constructor(public landmark: Partial<Landmark>, public undoable = true) {}
+  constructor(public landmark: Partial<Landmark>, public undoable = true) {
+    super(landmark, undoable);
+    this.redoneBy = DeleteLandmark;
+    this.undoneBy = AddLandmark;
+  }
 }
 
 export class Redo {
@@ -73,9 +88,13 @@ export class Undo {
   constructor() {}
 }
 
-export class UpdateLandmark {
+export class UpdateLandmark extends Undoable {
   static readonly type = '[Landmarks] UpdateLandmark';
-  constructor(public landmark: Partial<Landmark>, public undoable = true) {}
+  constructor(public landmark: Partial<Landmark>, public undoable = true) {
+    super(landmark, undoable);
+    this.redoneBy = UpdateLandmark;
+    this.undoneBy = UpdateLandmark;
+  }
 }
 
 type RedoableAction = UpdateLandmark;
@@ -162,8 +181,12 @@ export class LandmarksState implements NgxsOnInit {
       });
   }
 
-  #landmarkByID(ctx: StateContext<LandmarksStateModel>, id: string): Landmark {
-    return copy(ctx.getState().find((landmark) => landmark.id === id));
+  #landmarkByID(
+    ctx: StateContext<LandmarksStateModel>,
+    id: string
+  ): Partial<Landmark> {
+    const original = ctx.getState().find((landmark) => landmark.id === id);
+    return original ? copy(original) : { id };
   }
 
   #logLandmarks(landmarks: Landmark[]): void {
@@ -178,6 +201,24 @@ export class LandmarksState implements NgxsOnInit {
     );
   }
 
+  #makeUndoAction(
+    ctx: StateContext<LandmarksStateModel>,
+    origAction: Undoable,
+    id: LandmarkID
+  ): Undoable {
+    let undoAction;
+    if (origAction.undoable) {
+      redoStack.length = 0;
+      while (undoStack.length >= maxStackSize) undoStack.shift();
+      // 👉 push the undo action onto the undo stack
+      undoAction = new origAction.undoneBy(
+        this.#landmarkByID(ctx, id),
+        /* undoable = */ false
+      );
+    }
+    return undoAction;
+  }
+
   #normalize(landmark: Partial<Landmark>): Partial<Landmark> {
     const normalized = copy(landmark);
     serializeLandmark(normalized);
@@ -187,29 +228,46 @@ export class LandmarksState implements NgxsOnInit {
   @Action(AddLandmark) addLandmark(
     ctx: StateContext<LandmarksStateModel>,
     action: AddLandmark
-  ): void {
+  ): Promise<void> {
     const normalized = this.#normalize(action.landmark);
     if (!normalized.id) normalized.id = makeLandmarkID(normalized);
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch(new CanDo(false, false));
+    // 👇 add the landmark
     console.log(
       `%cFirestore add: landmarks ${normalized.id} ${JSON.stringify(
         normalized
       )}`,
       'color: crimson'
     );
-    const docRef = doc(this.firestore, 'landmarks', action.landmark.id);
-    setDoc(docRef, normalized);
+    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
+    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    return setDoc(docRef, normalized).then(() => {
+      if (undoAction) undoStack.push(undoAction);
+      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+    });
+    // 👉 side-effect of handleStreams$ will update state
   }
 
   @Action(DeleteLandmark) deleteLandmark(
     ctx: StateContext<LandmarksStateModel>,
     action: DeleteLandmark
-  ): void {
+  ): Promise<void> {
+    // 👇 don't really need to normalize as only an ID is needed
+    //    just following the pattern
+    const normalized = this.#normalize(action.landmark);
+    // 👇 delete the landmark
     console.log(
-      `%cFirestore delete: landmarks ${action.landmark.id}`,
+      `%cFirestore delete: landmarks ${normalized.id}`,
       'color: crimson'
     );
-    const docRef = doc(this.firestore, 'landmarks', action.landmark.id);
-    deleteDoc(docRef);
+    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
+    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    return deleteDoc(docRef).then(() => {
+      if (undoAction) undoStack.push(undoAction);
+      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+    });
+    // 👉 side-effect of handleStreams$ will update state
   }
 
   ngxsOnInit(): void {
@@ -227,7 +285,7 @@ export class LandmarksState implements NgxsOnInit {
     ctx.dispatch(new CanDo(false, false));
     // 👉 prepare the undo/redo actions
     const redoAction = redoStack.pop();
-    const undoAction = new UpdateLandmark(
+    const undoAction = new redoAction.redoneBy(
       this.#landmarkByID(ctx, redoAction.landmark.id),
       /* undoable = */ false
     );
@@ -256,7 +314,7 @@ export class LandmarksState implements NgxsOnInit {
     ctx.dispatch(new CanDo(false, false));
     // 👉 prepare the undo/redo actions
     const undoAction = undoStack.pop();
-    const redoAction = new UpdateLandmark(
+    const redoAction = new undoAction.redoneBy(
       this.#landmarkByID(ctx, undoAction.landmark.id),
       /* undoable = */ false
     );
@@ -271,27 +329,17 @@ export class LandmarksState implements NgxsOnInit {
     ctx: StateContext<LandmarksStateModel>,
     action: UpdateLandmark
   ): Promise<void> {
+    const normalized = this.#normalize(action.landmark);
     // 👉 block any other undo, redo until this is finished
     ctx.dispatch(new CanDo(false, false));
-    // 👉 reset the stacks as required
-    let undoAction;
-    if (action.undoable) {
-      redoStack.length = 0;
-      while (undoStack.length >= maxStackSize) undoStack.shift();
-      // 👉 push the undo action onto the undo stack
-      undoAction = new UpdateLandmark(
-        this.#landmarkByID(ctx, action.landmark.id),
-        /* undoable = */ false
-      );
-    }
     // 👉 update the landmark
-    const normalized = this.#normalize(action.landmark);
     console.log(
       `%cFirestore set: landmarks ${normalized.id} ${JSON.stringify(
         normalized
       )}`,
       'color: chocolate'
     );
+    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
     const docRef = doc(this.firestore, 'landmarks', normalized.id);
     return setDoc(docRef, normalized, { merge: true }).then(() => {
       if (undoAction) undoStack.push(undoAction);
