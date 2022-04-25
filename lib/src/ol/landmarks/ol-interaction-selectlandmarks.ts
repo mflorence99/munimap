@@ -61,6 +61,8 @@ export class OLInteractionSelectLandmarksComponent
   ) {
     this.olHover = new OLSelect({
       condition: (event): boolean => event.type === 'pointermove',
+      // 👇 don't hover over something that's already selected
+      filter: (feature): boolean => !this.selectedIDs.includes(feature.getId()),
       layers: [this.layer.olLayer],
       style: this.layer.styleWhenHovering()
     });
