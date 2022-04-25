@@ -139,16 +139,21 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   #colorOf(
     colorKey: string,
     whenHovering = false,
-    whenSelected = false
+    whenSelected = false,
+    whenRedrawing = false
   ): string {
     if (this.contrast === 'blackOnWhite') {
       if (whenHovering) colorKey = '--rgb-indigo-a700';
       else if (whenSelected) colorKey = '--rgb-red-a700';
+      else if (whenRedrawing) colorKey = '--rgb-blue-a200';
       else colorKey = '--rgb-gray-900';
     } else if (this.contrast === 'whiteOnBlack') {
       if (whenHovering) colorKey = '--rgb-indigo-a100';
       else if (whenSelected) colorKey = '--rgb-red-a100';
+      else if (whenRedrawing) colorKey = '--rgb-blue-a200';
       else colorKey = '--rgb-gray-50';
+    } else if (this.contrast === 'normal') {
+      if (whenRedrawing) colorKey = '--rgb-blue-a200';
     }
     return this.map.vars[colorKey];
   }
@@ -286,10 +291,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.strokeStyle &&
       (props.strokeFeet || props.strokePixels || props.strokeWidth)
     ) {
+      // 🔥 pretty hack back door -- se ol-interaction-redraw*
+      const whenRedrawing = feature.get('ol-interaction-redraw');
       const strokeColor = this.#colorOf(
         props.strokeColor,
         whenHovering,
-        whenSelected
+        whenSelected,
+        whenRedrawing
       );
       const strokePixels = this.#calcStrokePixels(props, resolution);
       // 👇 develop the lineDash
@@ -319,12 +327,14 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         } catch (ignored) {}
       }
       // 👇 here's the style
+      //    don't spline when redrawing
       const style = new OLStyle({
-        geometry: props.lineSpline
-          ? this.#splineLine(feature)
-          : props.offsetFeet
-          ? this.#offsetGeometry(feature, props.offsetFeet)
-          : null,
+        geometry:
+          props.lineSpline && !whenRedrawing
+            ? this.#splineLine(feature)
+            : props.offsetFeet
+            ? this.#offsetGeometry(feature, props.offsetFeet)
+            : null,
         stroke: stroke,
         zIndex: props.zIndex
       });
@@ -634,7 +644,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         const propss = (this.adaptor as Adaptor).adaptWhenHovering(
           feature.getProperties()
         );
-        return this.#styleImpl(feature, resolution, propss, true, false);
+        const whenHovering = true;
+        const whenSelected = false;
+        return this.#styleImpl(
+          feature,
+          resolution,
+          propss,
+          whenHovering,
+          whenSelected
+        );
       } else return [];
     };
   }
@@ -645,7 +663,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         const propss = (this.adaptor as Adaptor).adaptWhenSelected(
           feature.getProperties()
         );
-        return this.#styleImpl(feature, resolution, propss, false, true);
+        const whenHovering = false;
+        const whenSelected = true;
+        return this.#styleImpl(
+          feature,
+          resolution,
+          propss,
+          whenHovering,
+          whenSelected
+        );
       } else return [];
     };
   }

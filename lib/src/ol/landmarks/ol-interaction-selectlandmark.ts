@@ -25,18 +25,18 @@ import OLSelect from 'ol/interaction/Select';
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
+      useExisting: forwardRef(() => OLInteractionSelectLandmarkComponent)
     },
     {
       provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
+      useExisting: forwardRef(() => OLInteractionSelectLandmarkComponent)
     }
   ],
-  selector: 'app-ol-interaction-selectlandmarks',
+  selector: 'app-ol-interaction-selectlandmark',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionSelectLandmarksComponent
+export class OLInteractionSelectLandmarkComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
   #selectKey: OLEventsKey;

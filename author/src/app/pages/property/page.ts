@@ -12,6 +12,7 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { MapType } from '@lib/state/map';
+import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
 import { OLOverlayMoveLandmarkComponent } from '@lib/ol/landmarks/ol-overlay-movelandmark';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -28,6 +29,9 @@ import { ViewState } from '@lib/state/view';
 export class PropertyPage extends AbstractMapPage {
   @ViewChild(OLOverlayMoveLandmarkComponent)
   moveLandmark: OLOverlayMoveLandmarkComponent;
+
+  @ViewChild(OLInteractionRedrawLandmarkComponent)
+  redrawLandmark: OLInteractionRedrawLandmarkComponent;
 
   constructor(
     protected actions$: Actions,
@@ -60,6 +64,16 @@ export class PropertyPage extends AbstractMapPage {
     );
   }
 
+  canRedrawLandmark(event?: MouseEvent): boolean {
+    return this.#can(
+      event,
+      this.olMap.selected.length === 1 &&
+        ['LineString', 'MultiLineString', 'Polygon', 'MultiPolygon'].includes(
+          this.olMap.selected[0].getGeometry().getType()
+        )
+    );
+  }
+
   getType(): MapType {
     return 'property';
   }
@@ -74,6 +88,9 @@ export class PropertyPage extends AbstractMapPage {
         break;
       case 'move-landmark':
         this.moveLandmark.setFeature(this.olMap.selected[0]);
+        break;
+      case 'redraw-landmark':
+        this.redrawLandmark.setFeature(this.olMap.selected[0]);
         break;
     }
     if (cFactory) this.onContextMenuImpl(cFactory);

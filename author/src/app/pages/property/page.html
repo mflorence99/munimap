@@ -279,8 +279,9 @@
               ></app-ol-style-universal
             ></app-ol-adaptor-landmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
-            <app-ol-interaction-selectlandmarks>
-            </app-ol-interaction-selectlandmarks>
+            <app-ol-interaction-selectlandmark>
+            </app-ol-interaction-selectlandmark>
+            <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
         </ng-container>
 
@@ -327,8 +328,9 @@
               ></app-ol-style-universal
             ></app-ol-adaptor-landmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
-            <app-ol-interaction-selectlandmarks>
-            </app-ol-interaction-selectlandmarks>
+            <app-ol-interaction-selectlandmark>
+            </app-ol-interaction-selectlandmark>
+            <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
         </ng-container>
 
@@ -369,8 +371,8 @@
 
     <ul>
       <li
+        *ngIf="canMoveLandmark()"
         (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
-        [class.disabled]="!canMoveLandmark()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
@@ -380,6 +382,23 @@
             ><fa-icon
               [icon]="['fas', 'question-circle']"
               matTooltip="Click and drag the target icon to the new position"
+            ></fa-icon
+          ></em>
+        </p>
+      </li>
+
+      <li
+        *ngIf="canRedrawLandmark()"
+        (click)="canRedrawLandmark($event) && onContextMenu('redraw-landmark')"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'draw-polygon']"></fa-icon>
+        <p>
+          Redraw landmark alignment
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click and drag the blue perimeter dots. Click+Ctrl to delete a point. ESC when finished."
             ></fa-icon
           ></em>
         </p>

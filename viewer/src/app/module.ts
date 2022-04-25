@@ -76,7 +76,7 @@ import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterCrop2SelectedParcelsComponent } from '@lib/ol/parcels/ol-filter-crop2selectedparcels';
-import { OLInteractionSelectLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-selectlandmarks';
+import { OLInteractionSelectLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-selectlandmark';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
@@ -184,7 +184,7 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterCrop2SelectedParcelsComponent,
-  OLInteractionSelectLandmarksComponent,
+  OLInteractionSelectLandmarkComponent,
   OLInteractionSelectParcelsComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,

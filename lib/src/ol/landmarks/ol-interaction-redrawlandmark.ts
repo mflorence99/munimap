@@ -1,11 +1,10 @@
-import { AddParcels } from '../../state/parcels';
-import { AuthState } from '../../state/auth';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog';
 import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DestroyService } from '../../services/destroy';
+import { Landmark } from '../../common';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
+import { UpdateLandmark } from '../../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -25,24 +24,28 @@ import copy from 'fast-copy';
 import OLCollection from 'ol/Collection';
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
+import OLLineString from 'ol/geom/LineString';
 import OLModify from 'ol/interaction/Modify';
+import OLMultiLineString from 'ol/geom/MultiLineString';
 import OLMultiPolygon from 'ol/geom/MultiPolygon';
 import OLPolygon from 'ol/geom/Polygon';
 import OLSnap from 'ol/interaction/Snap';
 
-// 🔥 this is substantially the same as ol-interaction-redrawlandmark
+// 🔥 this is substantially the same as ol-interaction-redrawparcel
 //    refactor ??
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-interaction-redrawparcel',
+  selector: 'app-ol-interaction-redrawlandmark',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
-  #feature: OLFeature<OLPolygon | OLMultiPolygon>;
+export class OLInteractionRedrawLandmarkComponent implements OnDestroy, OnInit {
+  #feature: OLFeature<
+    OLLineString | OLMultiLineString | OLPolygon | OLMultiPolygon
+  >;
   #format: OLGeoJSON;
-  #geometry: OLPolygon | OLMultiPolygon;
+  #geometry: OLLineString | OLMultiLineString | OLPolygon | OLMultiPolygon;
   #modifyStartKey: OLEventsKey;
   #touched = false;
 
@@ -50,7 +53,6 @@ export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
   olSnap: OLSnap;
 
   constructor(
-    private authState: AuthState,
     private dialog: MatDialog,
     private destroy$: DestroyService,
     private layer: OLLayerVectorComponent,
@@ -80,8 +82,10 @@ export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
 
   #saveRedraw(): void {
     const data: ConfirmDialogData = {
-      content: `Do you want to save the new parcel boundary for ${this.#feature.getId()}?`,
-      title: 'Please confirm new boundary'
+      content: `Do you want to save the new landmark alignment for ${this.#feature.get(
+        'name'
+      )}?`,
+      title: 'Please confirm new alignment'
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
@@ -89,15 +93,13 @@ export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
       .subscribe((result) => {
         if (result) {
           const geojson = JSON.parse(this.#format.writeFeature(this.#feature));
-          const redrawnParcel: Parcel = {
-            action: 'modified',
+          // 👉 update the store
+          const redrawnLandmark: Partial<Landmark> = {
+            id: this.#feature.getId() as string,
             geometry: geojson.geometry,
-            id: this.#feature.getId(),
-            owner: this.authState.currentProfile().email,
-            path: this.map.path,
             type: 'Feature'
           };
-          this.store.dispatch(new AddParcels([redrawnParcel]));
+          this.store.dispatch(new UpdateLandmark(redrawnLandmark));
         }
         // 👉 on CANCEL, reset geometry
         else this.#resetRedraw();
@@ -125,7 +127,7 @@ export class OLInteractionRedrawParcelComponent implements OnDestroy, OnInit {
 
   setFeature(feature: OLFeature<OLPolygon | OLMultiPolygon>): void {
     this.#feature = feature;
-    // 🔥 pretty hack back door -- see ol-style-parcels.ts
+    // 🔥 pretty hack back door -- see ol-style-universal.ts
     this.#feature.set('ol-interaction-redraw', true);
     // 👇 copy the geometry so we can restore it if redraw cancelled
     this.#geometry = copy(feature.getGeometry());
