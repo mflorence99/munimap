@@ -4,7 +4,6 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { CreateMap } from '@lib/state/map';
-import { DestroyService } from '@lib/services/destroy';
 import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -43,7 +42,6 @@ const PRINT_SIZES = {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
   selector: 'app-create-propertymap',
   styleUrls: [
     './create-propertymap.scss',

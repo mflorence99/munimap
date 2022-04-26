@@ -13,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
   selector: 'app-contextmenu',
   templateUrl: './contextmenu.html',
   styleUrls: ['./contextmenu.scss']

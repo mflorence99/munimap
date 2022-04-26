@@ -26,6 +26,7 @@ import OLPolygon from 'ol/geom/Polygon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
   selector: 'app-ol-interaction-redrawboundary',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
