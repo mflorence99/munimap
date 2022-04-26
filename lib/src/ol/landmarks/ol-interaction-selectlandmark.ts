@@ -1,3 +1,4 @@
+import { LandmarkID } from '../../common';
 import { Mapable } from '../ol-mapable';
 import { MapableComponent } from '../ol-mapable';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
@@ -74,9 +75,23 @@ export class OLInteractionSelectLandmarkComponent
   }
 
   #onSelect(_event?: OLSelectEvent): void {
-    const ids = this.selectedIDs.join(', ');
-    console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
+    console.log(
+      `%cSelected landmark`,
+      'color: lightcoral',
+      `${this.selected[0]?.get('name') ?? '-none-'}`
+    );
     this.featuresSelected.emit(this.selected);
+  }
+
+  #selectLandmark(id: LandmarkID): void {
+    const delta = id !== this.selectedIDs[0];
+    this.olSelect.getFeatures().clear();
+    const feature = this.layer.olLayer.getSource().getFeatureById(id);
+    this.olSelect.getFeatures().push(feature);
+    // 👉 ony push an event if the selection has changed
+    //    OL will reselect when features come in and out of view,
+    //    so we need to jump through all the other hoops
+    if (delta) this.#onSelect();
   }
 
   addToMap(): void {
@@ -90,5 +105,9 @@ export class OLInteractionSelectLandmarkComponent
 
   ngOnInit(): void {
     this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+  }
+
+  reselectLandmark(id: LandmarkID): void {
+    this.#selectLandmark(id);
   }
 }

@@ -135,7 +135,7 @@ export class OLInteractionSelectParcelsComponent
 
   #onSelect(_event?: OLSelectEvent): void {
     const ids = this.selectedIDs.join(', ');
-    console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
+    console.log(`%cSelected parcels`, 'color: lightcoral', `[${ids}]`);
     this.featuresSelected.emit(this.selected);
     // 👉 find the abutters
     if (this.findAbutters) this.#findAbutters();

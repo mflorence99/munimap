@@ -1,6 +1,7 @@
 import { DestroyService } from '../services/destroy';
 import { Landmark } from '../common';
 import { LandmarksState } from '../state/landmarks';
+import { OLInteractionSelectLandmarkComponent } from './landmarks/ol-interaction-selectlandmark';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
@@ -61,6 +62,12 @@ export class OLSourceLandmarksComponent implements OnInit {
       // 👉 add feature to source
       this.olVector.clear();
       this.olVector.addFeatures(features);
+      // 👉 the selector MAY not be present
+      const selector = this.map
+        .selector as OLInteractionSelectLandmarkComponent;
+      // 👉 reselect selected features b/c we've potentially removed them
+      const selectedIDs = selector?.selectedIDs;
+      if (selectedIDs?.length > 0) selector?.reselectLandmark(selectedIDs[0]);
       this.#success?.(features);
     });
   }

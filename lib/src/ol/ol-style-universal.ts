@@ -144,13 +144,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   ): string {
     if (this.contrast === 'blackOnWhite') {
       if (whenHovering) colorKey = '--rgb-indigo-a700';
-      else if (whenSelected) colorKey = '--rgb-red-a700';
       else if (whenRedrawing) colorKey = '--rgb-blue-a200';
+      else if (whenSelected) colorKey = '--rgb-red-a700';
       else colorKey = '--rgb-gray-900';
     } else if (this.contrast === 'whiteOnBlack') {
       if (whenHovering) colorKey = '--rgb-indigo-a100';
-      else if (whenSelected) colorKey = '--rgb-red-a100';
       else if (whenRedrawing) colorKey = '--rgb-blue-a200';
+      else if (whenSelected) colorKey = '--rgb-red-a100';
       else colorKey = '--rgb-gray-50';
     } else if (this.contrast === 'normal') {
       if (whenRedrawing) colorKey = '--rgb-blue-a200';
