@@ -347,9 +347,9 @@
 
         <!-- 📦 OVERLAY TO MOVE LANDMARK -->
 
-        <app-ol-overlay-movelandmark
+        <app-ol-overlay-landmarklabel
           *ngIf="!olMap.printing"
-        ></app-ol-overlay-movelandmark>
+        ></app-ol-overlay-landmarklabel>
       </ng-container>
     </app-ol-map>
   </mat-drawer-content>
@@ -371,13 +371,13 @@
 
     <ul>
       <li
-        *ngIf="canMoveLandmark()"
         (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
+        [class.disabled]="!canMoveLandmark()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
         <p>
-          Move landmark
+          Move landmark label
           <em
             ><fa-icon
               [icon]="['fas', 'question-circle']"
@@ -388,8 +388,8 @@
       </li>
 
       <li
-        *ngIf="canRedrawLandmark()"
         (click)="canRedrawLandmark($event) && onContextMenu('redraw-landmark')"
+        [class.disabled]="!canRedrawLandmark()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'draw-polygon']"></fa-icon>

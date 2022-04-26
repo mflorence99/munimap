@@ -473,7 +473,10 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           whenHovering,
           whenSelected
         );
-        const fontOutlineColor = this.#colorOfOpposite(props.fontOutlineColor);
+        const dfltOutlineColor = '--rgb-gray-50';
+        const fontOutlineColor = this.#colorOfOpposite(
+          props.fontOutlineColor ?? dfltOutlineColor
+        );
         // 👇 we may need to chunk the text into multiple lines
         let chunked;
         if (props.lineChunk) {
@@ -560,11 +563,16 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           whenHovering,
           whenSelected
         );
-        const fontOutlineColor = this.#colorOfOpposite(props.fontOutlineColor);
+        const dfltOutlineColor = '--rgb-gray-50';
+        const fontOutlineColor = this.#colorOfOpposite(
+          props.fontOutlineColor ?? dfltOutlineColor
+        );
         const iconColor = props.iconColor
           ? this.#colorOf(props.iconColor, whenHovering, whenSelected)
           : this.#colorOf(props.fontColor, whenHovering, whenSelected);
-        const iconOutlineColor = this.#colorOfOpposite(props.iconOutlineColor);
+        const iconOutlineColor = this.#colorOfOpposite(
+          props.iconOutlineColor ?? dfltOutlineColor
+        );
         // 👇 calculate the acreage if requested
         let text = props.name?.replace(/ /g, '\n');
         if (props.showDimension) {

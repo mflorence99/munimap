@@ -113,7 +113,7 @@ import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interact
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { OLOverlayMoveLandmarkComponent } from '@lib/ol/landmarks/ol-overlay-movelandmark';
+import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
@@ -264,7 +264,7 @@ const COMPONENTS = [
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLMapComponent,
-  OLOverlayMoveLandmarkComponent,
+  OLOverlayLandmarkLabelComponent,
   OLOverlayParcelLabelComponent,
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,

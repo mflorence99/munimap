@@ -79,14 +79,14 @@ export class LandmarkPropertiesClass {
   public fontFeet: number = null;
   public fontOpacity = 0;
   public fontOutline = false;
-  public fontOutlineColor = '--rgb-gray-50';
+  public fontOutlineColor = null;
   public fontPixels: number = null;
   public fontSize: 'huge' | 'large' | 'medium' | 'small' | 'tiny' | null = null;
   public fontStyle: 'normal' | 'bold' | 'italic' | null = null;
   public iconColor: string = null;
   public iconOpacity = 0;
   public iconOutline = false;
-  public iconOutlineColor = '--rgb-gray-50';
+  public iconOutlineColor = null;
   public iconSymbol: string = null;
   public lineChunk = false;
   public lineDash = [2, 1];
@@ -638,10 +638,12 @@ export function deserializeLandmark(landmark: Partial<Landmark>): void {
   if (landmark.geometry)
     landmark.geometry = JSON.parse(landmark.geometry as any);
   if (landmark.properties) {
-    landmarkProperties.forEach((prop) => {
-      if (!landmark.properties[prop])
-        landmark.properties[prop] = modelLandmark[prop];
-    });
+    // 🔥 this may not be such a brilliant idea, as without an
+    //    explicit property setting, we can't propery undo
+    // landmarkProperties.forEach((prop) => {
+    //   if (!landmark.properties[prop])
+    //     landmark.properties[prop] = modelLandmark[prop];
+    // });
     serializedLandmarkProperties.forEach((prop) => {
       if (landmark.properties[prop])
         landmark.properties[prop] = JSON.parse(landmark.properties[prop]);
@@ -706,10 +708,12 @@ export function serializeLandmark(landmark: Partial<Landmark>): void {
   if (landmark.geometry)
     landmark.geometry = JSON.stringify(landmark.geometry) as any;
   if (landmark.properties) {
-    landmarkProperties.forEach((prop) => {
-      if (landmark.properties[prop] === modelLandmark[prop])
-        delete landmark.properties[prop];
-    });
+    // 🔥 this may not be such a brilliant idea, as without an
+    //    explicit property setting, we can't propery undo
+    // landmarkProperties.forEach((prop) => {
+    //   if (landmark.properties[prop] === modelLandmark[prop])
+    //     delete landmark.properties[prop];
+    // });
     serializedLandmarkProperties.forEach((prop) => {
       if (landmark.properties[prop])
         landmark.properties[prop] = JSON.stringify(landmark.properties[prop]);

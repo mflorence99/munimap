@@ -13,7 +13,7 @@ import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { MapType } from '@lib/state/map';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
-import { OLOverlayMoveLandmarkComponent } from '@lib/ol/landmarks/ol-overlay-movelandmark';
+import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
@@ -27,8 +27,8 @@ import { ViewState } from '@lib/state/view';
   templateUrl: './page.html'
 })
 export class PropertyPage extends AbstractMapPage {
-  @ViewChild(OLOverlayMoveLandmarkComponent)
-  moveLandmark: OLOverlayMoveLandmarkComponent;
+  @ViewChild(OLOverlayLandmarkLabelComponent)
+  moveLandmark: OLOverlayLandmarkLabelComponent;
 
   @ViewChild(OLInteractionRedrawLandmarkComponent)
   redrawLandmark: OLInteractionRedrawLandmarkComponent;
@@ -57,19 +57,22 @@ export class PropertyPage extends AbstractMapPage {
   }
 
   canMoveLandmark(event?: MouseEvent): boolean {
+    const feature = this.olMap.selected[0];
     return this.#can(
       event,
       this.olMap.selected.length === 1 &&
-        this.olMap.selected[0].getGeometry().getType() === 'Point'
+        feature.get('name') &&
+        ['Point', 'Polygon'].includes(feature.getGeometry().getType())
     );
   }
 
   canRedrawLandmark(event?: MouseEvent): boolean {
+    const feature = this.olMap.selected[0];
     return this.#can(
       event,
       this.olMap.selected.length === 1 &&
         ['LineString', 'MultiLineString', 'Polygon', 'MultiPolygon'].includes(
-          this.olMap.selected[0].getGeometry().getType()
+          feature.getGeometry().getType()
         )
     );
   }

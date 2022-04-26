@@ -22,17 +22,17 @@ import OLPoint from 'ol/geom/Point';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-overlay-movelandmark',
-  templateUrl: './ol-overlay-movelandmark.html',
-  styleUrls: ['./ol-overlay-movelandmark.scss']
+  selector: 'app-ol-overlay-landmarklabel',
+  templateUrl: './ol-overlay-landmarklabel.html',
+  styleUrls: ['./ol-overlay-landmarklabel.scss']
 })
-export class OLOverlayMoveLandmarkComponent implements OnInit {
+export class OLOverlayLandmarkLabelComponent implements OnInit {
   #feature: OLFeature<any>;
   #hack: number;
 
-  olOverlay: OLOverlay;
+  @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;
 
-  @ViewChild('point', { static: true }) point: ElementRef<HTMLDivElement>;
+  olOverlay: OLOverlay;
 
   constructor(
     private destroy$: DestroyService,
@@ -56,7 +56,7 @@ export class OLOverlayMoveLandmarkComponent implements OnInit {
     // 👉 need to hack Y offsets by the height of the toolbar
     const style = getComputedStyle(document.documentElement);
     this.#hack = Number(style.getPropertyValue('--map-cy-toolbar'));
-    this.olOverlay.setElement(this.point.nativeElement);
+    this.olOverlay.setElement(this.label.nativeElement);
     this.#handleClick$();
   }
 
@@ -68,15 +68,24 @@ export class OLOverlayMoveLandmarkComponent implements OnInit {
         event.dropPoint.y - this.#hack
       ])
     );
-    // 👉 update the Feature
-    this.#feature.setGeometry(new OLPoint(fromLonLat(position)));
-    // 👉 update the store
-    const movedLandmark: Partial<Landmark> = {
-      id: this.#feature.getId() as string,
-      geometry: { type: 'Point', coordinates: position },
-      type: 'Feature'
-    };
-    this.store.dispatch(new UpdateLandmark(movedLandmark));
+    // 👉 update point labels
+    if (this.#feature.getGeometry().getType() === 'Point') {
+      this.#feature.setGeometry(new OLPoint(fromLonLat(position)));
+      const movedLandmark: Partial<Landmark> = {
+        id: this.#feature.getId() as string,
+        geometry: { type: 'Point', coordinates: position }
+      };
+      this.store.dispatch(new UpdateLandmark(movedLandmark));
+    }
+    // 👉 update point labels
+    else if (this.#feature.getGeometry().getType() === 'Polygon') {
+      this.#feature.set('textLocation', position);
+      const movedLandmark: Partial<Landmark> = {
+        id: this.#feature.getId() as string,
+        properties: { textLocation: position as [number, number] }
+      };
+      this.store.dispatch(new UpdateLandmark(movedLandmark));
+    }
     this.olOverlay.setPosition([0, 0]);
     // 👉 https://stackoverflow.com/questions/61157528
     event.source._dragRef.reset();
@@ -87,6 +96,18 @@ export class OLOverlayMoveLandmarkComponent implements OnInit {
 
   setFeature(feature: OLFeature<any>): void {
     this.#feature = feature;
-    this.olOverlay.setPosition(feature.getGeometry().getCoordinates());
+    if (feature.getGeometry().getType() === 'Point')
+      this.olOverlay.setPosition(feature.getGeometry().getCoordinates());
+    else if (feature.getGeometry().getType() === 'Polygon') {
+      if (feature.get('textLocation'))
+        this.olOverlay.setPosition(fromLonLat(feature.get('textLocation')));
+      else {
+        const center = feature
+          .getGeometry()
+          .getInteriorPoint()
+          .getCoordinates();
+        this.olOverlay.setPosition(center);
+      }
+    }
   }
 }
