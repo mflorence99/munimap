@@ -19,8 +19,6 @@ import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLLineString from 'ol/geom/LineString';
 import OLModify from 'ol/interaction/Modify';
-import OLMultiLineString from 'ol/geom/MultiLineString';
-import OLMultiPolygon from 'ol/geom/MultiPolygon';
 import OLPolygon from 'ol/geom/Polygon';
 import OLSnap from 'ol/interaction/Snap';
 
@@ -28,14 +26,12 @@ import OLSnap from 'ol/interaction/Snap';
 export abstract class OLInteractionRedrawComponent
   implements OnDestroy, OnInit
 {
+  #format: OLGeoJSON;
   #modifyStartKey: OLEventsKey;
   #touched = false;
 
-  feature: OLFeature<
-    OLLineString | OLMultiLineString | OLPolygon | OLMultiPolygon
-  >;
-  format: OLGeoJSON;
-  geometry: OLLineString | OLMultiLineString | OLPolygon | OLMultiPolygon;
+  feature: OLFeature<OLLineString | OLPolygon>;
+  geometry: OLLineString | OLPolygon;
 
   olModify: OLModify;
   olSnap: OLSnap;
@@ -45,7 +41,7 @@ export abstract class OLInteractionRedrawComponent
     protected layer: OLLayerVectorComponent,
     protected map: OLMapComponent
   ) {
-    this.format = new OLGeoJSON({
+    this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
@@ -70,6 +66,10 @@ export abstract class OLInteractionRedrawComponent
     this.#touched = false;
   }
 
+  getUpdatedGeometry(): any {
+    return JSON.parse(this.#format.writeFeature(this.feature)).geometry;
+  }
+
   ngOnDestroy(): void {
     this.#unsetFeature();
   }
@@ -85,7 +85,7 @@ export abstract class OLInteractionRedrawComponent
   // 👉 setFeature is called by the contextmenu code to initiate
   //    this interaction
 
-  setFeature(feature: OLFeature<OLPolygon | OLMultiPolygon>): void {
+  setFeature(feature: OLFeature<OLLineString | OLPolygon>): void {
     this.feature = feature;
     // 🔥 pretty hack back door -- see ol-style-parcels.ts
     this.feature.set('ol-interaction-redraw', true);

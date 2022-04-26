@@ -42,11 +42,10 @@ export class OLInteractionRedrawLandmarkComponent extends OLInteractionRedrawCom
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          const geojson = JSON.parse(this.format.writeFeature(this.feature));
           // 👉 update the store
           const redrawnLandmark: Partial<Landmark> = {
             id: this.feature.getId() as string,
-            geometry: geojson.geometry,
+            geometry: this.getUpdatedGeometry(),
             type: 'Feature'
           };
           this.store.dispatch(new UpdateLandmark(redrawnLandmark));

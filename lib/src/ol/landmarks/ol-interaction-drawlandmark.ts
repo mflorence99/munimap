@@ -1,31 +1,24 @@
-import { AddParcels } from '../../state/parcels';
-import { AuthState } from '../../state/auth';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog';
 import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DestroyService } from '../../services/destroy';
-import { OLInteractionRedrawComponent } from '../ol-interaction-redraw';
+import { OLInteractionDrawComponent } from '../ol-interaction-draw';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngxs/store';
 
-// 🔥 this is substantially the same as ol-interaction-redrawlandmark
-//    refactor ??
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-interaction-redrawparcel',
+  selector: 'app-ol-interaction-drawlandmark',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionRedrawParcelComponent extends OLInteractionRedrawComponent {
+export class OLInteractionDrawLandmarkComponent extends OLInteractionDrawComponent {
   constructor(
-    private authState: AuthState,
     private dialog: MatDialog,
     protected destroy$: DestroyService,
     protected layer: OLLayerVectorComponent,
@@ -35,28 +28,18 @@ export class OLInteractionRedrawParcelComponent extends OLInteractionRedrawCompo
     super(destroy$, layer, map);
   }
 
-  saveRedraw(): void {
+  saveFeature(): void {
     const data: ConfirmDialogData = {
-      content: `Do you want to save the new parcel boundary for ${this.feature.getId()}?`,
-      title: 'Please confirm new boundary'
+      content: `Do you want to save the new landmark?`,
+      title: 'Please confirm new landmark'
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          const redrawnParcel: Parcel = {
-            action: 'modified',
-            geometry: this.getUpdatedGeometry(),
-            id: this.feature.getId(),
-            owner: this.authState.currentProfile().email,
-            path: this.map.path,
-            type: 'Feature'
-          };
-          this.store.dispatch(new AddParcels([redrawnParcel]));
+          console.log({ feature: this.getFeature() });
         }
-        // 👉 on CANCEL, reset geometry
-        else this.resetRedraw();
       });
   }
 }

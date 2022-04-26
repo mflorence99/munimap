@@ -12,6 +12,7 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { MapType } from '@lib/state/map';
+import { OLInteractionDrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmark';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { Router } from '@angular/router';
@@ -27,6 +28,9 @@ import { ViewState } from '@lib/state/view';
   templateUrl: './page.html'
 })
 export class PropertyPage extends AbstractMapPage {
+  @ViewChild(OLInteractionDrawLandmarkComponent)
+  drawLandmark: OLInteractionDrawLandmarkComponent;
+
   @ViewChild(OLOverlayLandmarkLabelComponent)
   moveLandmark: OLOverlayLandmarkLabelComponent;
 
@@ -56,6 +60,10 @@ export class PropertyPage extends AbstractMapPage {
     return this.#can(event, this.olMap.selected.length === 1);
   }
 
+  canDrawLandmark(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 0);
+  }
+
   canMoveLandmark(event?: MouseEvent): boolean {
     const feature = this.olMap.selected[0];
     return this.#can(
@@ -71,9 +79,7 @@ export class PropertyPage extends AbstractMapPage {
     return this.#can(
       event,
       this.olMap.selected.length === 1 &&
-        ['LineString', 'MultiLineString', 'Polygon', 'MultiPolygon'].includes(
-          feature.getGeometry().getType()
-        )
+        ['LineString', 'Polygon'].includes(feature.getGeometry().getType())
     );
   }
 
@@ -88,6 +94,9 @@ export class PropertyPage extends AbstractMapPage {
         this.store.dispatch(
           new DeleteLandmark({ id: this.olMap.selectedIDs[0] })
         );
+        break;
+      case 'draw-landmark':
+        this.drawLandmark.startDraw();
         break;
       case 'move-landmark':
         this.moveLandmark.setFeature(this.olMap.selected[0]);

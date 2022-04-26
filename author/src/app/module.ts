@@ -104,6 +104,7 @@ import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
+import { OLInteractionDrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmark';
 import { OLInteractionRedrawBoundaryComponent } from '@lib/ol/ol-interaction-redrawboundary';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
@@ -176,6 +177,7 @@ import { faObjectGroup as fadObjectGroup } from '@fortawesome/pro-duotone-svg-ic
 import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-icons';
 import { faObjectUngroup as fadObjectUngroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectUngroup as fasObjectUngroup } from '@fortawesome/free-solid-svg-icons';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faPlusSquare as fadPlusSquare } from '@fortawesome/pro-duotone-svg-icons';
 import { faPlusSquare as fasPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
@@ -255,6 +257,7 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterPencilComponent,
+  OLInteractionDrawLandmarkComponent,
   OLInteractionRedrawBoundaryComponent,
   OLInteractionRedrawLandmarkComponent,
   OLInteractionRedrawParcelComponent,
@@ -506,6 +509,7 @@ export class RootModule {
       fasObjectGroup,
       fadObjectUngroup,
       fasObjectUngroup,
+      faPen,
       fadPlusSquare,
       fasPlusSquare,
       faPrint,
