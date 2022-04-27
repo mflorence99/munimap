@@ -26,18 +26,18 @@ import OLSelect from 'ol/interaction/Select';
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarkComponent)
+      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
     },
     {
       provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarkComponent)
+      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
     }
   ],
-  selector: 'app-ol-interaction-selectlandmark',
+  selector: 'app-ol-interaction-selectlandmarks',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionSelectLandmarkComponent
+export class OLInteractionSelectLandmarksComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
   #selectKey: OLEventsKey;
@@ -70,24 +70,33 @@ export class OLInteractionSelectLandmarkComponent
     this.olSelect = new OLSelect({
       condition: (event): boolean => event.type === 'click',
       layers: [this.layer.olLayer],
+      multi: true,
       style: this.layer.styleWhenSelected()
     });
   }
 
+  #hasSelectionChanged(ids: LandmarkID[]): boolean {
+    const diff = new Set(this.selectedIDs);
+    if (ids.length !== diff.size) return true;
+    for (const id of ids) diff.delete(id);
+    return diff.size > 0;
+  }
+
   #onSelect(_event?: OLSelectEvent): void {
-    console.log(
-      `%cSelected landmark`,
-      'color: lightcoral',
-      `${this.selected[0]?.get('name') ?? '-none-'}`
-    );
+    const names = this.selected
+      .map((selected) => selected.get('name'))
+      .join(', ');
+    console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
     this.featuresSelected.emit(this.selected);
   }
 
-  #selectLandmark(id: LandmarkID): void {
-    const delta = id !== this.selectedIDs[0];
+  #selectLandmarks(ids: LandmarkID[]): void {
+    const delta = this.#hasSelectionChanged(ids);
     this.olSelect.getFeatures().clear();
-    const feature = this.layer.olLayer.getSource().getFeatureById(id);
-    this.olSelect.getFeatures().push(feature);
+    this.layer.olLayer.getSource().forEachFeature((feature) => {
+      if (ids.includes(feature.getId()))
+        this.olSelect.getFeatures().push(feature);
+    });
     // 👉 ony push an event if the selection has changed
     //    OL will reselect when features come in and out of view,
     //    so we need to jump through all the other hoops
@@ -107,7 +116,7 @@ export class OLInteractionSelectLandmarkComponent
     this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 
-  reselectLandmark(id: LandmarkID): void {
-    this.#selectLandmark(id);
+  reselectLandmarks(ids: LandmarkID[]): void {
+    this.#selectLandmarks(ids);
   }
 }

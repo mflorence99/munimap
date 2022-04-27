@@ -59,8 +59,8 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
     this.#touched = false;
   }
 
-  getFeature(): OLFeature<any> {
-    return this.#source.getFeatures()[0];
+  getFeatures(): OLFeature<any>[] {
+    return this.#source.getFeatures();
   }
 
   ngOnDestroy(): void {

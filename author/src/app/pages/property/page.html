@@ -279,9 +279,9 @@
               ></app-ol-style-universal
             ></app-ol-adaptor-landmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
-            <app-ol-interaction-selectlandmark>
-            </app-ol-interaction-selectlandmark>
-            <app-ol-interaction-drawlandmark></app-ol-interaction-drawlandmark>
+            <app-ol-interaction-selectlandmarks>
+            </app-ol-interaction-selectlandmarks>
+            <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
             <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
         </ng-container>
@@ -329,9 +329,9 @@
               ></app-ol-style-universal
             ></app-ol-adaptor-landmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
-            <app-ol-interaction-selectlandmark>
-            </app-ol-interaction-selectlandmark>
-            <app-ol-interaction-drawlandmark></app-ol-interaction-drawlandmark>
+            <app-ol-interaction-selectlandmarks>
+            </app-ol-interaction-selectlandmarks>
+            <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
             <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
         </ng-container>
@@ -368,7 +368,8 @@
 <ng-template #contextmenu>
   <nav class="contextmenu">
     <header *ngIf="olMap.selectedIDs.length !== 0" class="header">
-      {{ olMap.selected[0].get('name') }}
+      {{ olMap.selected.length === 1 ? olMap.selected[0].get('name') : 'Multiple
+      landmarks' }}
     </header>
 
     <ul>
@@ -407,8 +408,8 @@
       </li>
 
       <li
-        (click)="canDrawLandmark($event) && onContextMenu('draw-landmark')"
-        [class.disabled]="!canDrawLandmark()"
+        (click)="canDrawLandmarks($event) && onContextMenu('draw-landmarks')"
+        [class.disabled]="!canDrawLandmarks()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'pen']"></fa-icon>

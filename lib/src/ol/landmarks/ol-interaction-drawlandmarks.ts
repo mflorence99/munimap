@@ -13,11 +13,11 @@ import { Store } from '@ngxs/store';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-interaction-drawlandmark',
+  selector: 'app-ol-interaction-drawlandmarks',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionDrawLandmarkComponent extends OLInteractionDrawComponent {
+export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawComponent {
   constructor(
     private dialog: MatDialog,
     protected destroy$: DestroyService,
@@ -30,15 +30,15 @@ export class OLInteractionDrawLandmarkComponent extends OLInteractionDrawCompone
 
   saveFeature(): void {
     const data: ConfirmDialogData = {
-      content: `Do you want to save the new landmark?`,
-      title: 'Please confirm new landmark'
+      content: `Blah blah?`,
+      title: 'Blah Blah'
     };
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          console.log({ feature: this.getFeature() });
+          console.log({ features: this.getFeatures() });
         }
       });
   }

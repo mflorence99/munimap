@@ -90,8 +90,6 @@ export class OLInteractionRedrawBoundaryComponent implements OnDestroy, OnInit {
     this.#unsetBoundary();
   }
 
-  // 👇 this makes the interaction work only for me
-
   ngOnInit(): void {
     // 🔥 horrible hack but OK as this is just a backdoor
     setTimeout(() => {

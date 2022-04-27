@@ -104,12 +104,12 @@ import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
-import { OLInteractionDrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmark';
+import { OLInteractionDrawLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmarks';
 import { OLInteractionRedrawBoundaryComponent } from '@lib/ol/ol-interaction-redrawboundary';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
 import { OLInteractionSelectGeoJSONComponent } from '@lib/ol/ol-interaction-selectgeojson';
-import { OLInteractionSelectLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-selectlandmark';
+import { OLInteractionSelectLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-selectlandmarks';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/parcels/ol-interaction-selectparcels';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
@@ -257,12 +257,12 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterPencilComponent,
-  OLInteractionDrawLandmarkComponent,
+  OLInteractionDrawLandmarksComponent,
   OLInteractionRedrawBoundaryComponent,
   OLInteractionRedrawLandmarkComponent,
   OLInteractionRedrawParcelComponent,
   OLInteractionSelectGeoJSONComponent,
-  OLInteractionSelectLandmarkComponent,
+  OLInteractionSelectLandmarksComponent,
   OLInteractionSelectParcelsComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
