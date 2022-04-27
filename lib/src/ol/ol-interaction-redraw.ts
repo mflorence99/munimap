@@ -4,6 +4,7 @@ import { OLMapComponent } from './ol-map';
 
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
+import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
@@ -55,9 +56,8 @@ export abstract class OLInteractionRedrawComponent
       .subscribe(() => {
         if (this.#touched) {
           const feature = JSON.parse(this.#format.writeFeature(this.feature));
-          this.saveRedraw(feature);
-        }
-        this.#unsetFeature();
+          this.saveRedraw(feature).subscribe(() => this.#unsetFeature());
+        } else this.#unsetFeature();
       });
   }
 
@@ -66,6 +66,10 @@ export abstract class OLInteractionRedrawComponent
     if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
     if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
     if (this.feature) this.feature.set('ol-interaction-redraw', false);
+    this.#modifyStartKey = null;
+    this.olModify = null;
+    this.olSnap = null;
+    this.feature = null;
     this.#touched = false;
   }
 
@@ -108,5 +112,5 @@ export abstract class OLInteractionRedrawComponent
     this.map.olMap.addInteraction(this.olSnap);
   }
 
-  abstract saveRedraw(feature: GeoJSON.Feature<any>): void;
+  abstract saveRedraw(feature: GeoJSON.Feature<any>): Observable<boolean>;
 }

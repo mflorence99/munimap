@@ -4,6 +4,7 @@ import { OLMapComponent } from './ol-map';
 
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
+import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
@@ -12,7 +13,6 @@ import { unByKey } from 'ol/Observable';
 
 import OLDraw from 'ol/interaction/Draw';
 import OLGeoJSON from 'ol/format/GeoJSON';
-import OLSnap from 'ol/interaction/Snap';
 import OLVectorLayer from 'ol/layer/Vector';
 import OLVectorSource from 'ol/source/Vector';
 
@@ -25,7 +25,6 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
   #touched = false;
 
   olDraw: OLDraw;
-  olSnap: OLSnap;
 
   constructor(
     protected destroy$: DestroyService,
@@ -43,13 +42,11 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
   #handleStreams$(): void {
     this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.#touched) {
-        this.olDraw.finishDrawing();
         const features = this.#source
           .getFeatures()
           .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
-        this.saveFeatures(features);
-      }
-      this.#stopDraw();
+        this.saveFeatures(features).subscribe(() => this.#stopDraw());
+      } else this.#stopDraw();
     });
   }
 
@@ -57,7 +54,9 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
     if (this.#drawStartKey) unByKey(this.#drawStartKey);
     if (this.#layer) this.map.olMap.removeLayer(this.#layer);
     if (this.olDraw) this.map.olMap.removeInteraction(this.olDraw);
-    if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
+    this.#drawStartKey = null;
+    this.#layer = null;
+    this.olDraw = null;
     this.#touched = false;
   }
 
@@ -67,6 +66,10 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.#handleStreams$();
+  }
+
+  resetDraw(): void {
+    this.olDraw.abortDrawing();
   }
 
   // 👉 setFeature is called by the contextmenu code to initiate
@@ -79,8 +82,9 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
     this.map.olMap.addLayer(this.#layer);
     // 👇 create a standard OL Draw interaction
     this.olDraw = new OLDraw({
-      stopClick: true,
+      freehand: true,
       source: this.#source,
+      stopClick: true,
       type: geometryType
     });
     this.#drawStartKey = this.olDraw.on(
@@ -88,10 +92,7 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
       () => (this.#touched = true)
     );
     this.map.olMap.addInteraction(this.olDraw);
-    // 👇 create a standard OL Snap interaction
-    this.olSnap = new OLSnap({ source: this.layer.olLayer.getSource() });
-    this.map.olMap.addInteraction(this.olSnap);
   }
 
-  abstract saveFeatures(features: GeoJSON.Feature<any>[]): void;
+  abstract saveFeatures(features: GeoJSON.Feature<any>[]): Observable<boolean>;
 }

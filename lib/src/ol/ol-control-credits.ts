@@ -48,7 +48,7 @@ export class OLControlCreditsComponent implements AfterViewInit, Mapable {
         // 👇 set the font and position proportional to the map size
         const element = this.map.olMap.getTargetElement();
         const style = (credits as any).style;
-        const dim = `${element.clientHeight / 150}px`;
+        const dim = `${element.clientHeight / 100}px`;
         style.bottom = dim;
         style.height = dim;
         style.fontSize = dim;

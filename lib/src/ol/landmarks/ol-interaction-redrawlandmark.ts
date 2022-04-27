@@ -10,7 +10,10 @@ import { UpdateLandmark } from '../../state/landmarks';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
+
+import { tap } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,28 +33,30 @@ export class OLInteractionRedrawLandmarkComponent extends OLInteractionRedrawCom
     super(destroy$, layer, map);
   }
 
-  saveRedraw(feature: GeoJSON.Feature<any>): void {
+  saveRedraw(feature: GeoJSON.Feature<any>): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new landmark alignment for ${this.feature.get(
         'name'
       )}?`,
       title: 'Please confirm new alignment'
     };
-    this.dialog
+    return this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          // 👉 update the store
-          const redrawnLandmark: Partial<Landmark> = {
-            id: this.feature.getId() as string,
-            geometry: feature.geometry,
-            type: 'Feature'
-          };
-          this.store.dispatch(new UpdateLandmark(redrawnLandmark));
-        }
-        // 👉 on CANCEL, reset geometry
-        else this.resetRedraw();
-      });
+      .pipe(
+        tap((result) => {
+          if (result) {
+            // 👉 update the store
+            const redrawnLandmark: Partial<Landmark> = {
+              id: this.feature.getId() as string,
+              geometry: feature.geometry,
+              type: 'Feature'
+            };
+            this.store.dispatch(new UpdateLandmark(redrawnLandmark));
+          }
+          // 👉 on CANCEL, reset geometry
+          else this.resetRedraw();
+        })
+      );
   }
 }

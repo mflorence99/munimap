@@ -8,7 +8,10 @@ import { OLMapComponent } from '../ol-map';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
+
+import { tap } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,18 +31,20 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
     super(destroy$, layer, map);
   }
 
-  saveFeatures(features: GeoJSON.Feature<any>[]): void {
+  saveFeatures(features: GeoJSON.Feature<any>[]): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Blah blah?`,
       title: 'Blah Blah'
     };
-    this.dialog
+    return this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          console.log({ features });
-        }
-      });
+      .pipe(
+        tap((result) => {
+          if (result) {
+            console.log({ features });
+          } else this.resetDraw();
+        })
+      );
   }
 }

@@ -11,10 +11,10 @@ import { Parcel } from '../../common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
 
-// 🔥 this is substantially the same as ol-interaction-redrawlandmark
-//    refactor ??
+import { tap } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,28 +35,30 @@ export class OLInteractionRedrawParcelComponent extends OLInteractionRedrawCompo
     super(destroy$, layer, map);
   }
 
-  saveRedraw(feature: GeoJSON.Feature<any>): void {
+  saveRedraw(feature: GeoJSON.Feature<any>): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new parcel boundary for ${this.feature.getId()}?`,
       title: 'Please confirm new boundary'
     };
-    this.dialog
+    return this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          const redrawnParcel: Parcel = {
-            action: 'modified',
-            geometry: feature.geometry,
-            id: this.feature.getId(),
-            owner: this.authState.currentProfile().email,
-            path: this.map.path,
-            type: 'Feature'
-          };
-          this.store.dispatch(new AddParcels([redrawnParcel]));
-        }
-        // 👉 on CANCEL, reset geometry
-        else this.resetRedraw();
-      });
+      .pipe(
+        tap((result) => {
+          if (result) {
+            const redrawnParcel: Parcel = {
+              action: 'modified',
+              geometry: feature.geometry,
+              id: this.feature.getId(),
+              owner: this.authState.currentProfile().email,
+              path: this.map.path,
+              type: 'Feature'
+            };
+            this.store.dispatch(new AddParcels([redrawnParcel]));
+          }
+          // 👉 on CANCEL, reset geometry
+          else this.resetRedraw();
+        })
+      );
   }
 }

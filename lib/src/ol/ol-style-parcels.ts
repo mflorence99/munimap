@@ -94,7 +94,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
 
   @Input() borderWidth = 10 /* 👈 feet */;
   @Input() borderWidthSelectRatio = 2;
-  @Input() dimensionsFontSize = 12;
+  @Input() dimensionsFontSize = 24;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
   @Input() forceAbutted = false /* 🔥 experimental */;
@@ -177,8 +177,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
             offsetY:
               fontSizes[dimension.ix] *
               (ltr ? -1 : 1) *
-              (dimension.clockwise ? -1 : 1) *
-              0.75,
+              (dimension.clockwise ? -1 : 1),
             placement: 'line',
             stroke: new OLStroke({
               color: `rgba(${outline}, 1)`,
