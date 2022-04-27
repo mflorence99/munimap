@@ -53,7 +53,10 @@ export abstract class OLInteractionRedrawComponent
     merge(this.map.escape$, this.map.featuresSelected)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.#touched) this.saveRedraw();
+        if (this.#touched) {
+          const feature = JSON.parse(this.#format.writeFeature(this.feature));
+          this.saveRedraw(feature);
+        }
         this.#unsetFeature();
       });
   }
@@ -64,10 +67,6 @@ export abstract class OLInteractionRedrawComponent
     if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
     if (this.feature) this.feature.set('ol-interaction-redraw', false);
     this.#touched = false;
-  }
-
-  getUpdatedGeometry(): any {
-    return JSON.parse(this.#format.writeFeature(this.feature)).geometry;
   }
 
   ngOnDestroy(): void {
@@ -109,5 +108,5 @@ export abstract class OLInteractionRedrawComponent
     this.map.olMap.addInteraction(this.olSnap);
   }
 
-  abstract saveRedraw(): void;
+  abstract saveRedraw(feature: GeoJSON.Feature<any>): void;
 }

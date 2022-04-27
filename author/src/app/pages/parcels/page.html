@@ -337,7 +337,9 @@
             ></app-ol-style-universal
           ></app-ol-adaptor-boundary>
           <app-ol-source-boundary></app-ol-source-boundary>
-          <app-ol-interaction-redrawboundary></app-ol-interaction-redrawboundary>
+          <app-ol-interaction-redrawboundary
+            *ngIf="isPrivileged()"
+          ></app-ol-interaction-redrawboundary>
         </app-ol-layer-vector>
 
         <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->

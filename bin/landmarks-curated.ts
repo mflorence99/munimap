@@ -113,7 +113,12 @@ const CURATIONS: Curation[] = [
         geoOp: 'lineToPolygon',
         properties: new LandmarkPropertiesClass({
           fillColor: '--map-waterbody-fill',
-          fillOpacity: 1
+          fillOpacity: 1,
+          fontColor: '--map-river-text-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic'
         }),
         source: './proxy/assets/landmarks/florence/ponds.gpx'
       },

@@ -176,7 +176,7 @@
   </trk>
 
   <trk>
-    <name>Trench 1</name>
+    <name>Trench</name>
     <trkseg>
       <trkpt lat="43.205575497821897" lon="-72.028967296958925"> </trkpt>
       <trkpt lat="43.20561264409389" lon="-72.028956568122865"> </trkpt>
@@ -198,7 +198,7 @@
     </trkseg>
   </trk>
   <trk>
-    <name>Trench 2</name>
+    <name>Trench</name>
     <trkseg>
       <trkpt lat="43.20587559995149" lon="-72.02884391534424"> </trkpt>
       <trkpt lat="43.205921543795419" lon="-72.028841233135225"> </trkpt>

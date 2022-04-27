@@ -28,7 +28,7 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
     super(destroy$, layer, map);
   }
 
-  saveFeature(): void {
+  saveFeatures(features: GeoJSON.Feature<any>[]): void {
     const data: ConfirmDialogData = {
       content: `Blah blah?`,
       title: 'Blah Blah'
@@ -38,7 +38,7 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          console.log({ features: this.getFeatures() });
+          console.log({ features });
         }
       });
   }

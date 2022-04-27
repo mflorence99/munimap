@@ -35,7 +35,7 @@ export class OLInteractionRedrawParcelComponent extends OLInteractionRedrawCompo
     super(destroy$, layer, map);
   }
 
-  saveRedraw(): void {
+  saveRedraw(feature: GeoJSON.Feature<any>): void {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new parcel boundary for ${this.feature.getId()}?`,
       title: 'Please confirm new boundary'
@@ -47,7 +47,7 @@ export class OLInteractionRedrawParcelComponent extends OLInteractionRedrawCompo
         if (result) {
           const redrawnParcel: Parcel = {
             action: 'modified',
-            geometry: this.getUpdatedGeometry(),
+            geometry: feature.geometry,
             id: this.feature.getId(),
             owner: this.authState.currentProfile().email,
             path: this.map.path,

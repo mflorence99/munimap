@@ -12,7 +12,6 @@ import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
 import OLDraw from 'ol/interaction/Draw';
-import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLSnap from 'ol/interaction/Snap';
 import OLVectorLayer from 'ol/layer/Vector';
@@ -46,7 +45,12 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
     merge(this.map.escape$, this.map.featuresSelected)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.#touched) this.saveFeature();
+        if (this.#touched) {
+          const features = this.#source
+            .getFeatures()
+            .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
+          this.saveFeatures(features);
+        }
         this.#stopDraw();
       });
   }
@@ -57,10 +61,6 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
     if (this.olDraw) this.map.olMap.removeInteraction(this.olDraw);
     if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
     this.#touched = false;
-  }
-
-  getFeatures(): OLFeature<any>[] {
-    return this.#source.getFeatures();
   }
 
   ngOnDestroy(): void {
@@ -95,5 +95,5 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
     this.map.olMap.addInteraction(this.olSnap);
   }
 
-  abstract saveFeature(): void;
+  abstract saveFeatures(features: GeoJSON.Feature<any>[]): void;
 }
