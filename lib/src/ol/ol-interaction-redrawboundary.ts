@@ -1,24 +1,20 @@
 import { DestroyService } from '../services/destroy';
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
-import { simplify } from '../common';
-
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { click } from 'ol/events/condition';
+import { forwardRef } from '@angular/core';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 
-import OLCollection from 'ol/Collection';
-import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLModify from 'ol/interaction/Modify';
-import OLMultiPolygon from 'ol/geom/MultiPolygon';
-import OLPolygon from 'ol/geom/Polygon';
 
 // 🔥 this is a back-door interface only for me to hack in revised
 //    town boundaries -- the state supplied geometries do not properly
@@ -26,13 +22,18 @@ import OLPolygon from 'ol/geom/Polygon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLInteractionRedrawBoundaryComponent)
+    },
+    DestroyService
+  ],
   selector: 'app-ol-interaction-redrawboundary',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionRedrawBoundaryComponent implements OnDestroy, OnInit {
-  #boundary: OLFeature<OLPolygon | OLMultiPolygon>;
+export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
   #format: OLGeoJSON;
 
   olModify: OLModify;
@@ -42,6 +43,7 @@ export class OLInteractionRedrawBoundaryComponent implements OnDestroy, OnInit {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
+    // 👉 one to rule them all
     this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
@@ -50,13 +52,21 @@ export class OLInteractionRedrawBoundaryComponent implements OnDestroy, OnInit {
 
   #emitBoundary(): void {
     const geojson: GeoJSON.FeatureCollection = {
-      features: [JSON.parse(this.#format.writeFeature(this.#boundary))],
+      features: [
+        JSON.parse(
+          this.#format.writeFeatures(
+            this.layer.olLayer.getSource().getFeatures()
+          )
+        )
+      ],
       type: 'FeatureCollection'
     };
     // 👉 jam original bbox, which was calculated as 4:3
     geojson.features[0].bbox = this.map.boundary.features[0].bbox;
     // 👉 put the adjusted boundary on the clipboard
-    navigator.clipboard.writeText(JSON.stringify(simplify(geojson), null, ' '));
+    navigator.clipboard.writeText(JSON.stringify(geojson, null, ' '));
+    // 👉 jst so we know something happened
+    console.log(geojson);
   }
 
   // 👇 the idea is that ESC accepts the redraw
@@ -67,34 +77,17 @@ export class OLInteractionRedrawBoundaryComponent implements OnDestroy, OnInit {
     });
   }
 
-  #setBoundary(): void {
-    // 👉 the one and only feature is the boundary
-    this.#boundary = this.layer.olLayer.getSource().getFeatures()[0];
-    if (this.#boundary) {
-      const features = new OLCollection([this.#boundary]);
-      this.olModify = new OLModify({
-        deleteCondition: (event): boolean =>
-          click(event) && platformModifierKeyOnly(event),
-        features,
-        hitDetection: this.layer.olLayer
-      });
-      this.map.olMap.addInteraction(this.olModify);
-    }
-  }
-
-  #unsetBoundary(): void {
-    if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
-  }
-
-  ngOnDestroy(): void {
-    this.#unsetBoundary();
+  addToMap(): void {
+    this.olModify = new OLModify({
+      deleteCondition: (event): boolean =>
+        click(event) && platformModifierKeyOnly(event),
+      hitDetection: this.layer.olLayer,
+      source: this.layer.olLayer.getSource()
+    });
+    this.map.olMap.addInteraction(this.olModify);
   }
 
   ngOnInit(): void {
-    // 🔥 horrible hack but OK as this is just a backdoor
-    setTimeout(() => {
-      this.#handleStreams$();
-      this.#setBoundary();
-    }, 1500 /* 👈 not always long enough, hence check in #setBoundary */);
+    this.#handleStreams$();
   }
 }

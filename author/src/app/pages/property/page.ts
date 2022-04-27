@@ -24,7 +24,7 @@ import { ViewState } from '@lib/state/view';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-property',
-  styleUrls: ['../abstract-map.scss'],
+  styleUrls: ['../abstract-map.scss', './page.scss'],
   templateUrl: './page.html'
 })
 export class PropertyPage extends AbstractMapPage {
@@ -83,11 +83,16 @@ export class PropertyPage extends AbstractMapPage {
     );
   }
 
+  eatMe(event: Event): void {
+    event.stopPropagation();
+  }
+
   getType(): MapType {
     return 'property';
   }
 
-  onContextMenu(key: string): void {
+  onContextMenu(key: string, opaque?: string): void {
+    console.log({ opaque });
     let cFactory: ComponentFactory<SidebarComponent>;
     switch (key) {
       case 'delete-landmark':
@@ -96,7 +101,7 @@ export class PropertyPage extends AbstractMapPage {
         );
         break;
       case 'draw-landmarks':
-        this.drawLandmarks.startDraw();
+        this.drawLandmarks.startDraw(opaque);
         break;
       case 'move-landmark':
         this.moveLandmark.setFeature(this.olMap.selected[0]);

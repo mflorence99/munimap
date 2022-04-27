@@ -1,0 +1,12 @@
+select {
+  appearance: auto;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  display: inline;
+  width: unset;
+
+  option {
+    background-color: var(--mat-gray-800);
+    color: var(--text-color);
+  }
+}

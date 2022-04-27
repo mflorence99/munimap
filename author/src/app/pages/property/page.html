@@ -368,8 +368,8 @@
 <ng-template #contextmenu>
   <nav class="contextmenu">
     <header *ngIf="olMap.selectedIDs.length !== 0" class="header">
-      {{ olMap.selected.length === 1 ? olMap.selected[0].get('name') : 'Multiple
-      landmarks' }}
+      {{ olMap.selected.length > 1 ? 'Multiple landmarks' :
+      olMap.selected[0].get('name') }}
     </header>
 
     <ul>
@@ -401,19 +401,37 @@
           <em
             ><fa-icon
               [icon]="['fas', 'question-circle']"
-              matTooltip="Click and drag the blue perimeter dots. Click+Ctrl to delete a point. ESC when finished."
+              matTooltip="Click and drag the blue perimeter points. Click+Ctrl to delete a point. ESC when finished."
             ></fa-icon
           ></em>
         </p>
       </li>
 
       <li
-        (click)="canDrawLandmarks($event) && onContextMenu('draw-landmarks')"
+        (click)="canDrawLandmarks($event) && onContextMenu('draw-landmarks', geometryType.value)"
         [class.disabled]="!canDrawLandmarks()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'pen']"></fa-icon>
-        <p>TEMPORARY</p>
+        <p>
+          Draw new
+          <select
+            #geometryType
+            (change)="onContextMenu('draw-landmarks', $event.srcElement.value)"
+            [disabled]="!canDrawLandmarks()"
+          >
+            <option [value]="'Point'">point</option>
+            <option [value]="'LineString'">linear</option>
+            <option [value]="'Polygon'">area</option>
+          </select>
+          landmarks
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click to place a perimeter point. ESC when finished. Use the redraw tool to modify later."
+            ></fa-icon
+          ></em>
+        </p>
       </li>
 
       <li
