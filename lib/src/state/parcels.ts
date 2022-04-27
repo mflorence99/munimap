@@ -191,12 +191,13 @@ export class ParcelsState implements NgxsOnInit {
     );
   }
 
-  #normalize(parcel: Parcel): Parcel {
-    calculateParcel(parcel);
-    normalizeParcel(parcel);
-    serializeParcel(parcel);
-    timestampParcel(parcel);
-    return parcel;
+  #normalize(parcel: Partial<Parcel>): Partial<Parcel> {
+    const normalized = copy(parcel);
+    calculateParcel(normalized);
+    normalizeParcel(normalized);
+    serializeParcel(normalized);
+    timestampParcel(normalized);
+    return normalized;
   }
 
   @Action(AddParcels) addParcels(

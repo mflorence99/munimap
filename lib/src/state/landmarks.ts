@@ -10,6 +10,7 @@ import { Profile } from './auth';
 import { Redo as RedoProxy } from './undo';
 import { Undo as UndoProxy } from './undo';
 
+import { calculateLandmark } from '../common';
 import { deserializeLandmark } from '../common';
 import { makeLandmarkID } from '../common';
 import { serializeLandmark } from '../common';
@@ -221,6 +222,7 @@ export class LandmarksState implements NgxsOnInit {
 
   #normalize(landmark: Partial<Landmark>): Partial<Landmark> {
     const normalized = copy(landmark);
+    calculateLandmark(normalized);
     serializeLandmark(normalized);
     return normalized;
   }

@@ -43,12 +43,7 @@ export interface LakeProperties {
 
 export interface Landmark
   extends GeoJSON.Feature<
-    | GeoJSON.Point
-    | GeoJSON.MultiPoint
-    | GeoJSON.LineString
-    | GeoJSON.MultiLineString
-    | GeoJSON.Polygon
-    | GeoJSON.MultiPolygon,
+    GeoJSON.Point | GeoJSON.MultiPoint | GeoJSON.LineString | GeoJSON.Polygon,
     LandmarkProperties
   > {
   $id?: string /* 👈 optional only because we'll complete it */;
@@ -59,12 +54,7 @@ export interface Landmark
 }
 
 export type Landmarks = GeoJSON.FeatureCollection<
-  | GeoJSON.Point
-  | GeoJSON.MultiPoint
-  | GeoJSON.LineString
-  | GeoJSON.MultiLineString
-  | GeoJSON.Polygon
-  | GeoJSON.MultiPolygon,
+  GeoJSON.Point | GeoJSON.MultiPoint | GeoJSON.LineString | GeoJSON.Polygon,
   LandmarkProperties
 >;
 
@@ -94,7 +84,9 @@ export class LandmarkPropertiesClass {
   public minZoom = 0;
   public name: string = null;
   public offsetFeet: number[] = null;
+  public orientation: number = null;
   public showDimension = false;
+  public sqarcity: number = null;
   public strokeColor: string = null;
   public strokeFeet: number = null;
   public strokeOpacity = 0;
@@ -495,7 +487,23 @@ export function bboxDistance(
   return [cx, cy];
 }
 
-export function calculateParcel(parcel: Parcel): void {
+export function calculateLandmark(landmark: Partial<Landmark>): void {
+  if (landmark.geometry && landmark.geometry.type === 'Polygon') {
+    const polygon = landmark as GeoJSON.Feature<GeoJSON.Polygon>;
+    landmark.properties ??= {};
+    landmark.properties.orientation = calculateOrientation(polygon);
+    landmark.properties.sqarcity = calculateSqarcity(
+      polygon,
+      calculateLengths(polygon)
+    );
+  } else {
+    landmark.properties ??= {};
+    landmark.properties.orientation = 0;
+    landmark.properties.sqarcity = 0;
+  }
+}
+
+export function calculateParcel(parcel: Partial<Parcel>): void {
   if (parcel.geometry) {
     // 👉 convert MultiPolygons into an array of Polygons
     let polygons: GeoJSON.Feature<GeoJSON.Polygon>[] = [parcel as any];
@@ -509,7 +517,7 @@ export function calculateParcel(parcel: Parcel): void {
         type: 'Feature'
       }));
     }
-    // 👉 bbox applues to the whole geometry
+    // 👉 bbox applies to the whole geometry
     parcel.bbox = bbox(parcel);
     // 👉 now do calculations on each Polygon
     parcel.properties ??= {};
@@ -531,6 +539,7 @@ export function calculateParcel(parcel: Parcel): void {
     );
   } else if (parcel.geometry === null) {
     parcel.bbox = null;
+    parcel.properties ??= {};
     parcel.properties.areas = null;
     parcel.properties.centers = null;
     parcel.properties.lengths = null;
@@ -667,14 +676,14 @@ export function makeLandmarkID(landmark: Partial<Landmark>): LandmarkID {
   return hash.MD5(landmark.geometry);
 }
 
-export function normalizeParcel(parcel: Parcel): void {
+export function normalizeParcel(parcel: Partial<Parcel>): void {
   if (parcel.properties) {
     normalizeAddress(parcel);
     normalizeOwner(parcel);
   }
 }
 
-export function normalizeAddress(parcel: Parcel): void {
+export function normalizeAddress(parcel: Partial<Parcel>): void {
   if (parcel.properties.address) {
     let normalized = parcel.properties.address.trim().toUpperCase();
     normalized = normalized.replace(/\bCIR\b/, ' CIRCLE ');
@@ -697,7 +706,7 @@ export function normalizeAddress(parcel: Parcel): void {
   }
 }
 
-export function normalizeOwner(parcel: Parcel): void {
+export function normalizeOwner(parcel: Partial<Parcel>): void {
   if (parcel.properties.owner) {
     const normalized = parcel.properties.owner.trim().toUpperCase();
     parcel.properties.owner = normalized;
@@ -760,6 +769,6 @@ export function simplify(
   return geojson;
 }
 
-export function timestampParcel(parcel: Parcel): void {
+export function timestampParcel(parcel: Partial<Parcel>): void {
   if (!parcel.timestamp) parcel.timestamp = serverTimestamp();
 }

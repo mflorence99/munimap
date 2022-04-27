@@ -610,6 +610,10 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 font: `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`,
                 offsetY: props.iconSymbol ? -fontPixels : 0,
                 overflow: true,
+                rotation:
+                  props.sqarcity <= 0.5
+                    ? props.orientation * (Math.PI / 180)
+                    : 0,
                 stroke: props.fontOutline
                   ? new OLStroke({
                       color: `rgba(${fontOutlineColor}, 1)`,

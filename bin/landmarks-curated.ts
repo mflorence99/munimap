@@ -2,6 +2,7 @@ import { Landmark } from '../lib/src/common';
 import { LandmarkProperties } from '../lib/src/common';
 import { LandmarkPropertiesClass } from '../lib/src/common';
 
+import { calculateLandmark } from '../lib/src/common';
 import { makeLandmarkID } from '../lib/src/common';
 import { serializeLandmark } from '../lib/src/common';
 
@@ -278,6 +279,7 @@ async function main(): Promise<void> {
         landmark.id = makeLandmarkID(landmark);
 
         // 👇 write out the landmark
+        calculateLandmark(landmark);
         serializeLandmark(landmark);
         promises.push(landmarks.doc(landmark.id).set(landmark));
       }
