@@ -14,6 +14,7 @@ import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
+import cleanCoords from '@turf/clean-coords';
 import copy from 'fast-copy';
 import OLCollection from 'ol/Collection';
 import OLFeature from 'ol/Feature';
@@ -56,7 +57,9 @@ export abstract class OLInteractionRedrawComponent
       .subscribe(() => {
         if (this.#touched) {
           const feature = JSON.parse(this.#format.writeFeature(this.feature));
-          this.saveRedraw(feature).subscribe(() => this.#unsetFeature());
+          this.saveRedraw(cleanCoords(feature)).subscribe(() =>
+            this.#unsetFeature()
+          );
         } else this.#unsetFeature();
       });
   }

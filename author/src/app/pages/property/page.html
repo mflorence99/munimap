@@ -417,7 +417,7 @@
           Draw new
           <select
             #geometryType
-            (change)="onContextMenu('draw-landmarks', $event.srcElement.value)"
+            (click)="eatMe($event)"
             [disabled]="!canDrawLandmarks()"
           >
             <option [value]="'Point'">point</option>
@@ -435,12 +435,12 @@
       </li>
 
       <li
-        (click)="canDeleteLandmark($event) && onContextMenu('delete-landmark')"
-        [class.disabled]="!canDeleteLandmark()"
+        (click)="canDeleteLandmarks($event) && onContextMenu('delete-landmark')"
+        [class.disabled]="!canDeleteLandmarks()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
-        <p>Delete landmark</p>
+        <p>Delete landmarks</p>
       </li>
     </ul>
   </nav>

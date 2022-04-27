@@ -56,8 +56,8 @@ export class PropertyPage extends AbstractMapPage {
     return condition;
   }
 
-  canDeleteLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 1);
+  canDeleteLandmarks(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length > 0);
   }
 
   canDrawLandmarks(event?: MouseEvent): boolean {
@@ -92,12 +92,11 @@ export class PropertyPage extends AbstractMapPage {
   }
 
   onContextMenu(key: string, opaque?: string): void {
-    console.log({ opaque });
     let cFactory: ComponentFactory<SidebarComponent>;
     switch (key) {
       case 'delete-landmark':
         this.store.dispatch(
-          new DeleteLandmark({ id: this.olMap.selectedIDs[0] })
+          this.olMap.selectedIDs.map((id) => new DeleteLandmark({ id }))
         );
         break;
       case 'draw-landmarks':

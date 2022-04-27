@@ -47,12 +47,11 @@ export class OLInteractionRedrawLandmarkComponent extends OLInteractionRedrawCom
         tap((result) => {
           if (result) {
             // 👉 update the store
-            const redrawnLandmark: Partial<Landmark> = {
+            const landmark: Partial<Landmark> = {
               id: this.feature.getId() as string,
-              geometry: feature.geometry,
-              type: 'Feature'
+              geometry: feature.geometry
             };
-            this.store.dispatch(new UpdateLandmark(redrawnLandmark));
+            this.store.dispatch(new UpdateLandmark(landmark));
           }
           // 👉 on CANCEL, reset geometry
           else this.resetRedraw();
