@@ -11,10 +11,12 @@ import { OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
+import cleanCoords from '@turf/clean-coords';
 import OLDraw from 'ol/interaction/Draw';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLVectorLayer from 'ol/layer/Vector';
 import OLVectorSource from 'ol/source/Vector';
+import simplify from '@turf/simplify';
 
 @Component({ template: '' })
 export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
@@ -42,10 +44,14 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
   #handleStreams$(): void {
     this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.#touched) {
-        const features = this.#source
-          .getFeatures()
-          .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
-        this.saveFeatures(features).subscribe(() => this.#stopDraw());
+        const geojsons = this.#source.getFeatures().map((feature) => {
+          const geojson = JSON.parse(this.#format.writeFeature(feature));
+          return simplify(cleanCoords(geojson), {
+            tolerance: 0.00001,
+            highQuality: false
+          });
+        });
+        this.saveFeatures(geojsons).subscribe(() => this.#stopDraw());
       } else this.#stopDraw();
     });
   }

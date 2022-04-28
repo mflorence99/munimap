@@ -209,15 +209,28 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           });
         } catch (ignored) {}
       }
-      // 👇 here's the style
+      // 👇 here's the base style
       const style = new OLStyle({
         fill: fill,
-        geometry: props.offsetFeet
-          ? this.#offsetGeometry(feature, props.offsetFeet)
-          : null,
         zIndex: props.zIndex
       });
       styles.push(style);
+      // 👇 here's the shadow style
+      if (props.shadowColor && props.shadowOffsetFeet && props.shadowOpacity) {
+        const shadowColor = this.#colorOf(
+          props.shadowColor,
+          whenHovering,
+          whenSelected
+        );
+        const shadow = new OLStyle({
+          fill: new OLFill({
+            color: `rgba(${shadowColor}, ${props.shadowOpacity})`
+          }),
+          geometry: this.#offsetGeometry(feature, props.shadowOffsetFeet),
+          zIndex: props.zIndex - 1
+        });
+        styles.push(shadow);
+      }
     }
     return styles;
   }
@@ -327,14 +340,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         } catch (ignored) {}
       }
       // 👇 here's the style
-      //    don't spline when redrawing
       const style = new OLStyle({
-        geometry:
-          props.lineSpline && !whenRedrawing
-            ? this.#splineLine(feature)
-            : props.offsetFeet
-            ? this.#offsetGeometry(feature, props.offsetFeet)
-            : null,
         stroke: stroke,
         zIndex: props.zIndex
       });
@@ -610,10 +616,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 font: `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`,
                 offsetY: props.iconSymbol ? -fontPixels : 0,
                 overflow: true,
-                rotation:
-                  props.sqarcity <= 0.5
-                    ? props.orientation * (Math.PI / 180)
-                    : 0,
+                rotation: props.textRotate
+                  ? props.orientation * (Math.PI / 180)
+                  : 0,
                 stroke: props.fontOutline
                   ? new OLStroke({
                       color: `rgba(${fontOutlineColor}, 1)`,

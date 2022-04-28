@@ -83,10 +83,11 @@ export class LandmarkPropertiesClass {
   public lineSpline = false;
   public minZoom = 0;
   public name: string = null;
-  public offsetFeet: number[] = null;
   public orientation: number = null;
+  public shadowColor: string = null;
+  public shadowOffsetFeet: number[] = null;
+  public shadowOpacity = 0;
   public showDimension = false;
-  public sqarcity: number = null;
   public strokeColor: string = null;
   public strokeFeet: number = null;
   public strokeOpacity = 0;
@@ -105,6 +106,7 @@ export class LandmarkPropertiesClass {
     | 'ideographic'
     | null = null;
   public textLocation: [number, number] = null;
+  public textRotate = false;
   public zIndex = 0;
   constructor(opts?: LandmarkProperties) {
     Object.assign(this, opts ?? {});
@@ -492,14 +494,9 @@ export function calculateLandmark(landmark: Partial<Landmark>): void {
     const polygon = landmark as GeoJSON.Feature<GeoJSON.Polygon>;
     landmark.properties ??= {};
     landmark.properties.orientation = calculateOrientation(polygon);
-    landmark.properties.sqarcity = calculateSqarcity(
-      polygon,
-      calculateLengths(polygon)
-    );
   } else {
     landmark.properties ??= {};
     landmark.properties.orientation = 0;
-    landmark.properties.sqarcity = 0;
   }
 }
 

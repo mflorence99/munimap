@@ -42,7 +42,11 @@
     </ng-container>
   </mat-toolbar>
 
-  <mat-progress-bar *ngIf="loading" color="primary" mode="indeterminate">
+  <mat-progress-bar
+    *ngIf="loading || working"
+    color="primary"
+    mode="indeterminate"
+  >
   </mat-progress-bar>
 
   <mat-drawer-container class="container">

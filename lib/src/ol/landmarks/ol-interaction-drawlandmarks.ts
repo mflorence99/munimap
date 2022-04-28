@@ -38,10 +38,10 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
     super(destroy$, layer, map);
   }
 
-  saveFeatures(features: GeoJSON.Feature<any>[]): Observable<boolean> {
+  saveFeatures(geojsons: GeoJSON.Feature<any>[]): Observable<boolean> {
     const data: ConfirmDialogData = {
-      content: `Blah blah?`,
-      title: 'Blah Blah'
+      content: `Do you want to save these new landmarks?`,
+      title: 'Please confirm new landmarks'
     };
     return this.dialog
       .open(ConfirmDialogComponent, { data })
@@ -49,36 +49,36 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
       .pipe(
         tap((result) => {
           if (result) {
-            features.forEach((feature, ix) => {
+            geojsons.forEach((geojson, ix) => {
               const landmark: Partial<Landmark> = {
-                geometry: feature.geometry,
+                geometry: geojson.geometry,
                 owner: this.authState.currentProfile().email,
                 path: this.map.path,
                 type: 'Feature'
               };
               let properties;
-              switch (feature.geometry.type) {
+              switch (geojson.geometry.type) {
                 case 'Point':
                   properties = new LandmarkPropertiesClass({
-                    fontColor: '--map-place-text-color',
+                    fontColor: '--rgb-pink-a200',
                     fontOpacity: 1,
                     fontOutline: true,
                     fontSize: 'large',
-                    fontStyle: 'italic'
+                    fontStyle: 'bold'
                   });
                   break;
                 case 'LineString':
                   properties = new LandmarkPropertiesClass({
-                    fontColor: '--map-trail-text-color',
+                    fontColor: '--rgb-pink-a200',
                     fontOpacity: 1,
                     fontOutline: true,
                     fontSize: 'medium',
                     fontStyle: 'italic',
                     lineChunk: true,
-                    lineDash: [2, 1],
+                    lineDash: [1, 1],
                     lineSpline: true,
                     showDimension: true,
-                    strokeColor: '--map-trail-line-color',
+                    strokeColor: '--rgb-purple-a200',
                     strokeOpacity: 1,
                     strokeStyle: 'dashed',
                     strokeWidth: 'medium'
@@ -86,17 +86,20 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
                   break;
                 case 'Polygon':
                   properties = new LandmarkPropertiesClass({
-                    fillColor: '--map-parcel-fill-u190',
+                    fillColor: '--rgb-pink-a200',
                     fillOpacity: 0.15,
-                    fontColor: '--map-conservation-outline',
+                    fontColor: '--rgb-pink-a200',
                     fontOpacity: 1,
-                    fontSize: 'small',
+                    fontOutline: true,
+                    fontSize: 'medium',
                     fontStyle: 'normal',
+                    lineDash: [1, 1],
                     showDimension: true,
-                    strokeColor: '--map-parcel-fill-u190',
+                    strokeColor: '--rgb-purple-a200',
                     strokeOpacity: 1,
-                    strokeStyle: 'solid',
-                    strokeWidth: 'medium'
+                    strokeStyle: 'dashed',
+                    strokeWidth: 'medium',
+                    textRotate: true
                   });
                   break;
               }

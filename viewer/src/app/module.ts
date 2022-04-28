@@ -118,6 +118,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { UndoState } from '@lib/state/undo';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
+import { WorkingState } from '@lib/state/working';
 
 import { connectAuthEmulator } from '@angular/fire/auth';
 import { connectFirestoreEmulator } from '@angular/fire/firestore';
@@ -289,7 +290,8 @@ const STATES = [
   OverlayState,
   ParcelsState,
   UndoState,
-  ViewState
+  ViewState,
+  WorkingState
 ];
 const STATES_SAVED = [OverlayState, ViewState];
 

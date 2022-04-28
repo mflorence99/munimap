@@ -281,6 +281,7 @@
             <app-ol-source-landmarks></app-ol-source-landmarks>
             <app-ol-interaction-selectlandmarks>
             </app-ol-interaction-selectlandmarks>
+            <app-ol-interaction-convert2building></app-ol-interaction-convert2building>
             <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
             <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
@@ -331,6 +332,7 @@
             <app-ol-source-landmarks></app-ol-source-landmarks>
             <app-ol-interaction-selectlandmarks>
             </app-ol-interaction-selectlandmarks>
+            <app-ol-interaction-convert2building></app-ol-interaction-convert2building>
             <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
             <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
@@ -368,8 +370,11 @@
 <ng-template #contextmenu>
   <nav class="contextmenu">
     <header *ngIf="olMap.selectedIDs.length !== 0" class="header">
-      {{ olMap.selected.length > 1 ? 'Multiple landmarks' :
-      olMap.selected[0].get('name') }}
+      <p [ngPlural]="olMap.selected.length">
+        <ng-template ngPluralCase="one"
+          >Landmark {{ olMap.selected[0].get('name') }}</ng-template
+        ><ng-template ngPluralCase="other">Multiple landmarks</ng-template>
+      </p>
     </header>
 
     <ul>
@@ -428,10 +433,19 @@
           <em
             ><fa-icon
               [icon]="['fas', 'question-circle']"
-              matTooltip="Click to place a perimeter point. ESC when finished. Use the redraw tool to modify later."
+              matTooltip="Click to place a points, click and drag to draw lines or areas. ESC when finished. Use the redraw tool to modify later."
             ></fa-icon
           ></em>
         </p>
+      </li>
+
+      <li
+        (click)="canConvertToBuilding($event) && onContextMenu('convert-to-building')"
+        [class.disabled]="!canConvertToBuilding()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'house']"></fa-icon>
+        <p>Convert landmark to a building</p>
       </li>
 
       <li
@@ -440,7 +454,10 @@
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
-        <p>Delete landmarks</p>
+        <p [ngPlural]="olMap.selected.length">
+          <ng-template ngPluralCase="one">Delete landmark</ng-template
+          ><ng-template ngPluralCase="other">Delete landmarks</ng-template>
+        </p>
       </li>
     </ul>
   </nav>

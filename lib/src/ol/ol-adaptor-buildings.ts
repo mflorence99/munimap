@@ -28,19 +28,18 @@ export class OLAdaptorBuildingsComponent implements Adaptor {
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: '--map-building-outline',
-        fillOpacity: 0.75,
-        offsetFeet: [this.shadowLength, -this.shadowLength],
         zIndex: 1
       }),
       new LandmarkPropertiesClass({
         fillColor: '--map-building-fill',
         fillOpacity: 1,
+        shadowColor: '--map-building-outline',
+        shadowOffsetFeet: [this.shadowLength, -this.shadowLength],
+        shadowOpacity: 0.75,
         strokeColor: '--map-building-outline',
         strokeOpacity: 1,
         strokePixels: 1,
-        strokeStyle: 'solid',
-        zIndex: 2
+        strokeStyle: 'solid'
       })
     ];
   }

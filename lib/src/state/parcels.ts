@@ -10,6 +10,7 @@ import { ParcelID } from '../common';
 import { Profile } from './auth';
 import { Redo as RedoProxy } from './undo';
 import { Undo as UndoProxy } from './undo';
+import { Working } from './working';
 
 import { calculateParcel } from '../common';
 import { deserializeParcel } from '../common';
@@ -205,7 +206,7 @@ export class ParcelsState implements NgxsOnInit {
     action: AddParcels
   ): void {
     // 👉 block any other undo, redo until this is finished
-    ctx.dispatch(new CanDo(false, false));
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👉 reset the stacks as required
     redoStack.length = 0;
     while (undoStack.length >= maxStackSize) undoStack.shift();
@@ -230,7 +231,10 @@ export class ParcelsState implements NgxsOnInit {
       .commit()
       .then(() => Promise.all(promises))
       .then(() => {
-        ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+        ctx.dispatch([
+          new CanDo(undoStack.length > 0, redoStack.length > 0),
+          new Working(-1)
+        ]);
       });
     // 👉 side-effect of handleStreams$ will update state
   }
@@ -281,7 +285,7 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 quick return if nothing to redo
     if (redoStack.length === 0) return;
     // 👉 block any other undo, redo until this is finished
-    ctx.dispatch(new CanDo(false, false));
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👉 prepare the stacks
     const redos = redoStack.pop();
     const undos: Parcel[] = [];
@@ -323,7 +327,10 @@ export class ParcelsState implements NgxsOnInit {
       .commit()
       .then(() => Promise.all(promises))
       .then(() => {
-        ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+        ctx.dispatch([
+          new CanDo(undoStack.length > 0, redoStack.length > 0),
+          new Working(-1)
+        ]);
       });
     // 👉 side-effect of handleStreams$ will update state
   }
@@ -343,7 +350,7 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 quick return if nothing to undo
     if (undoStack.length === 0) return;
     // 👉 block any other undo, redo until this is finished
-    ctx.dispatch(new CanDo(false, false));
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👉 prepare the stacks
     const undos = undoStack.pop();
     const redos: Parcel[] = [];
@@ -383,7 +390,10 @@ export class ParcelsState implements NgxsOnInit {
       .commit()
       .then(() => Promise.all(promises))
       .then(() => {
-        ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+        ctx.dispatch([
+          new CanDo(undoStack.length > 0, redoStack.length > 0),
+          new Working(-1)
+        ]);
       });
     // 👉 side-effect of handleStreams$ will update state
   }

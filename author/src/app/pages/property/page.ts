@@ -12,6 +12,7 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { MapType } from '@lib/state/map';
+import { OLInteractionConvertToBuildingComponent } from '@lib/ol/landmarks/ol-interaction-convert2building';
 import { OLInteractionDrawLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmarks';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
@@ -28,6 +29,9 @@ import { ViewState } from '@lib/state/view';
   templateUrl: './page.html'
 })
 export class PropertyPage extends AbstractMapPage {
+  @ViewChild(OLInteractionConvertToBuildingComponent)
+  convertToBuilding: OLInteractionConvertToBuildingComponent;
+
   @ViewChild(OLInteractionDrawLandmarksComponent)
   drawLandmarks: OLInteractionDrawLandmarksComponent;
 
@@ -54,6 +58,15 @@ export class PropertyPage extends AbstractMapPage {
   #can(event: MouseEvent, condition: boolean): boolean {
     if (!condition && event) event.stopPropagation();
     return condition;
+  }
+
+  canConvertToBuilding(event?: MouseEvent): boolean {
+    const feature = this.olMap.selected[0];
+    return this.#can(
+      event,
+      this.olMap.selected.length === 1 &&
+        ['Polygon'].includes(feature.getGeometry().getType())
+    );
   }
 
   canDeleteLandmarks(event?: MouseEvent): boolean {
@@ -94,6 +107,9 @@ export class PropertyPage extends AbstractMapPage {
   onContextMenu(key: string, opaque?: string): void {
     let cFactory: ComponentFactory<SidebarComponent>;
     switch (key) {
+      case 'convert-to-building':
+        this.convertToBuilding.convert(this.olMap.selected[0]);
+        break;
       case 'delete-landmark':
         this.store.dispatch(
           this.olMap.selectedIDs.map((id) => new DeleteLandmark({ id }))

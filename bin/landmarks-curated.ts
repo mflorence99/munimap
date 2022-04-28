@@ -119,7 +119,8 @@ const CURATIONS: Curation[] = [
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
-          fontStyle: 'italic'
+          fontStyle: 'italic',
+          textRotate: true
         }),
         source: './proxy/assets/landmarks/florence/ponds.gpx'
       },

@@ -33,7 +33,7 @@ export class OLInteractionRedrawLandmarkComponent extends OLInteractionRedrawCom
     super(destroy$, layer, map);
   }
 
-  saveRedraw(feature: GeoJSON.Feature<any>): Observable<boolean> {
+  saveRedraw(geojson: GeoJSON.Feature<any>): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new landmark alignment for ${this.feature.get(
         'name'
@@ -49,7 +49,8 @@ export class OLInteractionRedrawLandmarkComponent extends OLInteractionRedrawCom
             // 👉 update the store
             const landmark: Partial<Landmark> = {
               id: this.feature.getId() as string,
-              geometry: feature.geometry
+              geometry: geojson.geometry,
+              type: 'Feature'
             };
             this.store.dispatch(new UpdateLandmark(landmark));
           }

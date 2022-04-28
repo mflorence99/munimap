@@ -104,6 +104,7 @@ import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
+import { OLInteractionConvertToBuildingComponent } from '@lib/ol/landmarks/ol-interaction-convert2building';
 import { OLInteractionDrawLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmarks';
 import { OLInteractionRedrawBoundaryComponent } from '@lib/ol/ol-interaction-redrawboundary';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
@@ -154,6 +155,7 @@ import { UndoState } from '@lib/state/undo';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
 import { WorkgroupValidator } from '@lib/validators/workgroup';
+import { WorkingState } from '@lib/state/working';
 
 import { connectAuthEmulator } from '@angular/fire/auth';
 import { connectFirestoreEmulator } from '@angular/fire/firestore';
@@ -167,6 +169,7 @@ import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
@@ -257,6 +260,7 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterPencilComponent,
+  OLInteractionConvertToBuildingComponent,
   OLInteractionDrawLandmarksComponent,
   OLInteractionRedrawBoundaryComponent,
   OLInteractionRedrawLandmarkComponent,
@@ -383,7 +387,8 @@ const STATES = [
   OverlayState,
   ParcelsState,
   UndoState,
-  ViewState
+  ViewState,
+  WorkingState
 ];
 const STATES_SAVED = [OverlayState, RouterState, ViewState];
 
@@ -499,6 +504,7 @@ export class RootModule {
       faExclamationTriangle,
       faExpandArrows,
       faGlobeAmericas,
+      faHouse,
       faInfoCircle,
       faLayerGroup,
       faLayerPlus,

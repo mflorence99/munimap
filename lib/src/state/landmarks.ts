@@ -9,6 +9,7 @@ import { MapState } from './map';
 import { Profile } from './auth';
 import { Redo as RedoProxy } from './undo';
 import { Undo as UndoProxy } from './undo';
+import { Working } from './working';
 
 import { calculateLandmark } from '../common';
 import { deserializeLandmark } from '../common';
@@ -234,7 +235,7 @@ export class LandmarksState implements NgxsOnInit {
     const normalized = this.#normalize(action.landmark);
     if (!normalized.id) normalized.id = makeLandmarkID(normalized);
     // 👉 block any other undo, redo until this is finished
-    ctx.dispatch(new CanDo(false, false));
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👇 add the landmark
     console.log(
       `%cFirestore add: landmarks ${normalized.id} ${JSON.stringify(
@@ -246,7 +247,10 @@ export class LandmarksState implements NgxsOnInit {
     const docRef = doc(this.firestore, 'landmarks', normalized.id);
     return setDoc(docRef, normalized).then(() => {
       if (undoAction) undoStack.push(undoAction);
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
     });
     // 👉 side-effect of handleStreams$ will update state
   }
@@ -258,6 +262,8 @@ export class LandmarksState implements NgxsOnInit {
     // 👇 don't really need to normalize as only an ID is needed
     //    just following the pattern
     const normalized = this.#normalize(action.landmark);
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👇 delete the landmark
     console.log(
       `%cFirestore delete: landmarks ${normalized.id}`,
@@ -267,7 +273,10 @@ export class LandmarksState implements NgxsOnInit {
     const docRef = doc(this.firestore, 'landmarks', normalized.id);
     return deleteDoc(docRef).then(() => {
       if (undoAction) undoStack.push(undoAction);
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
     });
     // 👉 side-effect of handleStreams$ will update state
   }
@@ -284,7 +293,7 @@ export class LandmarksState implements NgxsOnInit {
     // 👉 quick return if nothing to redo
     if (redoStack.length === 0) return;
     // 👉 block any other undo, redo until this is finished
-    ctx.dispatch(new CanDo(false, false));
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👉 prepare the undo/redo actions
     const redoAction = redoStack.pop();
     const undoAction = new redoAction.redoneBy(
@@ -294,7 +303,10 @@ export class LandmarksState implements NgxsOnInit {
     // 👇 execute the redo action
     ctx.dispatch(redoAction).subscribe(() => {
       undoStack.push(undoAction);
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
     });
   }
 
@@ -313,7 +325,7 @@ export class LandmarksState implements NgxsOnInit {
     // 👉 quick return if nothing to undo
     if (undoStack.length === 0) return;
     // 👉 block any other undo, redo until this is finished
-    ctx.dispatch(new CanDo(false, false));
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👉 prepare the undo/redo actions
     const undoAction = undoStack.pop();
     const redoAction = new undoAction.redoneBy(
@@ -323,7 +335,10 @@ export class LandmarksState implements NgxsOnInit {
     // 👇 execute the undo action
     ctx.dispatch(undoAction).subscribe(() => {
       redoStack.push(redoAction);
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
     });
   }
 
@@ -333,7 +348,7 @@ export class LandmarksState implements NgxsOnInit {
   ): Promise<void> {
     const normalized = this.#normalize(action.landmark);
     // 👉 block any other undo, redo until this is finished
-    ctx.dispatch(new CanDo(false, false));
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
     // 👉 update the landmark
     console.log(
       `%cFirestore set: landmarks ${normalized.id} ${JSON.stringify(
@@ -345,7 +360,10 @@ export class LandmarksState implements NgxsOnInit {
     const docRef = doc(this.firestore, 'landmarks', normalized.id);
     return setDoc(docRef, normalized, { merge: true }).then(() => {
       if (undoAction) undoStack.push(undoAction);
-      ctx.dispatch(new CanDo(undoStack.length > 0, redoStack.length > 0));
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
     });
     // 👉 side-effect of handleStreams$ will update state
   }

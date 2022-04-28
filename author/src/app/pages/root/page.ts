@@ -30,6 +30,7 @@ import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
+import { Working } from '@lib/state/working';
 
 import { moveFromLeftFade } from 'ngx-router-animations';
 import { ofActionSuccessful } from '@ngxs/store';
@@ -65,6 +66,8 @@ export class RootPage implements OnInit {
   title: string;
 
   @Select(AuthState.user) user$: Observable<User>;
+
+  working = 0;
 
   constructor(
     private actions$: Actions,
@@ -127,14 +130,25 @@ export class RootPage implements OnInit {
       });
   }
 
+  #handleWorkingActions$(): void {
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionSuccessful(Working))
+      .subscribe((action: Working) => {
+        this.working = Math.max(0, this.working + action.increment);
+        console.log({ working: this.working });
+        this.cdf.markForCheck();
+      });
+  }
+
   getState(): any {
     return this.outlet?.activatedRouteData?.state;
   }
 
   ngOnInit(): void {
     this.#handleMapErrorActions$();
-    this.#handleUndoActions$();
     this.#handleRouterEvents$();
+    this.#handleUndoActions$();
+    this.#handleWorkingActions$();
   }
 
   onSatelliteViewToggle(state: boolean): void {

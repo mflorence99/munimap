@@ -56,8 +56,8 @@ export abstract class OLInteractionRedrawComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.#touched) {
-          const feature = JSON.parse(this.#format.writeFeature(this.feature));
-          this.saveRedraw(cleanCoords(feature)).subscribe(() =>
+          const geojson = JSON.parse(this.#format.writeFeature(this.feature));
+          this.saveRedraw(cleanCoords(geojson)).subscribe(() =>
             this.#unsetFeature()
           );
         } else this.#unsetFeature();

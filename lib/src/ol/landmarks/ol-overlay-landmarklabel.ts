@@ -73,7 +73,8 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
       this.#feature.setGeometry(new OLPoint(fromLonLat(position)));
       const movedLandmark: Partial<Landmark> = {
         id: this.#feature.getId() as string,
-        geometry: { type: 'Point', coordinates: position }
+        geometry: { type: 'Point', coordinates: position },
+        type: 'Feature'
       };
       this.store.dispatch(new UpdateLandmark(movedLandmark));
     }
@@ -82,7 +83,8 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
       this.#feature.set('textLocation', position);
       const movedLandmark: Partial<Landmark> = {
         id: this.#feature.getId() as string,
-        properties: { textLocation: position as [number, number] }
+        properties: { textLocation: position as [number, number] },
+        type: 'Feature'
       };
       this.store.dispatch(new UpdateLandmark(movedLandmark));
     }
