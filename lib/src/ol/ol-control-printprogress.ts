@@ -64,7 +64,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
       //   giveUp: this.#timestamp + this.giveUpAfter < Date.now()
       // });
       if (
-        (this.isComplete() || this.isStarting()) &&
+        this.isComplete() &&
         this.#timestamp + this.giveUpAfter < Date.now()
       ) {
         clearInterval(this.#interval);

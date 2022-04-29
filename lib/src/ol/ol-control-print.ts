@@ -27,6 +27,7 @@ import html2canvas from 'html2canvas';
 })
 export class OLControlPrintComponent {
   #center: OLCoordinate;
+  #dpi: number;
   #progressRef: MatDialogRef<OLControlPrintProgressComponent>;
   #px: number;
   #py: number;
@@ -139,6 +140,8 @@ export class OLControlPrintComponent {
       element.style.height = `${this.#py}px`;
       element.style.overflow = 'visible';
       element.style.width = `${this.#px}px`;
+      this.#dpi = this.map.dpi;
+      this.map.dpi = this.dpi;
       this.map.olMap.updateSize();
       this.map.zoomToBounds();
       // 👉 controls map configuration
@@ -153,6 +156,7 @@ export class OLControlPrintComponent {
     element.style.height = ``;
     element.style.overflow = 'hidden';
     element.style.width = ``;
+    this.map.dpi = this.#dpi;
     this.map.olMap.updateSize();
     this.map.olView.setCenter(this.#center);
     this.map.olView.setZoom(this.#zoom);

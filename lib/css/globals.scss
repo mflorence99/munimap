@@ -410,32 +410,6 @@ color-picker {
   display: none !important;
 }
 
-// 👉 ol styles
-
-.ol-credits {
-  // 👇 position set in code
-  background-color: rgba(var(--rgb-gray-100), 0.66) !important;
-  color: var(--background-color);
-  font-family: 'Bentham Regular', sans-serif;
-  line-height: 1;
-  padding: 0 0.5rem !important;
-  position: absolute;
-  white-space: nowrap;
-
-  button {
-    display: none !important;
-  }
-
-  li,
-  ul {
-    display: inline-block;
-  }
-
-  li:not(:last-of-type)::after {
-    content: '\00a0|\00a0';
-  }
-}
-
 // 👉 going through some hoops here because although the legend
 //    is only ever printed, we want to see it on the screen
 //    for degugging
@@ -490,13 +464,4 @@ color-picker {
     top: 50%;
     width: 100%;
   }
-}
-
-.ol-scaleline-bar {
-  // 👇 position set in code
-  position: absolute;
-}
-
-.ol-scale-step-text {
-  font-size: 18px !important;
 }

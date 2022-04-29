@@ -94,7 +94,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
 
   @Input() borderWidth = 10 /* 👈 feet */;
   @Input() borderWidthSelectRatio = 2;
-  @Input() dimensionsFontSize = 16;
+  @Input() dimensionsFontSizeRatio = 0.66;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
   @Input() forceAbutted = false /* 🔥 experimental */;
@@ -245,12 +245,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   ): number[] {
     return polygons.map((polygon, ix) => {
       const labelFontSize = this.#labelFontSize(props, resolution, ix);
-      // 👉 fontSize is proportional to the resolution,
-      //    but no bigger than the size of the label
-      return Math.min(
-        Math.min(labelFontSize, this.dimensionsFontSize),
-        this.dimensionsFontSize / resolution
-      );
+      return labelFontSize * this.dimensionsFontSizeRatio;
     });
   }
 

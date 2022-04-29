@@ -2,16 +2,24 @@ import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLMapComponent } from './ol-map';
 
-import { AfterViewInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
+import { Input } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
-import OLAttribution from 'ol/control/Attribution';
-
 // 🔥 this control is designed ONLY to be printed on the map
+
+class Credits extends OLControl {
+  constructor(opts: any) {
+    super(opts);
+  }
+}
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,38 +30,61 @@ import OLAttribution from 'ol/control/Attribution';
     }
   ],
   selector: 'app-ol-control-credits',
-  template: `{{ now | date: 'longDate' }}&nbsp;|&nbsp;`,
-  styles: [':host { display: none }']
+  templateUrl: './ol-control-credits.html',
+  styleUrls: ['./ol-control-credits.scss']
 })
-export class OLControlCreditsComponent implements AfterViewInit, Mapable {
-  now = Date.now();
-  olControl: OLAttribution;
+export class OLControlCreditsComponent implements Mapable, OnInit {
+  attributions: string[] = [];
 
-  constructor(private host: ElementRef, private map: OLMapComponent) {
-    this.olControl = new OLAttribution({
-      className: 'ol-credits',
-      collapsible: false
-    });
+  // 👇 set the position proportional to the map size
+  get bottom(): number {
+    const element = this.map.olMap.getTargetElement();
+    return element.clientHeight / this.scaleFactor;
   }
+
+  @ViewChild('creditsRef', { static: true }) creditsRef: ElementRef;
+
+  // 👇 set the font size proportional to the map size
+  get fontSize(): number {
+    const element = this.map.olMap.getTargetElement();
+    return element.clientHeight / this.scaleFactor;
+  }
+
+  // 👇 set the height proportional to the map size
+  get height(): number {
+    return this.fontSize * 1.25;
+  }
+
+  now = Date.now();
+
+  olControl: OLControl;
+
+  // 👇 set the position proportional to the map size
+  get right(): number {
+    return this.bottom;
+  }
+
+  @Input() scaleFactor = 150;
+
+  constructor(private cdf: ChangeDetectorRef, private map: OLMapComponent) {}
 
   addToMap(): void {
     this.map.olMap.addControl(this.olControl);
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const credits = document.querySelector('.ol-credits');
-      if (credits) {
-        credits.prepend(this.host.nativeElement.innerText);
-        // 👇 set the font and position proportional to the map size
-        const element = this.map.olMap.getTargetElement();
-        const style = (credits as any).style;
-        const dim = `${element.clientHeight / 100}px`;
-        style.bottom = dim;
-        style.height = dim;
-        style.fontSize = dim;
-        style.right = dim;
-      }
-    }, 0);
+  mapUpdated(): void {
+    const raw = this.map.olMap
+      .getLayers()
+      .getArray()
+      .map(
+        (layer: any): string[] => layer.getSource().getAttributions()?.() ?? []
+      )
+      .flat();
+    this.attributions = Array.from(new Set(raw));
+    this.cdf.markForCheck();
+  }
+
+  ngOnInit(): void {
+    this.olControl = new Credits({ element: this.creditsRef.nativeElement });
   }
 }

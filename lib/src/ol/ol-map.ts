@@ -56,6 +56,7 @@ export class OLMapComponent
   #bbox: Coordinate;
   #changeKey: OLEventsKey;
   #clickKey: OLEventsKey;
+  #dpi = 96 /* 👈 nominal pixels per inch of screen */;
   #origControls: string[];
   #origInteractions: string[];
   #origLayers: string[];
@@ -83,8 +84,10 @@ export class OLMapComponent
 
   click$ = new Subject<OLMapBrowserEvent<any>>();
   contextMenu$ = new BehaviorSubject<PointerEvent>(null);
-  escape$ = new Subject<KeyboardEvent>();
 
+  @Input() dpi = this.#dpi /* 👈 actual pixels per inch of media */;
+
+  escape$ = new Subject<KeyboardEvent>();
   featureProjection = 'EPSG:4326';
 
   // 👉 proxy this from the real selector (if any) to ensure safe access
@@ -308,6 +311,8 @@ export class OLMapComponent
         this.abuttersFound.emit([]);
         this.featuresSelected.emit([]);
       }
+      // 👉 indicate map changed on next tick
+      setTimeout(() => list.forEach((mapable) => mapable.mapUpdated?.()), 0);
     });
   }
 
@@ -380,6 +385,12 @@ export class OLMapComponent
   ngOnInit(): void {
     this.#clickKey = this.olMap.on('click', this.#onClick.bind(this));
     this.olMap.setTarget(this.host.nativeElement);
+  }
+
+  numPixels(nominal: number): number {
+    // 🔥 EXPERIMENTAL -- number of pixels for a nominal value
+    //    to preserve the same experience as on screen
+    return (this.dpi / this.#dpi) * nominal;
   }
 
   @HostListener('contextmenu', ['$event']) onContextMenu(

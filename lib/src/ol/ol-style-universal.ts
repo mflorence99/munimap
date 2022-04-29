@@ -91,7 +91,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         this[`fontSize_${props.fontSize}`],
         resolution
       );
-    return fontPixels;
+    return this.map.numPixels(fontPixels);
   }
 
   #calcFontSize(pixels: number, resolution: number): number {
@@ -111,7 +111,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         this[`strokeWidth_${props.strokeWidth}`],
         resolution
       );
-    return strokePixels;
+    return this.map.numPixels(strokePixels);
   }
 
   #calcWidth(feet: number, resolution: number): number {
