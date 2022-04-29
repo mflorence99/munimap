@@ -314,7 +314,7 @@ export class LandmarksState implements NgxsOnInit {
     ctx: StateContext<LandmarksStateModel>,
     action: SetLandmarks
   ): void {
-    this.#logLandmarks(action.landmarks);
+    // this.#logLandmarks(action.landmarks);
     ctx.setState(action.landmarks);
   }
 

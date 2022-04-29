@@ -440,7 +440,7 @@ color-picker {
 }
 
 .ol-scaleline-line {
-  background-color: rgba(var(--rgb-gray-100), 0.66);
+  background-color: rgba(var(--rgb-gray-100), 0.75);
   bottom: 1rem;
   left: 1rem;
   padding: 0.5rem;
@@ -448,7 +448,6 @@ color-picker {
 
   .ol-scaleline-line-inner {
     color: var(--background-color);
-    font-size: 10px;
     position: relative;
     text-align: center;
   }

@@ -93,6 +93,7 @@ import { OLControlMousePositionComponent } from '@lib/ol/ol-control-mousepositio
 import { OLControlParcelsLegendComponent } from '@lib/ol/parcels/ol-control-parcelslegend';
 import { OLControlPrintComponent } from '@lib/ol/ol-control-print';
 import { OLControlPrintProgressComponent } from '@lib/ol/ol-control-printprogress';
+import { OLControlScaleBarComponent } from '@lib/ol/ol-control-scalebar';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
 import { OLControlStreetsLegendComponent } from '@lib/ol/streets/ol-control-streetslegend';
@@ -151,6 +152,7 @@ import { RouterModule } from '@angular/router';
 import { RouterState } from '@ngxs/router-plugin';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SubdivisionIDValidator } from '@lib/validators/subdivisionid';
+import { TimesPipe } from '@lib/pipes/times';
 import { UndoState } from '@lib/state/undo';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
@@ -249,6 +251,7 @@ const COMPONENTS = [
   OLControlParcelsLegendComponent,
   OLControlPrintComponent,
   OLControlPrintProgressComponent,
+  OLControlScaleBarComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
   OLControlStreetsLegendComponent,
@@ -318,6 +321,8 @@ const PAGES = [
   StreetsPage,
   TopoPage
 ];
+
+const PIPES = [TimesPipe];
 
 const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
@@ -395,7 +400,7 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
 @NgModule({
   bootstrap: [RootPage],
 
-  declarations: [...COMPONENTS, ...DIRECTIVES, ...PAGES],
+  declarations: [...COMPONENTS, ...DIRECTIVES, ...PAGES, ...PIPES],
 
   entryComponents: [],
 

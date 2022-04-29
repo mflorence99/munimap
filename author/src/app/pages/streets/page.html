@@ -48,10 +48,9 @@
         [title]="map.name"
       ></app-ol-control-streetslegend>
 
-      <app-ol-control-scaleline
+      <app-ol-control-scalebar
         *ngIf="olMap.printing"
-        [printing]="true"
-      ></app-ol-control-scaleline>
+      ></app-ol-control-scalebar>
 
       <app-ol-control-scaleline
         *ngIf="!olMap.printing"

@@ -1,0 +1,28 @@
+<article
+  #barRef
+  [ngStyle]="{'bottom.px': bottom, 'left.px': left}"
+  class="scalebar ol-unselectable"
+>
+  <div class="annotations" [ngStyle]="{'marginLeft.px': -cxUnit / 2}">
+    <div
+      *ngFor="let unit of numUnits + 1 | times"
+      [ngStyle]="{'fontSize.px': fontSize, 'width.px': cxUnit}"
+      class="annotation"
+    >
+      {{ unit * ftUnit }}'
+    </div>
+  </div>
+  <div class="units" [ngStyle]="{'width.px': cxWidth}">
+    <div
+      *ngFor="
+          let unit of numUnits | times;
+          odd as white;
+          even as black
+        "
+      [class.black]="black"
+      [class.white]="white"
+      [ngStyle]="{'height.px': height, 'width.px': cxUnit}"
+      class="unit"
+    ></div>
+  </div>
+</article>
