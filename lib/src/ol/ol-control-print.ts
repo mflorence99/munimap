@@ -141,7 +141,8 @@ export class OLControlPrintComponent {
       element.style.overflow = 'visible';
       element.style.width = `${this.#px}px`;
       this.#dpi = this.map.dpi;
-      this.map.dpi = this.dpi;
+      // 👉 the actual dpi has been clamped!
+      this.map.dpi = printArea[0] / this.printSize[0];
       this.map.olMap.updateSize();
       this.map.zoomToBounds();
       // 👉 controls map configuration

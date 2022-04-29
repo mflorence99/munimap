@@ -10,6 +10,12 @@
 
     .annotation {
       text-align: center;
+      visibility: hidden;
+    }
+
+    .annotation.first,
+    .annotation.last {
+      visibility: visible;
     }
   }
 

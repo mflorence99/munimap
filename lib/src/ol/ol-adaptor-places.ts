@@ -20,7 +20,7 @@ interface PlaceStyleAttributes {
 
 const DEFAULT: PlaceStyleAttributes = {
   color: '--map-place-text-color',
-  fontSize: 'small',
+  fontSize: 'tiny',
   placement: 'point'
 };
 
@@ -29,7 +29,7 @@ const EXCEPTIONS: {
 } = {
   lake: {
     color: '--map-place-water-color',
-    fontSize: 'huge',
+    fontSize: 'large',
     placement: 'point'
   },
   park: {

@@ -37,8 +37,8 @@ export class OLAdaptorBuildingsComponent implements Adaptor {
         shadowOffsetFeet: [this.shadowLength, -this.shadowLength],
         shadowOpacity: 0.75,
         strokeColor: '--map-building-outline',
+        strokeFeet: 1,
         strokeOpacity: 1,
-        strokePixels: 1,
         strokeStyle: 'solid'
       })
     ];

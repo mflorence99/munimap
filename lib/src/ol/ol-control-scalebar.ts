@@ -72,8 +72,8 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
   constructor(private map: OLMapComponent) {}
 
   #calculateMetrics(): void {
-    const [minX, minY, maxX, maxY] = this.map.bbox;
-    const numFeet = getDistance([minX, maxY], [maxX, minY]) * 3.28084;
+    const [minX, minY, maxX] = this.map.bbox;
+    const numFeet = getDistance([minX, minY], [maxX, minY]) * 3.28084;
     this.ftUnit = Math.pow(10, Math.floor(numFeet).toString().length - 2);
     this.numUnits = Math.min(10, Math.round(numFeet / 4 / this.ftUnit));
     const numPixels = this.map.olMap.getSize()[0];
