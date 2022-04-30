@@ -15,7 +15,9 @@ import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
+import { click } from 'ol/events/condition';
 import { forwardRef } from '@angular/core';
+import { pointerMove } from 'ol/events/condition';
 import { unByKey } from 'ol/Observable';
 
 import OLFeature from 'ol/Feature';
@@ -65,13 +67,13 @@ export class OLInteractionSelectGeoJSONComponent
     private map: OLMapComponent
   ) {
     this.olHover = new OLSelect({
-      condition: (event): boolean => event.type === 'pointermove',
+      condition: (event): boolean => pointerMove(event),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
       style: this.layer.styleWhenHovering()
     });
     this.olSelect = new OLSelect({
-      condition: (event): boolean => event.type === 'click',
+      condition: (event): boolean => click(event),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
       style: this.layer.styleWhenSelected()

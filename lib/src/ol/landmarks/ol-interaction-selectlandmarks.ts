@@ -15,7 +15,12 @@ import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
+import { click } from 'ol/events/condition';
 import { forwardRef } from '@angular/core';
+import { never } from 'ol/events/condition';
+import { platformModifierKeyOnly } from 'ol/events/condition';
+import { pointerMove } from 'ol/events/condition';
+import { shiftKeyOnly } from 'ol/events/condition';
 import { unByKey } from 'ol/Observable';
 
 import OLFeature from 'ol/Feature';
@@ -61,17 +66,21 @@ export class OLInteractionSelectLandmarksComponent
     private map: OLMapComponent
   ) {
     this.olHover = new OLSelect({
-      condition: (event): boolean => event.type === 'pointermove',
+      condition: (event): boolean => pointerMove(event),
       // 👇 don't hover over something that's already selected
       filter: (feature): boolean => !this.selectedIDs.includes(feature.getId()),
       layers: [this.layer.olLayer],
       style: this.layer.styleWhenHovering()
     });
     this.olSelect = new OLSelect({
-      condition: (event): boolean => event.type === 'click',
+      addCondition: (event): boolean => click(event) && shiftKeyOnly(event),
+      condition: (event): boolean => click(event),
       layers: [this.layer.olLayer],
       multi: true,
-      style: this.layer.styleWhenSelected()
+      removeCondition: (event): boolean =>
+        click(event) && platformModifierKeyOnly(event),
+      style: this.layer.styleWhenSelected(),
+      toggleCondition: (event): boolean => never()
     });
   }
 
