@@ -69,6 +69,8 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
 
   @Input() scaleFactor = 150;
 
+  @Input() showScaleContrast: boolean;
+
   constructor(private map: OLMapComponent) {}
 
   #calculateMetrics(): void {

@@ -60,13 +60,17 @@
 
         <app-ol-control-scalebar
           *ngIf="olMap.printing"
+          [showScaleContrast]="satelliteView$ | async"
         ></app-ol-control-scalebar>
 
         <app-ol-control-scaleline
           *ngIf="!olMap.printing"
         ></app-ol-control-scaleline>
 
-        <app-ol-control-credits *ngIf="olMap.printing"></app-ol-control-credits>
+        <app-ol-control-credits
+          *ngIf="olMap.printing"
+          [showCreditsContrast]="satelliteView$ | async"
+        ></app-ol-control-credits>
 
         <!-- 📦 TERRAIN LAYERS -->
 

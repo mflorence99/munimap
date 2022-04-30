@@ -66,6 +66,8 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
 
   @Input() scaleFactor = 150;
 
+  @Input() showCreditsContrast: boolean;
+
   constructor(private cdf: ChangeDetectorRef, private map: OLMapComponent) {}
 
   addToMap(): void {

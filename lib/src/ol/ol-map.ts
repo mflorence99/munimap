@@ -32,7 +32,9 @@ import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
+import { delay } from 'rxjs/operators';
 import { fromLonLat } from 'ol/proj';
+import { tap } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
@@ -292,28 +294,32 @@ export class OLMapComponent
   }
 
   #handleMapables$(): void {
-    this.mapables$.changes.subscribe((list) => {
-      this.#cleanMap();
-      list.forEach((mapable) => mapable.addToMap());
-      // 👉 proxy any selector events
-      this.#subToAbuttersFound?.unsubscribe();
-      this.#subToAbuttersFound = this.selector?.abuttersFound?.subscribe(
-        (abutters) => this.abuttersFound.emit(abutters)
-      );
-      this.#subToFeaturesSelected?.unsubscribe();
-      this.#subToFeaturesSelected = this.selector?.featuresSelected.subscribe(
-        (features) => {
-          this.featuresSelected.emit(features);
-        }
-      );
-      // 👉 when there's no selector, there are no features selected
-      if (!this.selector) {
-        this.abuttersFound.emit([]);
-        this.featuresSelected.emit([]);
-      }
-      // 👉 indicate map changed on next tick
-      setTimeout(() => list.forEach((mapable) => mapable.mapUpdated?.()), 0);
-    });
+    this.mapables$.changes
+      .pipe(
+        tap((list) => {
+          this.#cleanMap();
+          list.forEach((mapable) => mapable.addToMap());
+          // 👉 proxy any selector events
+          this.#subToAbuttersFound?.unsubscribe();
+          this.#subToAbuttersFound = this.selector?.abuttersFound?.subscribe(
+            (abutters) => this.abuttersFound.emit(abutters)
+          );
+          this.#subToFeaturesSelected?.unsubscribe();
+          this.#subToFeaturesSelected =
+            this.selector?.featuresSelected.subscribe((features) => {
+              this.featuresSelected.emit(features);
+            });
+          // 👉 when there's no selector, there are no features selected
+          if (!this.selector) {
+            this.abuttersFound.emit([]);
+            this.featuresSelected.emit([]);
+          }
+        }),
+        // 👇 indicate mapUpdated on next tick
+        delay(0),
+        tap((list) => list.forEach((mapable) => mapable.mapUpdated?.()))
+      )
+      .subscribe();
   }
 
   #initializeView(path: Path): Path {

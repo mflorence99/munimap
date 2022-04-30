@@ -7,6 +7,11 @@
     padding: 0 0.5rem;
     white-space: nowrap;
 
+    &.contrast {
+      color: var(--text-color);
+      -webkit-text-stroke-color: var(--background-color);
+    }
+
     li,
     ul {
       display: inline-block;

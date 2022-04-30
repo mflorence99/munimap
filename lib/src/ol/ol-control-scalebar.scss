@@ -11,6 +11,11 @@
     .annotation {
       text-align: center;
       visibility: hidden;
+
+      &.contrast {
+        color: var(--text-color);
+        -webkit-text-stroke-color: var(--background-color);
+      }
     }
 
     .annotation.first,

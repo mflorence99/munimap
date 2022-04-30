@@ -6,6 +6,7 @@
   <div class="annotations" [ngStyle]="{'marginLeft.px': -cxUnit / 2}">
     <div
       *ngFor="let unit of numUnits + 1 | times; first as first; last as last"
+      [class.contrast]="showScaleContrast"
       [class.first]="first"
       [class.last]="last"
       [ngStyle]="{'fontSize.px': fontSize, 'height.px': height, 'width.px': cxUnit}"
