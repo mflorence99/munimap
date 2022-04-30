@@ -8,6 +8,7 @@ import { Selector } from './ol-selector';
 import { SelectorComponent } from './ol-selector';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
+import { bboxDistance } from '../common';
 
 import { ActivatedRoute } from '@angular/router';
 import { AfterContentInit } from '@angular/core';
@@ -110,6 +111,12 @@ export class OLMapComponent
 
   olMap: OLMap;
   olView: OLView;
+
+  get orientation(): 'landscape' | 'portrait' {
+    const [minX, minY, maxX, maxY] = this.bbox;
+    const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+    return cx > cy ? 'landscape' : 'portrait';
+  }
 
   @Input()
   get path(): Path {

@@ -450,8 +450,10 @@ function bboxByAspectRatioImpl(
   const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
   // 👉 compare aspect ratios and pick best one
   const ar = cx / cy;
-  // 👉 aspect ration less than 1 means portrait
-  if (ar < 1) {
+  // 👉 aspect ratio less than 1 means portrait
+  //    but landscape is much better for large-scale printing,
+  //    se we prefer it with a level of tolerance
+  if (ar < 0.95) {
     const z = (cy * y) / x;
     // account for buffer
     const bx = b;

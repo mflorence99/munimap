@@ -80,7 +80,7 @@ export class OLInteractionSelectLandmarksComponent
       removeCondition: (event): boolean =>
         click(event) && platformModifierKeyOnly(event),
       style: this.layer.styleWhenSelected(),
-      toggleCondition: (event): boolean => never()
+      toggleCondition: (): boolean => never()
     });
   }
 

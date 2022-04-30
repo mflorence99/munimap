@@ -71,7 +71,7 @@ export class OLControlPrintComponent {
 
   #printArea(cx: number, cy: number): number[] {
     const nominal = [cx * this.dpi, cy * this.dpi];
-    const ar = cx / cy;
+    const ar = this.map.orientation === 'portrait' ? cx / cy : cy / cx;
     const actual = [];
     if (ar > 1) {
       actual[0] = Math.min(nominal[0], this.maxPrintSize);
