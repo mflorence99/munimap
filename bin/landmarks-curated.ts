@@ -276,7 +276,7 @@ const CURATIONS: Curation[] = [
           type: 'FeatureCollection'
         },
         properties: new LandmarkPropertiesClass({
-          fontColor: '--map-rplace-water-color',
+          fontColor: '--map-place-water-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
