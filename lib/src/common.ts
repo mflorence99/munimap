@@ -327,6 +327,11 @@ export interface RoadProperties {
 
 export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 
+export interface StreamCrossingProperties {
+  condition: 'good' | 'fair' | 'poor' | 'unknown';
+  name: string;
+}
+
 export interface TrailProperties {
   county: string;
   name: string;

@@ -43,7 +43,7 @@ export class OLStyleGraticuleComponent implements Styler {
   ) {}
 
   #border(): OLFill {
-    // 👉 this is the part ofthe border that isn't the same
+    // 👉 this is the part of the border that isn't the same
     //    color as the lines
     const color = this.map.vars['--map-graticule-border-color'];
     return new OLFill({ color: `rgba(${color}, 1)` });

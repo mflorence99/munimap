@@ -81,6 +81,7 @@ import { OLAdaptorPowerlinesComponent } from '@lib/ol/ol-adaptor-powerlines';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
 import { OLAdaptorRoadsComponent } from '@lib/ol/ol-adaptor-roads';
 import { OLAdaptorStoneWallsComponent } from '@lib/ol/ol-adaptor-stonewalls';
+import { OLAdaptorStreamCrossingsComponent } from '@lib/ol/ol-adaptor-streamcrossings';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
 import { OLAdaptorWaterbodiesComponent } from '@lib/ol/ol-adaptor-waterbodies';
 import { OLAdaptorWetlandsComponent } from '@lib/ol/ol-adaptor-wetlands';
@@ -135,6 +136,7 @@ import { OLSourceParcelsComponent } from '@lib/ol/ol-source-parcels';
 import { OLSourceRailroadsComponent } from '@lib/ol/ol-source-railroads';
 import { OLSourceRiversComponent } from '@lib/ol/ol-source-rivers';
 import { OLSourceStoneWallsComponent } from '@lib/ol/ol-source-stonewalls';
+import { OLSourceStreamCrossingsComponent } from '@lib/ol/ol-source-streamcrossings';
 import { OLSourceWaterbodiesComponent } from '@lib/ol/ol-source-waterbodies';
 import { OLSourceWetlandsComponent } from '@lib/ol/ol-source-wetlands';
 import { OLSourceXYZComponent } from '@lib/ol/ol-source-xyz';
@@ -239,6 +241,7 @@ const COMPONENTS = [
   OLAdaptorRailroadsComponent,
   OLAdaptorRoadsComponent,
   OLAdaptorStoneWallsComponent,
+  OLAdaptorStreamCrossingsComponent,
   OLAdaptorTrailsComponent,
   OLAdaptorWaterbodiesComponent,
   OLAdaptorWetlandsComponent,
@@ -293,6 +296,7 @@ const COMPONENTS = [
   OLSourceRailroadsComponent,
   OLSourceRiversComponent,
   OLSourceStoneWallsComponent,
+  OLSourceStreamCrossingsComponent,
   OLSourceWaterbodiesComponent,
   OLSourceWetlandsComponent,
   OLSourceXYZComponent,
