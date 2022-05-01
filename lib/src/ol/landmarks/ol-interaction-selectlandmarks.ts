@@ -93,7 +93,7 @@ export class OLInteractionSelectLandmarksComponent
 
   #onSelect(_event?: OLSelectEvent): void {
     const names = this.selected
-      .map((selected) => selected.get('name'))
+      .map((selected) => `${selected.get('name')} - ${selected.getId()}`)
       .join(', ');
     console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
     this.featuresSelected.emit(this.selected);

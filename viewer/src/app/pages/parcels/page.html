@@ -175,13 +175,13 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
-          <app-ol-adaptor-streamcrossings>
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-streamcrossings>
-          <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
-          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-        </app-ol-layer-vector>
+      <app-ol-layer-vector>
+        <app-ol-adaptor-streamcrossings>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-streamcrossings>
+        <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-adaptor-places>
@@ -211,6 +211,14 @@
           [layerKey]="'powerlines'"
         ></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+
+        <app-ol-layer-vector>
+          <!-- 👇 user landmarks here are really map amendments -->
+          <app-ol-adaptor-landmarks>
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal
+          ></app-ol-adaptor-landmarks>
+          <app-ol-source-landmarks></app-ol-source-landmarks>
+        </app-ol-layer-vector>
       </app-ol-layer-vector>
 
       <!-- 📦 SATELLITE OVERLAY FOR SELECTION  -->

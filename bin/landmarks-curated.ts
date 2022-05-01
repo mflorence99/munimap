@@ -1,6 +1,7 @@
 import { Landmark } from '../lib/src/common';
 import { LandmarkProperties } from '../lib/src/common';
 import { LandmarkPropertiesClass } from '../lib/src/common';
+import { Landmarks } from '../lib/src/common';
 
 import { calculateLandmark } from '../lib/src/common';
 import { makeLandmarkID } from '../lib/src/common';
@@ -20,8 +21,9 @@ import lineToPolygon from '@turf/line-to-polygon';
 
 interface CuratedLandmark {
   geoOp?: 'lineToPolygon' | null;
+  geojson?: Landmarks;
   properties: LandmarkProperties;
-  source: string;
+  source?: string;
   textLocations?: [number, number][];
 }
 
@@ -32,6 +34,9 @@ interface Curation {
 }
 
 const CURATIONS: Curation[] = [
+  // ///////////////////////////////////////////////////////////////////
+  // 👇 Florence/Hendrickson property bootstrap data
+  // ///////////////////////////////////////////////////////////////////
   {
     landmarks: [
       {
@@ -191,6 +196,96 @@ const CURATIONS: Curation[] = [
     ],
     owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
+  },
+  // ///////////////////////////////////////////////////////////////////
+  // 👇 Tom Cross's map amendments
+  // ///////////////////////////////////////////////////////////////////
+  {
+    landmarks: [
+      {
+        geojson: {
+          features: [
+            {
+              geometry: {
+                type: 'LineString',
+                coordinates: [
+                  [-72.15684443476792, 43.15072211573772],
+                  [-72.15680718420808, 43.15063152763469],
+                  [-72.15662093140892, 43.15045035102571],
+                  [-72.15605596458481, 43.150133290667696],
+                  [-72.15593179605203, 43.150042701691916],
+                  [-72.15580141909263, 43.14991134743849],
+                  [-72.15549720618732, 43.14971658026727],
+                  [-72.15521782698858, 43.14960787273901],
+                  [-72.15503778261606, 43.14952634196598],
+                  [-72.15460319275135, 43.14924098340387],
+                  [-72.1544169399522, 43.149105097906045],
+                  [-72.15398235008749, 43.14882879646214],
+                  [-72.1538085141416, 43.14869291004791],
+                  [-72.15363467819571, 43.14859778937824],
+                  [-72.15350430123631, 43.1484754911568],
+                  [-72.15344842539655, 43.1483396039572],
+                  [-72.15340496641008, 43.14818106850913],
+                  [-72.15340496641008, 43.14797270700919]
+                ]
+              },
+              properties: { name: 'Private Way' },
+              type: 'Feature'
+            }
+          ],
+          type: 'FeatureCollection'
+        },
+        properties: new LandmarkPropertiesClass({
+          fontColor: '--map-road-edge-VI',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'bold',
+          lineSpline: true,
+          strokeColor: '--map-road-lane-VI',
+          strokeFeet: 24 /* 👈 feet */,
+          strokeOpacity: 1,
+          strokeStyle: 'solid',
+          zIndex: 1
+        })
+      },
+      {
+        geojson: {
+          features: [
+            {
+              geometry: {
+                type: 'LineString',
+                coordinates: [
+                  [-72.15666439039539, 43.15076288034035],
+                  [-72.15670784938186, 43.15069946872458],
+                  [-72.15696239487404, 43.150468468710756],
+                  [-72.15708035498018, 43.150318997648384],
+                  [-72.15711139711337, 43.150196702870886],
+                  [-72.15717348137976, 43.150074407848706],
+                  [-72.15719210665968, 43.14999740715368],
+                  [-72.15719210665968, 43.14977546343101],
+                  [-72.1572107319396, 43.149743757119126],
+                  [-72.15723556564616, 43.149562577878555],
+                  [-72.1572914414859, 43.14935875059095]
+                ]
+              },
+              properties: { name: 'Ashuelot River' },
+              type: 'Feature'
+            }
+          ],
+          type: 'FeatureCollection'
+        },
+        properties: new LandmarkPropertiesClass({
+          fontColor: '--map-rplace-water-color',
+          fontOpacity: 1,
+          fontOutline: true,
+          fontSize: 'medium',
+          fontStyle: 'italic'
+        })
+      }
+    ],
+    owner: 'mflo999@gmail.com',
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
   }
 ];
 
@@ -232,12 +327,15 @@ async function main(): Promise<void> {
 
     // 👇 for each landmark ...
     for (const curated of curation.landmarks) {
-      const geojson = gpx(
-        new DOMParser().parseFromString(
-          readFileSync(curated.source).toString(),
-          'text/xml'
-        )
-      );
+      // 👉 source is external GPX or inline GeoJSON
+      const geojson = curated.source
+        ? gpx(
+            new DOMParser().parseFromString(
+              readFileSync(curated.source).toString(),
+              'text/xml'
+            )
+          )
+        : curated.geojson;
 
       // 👉 for each feature ...
       const promises = [];
