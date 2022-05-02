@@ -24,9 +24,10 @@ import { forwardRef } from '@angular/core';
 })
 export class OLAdaptorRoadsComponent implements Adaptor {
   @Input() class6Pattern = 'conglomerate';
-  @Input() minRoadFeet = 10 /* 👈 feet */;
+  @Input() minRoadFeet = 20 /* 👈 feet */;
   @Input() rightOfWayRatio = 3;
   @Input() roadLaneRatio = 0.9;
+  @Input() roadNameRatio = 1.125;
 
   #roadFeet(road: RoadProperties): number {
     return Math.max(road.width, this.minRoadFeet) * this.rightOfWayRatio;
@@ -68,7 +69,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
         lineSpline: true,
         name: road.class === 'VI' ? `${road.name} (Class VI)` : road.name,
         fontColor: `--map-road-text-${road.class ?? '0'}`,
-        fontFeet: this.#roadFeet(road) * this.roadLaneRatio,
+        fontFeet: this.#roadFeet(road) * this.roadNameRatio,
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',

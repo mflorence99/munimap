@@ -88,8 +88,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     else if (props.fontPixels)
       fontPixels = this.map.numPixels(props.fontPixels);
     else if (props.fontSize)
-      fontPixels = this.map.numPixels(this[`fontSize_${props.fontSize}`]);
+      fontPixels = this[`fontSize_${props.fontSize}`] / Math.sqrt(resolution);
     return fontPixels;
+  }
+
+  #calcFontSize(pixels: number, resolution: number): number {
+    // 👇 fontSize in pixels is proportional to resolution
+    //    but no larger than the a nominal maxmimum which is for
+    //    simplicity just the raw number of pixels
+    return Math.min(10000000000, pixels / Math.sqrt(resolution));
   }
 
   #calcPixelsForFeet(feet: number, resolution: number): number {

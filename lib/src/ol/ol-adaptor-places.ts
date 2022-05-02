@@ -29,7 +29,7 @@ const EXCEPTIONS: {
 } = {
   lake: {
     color: '--map-place-water-color',
-    fontSize: 'large',
+    fontSize: 'huge',
     placement: 'point'
   },
   park: {
@@ -39,7 +39,7 @@ const EXCEPTIONS: {
   },
   stream: {
     color: '--map-place-water-color',
-    fontSize: 'medium',
+    fontSize: 'large',
     placement: 'line'
   }
 };

@@ -140,7 +140,7 @@
           <app-ol-layer-vector>
             <app-ol-style-parcels
               [showBackground]="'always'"
-              [showStolen]="isPrivileged() ? 'always' : 'never'"
+              [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"
             ></app-ol-style-parcels>
             <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
@@ -311,7 +311,7 @@
           <app-ol-style-parcels
             [showBorder]="'always'"
             [showLabels]="'always'"
-            [showStolen]="isPrivileged() ? 'always' : 'never'"
+            [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
         </app-ol-layer-vector>
@@ -326,7 +326,7 @@
             [showLabels]="'always'"
             [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'never'"
             [showSelection]="'always'"
-            [showStolen]="isPrivileged() ? 'always' : 'never'"
+            [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"
           ></app-ol-style-parcels>
           <app-ol-source-parcels></app-ol-source-parcels>
           <app-ol-interaction-selectparcels> </app-ol-interaction-selectparcels>

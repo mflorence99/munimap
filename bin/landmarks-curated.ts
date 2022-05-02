@@ -52,9 +52,9 @@ const CURATIONS: Curation[] = [
       {
         properties: new LandmarkPropertiesClass({
           fontColor: '--rgb-blue-gray-600',
+          fontFeet: 16,
           fontOpacity: 1,
           fontOutline: true,
-          fontSize: 'small',
           fontStyle: 'normal',
           iconOpacity: 1,
           iconSymbol: '\uf1ce' /* 👈 circle-notch */,
@@ -120,7 +120,7 @@ const CURATIONS: Curation[] = [
         properties: new LandmarkPropertiesClass({
           fillColor: '--map-waterbody-fill',
           fillOpacity: 1,
-          fontColor: '--map-river-text-color',
+          fontColor: '--map-place-water-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
@@ -131,7 +131,7 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: new LandmarkPropertiesClass({
-          fontColor: '--map-river-text-color',
+          fontColor: '--map-place-water-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
@@ -141,7 +141,7 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: new LandmarkPropertiesClass({
-          fontColor: '--map-river-text-color',
+          fontColor: '--map-place-water-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
@@ -174,7 +174,6 @@ const CURATIONS: Curation[] = [
           lineChunk: true,
           lineDash: [2, 1],
           lineSpline: true,
-          showDimension: true,
           strokeColor: '--map-trail-line-color',
           strokeOpacity: 1,
           strokeStyle: 'dashed',
@@ -185,7 +184,7 @@ const CURATIONS: Curation[] = [
       },
       {
         properties: new LandmarkPropertiesClass({
-          fontColor: '--map-river-text-color',
+          fontColor: '--map-place-water-color',
           fontOpacity: 1,
           fontOutline: true,
           fontSize: 'medium',
@@ -279,8 +278,8 @@ const CURATIONS: Curation[] = [
           fontColor: '--map-place-water-color',
           fontOpacity: 1,
           fontOutline: true,
-          fontSize: 'medium',
-          fontStyle: 'italic'
+          fontSize: 'large',
+          fontStyle: 'bold'
         })
       }
     ],
