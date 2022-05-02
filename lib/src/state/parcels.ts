@@ -222,7 +222,7 @@ export class ParcelsState implements NgxsOnInit {
       );
       const collectionRef = collection(this.firestore, 'parcels');
       return addDoc(collectionRef, normalized).then((ref) =>
-        undos.push({ ...copy(parcel), $id: ref.id })
+        undos.push({ ...(normalized as Parcel), $id: ref.id })
       );
     });
     // TODO 🔥 we have a great opportunity here to "cull"
