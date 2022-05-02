@@ -8,6 +8,7 @@ import { Selector } from './ol-selector';
 import { SelectorComponent } from './ol-selector';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
+
 import { bboxDistance } from '../common';
 
 import { ActivatedRoute } from '@angular/router';

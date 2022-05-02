@@ -6,6 +6,7 @@ import { StreamCrossingProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
@@ -22,12 +23,14 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorStreamCrossingsComponent implements Adaptor {
+  @Input() streamCrossingWidth = 36 /* 👈 feet */;
+
   // 👇 construct LandmarkProperties
   adapt(streamCrossing: StreamCrossingProperties): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fontColor: '--map-streamcrossing-line-color',
-        fontFeet: 24,
+        fontFeet: this.streamCrossingWidth,
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',

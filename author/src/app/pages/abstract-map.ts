@@ -109,7 +109,7 @@ export abstract class AbstractMapPage implements OnInit {
 
   // 🔥 a very hacked up definition of privileged!
   isPrivileged(): boolean {
-    return this.authState.currentProfile().email === 'mflo999@gmail.com';
+    return /^mflo999.*@gmail\.com$/.test(this.authState.currentProfile().email);
   }
 
   ngOnInit(): void {

@@ -1,8 +1,7 @@
 .scalebar {
   color: var(--background-color);
-  display: flex;
-  flex-direction: column;
-  padding: 1rem 0 1rem 1rem;
+  display: grid;
+  grid-template-rows: auto auto;
   position: absolute;
 
   .annotations {

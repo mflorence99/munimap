@@ -39,7 +39,7 @@ const EXCEPTIONS: {
   },
   stream: {
     color: '--map-place-water-color',
-    fontSize: 'large',
+    fontSize: 'medium',
     placement: 'line'
   }
 };

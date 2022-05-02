@@ -94,7 +94,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
 
   @Input() borderWidth = 10 /* 👈 feet */;
   @Input() borderWidthSelectRatio = 2;
-  @Input() dimensionsFontSizeRatio = 0.66;
+  @Input() dimensionsFontSizeRatio = 0.5;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
   @Input() forceAbutted = false /* 🔥 experimental */;

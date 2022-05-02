@@ -39,7 +39,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
   // 👇 set the position proportional to the map size
   get bottom(): number {
     const element = this.map.olMap.getTargetElement();
-    return element.clientHeight / this.scaleFactor;
+    return (element.clientHeight / this.scaleFactor) * 4;
   }
 
   cxUnit: number;

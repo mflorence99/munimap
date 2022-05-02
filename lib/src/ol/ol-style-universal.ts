@@ -60,7 +60,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontFamily = 'Roboto';
   @Input() fontSize_huge = 32 /* 👈 pixels */;
   @Input() fontSize_large = 16 /* 👈 pixels */;
-  @Input() fontSize_medium = 14 /* 👈 pixels */;
+  @Input() fontSize_medium = 12 /* 👈 pixels */;
   @Input() fontSize_small = 12 /* 👈 pixels */;
   @Input() fontSize_tiny = 8 /* 👈 pixels */;
   @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
@@ -84,41 +84,31 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   #calcFontPixels(props: LandmarkProperties, resolution: number): number {
     let fontPixels;
     if (props.fontFeet)
-      fontPixels = this.#calcWidth(props.fontFeet, resolution);
-    else if (props.fontPixels) fontPixels = props.fontPixels;
+      fontPixels = this.#calcPixelsForFeet(props.fontFeet, resolution);
+    else if (props.fontPixels)
+      fontPixels = this.map.numPixels(props.fontPixels);
     else if (props.fontSize)
-      fontPixels = this.#calcFontSize(
-        this[`fontSize_${props.fontSize}`],
-        resolution
-      );
-    return this.map.numPixels(fontPixels);
+      fontPixels = this.map.numPixels(this[`fontSize_${props.fontSize}`]);
+    return fontPixels;
   }
 
-  #calcFontSize(pixels: number, resolution: number): number {
-    // 👇 fontSize in pixels is proportional to resolution
-    //    but no larger than the a nominal maxmimum which is for
-    //    simplicity just the raw number of pixels
-    return Math.min(pixels, pixels / resolution);
+  #calcPixelsForFeet(feet: number, resolution: number): number {
+    // 👇 resolution is meters per pixel
+    return feet / (resolution * 3.28084);
   }
 
   #calcStrokePixels(props: LandmarkProperties, resolution: number): number {
     let strokePixels;
     if (props.strokeFeet)
-      strokePixels = this.#calcWidth(props.strokeFeet, resolution);
-    else if (props.strokePixels) strokePixels = props.strokePixels;
+      strokePixels = this.#calcPixelsForFeet(props.strokeFeet, resolution);
+    else if (props.strokePixels)
+      strokePixels = this.map.numPixels(props.strokePixels);
     else if (props.strokeWidth)
-      strokePixels = this.#calcWidth(
+      strokePixels = this.#calcPixelsForFeet(
         this[`strokeWidth_${props.strokeWidth}`],
         resolution
       );
-    return this.map.numPixels(strokePixels);
-  }
-
-  #calcWidth(feet: number, resolution: number): number {
-    // 👇 width in pixels is proportional to resolution in meters
-    //    but no larger than the a nominal maxmimum which is for
-    //    simplicity just the raw number of feet
-    return Math.min(feet, feet / (resolution * 3.28084));
+    return strokePixels;
   }
 
   #chunkLine(
