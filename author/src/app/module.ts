@@ -73,6 +73,7 @@ import { OLAdaptorBoundaryComponent } from '@lib/ol/ol-adaptor-boundary';
 import { OLAdaptorBridgesComponent } from '@lib/ol/ol-adaptor-bridges';
 import { OLAdaptorBuildingsComponent } from '@lib/ol/ol-adaptor-buildings';
 import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservations';
+import { OLAdaptorFloodHazardsComponent } from '@lib/ol/ol-adaptor-floodhazards';
 import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
 import { OLAdaptorGeoJSONComponent } from '@lib/ol/ol-adaptor-geojson';
 import { OLAdaptorLandmarksComponent } from '@lib/ol/ol-adaptor-landmarks';
@@ -126,6 +127,7 @@ import { OLSourceConservationsComponent } from '@lib/ol/ol-source-conservations'
 import { OLSourceContours2ftComponent } from '@lib/ol/ol-source-contours-2ft';
 import { OLSourceContoursComponent } from '@lib/ol/ol-source-contours';
 import { OLSourceDamsComponent } from '@lib/ol/ol-source-dams';
+import { OLSourceFloodHazardsComponent } from '@lib/ol/ol-source-floodhazards';
 import { OLSourceFloodplainsComponent } from '@lib/ol/ol-source-floodplains';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
@@ -233,6 +235,7 @@ const COMPONENTS = [
   OLAdaptorBridgesComponent,
   OLAdaptorBuildingsComponent,
   OLAdaptorConservationsComponent,
+  OLAdaptorFloodHazardsComponent,
   OLAdaptorFloodplainsComponent,
   OLAdaptorGeoJSONComponent,
   OLAdaptorLandmarksComponent,
@@ -286,6 +289,7 @@ const COMPONENTS = [
   OLSourceContours2ftComponent,
   OLSourceContoursComponent,
   OLSourceDamsComponent,
+  OLSourceFloodHazardsComponent,
   OLSourceFloodplainsComponent,
   OLSourceGeoJSONComponent,
   OLSourceHillshadeComponent,

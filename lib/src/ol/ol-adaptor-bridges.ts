@@ -45,4 +45,20 @@ export class OLAdaptorBridgesComponent implements Adaptor {
       })
     ];
   }
+
+  // 👇 tweak style when hovering
+  adaptWhenHovering(bridge: BridgeProperties): LandmarkProperties[] {
+    const hovering = this.adapt(bridge)[0];
+    hovering.fontColor = '--map-landmark-hover';
+    hovering.iconColor = '--map-landmark-hover';
+    return [hovering];
+  }
+
+  // 👇 tweak style when selected
+  adaptWhenSelected(bridge: BridgeProperties): LandmarkProperties[] {
+    const selected = this.adapt(bridge)[0];
+    selected.fontColor = '--map-landmark-select';
+    selected.iconColor = '--map-landmark-select';
+    return [selected];
+  }
 }

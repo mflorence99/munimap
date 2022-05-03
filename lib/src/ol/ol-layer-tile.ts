@@ -29,12 +29,16 @@ export class OLLayerTileComponent implements Mapable {
     this.olLayer.setMaxZoom(maxZoom);
   }
 
+  @Input() set name(name: string) {
+    this.olLayer.set('name', name);
+  }
+
   @Input() set opacity(opacity: number) {
     this.olLayer.setOpacity(opacity);
   }
 
   constructor(private map: OLMapComponent) {
-    this.olLayer = new OLTile({ source: null });
+    this.olLayer = new OLTile({ properties: {} });
   }
 
   addToMap(): void {

@@ -37,13 +37,17 @@ export class OLLayerVectorComponent implements Mapable {
     this.olLayer.setMaxZoom(maxZoom);
   }
 
+  @Input() set name(name: string) {
+    this.olLayer.set('name', name);
+  }
+
   @Input() set opacity(opacity: number) {
     this.olLayer.setOpacity(opacity);
   }
 
   constructor(private map: OLMapComponent) {
     this.olLayer = new OLVector({
-      source: null,
+      properties: { component: this },
       style: this.style()
     });
   }

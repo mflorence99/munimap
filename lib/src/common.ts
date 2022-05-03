@@ -35,6 +35,8 @@ export interface ConservationProperties {
   name: string;
 }
 
+export interface FloodHazardProperties {}
+
 export interface LakeProperties {
   county: string;
   name: string;

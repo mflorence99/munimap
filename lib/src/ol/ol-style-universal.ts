@@ -554,7 +554,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
-      props.fontColor &&
+      (props.fontColor || props.iconColor) &&
       (props.fontFeet || props.fontPixels || props.fontSize) &&
       props.fontStyle &&
       (props.iconSymbol || props.name)

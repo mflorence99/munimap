@@ -132,22 +132,6 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
-        <app-ol-adaptor-bridges [bridgeWidth]="128">
-          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-        </app-ol-adaptor-bridges>
-        <app-ol-source-bridges></app-ol-source-bridges>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-adaptor-streamcrossings [streamCrossingWidth]="128">
-          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-        </app-ol-adaptor-streamcrossings>
-        <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-adaptor-places>
           <app-ol-style-universal [showText]="true"></app-ol-style-universal>
         </app-ol-adaptor-places>
@@ -167,6 +151,30 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
+      <app-ol-layer-vector [name]="'bridges'">
+        <app-ol-adaptor-bridges [bridgeWidth]="128">
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-bridges>
+        <app-ol-source-bridges></app-ol-source-bridges>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector [name]="'streamcrossings'">
+        <app-ol-adaptor-streamcrossings [streamCrossingWidth]="128">
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-streamcrossings>
+        <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector [name]="'floodhazards'">
+        <app-ol-adaptor-floodhazards [floodHazardWidth]="128">
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-floodhazards>
+        <app-ol-source-floodhazards></app-ol-source-floodhazards>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
       <app-ol-layer-vector>
         <app-ol-adaptor-powerlines
           ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
@@ -177,12 +185,19 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
+      <!-- 📦 DPW'S LANDMARKS -->
+
       <app-ol-layer-vector>
         <!-- 👇 user landmarks here are really map amendments -->
         <app-ol-adaptor-landmarks>
           <app-ol-style-universal [showAll]="true"></app-ol-style-universal
         ></app-ol-adaptor-landmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
+        <app-ol-interaction-selectlandmarks
+          [layers]="['bridges', 'streamcrossings', 'floodhazards']"
+          [multi]="false"
+        >
+        </app-ol-interaction-selectlandmarks>
       </app-ol-layer-vector>
     </ng-container>
 
@@ -227,6 +242,54 @@
             ></app-ol-source-xyz
           >
         </app-ol-layer-tile>
+
+        <app-ol-layer-vector [name]="'bridges'">
+          <app-ol-adaptor-bridges [bridgeWidth]="128">
+            <app-ol-style-universal
+              [contrast]="'whiteOnBlack'"
+              [showAll]="true"
+            ></app-ol-style-universal>
+          </app-ol-adaptor-bridges>
+          <app-ol-source-bridges></app-ol-source-bridges>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector [name]="'streamcrossings'">
+          <app-ol-adaptor-streamcrossings [streamCrossingWidth]="128">
+            <app-ol-style-universal
+              [contrast]="'whiteOnBlack'"
+              [showAll]="true"
+            ></app-ol-style-universal>
+          </app-ol-adaptor-streamcrossings>
+          <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector [name]="'floodhazards'">
+          <app-ol-adaptor-floodhazards [floodHazardWidth]="128">
+            <app-ol-style-universal
+              [contrast]="'whiteOnBlack'"
+              [showAll]="true"
+            ></app-ol-style-universal>
+          </app-ol-adaptor-floodhazards>
+          <app-ol-source-floodhazards></app-ol-source-floodhazards>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <app-ol-layer-vector>
+          <app-ol-adaptor-landmarks>
+            <app-ol-style-universal
+              [contrast]="'whiteOnBlack'"
+              [showAll]="true"
+            ></app-ol-style-universal
+          ></app-ol-adaptor-landmarks>
+          <app-ol-source-landmarks></app-ol-source-landmarks>
+          <app-ol-interaction-selectlandmarks
+            [layers]="['bridges', 'streamcrossings', 'floodhazards']"
+            [multi]="false"
+          >
+          </app-ol-interaction-selectlandmarks>
+        </app-ol-layer-vector>
       </ng-container>
     </ng-container>
 

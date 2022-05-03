@@ -10,10 +10,12 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
+import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
+import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { click } from 'ol/events/condition';
 import { forwardRef } from '@angular/core';
@@ -24,7 +26,9 @@ import { shiftKeyOnly } from 'ol/events/condition';
 import { unByKey } from 'ol/Observable';
 
 import OLFeature from 'ol/Feature';
+import OLLayer from 'ol/layer/Layer';
 import OLSelect from 'ol/interaction/Select';
+import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +53,10 @@ export class OLInteractionSelectLandmarksComponent
 
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
+  @Input() layers: string[] = [];
+
+  @Input() multi: boolean;
+
   olHover: OLSelect;
   olSelect: OLSelect;
 
@@ -69,17 +77,18 @@ export class OLInteractionSelectLandmarksComponent
       condition: (event): boolean => pointerMove(event),
       // 👇 don't hover over something that's already selected
       filter: (feature): boolean => !this.selectedIDs.includes(feature.getId()),
-      layers: [this.layer.olLayer],
-      style: this.layer.styleWhenHovering()
+      layers: this.#pickLayer.bind(this),
+      style: this.#styleWhenHovering()
     });
     this.olSelect = new OLSelect({
-      addCondition: (event): boolean => click(event) && shiftKeyOnly(event),
+      addCondition: (event): boolean =>
+        this.multi ? click(event) && shiftKeyOnly(event) : never(),
       condition: (event): boolean => click(event),
-      layers: [this.layer.olLayer],
-      multi: true,
+      layers: this.#pickLayer.bind(this),
+      multi: this.multi,
       removeCondition: (event): boolean =>
-        click(event) && platformModifierKeyOnly(event),
-      style: this.layer.styleWhenSelected(),
+        this.multi ? click(event) && platformModifierKeyOnly(event) : never(),
+      style: this.#styleWhenSelected(),
       toggleCondition: (): boolean => never()
     });
   }
@@ -91,12 +100,19 @@ export class OLInteractionSelectLandmarksComponent
     return diff.size > 0;
   }
 
-  #onSelect(_event?: OLSelectEvent): void {
+  #onSelect(event?: OLSelectEvent): void {
+    console.log({ event });
     const names = this.selected
       .map((selected) => `${selected.get('name')} - ${selected.getId()}`)
       .join(', ');
     console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
     this.featuresSelected.emit(this.selected);
+  }
+
+  #pickLayer(layer: OLLayer): boolean {
+    return (
+      layer === this.layer.olLayer || this.layers.includes(layer.get('name'))
+    );
   }
 
   #selectLandmarks(ids: LandmarkID[]): void {
@@ -110,6 +126,24 @@ export class OLInteractionSelectLandmarksComponent
     //    OL will reselect when features come in and out of view,
     //    so we need to jump through all the other hoops
     if (delta) this.#onSelect();
+  }
+
+  #styleWhenHovering(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      const layer: OLLayerVectorComponent = this.olHover
+        .getLayer(feature)
+        .get('component');
+      return layer?.styleWhenHovering?.()(feature, resolution) as OLStyle[];
+    };
+  }
+
+  #styleWhenSelected(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      const layer: OLLayerVectorComponent = this.olSelect
+        .getLayer(feature)
+        .get('component');
+      return layer?.styleWhenSelected?.()(feature, resolution) as OLStyle[];
+    };
   }
 
   addToMap(): void {
