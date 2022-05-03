@@ -35,7 +35,7 @@ async function backup(nm: string): Promise<void> {
   const source = await docs.get();
   let numCopied = 0;
   for (const doc of source.docs) {
-    await backup.add(doc.data());
+    await backup.doc(doc.id).set(doc.data());
     process.stdout.write('.');
     numCopied += 1;
   }
