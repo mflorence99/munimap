@@ -123,6 +123,17 @@ const MAPS = [
   },
   {
     bbox: null,
+    id: 'washington-dpw',
+    isDflt: false,
+    name: 'Washington DPW',
+    owner: 'mflo999@gmail.com',
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    printSize: [45, 60],
+    timestamp: null,
+    type: 'dpw'
+  },
+  {
+    bbox: null,
     id: 'florence',
     isDflt: false,
     name: 'Florence/Hendrickson Estate',

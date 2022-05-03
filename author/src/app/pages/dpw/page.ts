@@ -15,11 +15,11 @@ import { ViewState } from '@lib/state/view';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-streets',
+  selector: 'app-dpw',
   styleUrls: ['../abstract-map.scss'],
   templateUrl: './page.html'
 })
-export class StreetsPage extends AbstractMapPage {
+export class DPWPage extends AbstractMapPage {
   constructor(
     protected actions$: Actions,
     protected authState: AuthState,
@@ -34,6 +34,6 @@ export class StreetsPage extends AbstractMapPage {
   }
 
   getType(): MapType {
-    return 'streets';
+    return 'dpw';
   }
 }

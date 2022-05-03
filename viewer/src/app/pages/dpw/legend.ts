@@ -7,11 +7,11 @@ import { VersionService } from '@lib/services/version';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-streets-legend',
+  selector: 'app-dpw-legend',
   styleUrls: ['../legend.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './legend.html'
 })
-export class StreetsLegendComponent extends LegendComponent {
+export class DPWLegendComponent extends LegendComponent {
   constructor(registry: TypeRegistry, version: VersionService) {
     super(registry, version);
   }

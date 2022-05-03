@@ -7,6 +7,7 @@ import { ControlPanelEasyTrailsComponent } from './components/controlpanel-easyt
 import { ControlPanelPropertiesComponent } from './components/controlpanel-properties';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
+import { DPWPage } from './pages/dpw/page';
 import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
@@ -16,7 +17,6 @@ import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
-import { StreetsPage } from './pages/streets/page';
 import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
 import { TopoPage } from './pages/topo/page';
 
@@ -88,6 +88,7 @@ import { OLAdaptorWetlandsComponent } from '@lib/ol/ol-adaptor-wetlands';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
+import { OLControlDPWLegendComponent } from '@lib/ol/dpw/ol-control-dpwlegend';
 import { OLControlExportParcelsComponent } from '@lib/ol/parcels/ol-control-exportparcels';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
 import { OLControlMousePositionComponent } from '@lib/ol/ol-control-mouseposition';
@@ -97,7 +98,6 @@ import { OLControlPrintProgressComponent } from '@lib/ol/ol-control-printprogres
 import { OLControlScaleBarComponent } from '@lib/ol/ol-control-scalebar';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/parcels/ol-control-searchparcels';
-import { OLControlStreetsLegendComponent } from '@lib/ol/streets/ol-control-streetslegend';
 import { OLControlTitleComponent } from '@lib/ol/ol-control-title';
 import { OLControlTopoLegendComponent } from '@lib/ol/topo/ol-control-topolegend';
 import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
@@ -248,6 +248,7 @@ const COMPONENTS = [
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,
+  OLControlDPWLegendComponent,
   OLControlExportParcelsComponent,
   OLControlGraticuleComponent,
   OLControlMousePositionComponent,
@@ -257,7 +258,6 @@ const COMPONENTS = [
   OLControlScaleBarComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
-  OLControlStreetsLegendComponent,
   OLControlTitleComponent,
   OLControlTopoLegendComponent,
   OLControlZoomComponent,
@@ -318,11 +318,11 @@ const PAGES = [
   AreaPage,
   LoginPage,
   CreatePage,
+  DPWPage,
   ListPage,
   ParcelsPage,
   PropertyPage,
   RootPage,
-  StreetsPage,
   TopoPage
 ];
 
@@ -359,6 +359,11 @@ const ROUTES = [
         data: { state: 'create' }
       },
       {
+        path: 'dpw/:id',
+        component: DPWPage,
+        data: { state: 'dpw' }
+      },
+      {
         path: 'list',
         component: ListPage,
         data: { state: 'list' }
@@ -372,11 +377,6 @@ const ROUTES = [
         path: 'property/:id',
         component: PropertyPage,
         data: { state: 'property' }
-      },
-      {
-        path: 'streets/:id',
-        component: StreetsPage,
-        data: { state: 'streets' }
       },
       {
         path: 'topo/:id',

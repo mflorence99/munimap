@@ -64,7 +64,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontSize_small = 12 /* 👈 pixels */;
   @Input() fontSize_tiny = 8 /* 👈 pixels */;
   @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
-  @Input() minFontPixels = 4 /* 👈 pixels */;
+  @Input() maxFontPixels = 40 /* 👈 pixels */;
+  @Input() minFontPixels = 6 /* 👈 pixels */;
   @Input() overlaySelectable = false;
   @Input() showAll = false;
   @Input() showFill = false;
@@ -89,7 +90,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       fontPixels = this.map.numPixels(props.fontPixels);
     else if (props.fontSize)
       fontPixels = this[`fontSize_${props.fontSize}`] / Math.sqrt(resolution);
-    return fontPixels;
+    return Math.min(this.maxFontPixels, fontPixels);
   }
 
   #calcFontSize(pixels: number, resolution: number): number {

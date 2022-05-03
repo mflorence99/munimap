@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-streets',
+  selector: 'app-dpw',
   styleUrls: ['../abstract-map.scss'],
   templateUrl: './page.html'
 })
-export class StreetsPage extends AbstractMapPage {}
+export class DPWPage extends AbstractMapPage {}

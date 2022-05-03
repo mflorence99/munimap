@@ -29,13 +29,19 @@ export class OLAdaptorBridgesComponent implements Adaptor {
   adapt(bridge: BridgeProperties): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fontColor: `--map-bridge-${bridge.rygb}-icon-color`,
+        fontColor: '--map-bridge-line-color',
         fontFeet: this.bridgeWidth,
+        fontOpacity: 1,
+        fontOutline: true,
         fontStyle: 'bold',
+        iconColor: `--map-bridge-${bridge.rygb}-icon-color`,
         iconOutline: true,
         iconOutlineColor: '--map-bridge-line-color',
         iconOpacity: 1,
-        iconSymbol: '\uf00d' /* 👈 times */
+        iconSymbol: '\uf00d' /* 👈 times */,
+        name: 'Bridge',
+        textAlign: 'center',
+        textBaseline: 'bottom'
       })
     ];
   }

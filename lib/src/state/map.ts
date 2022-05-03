@@ -56,7 +56,7 @@ export class UpdateMapError {
   constructor(public error: string) {}
 }
 
-export type MapType = 'area' | 'parcels' | 'topo' | 'streets' | 'property';
+export type MapType = 'area' | 'dpw' | 'parcels' | 'topo' | 'property';
 
 export interface Map {
   bbox?: Coordinate;

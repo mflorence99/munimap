@@ -1,11 +1,11 @@
+import { DPWLegendComponent } from './pages/dpw/legend';
+import { DPWPage } from './pages/dpw/page';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsOverlayComponent } from './pages/parcels/overlay';
 import { ParcelsPage } from './pages/parcels/page';
 import { PropertyLegendComponent } from './pages/property/legend';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
-import { StreetsLegendComponent } from './pages/streets/legend';
-import { StreetsPage } from './pages/streets/page';
 import { TopoLegendComponent } from './pages/topo/legend';
 import { TopoPage } from './pages/topo/page';
 
@@ -159,6 +159,7 @@ export const persistenceEnabled = new Promise<boolean>((resolve) => {
 
 const COMPONENTS = [
   ConfirmDialogComponent,
+  DPWLegendComponent,
   MessageDialogComponent,
   OLAdaptorBoundaryComponent,
   OLAdaptorBridgesComponent,
@@ -225,14 +226,13 @@ const COMPONENTS = [
   ParcelsLegendComponent,
   ParcelsOverlayComponent,
   PropertyLegendComponent,
-  StreetsLegendComponent,
   TopoLegendComponent,
   VersionDialogComponent
 ];
 
 const DIRECTIVES = [];
 
-const PAGES = [ParcelsPage, PropertyPage, RootPage, StreetsPage, TopoPage];
+const PAGES = [DPWPage, ParcelsPage, PropertyPage, RootPage, TopoPage];
 
 const ROUTES = [
   {
@@ -242,6 +242,15 @@ const ROUTES = [
       ready: ReadyResolver
     },
     children: [
+      {
+        path: 'dpw',
+        component: DPWPage
+      },
+      {
+        path: 'dpw-legend',
+        component: DPWLegendComponent,
+        outlet: 'leftSidebar'
+      },
       {
         path: 'parcels',
         component: ParcelsPage
@@ -263,15 +272,6 @@ const ROUTES = [
       {
         path: 'property-legend',
         component: PropertyLegendComponent,
-        outlet: 'leftSidebar'
-      },
-      {
-        path: 'streets',
-        component: StreetsPage
-      },
-      {
-        path: 'streets-legend',
-        component: StreetsLegendComponent,
         outlet: 'leftSidebar'
       },
       {

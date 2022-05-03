@@ -39,14 +39,14 @@
         ><app-ol-style-graticule></app-ol-style-graticule
       ></app-ol-control-graticule>
 
-      <app-ol-control-streetslegend
+      <app-ol-control-dpwlegend
         *ngIf="map.name && olMap.printing"
         [county]="map.path.split(':')[1]"
         [id]="map.id"
         [printing]="olMap.printing"
         [state]="map.path.split(':')[0]"
         [title]="map.name"
-      ></app-ol-control-streetslegend>
+      ></app-ol-control-dpwlegend>
 
       <app-ol-control-scalebar *ngIf="olMap.printing"></app-ol-control-scalebar>
 
@@ -80,7 +80,7 @@
 
         <!-- 📦 HILLSHADE LAYER =-->
 
-        <app-ol-layer-tile [opacity]="0.66">
+        <app-ol-layer-tile [opacity]="0.5">
           <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-tile>
@@ -166,7 +166,7 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-adaptor-bridges>
+          <app-ol-adaptor-bridges [bridgeWidth]="128">
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
           </app-ol-adaptor-bridges>
           <app-ol-source-bridges></app-ol-source-bridges>
@@ -174,7 +174,7 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector>
-          <app-ol-adaptor-streamcrossings>
+          <app-ol-adaptor-streamcrossings [streamCrossingWidth]="128">
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
           </app-ol-adaptor-streamcrossings>
           <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
