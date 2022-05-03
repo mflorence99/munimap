@@ -11,7 +11,7 @@
   "scripts": {
     "assets:viewer:henniker": "cp ./data/'NEW HAMPSHIRE'/MERRIMACK/HENNIKER/*.geojson ./viewer/assets",
     "assets:viewer:washington": "cp ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/*.geojson ./viewer/assets",
-    "build:author": "npm run lint && ng build author --configuration production",
+    "build:author": "ng build author --configuration production",
     "build:proxy": "npm run compile:proxy && cp proxy/package.json dist/proxy && npm --prefix dist/proxy i",
     "build:viewer:henniker": "npm run assets:viewer:henniker && ng build viewer --configuration production",
     "build:viewer:washington": "npm run assets:viewer:washington && ng build viewer --configuration production",
