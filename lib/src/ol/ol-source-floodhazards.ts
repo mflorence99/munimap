@@ -27,17 +27,6 @@ export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
     super(cache, http, layer, map);
   }
 
-  // 👇 see BridgeProperties
-
-  filter(arcgis: any): any {
-    if (arcgis) {
-      arcgis.features.forEach((feature) => {
-        console.log(feature);
-      });
-      return arcgis;
-    } else return super.filter(arcgis);
-  }
-
   getAttribution(): string {
     return attribution;
   }

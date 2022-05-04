@@ -171,18 +171,18 @@ export class OLPopupParcelPropertiesComponent {
 
   onClose(): void {
     this.snackBar.dismiss();
-    // 👉 the selector MAY not be present
+    // 👉 the selector MAY not be present and may not be for parcels
     const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    selector?.unselectParcels();
+    selector?.unselectParcels?.();
     // 🔥  this doesn't seem to work
     // this.#subToAbutters?.unsubscribe();
     // this.#subToSelection?.unsubscribe();
   }
 
   onSelect(abutterID: ParcelID): void {
-    // 👉 the selector MAY not be present
+    // 👉 the selector MAY not be present and may not be for parcels
     const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    selector?.reselectParcels([abutterID]);
+    selector?.reselectParcels?.([abutterID]);
   }
 
   sum(array: number[]): number {

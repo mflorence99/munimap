@@ -1,4 +1,3 @@
-import { LandmarkProperties } from '../../common';
 import { OLInteractionSelectLandmarksComponent } from '../landmarks/ol-interaction-selectlandmarks';
 import { OLMapComponent } from '../ol-map';
 import { UtilsService } from '../../services/utils';
@@ -8,8 +7,10 @@ import * as Sentry from '@sentry/angular';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { ViewChild } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
@@ -28,7 +29,9 @@ import OLFeature from 'ol/Feature';
 export class OLPopupDPWPropertiesComponent {
   #subToSelection: Subscription;
 
-  properties: LandmarkProperties;
+  properties: any /* 👈 could be bridge, stream crossing etc etc */;
+
+  @ViewChild('table', { static: true }) table: ElementRef;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -41,20 +44,18 @@ export class OLPopupDPWPropertiesComponent {
   }
 
   // 👇 note only single selection is supported
+  //    and we could be selecting a bridge, stream crossing etc etc
 
   #handleFeatureSelected$(): void {
     /* 🔥 this.#subToSelection = */ this.map.featuresSelected
       .pipe(
-        map(
-          (features: OLFeature<any>[]): LandmarkProperties =>
-            features[0]?.getProperties()
-        )
+        map((features: OLFeature<any>[]): any => features[0]?.getProperties())
       )
-      .subscribe((properties: LandmarkProperties) => {
+      .subscribe((properties: any) => {
         this.properties = properties;
         if (!this.properties) this.onClose();
         else {
-          console.log(typeof this.properties, this.properties);
+          console.log(this.properties);
           this.cdf.markForCheck();
         }
       });
@@ -71,14 +72,9 @@ export class OLPopupDPWPropertiesComponent {
     //    https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem
     const data = [
       new ClipboardItem({
-        [type]: new Blob(
-          [
-            /* :fire */
-          ],
-          {
-            type
-          }
-        ) as any
+        [type]: new Blob([this.table.nativeElement.innerHTML], {
+          type
+        }) as any
       })
     ];
     navigator.clipboard
@@ -94,9 +90,9 @@ export class OLPopupDPWPropertiesComponent {
 
   onClose(): void {
     this.snackBar.dismiss();
-    // 👉 the selector MAY not be present
+    // 👉 the selector MAY not be present and may not be for landmarks
     const selector = this.map.selector as OLInteractionSelectLandmarksComponent;
-    selector?.unselectLandmarks();
+    selector?.unselectLandmarks?.();
     // 🔥  this doesn't seem to work
     // this.#subToSelection?.unsubscribe();
   }

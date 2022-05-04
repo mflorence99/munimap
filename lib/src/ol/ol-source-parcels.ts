@@ -127,12 +127,12 @@ export class OLSourceParcelsComponent implements OnInit {
           if (!this.olVector.hasFeature(feature))
             this.olVector.addFeature(feature);
         });
-        // 👉 the selector MAY not be present
+        // 👉 the selector MAY not be present and may not be for parcels
         const selector = this.map
           .selector as OLInteractionSelectParcelsComponent;
         // 👉 reselect selected features b/c we've potentially removed them
         const selectedIDs = selector?.selectedIDs;
-        if (selectedIDs?.length > 0) selector?.reselectParcels(selectedIDs);
+        if (selectedIDs?.length > 0) selector?.reselectParcels?.(selectedIDs);
         this.#success?.(features);
       });
   }

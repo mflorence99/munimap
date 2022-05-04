@@ -289,9 +289,6 @@
       <app-ol-source-parcels></app-ol-source-parcels>
       <app-ol-interaction-selectparcels [findAbutters]="true">
       </app-ol-interaction-selectparcels>
-      <app-ol-popup-selection>
-        <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>
-      </app-ol-popup-selection>
     </app-ol-layer-vector>
 
     <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
@@ -312,6 +309,12 @@
       ></app-ol-adaptor-boundary>
       <app-ol-source-boundary></app-ol-source-boundary>
     </app-ol-layer-vector>
+
+    <!-- 📦 POPUP FOR PROPERTIES -->
+
+    <app-ol-popup-selection>
+      <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>
+    </app-ol-popup-selection>
 
     <!-- 📦 OVERLAY FOR GPS -->
 

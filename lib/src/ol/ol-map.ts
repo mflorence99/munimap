@@ -344,7 +344,6 @@ export class OLMapComponent
   }
 
   #onClick(event: OLMapBrowserEvent<any>): void {
-    console.log(toLonLat(event.coordinate));
     this.click$.next(event);
   }
 

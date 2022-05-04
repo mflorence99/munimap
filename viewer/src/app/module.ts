@@ -84,9 +84,12 @@ import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
+import { OLPopupBridgePropertiesComponent } from '@lib/ol/dpw/ol-popup-bridgeproperties';
 import { OLPopupDPWPropertiesComponent } from '@lib/ol/dpw/ol-popup-dpwproperties';
+import { OLPopupFloodHazardPropertiesComponent } from '@lib/ol/dpw/ol-popup-floodhazardproperties';
 import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parcelproperties';
 import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
+import { OLPopupStreamCrossingPropertiesComponent } from '@lib/ol/dpw/ol-popup-streamcrossingproperties';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
 import { OLSourceBridgesComponent } from '@lib/ol/ol-source-bridges';
@@ -199,9 +202,12 @@ const COMPONENTS = [
   OLLayerVectorComponent,
   OLMapComponent,
   OLOverlayGPSComponent,
+  OLPopupBridgePropertiesComponent,
   OLPopupDPWPropertiesComponent,
+  OLPopupFloodHazardPropertiesComponent,
   OLPopupParcelPropertiesComponent,
   OLPopupSelectionComponent,
+  OLPopupStreamCrossingPropertiesComponent,
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
   OLSourceBridgesComponent,

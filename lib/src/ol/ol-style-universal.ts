@@ -220,11 +220,19 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           whenHovering,
           whenSelected
         );
+        const shadowLocation = new OLPolygon(
+          feature.getGeometry().getCoordinates()
+        );
+        // 👉 offset is in feet, translation units are meters
+        shadowLocation.translate(
+          props.shadowOffsetFeet[0] / 3.28084,
+          props.shadowOffsetFeet[1] / 3.28084
+        );
         const shadow = new OLStyle({
           fill: new OLFill({
             color: `rgba(${shadowColor}, ${props.shadowOpacity})`
           }),
-          geometry: this.#offsetGeometry(feature, props.shadowOffsetFeet),
+          geometry: shadowLocation,
           zIndex: props.zIndex - 1
         });
         styles.push(shadow);
@@ -583,12 +591,25 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           const acreage = feature.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
         }
+        // 👇 establish the location of the text
+        let textLocation;
+        if (props.textLocation)
+          textLocation = new OLPoint(fromLonLat(props.textLocation));
+        else {
+          textLocation = new OLPoint(
+            getCenter(feature.getGeometry().getExtent())
+          );
+          // 👉 offset is in feet, translation units are meters
+          if (props.textOffsetFeet)
+            textLocation.translate(
+              props.textOffsetFeet[0] / 3.28084,
+              props.textOffsetFeet[1] / 3.28084
+            );
+        }
         // 👇 here's the style
         const style = new OLStyle({
           // 👇 geometry MUST be set to 'point' or else the icon won't show
-          geometry: props.textLocation
-            ? new OLPoint(fromLonLat(props.textLocation))
-            : new OLPoint(getCenter(feature.getGeometry().getExtent())),
+          geometry: textLocation,
           image: props.iconSymbol
             ? new OLFontSymbol({
                 color: `rgba(${iconColor}, ${props.iconOpacity})`,

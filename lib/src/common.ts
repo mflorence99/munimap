@@ -108,6 +108,7 @@ export class LandmarkPropertiesClass {
     | 'ideographic'
     | null = null;
   public textLocation: [number, number] = null;
+  public textOffsetFeet: number[] = null;
   public textRotate = false;
   public zIndex = 0;
   constructor(opts?: LandmarkProperties) {

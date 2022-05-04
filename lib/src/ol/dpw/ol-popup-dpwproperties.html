@@ -10,3 +10,20 @@
 >
   <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
 </button>
+
+<section #table class="wrapper">
+  <app-ol-popup-bridgeproperties
+    *ngIf="properties?.BRIDGE_ID !== undefined"
+    [properties]="properties"
+  ></app-ol-popup-bridgeproperties>
+
+  <app-ol-popup-streamcrossingproperties
+    *ngIf="properties?.CulWatDep !== undefined"
+    [properties]="properties"
+  ></app-ol-popup-streamcrossingproperties>
+
+  <app-ol-popup-floodhazardproperties
+    *ngIf="properties?.FloodHazID !== undefined"
+    [properties]="properties"
+  ></app-ol-popup-floodhazardproperties>
+</section>

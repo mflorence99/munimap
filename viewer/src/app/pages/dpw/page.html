@@ -198,9 +198,6 @@
           [multi]="false"
         >
         </app-ol-interaction-selectlandmarks>
-        <app-ol-popup-selection>
-          <app-ol-popup-dpwproperties></app-ol-popup-dpwproperties
-        ></app-ol-popup-selection>
       </app-ol-layer-vector>
     </ng-container>
 
@@ -292,9 +289,6 @@
             [multi]="false"
           >
           </app-ol-interaction-selectlandmarks>
-          <app-ol-popup-selection>
-            <app-ol-popup-dpwproperties></app-ol-popup-dpwproperties
-          ></app-ol-popup-selection>
         </app-ol-layer-vector>
       </ng-container>
     </ng-container>
@@ -307,6 +301,12 @@
       ></app-ol-adaptor-boundary>
       <app-ol-source-boundary></app-ol-source-boundary>
     </app-ol-layer-vector>
+
+    <!-- 📦 POPUP FOR PROPERTIES -->
+
+    <app-ol-popup-selection>
+      <app-ol-popup-dpwproperties></app-ol-popup-dpwproperties
+    ></app-ol-popup-selection>
 
     <!-- 📦 OVERLAY FOR GPS -->
 

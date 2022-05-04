@@ -31,10 +31,13 @@ export class OLAdaptorFloodHazardsComponent implements Adaptor {
         fontFeet: this.floodHazardWidth,
         fontStyle: 'bold',
         iconColor: '--map-floodhazard-icon-color',
-        iconOpacity: 0.5,
+        iconOpacity: 1,
         iconOutline: true,
         iconOutlineColor: '--map-floodhazard-line-color',
-        iconSymbol: '\uf024' /* 👈 flag */
+        iconSymbol: '\uf024' /* 👈 flag */,
+        // 👉 flood hazard can be co-located with a bridge
+        //    or a stream crossing
+        textOffsetFeet: [this.floodHazardWidth, -this.floodHazardWidth]
       })
     ];
   }

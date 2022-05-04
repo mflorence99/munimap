@@ -102,8 +102,7 @@ export class OLInteractionSelectLandmarksComponent
     return diff.size > 0;
   }
 
-  #onSelect(event?: OLSelectEvent): void {
-    console.log({ event });
+  #onSelect(_event?: OLSelectEvent): void {
     const names = this.selected.map((selected) => selected.getId()).join(', ');
     console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
     this.featuresSelected.emit(this.selected);

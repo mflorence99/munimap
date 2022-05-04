@@ -1,0 +1,8 @@
+<table class="properties">
+  <tbody>
+    <tr *ngFor="let scheme of schema">
+      <td>{{ scheme[0]}}</td>
+      <td>{{ properties?.[scheme[1]] || ''}}</td>
+    </tr>
+  </tbody>
+</table>
