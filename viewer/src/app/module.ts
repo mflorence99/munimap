@@ -84,6 +84,7 @@ import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
+import { OLPopupDPWPropertiesComponent } from '@lib/ol/dpw/ol-popup-dpwproperties';
 import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parcelproperties';
 import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
@@ -198,6 +199,7 @@ const COMPONENTS = [
   OLLayerVectorComponent,
   OLMapComponent,
   OLOverlayGPSComponent,
+  OLPopupDPWPropertiesComponent,
   OLPopupParcelPropertiesComponent,
   OLPopupSelectionComponent,
   OLSourceBoundaryComponent,

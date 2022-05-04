@@ -72,12 +72,14 @@ export class OLInteractionSelectGeoJSONComponent
       layers: [this.layer.olLayer],
       style: this.layer.styleWhenHovering()
     });
+    this.olHover.setProperties({ component: this }, true);
     this.olSelect = new OLSelect({
       condition: (event): boolean => click(event),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
       style: this.layer.styleWhenSelected()
     });
+    this.olSelect.setProperties({ component: this }, true);
   }
 
   #filter(feature: OLFeature<any>): boolean {

@@ -45,6 +45,7 @@ export class OLSourceLandmarksComponent implements OnInit {
       loader: this.#loader.bind(this),
       strategy: allStrategy
     });
+    this.olVector.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olVector);
   }
 

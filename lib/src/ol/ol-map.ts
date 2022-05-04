@@ -61,9 +61,6 @@ export class OLMapComponent
   #changeKey: OLEventsKey;
   #clickKey: OLEventsKey;
   #dpi = 96 /* 👈 nominal pixels per inch of screen */;
-  #origControls: string[];
-  #origInteractions: string[];
-  #origLayers: string[];
   #path: Path;
   #printing = false;
   #subToAbuttersFound: Subscription;
@@ -170,48 +167,29 @@ export class OLMapComponent
       target: null,
       view: null
     });
-    // 👉 capture the original contents of the map
-    //    https://stackoverflow.com/questions/13613524/
-    //    constructor.name does NOT survive minification
-    this.#origControls = this.olMap
-      .getControls()
-      .getArray()
-      .map((control) => control.constructor.toString());
-    this.#origInteractions = this.olMap
-      .getInteractions()
-      .getArray()
-      .map((interaction) => interaction.constructor.toString());
-    this.#origLayers = this.olMap
-      .getLayers()
-      .getArray()
-      .map((layer) => layer.constructor.toString());
+    this.olMap.setProperties({ component: this }, true);
     // 👉 get these up front, all at once,
     //    meaning we don't expect them to change
     this.vars = this.#findAllCustomVariables();
   }
 
-  // 👇 https://stackoverflow.com/questions/40862706
-  //    https://stackoverflow.com/questions/13613524/
-  //    constructor.name does NOT survive minification
   #cleanMap(): void {
+    // 👇 we only want to remove the controls we added
     const controls = [...this.olMap.getControls().getArray()];
     controls.forEach((control) => {
-      // 👇 this should never happen, as there are no default controls
-      if (!this.#origControls.includes(control.constructor.toString()))
-        this.olMap.removeControl(control);
+      if (control.get('component')) this.olMap.removeControl(control);
     });
+    // 👇 we only want to remove the interactions we added
+    //    OL adds a bunch of its own we must keep intact
     const interactions = [...this.olMap.getInteractions().getArray()];
     interactions.forEach((interaction) => {
-      // 👇 OL adds a bunch of interactions of its own
-      //    that we don't want to remove
-      if (!this.#origInteractions.includes(interaction.constructor.toString()))
+      if (interaction.get('component'))
         this.olMap.removeInteraction(interaction);
     });
+    // 👇 we only want to remove the layers we added
     const layers = [...this.olMap.getLayers().getArray()];
     layers.forEach((layer) => {
-      // 👇 this should never happen, as there are no default layers
-      if (!this.#origLayers.includes(layer.constructor.toString()))
-        this.olMap.removeLayer(layer);
+      if (layer.get('component')) this.olMap.removeLayer(layer);
     });
   }
 
@@ -247,6 +225,7 @@ export class OLMapComponent
       smoothExtentConstraint: true,
       showFullExtent: true
     });
+    this.olView.setProperties({ component: this }, true);
     this.olMap.setView(this.olView);
     // 👉 if center, zoom available use them else fit to bounds
     const viewState =

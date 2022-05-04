@@ -1,0 +1,12 @@
+<button (click)="onClose()" class="closer" mat-icon-button>
+  <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
+</button>
+
+<button
+  *ngIf="canClipboard()"
+  (click)="onClipboard()"
+  class="clipboard"
+  mat-icon-button
+>
+  <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
+</button>

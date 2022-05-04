@@ -73,6 +73,7 @@ export class OLSourceContours2ftComponent {
       tileLoadFunction: this.#loader.bind(this),
       url: 'https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_XXXXXXXX_smooth_cached/MapServer/tile/{z}/{y}/{x}'
     });
+    this.olXYZ.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olXYZ);
   }
 

@@ -29,6 +29,7 @@ export class OLControlMousePositionComponent implements Mapable {
       className: 'ol-control-mouseposition',
       projection: this.map.featureProjection
     });
+    this.olControl.setProperties({ component: this }, true);
   }
 
   addToMap(): void {

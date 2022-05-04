@@ -24,6 +24,7 @@ export class OLSourceOSMComponent implements OnInit {
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olOSM = new OLOSM({ maxZoom: this.maxZoom });
+    this.olOSM.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olOSM);
   }
 }

@@ -43,6 +43,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
       position: [0, 0],
       positioning: 'center-center'
     });
+    this.olOverlay.setProperties({ component: this }, true);
     this.map.olMap.addOverlay(this.olOverlay);
   }
 

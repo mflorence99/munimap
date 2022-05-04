@@ -70,6 +70,7 @@ export class OLSourceSatelliteComponent {
       tileLoadFunction: this.#loader.bind(this),
       url: 'http://dummy.com'
     });
+    this.olTileWMS.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olTileWMS);
   }
 

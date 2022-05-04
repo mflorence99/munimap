@@ -51,6 +51,7 @@ export abstract class OLSourceArcGISComponent {
       loader: this.#loader.bind(this),
       strategy: strategy
     });
+    this.olVector.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olVector);
   }
 

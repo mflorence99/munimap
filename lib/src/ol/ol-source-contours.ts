@@ -61,6 +61,7 @@ export class OLSourceContoursComponent {
       tileLoadFunction: this.#loader.bind(this),
       url: 'http://dummy.com'
     });
+    this.olTileWMS.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olTileWMS);
     // 👇 capture the original opacity so we can restore it
     this.#origOpacity = this.layer.olLayer.getOpacity();

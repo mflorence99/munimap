@@ -38,7 +38,8 @@ export class OLLayerTileComponent implements Mapable {
   }
 
   constructor(private map: OLMapComponent) {
-    this.olLayer = new OLTile({ properties: {} });
+    this.olLayer = new OLTile();
+    this.olLayer.setProperties({ component: this }, true);
   }
 
   addToMap(): void {

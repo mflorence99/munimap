@@ -71,5 +71,6 @@ export class OLControlGraticuleComponent
       step: this.step,
       stepCoord: this.stepCoord
     });
+    this.olControl.setProperties({ component: this }, true);
   }
 }

@@ -37,6 +37,7 @@ export class OLControlSplitScreenComponent
 
   constructor(private map: OLMapComponent) {
     this.olControl = new OLSwipe();
+    this.olControl.setProperties({ component: this }, true);
   }
 
   addToMap(): void {

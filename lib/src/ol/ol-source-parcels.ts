@@ -75,6 +75,7 @@ export class OLSourceParcelsComponent implements OnInit {
       loader: this.#loader.bind(this),
       strategy: strategy
     });
+    this.olVector.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olVector);
   }
 

@@ -84,6 +84,7 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
       hitDetection: this.layer.olLayer,
       source: this.layer.olLayer.getSource()
     });
+    this.olModify.setProperties({ component: this }, true);
     this.map.olMap.addInteraction(this.olModify);
   }
 

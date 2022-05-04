@@ -46,10 +46,8 @@ export class OLLayerVectorComponent implements Mapable {
   }
 
   constructor(private map: OLMapComponent) {
-    this.olLayer = new OLVector({
-      properties: { component: this },
-      style: this.style()
-    });
+    this.olLayer = new OLVector({ style: this.style() });
+    this.olLayer.setProperties({ component: this }, true);
   }
 
   addToMap(): void {

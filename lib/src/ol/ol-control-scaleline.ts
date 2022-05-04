@@ -29,6 +29,7 @@ export class OLControlScaleLineComponent implements Mapable {
       className: 'ol-scaleline-line',
       units: 'us'
     });
+    this.olControl.setProperties({ component: this }, true);
   }
 
   addToMap(): void {

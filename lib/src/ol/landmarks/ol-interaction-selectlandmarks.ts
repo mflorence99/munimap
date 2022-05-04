@@ -80,6 +80,7 @@ export class OLInteractionSelectLandmarksComponent
       layers: this.#pickLayer.bind(this),
       style: this.#styleWhenHovering()
     });
+    this.olHover.setProperties({ component: this }, true);
     this.olSelect = new OLSelect({
       addCondition: (event): boolean =>
         this.multi ? click(event) && shiftKeyOnly(event) : never(),
@@ -91,6 +92,7 @@ export class OLInteractionSelectLandmarksComponent
       style: this.#styleWhenSelected(),
       toggleCondition: (): boolean => never()
     });
+    this.olSelect.setProperties({ component: this }, true);
   }
 
   #hasSelectionChanged(ids: LandmarkID[]): boolean {
@@ -102,9 +104,7 @@ export class OLInteractionSelectLandmarksComponent
 
   #onSelect(event?: OLSelectEvent): void {
     console.log({ event });
-    const names = this.selected
-      .map((selected) => `${selected.get('name')} - ${selected.getId()}`)
-      .join(', ');
+    const names = this.selected.map((selected) => selected.getId()).join(', ');
     console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
     this.featuresSelected.emit(this.selected);
   }
@@ -161,5 +161,9 @@ export class OLInteractionSelectLandmarksComponent
 
   reselectLandmarks(ids: LandmarkID[]): void {
     this.#selectLandmarks(ids);
+  }
+
+  unselectLandmarks(): void {
+    this.#selectLandmarks([]);
   }
 }

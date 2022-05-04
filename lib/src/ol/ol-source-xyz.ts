@@ -53,6 +53,7 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
         parsed.hostname
       }?url=${encoded}&x={x}&y={y}&z={z}&s=${this.s.join(',')}`
     });
+    this.olXYZ.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olXYZ);
   }
 }
