@@ -105,7 +105,10 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
               }
               if (properties) {
                 landmark.id = makeLandmarkID(landmark);
-                landmark.properties = { ...properties, name: `#${ix + 1}` };
+                landmark.properties = {
+                  ...properties,
+                  name: `New landmark #${ix + 1}`
+                };
                 this.store.dispatch(new AddLandmark(landmark));
               }
             });

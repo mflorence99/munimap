@@ -107,7 +107,6 @@ import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/property/ol-filter-crop2propertyparcels';
 import { OLFilterPencilComponent } from '@lib/ol/ol-filter-pencil';
-import { OLInteractionConvertToBuildingComponent } from '@lib/ol/landmarks/ol-interaction-convert2building';
 import { OLInteractionDrawLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmarks';
 import { OLInteractionRedrawBoundaryComponent } from '@lib/ol/ol-interaction-redrawboundary';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
@@ -175,7 +174,6 @@ import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
-import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faLayerPlus } from '@fortawesome/pro-duotone-svg-icons';
@@ -191,6 +189,7 @@ import { faPlusSquare as fadPlusSquare } from '@fortawesome/pro-duotone-svg-icon
 import { faPlusSquare as fasPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faRecycle } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/pro-duotone-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faSignIn } from '@fortawesome/pro-duotone-svg-icons';
@@ -269,7 +268,6 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterPencilComponent,
-  OLInteractionConvertToBuildingComponent,
   OLInteractionDrawLandmarksComponent,
   OLInteractionRedrawBoundaryComponent,
   OLInteractionRedrawLandmarkComponent,
@@ -517,7 +515,6 @@ export class RootModule {
       faExclamationTriangle,
       faExpandArrows,
       faGlobeAmericas,
-      faHouse,
       faInfoCircle,
       faLayerGroup,
       faLayerPlus,
@@ -533,6 +530,7 @@ export class RootModule {
       fasPlusSquare,
       faPrint,
       faQuestionCircle,
+      faRecycle,
       faRedo,
       faSearch,
       faSignIn,

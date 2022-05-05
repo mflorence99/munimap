@@ -38,10 +38,6 @@ import OLStrokePattern from 'ol-ext/style/StrokePattern';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
 
-// 🔥 currently only works for landmarks and styles with adaptors
-//    will change to work via an adadpter for most sources
-//    except special cases like parcels
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -58,12 +54,16 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
 
   @Input() fontFamily = 'Roboto';
+  @Input() fontOutlineRatio = 0.1 /* 👈 outline width : fontSize */;
   @Input() fontSize_huge = 32 /* 👈 pixels */;
   @Input() fontSize_large = 16 /* 👈 pixels */;
   @Input() fontSize_medium = 12 /* 👈 pixels */;
   @Input() fontSize_small = 12 /* 👈 pixels */;
   @Input() fontSize_tiny = 8 /* 👈 pixels */;
+  @Input() iconOutlineRatio = 0.1 /* 👈 outline width : fontSize */;
+  @Input() lineCap: CanvasLineCap = 'butt';
   @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
+  @Input() lineJoin: CanvasLineJoin = 'bevel';
   @Input() maxFontPixels = 40 /* 👈 pixels */;
   @Input() minFontPixels = 6 /* 👈 pixels */;
   @Input() overlaySelectable = false;
@@ -71,6 +71,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() showFill = false;
   @Input() showStroke = false;
   @Input() showText = false;
+  @Input() strokeOutlineRatio = 0.1 /* 👈 outline width : strokeWidth */;
   @Input() strokeWidth_medium = 6 /* 👈 feet */;
   @Input() strokeWidth_thick = 9 /* 👈 feet */;
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
@@ -91,13 +92,6 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     else if (props.fontSize)
       fontPixels = this[`fontSize_${props.fontSize}`] / Math.sqrt(resolution);
     return Math.min(this.maxFontPixels, fontPixels);
-  }
-
-  #calcFontSize(pixels: number, resolution: number): number {
-    // 👇 fontSize in pixels is proportional to resolution
-    //    but no larger than the a nominal maxmimum which is for
-    //    simplicity just the raw number of pixels
-    return Math.min(10000000000, pixels / Math.sqrt(resolution));
   }
 
   #calcPixelsForFeet(feet: number, resolution: number): number {
@@ -310,7 +304,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.strokeStyle &&
       (props.strokeFeet || props.strokePixels || props.strokeWidth)
     ) {
-      // 🔥 pretty hack back door -- se ol-interaction-redraw*
+      // 🔥 pretty hack back door -- see ol-interaction-redraw*
       const whenRedrawing = feature.get('ol-interaction-redraw');
       const strokeColor = this.#colorOf(
         props.strokeColor,
@@ -318,7 +312,41 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         whenSelected,
         whenRedrawing
       );
-      const strokePixels = this.#calcStrokePixels(props, resolution);
+      const strokeOutlineColor = this.#colorOf(
+        props.strokeOutlineColor,
+        whenHovering,
+        whenSelected,
+        whenRedrawing
+      );
+      let strokePixels = this.#calcStrokePixels(props, resolution);
+      // 👇 if we're drawing a stroke outline, we first stroke
+      //    full width of the outline, then reduce the width for
+      //    the interior
+      if (props.strokeOutline && props.strokeOutlineColor) {
+        let style = new OLStyle({
+          stroke: new OLStroke({
+            color: `rgba(${strokeOutlineColor}, 1)`,
+            lineCap: this.lineCap,
+            lineJoin: this.lineJoin,
+            width: strokePixels
+          }),
+          zIndex: props.zIndex - 2
+        });
+        styles.push(style);
+        strokePixels = strokePixels * (1 - this.strokeOutlineRatio);
+        if (props.strokePattern) {
+          style = new OLStyle({
+            stroke: new OLStroke({
+              color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
+              lineCap: this.lineCap,
+              lineJoin: this.lineJoin,
+              width: strokePixels
+            }),
+            zIndex: props.zIndex - 1
+          });
+          styles.push(style);
+        }
+      }
       // 👇 develop the lineDash
       let lineDash;
       if (props.strokeStyle === 'dashed')
@@ -330,15 +358,17 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       // 🐛 StrokePattern sometimes throws InvalidStateError
       let stroke = new OLStroke({
         color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
-        lineCap: 'butt',
+        lineCap: this.lineCap,
         lineDash: lineDash,
-        lineJoin: 'bevel',
+        lineJoin: this.lineJoin,
         width: strokePixels
       });
       if (props.strokePattern) {
         try {
           stroke = new OLStrokePattern({
-            color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
+            color: `rgba(${
+              props.strokeOutline ? strokeOutlineColor : strokeColor
+            }, ${props.strokeOpacity})`,
             pattern: props.strokePattern,
             scale: props.strokePatternScale,
             width: strokePixels
@@ -621,7 +651,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                   ? new OLStroke({
                       // 🔥 this always shows as black!!
                       color: `rgba(${iconOutlineColor}, 1)`,
-                      width: fontPixels * 0.1
+                      width: fontPixels * this.fontOutlineRatio
                     })
                   : null,
                 text: props.iconSymbol
@@ -641,7 +671,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 stroke: props.fontOutline
                   ? new OLStroke({
                       color: `rgba(${fontOutlineColor}, 1)`,
-                      width: fontPixels * 0.25
+                      width: fontPixels * this.iconOutlineRatio
                     })
                   : null,
                 text: text,

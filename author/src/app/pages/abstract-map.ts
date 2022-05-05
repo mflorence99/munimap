@@ -29,6 +29,8 @@ import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
+import OLGeoJSON from 'ol/format/GeoJSON';
+
 @Component({ template: '' })
 export abstract class AbstractMapPage implements OnInit {
   @ViewChild(ContextMenuHostDirective)
@@ -105,6 +107,13 @@ export abstract class AbstractMapPage implements OnInit {
     this.store.dispatch(new LoadMap(id, dflt, /* touch = */ true));
     // 👉 set the window title to something we know for now
     this.root.setTitle(path);
+  }
+
+  getGeoJSONFormatter(): OLGeoJSON {
+    return new OLGeoJSON({
+      dataProjection: this.olMap.featureProjection,
+      featureProjection: this.olMap.projection
+    });
   }
 
   // 🔥 a very hacked up definition of privileged!

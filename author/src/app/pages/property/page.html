@@ -275,7 +275,6 @@
             <app-ol-source-landmarks></app-ol-source-landmarks>
             <app-ol-interaction-selectlandmarks [multi]="true">
             </app-ol-interaction-selectlandmarks>
-            <app-ol-interaction-convert2building></app-ol-interaction-convert2building>
             <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
             <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
@@ -326,7 +325,6 @@
             <app-ol-source-landmarks></app-ol-source-landmarks>
             <app-ol-interaction-selectlandmarks [multi]="true">
             </app-ol-interaction-selectlandmarks>
-            <app-ol-interaction-convert2building></app-ol-interaction-convert2building>
             <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
             <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
           </app-ol-layer-vector>
@@ -366,7 +364,7 @@
     <header *ngIf="olMap.selectedIDs.length !== 0" class="header">
       <p [ngPlural]="olMap.selected.length">
         <ng-template ngPluralCase="one"
-          >Landmark {{ olMap.selected[0].get('name') }}</ng-template
+          >{{ olMap.selected[0].get('name') }}</ng-template
         ><ng-template ngPluralCase="other">Multiple landmarks</ng-template>
       </p>
     </header>
@@ -406,19 +404,16 @@
         </p>
       </li>
 
-      <li
-        (click)="canDrawLandmarks($event) && onContextMenu('draw-landmarks', geometryType.value)"
-        [class.disabled]="!canDrawLandmarks()"
-        class="item"
-      >
+      <li [class.disabled]="!canDrawLandmarks()" class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'pen']"></fa-icon>
         <p>
           Draw new
           <select
             #geometryType
-            (click)="eatMe($event)"
+            (input)="canDrawLandmarks($event) && onContextMenu('draw-landmarks', geometryType.value)"
             [disabled]="!canDrawLandmarks()"
           >
+            <option [value]="''" selected>-select-</option>
             <option [value]="'Point'">point</option>
             <option [value]="'LineString'">linear</option>
             <option [value]="'Polygon'">area</option>
@@ -433,13 +428,26 @@
         </p>
       </li>
 
-      <li
-        (click)="canConvertToBuilding($event) && onContextMenu('convert-to-building')"
-        [class.disabled]="!canConvertToBuilding()"
-        class="item"
-      >
-        <fa-icon [fixedWidth]="true" [icon]="['fas', 'house']"></fa-icon>
-        <p>Convert landmark to a building</p>
+      <li [class.disabled]="!canConvertLandmark()" class="item">
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'recycle']"></fa-icon>
+        <p>
+          Convert landmark to
+          <select
+            #conversionType
+            (input)="canConvertLandmark($event) && onContextMenu('convert-landmark', conversionType.value)"
+            [disabled]="!canConvertLandmark()"
+          >
+            <option [value]="''" selected>-select-</option>
+            <ng-container *ngFor="let conversion of conversions">
+              <option
+                *ngIf="canConvertFor(conversion)"
+                [value]="conversion.label"
+              >
+                {{ conversion.label }}
+              </option>
+            </ng-container>
+          </select>
+        </p>
       </li>
 
       <li

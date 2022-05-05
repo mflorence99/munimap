@@ -93,6 +93,8 @@ export class LandmarkPropertiesClass {
   public strokeColor: string = null;
   public strokeFeet: number = null;
   public strokeOpacity = 0;
+  public strokeOutline = false;
+  public strokeOutlineColor = null;
   public strokePattern: string = null /* 👈 should be OLStrokePatternType */;
   public strokePatternScale = 1;
   public strokePixels: number = null;

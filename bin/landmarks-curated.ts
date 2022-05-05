@@ -81,6 +81,10 @@ const CURATIONS: Curation[] = [
           strokeColor: '--map-road-lane-VI',
           strokeFeet: 15 /* 👈 feet */,
           strokeOpacity: 1,
+          strokeOutline: true,
+          strokeOutlineColor: '--map-road-edge-VI',
+          strokePattern: 'conglomerate',
+          strokePatternScale: 0.66,
           strokeStyle: 'solid',
           zIndex: 1
         }),
@@ -242,8 +246,12 @@ const CURATIONS: Curation[] = [
           fontStyle: 'bold',
           lineSpline: true,
           strokeColor: '--map-road-lane-VI',
-          strokeFeet: 24 /* 👈 feet */,
+          strokeFeet: 48 /* 👈 feet */,
           strokeOpacity: 1,
+          strokeOutline: true,
+          strokeOutlineColor: '--map-road-edge-VI',
+          strokePattern: 'conglomerate',
+          strokePatternScale: 0.66,
           strokeStyle: 'solid',
           zIndex: 1
         })
