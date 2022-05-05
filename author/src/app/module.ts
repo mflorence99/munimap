@@ -167,12 +167,14 @@ import { connectFirestoreEmulator } from '@angular/fire/firestore';
 import { enableMultiTabIndexedDbPersistence } from '@angular/fire/firestore';
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCircleExclamation } from '@fortawesome/pro-duotone-svg-icons';
 import { faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { faFileSignature } from '@fortawesome/pro-regular-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faLayerGroup } from '@fortawesome/pro-duotone-svg-icons';
@@ -200,6 +202,7 @@ import { faTasks as fasTasks } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faUndo } from '@fortawesome/pro-duotone-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { getAnalytics } from '@angular/fire/analytics';
 import { getAuth } from '@angular/fire/auth';
 import { getFirestore } from '@angular/fire/firestore';
@@ -508,12 +511,14 @@ export class RootModule {
     // 👇 must add icons we use right here
     library.addIcons(
       faBars,
+      faCheck,
       faCircleExclamation,
       faCrosshairs,
       faDownload,
       faDrawPolygon,
       faExclamationTriangle,
       faExpandArrows,
+      faFileSignature,
       faGlobeAmericas,
       faInfoCircle,
       faLayerGroup,
@@ -540,7 +545,8 @@ export class RootModule {
       fasTasks,
       faTimes,
       faTrash,
-      faUndo
+      faUndo,
+      faXmark
     );
   }
 }

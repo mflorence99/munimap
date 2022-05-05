@@ -12,6 +12,7 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
+import { LandmarkPropertiesClass } from '@lib/common';
 import { MapType } from '@lib/state/map';
 import { OLInteractionDrawLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmarks';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
@@ -30,7 +31,7 @@ import OLFeature from 'ol/Feature';
 import transformRotate from '@turf/transform-rotate';
 
 interface LandmarkConversion {
-  converter: (feature: OLFeature<any>) => void;
+  converter: (feature: OLFeature<any>) => Partial<Landmark>;
   geometryType: 'Point' | 'LineString' | 'Polygon';
   label: string;
 }
@@ -45,9 +46,44 @@ interface LandmarkConversion {
 export class PropertyPage extends AbstractMapPage {
   conversions: LandmarkConversion[] = [
     {
-      converter: this.convertToBuilding.bind(this),
+      converter: this.#convertToBuilding.bind(this),
       geometryType: 'Polygon',
       label: 'building'
+    },
+    {
+      converter: this.#convertToCulvert.bind(this),
+      geometryType: 'Point',
+      label: 'culvert'
+    },
+    {
+      converter: this.#convertToDitch.bind(this),
+      geometryType: 'LineString',
+      label: 'ditch'
+    },
+    {
+      converter: this.#convertToDriveway.bind(this),
+      geometryType: 'LineString',
+      label: 'driveway'
+    },
+    {
+      converter: this.#convertToField.bind(this),
+      geometryType: 'Polygon',
+      label: 'field'
+    },
+    {
+      converter: this.#convertToForest.bind(this),
+      geometryType: 'Polygon',
+      label: 'forest'
+    },
+    {
+      converter: this.#convertToPlace.bind(this),
+      geometryType: 'Point',
+      label: 'place'
+    },
+    {
+      converter: this.#convertToWetland.bind(this),
+      geometryType: 'Polygon',
+      label: 'wetland'
     }
   ];
 
@@ -77,6 +113,197 @@ export class PropertyPage extends AbstractMapPage {
   #can(event: MouseEvent, condition: boolean): boolean {
     if (!condition && event) event.stopPropagation();
     return condition;
+  }
+
+  #convertTo(label: string): void {
+    if (label) {
+      const conversion = this.conversions.find(
+        (conversion) => conversion.label === label
+      );
+      const landmark = conversion?.converter?.(this.olMap.selected[0]);
+      this.store.dispatch(new UpdateLandmark(landmark));
+    }
+  }
+
+  #convertToBuilding(feature: OLFeature<any>): Partial<Landmark> {
+    const formatter = this.getGeoJSONFormatter();
+    const geojson = JSON.parse(formatter.writeFeature(feature));
+    // 👇 calculate the orientation of the building outline
+    const theta = calculateOrientation(geojson);
+    // 👇 rotate it level, expand to bbox, then rotate it back
+    let munged = transformRotate(geojson, theta * -1);
+    munged = bboxPolygon(bbox(munged));
+    munged = transformRotate(munged, theta);
+    return {
+      id: feature.getId() as string,
+      geometry: munged.geometry,
+      properties: new LandmarkPropertiesClass({
+        fillColor: '--map-building-fill',
+        fillOpacity: 1,
+        fontColor: '--map-building-outline',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'medium',
+        fontStyle: 'italic',
+        name: 'Building',
+        orientation: feature.get('orientation'),
+        shadowColor: '--map-building-outline',
+        shadowOffsetFeet: [6, -6],
+        shadowOpacity: 0.75,
+        showDimension: false,
+        strokeColor: '--map-building-outline',
+        strokeOpacity: 1,
+        strokePixels: 1,
+        strokeStyle: 'solid',
+        textRotate: true
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToCulvert(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--rgb-blue-gray-600',
+        fontFeet: 16,
+        fontOpacity: 1,
+        fontOutline: true,
+        fontStyle: 'normal',
+        iconOpacity: 1,
+        iconSymbol: '\uf1ce' /* 👈 circle-notch */,
+        name: 'Culvert',
+        textAlign: 'center',
+        textBaseline: 'bottom'
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToDitch(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        lineDash: [1, 1],
+        lineSpline: true,
+        strokeColor: '--map-river-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 'thin'
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToDriveway(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        lineSpline: true,
+        strokeColor: '--map-road-lane-VI',
+        strokeFeet: 15 /* 👈 feet */,
+        strokeOpacity: 1,
+        strokeOutline: true,
+        strokeOutlineColor: '--map-road-edge-VI',
+        strokePattern: 'conglomerate',
+        strokePatternScale: 0.66,
+        strokeStyle: 'solid'
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToField(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fillColor: '--map-parcel-fill-u190',
+        fillOpacity: 1,
+        fillPattern: 'grass',
+        fontColor: '--map-conservation-outline',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'small',
+        fontStyle: 'normal',
+        name: 'Field',
+        orientation: feature.get('orientation'),
+        showDimension: true,
+        textLocation: feature.get('textLocation'),
+        textRotate: true
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToForest(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fillColor: '--map-parcel-fill-u501',
+        fillOpacity: 1,
+        fillPattern: 'tree',
+        fontColor: '--map-conservation-outline',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'small',
+        fontStyle: 'normal',
+        name: 'Forest',
+        orientation: feature.get('orientation'),
+        showDimension: true,
+        textLocation: feature.get('textLocation'),
+        textRotate: true
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToPlace(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--map-place-text-color',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'large',
+        fontStyle: 'italic',
+        name: feature.get('name')
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToWetland(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fillColor: '--map-wetland-swamp',
+        fillOpacity: 0.75,
+        fillPattern: 'swamp',
+        fontColor: '--map-place-water-color',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'small',
+        fontStyle: 'normal',
+        name: 'Forest',
+        orientation: feature.get('orientation'),
+        showDimension: true,
+        textLocation: feature.get('textLocation'),
+        textRotate: true
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #renameTo(name: string): void {
+    const feature = this.olMap.selected[0];
+    const landmark: Partial<Landmark> = {
+      id: feature.getId() as string,
+      properties: {
+        name: name
+      },
+      type: 'Feature'
+    };
+    this.store.dispatch(new UpdateLandmark(landmark));
   }
 
   canConvertFor(conversion: LandmarkConversion): boolean {
@@ -118,39 +345,12 @@ export class PropertyPage extends AbstractMapPage {
     );
   }
 
-  convertToBuilding(feature: OLFeature<any>): void {
-    const formatter = this.getGeoJSONFormatter();
-    const geojson = JSON.parse(formatter.writeFeature(feature));
-    // 👇 calculate the orientation of the building outline
-    const theta = calculateOrientation(geojson);
-    // 👇 rotate it level, expand to bbox, then rotate it back
-    let munged = transformRotate(geojson, theta * -1);
-    munged = bboxPolygon(bbox(munged));
-    munged = transformRotate(munged, theta);
-    // 👉 update the store
-    const landmark: Partial<Landmark> = {
-      id: feature.getId() as string,
-      geometry: munged.geometry,
-      properties: {
-        fillColor: '--map-building-fill',
-        fillOpacity: 1,
-        fontColor: '--map-building-outline',
-        fontOpacity: 1,
-        fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'italic',
-        shadowColor: '--map-building-outline',
-        shadowOffsetFeet: [6, -6],
-        shadowOpacity: 0.75,
-        showDimension: false,
-        strokeColor: '--map-building-outline',
-        strokeOpacity: 1,
-        strokePixels: 1,
-        strokeStyle: 'solid'
-      },
-      type: 'Feature'
-    };
-    this.store.dispatch(new UpdateLandmark(landmark));
+  canRenameLandmark(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 1);
+  }
+
+  eatMe(event: MouseEvent): void {
+    event.stopPropagation();
   }
 
   getType(): MapType {
@@ -161,12 +361,7 @@ export class PropertyPage extends AbstractMapPage {
     let cFactory: ComponentFactory<SidebarComponent>;
     switch (key) {
       case 'convert-landmark':
-        if (opaque) {
-          const conversion = this.conversions.find(
-            (conversion) => conversion.label === opaque
-          );
-          conversion?.converter?.(this.olMap.selected[0]);
-        }
+        this.#convertTo(opaque);
         break;
       case 'delete-landmark':
         this.store.dispatch(
@@ -181,6 +376,9 @@ export class PropertyPage extends AbstractMapPage {
         break;
       case 'redraw-landmark':
         this.redrawLandmark.setFeature(this.olMap.selected[0]);
+        break;
+      case 'rename-landmark':
+        this.#renameTo(opaque);
         break;
     }
     if (cFactory) this.onContextMenuImpl(cFactory);

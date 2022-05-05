@@ -58,7 +58,6 @@ const CURATIONS: Curation[] = [
           fontStyle: 'normal',
           iconOpacity: 1,
           iconSymbol: '\uf1ce' /* 👈 circle-notch */,
-          minZoom: 18,
           textAlign: 'center',
           textBaseline: 'bottom'
         }),
@@ -359,7 +358,9 @@ async function main(): Promise<void> {
         let munged;
         switch (curated.geoOp) {
           case 'lineToPolygon':
-            munged = lineToPolygon(feature.geometry).geometry;
+            // 🔥 don't know why we do this -- just popped up in new OL version
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            munged = lineToPolygon(feature.geometry as any).geometry;
             break;
           default:
             munged = feature.geometry;

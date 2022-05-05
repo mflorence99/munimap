@@ -370,6 +370,38 @@
     </header>
 
     <ul>
+      <li [class.disabled]="!canRenameLandmark()" class="item">
+        <fa-icon
+          [fixedWidth]="true"
+          [icon]="['far', 'file-signature']"
+        ></fa-icon>
+        <p>
+          Rename landmark
+          <input
+            #newName
+            (click)="eatMe($event)"
+            [disabled]="!canRenameLandmark()"
+            [value]="olMap.selected[0]?.get('name')"
+            type="text"
+          />
+          <button
+            (click)="canRenameLandmark($event) && onContextMenu('rename-landmark', newName.value)"
+            mat-icon-button
+          >
+            <fa-icon
+              [icon]="['fas', 'check']"
+              [fixedWidth]="true"
+              size="lg"
+            ></fa-icon></button
+          >&nbsp;<em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click the checkmark to save the new name"
+            ></fa-icon
+          ></em>
+        </p>
+      </li>
+
       <li
         (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
         [class.disabled]="!canMoveLandmark()"
@@ -431,7 +463,7 @@
       <li [class.disabled]="!canConvertLandmark()" class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'recycle']"></fa-icon>
         <p>
-          Convert landmark to
+          Convert landmark into
           <select
             #conversionType
             (input)="canConvertLandmark($event) && onContextMenu('convert-landmark', conversionType.value)"

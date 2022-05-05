@@ -1,8 +1,19 @@
+button {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+input {
+  height: 1.5rem;
+  width: 8rem;
+}
+
 select {
   appearance: auto;
   background-color: var(--text-color);
   color: var(--background-color);
   display: inline;
+  height: 1.5rem;
   width: unset;
 
   option {

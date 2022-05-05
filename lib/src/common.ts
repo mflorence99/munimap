@@ -109,7 +109,7 @@ export class LandmarkPropertiesClass {
     | 'hanging'
     | 'ideographic'
     | null = null;
-  public textLocation: [number, number] = null;
+  public textLocation: number[] = null;
   public textOffsetFeet: number[] = null;
   public textRotate = false;
   public zIndex = 0;
@@ -506,9 +506,9 @@ export function calculateLandmark(landmark: Partial<Landmark>): void {
     const polygon = landmark as GeoJSON.Feature<GeoJSON.Polygon>;
     landmark.properties ??= {};
     landmark.properties.orientation = calculateOrientation(polygon);
+    landmark.properties.textLocation ??= calculateCenter(polygon);
   } else {
     landmark.properties ??= {};
-    landmark.properties.orientation = 0;
   }
 }
 
@@ -726,6 +726,8 @@ export function serializeLandmark(landmark: Partial<Landmark>): void {
   if (landmark.geometry)
     landmark.geometry = JSON.stringify(landmark.geometry) as any;
   if (landmark.properties) {
+    if (landmark.properties instanceof LandmarkPropertiesClass)
+      landmark.properties = { ...landmark.properties };
     // 🔥 this may not be such a brilliant idea, as without an
     //    explicit property setting, we can't propery undo
     // landmarkProperties.forEach((prop) => {
