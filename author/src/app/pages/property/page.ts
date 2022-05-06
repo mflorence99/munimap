@@ -1,4 +1,5 @@
 import { AbstractMapPage } from '../abstract-map';
+import { ContextMenuComponent } from '../../components/contextmenu';
 import { RootPage } from '../root/page';
 import { SidebarComponent } from '../../components/sidebar-component';
 
@@ -44,6 +45,8 @@ interface LandmarkConversion {
   templateUrl: './page.html'
 })
 export class PropertyPage extends AbstractMapPage {
+  @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
+
   conversions: LandmarkConversion[] = [
     {
       converter: this.#convertToBuilding.bind(this),
@@ -84,6 +87,11 @@ export class PropertyPage extends AbstractMapPage {
       converter: this.#convertToPond.bind(this),
       geometryType: 'Polygon',
       label: 'pond'
+    },
+    {
+      converter: this.#convertToStonewall.bind(this),
+      geometryType: 'LineString',
+      label: 'stonewall'
     },
     {
       converter: this.#convertToStream.bind(this),
@@ -135,8 +143,11 @@ export class PropertyPage extends AbstractMapPage {
       const conversion = this.conversions.find(
         (conversion) => conversion.label === label
       );
-      const landmark = conversion?.converter?.(this.olMap.selected[0]);
-      this.store.dispatch(new UpdateLandmark(landmark));
+      if (conversion) {
+        const feature = this.olMap.selected[0];
+        const landmark = conversion.converter(feature);
+        this.store.dispatch(new UpdateLandmark(landmark));
+      }
     }
   }
 
@@ -244,14 +255,14 @@ export class PropertyPage extends AbstractMapPage {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--map-parcel-fill-u501',
-        fillOpacity: 1,
-        fillPattern: 'grass',
+        fillColor: '--map-parcel-fill-u190',
+        fillOpacity: 0.25,
         fontColor: '--map-conservation-outline',
         fontOpacity: 1,
         fontOutline: true,
         fontSize: 'small',
         fontStyle: 'normal',
+        minWidth: feature.get('minWidth'),
         name: 'Field',
         orientation: feature.get('orientation'),
         showDimension: true,
@@ -275,6 +286,7 @@ export class PropertyPage extends AbstractMapPage {
         fontOutline: true,
         fontSize: 'small',
         fontStyle: 'normal',
+        minWidth: feature.get('minWidth'),
         name: 'Forest',
         orientation: feature.get('orientation'),
         showDimension: true,
@@ -313,10 +325,27 @@ export class PropertyPage extends AbstractMapPage {
         fontOutline: true,
         fontSize: 'medium',
         fontStyle: 'italic',
+        minWidth: feature.get('minWidth'),
+        name: 'Pond',
         orientation: feature.get('orientation'),
         textLocation: feature.get('textLocation'),
         textRotate: true,
-        name: 'Pond',
+        zIndex: 4
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToStonewall(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        strokeColor: '--map-stonewall-rocks',
+        strokeOpacity: 0.5,
+        strokePattern: 'rocks',
+        strokePatternScale: 2,
+        strokeStyle: 'solid',
+        strokeWidth: 'medium',
         zIndex: 4
       }),
       type: 'Feature'
@@ -380,6 +409,7 @@ export class PropertyPage extends AbstractMapPage {
         fontOutline: true,
         fontSize: 'small',
         fontStyle: 'normal',
+        minWidth: feature.get('minWidth'),
         name: 'Wetland',
         orientation: feature.get('orientation'),
         showDimension: true,
@@ -479,5 +509,7 @@ export class PropertyPage extends AbstractMapPage {
         break;
     }
     if (cFactory) this.onContextMenuImpl(cFactory);
+    // 👇 in some cases, doesn't close itself
+    this.contextMenu.closeMenu();
   }
 }

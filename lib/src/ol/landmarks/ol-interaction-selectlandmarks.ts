@@ -114,19 +114,6 @@ export class OLInteractionSelectLandmarksComponent
     );
   }
 
-  #selectLandmarks(ids: LandmarkID[]): void {
-    const delta = this.#hasSelectionChanged(ids);
-    this.olSelect.getFeatures().clear();
-    this.layer.olLayer.getSource().forEachFeature((feature) => {
-      if (ids.includes(feature.getId()))
-        this.olSelect.getFeatures().push(feature);
-    });
-    // 👉 ony push an event if the selection has changed
-    //    OL will reselect when features come in and out of view,
-    //    so we need to jump through all the other hoops
-    if (delta) this.#onSelect();
-  }
-
   #styleWhenHovering(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
       const layer: OLLayerVectorComponent = this.olHover
@@ -159,10 +146,23 @@ export class OLInteractionSelectLandmarksComponent
   }
 
   reselectLandmarks(ids: LandmarkID[]): void {
-    this.#selectLandmarks(ids);
+    this.selectLandmarks(ids);
+  }
+
+  selectLandmarks(ids: LandmarkID[]): void {
+    const delta = this.#hasSelectionChanged(ids);
+    this.olSelect.getFeatures().clear();
+    this.layer.olLayer.getSource().forEachFeature((feature) => {
+      if (ids.includes(feature.getId()))
+        this.olSelect.getFeatures().push(feature);
+    });
+    // 👉 only push an event if the selection has changed
+    //    OL will reselect when features come in and out of view,
+    //    so we need to jump through all the other hoops
+    if (delta) this.#onSelect();
   }
 
   unselectLandmarks(): void {
-    this.#selectLandmarks([]);
+    this.selectLandmarks([]);
   }
 }

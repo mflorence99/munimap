@@ -52,7 +52,15 @@ export class ContextMenuComponent implements OnInit {
       });
   }
 
+  closeMenu(): void {
+    this.contextMenuTrigger.closeMenu();
+  }
+
   ngOnInit(): void {
     this.#handleContextMenu$();
+  }
+
+  openMenu(): void {
+    this.contextMenuTrigger.openMenu();
   }
 }

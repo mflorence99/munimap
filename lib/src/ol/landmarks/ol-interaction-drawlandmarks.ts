@@ -6,6 +6,7 @@ import { DestroyService } from '../../services/destroy';
 import { Landmark } from '../../common';
 import { LandmarkPropertiesClass } from '../../common';
 import { OLInteractionDrawComponent } from '../ol-interaction-draw';
+import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
 
@@ -60,7 +61,7 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
               switch (geojson.geometry.type) {
                 case 'Point':
                   properties = new LandmarkPropertiesClass({
-                    fontColor: '--rgb-pink-a200',
+                    fontColor: '--rgb-blue-gray-800',
                     fontOpacity: 1,
                     fontOutline: true,
                     fontSize: 'large',
@@ -69,7 +70,7 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
                   break;
                 case 'LineString':
                   properties = new LandmarkPropertiesClass({
-                    fontColor: '--rgb-pink-a200',
+                    fontColor: '--rgb-blue-gray-800',
                     fontOpacity: 1,
                     fontOutline: true,
                     fontSize: 'medium',
@@ -78,7 +79,7 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
                     lineDash: [1, 1],
                     lineSpline: true,
                     showDimension: true,
-                    strokeColor: '--rgb-purple-a200',
+                    strokeColor: '--rgb-blue-gray-800',
                     strokeOpacity: 1,
                     strokeStyle: 'dashed',
                     strokeWidth: 'medium'
@@ -86,16 +87,16 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
                   break;
                 case 'Polygon':
                   properties = new LandmarkPropertiesClass({
-                    fillColor: '--rgb-pink-a200',
+                    fillColor: '--rgb-blue-gray-600',
                     fillOpacity: 0.15,
-                    fontColor: '--rgb-pink-a200',
+                    fontColor: '--rgb-blue-gray-800',
                     fontOpacity: 1,
                     fontOutline: true,
                     fontSize: 'medium',
                     fontStyle: 'normal',
                     lineDash: [1, 1],
                     showDimension: true,
-                    strokeColor: '--rgb-purple-a200',
+                    strokeColor: '--rgb-blue-gray-800',
                     strokeOpacity: 1,
                     strokeStyle: 'dashed',
                     strokeWidth: 'medium',
@@ -109,7 +110,12 @@ export class OLInteractionDrawLandmarksComponent extends OLInteractionDrawCompon
                   ...properties,
                   name: `New landmark #${ix + 1}`
                 };
-                this.store.dispatch(new AddLandmark(landmark));
+                // 👇 select landmark after adding
+                this.store.dispatch(new AddLandmark(landmark)).subscribe(() => {
+                  const selector = this.map
+                    .selector as OLInteractionSelectLandmarksComponent;
+                  selector?.selectLandmarks([landmark.id]);
+                });
               }
             });
           } else this.resetDraw();

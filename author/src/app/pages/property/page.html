@@ -377,72 +377,6 @@
     </header>
 
     <ul>
-      <li [class.disabled]="!canRenameLandmark()" class="item">
-        <fa-icon
-          [fixedWidth]="true"
-          [icon]="['far', 'file-signature']"
-        ></fa-icon>
-        <p>
-          Rename landmark
-          <input
-            #newName
-            (click)="eatMe($event)"
-            [disabled]="!canRenameLandmark()"
-            [value]="olMap.selected[0]?.get('name')"
-            type="text"
-          />
-          <button
-            (click)="canRenameLandmark($event) && onContextMenu('rename-landmark', newName.value)"
-            mat-icon-button
-          >
-            <fa-icon
-              [icon]="['fas', 'check']"
-              [fixedWidth]="true"
-              size="lg"
-            ></fa-icon></button
-          >&nbsp;<em
-            ><fa-icon
-              [icon]="['fas', 'question-circle']"
-              matTooltip="Click the checkmark to save the new name"
-            ></fa-icon
-          ></em>
-        </p>
-      </li>
-
-      <li
-        (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
-        [class.disabled]="!canMoveLandmark()"
-        class="item"
-      >
-        <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
-        <p>
-          Move landmark label
-          <em
-            ><fa-icon
-              [icon]="['fas', 'question-circle']"
-              matTooltip="Click and drag the target icon to the new position"
-            ></fa-icon
-          ></em>
-        </p>
-      </li>
-
-      <li
-        (click)="canRedrawLandmark($event) && onContextMenu('redraw-landmark')"
-        [class.disabled]="!canRedrawLandmark()"
-        class="item"
-      >
-        <fa-icon [fixedWidth]="true" [icon]="['fas', 'draw-polygon']"></fa-icon>
-        <p>
-          Redraw landmark alignment
-          <em
-            ><fa-icon
-              [icon]="['fas', 'question-circle']"
-              matTooltip="Click and drag the blue perimeter points. Click+Ctrl to delete a point. ESC when finished."
-            ></fa-icon
-          ></em>
-        </p>
-      </li>
-
       <li [class.disabled]="!canDrawLandmarks()" class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'pen']"></fa-icon>
         <p>
@@ -486,6 +420,85 @@
               </option>
             </ng-container>
           </select>
+        </p>
+      </li>
+
+      <li [class.disabled]="!canRenameLandmark()" class="item">
+        <fa-icon
+          [fixedWidth]="true"
+          [icon]="['far', 'file-signature']"
+        ></fa-icon>
+        <p (click)="eatMe($event)">
+          Rename landmark
+          <input
+            #newName
+            (click)="eatMe($event)"
+            [disabled]="!canRenameLandmark()"
+            [value]="olMap.selected[0]?.get('name')"
+            type="text"
+          />
+
+          <button
+            (click)="canRenameLandmark($event) && onContextMenu('rename-landmark', newName.value)"
+            mat-icon-button
+          >
+            <fa-icon
+              [icon]="['fas', 'check']"
+              [fixedWidth]="true"
+              size="lg"
+            ></fa-icon>
+          </button>
+
+          <button (click)="newName.value = ''" mat-icon-button>
+            <fa-icon
+              [icon]="['fas', 'xmark']"
+              [fixedWidth]="true"
+              size="lg"
+            ></fa-icon>
+          </button>
+
+          &nbsp;
+
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click the checkmark to save the new name"
+            ></fa-icon
+          ></em>
+        </p>
+      </li>
+
+      <li
+        (click)="canRedrawLandmark($event) && onContextMenu('redraw-landmark')"
+        [class.disabled]="!canRedrawLandmark()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'draw-polygon']"></fa-icon>
+        <p>
+          Redraw landmark alignment
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click and drag the blue perimeter points. Click+Ctrl to delete a point. ESC when finished."
+            ></fa-icon
+          ></em>
+        </p>
+      </li>
+
+      <li
+        (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
+        [class.disabled]="!canMoveLandmark()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
+        <p>
+          Move landmark label
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click and drag the target icon to the new position"
+            ></fa-icon
+          ></em>
         </p>
       </li>
 
