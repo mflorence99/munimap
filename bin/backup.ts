@@ -1,5 +1,6 @@
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
+import * as inquirer from 'inquirer';
 import * as yargs from 'yargs';
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
@@ -43,6 +44,18 @@ async function backup(nm: string): Promise<void> {
 }
 
 async function main(): Promise<void> {
+  if (!useEmulator) {
+    const response = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'proceed',
+        choices: ['y', 'n'],
+        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
+      }
+    ]);
+    if (response.proceed.toLowerCase() !== 'y') return;
+  }
+
   await backup('landmarks');
   await backup('maps');
   await backup('parcels');

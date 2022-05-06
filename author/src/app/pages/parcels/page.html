@@ -37,7 +37,7 @@
       ></app-ol-control-print>
 
       <app-ol-control-exportparcels
-        *ngIf="map.name && isPrivileged()"
+        *ngIf="map.name"
         [fileName]="map.id + '-parcels'"
         mapControlExport
       ></app-ol-control-exportparcels>

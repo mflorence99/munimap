@@ -1,6 +1,7 @@
 import * as fireauth from 'firebase-admin/auth';
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
+import * as inquirer from 'inquirer';
 import * as yargs from 'yargs';
 
 const PROFILES = [
@@ -65,6 +66,18 @@ const profiles = db.collection('profiles');
 const auth = fireauth.getAuth();
 
 async function main(): Promise<void> {
+  if (!useEmulator) {
+    const response = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'proceed',
+        choices: ['y', 'n'],
+        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
+      }
+    ]);
+    if (response.proceed.toLowerCase() !== 'y') return;
+  }
+
   for (const user of USERS) {
     auth
       .createUser(user)

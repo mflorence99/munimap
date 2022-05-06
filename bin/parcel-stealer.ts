@@ -7,6 +7,7 @@ import { serializeParcel } from '../lib/src/common';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
+import * as inquirer from 'inquirer';
 import * as yargs from 'yargs';
 
 import { readFileSync } from 'fs';
@@ -159,6 +160,18 @@ function loadGeoJSON(path: string): Parcels {
 }
 
 async function main(): Promise<void> {
+  if (!useEmulator) {
+    const response = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'proceed',
+        choices: ['y', 'n'],
+        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
+      }
+    ]);
+    if (response.proceed.toLowerCase() !== 'y') return;
+  }
+
   for (const steal of STEALS) {
     const [, county, town] = steal.toPath.split(':');
 

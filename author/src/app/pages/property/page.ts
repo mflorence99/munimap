@@ -81,6 +81,21 @@ export class PropertyPage extends AbstractMapPage {
       label: 'place'
     },
     {
+      converter: this.#convertToPond.bind(this),
+      geometryType: 'Polygon',
+      label: 'pond'
+    },
+    {
+      converter: this.#convertToStream.bind(this),
+      geometryType: 'LineString',
+      label: 'stream'
+    },
+    {
+      converter: this.#convertToTrail.bind(this),
+      geometryType: 'LineString',
+      label: 'trail'
+    },
+    {
       converter: this.#convertToWetland.bind(this),
       geometryType: 'Polygon',
       label: 'wetland'
@@ -125,6 +140,14 @@ export class PropertyPage extends AbstractMapPage {
     }
   }
 
+  // 👇 about zIndex:
+  //  0 - background, like forest, field, etc.
+  //  1 - lies directly on top of the background like stream, ditch etc
+  //  2 - roadways, trails etc cover streams
+  //  3 - culverts convey streams under roadways
+  //  4 - buildings, ponds etc cover most anything
+  //  5 - place names are conceptually on top of everything
+
   #convertToBuilding(feature: OLFeature<any>): Partial<Landmark> {
     const formatter = this.getGeoJSONFormatter();
     const geojson = JSON.parse(formatter.writeFeature(feature));
@@ -155,7 +178,8 @@ export class PropertyPage extends AbstractMapPage {
         strokeOpacity: 1,
         strokePixels: 1,
         strokeStyle: 'solid',
-        textRotate: true
+        textRotate: true,
+        zIndex: 4
       }),
       type: 'Feature'
     };
@@ -174,7 +198,8 @@ export class PropertyPage extends AbstractMapPage {
         iconSymbol: '\uf1ce' /* 👈 circle-notch */,
         name: 'Culvert',
         textAlign: 'center',
-        textBaseline: 'bottom'
+        textBaseline: 'bottom',
+        zIndex: 3
       }),
       type: 'Feature'
     };
@@ -189,7 +214,8 @@ export class PropertyPage extends AbstractMapPage {
         strokeColor: '--map-river-line-color',
         strokeOpacity: 1,
         strokeStyle: 'dashed',
-        strokeWidth: 'thin'
+        strokeWidth: 'thin',
+        zIndex: 1
       }),
       type: 'Feature'
     };
@@ -207,7 +233,8 @@ export class PropertyPage extends AbstractMapPage {
         strokeOutlineColor: '--map-road-edge-VI',
         strokePattern: 'conglomerate',
         strokePatternScale: 0.66,
-        strokeStyle: 'solid'
+        strokeStyle: 'solid',
+        zIndex: 2
       }),
       type: 'Feature'
     };
@@ -217,7 +244,7 @@ export class PropertyPage extends AbstractMapPage {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--map-parcel-fill-u190',
+        fillColor: '--map-parcel-fill-u501',
         fillOpacity: 1,
         fillPattern: 'grass',
         fontColor: '--map-conservation-outline',
@@ -229,7 +256,8 @@ export class PropertyPage extends AbstractMapPage {
         orientation: feature.get('orientation'),
         showDimension: true,
         textLocation: feature.get('textLocation'),
-        textRotate: true
+        textRotate: true,
+        zIndex: 0
       }),
       type: 'Feature'
     };
@@ -241,7 +269,7 @@ export class PropertyPage extends AbstractMapPage {
       properties: new LandmarkPropertiesClass({
         fillColor: '--map-parcel-fill-u501',
         fillOpacity: 1,
-        fillPattern: 'tree',
+        fillPattern: 'mixtree2',
         fontColor: '--map-conservation-outline',
         fontOpacity: 1,
         fontOutline: true,
@@ -251,7 +279,8 @@ export class PropertyPage extends AbstractMapPage {
         orientation: feature.get('orientation'),
         showDimension: true,
         textLocation: feature.get('textLocation'),
-        textRotate: true
+        textRotate: true,
+        zIndex: 0
       }),
       type: 'Feature'
     };
@@ -266,7 +295,74 @@ export class PropertyPage extends AbstractMapPage {
         fontOutline: true,
         fontSize: 'large',
         fontStyle: 'italic',
-        name: feature.get('name')
+        name: 'Place',
+        zIndex: 5
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToPond(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fillColor: '--map-waterbody-fill',
+        fillOpacity: 1,
+        fontColor: '--map-place-water-color',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'medium',
+        fontStyle: 'italic',
+        orientation: feature.get('orientation'),
+        textLocation: feature.get('textLocation'),
+        textRotate: true,
+        name: 'Pond',
+        zIndex: 4
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToStream(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--map-place-water-color',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'medium',
+        fontStyle: 'italic',
+        lineChunk: true,
+        lineSpline: true,
+        name: 'Stream',
+        strokeColor: '--map-river-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'solid',
+        strokeWidth: 'medium',
+        zIndex: 1
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToTrail(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--map-trail-text-color',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'medium',
+        fontStyle: 'italic',
+        lineChunk: true,
+        lineDash: [2, 1],
+        lineSpline: true,
+        name: 'Trail',
+        strokeColor: '--map-trail-line-color',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 'medium',
+        zIndex: 2
       }),
       type: 'Feature'
     };
@@ -284,11 +380,12 @@ export class PropertyPage extends AbstractMapPage {
         fontOutline: true,
         fontSize: 'small',
         fontStyle: 'normal',
-        name: 'Forest',
+        name: 'Wetland',
         orientation: feature.get('orientation'),
         showDimension: true,
         textLocation: feature.get('textLocation'),
-        textRotate: true
+        textRotate: true,
+        zIndex: 0
       }),
       type: 'Feature'
     };

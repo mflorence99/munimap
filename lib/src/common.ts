@@ -83,6 +83,7 @@ export class LandmarkPropertiesClass {
   public lineChunk = false;
   public lineDash = [2, 1];
   public lineSpline = false;
+  public minWidth = 0;
   public minZoom = 0;
   public name: string = null;
   public orientation: number = null;
@@ -506,9 +507,11 @@ export function calculateLandmark(landmark: Partial<Landmark>): void {
     const polygon = landmark as GeoJSON.Feature<GeoJSON.Polygon>;
     landmark.properties ??= {};
     landmark.properties.orientation = calculateOrientation(polygon);
-    landmark.properties.textLocation ??= calculateCenter(polygon);
-  } else {
-    landmark.properties ??= {};
+    landmark.properties.minWidth = calculateMinWidth(
+      polygon,
+      landmark.properties.orientation
+    );
+    landmark.properties.textLocation = calculateCenter(polygon);
   }
 }
 

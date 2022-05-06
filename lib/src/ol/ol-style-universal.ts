@@ -600,6 +600,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       const fontPixels = this.#calcFontPixels(props, resolution);
       // 👇 only show text if font size greater than minimum
       if (fontPixels >= this.minFontPixels) {
+        const font = `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`;
         const fontColor = this.#colorOf(
           props.fontColor,
           whenHovering,
@@ -636,6 +637,16 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
               props.textOffsetFeet[1] / 3.28084
             );
         }
+        // 👇 will the text rotate?
+        let textRotate = props.textRotate;
+        if (textRotate) {
+          const longest = text
+            .split('\n')
+            .sort((a, b) => b.length - a.length)[0];
+          const textLength = this.#measureText(longest, font, resolution);
+          // 👉 textLength is in meters, minWidth in feet
+          if (textLength * 3.28084 < props.minWidth) textRotate = false;
+        }
         // 👇 here's the style
         const style = new OLStyle({
           // 👇 geometry MUST be set to 'point' or else the icon won't show
@@ -662,12 +673,10 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 fill: new OLFill({
                   color: `rgba(${fontColor}, ${props.fontOpacity})`
                 }),
-                font: `${props.fontStyle} ${fontPixels}px '${this.fontFamily}'`,
+                font: font,
                 offsetY: props.iconSymbol ? -fontPixels : 0,
                 overflow: true,
-                rotation: props.textRotate
-                  ? props.orientation * (Math.PI / 180)
-                  : 0,
+                rotation: textRotate ? props.orientation * (Math.PI / 180) : 0,
                 stroke: props.fontOutline
                   ? new OLStroke({
                       color: `rgba(${fontOutlineColor}, 1)`,

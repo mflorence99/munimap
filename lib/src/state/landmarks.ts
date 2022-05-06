@@ -2,7 +2,7 @@ import { AnonState } from './anon';
 import { AuthState } from './auth';
 import { CanDo } from './undo';
 import { ClearStacks as ClearStacksProxy } from './undo';
-import { Landmark } from '../common';
+import { Landmark, Landmarks } from '../common';
 import { LandmarkID } from '../common';
 import { Map } from './map';
 import { MapState } from './map';
@@ -316,6 +316,13 @@ export class LandmarksState implements NgxsOnInit {
   ): void {
     // this.#logLandmarks(action.landmarks);
     ctx.setState(action.landmarks);
+  }
+
+  toGeoJSON(): Landmarks {
+    return {
+      features: this.store.snapshot().landmarks,
+      type: 'FeatureCollection'
+    };
   }
 
   @Action(Undo) undo(
