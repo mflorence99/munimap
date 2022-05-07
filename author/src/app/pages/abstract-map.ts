@@ -135,10 +135,11 @@ export abstract class AbstractMapPage implements OnInit {
     const comp = cRef.instance;
     comp.drawer = this.drawer;
     comp.map = this.olMap;
-    // 👉 there really should be a selector, or else we couldn't be here
     let key;
     const selector = this.olMap.selector;
     if (selector) {
+      // 👉 the layer that contains the selector contains the features
+      //    that can be operated on
       const source = selector.layer.olLayer.getSource();
       comp.selectedIDs = selector.selectedIDs;
       comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));

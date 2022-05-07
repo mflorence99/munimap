@@ -63,9 +63,13 @@ export class OLInteractionSelectGeoJSONComponent
 
   constructor(
     // 👉 we need public access to go through the selector to its layer
+    //    see abstract-map.ts -- this is how the context menu works
+    //    the layer that contains the selector contains the features
+    //    that can be operated on
     public layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
+    // 👉 for hovering
     this.olHover = new OLSelect({
       condition: (event): boolean => pointerMove(event),
       filter: this.#filter.bind(this),
@@ -73,6 +77,7 @@ export class OLInteractionSelectGeoJSONComponent
       style: this.layer.styleWhenHovering()
     });
     this.olHover.setProperties({ component: this }, true);
+    // 👉 for selecting
     this.olSelect = new OLSelect({
       condition: (event): boolean => click(event),
       filter: this.#filter.bind(this),

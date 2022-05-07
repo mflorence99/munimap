@@ -53,7 +53,7 @@ export class OLInteractionSelectLandmarksComponent
 
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
-  @Input() layers: string[] = [];
+  @Input() layers: OLLayerVectorComponent[];
 
   @Input() multi: boolean;
 
@@ -70,22 +70,31 @@ export class OLInteractionSelectLandmarksComponent
 
   constructor(
     // 👉 we need public access to go through the selector to its layer
+    //    see abstract-map.ts -- this is how the context menu works
+    //    the layer that contains the selector contains the features
+    //    that can be operated on
     public layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
+    const whichLayers = (olLayer: OLLayer): boolean => {
+      const layers = this.layers ?? [this.layer];
+      return layers.some((layer) => layer.olLayer === olLayer);
+    };
+    // 👉 for hovering
     this.olHover = new OLSelect({
       condition: (event): boolean => pointerMove(event),
       // 👇 don't hover over something that's already selected
       filter: (feature): boolean => !this.selectedIDs.includes(feature.getId()),
-      layers: this.#pickLayer.bind(this),
+      layers: whichLayers,
       style: this.#styleWhenHovering()
     });
     this.olHover.setProperties({ component: this }, true);
+    // 👉 for selecting
     this.olSelect = new OLSelect({
       addCondition: (event): boolean =>
         this.multi ? click(event) && shiftKeyOnly(event) : never(),
       condition: (event): boolean => click(event),
-      layers: this.#pickLayer.bind(this),
+      layers: whichLayers,
       multi: this.multi,
       removeCondition: (event): boolean =>
         this.multi ? click(event) && platformModifierKeyOnly(event) : never(),
@@ -106,12 +115,6 @@ export class OLInteractionSelectLandmarksComponent
     const names = this.selected.map((selected) => selected.getId()).join(', ');
     console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
     this.featuresSelected.emit(this.selected);
-  }
-
-  #pickLayer(layer: OLLayer): boolean {
-    return (
-      layer === this.layer.olLayer || this.layers.includes(layer.get('name'))
-    );
   }
 
   #styleWhenHovering(): OLStyleFunction {
@@ -152,9 +155,12 @@ export class OLInteractionSelectLandmarksComponent
   selectLandmarks(ids: LandmarkID[]): void {
     const delta = this.#hasSelectionChanged(ids);
     this.olSelect.getFeatures().clear();
-    this.layer.olLayer.getSource().forEachFeature((feature) => {
-      if (ids.includes(feature.getId()))
-        this.olSelect.getFeatures().push(feature);
+    const layers = this.layers ?? [this.layer];
+    layers.forEach((layer) => {
+      layer.olLayer.getSource().forEachFeature((feature) => {
+        if (ids.includes(feature.getId()))
+          this.olSelect.getFeatures().push(feature);
+      });
     });
     // 👉 only push an event if the selection has changed
     //    OL will reselect when features come in and out of view,

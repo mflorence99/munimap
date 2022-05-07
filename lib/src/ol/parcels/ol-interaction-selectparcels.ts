@@ -85,6 +85,9 @@ export class OLInteractionSelectParcelsComponent
 
   constructor(
     // 👉 we need public access to go through the selector to its layer
+    //    see abstract-map.ts -- this is how the context menu works
+    //    the layer that contains the selector contains the features
+    //    that can be operated on
     public layer: OLLayerVectorComponent,
     private map: OLMapComponent
   ) {
@@ -98,8 +101,8 @@ export class OLInteractionSelectParcelsComponent
       style: this.layer.styleWhenSelected(),
       toggleCondition: (): boolean => never()
     });
-     this.olSelect.setProperties({ component: this }, true);
-   // 👉 one to rule them all
+    this.olSelect.setProperties({ component: this }, true);
+    // 👉 one to rule them all
     this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection

@@ -29,10 +29,6 @@ export class OLLayerTileComponent implements Mapable {
     this.olLayer.setMaxZoom(maxZoom);
   }
 
-  @Input() set name(name: string) {
-    this.olLayer.set('name', name);
-  }
-
   @Input() set opacity(opacity: number) {
     this.olLayer.setOpacity(opacity);
   }

@@ -185,7 +185,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector [name]="'bridges'">
+        <app-ol-layer-vector #bridges>
           <app-ol-adaptor-bridges [bridgeWidth]="128">
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
           </app-ol-adaptor-bridges>
@@ -193,7 +193,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector [name]="'streamcrossings'">
+        <app-ol-layer-vector #streamcrossings>
           <app-ol-adaptor-streamcrossings [streamCrossingWidth]="128">
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
           </app-ol-adaptor-streamcrossings>
@@ -201,7 +201,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector [name]="'floodhazards'">
+        <app-ol-layer-vector #floodhazards>
           <app-ol-adaptor-floodhazards [floodHazardWidth]="128">
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
           </app-ol-adaptor-floodhazards>
@@ -221,13 +221,13 @@
 
         <!-- 📦 DPW'S LANDMARKS -->
 
-        <app-ol-layer-vector>
+        <app-ol-layer-vector #landmarks>
           <app-ol-adaptor-landmarks>
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal
           ></app-ol-adaptor-landmarks>
           <app-ol-source-landmarks></app-ol-source-landmarks>
           <app-ol-interaction-selectlandmarks
-            [layers]="['bridges', 'streamcrossings', 'floodhazards']"
+            [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
             [multi]="false"
           >
           </app-ol-interaction-selectlandmarks>
@@ -250,7 +250,7 @@
           >
         </app-ol-layer-tile>
 
-        <app-ol-layer-vector [name]="'bridges'">
+        <app-ol-layer-vector #bridges>
           <app-ol-adaptor-bridges [bridgeWidth]="128">
             <app-ol-style-universal
               [contrast]="'whiteOnBlack'"
@@ -261,7 +261,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector [name]="'streamcrossings'">
+        <app-ol-layer-vector #streamcrossings>
           <app-ol-adaptor-streamcrossings [streamCrossingWidth]="128">
             <app-ol-style-universal
               [contrast]="'whiteOnBlack'"
@@ -272,7 +272,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector [name]="'floodhazards'">
+        <app-ol-layer-vector #floodhazards>
           <app-ol-adaptor-floodhazards [floodHazardWidth]="128">
             <app-ol-style-universal
               [contrast]="'whiteOnBlack'"
@@ -283,7 +283,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
+        <app-ol-layer-vector #landmarks>
           <app-ol-adaptor-landmarks>
             <app-ol-style-universal
               [contrast]="'whiteOnBlack'"
@@ -292,7 +292,7 @@
           ></app-ol-adaptor-landmarks>
           <app-ol-source-landmarks></app-ol-source-landmarks>
           <app-ol-interaction-selectlandmarks
-            [layers]="['bridges', 'streamcrossings', 'floodhazards']"
+            [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
             [multi]="false"
           >
           </app-ol-interaction-selectlandmarks>
