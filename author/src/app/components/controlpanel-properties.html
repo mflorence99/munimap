@@ -19,12 +19,21 @@
   </mat-card-header>
 
   <mat-card-content>
-    <form #setupForm="ngForm" class="form" novalidate spellcheck="false">
+    <form
+      #setupForm="ngForm"
+      (submit)="update(map)"
+      class="form"
+      id="setupForm"
+      novalidate
+      spellcheck="false"
+    >
       <mat-form-field>
         <mat-label>Give your map a name</mat-label>
         <input
           #name="ngModel"
           [(ngModel)]="map.name"
+          [appAutoFocus]="!rolledup"
+          [appSelectOnFocus]="true"
           autocomplete="off"
           matInput
           name="name"
@@ -39,6 +48,7 @@
         <input
           #id="ngModel"
           [(ngModel)]="map.id"
+          [appSelectOnFocus]="true"
           [disabled]="!map.isDflt"
           autocomplete="off"
           matInput
@@ -67,10 +77,11 @@
     <div class="filler"></div>
 
     <button
-      (click)="update(map)"
       [disabled]="setupForm.invalid || !setupForm.dirty"
       color="primary"
+      form="setupForm"
       mat-flat-button
+      type="submit"
     >
       SAVE
     </button>

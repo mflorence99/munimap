@@ -33,13 +33,22 @@
       >. Then enter the sharing URL below.
     </p>
 
-    <form #sharingForm="ngForm" class="form" novalidate spellcheck="false">
+    <form
+      #sharingForm="ngForm"
+      (submit)="validate(record.url)"
+      class="form"
+      id="sharingForm"
+      novalidate
+      spellcheck="false"
+    >
       <mat-form-field>
         <mat-label>EasyTrails Sharing URL</mat-label>
         <input
           #url="ngModel"
           (input)="invalidURL = false"
           [(ngModel)]="record.url"
+          [appAutoFocus]="!rolledup"
+          [appSelectOnFocus]="true"
           autocomplete="off"
           matInput
           name="url"
@@ -65,10 +74,11 @@
       CANCEL
     </button>
     <button
-      (click)="validate(record.url)"
       [disabled]="sharingForm.invalid || validating"
       color="primary"
+      form="sharingForm"
       mat-flat-button
+      type="submit"
     >
       <fa-icon
         *ngIf="validating"

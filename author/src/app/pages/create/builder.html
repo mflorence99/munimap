@@ -10,14 +10,17 @@
   <mat-card-content>
     <form
       #filterForm="ngForm"
+      (submit)="submit()"
       autocomplete="off"
       class="form"
+      id="filterForm"
       novalidate
       spellcheck="false"
     >
       <mat-form-field>
         <mat-label>Select Map Type</mat-label>
         <mat-select
+          [appAutoFocus]="true"
           (selectionChange)="switchType($event.value)"
           [disabled]="currentTown()"
           [value]="currentType()"
@@ -84,10 +87,11 @@
     <div class="filler"></div>
 
     <button
-      (click)="submit()"
       [disabled]="!currentTown()"
       color="primary"
+      form="filterForm"
       mat-flat-button
+      type="submit"
     >
       NEXT
     </button>

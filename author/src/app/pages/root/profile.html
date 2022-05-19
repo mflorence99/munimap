@@ -26,8 +26,8 @@
     <input
       #displayName="ngModel"
       [(ngModel)]="user.displayName"
-      appAutoFocus
-      appSelectOnFocus
+      [appAutoFocus]="true"
+      [appSelectOnFocus]="true"
       autocomplete="off"
       matInput
       name="displayName"

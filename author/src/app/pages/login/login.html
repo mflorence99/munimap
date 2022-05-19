@@ -21,9 +21,9 @@
         <input
           #emailAddress="ngModel"
           [(ngModel)]="login.emailAddress"
-          appAutoFocus
+          [appAutoFocus]="true"
+          [appSelectOnFocus]="true"
           appEmailAddress
-          appSelectOnFocus
           autocomplete="off"
           matInput
           name="emailAddress"
@@ -90,8 +90,8 @@
         <input
           #password="ngModel"
           [(ngModel)]="login.password"
-          appAutoFocus
-          appSelectOnFocus
+          [appAutoFocus]="true"
+          [appSelectOnFocus]="true"
           autocomplete="off"
           matInput
           name="password"
@@ -157,8 +157,8 @@
         <input
           #displayName="ngModel"
           [(ngModel)]="login.displayName"
-          appAutoFocus
-          appSelectOnFocus
+          [appAutoFocus]="true"
+          [appSelectOnFocus]="true"
           autocomplete="off"
           matInput
           name="displayName"
@@ -172,7 +172,7 @@
         <input
           #password="ngModel"
           [(ngModel)]="login.password"
-          appSelectOnFocus
+          [appSelectOnFocus]="true"
           autocomplete="off"
           matInput
           name="password"
