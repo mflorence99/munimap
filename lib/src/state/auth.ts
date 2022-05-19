@@ -50,7 +50,8 @@ export interface Profile {
 export interface User {
   displayName: string;
   email: string;
-  photoURL: string;
+  password?: string;
+  photoURL?: string;
   uid: string;
 }
 
@@ -95,7 +96,7 @@ export class AuthState implements NgxsOnInit {
     return {
       displayName: obj.displayName,
       email: obj.email,
-      photoURL: obj.photoURL,
+      photoURL: obj.photoURL ?? '',
       uid: obj.uid
     };
   }

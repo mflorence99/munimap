@@ -13,12 +13,21 @@
   <p class="subtitle">{{ user.email }}</p>
 </header>
 
-<form #profileForm="ngForm" class="form" novalidate spellcheck="false">
+<form
+  #profileForm="ngForm"
+  (submit)="update(user, profile)"
+  class="form"
+  id="profileForm"
+  novalidate
+  spellcheck="false"
+>
   <mat-form-field>
     <mat-label>Display Name</mat-label>
     <input
       #displayName="ngModel"
       [(ngModel)]="user.displayName"
+      appAutoFocus
+      appSelectOnFocus
       autocomplete="off"
       matInput
       name="displayName"
@@ -52,16 +61,35 @@
       each on a new line.</mat-hint
     >
   </mat-form-field>
+
+  <br />
+
+  <mat-form-field>
+    <mat-label>New Password</mat-label>
+    <input
+      #password="ngModel"
+      [(ngModel)]="user.password"
+      autocomplete="off"
+      matInput
+      name="password"
+      type="password"
+    />
+    <mat-hint *ngIf="errorMessage" class="error">{{ errorMessage }}</mat-hint>
+  </mat-form-field>
 </form>
 
 <article class="actions">
+  <a (click)="logout()" mat-flat-button> Sign Out </a>
+
+  <div class="filler"></div>
+
   <button
     [disabled]="profileForm.invalid || !profileForm.dirty"
-    (click)="update(user, profile)"
-    color="accent"
+    color="primary"
+    form="profileForm"
     mat-flat-button
+    type="submit"
   >
     UPDATE
   </button>
-  <button (click)="logout()" color="primary" mat-flat-button>SIGN OUT</button>
 </article>

@@ -31,7 +31,7 @@
     width: 100%;
   }
 
-  .mat-hint {
+  .mat-hint.error {
     color: var(--warn-color);
   }
 }

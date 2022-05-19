@@ -13,11 +13,19 @@
   padding: 0.5rem 1rem;
 }
 
+.filler {
+  flex-grow: 1;
+}
+
 .form {
   display: grid;
   gap: 0.5rem;
   grid-template-rows: auto auto;
   padding: 0.5rem 1rem;
+
+  .mat-hint.error {
+    color: var(--warn-color);
+  }
 }
 
 .header {

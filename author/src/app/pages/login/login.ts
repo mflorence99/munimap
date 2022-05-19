@@ -57,12 +57,6 @@ export class LoginPage {
         if (error.code === 'auth/user-not-found') this.state = 'signup';
         else this.state = 'login';
         this.cdf.detectChanges();
-        // 👇 set focus to first input that isn't disabled
-        setTimeout(() => {
-          const form = document.forms[0];
-          const input: any = form.querySelector('input:not([disabled])');
-          input.focus();
-        }, 0);
       });
   }
 
