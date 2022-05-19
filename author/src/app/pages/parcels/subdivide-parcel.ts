@@ -44,7 +44,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
 
   @Input() selectedIDs: ParcelID[];
 
-  @ViewChild('subdivisionForm', { static: true }) subdivisionForm: NgForm;
+  @ViewChild('subdivisionForm') subdivisionForm: NgForm;
 
   subdivisions: Subdivision[];
 

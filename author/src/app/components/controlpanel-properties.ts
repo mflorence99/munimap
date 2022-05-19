@@ -41,7 +41,7 @@ export class ControlPanelPropertiesComponent {
 
   rolledup: boolean;
 
-  @ViewChild('setupForm', { static: true }) setupForm: NgForm;
+  @ViewChild('setupForm') setupForm: NgForm;
 
   constructor(
     private authState: AuthState,

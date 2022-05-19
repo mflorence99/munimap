@@ -52,7 +52,7 @@ const PRINT_SIZES = {
 export class CreatePropertyMapComponent implements SidebarComponent {
   @Input() border = 100 /* 👈 feet */;
 
-  @ViewChild('createForm', { static: true }) createForm: NgForm;
+  @ViewChild('createForm') createForm: NgForm;
 
   @Input() drawer: MatDrawer;
 

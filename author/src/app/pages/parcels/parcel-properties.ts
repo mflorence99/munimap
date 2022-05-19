@@ -64,7 +64,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
 
   @Input() map: OLMapComponent;
 
-  @ViewChild('propertiesForm', { static: true }) propertiesForm: NgForm;
+  @ViewChild('propertiesForm') propertiesForm: NgForm;
 
   record: ValueRecord = {};
 

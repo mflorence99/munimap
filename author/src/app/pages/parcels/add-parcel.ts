@@ -42,7 +42,7 @@ export class AddParcelComponent implements SidebarComponent, OnInit {
 
   addition: Addition = {} as Addition;
 
-  @ViewChild('additionForm', { static: true }) additionForm: NgForm;
+  @ViewChild('additionForm') additionForm: NgForm;
 
   @Input() drawer: MatDrawer;
 

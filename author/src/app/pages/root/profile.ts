@@ -31,7 +31,7 @@ export class ProfileComponent {
     this.#profile = copy(profile);
   }
 
-  @ViewChild('profileForm', { static: true }) profileForm: NgForm;
+  @ViewChild('profileForm') profileForm: NgForm;
 
   @Input()
   get user(): User {

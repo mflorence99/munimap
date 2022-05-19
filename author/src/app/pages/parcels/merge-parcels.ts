@@ -34,7 +34,7 @@ export class MergeParcelsComponent implements SidebarComponent {
 
   @Input() map: OLMapComponent;
 
-  @ViewChild('mergeForm', { static: true }) mergeForm: NgForm;
+  @ViewChild('mergeForm') mergeForm: NgForm;
 
   record: MergeRecord = {
     mergedID: null
