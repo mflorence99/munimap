@@ -3,13 +3,10 @@ import { Observable } from 'rxjs';
 
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { switchMap } from 'rxjs/operators';
 import { timeout } from 'rxjs/operators';
 
-// ❗ we have to use "fetch" here, rather than Angular's HttpClient
-//    because the EasyTrails app uses a CORS-enabled server
-
-// 👀 https://stackoverflow.com/questions/47345282
+// ❗ we can't use Angular's HttpClient because EasyTrails
+//    enforces CORS
 
 export interface Track {
   description: string;
@@ -23,14 +20,35 @@ export class EasyTrailsService {
 
   lastUsedURL = localStorage.getItem('easytrails.url') ?? '';
 
+  // 👁️ https://www.educative.io/edpresso/how-to-dynamically-load-a-js-file-in-javascript
+
+  #fetch(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = url;
+      // 👇 on successful load
+      script.addEventListener('load', () => {
+        resolve(script.innerHTML);
+        document.head.removeChild(script);
+      });
+      // 👇 on script failure
+      script.addEventListener('error', () => {
+        reject();
+        document.head.removeChild(script);
+      });
+      // 👇 load "script"
+      try {
+        document.head.appendChild(script);
+      } catch (error) {
+        reject();
+        document.head.removeChild(script);
+      }
+    });
+  }
+
   listTracks(): Observable<Track[]> {
-    return from(
-      fetch(this.lastUsedURL, {
-        method: 'GET',
-        mode: 'no-cors'
-      })
-    ).pipe(
-      switchMap((response: Response) => response.text()),
+    return from(this.#fetch(this.lastUsedURL)).pipe(
       map((html: string) => {
         console.log(html);
         return [];
@@ -41,11 +59,6 @@ export class EasyTrailsService {
   validate(url: string): Observable<any> {
     localStorage.setItem('easytrails.url', url);
     this.lastUsedURL = url;
-    return from(
-      fetch(url, {
-        method: 'GET',
-        mode: 'no-cors'
-      })
-    ).pipe(timeout(this.#validationTimeout));
+    return from(this.#fetch(url)).pipe(timeout(this.#validationTimeout));
   }
 }

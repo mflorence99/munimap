@@ -2,12 +2,16 @@ import { Auth } from '@angular/fire/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
+import { MessageDialogData } from '@lib/components/message-dialog';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { UpdateUser } from '@lib/state/auth';
 import { ViewChild } from '@angular/core';
 
 import { createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { sendPasswordResetEmail } from '@angular/fire/auth';
 import { signInWithEmailAndPassword } from '@angular/fire/auth';
 
 @Component({
@@ -25,12 +29,13 @@ export class LoginPage {
     password: ''
   };
 
-  @ViewChild('loginForm', { static: true }) loginForm: NgForm;
+  @ViewChild('loginForm') loginForm: NgForm;
 
   state: 'initial' | 'login' | 'signup' = 'initial';
 
   constructor(
     private cdf: ChangeDetectorRef,
+    private dialog: MatDialog,
     private fireauth: Auth,
     private store: Store
   ) {}
@@ -52,6 +57,12 @@ export class LoginPage {
         if (error.code === 'auth/user-not-found') this.state = 'signup';
         else this.state = 'login';
         this.cdf.detectChanges();
+        // 👇 set focus to first input that isn't disabled
+        setTimeout(() => {
+          const form = document.forms[0];
+          const input: any = form.querySelector('input:not([disabled])');
+          input.focus();
+        }, 0);
       });
   }
 
@@ -74,8 +85,13 @@ export class LoginPage {
       });
   }
 
-  reset(): void {
-    this.state = 'initial';
+  resetPassword(): void {
+    sendPasswordResetEmail(this.fireauth, this.login.emailAddress).then(() => {
+      const data: MessageDialogData = {
+        message: `An email has been sent to ${this.login.emailAddress} from which your password can be reset`
+      };
+      this.dialog.open(MessageDialogComponent, { data });
+    });
   }
 
   signUp(): void {
@@ -103,5 +119,9 @@ export class LoginPage {
         this.errorMessage = this.#extractFirebaseMessage(error.message);
         this.cdf.detectChanges();
       });
+  }
+
+  startOver(): void {
+    this.state = 'initial';
   }
 }
