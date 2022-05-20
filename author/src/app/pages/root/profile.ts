@@ -59,6 +59,10 @@ export class ProfileComponent {
     return match ? match[1] : message;
   }
 
+  cancel(): void {
+    this.drawer.close();
+  }
+
   logout(): void {
     this.store.dispatch(new Logout());
     this.drawer.close();
