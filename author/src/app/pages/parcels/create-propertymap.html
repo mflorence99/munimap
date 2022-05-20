@@ -9,8 +9,10 @@
 
 <form
   #createForm="ngForm"
+  (submit)="save(record)"
   autocomplete="off"
   class="form"
+  id="createForm"
   novalidate
   spellcheck="false"
 >
@@ -24,6 +26,7 @@
     <input
       #name="ngModel"
       [(ngModel)]="record.name"
+      [appAutoFocus]="true"
       autocomplete="off"
       matInput
       name="name"
@@ -53,6 +56,8 @@
       >Viewer app URL: <em>https://{{ record.id }}.munimap.online</em></mat-hint
     >
   </mat-form-field>
+
+  <br />
 
   <p class="instructions">Choose the format of the map.</p>
 
@@ -94,10 +99,11 @@
   <button (click)="cancel()" mat-flat-button>CANCEL</button>
 
   <button
-    (click)="save(record)"
     [disabled]="createForm.invalid || !createForm.dirty"
     color="primary"
+    form="createForm"
     mat-flat-button
+    type="submit"
   >
     SAVE
   </button>

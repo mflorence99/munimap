@@ -9,8 +9,10 @@
 
 <form
   #propertiesForm="ngForm"
+  (submit)="save(record)"
   autocomplete="off"
   class="form"
+  id="propertiesForm"
   novalidate
   spellcheck="false"
 >
@@ -20,7 +22,9 @@
     settings that are currently different.
   </p>
 
-  <ng-container *ngFor="let value of (record | values); trackBy: trackByProp">
+  <ng-container
+    *ngFor="let value of (record | values); let ix = index; trackBy: trackByProp"
+  >
     <!-- 
       👇 this control for props with a list 
         NOTE: use only appears if usage === current use
@@ -33,6 +37,7 @@
       <mat-select
         [(ngModel)]="value.value"
         [attr.ngControl]="value.prop"
+        [appAutoFocus]="ix === 0"
         [name]="value.prop"
       >
         <mat-option
@@ -55,6 +60,8 @@
       <input
         [(ngModel)]="value.value"
         [attr.ngControl]="value.prop"
+        [appAutoFocus]="ix === 0"
+        [appSelectOnFocus]="true"
         [name]="value.prop"
         [type]="value.type ?? 'text'"
         [step]="value.step"
@@ -73,10 +80,11 @@
   <button (click)="done()" mat-flat-button>DONE</button>
 
   <button
-    (click)="save(record)"
     [disabled]="!propertiesForm.dirty"
     color="primary"
+    form="propertiesForm"
     mat-flat-button
+    type="submit"
   >
     SAVE
   </button>

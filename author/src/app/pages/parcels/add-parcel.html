@@ -6,7 +6,14 @@
   <p class="title">New parcel</p>
 </header>
 
-<form #additionForm="ngForm" class="form" novalidate spellcheck="false">
+<form
+  #additionForm="ngForm"
+  (submit)="save(addition)"
+  class="form"
+  id="additionForm"
+  novalidate
+  spellcheck="false"
+>
   <p class="instructions">
     Specify the ID and acreage of the new parcel. After <em>SAVE</em>, use
     <em>Redraw parcel boundary</em> and <em>Modify parcel settings</em> to
@@ -19,6 +26,7 @@
       <input
         #parcelID="ngModel"
         [(ngModel)]="addition.id"
+        [appAutoFocus]="true"
         [appParcelID]="[map.searcher, addition.id]"
         autocomplete="off"
         matInput
@@ -51,10 +59,11 @@
   <button (click)="cancel()" mat-flat-button>CANCEL</button>
 
   <button
-    (click)="save(addition)"
     [disabled]="additionForm.invalid || !additionForm.dirty"
     color="primary"
+    form="additionForm"
     mat-flat-button
+    type="submit"
   >
     SAVE
   </button>

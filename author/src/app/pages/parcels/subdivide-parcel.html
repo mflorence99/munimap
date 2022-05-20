@@ -7,7 +7,14 @@
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
 
-<form #subdivisionForm="ngForm" class="form" novalidate spellcheck="false">
+<form
+  #subdivisionForm="ngForm"
+  (submit)="save(subdivisions)"
+  class="form"
+  id="subdivisionForm"
+  novalidate
+  spellcheck="false"
+>
   <p class="instructions">
     Specify the ID and acreage of each subdivision. After <em>SAVE</em>, use
     <em>Redraw parcel boundary</em> and <em>Modify parcel settings</em> to
@@ -23,7 +30,9 @@
         <input
           #subdivisionID="ngModel"
           [(ngModel)]="subdivision.id"
+          [appAutoFocus]="ix === 0"
           [appParcelID]="[map.searcher, subdivision.id]"
+          [appSelectOnFocus]="true"
           [appSubdivisionID]="[subdivisions, ix]"
           [name]="'id' + ix"
           [required]="ix < 2"
@@ -41,6 +50,7 @@
         <input
           #area="ngModel"
           [(ngModel)]="subdivision.area"
+          [appSelectOnFocus]="true"
           [name]="'area' + ix"
           [required]="ix < 2"
           [step]="0.01"
@@ -61,10 +71,11 @@
   <button (click)="cancel()" mat-flat-button>CANCEL</button>
 
   <button
-    (click)="save(subdivisions)"
     [disabled]="subdivisionForm.invalid || !subdivisionForm.dirty"
     color="primary"
+    form="subdivisionForm"
     mat-flat-button
+    type="submit"
   >
     SAVE
   </button>

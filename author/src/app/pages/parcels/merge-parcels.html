@@ -9,8 +9,10 @@
 
 <form
   #mergeForm="ngForm"
+  (submit)="save(record)"
   autocomplete="off"
   class="form"
+  id="mergeForm"
   novalidate
   spellcheck="false"
 >
@@ -33,10 +35,11 @@
   <button (click)="cancel()" mat-flat-button>CANCEL</button>
 
   <button
-    (click)="save(record)"
     [disabled]="!mergeForm.dirty"
     color="primary"
+    form="mergeForm"
     mat-flat-button
+    type="submit"
   >
     SAVE
   </button>
