@@ -9,6 +9,7 @@
 
 <form
   #createForm="ngForm"
+  (keydown.escape)="cancel()"
   (submit)="save(record)"
   autocomplete="off"
   class="form"

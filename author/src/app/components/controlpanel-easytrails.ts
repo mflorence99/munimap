@@ -26,6 +26,11 @@ export class ControlPanelEasyTrailsComponent {
     this.record.url = this.easytrails.lastUsedURL;
   }
 
+  cancel(): void {
+    this.invalidURL = false;
+    this.rolledup = true;
+  }
+
   // 👇 we're just testing the URL here and kicking off the import
   //    we'll do the actual import in the sidebar
 

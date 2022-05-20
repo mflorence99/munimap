@@ -106,7 +106,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     });
   }
 
-  done(): void {
+  cancel(): void {
     this.drawer.close();
   }
 

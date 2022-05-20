@@ -15,6 +15,7 @@
 
 <form
   #profileForm="ngForm"
+  (keydown.escape)="cancel()"
   (submit)="update(user, profile)"
   class="form"
   id="profileForm"

@@ -396,6 +396,7 @@ export class OLMapComponent
     event: KeyboardEvent
   ): void {
     this.escape$.next(event);
+    event.stopPropagation();
   }
 
   zoomToBounds(): void {

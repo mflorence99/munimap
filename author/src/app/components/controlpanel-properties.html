@@ -8,19 +8,12 @@
 
     <mat-card-title>Identify Your Map</mat-card-title>
     <mat-card-subtitle>Name will appear on printed version</mat-card-subtitle>
-    <button
-      *ngIf="!rolledup"
-      (click)="rolledup = !rolledup"
-      class="closer"
-      mat-icon-button
-    >
-      <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
-    </button>
   </mat-card-header>
 
   <mat-card-content>
     <form
       #setupForm="ngForm"
+      (keydown.escape)="cancel()"
       (submit)="update(map)"
       class="form"
       id="setupForm"
@@ -75,6 +68,8 @@
     </a>
 
     <div class="filler"></div>
+
+    <button (click)="cancel()" mat-flat-button>CANCEL</button>
 
     <button
       [disabled]="setupForm.invalid || !setupForm.dirty"

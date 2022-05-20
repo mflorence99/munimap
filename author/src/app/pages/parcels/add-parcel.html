@@ -8,6 +8,7 @@
 
 <form
   #additionForm="ngForm"
+  (keydown.escape)="cancel()"
   (submit)="save(addition)"
   class="form"
   id="additionForm"

@@ -49,13 +49,13 @@ export class ParcelsOverlayComponent implements OnInit {
     });
   }
 
+  cancel(): void {
+    this.drawer.close();
+  }
+
   currentColor(): string {
     const [property, fld] = this.#selectedProperty ?? [];
     return property?.[fld] ?? '#FFFFFF';
-  }
-
-  done(): void {
-    this.drawer.close();
   }
 
   isPicked([_property, _fld]): boolean {

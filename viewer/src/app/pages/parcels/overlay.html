@@ -9,6 +9,7 @@
 
 <form
   #setupForm="ngForm"
+  (keydown.escape)="cancel()"
   (submit)="save(record)"
   autocomplete="off"
   class="form"
@@ -70,7 +71,7 @@
 </form>
 
 <article class="actions">
-  <button (click)="done()" mat-flat-button>DONE</button>
+  <button (click)="cancel()" mat-flat-button>DONE</button>
 
   <button
     [disabled]="!setupForm.dirty"

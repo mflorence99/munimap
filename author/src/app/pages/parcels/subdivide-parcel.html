@@ -9,6 +9,7 @@
 
 <form
   #subdivisionForm="ngForm"
+  (keydown.escape)="cancel()"
   (submit)="save(subdivisions)"
   class="form"
   id="subdivisionForm"

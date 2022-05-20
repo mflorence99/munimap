@@ -9,6 +9,7 @@
 
 <form
   #mergeForm="ngForm"
+  (keydown.escape)="cancel()"
   (submit)="save(record)"
   autocomplete="off"
   class="form"

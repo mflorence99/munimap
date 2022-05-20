@@ -58,6 +58,10 @@ export class ControlPanelPropertiesComponent {
     );
   }
 
+  cancel(): void {
+    this.rolledup = true;
+  }
+
   delete(map: any): void {
     const data: ConfirmDialogData = {
       content:
