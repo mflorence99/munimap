@@ -69,6 +69,7 @@ export class ProfileComponent {
   }
 
   update(user: any, profile: any): void {
+    this.errorMessage = null;
     this.store.dispatch(new UpdateUser(user));
     this.store.dispatch(new UpdateProfile(profile));
     // 👇 special code to change password
@@ -83,6 +84,5 @@ export class ProfileComponent {
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.profileForm.form.markAsPristine();
-    // this.drawer.close();
   }
 }

@@ -34,6 +34,8 @@
           >Email address is required and must be valid
         </mat-error>
       </mat-form-field>
+
+      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
     </form>
   </mat-card-content>
 
@@ -98,10 +100,9 @@
           required
           type="password"
         />
-        <mat-hint *ngIf="errorMessage" class="error"
-          >{{ errorMessage }}</mat-hint
-        >
       </mat-form-field>
+
+      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
     </form>
   </mat-card-content>
 
@@ -179,10 +180,9 @@
           required
           type="password"
         />
-        <mat-hint *ngIf="errorMessage" class="error"
-          >{{ errorMessage }}</mat-hint
-        >
       </mat-form-field>
+
+      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
     </form>
   </mat-card-content>
 
