@@ -15,6 +15,7 @@ import { ViewChild } from '@angular/core';
 
 import { filter } from 'rxjs/operators';
 import { fromLonLat } from 'ol/proj';
+import { merge } from 'rxjs';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
 import { takeUntil } from 'rxjs/operators';
@@ -56,12 +57,6 @@ export class OLOverlayParcelLabelComponent implements OnInit {
     this.map.olMap.addOverlay(this.olOverlay);
   }
 
-  #handleClick$(): void {
-    this.map.click$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.olOverlay.setPosition([0, 0]));
-  }
-
   // 👉 we need to know where the contextmenu was clicked so that later
   //    in setFeature we can figure which polygon is being addressed
 
@@ -79,12 +74,20 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       });
   }
 
+  // 👇 the idea is that a selection change or ESC cancels the move
+
+  #handleStreams$(): void {
+    merge(this.map.click$, this.map.escape$, this.map.featuresSelected)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.olOverlay.setPosition([0, 0]));
+  }
+
   ngOnInit(): void {
     // 👉 need to hack Y offsets by the height of the toolbar
     const style = getComputedStyle(document.documentElement);
     this.#hack = Number(style.getPropertyValue('--map-cy-toolbar'));
     this.olOverlay.setElement(this.label.nativeElement);
-    this.#handleClick$();
+    this.#handleStreams$();
     this.#handleContextMenu$();
   }
 
