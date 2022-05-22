@@ -1,0 +1,85 @@
+<header class="header">
+  <figure class="icon">
+    <fa-icon [icon]="['fad', 'file-import']" size="2x"></fa-icon>
+  </figure>
+
+  <p class="title">Import Landmarks</p>
+  <p class="subtitle">From zipped GPX files</p>
+</header>
+
+<form
+  #importForm="ngForm"
+  (keydown.escape)="cancel()"
+  (submit)="import(record)"
+  autocomplete="off"
+  class="form"
+  id="importForm"
+  novalidate
+  spellcheck="false"
+>
+  <input
+    #fileList
+    (change)="setImportedFiles($event.target.files)"
+    accept=".zip,.gpx,.kml"
+    hidden
+    multiple
+    type="file"
+  />
+
+  <p class="instructions">
+    First,
+    <a (click)="fileList.click()">select one or more GPX, KML or ZIP files</a>
+    to import. <em>NOTE</em> multiple GPX and KML files can be compressed into a
+    single ZIP file.
+  </p>
+
+  <ng-container *ngIf=" files.length > 0">
+    <fieldset class="imported-files">
+      <mat-checkbox
+        *ngFor="let file of files"
+        [(ngModel)]="record[file.name]"
+        [name]="file.name"
+        >{{ file.name }}</mat-checkbox
+      >
+    </fieldset>
+
+    <p class="instructions">
+      Double-check the files to be imported from the list above then hit
+      <em>IMPORT</em>. Landmarks previously imported won't be re-imported.
+    </p>
+  </ng-container>
+
+  <mat-error *ngFor="let errorMessage of errorMessages"
+    >{{ errorMessage }}</mat-error
+  >
+</form>
+
+<article *ngIf="importing && numImporting > 0" class="progress">
+  <p>Imported {{ numImported }} of {{ numImporting }} landmarks &hellip;</p>
+
+  <br />
+
+  <mat-progress-bar
+    [mode]="'determinate' "
+    [value]="(numImported / numImporting) * 100"
+  ></mat-progress-bar>
+</article>
+
+<article class="actions">
+  <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+  <button
+    [disabled]="importForm.invalid || !atLeastOneSelected() || importing"
+    color="primary"
+    form="importForm"
+    mat-flat-button
+    type="submit"
+  >
+    <fa-icon
+      *ngIf="importing"
+      [icon]="['fas', 'spinner']"
+      [spin]="true"
+    ></fa-icon>
+    <span *ngIf="!importing">IMPORT</span>
+  </button>
+</article>

@@ -9,6 +9,7 @@ import { ControlPanelPropertiesComponent } from './components/controlpanel-prope
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
 import { DPWPage } from './pages/dpw/page';
+import { ImportLandmarksComponent } from './pages/property/import-landmarks';
 import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
@@ -51,6 +52,7 @@ import { MapState } from '@lib/state/map';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -177,6 +179,8 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/pro-duotone-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
+import { faFileImport as fadFileImport } from '@fortawesome/pro-duotone-svg-icons';
+import { faFileImport as farFileImport } from '@fortawesome/pro-regular-svg-icons';
 import { faFileSignature } from '@fortawesome/pro-regular-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -233,6 +237,7 @@ const COMPONENTS = [
   ControlPanelPropertiesComponent,
   CreatePropertyMapComponent,
   EmailAddressValidator,
+  ImportLandmarksComponent,
   MergeParcelsComponent,
   MessageDialogComponent,
   NavigatorComponent,
@@ -434,6 +439,7 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatCheckboxModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
@@ -527,6 +533,8 @@ export class RootModule {
       faDrawPolygon,
       faExclamationTriangle,
       faExpandArrows,
+      fadFileImport,
+      farFileImport,
       faFileSignature,
       faGlobeAmericas,
       faInfoCircle,

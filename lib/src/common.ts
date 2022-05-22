@@ -51,6 +51,7 @@ export interface Landmark
   $id?: string /* 👈 optional only because we'll complete it */;
   curated?: boolean;
   id: LandmarkID /* 👈 in Feature, also here just to remind us */;
+  importHash?: string /* 👈 MD5 hash of GPX used in import */;
   owner: string;
   path: string;
 }

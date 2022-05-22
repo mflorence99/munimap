@@ -3,6 +3,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { EasyTrailsService } from '@lib/services/easytrails';
 
+// 🔥 this doesn't work, because of CORS and mixed-content issues
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-controlpanel-easytrails',

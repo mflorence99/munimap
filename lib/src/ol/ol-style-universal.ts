@@ -504,7 +504,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       props.fontColor &&
       (props.fontFeet || props.fontPixels || props.fontSize) &&
       props.fontStyle &&
-      props.name
+      (props.name || props.showDimension)
     ) {
       const fontPixels = this.#calcFontPixels(props, resolution);
       // 👇 only show text if font size greater than minimum
@@ -532,7 +532,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           );
         }
         // 👇 calculate the length if requested
-        let text = props.name;
+        let text = props.name ?? '';
         if (props.showDimension) {
           const length = feature.getGeometry().getLength() * 3.28084;
           text += ` (${this.decimal.transform(length, '1.0-0')} ft)`;
@@ -595,7 +595,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       (props.fontColor || props.iconColor) &&
       (props.fontFeet || props.fontPixels || props.fontSize) &&
       props.fontStyle &&
-      (props.iconSymbol || props.name)
+      (props.iconSymbol || props.name || props.showDimension)
     ) {
       const fontPixels = this.#calcFontPixels(props, resolution);
       // 👇 only show text if font size greater than minimum
@@ -617,7 +617,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           props.iconOutlineColor ?? dfltOutlineColor
         );
         // 👇 calculate the acreage if requested
-        let text = props.name?.replace(/ /g, '\n');
+        let text = props.name?.replace(/ /g, '\n') ?? '';
         if (props.showDimension) {
           const acreage = feature.getGeometry().getArea() * 0.000247105;
           text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;

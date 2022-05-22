@@ -1,5 +1,6 @@
 import { AbstractMapPage } from '../abstract-map';
 import { ContextMenuComponent } from '../../components/contextmenu';
+import { ImportLandmarksComponent } from './import-landmarks';
 import { RootPage } from '../root/page';
 import { SidebarComponent } from '../../components/sidebar-component';
 
@@ -28,6 +29,7 @@ import { calculateOrientation } from '@lib/common';
 
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
+import lineToPolygon from '@turf/line-to-polygon';
 import OLFeature from 'ol/Feature';
 import transformRotate from '@turf/transform-rotate';
 
@@ -49,6 +51,11 @@ export class PropertyPage extends AbstractMapPage {
 
   conversions: LandmarkConversion[] = [
     {
+      converter: this.#convertToArea.bind(this),
+      geometryType: 'LineString',
+      label: 'area'
+    },
+    {
       converter: this.#convertToBuilding.bind(this),
       geometryType: 'Polygon',
       label: 'building'
@@ -57,6 +64,11 @@ export class PropertyPage extends AbstractMapPage {
       converter: this.#convertToCulvert.bind(this),
       geometryType: 'Point',
       label: 'culvert'
+    },
+    {
+      converter: this.#convertToDistance.bind(this),
+      geometryType: 'LineString',
+      label: 'distance'
     },
     {
       converter: this.#convertToDitch.bind(this),
@@ -159,6 +171,36 @@ export class PropertyPage extends AbstractMapPage {
   //  4 - buildings, ponds etc cover most anything
   //  5 - place names are conceptually on top of everything
 
+  #convertToArea(feature: OLFeature<any>): Partial<Landmark> {
+    const formatter = this.getGeoJSONFormatter();
+    const geojson = JSON.parse(formatter.writeFeature(feature));
+    // 👇 convert geometry to a polygon
+    const munged = lineToPolygon(geojson);
+    return {
+      id: feature.getId() as string,
+      geometry: munged.geometry as any /* 👈 types no help here */,
+      properties: new LandmarkPropertiesClass({
+        fillColor: '--rgb-blue-gray-600',
+        fillOpacity: 0.15,
+        fontColor: '--rgb-blue-gray-800',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'medium',
+        fontStyle: 'normal',
+        lineDash: [1, 1],
+        name: feature.get('name'),
+        showDimension: true,
+        strokeColor: '--rgb-blue-gray-800',
+        strokeOpacity: 1,
+        strokeStyle: 'dashed',
+        strokeWidth: 'medium',
+        textRotate: true,
+        zIndex: feature.get('zIndex')
+      }),
+      type: 'Feature'
+    };
+  }
+
   #convertToBuilding(feature: OLFeature<any>): Partial<Landmark> {
     const formatter = this.getGeoJSONFormatter();
     const geojson = JSON.parse(formatter.writeFeature(feature));
@@ -211,6 +253,34 @@ export class PropertyPage extends AbstractMapPage {
         textAlign: 'center',
         textBaseline: 'bottom',
         zIndex: 3
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToDistance(feature: OLFeature<any>): Partial<Landmark> {
+    const formatter = this.getGeoJSONFormatter();
+    const geojson = JSON.parse(formatter.writeFeature(feature));
+    // 👇 eliminate all but the start and end points
+    geojson.geometry.coordinates = [
+      geojson.geometry.coordinates[0],
+      geojson.geometry.coordinates[geojson.geometry.coordinates.length - 1]
+    ];
+    return {
+      id: feature.getId() as string,
+      geometry: geojson.geometry,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--rgb-blue-gray-800',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'small',
+        fontStyle: 'normal',
+        showDimension: true,
+        strokeColor: '--rgb-blue-gray-800',
+        strokeOpacity: 1,
+        strokeStyle: 'solid',
+        strokeWidth: 'thin',
+        zIndex: feature.get('zIndex')
       }),
       type: 'Feature'
     };
@@ -453,6 +523,10 @@ export class PropertyPage extends AbstractMapPage {
     return this.#can(event, this.olMap.selected.length === 0);
   }
 
+  canImportLandmarks(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 0);
+  }
+
   canMoveLandmark(event?: MouseEvent): boolean {
     const feature = this.olMap.selected[0];
     return this.#can(
@@ -497,6 +571,11 @@ export class PropertyPage extends AbstractMapPage {
         break;
       case 'draw-landmarks':
         if (opaque) this.drawLandmarks.startDraw(opaque);
+        break;
+      case 'import-landmarks':
+        cFactory = this.resolver.resolveComponentFactory(
+          ImportLandmarksComponent
+        );
         break;
       case 'move-landmark':
         this.moveLandmark.setFeature(this.olMap.selected[0]);

@@ -21,10 +21,6 @@
         mapControlPanel1
       ></app-controlpanel-properties>
 
-      <app-controlpanel-easytrails
-        mapControlPanel2
-      ></app-controlpanel-easytrails>
-
       <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
       <app-ol-control-print
@@ -376,6 +372,15 @@
     </header>
 
     <ul>
+      <li
+        (click)="canImportLandmarks($event) && onContextMenu('import-landmarks')"
+        [class.disabled]="!canImportLandmarks()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['far', 'file-import']"></fa-icon>
+        <p>Import landmarks from GPX or KML files ...</p>
+      </li>
+
       <li [class.disabled]="!canDrawLandmarks()" class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'pen']"></fa-icon>
         <p>

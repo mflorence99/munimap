@@ -5,8 +5,7 @@ import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { timeout } from 'rxjs/operators';
 
-// ❗ we can't use Angular's HttpClient because EasyTrails
-//    enforces CORS
+// 🔥 this doesn't work, because of CORS and mixed-content issues
 
 export interface Track {
   description: string;
