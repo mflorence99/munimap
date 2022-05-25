@@ -60,6 +60,14 @@ export class OLInteractionSelectLandmarksComponent
   olHover: OLSelect;
   olSelect: OLSelect;
 
+  // 👉 selection is read-only if any feature is drawn from any layer
+  //    which is not the primary layer
+  get roSelection(): boolean {
+    return this.selected.some(
+      (feature) => this.olSelect.getLayer(feature) !== this.layer.olLayer
+    );
+  }
+
   get selected(): OLFeature<any>[] {
     return this.olSelect.getFeatures().getArray();
   }

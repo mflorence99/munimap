@@ -55,7 +55,6 @@ export class OLPopupDPWPropertiesComponent {
         this.properties = properties;
         if (!this.properties) this.onClose();
         else {
-          console.log(this.properties);
           this.cdf.markForCheck();
         }
       });

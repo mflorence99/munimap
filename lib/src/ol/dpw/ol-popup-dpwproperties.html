@@ -11,19 +11,25 @@
   <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
 </button>
 
-<section #table class="wrapper">
+<!-- 
+  🔥 see Bridge... FloodHazard... and StreamCrossingProperties 
+     the original DES properties are untouched and these are 
+     discriminated by a common type property
+-->
+
+<section #table [ngSwitch]="properties?.type" class="wrapper">
   <app-ol-popup-bridgeproperties
-    *ngIf="properties?.BRIDGE_ID !== undefined"
+    *ngSwitchCase="'bridge'"
     [properties]="properties"
   ></app-ol-popup-bridgeproperties>
 
-  <app-ol-popup-streamcrossingproperties
-    *ngIf="properties?.CulWatDep !== undefined"
-    [properties]="properties"
-  ></app-ol-popup-streamcrossingproperties>
-
   <app-ol-popup-floodhazardproperties
-    *ngIf="properties?.FloodHazID !== undefined"
+    *ngSwitchCase="'hazard'"
     [properties]="properties"
   ></app-ol-popup-floodhazardproperties>
+
+  <app-ol-popup-streamcrossingproperties
+    *ngSwitchCase="'stream crossing'"
+    [properties]="properties"
+  ></app-ol-popup-streamcrossingproperties>
 </section>

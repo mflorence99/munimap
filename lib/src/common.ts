@@ -19,7 +19,10 @@ import transformRotate from '@turf/transform-rotate';
 export const theState = 'NEW HAMPSHIRE';
 
 export interface BridgeProperties {
+  name: string;
   rygb: 'red' | 'yellow' | 'green' | 'blue';
+  // 🔥 disambiguate bridges, flood hazards and stream crossings
+  type: 'bridge';
 }
 
 export type Building = GeoJSON.Feature<GeoJSON.Polygon, BuildingProperties>;
@@ -29,13 +32,19 @@ export type Buildings = GeoJSON.FeatureCollection<
   BuildingProperties
 >;
 
-export interface BuildingProperties {}
+export interface BuildingProperties {
+  name: string;
+}
 
 export interface ConservationProperties {
   name: string;
 }
 
-export interface FloodHazardProperties {}
+export interface FloodHazardProperties {
+  name: string;
+  // 🔥 disambiguate bridges, flood hazards and stream crossings
+  type: 'flood hazard';
+}
 
 export interface LakeProperties {
   county: string;
@@ -337,6 +346,8 @@ export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 export interface StreamCrossingProperties {
   condition: 'good' | 'fair' | 'poor' | 'unknown';
   name: string;
+  // 🔥 disambiguate bridges, flood hazards and stream crossings
+  type: 'stream crossing';
 }
 
 export interface TrailProperties {

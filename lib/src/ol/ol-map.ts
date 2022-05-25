@@ -134,6 +134,11 @@ export class OLMapComponent
 
   projection = 'EPSG:3857';
 
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  get roSelection(): boolean {
+    return !!this.selector?.roSelection;
+  }
+
   @ContentChild(SearcherComponent) searcher: Searcher;
 
   // 👉 proxy this from the real selector (if any) to ensure safe access

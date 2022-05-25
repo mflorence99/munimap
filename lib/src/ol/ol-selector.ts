@@ -11,6 +11,7 @@ export interface Selector {
   abuttersFound?: EventEmitter<any[]>;
   featuresSelected: EventEmitter<OLFeature<any>[]>;
   layer?: OLLayerVectorComponent;
+  roSelection?: boolean;
   selected: OLFeature<any>[];
   selectedIDs: any[];
 }

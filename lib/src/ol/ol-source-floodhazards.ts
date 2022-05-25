@@ -27,6 +27,18 @@ export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
     super(cache, http, layer, map);
   }
 
+  // 👇 see FloodHazardProperties
+
+  filter(arcgis: any): any {
+    if (arcgis) {
+      arcgis.features.forEach((feature) => {
+        feature.attributes.name = '' /* 👈 ??? */;
+        feature.attributes.type = 'flood hazard';
+      });
+      return arcgis;
+    } else return super.filter(arcgis);
+  }
+
   getAttribution(): string {
     return attribution;
   }

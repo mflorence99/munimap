@@ -28,11 +28,13 @@ export class OLSourceBridgesComponent extends OLSourceArcGISComponent {
   }
 
   // 👇 see BridgeProperties
-  
+
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
+        feature.attributes.name = '' /* 👈 ??? */;
         feature.attributes.rygb = feature.attributes.RYGB.toLowerCase();
+        feature.attributes.type = 'bridge';
       });
       return arcgis;
     } else return super.filter(arcgis);
