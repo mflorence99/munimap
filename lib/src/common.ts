@@ -19,6 +19,8 @@ import transformRotate from '@turf/transform-rotate';
 export const theState = 'NEW HAMPSHIRE';
 
 export interface BridgeProperties {
+  // 🔥 pass thru all data in DES schema
+  [key: string]: boolean | number | string;
   name: string;
   rygb: 'red' | 'yellow' | 'green' | 'blue';
   // 🔥 disambiguate bridges, flood hazards and stream crossings
@@ -41,6 +43,8 @@ export interface ConservationProperties {
 }
 
 export interface FloodHazardProperties {
+  // 🔥 pass thru all data in DES schema
+  [key: string]: boolean | number | string;
   name: string;
   // 🔥 disambiguate bridges, flood hazards and stream crossings
   type: 'flood hazard';
@@ -93,6 +97,7 @@ export class LandmarkPropertiesClass {
   public lineChunk = false;
   public lineDash = [2, 1];
   public lineSpline = false;
+  public metadata: Record<string, boolean | number | string> = null;
   public minWidth = 0;
   public minZoom = 0;
   public name: string = null;
@@ -344,6 +349,8 @@ export interface RoadProperties {
 export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 
 export interface StreamCrossingProperties {
+  // 🔥 pass thru all data in DES schema
+  [key: string]: boolean | number | string;
   condition: 'good' | 'fair' | 'poor' | 'unknown';
   name: string;
   // 🔥 disambiguate bridges, flood hazards and stream crossings

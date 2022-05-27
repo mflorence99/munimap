@@ -248,9 +248,9 @@
           <!-- 📦 DPW'S LANDMARKS -->
 
           <app-ol-layer-vector #landmarks>
-            <app-ol-adaptor-landmarks>
+            <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="128">
               <app-ol-style-universal [showAll]="true"></app-ol-style-universal
-            ></app-ol-adaptor-landmarks>
+            ></app-ol-adaptor-dpwlandmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
             <app-ol-interaction-selectlandmarks
               [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
@@ -310,12 +310,12 @@
           </app-ol-layer-vector>
 
           <app-ol-layer-vector #landmarks>
-            <app-ol-adaptor-landmarks>
+            <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="128">
               <app-ol-style-universal
                 [contrast]="'whiteOnBlack'"
                 [showAll]="true"
               ></app-ol-style-universal
-            ></app-ol-adaptor-landmarks>
+            ></app-ol-adaptor-dpwlandmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
             <app-ol-interaction-selectlandmarks
               [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
@@ -358,7 +358,33 @@
   <nav class="contextmenu">
     <ul>
       <li
-        (click)="canDeleteLandmark($event) && onContextMenu('delete-site')"
+        (click)="canAddLandmark($event) && onContextMenu('add-landmark')"
+        [class.disabled]="!canAddLandmark()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus-square']"></fa-icon>
+        <p>New stream crossing here</p>
+      </li>
+
+      <li
+        (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
+        [class.disabled]="!canMoveLandmark()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
+        <p>
+          Move {{ selectedLandmarkType() }}
+          <em
+            ><fa-icon
+              [icon]="['fas', 'question-circle']"
+              matTooltip="Click and drag the target icon to the new position"
+            ></fa-icon
+          ></em>
+        </p>
+      </li>
+
+      <li
+        (click)="canDeleteLandmark($event) && onContextMenu('delete-landmark')"
         [class.disabled]="!canDeleteLandmark()"
         class="item"
       >

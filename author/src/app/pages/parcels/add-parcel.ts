@@ -4,19 +4,15 @@ import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { DestroyService } from '@lib/services/destroy';
 import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
-import { filter } from 'rxjs/operators';
-import { takeUntil } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
 
 import bbox from '@turf/bbox';
@@ -31,15 +27,11 @@ interface Addition {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
   selector: 'app-add-parcel',
   styleUrls: ['./add-parcel.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './add-parcel.html'
 })
-export class AddParcelComponent implements SidebarComponent, OnInit {
-  #contextMenuAt: number[];
-  #hack: number;
-
+export class AddParcelComponent implements SidebarComponent {
   addition: Addition = {} as Addition;
 
   @ViewChild('additionForm') additionForm: NgForm;
@@ -52,40 +44,10 @@ export class AddParcelComponent implements SidebarComponent, OnInit {
 
   @Input() selectedIDs: ParcelID[];
 
-  constructor(
-    private authState: AuthState,
-    private destroy$: DestroyService,
-    private store: Store
-  ) {}
-
-  // 👉 we need to know where the contextmenu was clicked so that later
-  //    we can create a polygon around this center point
-
-  #handleContextMenu$(): void {
-    this.map.contextMenu$
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((event) => !!event)
-      )
-      .subscribe((event) => {
-        this.#contextMenuAt = toLonLat(
-          this.map.olMap.getCoordinateFromPixel([
-            event.clientX,
-            event.clientY - this.#hack
-          ])
-        );
-      });
-  }
+  constructor(private authState: AuthState, private store: Store) {}
 
   cancel(): void {
     this.drawer.close();
-  }
-
-  ngOnInit(): void {
-    // 👉 need to hack Y offsets by the height of the toolbar
-    const style = getComputedStyle(document.documentElement);
-    this.#hack = Number(style.getPropertyValue('--map-cy-toolbar'));
-    this.#handleContextMenu$();
   }
 
   refresh(): void {}
@@ -102,7 +64,12 @@ export class AddParcelComponent implements SidebarComponent, OnInit {
       2 /* 👈 diameter to radius */ /
       5280; /* 👈 to miles */
     const geojson = bboxPolygon(
-      bbox(circle(this.#contextMenuAt, r, { steps: 16, units: 'miles' }))
+      bbox(
+        circle(toLonLat(this.map.contextMenuAt), r, {
+          steps: 16,
+          units: 'miles'
+        })
+      )
     );
     // 👉 build the new parcel
     const addedParcel: Parcel = {

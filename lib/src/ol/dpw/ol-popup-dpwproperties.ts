@@ -49,7 +49,13 @@ export class OLPopupDPWPropertiesComponent {
   #handleFeatureSelected$(): void {
     /* 🔥 this.#subToSelection = */ this.map.featuresSelected
       .pipe(
-        map((features: OLFeature<any>[]): any => features[0]?.getProperties())
+        map((features: OLFeature<any>[]): any => {
+          // 🔥 feature may be landmark with meradata representing
+          //    bridge, flood hazard or stream crossing
+          let properties = features[0]?.getProperties();
+          if (properties?.metadata) properties = properties.metadata;
+          return properties;
+        })
       )
       .subscribe((properties: any) => {
         this.properties = properties;

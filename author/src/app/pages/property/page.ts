@@ -564,7 +564,7 @@ export class PropertyPage extends AbstractMapPage {
       case 'convert-landmark':
         this.#convertTo(opaque);
         break;
-      case 'delete-landmark':
+      case 'delete-landmarks':
         this.store.dispatch(
           this.olMap.selectedIDs.map((id) => new DeleteLandmark({ id }))
         );

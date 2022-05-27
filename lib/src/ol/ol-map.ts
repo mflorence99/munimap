@@ -84,7 +84,9 @@ export class OLMapComponent
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
 
   click$ = new Subject<OLMapBrowserEvent<any>>();
+
   contextMenu$ = new BehaviorSubject<PointerEvent>(null);
+  contextMenuAt: number[];
 
   @Input() dpi = this.#dpi /* 👈 actual pixels per inch of media */;
 
@@ -352,6 +354,13 @@ export class OLMapComponent
     this.click$.next(event);
   }
 
+  coordinateFromEvent(x: number, y: number): Coordinate {
+    // 👉 need to hack Y offsets by the height of the toolbar
+    const style = getComputedStyle(document.documentElement);
+    const hack = Number(style.getPropertyValue('--map-cy-toolbar'));
+    return this.olMap.getCoordinateFromPixel([x, y - hack]);
+  }
+
   currentCounty(): string {
     return this.path?.split(':')[1];
   }
@@ -394,6 +403,7 @@ export class OLMapComponent
     event: PointerEvent
   ): void {
     event.preventDefault();
+    this.contextMenuAt = this.coordinateFromEvent(event.clientX, event.clientY);
     this.contextMenu$.next(event);
   }
 

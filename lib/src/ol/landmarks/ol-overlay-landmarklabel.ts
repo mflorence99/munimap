@@ -28,7 +28,6 @@ import OLPoint from 'ol/geom/Point';
 })
 export class OLOverlayLandmarkLabelComponent implements OnInit {
   #feature: OLFeature<any>;
-  #hack: number;
 
   @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;
 
@@ -54,9 +53,6 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 👉 need to hack Y offsets by the height of the toolbar
-    const style = getComputedStyle(document.documentElement);
-    this.#hack = Number(style.getPropertyValue('--map-cy-toolbar'));
     this.olOverlay.setElement(this.label.nativeElement);
     this.#handleClick$();
   }
@@ -64,10 +60,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   onDragEnd(event: CdkDragEnd): void {
     // 👉 what is the new position?
     const position = toLonLat(
-      this.map.olMap.getCoordinateFromPixel([
-        event.dropPoint.x,
-        event.dropPoint.y - this.#hack
-      ])
+      this.map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
     );
     // 👉 update point labels
     if (this.#feature.getGeometry().getType() === 'Point') {

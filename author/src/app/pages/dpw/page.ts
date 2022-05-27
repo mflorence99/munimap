@@ -3,18 +3,26 @@ import { RootPage } from '../root/page';
 
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
+import { AddLandmark } from '@lib/state/landmarks';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
 import { ContextMenuComponent } from 'app/components/contextmenu';
+import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
+import { Landmark } from '@lib/common';
 import { MapType } from '@lib/state/map';
+import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { Router } from '@angular/router';
 import { SidebarComponent } from 'app/components/sidebar-component';
 import { Store } from '@ngxs/store';
+import { StreamCrossingProperties } from '@lib/common';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
+
+import { makeLandmarkID } from '@lib/common';
+import { toLonLat } from 'ol/proj';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +33,9 @@ import { ViewState } from '@lib/state/view';
 })
 export class DPWPage extends AbstractMapPage {
   @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
+
+  @ViewChild(OLOverlayLandmarkLabelComponent)
+  moveLandmark: OLOverlayLandmarkLabelComponent;
 
   constructor(
     protected actions$: Actions,
@@ -41,10 +52,44 @@ export class DPWPage extends AbstractMapPage {
 
   #can(event: MouseEvent, condition: boolean): boolean {
     if (!condition && event) event.stopPropagation();
-    return condition;
+    return this.selectedLandmarkType() && condition;
+  }
+
+  // 🔥 only stream crossings supported for now
+  #createLandmark(): void {
+    const landmark: Partial<Landmark> = {
+      geometry: {
+        coordinates: toLonLat(this.olMap.contextMenuAt),
+        type: 'Point'
+      },
+      owner: this.authState.currentProfile().email,
+      path: this.olMap.path,
+      properties: {
+        metadata: {
+          condition: 'unknown',
+          name: 'Culvert',
+          type: 'stream crossing'
+        } as StreamCrossingProperties
+      },
+      type: 'Feature'
+    };
+    landmark.id = makeLandmarkID(landmark);
+    this.store.dispatch(new AddLandmark(landmark));
+  }
+
+  // 🔥 only stream crossings supported for now
+  canAddLandmark(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 0);
   }
 
   canDeleteLandmark(event?: MouseEvent): boolean {
+    return this.#can(
+      event,
+      !this.olMap.roSelection && this.olMap.selected.length === 1
+    );
+  }
+
+  canMoveLandmark(event?: MouseEvent): boolean {
     return this.#can(
       event,
       !this.olMap.roSelection && this.olMap.selected.length === 1
@@ -58,6 +103,17 @@ export class DPWPage extends AbstractMapPage {
   onContextMenu(key: string): void {
     let cFactory: ComponentFactory<SidebarComponent>;
     switch (key) {
+      case 'add-landmark':
+        this.#createLandmark();
+        break;
+      case 'delete-landmark':
+        this.store.dispatch(
+          new DeleteLandmark({ id: this.olMap.selectedIDs[0] })
+        );
+        break;
+      case 'move-landmark':
+        this.moveLandmark.setFeature(this.olMap.selected[0]);
+        break;
     }
     if (cFactory) this.onContextMenuImpl(cFactory);
     // 👇 in some cases, doesn't close itself
@@ -65,6 +121,12 @@ export class DPWPage extends AbstractMapPage {
   }
 
   selectedLandmarkType(): string {
-    return this.olMap.selected[0]?.get('type') || 'site';
+    const selected = this.olMap.selected[0];
+    let type = 'site';
+    if (selected) {
+      const metadata = selected.get('metadata');
+      type = metadata?.type ?? selected.get('type');
+    }
+    return type;
   }
 }

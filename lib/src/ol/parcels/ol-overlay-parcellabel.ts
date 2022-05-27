@@ -13,7 +13,6 @@ import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
-import { filter } from 'rxjs/operators';
 import { fromLonLat } from 'ol/proj';
 import { merge } from 'rxjs';
 import { point } from '@turf/helpers';
@@ -34,8 +33,6 @@ import OLOverlay from 'ol/Overlay';
 })
 export class OLOverlayParcelLabelComponent implements OnInit {
   #centers: number[][];
-  #contextMenuAt: number[];
-  #hack: number;
   #id: ParcelID;
   #ix: number;
 
@@ -57,23 +54,6 @@ export class OLOverlayParcelLabelComponent implements OnInit {
     this.map.olMap.addOverlay(this.olOverlay);
   }
 
-  // 👉 we need to know where the contextmenu was clicked so that later
-  //    in setFeature we can figure which polygon is being addressed
-
-  #handleContextMenu$(): void {
-    this.map.contextMenu$
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((event) => !!event)
-      )
-      .subscribe((event) => {
-        this.#contextMenuAt = this.map.olMap.getCoordinateFromPixel([
-          event.clientX,
-          event.clientY - this.#hack
-        ]);
-      });
-  }
-
   // 👇 the idea is that a selection change or ESC cancels the move
 
   #handleStreams$(): void {
@@ -83,22 +63,15 @@ export class OLOverlayParcelLabelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 👉 need to hack Y offsets by the height of the toolbar
-    const style = getComputedStyle(document.documentElement);
-    this.#hack = Number(style.getPropertyValue('--map-cy-toolbar'));
     this.olOverlay.setElement(this.label.nativeElement);
     this.#handleStreams$();
-    this.#handleContextMenu$();
   }
 
   onDragEnd(event: CdkDragEnd): void {
     // 👉 construct a parcel to override the label position
     const centers = this.#centers;
     centers[this.#ix] = toLonLat(
-      this.map.olMap.getCoordinateFromPixel([
-        event.dropPoint.x,
-        event.dropPoint.y - this.#hack
-      ])
+      this.map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
     );
     const recenteredParcel: Parcel = {
       action: 'modified',
@@ -128,7 +101,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       for (this.#ix = 0; this.#ix < polygons.length; this.#ix++) {
         // 👉 we need to know which of the possible multiple ploygons
         //    that make up the parcel we will be re-centering
-        const pt = point(this.#contextMenuAt);
+        const pt = point(this.map.contextMenuAt);
         const poly = polygon([polygons[this.#ix].getCoordinates()[0]]);
         if (booleanPointInPolygon(pt, poly)) break;
       }

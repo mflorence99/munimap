@@ -188,9 +188,9 @@
       <!-- 📦 DPW'S LANDMARKS -->
 
       <app-ol-layer-vector #landmarks>
-        <app-ol-adaptor-landmarks>
+        <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="128">
           <app-ol-style-universal [showAll]="true"></app-ol-style-universal
-        ></app-ol-adaptor-landmarks>
+        ></app-ol-adaptor-dpwlandmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
         <app-ol-interaction-selectlandmarks
           [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
@@ -276,12 +276,12 @@
         </app-ol-layer-vector>
 
         <app-ol-layer-vector #landmarks>
-          <app-ol-adaptor-landmarks>
+          <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="128">
             <app-ol-style-universal
               [contrast]="'whiteOnBlack'"
               [showAll]="true"
             ></app-ol-style-universal
-          ></app-ol-adaptor-landmarks>
+          ></app-ol-adaptor-dpwlandmarks>
           <app-ol-source-landmarks></app-ol-source-landmarks>
           <app-ol-interaction-selectlandmarks
             [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
