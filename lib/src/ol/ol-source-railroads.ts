@@ -2,6 +2,7 @@ import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { RailroadProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -35,16 +36,11 @@ export class OLSourceRailroadsComponent extends OLSourceArcGISComponent {
   // 👇 see RailroadProperties
 
   filter(arcgis: any): any {
-    // 🔥 keep this b/c it helps see what's in the raw data
-    // const unique = new Set();
-    // arcgis.features.forEach((feature: any) =>
-    //   unique.add(feature.attributes.STATUS)
-    // );
-    // console.log(Array.from(unique).sort());
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.name = feature.attributes.NAME;
-        feature.attributes.active = feature.attributes.STATUS === 'Active';
+        const properties: RailroadProperties = feature.attributes;
+        properties.name = properties.NAME;
+        properties.active = properties.STATUS === 'Active';
       });
       return arcgis;
     } else return super.filter(arcgis);

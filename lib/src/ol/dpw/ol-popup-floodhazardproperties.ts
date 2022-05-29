@@ -1,3 +1,5 @@
+import { FloodHazardProperties } from '../../common';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
@@ -11,7 +13,7 @@ import { Input } from '@angular/core';
 export class OLPopupFloodHazardPropertiesComponent {
   @Input() properties: any;
 
-  schema = [
+  schema: [string, keyof FloodHazardProperties][] = [
     ['Location', 'Location'],
     ['Description', 'FloodDesc'],
     ['Flood Type', 'FloodType'],

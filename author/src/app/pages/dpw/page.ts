@@ -69,7 +69,7 @@ export class DPWPage extends AbstractMapPage {
           condition: 'unknown',
           name: 'Culvert',
           type: 'stream crossing'
-        } as StreamCrossingProperties
+        } as Partial<StreamCrossingProperties>
       },
       type: 'Feature'
     };

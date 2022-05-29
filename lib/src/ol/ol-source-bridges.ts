@@ -1,3 +1,4 @@
+import { BridgeProperties } from '../common';
 import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -32,9 +33,10 @@ export class OLSourceBridgesComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.name = '' /* 👈 ??? */;
-        feature.attributes.rygb = feature.attributes.RYGB.toLowerCase();
-        feature.attributes.type = 'bridge';
+        const properties: BridgeProperties = feature.attributes;
+        properties.name = '' /* 👈 ??? */;
+        properties.rygb = properties.RYGB.toLowerCase() as any;
+        properties.type = 'bridge';
       });
       return arcgis;
     } else return super.filter(arcgis);

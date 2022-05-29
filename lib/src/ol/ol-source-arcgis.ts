@@ -32,6 +32,8 @@ import OLVector from 'ol/source/Vector';
 
 @Component({ template: '' })
 export abstract class OLSourceArcGISComponent {
+  static schemaAlreadyAnalyzed: Record<string, boolean> = {};
+
   @Input() maxRequests = 8;
 
   olVector: OLVector<any>;
@@ -121,8 +123,9 @@ export abstract class OLSourceArcGISComponent {
             catchError(() => of({ features: [] })),
             // 👇 arcgis can return just an "error" which we ignore
             map((arcgis: any): any =>
-              arcgis?.features ? arcgis : { features: [] }
+              arcgis?.features ? arcgis : { features: [], fields: [] }
             ),
+            tap((arcgis: any) => this.#schema(arcgis)),
             map(
               (arcgis: any): GeoJSON.FeatureCollection<any, any> =>
                 arcgisToGeoJSON(this.filter(arcgis))
@@ -155,6 +158,46 @@ export abstract class OLSourceArcGISComponent {
         });
         success(features);
       });
+  }
+
+  #schema(arcgis: any): void {
+    if (
+      arcgis.fields?.length > 0 &&
+      !OLSourceArcGISComponent.schemaAlreadyAnalyzed[this.getProxyPath()]
+    ) {
+      OLSourceArcGISComponent.schemaAlreadyAnalyzed[this.getProxyPath()] = true;
+      const fields = arcgis.fields.sort((p, q) => p.name.localeCompare(q.name));
+      const js = fields.map((field) => {
+        let type;
+        switch (field.type) {
+          case 'esriFieldTypeBoolean':
+            type = 'boolean';
+            break;
+          case 'esriFieldTypeDate':
+            type = 'Date';
+            break;
+          case 'esriFieldTypeDouble':
+          case 'esriFieldTypeInteger':
+            type = 'number';
+            break;
+          default:
+            type = 'string';
+            break;
+        }
+        return `${field.name}: ${type} /* 👈 ${field.alias.trim()} */;`;
+      });
+      js.unshift(
+        `// 👇 original ${this.getProxyPath()} schema`,
+        '/* eslint-disable @typescript-eslint/naming-convention */',
+        '/* eslint-disable @typescript-eslint/member-ordering */'
+      );
+      js.push(
+        '/* eslint-enable @typescript-eslint/naming-convention */',
+        '/* eslint-enable @typescript-eslint/member-ordering */',
+        `// 👇 translated ${this.getProxyPath()} schema`
+      );
+      console.log(`${js.join('\n')}\n`);
+    }
   }
 
   filter(arcgis: any): any {

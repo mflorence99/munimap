@@ -2,6 +2,7 @@ import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { StreamCrossingProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -32,11 +33,11 @@ export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.condition =
-          feature.attributes.StructCond?.toLowerCase() || 'unknown';
-        feature.attributes.name =
-          feature.attributes.AssetType || feature.attributes.StructType;
-        feature.attributes.type = 'stream crossing';
+        const properties: StreamCrossingProperties = feature.attributes;
+        properties.condition =
+          properties.StructCond?.toLowerCase() || ('unknown' as any);
+        properties.name = properties.AssetType || properties.StructType;
+        properties.type = 'stream crossing';
       });
       return arcgis;
     } else return super.filter(arcgis);

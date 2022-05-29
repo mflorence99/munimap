@@ -1,4 +1,5 @@
 import { CacheService } from '../services/cache';
+import { LabelProperties } from '../common';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
@@ -55,8 +56,9 @@ export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.name = feature.attributes.NAME;
-        feature.attributes.type = LABELS[this.labelsFor].place;
+        const properties: LabelProperties = feature.attributes;
+        properties.name = properties.NAME;
+        properties.type = LABELS[this.labelsFor].place as any;
       });
       // 👇 sometimes adjacent features are duplicated
       const unique = new Set();

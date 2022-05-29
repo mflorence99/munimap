@@ -2,6 +2,7 @@ import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { RiverProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -37,8 +38,9 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.name = feature.attributes.GNIS_Name;
-        feature.attributes.type = 'stream';
+        const properties: RiverProperties = feature.attributes;
+        properties.name = properties.GNIS_Name;
+        properties.type = 'stream';
       });
       const filtered = copy(arcgis);
       filtered.features = arcgis.features.filter(

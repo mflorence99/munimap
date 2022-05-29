@@ -1,4 +1,5 @@
 import { CacheService } from '../services/cache';
+import { ConservationProperties } from '../common';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
@@ -37,7 +38,8 @@ export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.name = feature.attributes.NAME;
+        const properties: ConservationProperties = feature.attributes;
+        properties.name = properties.NAME;
       });
       return arcgis;
     } else return super.filter(arcgis);

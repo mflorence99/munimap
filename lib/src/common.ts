@@ -19,8 +19,74 @@ import transformRotate from '@turf/transform-rotate';
 export const theState = 'NEW HAMPSHIRE';
 
 export interface BridgeProperties {
-  // 🔥 pass thru all data in DES schema
-  [key: string]: boolean | number | string;
+  // 👇 original bridges schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/member-ordering */
+  ALT_LENGTH: number /* 👈 ALT_LENGTH */;
+  APPROACH_SPAN_DESIGN: string /* 👈 APPROACH_SPAN_DESIGN */;
+  APPROACH_SPAN_MATERIAL: string /* 👈 APPROACH_SPAN_MATERIAL */;
+  BRIDGE_ID: string /* 👈 BRIDGE_ID */;
+  BRIDGE_TIER: number /* 👈 BRIDGE_TIER */;
+  BRIDGE_TYPE: string /* 👈 BRIDGE_TYPE */;
+  BRIDGE_TYPE_DESCR: string /* 👈 BRIDGE_TYPE_DESCR */;
+  COUNTY: string /* 👈 COUNTY */;
+  CREATE_DATE: Date /* 👈 CREATE_DATE */;
+  DECK_AREA_FEET: number /* 👈 DECK_AREA_FEET */;
+  DECK_DESCRIPTION: string /* 👈 DECK_DESCRIPTION */;
+  DECKWIDTH_FEET: number /* 👈 DECKWIDTH_FEET */;
+  DISTRICT: string /* 👈 DISTRICT */;
+  EAST: string /* 👈 EAST */;
+  FACILITY: string /* 👈 FACILITY */;
+  FEATINT: string /* 👈 FEATINT */;
+  FROM_MP: number /* 👈 FROM_MP */;
+  HEIGHT_SIGN_REC_AW: string /* 👈 HEIGHT_SIGN_REC_AW */;
+  HISTSIGN: string /* 👈 HISTSIGN */;
+  IS_PRIMARY_SRI: number /* 👈 IS_PRIMARY_SRI */;
+  LATITUDE: number /* 👈 LATITUDE */;
+  LENGTH_FEET: number /* 👈 LENGTH_FEET */;
+  LOCATION: string /* 👈 LOCATION */;
+  LONGITUDE: number /* 👈 LONGITUDE */;
+  MAIN_SPAN_DESIGN: string /* 👈 MAIN_SPAN_DESIGN */;
+  MAIN_SPAN_MATERIAL: string /* 👈 MAIN_SPAN_MATERIAL */;
+  MAINSPANS: string /* 👈 MAINSPANS */;
+  MAXSPAN_FEET: number /* 👈 MAXSPAN_FEET */;
+  MP: number /* 👈 MP */;
+  NBI_RATING: string /* 👈 NBI_RATING */;
+  NBISLEN: string /* 👈 NBISLEN */;
+  NBISLEN_DESCR: string /* 👈 NBISLEN_DESCR */;
+  NORTH: string /* 👈 NORTH */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  OWNER: string /* 👈 OWNER */;
+  PLAN_FILENAMES: string /* 👈 PLAN_FILENAMES */;
+  PLAN_FOLDER: string /* 👈 PLAN_FOLDER */;
+  POA_HOTLINK: string /* 👈 POA_HOTLINK */;
+  REDLIST: string /* 👈 REDLIST */;
+  ROUTE_PREFIX: string /* 👈 ROUTE_PREFIX */;
+  ROUTE_TYPE: string /* 👈 ROUTE_TYPE */;
+  RYGB: string /* 👈 RYGB */;
+  SKEW: string /* 👈 SKEW */;
+  SRI: string /* 👈 SRI */;
+  STRUCT_NUM: string /* 👈 STRUCT_NUM */;
+  STRUCTNAME: string /* 👈 STRUCTNAME */;
+  TEMP_UID: string /* 👈 TEMP_UID */;
+  TIER: string /* 👈 TIER */;
+  TO_MP: number /* 👈 TO_MP */;
+  TOT_LENGTH_FEET: number /* 👈 TOT_LENGTH_FEET */;
+  TOWN: string /* 👈 TOWN */;
+  TOWN_ID: string /* 👈 TOWN_ID */;
+  TYPE_SERVICE_ON: string /* 👈 TYPE_SERVICE_ON */;
+  TYPE_SERVICE_UNDER: string /* 👈 TYPE_SERVICE_UNDER */;
+  UNIQUE_ID: number /* 👈 UNIQUE_ID */;
+  VCLROVER: number /* 👈 VCLROVER */;
+  VCLRUNDER: number /* 👈 VCLRUNDER */;
+  WEIGHT_SIGN_REC: string /* 👈 WEIGHT_SIGN_REC */;
+  X_COORD: number /* 👈 X_COORD */;
+  Y_COORD: number /* 👈 Y_COORD */;
+  YEARBUILT: string /* 👈 YEARBUILT */;
+  YEARRECON: string /* 👈 YEARRECON */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated bridges schema
   name: string;
   rygb: 'red' | 'yellow' | 'green' | 'blue';
   // 🔥 disambiguate bridges, flood hazards and stream crossings
@@ -39,15 +105,119 @@ export interface BuildingProperties {
 }
 
 export interface ConservationProperties {
+  // 👇 original conservation schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  NAME: string;
+  OBJECTID: string;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  // 👇 translated conservation schema
   name: string;
 }
 
-export interface FloodHazardProperties {
-  // 🔥 pass thru all data in DES schema
-  [key: string]: boolean | number | string;
+export interface DamProperties {
+  // 👇 original dams schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  CNTY: string /* 👈 CNTY */;
+  DAAC: number /* 👈 DAAC */;
+  DAM: string /* 👈 DAM */;
+  DOWNER: string /* 👈 DOWNER */;
+  FERC: string /* 👈 FERC */;
+  HAZCL: string /* 👈 HAZCL */;
+  HEIGHT: number /* 👈 HEIGHT */;
+  IMPND: number /* 👈 IMPND */;
+  LATITUDE: number /* 👈 LATITUDE */;
+  LENGTH: number /* 👈 LENGTH */;
+  LONGITUDE: number /* 👈 LONGITUDE */;
+  NAME: string /* 👈 NAME */;
+  NATDAMID: string /* 👈 NATDAMID */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  RIVER: string /* 👈 RIVER */;
+  STATUS: string /* 👈 STATUS */;
+  TOWN: string /* 👈 TOWN */;
+  USE: string /* 👈 USE */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated dams schema
   name: string;
+  type: 'dam';
+}
+
+export interface FloodHazardProperties {
+  // 👇 original floodhazards schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/member-ordering */
+  Creation_1: Date /* 👈 Creation_1 */;
+  CreationDa: Date /* 👈 CreationDa */;
+  Creator: string /* 👈 Creator */;
+  Creator_1: string /* 👈 Creator_1 */;
+  CrossIssue: string /* 👈 CrossIssue */;
+  CrossType: string /* 👈 CrossType */;
+  EditDate: Date /* 👈 EditDate */;
+  EditDate_1: Date /* 👈 EditDate_1 */;
+  Editor: string /* 👈 Editor */;
+  Editor_1: string /* 👈 Editor_1 */;
+  FID: string /* 👈 FID */;
+  FloodDate: string /* 👈 FloodDate */;
+  FloodDesc: string /* 👈 FloodDesc */;
+  FloodHazID: string /* 👈 FloodHazID */;
+  FloodPerio: string /* 👈 FloodPerio */;
+  FloodType: string /* 👈 FloodType */;
+  Frequency: string /* 👈 Frequency */;
+  GlobalID: string /* 👈 GlobalID */;
+  Impact: string /* 👈 Impact */;
+  Location: string /* 👈 Location */;
+  MitAction: string /* 👈 MitAction */;
+  ORIG_FID: number /* 👈 ORIG_FID */;
+  RPC_Area: string /* 👈 RPC_Area */;
+  Shape__Are: number /* 👈 Shape__Are */;
+  Shape__Len: number /* 👈 Shape__Len */;
+  Source: string /* 👈 Source */;
+  Town: string /* 👈 Town */;
+  Verified: string /* 👈 Verified */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated floodhazards schema  name: string;
   // 🔥 disambiguate bridges, flood hazards and stream crossings
+  name: string;
   type: 'flood hazard';
+}
+
+export interface FloodplainProperties {
+  // 👇 original floodplain schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/member-ordering */
+  AR_REVERT: string /* 👈 AR_REVERT */;
+  BFE_REVERT: number /* 👈 BFE_REVERT */;
+  DEP_REVERT: number /* 👈 DEP_REVERT */;
+  DEPTH: number /* 👈 DEPTH */;
+  DFIRM_STUDY: string /* 👈 DFIRM_Study */;
+  FLD_AR_ID: string /* 👈 FLD_AR_ID */;
+  FLD_ZONE: string /* 👈 Flood Zone */;
+  FLD_ZONE_SVD: string /* 👈 FLD_ZONE_SVD */;
+  FLOODWAY: string /* 👈 FLOODWAY */;
+  LEN_UNIT: string /* 👈 Units */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  SFHA_TF: string /* 👈 SFHA_TF */;
+  SHAPE_Area: number /* 👈 SHAPE_Area */;
+  SHAPE_Length: number /* 👈 SHAPE_Length */;
+  STATIC_BFE: number /* 👈 Static BFE */;
+  V_DATUM: string /* 👈 V_DATUM */;
+  VEL_UNIT: string /* 👈 VEL_UNIT */;
+  VELOCITY: number /* 👈 VELOCITY */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated floodplain schema
+}
+
+export interface LabelProperties {
+  // 👇 original floodplain schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  NAME: string;
+  OBJECTID: string;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  // 👇 translated floodplain schema
+  name: string;
+  type: 'park' | 'stream';
 }
 
 export interface LakeProperties {
@@ -97,7 +267,7 @@ export class LandmarkPropertiesClass {
   public lineChunk = false;
   public lineDash = [2, 1];
   public lineSpline = false;
-  public metadata: Record<string, boolean | number | string> = null;
+  public metadata: Record<string, boolean | number | string | Date> = null;
   public minWidth = 0;
   public minZoom = 0;
   public name: string = null;
@@ -325,11 +495,59 @@ export interface PowerlineProperties {
 }
 
 export interface RailroadProperties {
+  // 👇 original railroads schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  ABANDONMENT_YEAR: string /* 👈 Abandonment_Year */;
+  CREATE_DATE: Date /* 👈 CREATE_DATE */;
+  CREATE_USER: string /* 👈 CREATE_USER */;
+  IS_PASSENGER: string /* 👈 IS_PASSENGER */;
+  MP_END: number /* 👈 MP_END */;
+  MP_START: number /* 👈 MP_START */;
+  NAME: string /* 👈 RailroadName */;
+  NAME_HISTORIC: string /* 👈 Historic_Line_Name */;
+  NEEDS_CALIBRATION: string /* 👈 NEEDS_CALIBRATION */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  OPERATOR: string /* 👈 Operator */;
+  OWNERSHIP: string /* 👈 OWNERSHIP */;
+  PARTS: number /* 👈 PARTS */;
+  PURCHASE: string /* 👈 Purchase */;
+  RRI: string /* 👈 RRI */;
+  RRI_UID: number /* 👈 RRI_UID */;
+  SECT_LENGTH: number /* 👈 Miles */;
+  SHAPE_Length: number /* 👈 SHAPE_Length */;
+  STATUS: string /* 👈 Status */;
+  UPDT_DATE: Date /* 👈 UPDT_DATE */;
+  UPDT_USER: string /* 👈 UPDT_USER */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated railroads schema
   active: boolean;
   name: string;
 }
 
 export interface RiverProperties {
+  // 👇 original rivers schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/member-ordering */
+  FCode: number /* 👈 FCode */;
+  FDate: Date /* 👈 FDate */;
+  FlowDir: number /* 👈 FlowDir */;
+  FType: number /* 👈 FType */;
+  GNIS_ID: string /* 👈 GNIS_ID */;
+  GNIS_Name: string /* 👈 GNIS_Name */;
+  InNetwork: number /* 👈 InNetwork */;
+  LengthKM: number /* 👈 LengthKM */;
+  MainPath: number /* 👈 MainPath */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  Permanent_Identifier: string /* 👈 Permanent_Identifier */;
+  ReachCode: string /* 👈 ReachCode */;
+  Resolution: number /* 👈 Resolution */;
+  Shape_Length: number /* 👈 SHAPE_Length */;
+  VisibilityFilter: number /* 👈 VisibilityFilter */;
+  WBArea_Permanent_Identifier: string /* 👈 WBArea_Permanent_Identifier */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated rivers schema
   county: string;
   name: string;
   section: string;
@@ -349,12 +567,160 @@ export interface RoadProperties {
 export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 
 export interface StreamCrossingProperties {
-  // 🔥 pass thru all data in DES schema
-  [key: string]: boolean | number | string;
+  // 👇 original streamcrossings schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/member-ordering */
+  AOP_Score: string /* 👈 98) AOP Compatibility Score */;
+  ApproAngle: string /* 👈 16) Angle of Stream Flow Approach */;
+  AssessDate: Date /* 👈 05) Assessment Date */;
+  AssetType: string /* 👈 02) Asset Type */;
+  ChanBFW1: number /* 👈 44) Channel - Bankfull Width 1 (ft) */;
+  ChanBFW2: number /* 👈 45) Channel - Bankfull Width 2 (ft) */;
+  ChanBFW3: number /* 👈 46) Channel - Bankfull Width 3 (ft) */;
+  ChanDomSub: string /* 👈 47) Channel - Dominant Substrate */;
+  Comments: string /* 👈 93) Comments */;
+  CoverDepth: number /* 👈 53) Cover Depth (ft) */;
+  CreationDa: Date /* 👈 CreationDa */;
+  Creator: string /* 👈 Creator */;
+  CrossConDs: string /* 👈 Crossing Condition - Outlet */;
+  CrossConUs: string /* 👈 Crossing Condition - Inlet */;
+  CrossSlope: string /* 👈 51) Structure Slope Compared to Channel Slope */;
+  CrossType: string /* 👈 04) Crossing Type */;
+  CulWatDep: number /* 👈 57) Water Depth - Structure Outlet (ft) */;
+  DA_Acre: number /* 👈 Drainage Area (Acres) */;
+  DA_Mile: number /* 👈 Drainage Area (Square Miles) */;
+  DsBankArmo: string /* 👈 77) Downstream - Bank Armoring */;
+  DsBankEros: string /* 👈 86) Downstream - Bank Erosion */;
+  DsBankHigh: string /* 👈 87) DS Bank Heights Taller than US Banks */;
+  DsBeavDam: string /* 👈 91) Downstream - Beaver Dam Near Structure */;
+  DsBedrockP: string /* 👈 88) Downstream - Bedrock Present */;
+  DsBFW1: number /* 👈 82) Downstream - Bankful Width 1 (ft) */;
+  DsBFW2: number /* 👈 83) Downstream - Bankful Width 2 (ft) */;
+  DsBFW3: number /* 👈 84) Downstream - Bankful Width 3 (ft) */;
+  DsDomSub: string /* 👈 85) Downstream - Dominant Substrate */;
+  DsHwCon: string /* 👈 70) Outlet Condition */;
+  DsHwMat: string /* 👈 69) Outlet Headwall - Materials */;
+  DsHydConDi: number /* 👈 90) Hydraulic Control Distance from Structure (ft) */;
+  DsHydConTy: string /* 👈 89) Hydraulic Control Type */;
+  DsInvElev: number /* 👈 55) Outlet Invert Elevation (ft) */;
+  DsOpenHght: number /* 👈 61) Downstream - Open Height (B) (ft) */;
+  DsPoolPres: string /* 👈 78) Downstream Pool Present */;
+  DsTotHght: number /* 👈 63) Downstream - Total Height (D) (ft) */;
+  DsUndermin: string /* 👈 71) Downstream - Scour Undermining Structure */;
+  DsWatBody: string /* 👈 56) Downstream Waterbody */;
+  DsWatDep: number /* 👈 81) Water Depth - Downstream Channel (ft) */;
+  DsWetWidth: number /* 👈 62) Downstream - Wetted Width-Wall Rise (C) (ft) */;
+  DsWidth: number /* 👈 60) Downstream - Width (A) (ft) */;
+  DsWingwallMat: string /* 👈 68) Outlet Wingwall - Material */;
+  EditDate: Date /* 👈 EditDate */;
+  Editor: string /* 👈 Editor */;
+  GC_Score: string /* 👈 99) Geomorphic Compatibility Score */;
+  GlobalID_3: string /* 👈 GlobalID_3 */;
+  GUID_DES: string /* 👈 GUID_DES */;
+  HC_100yr: string /* 👈 104) Hydraulic Vulnerability - 100 Year */;
+  HC_10yr: string /* 👈 101) Hydraulic Vulnerability- 10 Year */;
+  HC_25yr: string /* 👈 102) Hydraulic Vulnerability - 25 Year */;
+  HC_2yr: string /* 👈 100) Hydraulic Vulnerability - 2 Year */;
+  HC_50yr: string /* 👈 103) Hydraulic Vulnerability - 50 Year */;
+  HUC10: string /* 👈 HUC 10 */;
+  InletType: string /* 👈 22) Inlet Type */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  Observers: string /* 👈 07) Observers */;
+  Organizat: string /* 👈 08) Organization */;
+  OutGrade: string /* 👈 72) Outlet Water Profile */;
+  OutletDrop: number /* 👈 73) Outlet Drop (ft) */;
+  OutletHeig: string /* 👈 74) Outlet Height from Streambed */;
+  OutScour: string /* 👈 76) Scour of Streambed at the Outlet */;
+  OutTreat: string /* 👈 75) Outfall Treatment */;
+  POINT_X: number /* 👈 POINT_X */;
+  POINT_Y: number /* 👈 POINT_Y */;
+  PoolDepEnt: number /* 👈 79) Water Depth at Flow Entry (ft) */;
+  PoolDepMax: string /* 👈 80) Downstream Pool Maximum Depth (ft) */;
+  ProjName: string /* 👈 09) Project Name */;
+  QC_AOP_Status: string /* 👈 95) Current AOP QAQC Review Status */;
+  QC_DesComs: string /* 👈 96) NHDES Review Comment */;
+  QC_NHGS_Status: string /* 👈 95) Current NHGS status */;
+  QC_ResCom: string /* 👈 97) Assessment Team Response Comment */;
+  RoadNameA: string /* 👈 11) Road Name - Auto */;
+  RoadNameF: string /* 👈 12) Road Name - Field */;
+  SADES_ID: number /* 👈 01) SADES ID */;
+  StrDomSub: string /* 👈 66) Dominant Substrate - Throughout Structure */;
+  StreamName: string /* 👈 13) Stream Name */;
+  StrScreen: string /* 👈 31) Screening at Structure */;
+  StructCond: string /* 👈 65) Structure Condition */;
+  StructLen: number /* 👈 58) Structure Length (ft) */;
+  StructMat: string /* 👈 20) Structure Material */;
+  StructNum: number /* 👈 17) Number of Structures at Crossing */;
+  StructOver: string /* 👈 18) Overflow Structures Present */;
+  StructSed: string /* 👈 67) Structure Filled with Sediment */;
+  StructSkew: string /* 👈 14) Structure Skewed to Roadway */;
+  StructSlop: number /* 👈 59) Structure Slope (%) */;
+  StructType: string /* 👈 19) Structure Type */;
+  Town: string /* 👈 10) Town */;
+  UsBankArmo: string /* 👈 35) Upstream - Bank Armoring */;
+  UsBankEros: string /* 👈 43) Upstream - Bank Erosion */;
+  UsBeavDam: string /* 👈 49) Upstream - Beaver Dam Near Structure */;
+  UsBFW1: number /* 👈 37) Upstream - Bankfull Width 1 (ft) */;
+  UsBFW2: number /* 👈 38) Upstream - Bankfull Width 2 (ft) */;
+  UsBFW3: number /* 👈 39) Upstream - Bankfull Width 3 (ft) */;
+  UsDeposEle: string /* 👈 42) US Deposit Taller than 0.5 Bankfull Height */;
+  UsDeposTyp: string /* 👈 41) Upstream Deposit Type */;
+  UsDomSub: string /* 👈 40) Upstream - Dominant Substrate */;
+  USER_ID: string /* 👈 06) User ID */;
+  UsHwCon: string /* 👈 33) Inlet Condition */;
+  UsHwMat: string /* 👈 32) Inlet Headwall - Materials */;
+  UsInvElev: number /* 👈 54) Inlet Invert Elevation (ft) */;
+  UsObstruct: string /* 👈 30) Structure Opening Mostly Obstructed */;
+  UsOpenHght: number /* 👈 27) Upstream - Open Height (B) (ft) */;
+  UsRoadElev: number /* 👈 52) Reference Elevation (ft) */;
+  UsSteepSeg: string /* 👈 48) Steeper Segment within 1/3 mile Upstream */;
+  UsTotHght: number /* 👈 29) Upstream - Total Height (D) (ft) */;
+  UsUndermin: string /* 👈 34) Upstream - Scour Undermining Structure */;
+  UsWatBody: string /* 👈 03) Upstream Waterbody */;
+  UsWatDepth: number /* 👈 36) Water Depth - Upstream channel (ft) */;
+  UsWetWidth: number /* 👈 28) Upstream - Wetted Width-Wall Rise (C) (ft) */;
+  UsWidth: number /* 👈 26) Upstream - Width (A) (ft) */;
+  UsWingwallMat: string /* 👈 23) Inlet Wingwall - Material */;
+  Wildlife: string /* 👈 92) Wildlife observed - US, DS, Structure */;
+  WingAngL: string /* 👈 24) Inlet Wingwall Angle - Stream Left */;
+  WingAngR: string /* 👈 25) Inlet Wingwall Angle - Stream Right */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated streamcrossings schema
   condition: 'good' | 'fair' | 'poor' | 'unknown';
   name: string;
   // 🔥 disambiguate bridges, flood hazards and stream crossings
   type: 'stream crossing';
+}
+
+export interface StoneWallProperties {
+  // 👇 original stonewalls schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/member-ordering */
+  CreationDate: Date /* 👈 CreationDate */;
+  Creator: string /* 👈 Creator */;
+  EditDate: Date /* 👈 EditDate */;
+  Editor: string /* 👈 Editor */;
+  FEATURE_MAPPING_NOTES: string /* 👈 Feature Mapping Notes */;
+  FEATURE_MAPPING_SOURCE: string /* 👈 Feature Mapping Source */;
+  FEATURE_STATUS: string /* 👈 Feature Verification Status */;
+  FEATURE_STATUS_SOURCE: string /* 👈 Feature Verification Status Source */;
+  FEATURE_STATUS_SOURCE_2: number /* 👈 Feature Verification Status Source 2 */;
+  FEATURE_TYPE: string /* 👈 Feature Type */;
+  FEATURE_TYPOLOGY: string /* 👈 Feature Typology */;
+  GENERAL_NOTES: string /* 👈 General Notes */;
+  GlobalID: string /* 👈 GlobalID */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  SCREENER_NAME: string /* 👈 Screener Name */;
+  Shape__Length: number /* 👈 Shape__Length */;
+  SYM_CODE: string /* 👈 Symbology Code */;
+  TOWN: string /* 👈 City or Town */;
+  USER_: string /* 👈 User name */;
+  USER_EMAIL: string /* 👈 User email */;
+  VERIFIER_NAME: string /* 👈 Verifier Name */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated stonewalls schema
 }
 
 export interface TrailProperties {
@@ -364,7 +730,42 @@ export interface TrailProperties {
   town: string;
 }
 
+export interface WaterbodyProperties {
+  // 👇 original waterbodies schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  AreaSqKm: number /* 👈 AreaSqKm */;
+  Elevation: number /* 👈 Elevation */;
+  FCode: number /* 👈 FCode */;
+  FDate: Date /* 👈 FDate */;
+  FType: string /* 👈 FType */;
+  GNIS_ID: string /* 👈 GNIS_ID */;
+  GNIS_Name: string /* 👈 GNIS_Name */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  Permanent_Identifier: string /* 👈 Permanent_Identifier */;
+  ReachCode: string /* 👈 ReachCode */;
+  Resolution: number /* 👈 Resolution */;
+  Shape_Area: number /* 👈 SHAPE_Area */;
+  Shape_Length: number /* 👈 SHAPE_Length */;
+  VisibilityFilter: number /* 👈 VisibilityFilter */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated waterbodies schema
+}
+
 export interface WetlandProperties {
+  // 👇 original wetland schema
+  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/member-ordering */
+  ACRES: number /* 👈 ACRES */;
+  ATTRIBUTE: string /* 👈 ATTRIBUTE */;
+  OBJECTID: string /* 👈 OBJECTID */;
+  Shape_Area: number /* 👈 Shape_Area */;
+  SHAPE_Leng: number /* 👈 SHAPE_Leng */;
+  Shape_Length: number /* 👈 Shape_Length */;
+  WETLAND_TY: string /* 👈 WETLAND_TY */;
+  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/member-ordering */
+  // 👇 translated wetland schema
   type: 'water' | 'marsh';
 }
 

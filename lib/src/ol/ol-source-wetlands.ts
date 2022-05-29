@@ -2,6 +2,7 @@ import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { WetlandProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -32,11 +33,10 @@ export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.type = [
-          'Freshwater Pond',
-          'Lake',
-          'Riverine'
-        ].includes(feature.attributes.WETLAND_TY)
+        const properties: WetlandProperties = feature.attributes;
+        properties.type = ['Freshwater Pond', 'Lake', 'Riverine'].includes(
+          properties.WETLAND_TY
+        )
           ? 'water'
           : 'marsh';
       });

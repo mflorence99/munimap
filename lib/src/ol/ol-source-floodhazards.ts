@@ -1,4 +1,5 @@
 import { CacheService } from '../services/cache';
+import { FloodHazardProperties } from '../common';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
@@ -32,8 +33,9 @@ export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.name = '' /* 👈 ??? */;
-        feature.attributes.type = 'flood hazard';
+        const properties: FloodHazardProperties = feature.attributes;
+        properties.name = '' /* 👈 ??? */;
+        properties.type = 'flood hazard';
       });
       return arcgis;
     } else return super.filter(arcgis);

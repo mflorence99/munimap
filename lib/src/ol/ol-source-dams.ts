@@ -1,4 +1,5 @@
 import { CacheService } from '../services/cache';
+import { DamProperties } from '../common';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
@@ -35,8 +36,9 @@ export class OLSourceDamsComponent extends OLSourceArcGISComponent {
   filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
-        feature.attributes.name = feature.attributes.NAME;
-        feature.attributes.type = 'dam';
+        const properties: DamProperties = feature.attributes;
+        properties.name = properties.NAME;
+        properties.type = 'dam';
       });
       return arcgis;
     } else return super.filter(arcgis);

@@ -2,6 +2,7 @@ import { CacheService } from '../services/cache';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { WaterbodyProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -36,17 +37,12 @@ export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
   }
 
   filter(arcgis: any): any {
-    // 🔥 keep this b/c it helps see what's in the raw data
-    // const unique = new Set();
-    // arcgis.features.forEach((feature: any) =>
-    //   unique.add(feature.attributes.FType)
-    // );
-    // console.log(Array.from(unique).sort());
     if (arcgis && this.exclude) {
       const filtered = copy(arcgis);
-      filtered.features = arcgis.features.filter(
-        (feature) => !this.exclude.includes(feature.attributes.FType)
-      );
+      filtered.features = arcgis.features.filter((feature) => {
+        const properties: WaterbodyProperties = feature.attributes;
+        return !this.exclude.includes(properties.FType);
+      });
       return filtered;
     } else return super.filter(arcgis);
   }

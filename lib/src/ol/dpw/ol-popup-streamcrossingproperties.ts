@@ -1,3 +1,5 @@
+import { StreamCrossingProperties } from '../../common';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
@@ -11,7 +13,7 @@ import { Input } from '@angular/core';
 export class OLPopupStreamCrossingPropertiesComponent {
   @Input() properties: any;
 
-  schema = [
+  schema: [string, keyof StreamCrossingProperties][] = [
     ['Location', 'RoadNameF'],
     ['Structure Type', 'StructType'],
     ['Structure Material', 'StructMat'],
