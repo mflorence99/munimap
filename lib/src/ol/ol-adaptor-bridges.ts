@@ -27,6 +27,7 @@ export class OLAdaptorBridgesComponent implements Adaptor {
 
   // 👇 construct LandmarkProperties
   adapt(bridge: BridgeProperties): LandmarkProperties[] {
+    const condition = bridge.RYGB?.toLowerCase() || 'blue';
     return [
       new LandmarkPropertiesClass({
         fontColor: '--map-bridge-line-color',
@@ -34,7 +35,7 @@ export class OLAdaptorBridgesComponent implements Adaptor {
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',
-        iconColor: `--map-bridge-${bridge.rygb}-icon-color`,
+        iconColor: `--map-bridge-${condition}-icon-color`,
         iconOutline: true,
         iconOutlineColor: '--map-bridge-line-color',
         iconOpacity: 1,

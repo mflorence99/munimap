@@ -35,7 +35,6 @@ export class OLSourceBridgesComponent extends OLSourceArcGISComponent {
       arcgis.features.forEach((feature) => {
         const properties: BridgeProperties = feature.attributes;
         properties.name = '' /* 👈 ??? */;
-        properties.rygb = properties.RYGB.toLowerCase() as any;
         properties.type = 'bridge';
       });
       return arcgis;

@@ -88,7 +88,6 @@ export interface BridgeProperties {
   /* eslint-enable @typescript-eslint/member-ordering */
   // 👇 translated bridges schema
   name: string;
-  rygb: 'red' | 'yellow' | 'green' | 'blue';
   // 🔥 disambiguate bridges, flood hazards and stream crossings
   type: 'bridge';
 }
