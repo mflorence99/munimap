@@ -1,4 +1,5 @@
 import { AbstractMapPage } from '../abstract-map';
+import { DPWLandmarkPropertiesComponent } from './dpwlandmark-properties';
 import { RootPage } from '../root/page';
 
 import { Actions } from '@ngxs/store';
@@ -8,6 +9,7 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
+import { ComponentFactoryResolver } from '@angular/core';
 import { ContextMenuComponent } from 'app/components/contextmenu';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
@@ -41,6 +43,7 @@ export class DPWPage extends AbstractMapPage {
     protected actions$: Actions,
     protected authState: AuthState,
     protected destroy$: DestroyService,
+    protected resolver: ComponentFactoryResolver,
     protected root: RootPage,
     protected route: ActivatedRoute,
     protected router: Router,
@@ -66,7 +69,7 @@ export class DPWPage extends AbstractMapPage {
       path: this.olMap.path,
       properties: {
         metadata: {
-          condition: 'unknown',
+          StructCond: 'unknown',
           name: 'Culvert',
           type: 'stream crossing'
         } as Partial<StreamCrossingProperties>
@@ -83,6 +86,13 @@ export class DPWPage extends AbstractMapPage {
   }
 
   canDeleteLandmark(event?: MouseEvent): boolean {
+    return this.#can(
+      event,
+      !this.olMap.roSelection && this.olMap.selected.length === 1
+    );
+  }
+
+  canLandmarkProperties(event?: MouseEvent): boolean {
     return this.#can(
       event,
       !this.olMap.roSelection && this.olMap.selected.length === 1
@@ -109,6 +119,11 @@ export class DPWPage extends AbstractMapPage {
       case 'delete-landmark':
         this.store.dispatch(
           new DeleteLandmark({ id: this.olMap.selectedIDs[0] })
+        );
+        break;
+      case 'landmark-properties':
+        cFactory = this.resolver.resolveComponentFactory(
+          DPWLandmarkPropertiesComponent
         );
         break;
       case 'move-landmark':

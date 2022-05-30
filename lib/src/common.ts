@@ -687,7 +687,6 @@ export interface StreamCrossingProperties {
   /* eslint-enable @typescript-eslint/naming-convention */
   /* eslint-enable @typescript-eslint/member-ordering */
   // 👇 translated streamcrossings schema
-  condition: 'good' | 'fair' | 'poor' | 'unknown';
   name: string;
   // 🔥 disambiguate bridges, flood hazards and stream crossings
   type: 'stream crossing';

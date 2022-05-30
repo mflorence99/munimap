@@ -8,6 +8,7 @@ import { ControlPanelEasyTrailsComponent } from './components/controlpanel-easyt
 import { ControlPanelPropertiesComponent } from './components/controlpanel-properties';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
+import { DPWLandmarkPropertiesComponent } from './pages/dpw/dpwlandmark-properties';
 import { DPWPage } from './pages/dpw/page';
 import { ImportLandmarksComponent } from './pages/property/import-landmarks';
 import { ListPage } from './pages/list/page';
@@ -237,6 +238,7 @@ const COMPONENTS = [
   ControlPanelEasyTrailsComponent,
   ControlPanelPropertiesComponent,
   CreatePropertyMapComponent,
+  DPWLandmarkPropertiesComponent,
   EmailAddressValidator,
   ImportLandmarksComponent,
   MergeParcelsComponent,

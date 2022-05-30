@@ -34,8 +34,6 @@ export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: StreamCrossingProperties = feature.attributes;
-        properties.condition =
-          properties.StructCond?.toLowerCase() || ('unknown' as any);
         properties.name = properties.AssetType || properties.StructType;
         properties.type = 'stream crossing';
       });

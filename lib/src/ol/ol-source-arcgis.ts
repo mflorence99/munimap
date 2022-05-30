@@ -30,6 +30,9 @@ import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
 
+// 👇 we don't care about the ArcGIS schema as defined in
+//    @arcgis/core because we immediately convert it to GeoJSON
+
 @Component({ template: '' })
 export abstract class OLSourceArcGISComponent {
   static schemaAlreadyAnalyzed: Record<string, boolean> = {};

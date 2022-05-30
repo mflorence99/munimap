@@ -27,6 +27,7 @@ export class OLAdaptorStreamCrossingsComponent implements Adaptor {
 
   // 👇 construct LandmarkProperties
   adapt(streamCrossing: StreamCrossingProperties): LandmarkProperties[] {
+    const condition = streamCrossing.StructCond?.toLowerCase() || 'unknown';
     return [
       new LandmarkPropertiesClass({
         fontColor: '--map-streamcrossing-line-color',
@@ -34,7 +35,7 @@ export class OLAdaptorStreamCrossingsComponent implements Adaptor {
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',
-        iconColor: `--map-streamcrossing-${streamCrossing.condition}-icon-color`,
+        iconColor: `--map-streamcrossing-${condition}-icon-color`,
         iconOpacity: 1,
         iconOutline: true,
         iconOutlineColor: '--map-streamcrossing-line-color',

@@ -367,6 +367,15 @@
       </li>
 
       <li
+        (click)="canLandmarkProperties($event) && onContextMenu('landmark-properties')"
+        [class.disabled]="!canLandmarkProperties()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
+        <p>Modify {{ selectedLandmarkType() }} settings &hellip;</p>
+      </li>
+
+      <li
         (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
         [class.disabled]="!canMoveLandmark()"
         class="item"
