@@ -1,5 +1,6 @@
 import { AbstractMapPage } from '../abstract-map';
 import { DPWLandmarkPropertiesComponent } from './dpwlandmark-properties';
+import { ImportDPWLandmarksComponent } from './import-dpwlandmarks';
 import { RootPage } from '../root/page';
 
 import { Actions } from '@ngxs/store';
@@ -93,6 +94,11 @@ export class DPWPage extends AbstractMapPage {
     );
   }
 
+  // 🔥 only stream crossings supported for now
+  canImportLandmarks(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 0);
+  }
+
   canLandmarkProperties(event?: MouseEvent): boolean {
     return this.#can(
       event,
@@ -120,6 +126,11 @@ export class DPWPage extends AbstractMapPage {
       case 'delete-landmark':
         this.store.dispatch(
           new DeleteLandmark({ id: this.olMap.selectedIDs[0] })
+        );
+        break;
+      case 'import-landmarks':
+        cFactory = this.resolver.resolveComponentFactory(
+          ImportDPWLandmarksComponent
         );
         break;
       case 'landmark-properties':

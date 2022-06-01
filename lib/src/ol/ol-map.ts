@@ -404,6 +404,7 @@ export class OLMapComponent
   ): void {
     event.preventDefault();
     this.contextMenuAt = this.coordinateFromEvent(event.clientX, event.clientY);
+    console.log(toLonLat(this.contextMenuAt));
     this.contextMenu$.next(event);
   }
 

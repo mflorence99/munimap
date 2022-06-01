@@ -358,6 +358,15 @@
   <nav class="contextmenu">
     <ul>
       <li
+        (click)="canImportLandmarks($event) && onContextMenu('import-landmarks')"
+        [class.disabled]="!canImportLandmarks()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['far', 'file-import']"></fa-icon>
+        <p>Import from GPX or KML files &hellip;</p>
+      </li>
+
+      <li
         (click)="canAddLandmark($event) && onContextMenu('add-landmark')"
         [class.disabled]="!canAddLandmark()"
         class="item"

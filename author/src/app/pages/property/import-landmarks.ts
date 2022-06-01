@@ -54,13 +54,13 @@ export class ImportLandmarksComponent implements SidebarComponent {
   @Input() selectedIDs: (string | number)[];
 
   constructor(
-    private authState: AuthState,
-    private cdf: ChangeDetectorRef,
-    private firestore: Firestore,
-    private store: Store
+    protected authState: AuthState,
+    protected cdf: ChangeDetectorRef,
+    protected firestore: Firestore,
+    protected store: Store
   ) {}
 
-  async #alreadyImported(importHash: string): Promise<boolean> {
+  async alreadyImported(importHash: string): Promise<boolean> {
     const workgroup = AuthState.workgroup(this.authState.currentProfile());
     console.log(
       `%cFirestore query: landmarks where owner in ${JSON.stringify(
@@ -78,9 +78,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
     return !docs.empty;
   }
 
-  async #analyzeImports(
-    record: any
-  ): Promise<GeoJSON.FeatureCollection<any>[]> {
+  async analyzeImports(record: any): Promise<GeoJSON.FeatureCollection<any>[]> {
     const geojsons: GeoJSON.FeatureCollection<any>[] = [];
     try {
       for (const file of this.files) {
@@ -129,7 +127,35 @@ export class ImportLandmarksComponent implements SidebarComponent {
     }
   }
 
-  async #makeLandmarks(
+  atLeastOneSelected(): boolean {
+    return Object.values(this.record).some((checked) => checked);
+  }
+
+  cancel(): void {
+    if (this.importing) this.cancelling = true;
+    else this.drawer.close();
+  }
+
+  async import(record: any): Promise<void> {
+    this.cancelling = false;
+    this.errorMessages = [];
+    this.importing = true;
+    this.numImported = 0;
+    this.numImporting = 0;
+    const geojsons = await this.analyzeImports(record);
+    this.numImporting = geojsons.reduce(
+      (acc, geojson) => acc + geojson.features.length,
+      0
+    );
+    this.cdf.markForCheck();
+    await this.makeLandmarks(geojsons);
+    this.cancelling = false;
+    this.importing = false;
+    this.cdf.markForCheck();
+    if (this.errorMessages.length === 0) this.cancel();
+  }
+
+  async makeLandmarks(
     geojsons: GeoJSON.FeatureCollection<any>[]
   ): Promise<void> {
     for (const geojson of geojsons) {
@@ -140,7 +166,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
         this.cdf.markForCheck();
         // 👇 potentially one landmark per feature
         const importHash = hash.MD5(feature);
-        const alreadyImported = await this.#alreadyImported(importHash);
+        const alreadyImported = await this.alreadyImported(importHash);
         if (!alreadyImported) {
           // 👇 yes, I know this looks identical to the code in
           //    ol-interaction-drawlandmarks -- but we MAY want
@@ -213,34 +239,6 @@ export class ImportLandmarksComponent implements SidebarComponent {
         }
       }
     }
-  }
-
-  atLeastOneSelected(): boolean {
-    return Object.values(this.record).some((checked) => checked);
-  }
-
-  cancel(): void {
-    if (this.importing) this.cancelling = true;
-    else this.drawer.close();
-  }
-
-  async import(record: any): Promise<void> {
-    this.cancelling = false;
-    this.errorMessages = [];
-    this.importing = true;
-    this.numImported = 0;
-    this.numImporting = 0;
-    const geojsons = await this.#analyzeImports(record);
-    this.numImporting = geojsons.reduce(
-      (acc, geojson) => acc + geojson.features.length,
-      0
-    );
-    this.cdf.markForCheck();
-    await this.#makeLandmarks(geojsons);
-    this.cancelling = false;
-    this.importing = false;
-    this.cdf.markForCheck();
-    if (this.errorMessages.length === 0) this.cancel();
   }
 
   refresh(): void {}

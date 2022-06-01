@@ -10,6 +10,7 @@ import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
 import { DPWLandmarkPropertiesComponent } from './pages/dpw/dpwlandmark-properties';
 import { DPWPage } from './pages/dpw/page';
+import { ImportDPWLandmarksComponent } from './pages/dpw/import-dpwlandmarks';
 import { ImportLandmarksComponent } from './pages/property/import-landmarks';
 import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
@@ -240,6 +241,7 @@ const COMPONENTS = [
   CreatePropertyMapComponent,
   DPWLandmarkPropertiesComponent,
   EmailAddressValidator,
+  ImportDPWLandmarksComponent,
   ImportLandmarksComponent,
   MergeParcelsComponent,
   MessageDialogComponent,
