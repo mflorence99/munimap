@@ -84,7 +84,7 @@ export class DPWPage extends AbstractMapPage {
 
   // 🔥 only stream crossings supported for now
   canAddLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 0);
+    return this.#can(event, true);
   }
 
   canDeleteLandmark(event?: MouseEvent): boolean {
@@ -96,7 +96,7 @@ export class DPWPage extends AbstractMapPage {
 
   // 🔥 only stream crossings supported for now
   canImportLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 0);
+    return this.#can(event, true);
   }
 
   canLandmarkProperties(event?: MouseEvent): boolean {

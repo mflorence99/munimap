@@ -10,6 +10,10 @@ const PROFILES = [
     workgroup: 'nick@mnassessing.com kchidester@washingtonnh.org'
   },
   {
+    email: 'mflo999+dpw@gmail.com',
+    workgroup: 'ethayer@washingtonnh.org'
+  },
+  {
     email: 'mflo999+flo@gmail.com',
     workgroup: 'mflo999@gmail.com'
   },
@@ -28,6 +32,11 @@ const USERS = [
     displayName: 'Mark Florence'
   },
   {
+    email: 'mflo999+dpw@gmail.com',
+    password: '33Buster44@@',
+    displayName: 'Mark Florence'
+  },
+  {
     email: 'mflo999+flo@gmail.com',
     password: 'password',
     displayName: 'Marco Polo'
@@ -36,6 +45,11 @@ const USERS = [
     email: 'cmoskey@gmail.com',
     password: 'password',
     displayName: 'Carl Moskey'
+  },
+  {
+    email: 'ethayer@washingtonnh.org',
+    password: 'password',
+    displayName: 'Ed Thayer'
   },
   {
     email: 'marshal@gsinet.net',

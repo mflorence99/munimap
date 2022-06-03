@@ -520,11 +520,11 @@ export class PropertyPage extends AbstractMapPage {
   }
 
   canDrawLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 0);
+    return this.#can(event, true);
   }
 
   canImportLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 0);
+    return this.#can(event, true);
   }
 
   canMoveLandmark(event?: MouseEvent): boolean {
