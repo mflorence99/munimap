@@ -248,7 +248,8 @@ const DIRECTIVES = [];
 
 const PAGES = [DPWPage, ParcelsPage, PropertyPage, RootPage, TopoPage];
 
-const ROUTES = [
+// 🔥 type error introduced in Angular v14 -- cause unknown
+const ROUTES: any = [
   {
     path: '',
     resolve: {

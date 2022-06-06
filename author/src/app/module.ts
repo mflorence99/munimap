@@ -357,7 +357,8 @@ const redirectUnauthorizedToLogin = (): AuthPipe =>
   redirectUnauthorizedTo(['login']);
 const redirectLoggedInToMaps = (): AuthPipe => redirectLoggedInTo(['create']);
 
-const ROUTES = [
+// 🔥 type error introduced in Angular v14 -- cause unknown
+const ROUTES: any = [
   {
     path: 'login',
     component: LoginPage,

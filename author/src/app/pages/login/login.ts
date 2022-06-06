@@ -74,7 +74,7 @@ export class LoginPage {
           'color: goldenrod'
         );
       })
-      .catch((error) => {
+      .catch(() => {
         // 👇 the Firebase error message isn't that helpful
         //    this.errorMessage = this.#extractFirebaseMessage(error.message);
         this.errorMessage = 'Email address and password invalid';
