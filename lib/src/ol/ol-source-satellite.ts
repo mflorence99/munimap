@@ -65,7 +65,6 @@ export class OLSourceSatelliteComponent {
     this.olTileWMS = new OLTileWMS({
       attributions: [attribution],
       crossOrigin: 'anonymous',
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       params: { LAYERS: 'dummy' },
       tileLoadFunction: this.#loader.bind(this),
       url: 'http://dummy.com'

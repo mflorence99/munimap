@@ -66,7 +66,6 @@ export class ImportDPWLandmarksComponent extends ImportLandmarksComponent {
             case 'Point':
               properties = {
                 metadata: {
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
                   StructCond: 'unknown',
                   name: feature.properties.name,
                   type: 'stream crossing'

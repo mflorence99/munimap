@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { Building } from '../lib/src/common';
 import { Buildings } from '../lib/src/common';
 

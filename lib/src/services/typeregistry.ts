@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { ParcelPropertiesUsage } from '../common';
 import { ParcelPropertiesUse } from '../common';
 

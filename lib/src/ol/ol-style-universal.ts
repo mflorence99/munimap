@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { Adaptor } from './ol-adaptor';
 import { AdaptorComponent } from './ol-adaptor';
 import { LandmarkProperties } from '../common';

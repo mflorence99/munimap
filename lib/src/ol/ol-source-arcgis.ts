@@ -189,16 +189,8 @@ export abstract class OLSourceArcGISComponent {
         }
         return `${field.name}: ${type} /* 👈 ${field.alias.trim()} */;`;
       });
-      js.unshift(
-        `// 👇 original ${this.getProxyPath()} schema`,
-        '/* eslint-disable @typescript-eslint/naming-convention */',
-        '/* eslint-disable @typescript-eslint/member-ordering */'
-      );
-      js.push(
-        '/* eslint-enable @typescript-eslint/naming-convention */',
-        '/* eslint-enable @typescript-eslint/member-ordering */',
-        `// 👇 translated ${this.getProxyPath()} schema`
-      );
+      js.unshift(`// 👇 original ${this.getProxyPath()} schema`);
+      js.push(`// 👇 translated ${this.getProxyPath()} schema`);
       console.log(`${js.join('\n')}\n`);
     }
   }

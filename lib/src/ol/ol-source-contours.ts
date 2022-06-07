@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLMapComponent } from './ol-map';
 

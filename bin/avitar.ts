@@ -110,8 +110,6 @@ function searchForAnomalies(): void {
   }
 }
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sample = {
   PID: '000000000001000000',

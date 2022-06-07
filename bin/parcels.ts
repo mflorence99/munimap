@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Parcel } from '../lib/src/common';
 import { Parcels } from '../lib/src/common';
 

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { Parcels } from '../lib/src/common';
 
 import { simplify } from '../lib/src/common';

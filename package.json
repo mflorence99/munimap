@@ -33,7 +33,7 @@
     "firebase:live:maps:curated": "ts-node --dir bin maps-curated.ts",
     "firebase:live:parcels:curated": "ts-node --dir bin parcel-stealer.ts",
     "firebase:live:users:curated": "ts-node --dir bin users-curated.ts",
-    "lint": "eslint --ext ts ./",
+    "lint": "TIMING=1 time eslint --ext ts ./",
     "patcher": "ts-node --dir bin patcher.ts",
     "postinstall": "npm run patcher",
     "prettier": "prettier --write .",

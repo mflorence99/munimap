@@ -14,5 +14,10 @@
     "eslint-plugin-import-splitnsort",
     "eslint-plugin-prefer-arrow"
   ],
-  "root": true
+  "root": true,
+  "rules": {
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/naming-convention": "off"
+  }
 }

@@ -70,7 +70,6 @@ export class DPWPage extends AbstractMapPage {
       path: this.olMap.path,
       properties: {
         metadata: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           StructCond: 'unknown',
           name: 'Culvert',
           type: 'stream crossing'
