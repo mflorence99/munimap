@@ -390,7 +390,7 @@ export type ParcelPropertiesUsage =
   | '300' // Town property
   | '400' // State property
   | '500' // State park
-  | '501' // Towm forest
+  | '501' // Town forest
   | '502'; // Conservation land
 
 export type ParcelPropertiesUse =

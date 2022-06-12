@@ -1,6 +1,6 @@
 {
   "name": "munimap",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "MuniMap",
   "license": "MIT",
   "repository": {
@@ -37,7 +37,7 @@
     "patcher": "ts-node --dir bin patcher.ts",
     "postinstall": "npm run patcher",
     "prettier": "prettier --write .",
-    "proxy:all": "npm run proxy:state && npm run proxy:counties && npm run proxy:towns && npm run proxy:indexer && npm run proxy:buildings && npm run proxy:lakes && npm run proxy:parcels && npm run proxy:places && npm run proxy:powerlines && npm run proxy:railroads && npm run proxy:rivers && npm run proxy:roads && npm run proxy:trails && npm run proxy:indexer && npm run proxy:curated && npm run proxy:avitar",
+    "proxy:all": "npm run proxy:state && npm run proxy:counties && npm run proxy:towns && npm run proxy:indexer && npm run proxy:buildings && npm run proxy:lakes && npm run proxy:parcels && npm run proxy:places && npm run proxy:powerlines && npm run proxy:railroads && npm run proxy:rivers && npm run proxy:roads && npm run proxy:trails && npm run proxy:indexer && npm run proxy:curated",
     "proxy:avitar": "ts-node --dir bin avitar.ts",
     "proxy:buildings": "ts-node --dir bin buildings.ts",
     "proxy:buildings:curated": "ts-node --dir bin buildings-curated.ts",
@@ -46,7 +46,7 @@
     "proxy:explorer": "ts-node --dir bin explorer.ts",
     "proxy:indexer": "ts-node --dir bin indexer.ts",
     "proxy:lakes": "ts-node --dir bin lakes.ts",
-    "proxy:parcels": "npm run proxy:parcels:belknap && npm run proxy:parcels:carroll && npm run proxy:parcels:cheshire && npm run proxy:parcels:coos && npm run proxy:parcels:grafton && npm run proxy:parcels:hillsborough && npm run proxy:parcels:merrimack && npm run proxy:parcels:rockingham && npm run proxy:parcels:strafford && npm run proxy:parcels:sullivan",
+    "proxy:parcels": "npm run proxy:parcels:belknap && npm run proxy:parcels:carroll && npm run proxy:parcels:cheshire && npm run proxy:parcels:coos && npm run proxy:parcels:grafton && npm run proxy:parcels:hillsborough && npm run proxy:parcels:merrimack && npm run proxy:parcels:rockingham && npm run proxy:parcels:strafford && npm run proxy:parcels:sullivan && npm run proxy:parcels:curated",
     "proxy:parcels:belknap": "ts-node --dir bin parcels.ts --county BELKNAP",
     "proxy:parcels:carroll": "ts-node --dir bin parcels.ts --county CARROLL",
     "proxy:parcels:cheshire": "ts-node --dir bin parcels.ts --county CHESHIRE",

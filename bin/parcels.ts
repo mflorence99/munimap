@@ -80,12 +80,14 @@ const tooManyZeroAreaParcelsRatio = 0.5;
 
 // 👇 we won't even bother to look at these towns as we know they're
 //    too big and analyzing them can cause out-of-memory conditions
+//    NOTE: we exclude HENNIKER because we have manually tweaked it
 //    NOTE: we exclude WASHINGTON because we already have its legacy data
 // 👉 https://www.newhampshire-demographics.com/cities_by_population
 const exclusions = [
   'CONCORD',
   'DERRY',
   'DOVER',
+  'HENNIKER',
   'HUDSON',
   'LONDONDERRY',
   'MANCHESTER',
