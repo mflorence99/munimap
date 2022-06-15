@@ -1,4 +1,4 @@
-import { LegendComponent } from '../legend';
+import { AbstractLegendComponent } from '../abstract-legend';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -11,7 +11,7 @@ import { VersionService } from '@lib/services/version';
   styleUrls: ['../legend.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: './legend.html'
 })
-export class PropertyLegendComponent extends LegendComponent {
+export class PropertyLegendComponent extends AbstractLegendComponent {
   constructor(registry: TypeRegistry, version: VersionService) {
     super(registry, version);
   }

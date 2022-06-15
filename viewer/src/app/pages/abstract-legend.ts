@@ -8,7 +8,7 @@ import OLFillPattern from 'ol-ext/style/FillPattern';
 @Component({
   template: ''
 })
-export abstract class LegendComponent {
+export abstract class AbstractLegendComponent {
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast
   //    with a black background
