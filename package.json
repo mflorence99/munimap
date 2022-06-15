@@ -15,7 +15,7 @@
     "build:proxy": "npm run compile:proxy && cp proxy/package.json dist/proxy && npm --prefix dist/proxy i",
     "build:viewer:henniker": "npm run assets:viewer:henniker && ng build viewer --configuration production",
     "build:viewer:washington": "npm run assets:viewer:washington && ng build viewer --configuration production",
-    "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm --legacy-peer-deps install && npm outdated",
+    "clean:deps": "rm -rf node_modules && rm -f package-lock.json && npm install && npm outdated",
     "compile:proxy": "rm -rf dist/proxy/node_modules && rm -f dist/proxy/package-lock.json && tsc -p proxy/src",
     "deploy:aws:author": "./author/deploy-aws.sh",
     "deploy:aws:proxy": "npm run build:proxy && cp proxy/serverless.yml dist/proxy && cd dist/proxy && serverless deploy",
@@ -73,8 +73,8 @@
     "serve:viewer:henniker": "npm run assets:viewer:henniker && ng serve viewer --port 4202 --allowed-hosts henniker.lots.online",
     "serve:viewer:ssl": "ws -p 8102 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/viewer --log.format dev",
     "serve:viewer:washington": "npm run assets:viewer:washington && ng serve viewer --port 4202 --allowed-hosts washington.lots.online",
-    "xxx": "npm run assets:viewer:washington && ng build viewer --watch",
-    "yyy": "ng build author --watch"
+    "xxx": "ng build author --watch",
+    "yyy": "npm run assets:viewer:washington && ng build viewer --watch"
   },
   "dependencies": {
     "@angular/animations": "^14",
@@ -149,7 +149,7 @@
     "url-parse": "^1",
     "uuid": "^8",
     "yargs": "^17",
-    "zone.js": "0.11.5"
+    "zone.js": "0.11.6"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14",

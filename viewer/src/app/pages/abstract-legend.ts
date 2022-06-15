@@ -1,13 +1,9 @@
-import { Component } from '@angular/core';
 import { Descriptor } from '@lib/services/typeregistry';
 import { TypeRegistry } from '@lib/services/typeregistry';
 import { VersionService } from '@lib/services/version';
 
 import OLFillPattern from 'ol-ext/style/FillPattern';
 
-@Component({
-  template: ''
-})
 export abstract class AbstractLegendComponent {
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast

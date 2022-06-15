@@ -5,10 +5,8 @@ import { OLMapComponent } from './ol-map';
 import { dedupe } from '../common';
 import { environment } from '../environment';
 
-import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
-import { Input } from '@angular/core';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
 import { arcgisToGeoJSON } from '@esri/arcgis-to-geojson-utils';
@@ -33,12 +31,10 @@ import OLVector from 'ol/source/Vector';
 // 👇 we don't care about the ArcGIS schema as defined in
 //    @arcgis/core because we immediately convert it to GeoJSON
 
-@Component({ template: '' })
 export abstract class OLSourceArcGISComponent {
   static schemaAlreadyAnalyzed: Record<string, boolean> = {};
 
-  @Input() maxRequests = 8;
-
+  maxRequests = 8;
   olVector: OLVector<any>;
 
   constructor(

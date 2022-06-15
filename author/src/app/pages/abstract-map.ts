@@ -5,23 +5,18 @@ import { SidebarComponent } from '../components/sidebar-component';
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
-import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { LoadMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { SetMap } from '@lib/state/map';
 import { Store } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
@@ -31,22 +26,14 @@ import { unByKey } from 'ol/Observable';
 
 import OLGeoJSON from 'ol/format/GeoJSON';
 
-@Component({ template: '' })
-export abstract class AbstractMapPage implements OnInit {
-  @ViewChild(ContextMenuHostDirective)
+export abstract class AbstractMapPage {
   contextMenuHost: ContextMenuHostDirective;
-
   creating = false;
-
-  @ViewChild('drawer') drawer: MatDrawer;
-
+  drawer: MatDrawer;
   env = environment;
-
-  @Select(MapState) mapState$: Observable<Map>;
-
-  @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+  mapState$: Observable<Map>;
+  olMap: OLMapComponent;
+  satelliteView$: Observable<boolean>;
 
   constructor(
     protected actions$: Actions,
@@ -121,11 +108,6 @@ export abstract class AbstractMapPage implements OnInit {
     return /^mflo999.*@gmail\.com$/.test(this.authState.currentProfile().email);
   }
 
-  ngOnInit(): void {
-    this.#handleActions$();
-    this.#loadMap();
-  }
-
   onContextMenuImpl(cFactory: ComponentFactory<SidebarComponent>): void {
     this.drawer.open();
     this.contextMenuHost.vcRef.clear();
@@ -156,6 +138,11 @@ export abstract class AbstractMapPage implements OnInit {
     this.drawer.closedStart.subscribe(() => {
       unByKey(key);
     });
+  }
+
+  onInit(): void {
+    this.#handleActions$();
+    this.#loadMap();
   }
 
   abstract getType(): MapType;

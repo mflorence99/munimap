@@ -12,12 +12,20 @@ import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ContextMenuComponent } from 'app/components/contextmenu';
+import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
+import { Map } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
+import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
+import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Select } from '@ngxs/store';
 import { SidebarComponent } from 'app/components/sidebar-component';
 import { Store } from '@ngxs/store';
 import { StreamCrossingProperties } from '@lib/common';
@@ -34,11 +42,22 @@ import { toLonLat } from 'ol/proj';
   styleUrls: ['../abstract-map.scss'],
   templateUrl: './page.html'
 })
-export class DPWPage extends AbstractMapPage {
+export class DPWPage extends AbstractMapPage implements OnInit {
   @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
+
+  @ViewChild(ContextMenuHostDirective)
+  contextMenuHost: ContextMenuHostDirective;
+
+  @ViewChild('drawer') drawer: MatDrawer;
+
+  @Select(MapState) mapState$: Observable<Map>;
 
   @ViewChild(OLOverlayLandmarkLabelComponent)
   moveLandmark: OLOverlayLandmarkLabelComponent;
+
+  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected actions$: Actions,
@@ -114,6 +133,10 @@ export class DPWPage extends AbstractMapPage {
 
   getType(): MapType {
     return 'dpw';
+  }
+
+  ngOnInit(): void {
+    this.onInit();
   }
 
   onContextMenu(key: string): void {

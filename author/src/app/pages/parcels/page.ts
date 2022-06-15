@@ -14,11 +14,19 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
+import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { DestroyService } from '@lib/services/destroy';
+import { Map } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
+import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
+import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
@@ -30,12 +38,23 @@ import { ViewState } from '@lib/state/view';
   styleUrls: ['../abstract-map.scss'],
   templateUrl: './page.html'
 })
-export class ParcelsPage extends AbstractMapPage {
+export class ParcelsPage extends AbstractMapPage implements OnInit {
+  @ViewChild(ContextMenuHostDirective)
+  contextMenuHost: ContextMenuHostDirective;
+
+  @ViewChild('drawer') drawer: MatDrawer;
+
   @ViewChild(OLInteractionRedrawParcelComponent)
   interactionRedraw: OLInteractionRedrawParcelComponent;
 
+  @Select(MapState) mapState$: Observable<Map>;
+
+  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+
   @ViewChild(OLOverlayParcelLabelComponent)
   overlayLabel: OLOverlayParcelLabelComponent;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected actions$: Actions,
@@ -86,6 +105,10 @@ export class ParcelsPage extends AbstractMapPage {
 
   getType(): MapType {
     return 'parcels';
+  }
+
+  ngOnInit(): void {
+    this.onInit();
   }
 
   onContextMenu(key: string): void {

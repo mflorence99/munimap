@@ -2,11 +2,8 @@ import { DestroyService } from '../services/destroy';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
-import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { Observable } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
 
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
@@ -18,8 +15,7 @@ import OLVectorLayer from 'ol/layer/Vector';
 import OLVectorSource from 'ol/source/Vector';
 import simplify from '@turf/simplify';
 
-@Component({ template: '' })
-export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
+export abstract class OLInteractionDrawComponent {
   #drawStartKey: OLEventsKey;
   #format: OLGeoJSON;
   #layer: OLVectorLayer<any>;
@@ -66,11 +62,11 @@ export abstract class OLInteractionDrawComponent implements OnDestroy, OnInit {
     this.#touched = false;
   }
 
-  ngOnDestroy(): void {
+  onDestroy(): void {
     this.#stopDraw();
   }
 
-  ngOnInit(): void {
+  onInit(): void {
     this.#handleStreams$();
   }
 

@@ -1,33 +1,21 @@
-import { Component } from '@angular/core';
 import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { Observable } from 'rxjs';
-import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
-import { ViewState } from '@lib/state/view';
 import { ViewStateModel } from '@lib/state/view';
 
 import { combineLatest } from 'rxjs';
 import { environment } from '@lib/environment';
 import { map } from 'rxjs/operators';
 
-@Component({ template: '' })
-export abstract class AbstractMapPage implements OnInit {
+export abstract class AbstractMapPage {
   env = environment;
-
-  @Select(ViewState.gps) gps$: Observable<boolean>;
-
-  @Select(MapState) map$: Observable<Map>;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
-
-  @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
-
-  @Select(ViewState) view$: Observable<ViewStateModel>;
-
+  gps$: Observable<boolean>;
+  map$: Observable<Map>;
+  satelliteView$: Observable<boolean>;
+  satelliteYear$: Observable<string>;
+  view$: Observable<ViewStateModel>;
   zoom$: Observable<number>;
 
-  ngOnInit(): void {
+  onInit(): void {
     this.zoom$ = combineLatest([this.map$, this.view$]).pipe(
       // 💣 sometimes triggered by ???
       map(([map, view]) => view.viewByPath[map.path]?.zoom ?? 15)

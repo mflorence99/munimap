@@ -2,11 +2,8 @@ import { DestroyService } from '../services/destroy';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
-import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { Observable } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
 
 import { click } from 'ol/events/condition';
 import { merge } from 'rxjs';
@@ -24,10 +21,7 @@ import OLModify from 'ol/interaction/Modify';
 import OLPolygon from 'ol/geom/Polygon';
 import OLSnap from 'ol/interaction/Snap';
 
-@Component({ template: '' })
-export abstract class OLInteractionRedrawComponent
-  implements OnDestroy, OnInit
-{
+export abstract class OLInteractionRedrawComponent {
   #format: OLGeoJSON;
   #modifyStartKey: OLEventsKey;
   #touched = false;
@@ -76,11 +70,11 @@ export abstract class OLInteractionRedrawComponent
     this.#touched = false;
   }
 
-  ngOnDestroy(): void {
+  onDestroy(): void {
     this.#unsetFeature();
   }
 
-  ngOnInit(): void {
+  onInit(): void {
     this.#handleStreams$();
   }
 

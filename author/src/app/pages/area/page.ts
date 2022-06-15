@@ -6,10 +6,19 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { DestroyService } from '@lib/services/destroy';
+import { Map } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
 // 🔥 we only expect "area" maps to be printed, never viewed in the viewer
@@ -21,7 +30,18 @@ import { ViewState } from '@lib/state/view';
   styleUrls: ['../abstract-map.scss'],
   templateUrl: './page.html'
 })
-export class AreaPage extends AbstractMapPage {
+export class AreaPage extends AbstractMapPage implements OnInit {
+  @ViewChild(ContextMenuHostDirective)
+  contextMenuHost: ContextMenuHostDirective;
+
+  @ViewChild('drawer') drawer: MatDrawer;
+
+  @Select(MapState) mapState$: Observable<Map>;
+
+  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+
   constructor(
     protected actions$: Actions,
     protected authState: AuthState,
@@ -37,5 +57,9 @@ export class AreaPage extends AbstractMapPage {
 
   getType(): MapType {
     return 'area';
+  }
+
+  ngOnInit(): void {
+    this.onInit();
   }
 }

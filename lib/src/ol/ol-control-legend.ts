@@ -11,15 +11,10 @@ import { TypeRegistry } from '../services/typeregistry';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
-import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
 import { Subject } from 'rxjs';
-import { ViewChild } from '@angular/core';
 
 import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -40,19 +35,14 @@ interface Override {
   use?: string;
 }
 
-@Component({
-  template: ''
-})
-export abstract class OLControlLegendComponent implements Mapable, OnInit {
+export abstract class OLControlLegendComponent implements Mapable {
   #geojson$ = new Subject<Parcels>();
 
   areaByUsage: Record<string, number> = {};
   areaByUse: Record<string, number> = {};
   areaOfParcels: number;
   areaOfTown: number;
-
-  @Input() county: string;
-
+  county: string;
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast
   //    with a white background
@@ -62,18 +52,13 @@ export abstract class OLControlLegendComponent implements Mapable, OnInit {
     pattern: 'swamp',
     scale: 0.66
   });
-
-  @Input() id: string;
-
-  @ViewChild('legend', { static: true }) legend: ElementRef;
-
+  id: string;
+  legend: ElementRef;
   olControl: OLControl;
-
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
-
-  @Input() printing: boolean;
-  @Input() state: string;
-  @Input() title: string;
+  parcels$: Observable<Parcel[]>;
+  printing: boolean;
+  state: string;
+  title: string;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -177,7 +162,7 @@ export abstract class OLControlLegendComponent implements Mapable, OnInit {
     this.map.olMap.addControl(this.olControl);
   }
 
-  ngOnInit(): void {
+  onInit(): void {
     this.olControl = new Legend({ element: this.legend.nativeElement });
     this.#handleGeoJSON$();
     this.#handleStreams$();

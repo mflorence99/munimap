@@ -12,6 +12,8 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { tap } from 'rxjs/operators';
@@ -23,7 +25,10 @@ import { tap } from 'rxjs/operators';
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLInteractionRedrawParcelComponent extends OLInteractionRedrawComponent {
+export class OLInteractionRedrawParcelComponent
+  extends OLInteractionRedrawComponent
+  implements OnDestroy, OnInit
+{
   constructor(
     private authState: AuthState,
     private dialog: MatDialog,
@@ -33,6 +38,14 @@ export class OLInteractionRedrawParcelComponent extends OLInteractionRedrawCompo
     private store: Store
   ) {
     super(destroy$, layer, map);
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy;
+  }
+
+  ngOnInit(): void {
+    this.onInit();
   }
 
   saveRedraw(geojson: GeoJSON.Feature<any>): Observable<boolean> {

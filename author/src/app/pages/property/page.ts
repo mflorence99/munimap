@@ -11,15 +11,23 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
+import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
 import { LandmarkPropertiesClass } from '@lib/common';
+import { Map } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
 import { OLInteractionDrawLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmarks';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
+import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
+import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { UpdateLandmark } from '@lib/state/landmarks';
 import { ViewChild } from '@angular/core';
@@ -46,8 +54,11 @@ interface LandmarkConversion {
   styleUrls: ['../abstract-map.scss', './page.scss'],
   templateUrl: './page.html'
 })
-export class PropertyPage extends AbstractMapPage {
+export class PropertyPage extends AbstractMapPage implements OnInit {
   @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
+
+  @ViewChild(ContextMenuHostDirective)
+  contextMenuHost: ContextMenuHostDirective;
 
   conversions: LandmarkConversion[] = [
     {
@@ -125,11 +136,19 @@ export class PropertyPage extends AbstractMapPage {
   @ViewChild(OLInteractionDrawLandmarksComponent)
   drawLandmarks: OLInteractionDrawLandmarksComponent;
 
+  @ViewChild('drawer') drawer: MatDrawer;
+
+  @Select(MapState) mapState$: Observable<Map>;
+
   @ViewChild(OLOverlayLandmarkLabelComponent)
   moveLandmark: OLOverlayLandmarkLabelComponent;
 
+  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+
   @ViewChild(OLInteractionRedrawLandmarkComponent)
   redrawLandmark: OLInteractionRedrawLandmarkComponent;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected actions$: Actions,
@@ -556,6 +575,10 @@ export class PropertyPage extends AbstractMapPage {
 
   getType(): MapType {
     return 'property';
+  }
+
+  ngOnInit(): void {
+    this.onInit();
   }
 
   onContextMenu(key: string, opaque?: any): void {
