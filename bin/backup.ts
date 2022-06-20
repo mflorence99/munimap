@@ -16,29 +16,53 @@ firebase.initializeApp({
   databaseURL: 'https://washington-app-319514.firebaseio.com'
 });
 
+const batchSize = 100;
+
 const db = firestore.getFirestore();
 
-async function backup(nm: string): Promise<void> {
+async function backup(nm: string, key: string): Promise<void> {
   const backup = db.collection(`${nm}-backup`);
-  const docs = db.collection(`${nm}`);
+  const live = db.collection(`${nm}`);
 
   // 👇 remove all docs from the backup collection
-  const target = await backup.get();
+  let backupCursor = null;
   let numDeleted = 0;
-  for (const doc of target.docs) {
-    await doc.ref.delete();
-    process.stdout.write('.');
-    numDeleted += 1;
+  for (;;) {
+    const bite = await backup
+      .orderBy(key)
+      .startAfter(backupCursor)
+      .limit(batchSize)
+      .get();
+    if (bite.empty) break;
+    const batch = db.batch();
+    for (const doc of bite.docs) {
+      backupCursor = doc.data()[key];
+      batch.delete(doc.ref);
+      process.stdout.write('.');
+      numDeleted += 1;
+    }
+    await batch.commit();
   }
   console.log(`${numDeleted} deleted from ${nm}-backup`);
 
   // 👇 copy all docs from the source collection to the backup collection
-  const source = await docs.get();
+  let liveCursor = null;
   let numCopied = 0;
-  for (const doc of source.docs) {
-    await backup.doc(doc.id).set(doc.data());
-    process.stdout.write('.');
-    numCopied += 1;
+  for (;;) {
+    const bite = await live
+      .orderBy(key)
+      .startAfter(liveCursor)
+      .limit(batchSize)
+      .get();
+    if (bite.empty) break;
+    const batch = db.batch();
+    for (const doc of bite.docs) {
+      liveCursor = doc.data()[key];
+      batch.set(backup.doc(doc.id), doc.data());
+      process.stdout.write('.');
+      numCopied += 1;
+    }
+    await batch.commit();
   }
   console.log(`${numCopied} ${nm} backed up`);
 }
@@ -56,10 +80,10 @@ async function main(): Promise<void> {
     if (response.proceed.toLowerCase() !== 'y') return;
   }
 
-  await backup('landmarks');
-  await backup('maps');
-  await backup('parcels');
-  await backup('profiles');
+  await backup('landmarks', 'id');
+  await backup('maps', 'id');
+  await backup('parcels', 'id');
+  await backup('profiles', 'email');
 }
 
 main();
