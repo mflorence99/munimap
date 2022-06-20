@@ -18,6 +18,7 @@ import union from '@turf/union';
 
 const dist = './data';
 
+// 👇 this list is in REVERSE order of the timestamp we want
 const MAPS = [
   {
     bbox: null,
@@ -309,7 +310,7 @@ async function main(): Promise<void> {
     if (response.proceed.toLowerCase() !== 'y') return;
   }
 
-  for (const map of MAPS) {
+  for (const map of MAPS.slice().reverse()) {
     console.log(chalk.green(`... creating map ${map.id} from ${map.owner}`));
 
     // 👉 delete any prior map
