@@ -16,6 +16,7 @@
   ],
   "root": true,
   "rules": {
+    "no-constant-condition": ["error", { "checkLoops": false }],
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/unbound-method": "off",
     "@typescript-eslint/naming-convention": "off"

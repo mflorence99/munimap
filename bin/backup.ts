@@ -27,7 +27,7 @@ async function backup(nm: string, key: string): Promise<void> {
   // 👇 remove all docs from the backup collection
   let backupCursor = null;
   let numDeleted = 0;
-  for (;;) {
+  while (true) {
     const bite = await backup
       .orderBy(key)
       .startAfter(backupCursor)
@@ -48,7 +48,7 @@ async function backup(nm: string, key: string): Promise<void> {
   // 👇 copy all docs from the source collection to the backup collection
   let liveCursor = null;
   let numCopied = 0;
-  for (;;) {
+  while (true) {
     const bite = await live
       .orderBy(key)
       .startAfter(liveCursor)
