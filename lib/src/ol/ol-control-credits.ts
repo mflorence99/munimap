@@ -88,5 +88,6 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
 
   ngOnInit(): void {
     this.olControl = new Credits({ element: this.creditsRef.nativeElement });
+    this.olControl.setProperties({ component: this }, true);
   }
 }

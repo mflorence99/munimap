@@ -164,6 +164,7 @@ export abstract class OLControlLegendComponent implements Mapable {
 
   onInit(): void {
     this.olControl = new Legend({ element: this.legend.nativeElement });
+    this.olControl.setProperties({ component: this }, true);
     this.#handleGeoJSON$();
     this.#handleStreams$();
   }

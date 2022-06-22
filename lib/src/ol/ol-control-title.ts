@@ -63,5 +63,6 @@ export class OLControlTitleComponent implements Mapable, OnInit {
 
   ngOnInit(): void {
     this.olControl = new Title({ element: this.titleRef.nativeElement });
+    this.olControl.setProperties({ component: this }, true);
   }
 }

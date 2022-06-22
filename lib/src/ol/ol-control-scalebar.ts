@@ -90,6 +90,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
 
   ngOnInit(): void {
     this.olControl = new Scalebar({ element: this.barRef.nativeElement });
+    this.olControl.setProperties({ component: this }, true);
     this.#calculateMetrics();
   }
 }
