@@ -27,13 +27,14 @@ import { unByKey } from 'ol/Observable';
 import OLGeoJSON from 'ol/format/GeoJSON';
 
 export abstract class AbstractMapPage {
-  contextMenuHost: ContextMenuHostDirective;
   creating = false;
-  drawer: MatDrawer;
   env = environment;
-  mapState$: Observable<Map>;
-  olMap: OLMapComponent;
-  satelliteView$: Observable<boolean>;
+
+  abstract contextMenuHost: ContextMenuHostDirective;
+  abstract drawer: MatDrawer;
+  abstract mapState$: Observable<Map>;
+  abstract olMap: OLMapComponent;
+  abstract satelliteView$: Observable<boolean>;
 
   constructor(
     protected actions$: Actions,

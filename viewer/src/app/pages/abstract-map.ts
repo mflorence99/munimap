@@ -8,12 +8,13 @@ import { map } from 'rxjs/operators';
 
 export abstract class AbstractMapPage {
   env = environment;
-  gps$: Observable<boolean>;
-  map$: Observable<Map>;
-  satelliteView$: Observable<boolean>;
-  satelliteYear$: Observable<string>;
-  view$: Observable<ViewStateModel>;
   zoom$: Observable<number>;
+
+  abstract gps$: Observable<boolean>;
+  abstract map$: Observable<Map>;
+  abstract satelliteView$: Observable<boolean>;
+  abstract satelliteYear$: Observable<string>;
+  abstract view$: Observable<ViewStateModel>;
 
   onInit(): void {
     this.zoom$ = combineLatest([this.map$, this.view$]).pipe(

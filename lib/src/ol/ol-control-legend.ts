@@ -42,7 +42,6 @@ export abstract class OLControlLegendComponent implements Mapable {
   areaByUse: Record<string, number> = {};
   areaOfParcels: number;
   areaOfTown: number;
-  county: string;
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast
   //    with a white background
@@ -52,13 +51,15 @@ export abstract class OLControlLegendComponent implements Mapable {
     pattern: 'swamp',
     scale: 0.66
   });
-  id: string;
-  legend: ElementRef;
   olControl: OLControl;
-  parcels$: Observable<Parcel[]>;
-  printing: boolean;
-  state: string;
-  title: string;
+
+  abstract county: string;
+  abstract id: string;
+  abstract legend: ElementRef;
+  abstract parcels$: Observable<Parcel[]>;
+  abstract printing: boolean;
+  abstract state: string;
+  abstract title: string;
 
   constructor(
     private cdf: ChangeDetectorRef,
