@@ -39,8 +39,7 @@ export class OLAdaptorStreamCrossingsComponent implements Adaptor {
         iconOpacity: 1,
         iconOutline: true,
         iconOutlineColor: '--map-streamcrossing-line-color',
-        iconSymbol: '\uf1ce' /* 👈 circle-notch */,
-        name: streamCrossing.name,
+        iconSymbol: '\ue4ce' /* 👈 bridge-water */,
         textAlign: 'center',
         textBaseline: 'bottom'
       })

@@ -331,7 +331,7 @@ export class OLMapComponent
       // 🔥 this seems like a hack
       //    we know we use Font Awesome to show map icons and
       //    it must be loaded before we proceed
-      document.fonts.load(`normal bold 10px 'Font Awesome`).then(() => {
+      document.fonts.load(`normal bold 10px 'Font Awesome'`).then(() => {
         this.geoJSON
           .loadByIndex(this.route, path, 'boundary')
           .subscribe((boundary: GeoJSON.FeatureCollection<any, any>) => {

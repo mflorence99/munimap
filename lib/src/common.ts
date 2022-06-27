@@ -656,7 +656,6 @@ export interface StreamCrossingProperties {
   Wildlife: string /* 👈 92) Wildlife observed - US, DS, Structure */;
   WingAngL: string /* 👈 24) Inlet Wingwall Angle - Stream Left */;
   WingAngR: string /* 👈 25) Inlet Wingwall Angle - Stream Right */;
-  name: string;
   // 🔥 disambiguate bridges, flood hazards and stream crossings
   type: 'stream crossing';
 }

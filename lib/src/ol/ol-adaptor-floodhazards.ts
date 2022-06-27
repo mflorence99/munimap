@@ -28,13 +28,18 @@ export class OLAdaptorFloodHazardsComponent implements Adaptor {
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
+        fontColor: '--map-streamcrossing-line-color',
         fontFeet: this.floodHazardWidth,
+        fontOpacity: 1,
+        fontOutline: true,
         fontStyle: 'bold',
         iconColor: '--map-floodhazard-icon-color',
         iconOpacity: 1,
         iconOutline: true,
         iconOutlineColor: '--map-floodhazard-line-color',
-        iconSymbol: '\uf024' /* 👈 flag */,
+        iconSymbol: '\uf773' /* 👈 water */,
+        textAlign: 'center',
+        textBaseline: 'bottom',
         // 👉 flood hazard can be co-located with a bridge
         //    or a stream crossing
         textOffsetFeet: [this.floodHazardWidth, -this.floodHazardWidth]
@@ -46,7 +51,6 @@ export class OLAdaptorFloodHazardsComponent implements Adaptor {
   adaptWhenHovering(): LandmarkProperties[] {
     const hovering = this.adapt()[0];
     hovering.iconColor = '--map-landmark-hover';
-    hovering.iconOpacity = 1;
     return [hovering];
   }
 
@@ -54,7 +58,6 @@ export class OLAdaptorFloodHazardsComponent implements Adaptor {
   adaptWhenSelected(): LandmarkProperties[] {
     const selected = this.adapt()[0];
     selected.iconColor = '--map-landmark-select';
-    selected.iconOpacity = 1;
     return [selected];
   }
 }

@@ -39,10 +39,11 @@ export class OLAdaptorBridgesComponent implements Adaptor {
         iconOutline: true,
         iconOutlineColor: '--map-bridge-line-color',
         iconOpacity: 1,
-        iconSymbol: '\uf00d' /* 👈 times */,
-        name: 'Bridge',
+        iconSymbol: '\ue4c8' /* 👈 bridge */,
         textAlign: 'center',
-        textBaseline: 'bottom'
+        textBaseline: 'bottom',
+        // 👉 a bridge is often co-located with a stream crossing
+        textOffsetFeet: [-this.bridgeWidth, this.bridgeWidth]
       })
     ];
   }
