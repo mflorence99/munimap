@@ -2,7 +2,7 @@
   <tbody>
     <tr *ngFor="let scheme of schema">
       <td>{{ scheme[0]}}</td>
-      <td>{{ properties?.[scheme[1]] || ''}}</td>
+      <td>{{ properties?.[scheme[1]] || ''}} {{ scheme[2] || ''}}</td>
     </tr>
   </tbody>
 </table>

@@ -40,7 +40,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
     super(authState, cdf, firestore, store);
   }
 
-  #makeCulvertProperties(description: string): CulvertProperties {
+  #makeCulvertProperties(description: string): Partial<CulvertProperties> {
     const parts = description
       .replace(/<div>/g, '\n')
       .replace(/<\/div>/g, '')
@@ -49,7 +49,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       .replace(/[\u201C\u201D]/g, '"')
       .trim()
       .split('\n');
-    const properties: CulvertProperties = {
+    const properties: Partial<CulvertProperties> = {
       condition: null,
       diameter: null,
       floodHazard: null,

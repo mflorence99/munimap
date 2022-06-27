@@ -84,6 +84,7 @@ import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayGPSComponent } from '@lib/ol/ol-overlay-gps';
 import { OLPopupBridgePropertiesComponent } from '@lib/ol/dpw/ol-popup-bridgeproperties';
+import { OLPopupCulvertPropertiesComponent } from '@lib/ol/dpw/ol-popup-culvertproperties';
 import { OLPopupDPWPropertiesComponent } from '@lib/ol/dpw/ol-popup-dpwproperties';
 import { OLPopupFloodHazardPropertiesComponent } from '@lib/ol/dpw/ol-popup-floodhazardproperties';
 import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parcelproperties';
@@ -203,6 +204,7 @@ const COMPONENTS = [
   OLMapComponent,
   OLOverlayGPSComponent,
   OLPopupBridgePropertiesComponent,
+  OLPopupCulvertPropertiesComponent,
   OLPopupDPWPropertiesComponent,
   OLPopupFloodHazardPropertiesComponent,
   OLPopupParcelPropertiesComponent,
