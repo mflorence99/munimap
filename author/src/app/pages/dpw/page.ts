@@ -1,6 +1,6 @@
 import { AbstractMapPage } from '../abstract-map';
-import { DPWLandmarkPropertiesComponent } from './dpwlandmark-properties';
-import { ImportDPWLandmarksComponent } from './import-dpwlandmarks';
+import { CulvertPropertiesComponent } from './culvert-properties';
+import { ImportCulvertsComponent } from './import-culverts';
 import { RootPage } from '../root/page';
 
 import { Actions } from '@ngxs/store';
@@ -13,6 +13,7 @@ import { ComponentFactory } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ContextMenuComponent } from 'app/components/contextmenu';
 import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
+import { CulvertProperties } from '@lib/common';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
@@ -28,12 +29,13 @@ import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SidebarComponent } from 'app/components/sidebar-component';
 import { Store } from '@ngxs/store';
-import { StreamCrossingProperties } from '@lib/common';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
 import { makeLandmarkID } from '@lib/common';
 import { toLonLat } from 'ol/proj';
+
+// 🔥 only culverts are supported for now
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,11 +77,10 @@ export class DPWPage extends AbstractMapPage implements OnInit {
 
   #can(event: MouseEvent, condition: boolean): boolean {
     if (!condition && event) event.stopPropagation();
-    return this.selectedLandmarkType() && condition;
+    return condition;
   }
 
-  // 🔥 only stream crossings supported for now
-  #createLandmark(): void {
+  #createCulvert(): void {
     const landmark: Partial<Landmark> = {
       geometry: {
         coordinates: toLonLat(this.olMap.contextMenuAt),
@@ -89,10 +90,10 @@ export class DPWPage extends AbstractMapPage implements OnInit {
       path: this.olMap.path,
       properties: {
         metadata: {
-          StructCond: 'unknown',
-          name: 'Culvert',
-          type: 'stream crossing'
-        } as Partial<StreamCrossingProperties>
+          diameter: 12,
+          length: 20,
+          type: 'culvert'
+        } as Partial<CulvertProperties>
       },
       type: 'Feature'
     };
@@ -100,31 +101,29 @@ export class DPWPage extends AbstractMapPage implements OnInit {
     this.store.dispatch(new AddLandmark(landmark));
   }
 
-  // 🔥 only stream crossings supported for now
-  canAddLandmark(event?: MouseEvent): boolean {
+  canAddCulvert(event?: MouseEvent): boolean {
     return this.#can(event, true);
   }
 
-  canDeleteLandmark(event?: MouseEvent): boolean {
+  canCulvertProperties(event?: MouseEvent): boolean {
     return this.#can(
       event,
       !this.olMap.roSelection && this.olMap.selected.length === 1
     );
   }
 
-  // 🔥 only stream crossings supported for now
-  canImportLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, true);
-  }
-
-  canLandmarkProperties(event?: MouseEvent): boolean {
+  canDeleteCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
       !this.olMap.roSelection && this.olMap.selected.length === 1
     );
   }
 
-  canMoveLandmark(event?: MouseEvent): boolean {
+  canImportCulverts(event?: MouseEvent): boolean {
+    return this.#can(event, true);
+  }
+
+  canMoveCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
       !this.olMap.roSelection && this.olMap.selected.length === 1
@@ -142,40 +141,30 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   onContextMenu(key: string): void {
     let cFactory: ComponentFactory<SidebarComponent>;
     switch (key) {
-      case 'add-landmark':
-        this.#createLandmark();
+      case 'add-culvert':
+        this.#createCulvert();
         break;
-      case 'delete-landmark':
+      case 'delete-culvert':
         this.store.dispatch(
           new DeleteLandmark({ id: this.olMap.selectedIDs[0] })
         );
         break;
-      case 'import-landmarks':
+      case 'import-culverts':
         cFactory = this.resolver.resolveComponentFactory(
-          ImportDPWLandmarksComponent
+          ImportCulvertsComponent
         );
         break;
-      case 'landmark-properties':
+      case 'culvert-properties':
         cFactory = this.resolver.resolveComponentFactory(
-          DPWLandmarkPropertiesComponent
+          CulvertPropertiesComponent
         );
         break;
-      case 'move-landmark':
+      case 'move-culvert':
         this.moveLandmark.setFeature(this.olMap.selected[0]);
         break;
     }
     if (cFactory) this.onContextMenuImpl(cFactory);
     // 👇 in some cases, doesn't close itself
     this.contextMenu.closeMenu();
-  }
-
-  selectedLandmarkType(): string {
-    const selected = this.olMap.selected[0];
-    let type = 'site';
-    if (selected) {
-      const metadata = selected.get('metadata');
-      type = metadata?.type ?? selected.get('type');
-    }
-    return type;
   }
 }

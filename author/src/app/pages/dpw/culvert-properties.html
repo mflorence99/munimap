@@ -1,0 +1,135 @@
+<header class="header">
+  <figure class="icon">
+    <fa-icon [icon]="['fad', 'tasks']" size="2x"></fa-icon>
+  </figure>
+
+  <p class="title">Modify {{ record.type }} settings</p>
+</header>
+
+<form
+  #propertiesForm="ngForm"
+  (keydown.escape)="cancel()"
+  (submit)="save(record)"
+  autocomplete="off"
+  class="form"
+  id="propertiesForm"
+  novalidate
+  spellcheck="false"
+>
+  <mat-form-field>
+    <mat-label>Diameter (inches)</mat-label>
+    <input
+      #length="ngModel"
+      [(ngModel)]="record.diameter"
+      [appSelectOnFocus]="true"
+      [step]="1"
+      autocomplete="off"
+      matInput
+      name="diameter"
+      required
+      type="number"
+    />
+    <mat-error *ngIf="diameter.errors">Culvert diameter is required </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Length (feet)</mat-label>
+    <input
+      #diameter="ngModel"
+      [(ngModel)]="record.length"
+      [step]="10"
+      autocomplete="off"
+      matInput
+      name="length"
+      required
+      type="number"
+    />
+    <mat-error *ngIf="length.errors">Culvert length is required </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Material</mat-label>
+    <mat-select
+      #material="ngModel"
+      [(ngModel)]="record.material"
+      name="material"
+      required
+    >
+      <mat-option value="Concrete">Concrete</mat-option>
+      <mat-option value="Plastic">Plastic</mat-option>
+      <mat-option value="Steel">Steel</mat-option>
+    </mat-select>
+    <mat-error *ngIf="material.errors">Culvert material is required </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Year Built/Reconstructed</mat-label>
+    <input
+      #diameter="ngModel"
+      [(ngModel)]="record.year"
+      [step]="1"
+      autocomplete="off"
+      matInput
+      name="year"
+      type="number"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Condition</mat-label>
+    <mat-select
+      #condition="ngModel"
+      [(ngModel)]="record.condition"
+      name="condition"
+      required
+    >
+      <mat-option value="Good">Good</mat-option>
+      <mat-option value="Fair">Fair</mat-option>
+      <mat-option value="Poor">Poor</mat-option>
+    </mat-select>
+    <mat-error *ngIf="condition.errors"
+      >Culvert condition is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Headwall</mat-label>
+    <mat-select
+      #headwall="ngModel"
+      [(ngModel)]="record.headwall"
+      name="headwall"
+      required
+    >
+      <mat-option value="Handlaid">Handlaid</mat-option>
+      <mat-option value="Precast">Precast</mat-option>
+    </mat-select>
+    <mat-error *ngIf="headwall.errors">Culvert headwall is required </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Flood Hazard</mat-label>
+    <mat-select
+      #floodHazard="ngModel"
+      [(ngModel)]="record.floodHazard"
+      name="floodHazard"
+    >
+      <mat-option value="Minor">Minor</mat-option>
+      <mat-option value="Moderate">Moderate</mat-option>
+      <mat-option value="Major">Major</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+
+<article class="actions">
+  <button (click)="cancel()" mat-flat-button>DONE</button>
+
+  <button
+    [disabled]="!propertiesForm.dirty"
+    color="primary"
+    form="propertiesForm"
+    mat-flat-button
+    type="submit"
+  >
+    SAVE
+  </button>
+</article>

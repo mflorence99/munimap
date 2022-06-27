@@ -84,7 +84,7 @@ export interface BridgeProperties {
   YEARRECON: string /* 👈 YEARRECON */;
   Y_COORD: number /* 👈 Y_COORD */;
   name: string;
-  // 🔥 disambiguate bridges, flood hazards and stream crossings
+  // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'bridge';
 }
 
@@ -105,6 +105,18 @@ export interface ConservationProperties {
   OBJECTID: string;
   // 👇 translated conservation schema
   name: string;
+}
+
+export interface CulvertProperties {
+  condition: 'Poor' | 'Fair' | 'Good';
+  diameter: number /* 👈 inches */;
+  floodHazard?: 'Minor' | 'Moderate' | 'Major';
+  headwall: 'Handlaid' | 'Precast';
+  length: number /* 👈 feet */;
+  material: 'Concrete' | 'Plastic' | 'Steel';
+  // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
+  type: 'culvert';
+  year?: number;
 }
 
 export interface DamProperties {
@@ -163,7 +175,7 @@ export interface FloodHazardProperties {
   Town: string /* 👈 Town */;
   Verified: string /* 👈 Verified */;
   // 👇 translated floodhazards schema  name: string;
-  // 🔥 disambiguate bridges, flood hazards and stream crossings
+  // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   name: string;
   type: 'flood hazard';
 }
@@ -656,7 +668,7 @@ export interface StreamCrossingProperties {
   Wildlife: string /* 👈 92) Wildlife observed - US, DS, Structure */;
   WingAngL: string /* 👈 24) Inlet Wingwall Angle - Stream Left */;
   WingAngR: string /* 👈 25) Inlet Wingwall Angle - Stream Right */;
-  // 🔥 disambiguate bridges, flood hazards and stream crossings
+  // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'stream crossing';
 }
 

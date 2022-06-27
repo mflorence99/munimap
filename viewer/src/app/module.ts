@@ -50,6 +50,7 @@ import { OLAdaptorBoundaryComponent } from '@lib/ol/ol-adaptor-boundary';
 import { OLAdaptorBridgesComponent } from '@lib/ol/ol-adaptor-bridges';
 import { OLAdaptorBuildingsComponent } from '@lib/ol/ol-adaptor-buildings';
 import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservations';
+import { OLAdaptorCulvertsComponent } from '@lib/ol/ol-adaptor-culverts';
 import { OLAdaptorDPWLandmarksComponent } from '@lib/ol/dpw/ol-adaptor-dpwlandmarks';
 import { OLAdaptorFloodHazardsComponent } from '@lib/ol/ol-adaptor-floodhazards';
 import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
@@ -168,6 +169,7 @@ const COMPONENTS = [
   OLAdaptorBridgesComponent,
   OLAdaptorBuildingsComponent,
   OLAdaptorConservationsComponent,
+  OLAdaptorCulvertsComponent,
   OLAdaptorDPWLandmarksComponent,
   OLAdaptorFloodHazardsComponent,
   OLAdaptorFloodplainsComponent,

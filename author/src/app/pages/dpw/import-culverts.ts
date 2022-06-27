@@ -5,10 +5,10 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
+import { CulvertProperties } from '@lib/common';
 import { Firestore } from '@angular/fire/firestore';
 import { Landmark } from '@lib/common';
 import { Store } from '@ngxs/store';
-import { StreamCrossingProperties } from '@lib/common';
 
 import { firstValueFrom } from 'rxjs';
 import { makeLandmarkID } from '@lib/common';
@@ -19,16 +19,18 @@ import hash from 'object-hash';
 //    implementation in property/import-landmarks.ts and is designed
 //    to ONLY import DPW landmarks like stream crossings, etc.
 
+// 🔥 only "Point" features are supported and they are assumed to be  culverts
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-import-dpwlandmarks',
+  selector: 'app-import-culverts',
   styleUrls: [
     '../property/import-landmarks.scss',
     '../../../../../lib/css/sidebar.scss'
   ],
   templateUrl: '../property/import-landmarks.html'
 })
-export class ImportDPWLandmarksComponent extends ImportLandmarksComponent {
+export class ImportCulvertsComponent extends ImportLandmarksComponent {
   constructor(
     protected authState: AuthState,
     protected cdf: ChangeDetectorRef,
@@ -38,8 +40,42 @@ export class ImportDPWLandmarksComponent extends ImportLandmarksComponent {
     super(authState, cdf, firestore, store);
   }
 
-  // 🔥 only "Point" features are supported and they are assumed to be
-  //    stream crossings
+  #makeCulvertProperties(description: string): CulvertProperties {
+    const parts = description
+      .replace(/<div>/g, '\n')
+      .replace(/<\/div>/g, '')
+      .replace(/<br>/g, '')
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .trim()
+      .split('\n');
+    const properties: CulvertProperties = {
+      condition: null,
+      diameter: null,
+      floodHazard: null,
+      headwall: null,
+      length: null,
+      material: null,
+      type: 'culvert',
+      year: null
+    };
+    parts.forEach((part) => {
+      if (['Poor', 'Fair', 'Good'].includes(part))
+        properties.condition = part as any;
+      if (/^[\d]+"$/.test(part))
+        properties.diameter = Number(part.substring(0, part.length - 1));
+      if (['Minor', 'Moderator', 'Major'].includes(part))
+        properties.floodHazard = part as any;
+      if (['Handlaid', 'Precast'].includes(part))
+        properties.headwall = part as any;
+      if (/^[\d]+'$/.test(part))
+        properties.length = Number(part.substring(0, part.length - 1));
+      if (['Concrete', 'Plastic', 'Steel'].includes(part))
+        properties.material = part as any;
+      if (/^\d{4}$/.test(part)) properties.year = Number(part);
+    });
+    return properties;
+  }
 
   async makeLandmarks(
     geojsons: GeoJSON.FeatureCollection<any>[]
@@ -61,15 +97,13 @@ export class ImportDPWLandmarksComponent extends ImportLandmarksComponent {
             type: 'Feature'
           };
           let properties;
-          // 🔥 TODO - parse name & desc for properties
           switch (feature.geometry?.type) {
             case 'Point':
               properties = {
-                metadata: {
-                  StructCond: 'unknown',
-                  name: feature.properties.name,
-                  type: 'stream crossing'
-                } as Partial<StreamCrossingProperties>
+                metadata: this.#makeCulvertProperties(
+                  feature.properties.description /* 👈 KML */ ??
+                    feature.properties.desc /* 👈 GPX */
+                )
               };
               break;
           }

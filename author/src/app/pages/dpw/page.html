@@ -358,8 +358,8 @@
   <nav class="contextmenu">
     <ul>
       <li
-        (click)="canImportLandmarks($event) && onContextMenu('import-landmarks')"
-        [class.disabled]="!canImportLandmarks()"
+        (click)="canImportCulverts($event) && onContextMenu('import-culverts')"
+        [class.disabled]="!canImportCulverts()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['far', 'file-import']"></fa-icon>
@@ -367,31 +367,31 @@
       </li>
 
       <li
-        (click)="canAddLandmark($event) && onContextMenu('add-landmark')"
-        [class.disabled]="!canAddLandmark()"
+        (click)="canAddCulvert($event) && onContextMenu('add-culvert')"
+        [class.disabled]="!canAddCulvert()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus-square']"></fa-icon>
-        <p>New stream crossing here</p>
+        <p>New culvert here</p>
       </li>
 
       <li
-        (click)="canLandmarkProperties($event) && onContextMenu('landmark-properties')"
-        [class.disabled]="!canLandmarkProperties()"
+        (click)="canCulvertProperties($event) && onContextMenu('culvert-properties')"
+        [class.disabled]="!canCulvertProperties()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
-        <p>Modify {{ selectedLandmarkType() }} settings &hellip;</p>
+        <p>Modify culvert settings &hellip;</p>
       </li>
 
       <li
-        (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
-        [class.disabled]="!canMoveLandmark()"
+        (click)="canMoveCulvert($event) && onContextMenu('move-culvert')"
+        [class.disabled]="!canMoveCulvert()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
         <p>
-          Move {{ selectedLandmarkType() }}
+          Move culvert
           <em
             ><fa-icon
               [icon]="['fas', 'question-circle']"
@@ -402,12 +402,12 @@
       </li>
 
       <li
-        (click)="canDeleteLandmark($event) && onContextMenu('delete-landmark')"
-        [class.disabled]="!canDeleteLandmark()"
+        (click)="canDeleteCulvert($event) && onContextMenu('delete-culvert')"
+        [class.disabled]="!canDeleteCulvert()"
         class="item"
       >
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
-        <p>Delete {{ selectedLandmarkType() }}</p>
+        <p>Delete culvert</p>
       </li>
     </ul>
   </nav>

@@ -130,6 +130,12 @@ $dark-app-theme: mat-dark-theme(
   --map-conservation-fill: var(--rgb-green-700);
   --map-conservation-outline: var(--rgb-green-700);
 
+  --map-culvert-poor-icon-color: var(--rgb-deep-orange-200);
+  --map-culvert-fair-icon-color: var(--rgb-yellow-200);
+  --map-culvert-good-icon-color: var(--rgb-green-200);
+  --map-culvert-unknown-icon-color: var(--rgb-gray-500);
+  --map-culvert-line-color: var(--rgb-gray-700);
+
   --map-feature-disabled: var(--rgb-gray-900);
   --map-feature-fill: var(--rgb-green-700);
   --map-feature-outline: var(--rgb-gray-700);
