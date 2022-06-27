@@ -1,12 +1,9 @@
-import { DPWLegendComponent } from './pages/dpw/legend';
 import { DPWPage } from './pages/dpw/page';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsOverlayComponent } from './pages/parcels/overlay';
 import { ParcelsPage } from './pages/parcels/page';
-import { PropertyLegendComponent } from './pages/property/legend';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
-import { TopoLegendComponent } from './pages/topo/legend';
 import { TopoPage } from './pages/topo/page';
 
 import * as Sentry from '@sentry/angular';
@@ -166,7 +163,6 @@ export const persistenceEnabled = new Promise<boolean>((resolve) => {
 
 const COMPONENTS = [
   ConfirmDialogComponent,
-  DPWLegendComponent,
   MessageDialogComponent,
   OLAdaptorBoundaryComponent,
   OLAdaptorBridgesComponent,
@@ -239,8 +235,6 @@ const COMPONENTS = [
   OLStyleUniversalComponent,
   ParcelsLegendComponent,
   ParcelsOverlayComponent,
-  PropertyLegendComponent,
-  TopoLegendComponent,
   VersionDialogComponent
 ];
 
@@ -262,11 +256,6 @@ const ROUTES: any = [
         component: DPWPage
       },
       {
-        path: 'dpw-legend',
-        component: DPWLegendComponent,
-        outlet: 'leftSidebar'
-      },
-      {
         path: 'parcels',
         component: ParcelsPage
       },
@@ -285,18 +274,8 @@ const ROUTES: any = [
         component: PropertyPage
       },
       {
-        path: 'property-legend',
-        component: PropertyLegendComponent,
-        outlet: 'leftSidebar'
-      },
-      {
         path: 'topo',
         component: TopoPage
-      },
-      {
-        path: 'topo-legend',
-        component: TopoLegendComponent,
-        outlet: 'leftSidebar'
       }
     ]
   }

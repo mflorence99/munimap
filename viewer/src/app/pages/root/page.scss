@@ -18,6 +18,10 @@
   width: 100%;
 }
 
+.filler {
+  flex-grow: 1;
+}
+
 .page {
   height: 100%;
   overflow: hidden;
@@ -36,9 +40,8 @@
 }
 
 .toolbar {
-  display: grid;
+  display: flex;
   gap: 0.5rem;
-  grid-template-columns: auto 1fr auto auto auto;
   height: calc(var(--map-cy-toolbar) * 1px);
   padding: 0 0.5rem !important;
   position: absolute;
