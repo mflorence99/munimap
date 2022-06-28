@@ -65,7 +65,7 @@ export class RootPage implements OnInit {
     private router: Router,
     private store: Store,
     private titleService: Title,
-    _version: VersionService /* 👈 just to get it loaded */
+    private version: VersionService
   ) {
     this.#url = urlParse(this.location.path(), true);
   }
@@ -173,5 +173,9 @@ export class RootPage implements OnInit {
 
   onSatelliteYear(year: string): void {
     this.store.dispatch(new SetSatelliteYear(year));
+  }
+
+  reset(): void {
+    this.version.hardReset();
   }
 }

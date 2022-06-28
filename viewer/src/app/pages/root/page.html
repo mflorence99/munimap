@@ -54,6 +54,10 @@
     >
       <fa-icon [icon]="['fas', 'cog']" size="2x"></fa-icon>
     </button>
+
+    <button *ngIf="!hasLeftSidebar" (click)="reset()" mat-icon-button>
+      <fa-icon [icon]="['fas', 'sync']" size="2x"></fa-icon>
+    </button>
   </mat-toolbar>
 
   <mat-drawer-container class="container">

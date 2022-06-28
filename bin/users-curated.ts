@@ -22,6 +22,10 @@ const PROFILES = [
   },
   {
     email: 'marshal@gsinet.net'
+  },
+  {
+    email: 'ethayer@washingtonnh.org',
+    workgroup: 'mflo999+dpw@gmail.com'
   }
 ];
 
