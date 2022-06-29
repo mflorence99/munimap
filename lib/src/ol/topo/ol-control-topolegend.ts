@@ -1,7 +1,7 @@
 import { DestroyService } from '../../services/destroy';
 import { GeoJSONService } from '../../services/geojson';
 import { MapableComponent } from '../ol-mapable';
-import { OLControlLegendComponent } from '../ol-control-legend';
+import { OLControlAbstractParcelsLegendComponent } from '../ol-control-abstractparcelslegend';
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../common';
 import { ParcelsState } from '../../state/parcels';
@@ -31,10 +31,10 @@ import { forwardRef } from '@angular/core';
   ],
   selector: 'app-ol-control-topolegend',
   templateUrl: './ol-control-topolegend.html',
-  styleUrls: ['../ol-control-legend.scss']
+  styleUrls: ['../ol-control-abstractparcelslegend.scss']
 })
 export class OLControlTopoLegendComponent
-  extends OLControlLegendComponent
+  extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
   @Input() county: string;

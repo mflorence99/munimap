@@ -15,7 +15,7 @@ import OLVectorLayer from 'ol/layer/Vector';
 import OLVectorSource from 'ol/source/Vector';
 import simplify from '@turf/simplify';
 
-export abstract class OLInteractionDrawComponent {
+export abstract class OLInteractionAbstractDrawComponent {
   #drawStartKey: OLEventsKey;
   #format: OLGeoJSON;
   #layer: OLVectorLayer<any>;

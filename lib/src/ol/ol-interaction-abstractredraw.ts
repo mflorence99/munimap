@@ -21,7 +21,7 @@ import OLModify from 'ol/interaction/Modify';
 import OLPolygon from 'ol/geom/Polygon';
 import OLSnap from 'ol/interaction/Snap';
 
-export abstract class OLInteractionRedrawComponent {
+export abstract class OLInteractionAbstractRedrawComponent {
   #format: OLGeoJSON;
   #modifyStartKey: OLEventsKey;
   #touched = false;

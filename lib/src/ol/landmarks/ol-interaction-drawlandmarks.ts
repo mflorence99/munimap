@@ -5,7 +5,7 @@ import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DestroyService } from '../../services/destroy';
 import { Landmark } from '../../common';
 import { LandmarkPropertiesClass } from '../../common';
-import { OLInteractionDrawComponent } from '../ol-interaction-draw';
+import { OLInteractionAbstractDrawComponent } from '../ol-interaction-abstractdraw';
 import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
@@ -30,7 +30,7 @@ import { tap } from 'rxjs/operators';
   styles: [':host { display: none }']
 })
 export class OLInteractionDrawLandmarksComponent
-  extends OLInteractionDrawComponent
+  extends OLInteractionAbstractDrawComponent
   implements OnDestroy, OnInit
 {
   constructor(

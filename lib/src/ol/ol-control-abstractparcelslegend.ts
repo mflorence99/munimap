@@ -35,7 +35,9 @@ interface Override {
   use?: string;
 }
 
-export abstract class OLControlLegendComponent implements Mapable {
+export abstract class OLControlAbstractParcelsLegendComponent
+  implements Mapable
+{
   #geojson$ = new Subject<Parcels>();
 
   areaByUsage: Record<string, number> = {};

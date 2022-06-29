@@ -3,7 +3,7 @@ import { AuthState } from '../../state/auth';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog';
 import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DestroyService } from '../../services/destroy';
-import { OLInteractionRedrawComponent } from '../ol-interaction-redraw';
+import { OLInteractionAbstractRedrawComponent } from '../ol-interaction-abstractredraw';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../common';
@@ -26,7 +26,7 @@ import { tap } from 'rxjs/operators';
   styles: [':host { display: none }']
 })
 export class OLInteractionRedrawParcelComponent
-  extends OLInteractionRedrawComponent
+  extends OLInteractionAbstractRedrawComponent
   implements OnDestroy, OnInit
 {
   constructor(

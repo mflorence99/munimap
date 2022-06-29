@@ -97,7 +97,6 @@ import { OLAdaptorWetlandsComponent } from '@lib/ol/ol-adaptor-wetlands';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
-import { OLControlDPWLegendComponent } from '@lib/ol/dpw/ol-control-dpwlegend';
 import { OLControlExportLandmarksComponent } from '@lib/ol/landmarks/ol-control-exportlandmarks';
 import { OLControlExportParcelsComponent } from '@lib/ol/parcels/ol-control-exportparcels';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
@@ -269,7 +268,6 @@ const COMPONENTS = [
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,
-  OLControlDPWLegendComponent,
   OLControlExportLandmarksComponent,
   OLControlExportParcelsComponent,
   OLControlGraticuleComponent,
