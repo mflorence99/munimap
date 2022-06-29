@@ -1,3 +1,4 @@
+import { DPWLegendComponent } from './pages/dpw/legend';
 import { DPWPage } from './pages/dpw/page';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsOverlayComponent } from './pages/parcels/overlay';
@@ -133,6 +134,8 @@ import { connectFirestoreEmulator } from '@angular/fire/firestore';
 import { enableMultiTabIndexedDbPersistence } from '@angular/fire/firestore';
 import { environment } from '@lib/environment';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch } from '@fortawesome/pro-duotone-svg-icons';
 import { faClipboard } from '@fortawesome/pro-regular-svg-icons';
 import { faCog } from '@fortawesome/pro-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
@@ -165,6 +168,7 @@ export const persistenceEnabled = new Promise<boolean>((resolve) => {
 
 const COMPONENTS = [
   ConfirmDialogComponent,
+  DPWLegendComponent,
   MessageDialogComponent,
   OLAdaptorBoundaryComponent,
   OLAdaptorBridgesComponent,
@@ -258,6 +262,11 @@ const ROUTES: any = [
       {
         path: 'dpw',
         component: DPWPage
+      },
+      {
+        path: 'dpw-legend',
+        component: DPWLegendComponent,
+        outlet: 'leftSidebar'
       },
       {
         path: 'parcels',
@@ -391,6 +400,8 @@ export class RootModule {
     // 👇 must add icons we use right here
     library.addIcons(
       faBars,
+      faCircle,
+      faCircleNotch,
       faClipboard,
       faCog,
       faExpandArrows,

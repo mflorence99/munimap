@@ -37,8 +37,7 @@ export class OLSourceLandmarksComponent implements OnInit {
   constructor(
     private destroy$: DestroyService,
     private layer: OLLayerVectorComponent,
-    private map: OLMapComponent,
-    private landmarksState: LandmarksState
+    private map: OLMapComponent
   ) {
     this.olVector = new OLVector({
       format: new GeoJSON(),

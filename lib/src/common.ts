@@ -259,7 +259,7 @@ export class LandmarkPropertiesClass {
   public lineChunk = false;
   public lineDash = [2, 1];
   public lineSpline = false;
-  public metadata: Record<string, boolean | number | string | Date> = null;
+  public metadata: Record<string, any> = null;
   public minWidth = 0;
   public minZoom = 0;
   public name: string = null;

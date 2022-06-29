@@ -184,21 +184,18 @@ export class OLMapComponent
     // 👇 we only want to remove the controls we added
     const controls = [...this.olMap.getControls().getArray()];
     controls.forEach((control) => {
-      console.log(control.get('component'));
       if (control.get('component')) this.olMap.removeControl(control);
     });
     // 👇 we only want to remove the interactions we added
     //    OL adds a bunch of its own we must keep intact
     const interactions = [...this.olMap.getInteractions().getArray()];
     interactions.forEach((interaction) => {
-      console.log(interaction.get('component'));
       if (interaction.get('component'))
         this.olMap.removeInteraction(interaction);
     });
     // 👇 we only want to remove the layers we added
     const layers = [...this.olMap.getLayers().getArray()];
     layers.forEach((layer) => {
-      console.log(layer.get('component'));
       if (layer.get('component')) this.olMap.removeLayer(layer);
     });
   }

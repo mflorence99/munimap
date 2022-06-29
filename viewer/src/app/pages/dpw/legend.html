@@ -1,0 +1,80 @@
+<button (click)="reset()" class="reloader" mat-icon-button>
+  <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
+</button>
+
+<header class="header">
+  <figure class="icon">
+    <fa-icon [icon]="['fad', 'circle-notch']" size="2x"></fa-icon>
+  </figure>
+  <p class="title">Culverts</p>
+  <p class="subtitle">Distribution and usage</p>
+</header>
+
+<table class="form legend">
+  <thead>
+    <tr>
+      <th>Diameter</th>
+      <th>Count</th>
+      <th>Feet</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container
+      *ngFor="let diameter of diameters(); trackBy: trackByDiameter"
+    >
+      <tr *ngIf="byDiameter[diameter]?.count">
+        <td>{{ diameter }}"</td>
+        <td>{{ byDiameter[diameter].count | number: '1.0-0' }}</td>
+        <td>{{ byDiameter[diameter].length | number: '1.0-0' }}'</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+
+<table class="form legend">
+  <thead>
+    <tr>
+      <th>Condition</th>
+      <th>Count</th>
+      <th>Feet</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container
+      *ngFor="let condition of conditions(); trackBy: trackByCondition"
+    >
+      <tr *ngIf="byCondition[condition[0]]?.count">
+        <td>
+          <fa-icon
+            [icon]="['fas', 'circle']"
+            [ngStyle]="{color: condition[1]}"
+          ></fa-icon>
+          {{ condition[0] }}
+        </td>
+        <td>{{ byCondition[condition[0]].count | number: '1.0-0' }}</td>
+        <td>{{ byCondition[condition[0]].length | number: '1.0-0' }}'</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+
+<table class="form legend">
+  <thead>
+    <tr>
+      <th>Material</th>
+      <th>Count</th>
+      <th>Feet</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container
+      *ngFor="let material of materials(); trackBy: trackByMaterial"
+    >
+      <tr *ngIf="byMaterial[material]?.count">
+        <td>{{ material }}</td>
+        <td>{{ byMaterial[material].count | number: '1.0-0' }}</td>
+        <td>{{ byMaterial[material].length | number: '1.0-0' }}'</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
