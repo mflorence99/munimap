@@ -60,13 +60,16 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       year: null
     };
     parts.forEach((part) => {
+      part = part.trim();
+      part =
+        part.substring(0, 1).toUpperCase() + part.substring(1).toLowerCase();
       if (['Poor', 'Fair', 'Good'].includes(part))
         properties.condition = part as any;
       if (/^[\d]+"$/.test(part))
         properties.diameter = Number(part.substring(0, part.length - 1));
       if (['Minor', 'Moderator', 'Major'].includes(part))
         properties.floodHazard = part as any;
-      if (['Handlaid', 'Precast'].includes(part))
+      if (['Handmade', 'Precast'].includes(part))
         properties.headwall = part as any;
       if (/^[\d]+'$/.test(part))
         properties.length = Number(part.substring(0, part.length - 1));

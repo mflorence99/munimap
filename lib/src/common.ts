@@ -111,7 +111,7 @@ export interface CulvertProperties {
   condition: 'Poor' | 'Fair' | 'Good';
   diameter: number /* 👈 inches */;
   floodHazard?: 'Minor' | 'Moderate' | 'Major';
-  headwall: 'Handlaid' | 'Precast';
+  headwall: 'Handmade' | 'Precast';
   length: number /* 👈 feet */;
   material: 'Concrete' | 'Plastic' | 'Steel';
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
