@@ -10,8 +10,18 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { VersionService } from '@lib/services/version';
 
+import { culvertConditions } from '@lib/common';
+import { culvertFloodHazards } from '@lib/common';
+import { culvertHeadwalls } from '@lib/common';
+import { culvertMaterials } from '@lib/common';
 import { map } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
+
+interface Metric {
+  enum: () => string[];
+  key: string;
+  tag: string;
+}
 
 interface Statistics {
   count: number;
@@ -26,9 +36,50 @@ interface Statistics {
   templateUrl: './legend.html'
 })
 export class DPWLegendComponent implements OnInit {
-  byCondition: Record<string, Statistics> = {};
-  byDiameter: Record<string, Statistics> = {};
-  byMaterial: Record<string, Statistics> = {};
+  allConditions = culvertConditions;
+
+  allMetrics: Metric[] = [
+    {
+      enum: (): string[] => {
+        return [undefined];
+      },
+      key: '$fake$' /* 👈 fakeroo field in every row */,
+      tag: 'Total'
+    },
+    {
+      enum: (): string[] => {
+        return Object.keys(this.breakdowns['diameter'] ?? {}).sort(
+          (p, q) => Number(p) - Number(q)
+        );
+      },
+      key: 'diameter',
+      tag: 'Diameter'
+    },
+    {
+      enum: (): string[] => {
+        return culvertMaterials as any;
+      },
+      key: 'material',
+      tag: 'Material'
+    },
+    {
+      enum: (): string[] => {
+        return culvertHeadwalls as any;
+      },
+      key: 'headwall',
+      tag: 'Headwall'
+    },
+    {
+      enum: (): string[] => {
+        return culvertFloodHazards as any;
+      },
+      key: 'floodHazard',
+      tag: 'Flood Hazard'
+    }
+  ];
+
+  // 👇 metric -> value -> condition -> { count, length }
+  breakdowns: Record<string, Record<string, Record<string, Statistics>>> = {};
 
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
 
@@ -37,6 +88,25 @@ export class DPWLegendComponent implements OnInit {
     private destroy$: DestroyService,
     private version: VersionService
   ) {}
+
+  #calcBreakdowns(culverts: CulvertProperties[]): void {
+    this.allMetrics.forEach((metric) => {
+      this.breakdowns[metric.key] = {};
+      culverts.forEach((culvert) => {
+        const key = culvert[metric.key];
+        const breakdown =
+          this.breakdowns[metric.key][key] ??
+          culvertConditions.reduce((acc, condition) => {
+            acc[condition] = { count: 0, length: 0 };
+            return acc;
+          }, {});
+        breakdown[culvert.condition].count += 1;
+        breakdown[culvert.condition].length += culvert.length;
+        this.breakdowns[metric.key][key] = breakdown;
+      });
+    });
+    console.error(this.breakdowns);
+  }
 
   #handleStreams$(): void {
     this.landmarks$
@@ -53,49 +123,9 @@ export class DPWLegendComponent implements OnInit {
         )
       )
       .subscribe((culverts: CulvertProperties[]) => {
-        // 👇 common breakdown
-        const breakdown = (keyfn, culverts): Record<string, Statistics> => {
-          return culverts.reduce((acc, culvert) => {
-            const stats = acc[keyfn(culvert)] ?? { count: 0, length: 0 };
-            stats.count += 1;
-            stats.length += culvert.length;
-            acc[keyfn(culvert)] = stats;
-            return acc;
-          }, {});
-        };
-        // 👇 breakdown by metrics
-        this.byCondition = breakdown(
-          (culvert) => culvert.condition ?? 'Unknown',
-          culverts
-        );
-        this.byDiameter = breakdown(
-          (culvert) => String(culvert.diameter ?? 0),
-          culverts
-        );
-        this.byMaterial = breakdown(
-          (culvert) => culvert.material ?? 'Unknown',
-          culverts
-        );
+        this.#calcBreakdowns(culverts);
         this.cdf.detectChanges();
       });
-  }
-
-  conditions(): string[][] {
-    // 🔥 not the "real" colors, just ones that look good in the sidebar
-    return [
-      ['Unknown', '#616161'],
-      ['Poor', '#c53929'],
-      ['Fair', '#f4b400'],
-      ['Good', '#0b8043']
-    ];
-  }
-
-  diameters(): string[] {
-    return Object.keys(this.byDiameter).sort((p, q) => Number(p) - Number(q));
-  }
-
-  materials(): string[] {
-    return ['Unknown', 'Concrete', 'Plastic', 'Steel'];
   }
 
   ngOnInit(): void {
@@ -106,15 +136,11 @@ export class DPWLegendComponent implements OnInit {
     this.version.hardReset();
   }
 
-  trackByCondition(ix: number, condition: string[]): string {
-    return condition[0];
+  trackByKey(ix: number, key: string): string {
+    return key;
   }
 
-  trackByDiameter(ix: number, diameter: string): string {
-    return diameter;
-  }
-
-  trackByMaterial(ix: number, material: string): string {
-    return material;
+  trackByMetric(ix: number, metric: Metric): string {
+    return metric.key;
   }
 }

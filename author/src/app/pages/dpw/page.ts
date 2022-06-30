@@ -32,6 +32,10 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
+import { culvertConditions } from '@lib/common';
+import { culvertFloodHazards } from '@lib/common';
+import { culvertHeadwalls } from '@lib/common';
+import { culvertMaterials } from '@lib/common';
 import { makeLandmarkID } from '@lib/common';
 import { toLonLat } from 'ol/proj';
 
@@ -90,9 +94,14 @@ export class DPWPage extends AbstractMapPage implements OnInit {
       path: this.olMap.path,
       properties: {
         metadata: {
+          condition: culvertConditions[0],
           diameter: 12,
+          floodHazard: culvertFloodHazards[0],
+          headwall: culvertHeadwalls[0],
           length: 20,
-          type: 'culvert'
+          material: culvertMaterials[0],
+          type: 'culvert',
+          year: null
         } as Partial<CulvertProperties>
       },
       type: 'Feature'

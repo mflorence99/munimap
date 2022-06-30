@@ -12,6 +12,11 @@ import { SidebarComponent } from 'app/components/sidebar-component';
 import { Store } from '@ngxs/store';
 import { UpdateLandmark } from '@lib/state/landmarks';
 
+import { culvertConditions } from '@lib/common';
+import { culvertFloodHazards } from '@lib/common';
+import { culvertHeadwalls } from '@lib/common';
+import { culvertMaterials } from '@lib/common';
+
 import copy from 'fast-copy';
 import OLFeature from 'ol/Feature';
 
@@ -27,6 +32,11 @@ import OLFeature from 'ol/Feature';
   templateUrl: './culvert-properties.html'
 })
 export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
+  allConditions = culvertConditions;
+  allFloodHazards = culvertFloodHazards;
+  allHeadwalls = culvertHeadwalls;
+  allMaterials = culvertMaterials;
+
   @Input() drawer: MatDrawer;
 
   @Input() features: OLFeature<any>[];

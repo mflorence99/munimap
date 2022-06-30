@@ -17,9 +17,9 @@ export class OLPopupCulvertPropertiesComponent {
     ['Diameter', 'diameter', 'inches'],
     ['Length', 'length', 'feet'],
     ['Material', 'material'],
-    ['Year Re/built', 'year'],
     ['Condition', 'condition'],
     ['Headwall', 'headwall'],
-    ['Flood Hazard', 'floodHazard']
+    ['Flood Hazard', 'floodHazard'],
+    ['Year Re/built', 'year']
   ];
 }

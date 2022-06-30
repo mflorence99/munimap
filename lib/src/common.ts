@@ -20,7 +20,6 @@ export const theState = 'NEW HAMPSHIRE';
 
 export interface BridgeProperties {
   // 👇 original bridges schema
-  // 👇 translated bridges schema
   ALT_LENGTH: number /* 👈 ALT_LENGTH */;
   APPROACH_SPAN_DESIGN: string /* 👈 APPROACH_SPAN_DESIGN */;
   APPROACH_SPAN_MATERIAL: string /* 👈 APPROACH_SPAN_MATERIAL */;
@@ -83,6 +82,7 @@ export interface BridgeProperties {
   YEARBUILT: string /* 👈 YEARBUILT */;
   YEARRECON: string /* 👈 YEARRECON */;
   Y_COORD: number /* 👈 Y_COORD */;
+  // 👇 translated bridges schema
   name: string;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'bridge';
@@ -107,13 +107,35 @@ export interface ConservationProperties {
   name: string;
 }
 
+// 👀 https://stackoverflow.com/questions/44480644/string-union-to-string-array
+
+export const culvertConditions = ['Unknown', 'Poor', 'Fair', 'Good'] as const;
+export const culvertFloodHazards = [
+  'None',
+  'Minor',
+  'Moderate',
+  'Major'
+] as const;
+export const culvertHeadwalls = ['None', 'Handmade', 'Precast'] as const;
+export const culvertMaterials = [
+  'Unknown',
+  'Concrete',
+  'Plastic',
+  'Steel'
+] as const;
+
+export type CulvertCondition = typeof culvertConditions[number];
+export type CulvertFloodHazard = typeof culvertFloodHazards[number];
+export type CulvertHeadwall = typeof culvertHeadwalls[number];
+export type CulvertMaterial = typeof culvertMaterials[number];
+
 export interface CulvertProperties {
-  condition: 'Poor' | 'Fair' | 'Good';
+  condition: CulvertCondition;
   diameter: number /* 👈 inches */;
-  floodHazard?: 'Minor' | 'Moderate' | 'Major';
-  headwall: 'Handmade' | 'Precast';
+  floodHazard?: CulvertFloodHazard;
+  headwall: CulvertHeadwall;
   length: number /* 👈 feet */;
-  material: 'Concrete' | 'Plastic' | 'Steel';
+  material: CulvertMaterial;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'culvert';
   year?: number;
@@ -175,14 +197,13 @@ export interface FloodHazardProperties {
   Town: string /* 👈 Town */;
   Verified: string /* 👈 Verified */;
   // 👇 translated floodhazards schema  name: string;
-  // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   name: string;
+  // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'flood hazard';
 }
 
 export interface FloodplainProperties {
   // 👇 original floodplain schema
-  // 👇 translated floodplain schema
   AR_REVERT: string /* 👈 AR_REVERT */;
   BFE_REVERT: number /* 👈 BFE_REVERT */;
   DEPTH: number /* 👈 DEPTH */;
@@ -553,7 +574,6 @@ export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
 
 export interface StreamCrossingProperties {
   // 👇 original streamcrossings schema
-  // 👇 translated streamcrossings schema
   AOP_Score: string /* 👈 98) AOP Compatibility Score */;
   ApproAngle: string /* 👈 16) Angle of Stream Flow Approach */;
   AssessDate: Date /* 👈 05) Assessment Date */;
@@ -695,7 +715,6 @@ export interface StoneWallProperties {
   USER_: string /* 👈 User name */;
   USER_EMAIL: string /* 👈 User email */;
   VERIFIER_NAME: string /* 👈 Verifier Name */;
-  // 👇 translated stonewalls schema
 }
 
 export interface TrailProperties {
@@ -721,7 +740,6 @@ export interface WaterbodyProperties {
   Shape_Area: number /* 👈 SHAPE_Area */;
   Shape_Length: number /* 👈 SHAPE_Length */;
   VisibilityFilter: number /* 👈 VisibilityFilter */;
-  // 👇 translated waterbodies schema
 }
 
 export interface WetlandProperties {

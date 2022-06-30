@@ -10,6 +10,10 @@ import { Firestore } from '@angular/fire/firestore';
 import { Landmark } from '@lib/common';
 import { Store } from '@ngxs/store';
 
+import { culvertConditions } from '@lib/common';
+import { culvertFloodHazards } from '@lib/common';
+import { culvertHeadwalls } from '@lib/common';
+import { culvertMaterials } from '@lib/common';
 import { firstValueFrom } from 'rxjs';
 import { makeLandmarkID } from '@lib/common';
 
@@ -41,6 +45,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
   }
 
   #makeCulvertProperties(description: string): Partial<CulvertProperties> {
+    // 👇 split description by line and eliminate decoration and smart quotes
     const parts = description
       .replace(/<div>/g, '\n')
       .replace(/<\/div>/g, '')
@@ -49,32 +54,32 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       .replace(/[\u201C\u201D]/g, '"')
       .trim()
       .split('\n');
+    // 👇 model culvert
     const properties: Partial<CulvertProperties> = {
-      condition: null,
-      diameter: null,
-      floodHazard: null,
-      headwall: null,
-      length: null,
-      material: null,
+      condition: culvertConditions[0],
+      diameter: 0,
+      floodHazard: culvertFloodHazards[0],
+      headwall: culvertHeadwalls[0],
+      length: 0,
+      material: culvertMaterials[0],
       type: 'culvert',
       year: null
     };
-    parts.forEach((part) => {
+    // 👇 the data on each line in unambiduous with respect to
+    //    culvert property
+    parts.forEach((part: any) => {
       part = part.trim();
-      part =
-        part.substring(0, 1).toUpperCase() + part.substring(1).toLowerCase();
-      if (['Poor', 'Fair', 'Good'].includes(part))
-        properties.condition = part as any;
+      part = `${part.substring(0, 1).toUpperCase()}${part
+        .substring(1)
+        .toLowerCase()}`;
+      if (culvertConditions.includes(part)) properties.condition = part;
       if (/^[\d]+"$/.test(part))
         properties.diameter = Number(part.substring(0, part.length - 1));
-      if (['Minor', 'Moderator', 'Major'].includes(part))
-        properties.floodHazard = part as any;
-      if (['Handmade', 'Precast'].includes(part))
-        properties.headwall = part as any;
+      if (culvertFloodHazards.includes(part)) properties.floodHazard = part;
+      if (culvertHeadwalls.includes(part)) properties.headwall = part;
       if (/^[\d]+'$/.test(part))
         properties.length = Number(part.substring(0, part.length - 1));
-      if (['Concrete', 'Plastic', 'Steel'].includes(part))
-        properties.material = part as any;
+      if (culvertMaterials.includes(part)) properties.material = part;
       if (/^\d{4}$/.test(part)) properties.year = Number(part);
     });
     return properties;
@@ -89,9 +94,10 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
         if (this.cancelling) break;
         this.numImported += 1;
         this.cdf.markForCheck();
-        // 👇 potentially one landmark per feature
+        // 👇 potentially one culvert per feature
         const importHash = hash.MD5(feature);
         const alreadyImported = await this.alreadyImported(importHash);
+        // 👇 only if not already imported
         if (!alreadyImported) {
           const landmark: Partial<Landmark> = {
             geometry: feature.geometry,
@@ -100,6 +106,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
             type: 'Feature'
           };
           let properties;
+          // 👇 only import waypoints
           switch (feature.geometry?.type) {
             case 'Point':
               properties = {
@@ -110,7 +117,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
               };
               break;
           }
-          // 👇 add the landmark if it fits our profile
+          // 👇 add the landmark if all above conditions met
           if (properties) {
             landmark.id = makeLandmarkID(landmark);
             landmark.importHash = importHash;

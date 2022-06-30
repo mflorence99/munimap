@@ -10,71 +10,41 @@
   <p class="subtitle">Distribution and usage</p>
 </header>
 
-<table class="form legend">
-  <thead>
-    <tr>
-      <th>Diameter</th>
-      <th>Count</th>
-      <th>Feet</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container
-      *ngFor="let diameter of diameters(); trackBy: trackByDiameter"
-    >
-      <tr *ngIf="byDiameter[diameter]?.count">
-        <td>{{ diameter }}"</td>
-        <td>{{ byDiameter[diameter].count | number: '1.0-0' }}</td>
-        <td>{{ byDiameter[diameter].length | number: '1.0-0' }}'</td>
-      </tr>
-    </ng-container>
-  </tbody>
-</table>
-
-<table class="form legend">
-  <thead>
-    <tr>
-      <th>Condition</th>
-      <th>Count</th>
-      <th>Feet</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container
-      *ngFor="let condition of conditions(); trackBy: trackByCondition"
-    >
-      <tr *ngIf="byCondition[condition[0]]?.count">
-        <td>
+<article class="form">
+  <table
+    *ngFor="let metric of allMetrics; trackBy: trackByMetric"
+    class="legend"
+  >
+    <thead>
+      <tr>
+        <th>{{ metric.tag }}</th>
+        <th *ngFor="let condition of allConditions">
           <fa-icon
             [icon]="['fas', 'circle']"
-            [ngStyle]="{color: condition[1]}"
+            [style.color]="'rgba(var(--map-culvert-' + condition.toLowerCase() + '-icon-color), 1)'"
           ></fa-icon>
-          {{ condition[0] }}
-        </td>
-        <td>{{ byCondition[condition[0]].count | number: '1.0-0' }}</td>
-        <td>{{ byCondition[condition[0]].length | number: '1.0-0' }}'</td>
+        </th>
       </tr>
-    </ng-container>
-  </tbody>
-</table>
+    </thead>
 
-<table class="form legend">
-  <thead>
-    <tr>
-      <th>Material</th>
-      <th>Count</th>
-      <th>Feet</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container
-      *ngFor="let material of materials(); trackBy: trackByMaterial"
-    >
-      <tr *ngIf="byMaterial[material]?.count">
-        <td>{{ material }}</td>
-        <td>{{ byMaterial[material].count | number: '1.0-0' }}</td>
-        <td>{{ byMaterial[material].length | number: '1.0-0' }}'</td>
+    <tbody *ngIf="metric.enum() as keys">
+      <tr *ngFor="let key of keys; trackBy: trackByKey">
+        <td [style.width.%]="25">
+          {{ key }} <span *ngIf="metric.key === 'diameter'">"</span>
+        </td>
+
+        <ng-container *ngFor="let condition of allConditions">
+          <ng-container
+            *ngIf="breakdowns[metric.key]?.[key]?.[condition] as stats"
+          >
+            <td [style.width.%]="75 / allConditions.length">
+              <span *ngIf="stats.count && stats.length"
+                >{{ stats.count }}&ndash;{{ stats.length }}'</span
+              >
+            </td>
+          </ng-container>
+        </ng-container>
       </tr>
-    </ng-container>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</article>

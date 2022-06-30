@@ -1,3 +1,26 @@
+.legend {
+  border-collapse: collapse;
+  width: 100%;
+
+  td:not(:first-child) {
+    font-size: smaller;
+    text-align: right;
+  }
+
+  th {
+    vertical-align: bottom;
+  }
+
+  th:first-child {
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  th:not(:first-child) {
+    text-align: right;
+  }
+}
+
 .reloader {
   position: absolute;
   right: 1rem;

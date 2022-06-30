@@ -29,7 +29,6 @@
       required
       type="number"
     />
-    <mat-error *ngIf="diameter.errors">Culvert diameter is required </mat-error>
   </mat-form-field>
 
   <mat-form-field>
@@ -44,7 +43,6 @@
       required
       type="number"
     />
-    <mat-error *ngIf="length.errors">Culvert length is required </mat-error>
   </mat-form-field>
 
   <mat-form-field>
@@ -55,11 +53,54 @@
       name="material"
       required
     >
-      <mat-option value="Concrete">Concrete</mat-option>
-      <mat-option value="Plastic">Plastic</mat-option>
-      <mat-option value="Steel">Steel</mat-option>
+      <mat-option *ngFor="let material of allMaterials" [value]="material"
+        >{{ material }}</mat-option
+      >
     </mat-select>
-    <mat-error *ngIf="material.errors">Culvert material is required </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Condition</mat-label>
+    <mat-select
+      #condition="ngModel"
+      [(ngModel)]="record.condition"
+      name="condition"
+      required
+    >
+      <mat-option *ngFor="let condition of allConditions" [value]="condition"
+        >{{ condition }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Headwall</mat-label>
+    <mat-select
+      #headwall="ngModel"
+      [(ngModel)]="record.headwall"
+      name="headwall"
+      required
+    >
+      <mat-option *ngFor="let headwall of allHeadwalls" [value]="headwall"
+        >{{ headwall }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Flood Hazard</mat-label>
+    <mat-select
+      #floodHazard="ngModel"
+      [(ngModel)]="record.floodHazard"
+      name="floodHazard"
+      required
+    >
+      <mat-option
+        *ngFor="let floodHazard of allFloodHazards"
+        [value]="floodHazard"
+        >{{ floodHazard }}</mat-option
+      >
+    </mat-select>
   </mat-form-field>
 
   <mat-form-field>
@@ -73,51 +114,6 @@
       name="year"
       type="number"
     />
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Condition</mat-label>
-    <mat-select
-      #condition="ngModel"
-      [(ngModel)]="record.condition"
-      name="condition"
-      required
-    >
-      <mat-option value="Good">Good</mat-option>
-      <mat-option value="Fair">Fair</mat-option>
-      <mat-option value="Poor">Poor</mat-option>
-    </mat-select>
-    <mat-error *ngIf="condition.errors"
-      >Culvert condition is required
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Headwall</mat-label>
-    <mat-select
-      #headwall="ngModel"
-      [(ngModel)]="record.headwall"
-      name="headwall"
-      required
-    >
-      <mat-option value="Handmade">Handmade</mat-option>
-      <mat-option value="Precast">Precast</mat-option>
-    </mat-select>
-    <mat-error *ngIf="headwall.errors">Culvert headwall is required </mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Flood Hazard</mat-label>
-    <mat-select
-      #floodHazard="ngModel"
-      [(ngModel)]="record.floodHazard"
-      name="floodHazard"
-    >
-      <mat-option value=""></mat-option>
-      <mat-option value="Minor">Minor</mat-option>
-      <mat-option value="Moderate">Moderate</mat-option>
-      <mat-option value="Major">Major</mat-option>
-    </mat-select>
   </mat-form-field>
 </form>
 
