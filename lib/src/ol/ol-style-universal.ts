@@ -522,18 +522,6 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         const fontOutlineColor = this.#colorOfOpposite(
           props.fontOutlineColor ?? dfltOutlineColor
         );
-        // 👇 we may need to chunk the text into multiple lines
-        let chunked;
-        if (props.lineChunk) {
-          const textLength = this.#measureText(props.name, font, resolution);
-          const chunkable = props.lineSpline
-            ? new OLFeature({ geometry: this.#splineLine(feature) })
-            : feature;
-          chunked = this.#chunkLine(
-            chunkable,
-            textLength * this.lineChunkRatio
-          );
-        }
         // 👇 calculate the length if requested
         let text = props.name ?? '';
         if (props.showDimension) {
@@ -543,6 +531,18 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             length(geojson, { units: 'miles' }) * 5280 /* 👈 to feet */,
             '1.0-0'
           )} ft)`;
+        }
+        // 👇 we may need to chunk the text into multiple lines
+        let chunked;
+        if (props.lineChunk) {
+          const textLength = this.#measureText(text, font, resolution);
+          const chunkable = props.lineSpline
+            ? new OLFeature({ geometry: this.#splineLine(feature) })
+            : feature;
+          chunked = this.#chunkLine(
+            chunkable,
+            textLength * this.lineChunkRatio
+          );
         }
         // 👇 here's the style
         const style = new OLStyle({

@@ -405,6 +405,15 @@
         </p>
       </li>
 
+      <li
+        (click)="canLandmarkProperties($event) && onContextMenu('landmark-properties')"
+        [class.disabled]="!canLandmarkProperties()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
+        <p>Modify landmark settings &hellip;</p>
+      </li>
+
       <li [class.disabled]="!canConvertLandmark()" class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'recycle']"></fa-icon>
         <p>

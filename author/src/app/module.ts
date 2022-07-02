@@ -12,6 +12,7 @@ import { CulvertPropertiesComponent } from './pages/dpw/culvert-properties';
 import { DPWPage } from './pages/dpw/page';
 import { ImportCulvertsComponent } from './pages/dpw/import-culverts';
 import { ImportLandmarksComponent } from './pages/property/import-landmarks';
+import { LandmarkPropertiesComponent } from './pages/property/landmark-properties';
 import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
@@ -243,6 +244,7 @@ const COMPONENTS = [
   EmailAddressValidator,
   ImportCulvertsComponent,
   ImportLandmarksComponent,
+  LandmarkPropertiesComponent,
   MergeParcelsComponent,
   MessageDialogComponent,
   NavigatorComponent,

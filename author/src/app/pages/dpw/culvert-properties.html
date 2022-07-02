@@ -19,7 +19,7 @@
   <mat-form-field>
     <mat-label>Diameter (inches)</mat-label>
     <input
-      #length="ngModel"
+      #diameter="ngModel"
       [(ngModel)]="record.diameter"
       [appSelectOnFocus]="true"
       [step]="1"
@@ -34,7 +34,7 @@
   <mat-form-field>
     <mat-label>Length (feet)</mat-label>
     <input
-      #diameter="ngModel"
+      #length="ngModel"
       [(ngModel)]="record.length"
       [step]="10"
       autocomplete="off"

@@ -1,6 +1,7 @@
 import { AbstractMapPage } from '../abstract-map';
 import { ContextMenuComponent } from '../../components/contextmenu';
 import { ImportLandmarksComponent } from './import-landmarks';
+import { LandmarkPropertiesComponent } from './landmark-properties';
 import { RootPage } from '../root/page';
 import { SidebarComponent } from '../../components/sidebar-component';
 
@@ -546,6 +547,10 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return this.#can(event, true);
   }
 
+  canLandmarkProperties(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 1);
+  }
+
   canMoveLandmark(event?: MouseEvent): boolean {
     const feature = this.olMap.selected[0];
     return this.#can(
@@ -598,6 +603,11 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       case 'import-landmarks':
         cFactory = this.resolver.resolveComponentFactory(
           ImportLandmarksComponent
+        );
+        break;
+      case 'landmark-properties':
+        cFactory = this.resolver.resolveComponentFactory(
+          LandmarkPropertiesComponent
         );
         break;
       case 'move-landmark':
