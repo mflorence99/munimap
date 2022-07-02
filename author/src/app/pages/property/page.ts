@@ -62,72 +62,72 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
 
   conversions: LandmarkConversion[] = [
     {
-      converter: this.#convertToArea,
+      converter: this.#convertToArea.bind(this),
       geometryType: 'LineString',
       label: 'area'
     },
     {
-      converter: this.#convertToBuilding,
+      converter: this.#convertToBuilding.bind(this),
       geometryType: 'Polygon',
       label: 'building'
     },
     {
-      converter: this.#convertToCulvert,
+      converter: this.#convertToCulvert.bind(this),
       geometryType: 'Point',
       label: 'culvert'
     },
     {
-      converter: this.#convertToDistance,
+      converter: this.#convertToDistance.bind(this),
       geometryType: 'LineString',
       label: 'distance'
     },
     {
-      converter: this.#convertToDitch,
+      converter: this.#convertToDitch.bind(this),
       geometryType: 'LineString',
       label: 'ditch'
     },
     {
-      converter: this.#convertToDriveway,
+      converter: this.#convertToDriveway.bind(this),
       geometryType: 'LineString',
       label: 'driveway'
     },
     {
-      converter: this.#convertToField,
+      converter: this.#convertToField.bind(this),
       geometryType: 'Polygon',
       label: 'field'
     },
     {
-      converter: this.#convertToForest,
+      converter: this.#convertToForest.bind(this),
       geometryType: 'Polygon',
       label: 'forest'
     },
     {
-      converter: this.#convertToPlace,
+      converter: this.#convertToPlace.bind(this),
       geometryType: 'Point',
       label: 'place'
     },
     {
-      converter: this.#convertToPond,
+      converter: this.#convertToPond.bind(this),
       geometryType: 'Polygon',
       label: 'pond'
     },
     {
-      converter: this.#convertToStonewall,
+      converter: this.#convertToStonewall.bind(this),
       geometryType: 'LineString',
       label: 'stonewall'
     },
     {
-      converter: this.#convertToStream,
+      converter: this.#convertToStream.bind(this),
       geometryType: 'LineString',
       label: 'stream'
     },
     {
-      converter: this.#convertToTrail,
+      converter: this.#convertToTrail.bind(this),
       geometryType: 'LineString',
       label: 'trail'
     },
     {
-      converter: this.#convertToWetland,
+      converter: this.#convertToWetland.bind(this),
       geometryType: 'Polygon',
       label: 'wetland'
     }

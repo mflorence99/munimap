@@ -88,6 +88,7 @@ import { OLPopupBridgePropertiesComponent } from '@lib/ol/dpw/ol-popup-bridgepro
 import { OLPopupCulvertPropertiesComponent } from '@lib/ol/dpw/ol-popup-culvertproperties';
 import { OLPopupDPWPropertiesComponent } from '@lib/ol/dpw/ol-popup-dpwproperties';
 import { OLPopupFloodHazardPropertiesComponent } from '@lib/ol/dpw/ol-popup-floodhazardproperties';
+import { OLPopupLandmarkPropertiesComponent } from '@lib/ol/landmarks/ol-popup-landmarkproperties';
 import { OLPopupParcelPropertiesComponent } from '@lib/ol/parcels/ol-popup-parcelproperties';
 import { OLPopupSelectionComponent } from '@lib/ol/ol-popup-selection';
 import { OLPopupStreamCrossingPropertiesComponent } from '@lib/ol/dpw/ol-popup-streamcrossingproperties';
@@ -211,6 +212,7 @@ const COMPONENTS = [
   OLPopupCulvertPropertiesComponent,
   OLPopupDPWPropertiesComponent,
   OLPopupFloodHazardPropertiesComponent,
+  OLPopupLandmarkPropertiesComponent,
   OLPopupParcelPropertiesComponent,
   OLPopupSelectionComponent,
   OLPopupStreamCrossingPropertiesComponent,

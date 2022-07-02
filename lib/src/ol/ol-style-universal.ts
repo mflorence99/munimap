@@ -19,8 +19,10 @@ import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getCenter } from 'ol/extent';
 
+import area from '@turf/area';
 import combine from '@turf/combine';
 import cspline from 'ol-ext/render/Cspline';
+import length from '@turf/length';
 import lineChunk from '@turf/line-chunk';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
@@ -49,6 +51,8 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleUniversalComponent implements OnChanges, Styler {
+  #format: OLGeoJSON;
+
   @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
 
   @Input() fontFamily = 'Roboto';
@@ -79,7 +83,12 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     private decimal: DecimalPipe,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent
-  ) {}
+  ) {
+    this.#format = new OLGeoJSON({
+      dataProjection: this.map.featureProjection,
+      featureProjection: this.map.projection
+    });
+  }
 
   #calcFontPixels(props: LandmarkProperties, resolution: number): number {
     let fontPixels;
@@ -115,14 +124,10 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     feature: OLFeature<any>,
     length: number /* 👈 meters */
   ): OLFeature<any> {
-    const format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
-    });
-    const geojson = JSON.parse(format.writeFeature(feature));
+    const geojson = JSON.parse(this.#format.writeFeature(feature));
     const chunks = lineChunk(geojson, length / 1000 /* 👈 km */);
     const multiline = combine(chunks).features[0];
-    const chunked = format.readFeature(multiline);
+    const chunked = this.#format.readFeature(multiline);
     return chunked;
   }
 
@@ -532,8 +537,12 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         // 👇 calculate the length if requested
         let text = props.name ?? '';
         if (props.showDimension) {
-          const length = feature.getGeometry().getLength() * 3.28084;
-          text += ` (${this.decimal.transform(length, '1.0-0')} ft)`;
+          // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+          const geojson = JSON.parse(this.#format.writeFeature(feature));
+          text += ` (${this.decimal.transform(
+            length(geojson, { units: 'miles' }) * 5280 /* 👈 to feet */,
+            '1.0-0'
+          )} ft)`;
         }
         // 👇 here's the style
         const style = new OLStyle({
@@ -617,8 +626,12 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         // 👇 calculate the acreage if requested
         let text = props.name?.replace(/ /g, '\n') ?? '';
         if (props.showDimension) {
-          const acreage = feature.getGeometry().getArea() * 0.000247105;
-          text += `\n(${this.decimal.transform(acreage, '1.0-2')} ac)`;
+          // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+          const geojson = JSON.parse(this.#format.writeFeature(feature));
+          text += `\n(${this.decimal.transform(
+            area(geojson) * 0.000247105 /* 👈 m2 to acres */,
+            '1.0-2'
+          )} ac)`;
         }
         // 👇 establish the location of the text
         let textLocation;
