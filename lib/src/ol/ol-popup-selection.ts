@@ -1,8 +1,12 @@
 import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
+import { UtilsService } from '../services/utils';
+
+import * as Sentry from '@sentry/angular';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { OnInit } from '@angular/core';
@@ -27,7 +31,8 @@ export class OLPopupSelectionComponent implements OnInit {
   constructor(
     private destroy$: DestroyService,
     private map: OLMapComponent,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private utils: UtilsService
   ) {}
 
   #handleFeaturesSelected$(): void {
@@ -44,7 +49,34 @@ export class OLPopupSelectionComponent implements OnInit {
       });
   }
 
+  // 🔥 copy to clipboard does not seems to work under iOS
+  canClipboard(): boolean {
+    return typeof ClipboardItem !== 'undefined' && !this.utils.iOS();
+  }
+
   ngOnInit(): void {
     this.#handleFeaturesSelected$();
+  }
+
+  toClipboard(element: ElementRef): void {
+    const type = 'text/html';
+    // 👉 get type mismatch error w/o any, contradicting the MDN example
+    //    https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem
+    const data = [
+      new ClipboardItem({
+        [type]: new Blob([element.nativeElement.innerHTML], {
+          type
+        }) as any
+      })
+    ];
+    navigator.clipboard
+      .write(data)
+      .then(() =>
+        console.log('%cElement copied to clipboard', 'color: skyblue')
+      )
+      .catch(() => {
+        console.error('🔥 Copy to clipboard failed');
+        Sentry.captureMessage('Copy to clipboard failed');
+      });
   }
 }

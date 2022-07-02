@@ -1,8 +1,6 @@
 import { OLInteractionSelectLandmarksComponent } from '../landmarks/ol-interaction-selectlandmarks';
 import { OLMapComponent } from '../ol-map';
-import { UtilsService } from '../../services/utils';
-
-import * as Sentry from '@sentry/angular';
+import { OLPopupSelectionComponent } from '../ol-popup-selection';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -24,7 +22,7 @@ import OLFeature from 'ol/Feature';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-dpwproperties',
   templateUrl: './ol-popup-dpwproperties.html',
-  styleUrls: ['./ol-popup-dpwproperties.scss']
+  styleUrls: ['../ol-popup-selection.scss', './ol-popup-dpwproperties.scss']
 })
 export class OLPopupDPWPropertiesComponent {
   #subToSelection: Subscription;
@@ -35,9 +33,9 @@ export class OLPopupDPWPropertiesComponent {
 
   constructor(
     private cdf: ChangeDetectorRef,
+    private popper: OLPopupSelectionComponent,
     private map: OLMapComponent,
-    private snackBar: MatSnackBar,
-    private utils: UtilsService
+    private snackBar: MatSnackBar
   ) {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleFeatureSelected$();
@@ -50,7 +48,7 @@ export class OLPopupDPWPropertiesComponent {
     /* 🔥 this.#subToSelection = */ this.map.featuresSelected
       .pipe(
         map((features: OLFeature<any>[]): any => {
-          // 🔥 feature may be landmark with meradata representing
+          // 🔥 feature may be landmark with metadata representing
           //    bridge, flood hazard or stream crossing
           let properties = features[0]?.getProperties();
           if (properties?.metadata) properties = properties.metadata;
@@ -60,37 +58,16 @@ export class OLPopupDPWPropertiesComponent {
       .subscribe((properties: any) => {
         this.properties = properties;
         if (!this.properties) this.onClose();
-        else {
-          this.cdf.markForCheck();
-        }
+        else this.cdf.markForCheck();
       });
   }
 
-  // 🔥 copy to clipboard does not seems to work under iOS
   canClipboard(): boolean {
-    return typeof ClipboardItem !== 'undefined' && !this.utils.iOS();
+    return this.popper.canClipboard();
   }
 
   onClipboard(): void {
-    const type = 'text/html';
-    // 👉 get type mismatch error w/o any, contradicting the MDN example
-    //    https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem
-    const data = [
-      new ClipboardItem({
-        [type]: new Blob([this.table.nativeElement.innerHTML], {
-          type
-        }) as any
-      })
-    ];
-    navigator.clipboard
-      .write(data)
-      .then(() =>
-        console.log('%cLandmark copied to clipboard', 'color: skyblue')
-      )
-      .catch(() => {
-        console.error('Copy to clipboard failed');
-        Sentry.captureMessage('Copy to clipboard failed');
-      });
+    this.popper.toClipboard(this.table);
   }
 
   onClose(): void {

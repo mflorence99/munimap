@@ -44,7 +44,7 @@ export class DPWLegendComponent implements OnInit {
         return [undefined];
       },
       key: '$fake$' /* 👈 fakeroo field in every row */,
-      tag: 'Total'
+      tag: 'All Culverts'
     },
     {
       enum: (): string[] => {
@@ -53,28 +53,28 @@ export class DPWLegendComponent implements OnInit {
         );
       },
       key: 'diameter',
-      tag: 'Diameter'
+      tag: 'By Diameter'
     },
     {
       enum: (): string[] => {
         return culvertMaterials as any;
       },
       key: 'material',
-      tag: 'Material'
+      tag: 'By Material'
     },
     {
       enum: (): string[] => {
         return culvertHeadwalls as any;
       },
       key: 'headwall',
-      tag: 'Headwall'
+      tag: 'By Headwall'
     },
     {
       enum: (): string[] => {
         return culvertFloodHazards as any;
       },
       key: 'floodHazard',
-      tag: 'Flood Hazard'
+      tag: 'By Flood Hazard'
     }
   ];
 
@@ -105,7 +105,6 @@ export class DPWLegendComponent implements OnInit {
         this.breakdowns[metric.key][key] = breakdown;
       });
     });
-    console.error(this.breakdowns);
   }
 
   #handleStreams$(): void {

@@ -1,12 +1,10 @@
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLMapComponent } from '../ol-map';
+import { OLPopupSelectionComponent } from '../ol-popup-selection';
 import { Parcel } from '../../common';
 import { ParcelID } from '../../common';
 import { ParcelProperties } from '../../common';
 import { TypeRegistry } from '../../services/typeregistry';
-import { UtilsService } from '../../services/utils';
-
-import * as Sentry from '@sentry/angular';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -35,7 +33,7 @@ interface Abutter {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-parcelproperties',
   templateUrl: './ol-popup-parcelproperties.html',
-  styleUrls: ['./ol-popup-parcelproperties.scss']
+  styleUrls: ['../ol-popup-selection.scss', './ol-popup-parcelproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
   #subToAbutters: Subscription;
@@ -59,9 +57,9 @@ export class OLPopupParcelPropertiesComponent {
   constructor(
     private cdf: ChangeDetectorRef,
     private map: OLMapComponent,
+    private popper: OLPopupSelectionComponent,
     public registry: TypeRegistry,
-    private snackBar: MatSnackBar,
-    private utils: UtilsService
+    private snackBar: MatSnackBar
   ) {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleAbuttersFound$();
@@ -129,9 +127,8 @@ export class OLPopupParcelPropertiesComponent {
       });
   }
 
-  // 🔥 copy to clipboard does not seems to work under iOS
   canClipboard(): boolean {
-    return typeof ClipboardItem !== 'undefined' && !this.utils.iOS();
+    return this.popper.canClipboard();
   }
 
   // 👉 https://developers.google.com/maps/documentation/urls/get-started
@@ -145,28 +142,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   onClipboard(): void {
-    const type = 'text/html';
-    // 👉 get type mismatch error w/o any, contradicting the MDN example
-    //    https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem
-    const data = [
-      new ClipboardItem({
-        [type]: new Blob([this.tables.nativeElement.innerHTML], {
-          type
-        }) as any
-      })
-    ];
-    navigator.clipboard
-      .write(data)
-      .then(() =>
-        console.log(
-          '%cParcelProperties and Abutters copied to clipboard',
-          'color: skyblue'
-        )
-      )
-      .catch(() => {
-        console.error('Copy to clipboard failed');
-        Sentry.captureMessage('Copy to clipboard failed');
-      });
+    this.popper.toClipboard(this.tables);
   }
 
   onClose(): void {
