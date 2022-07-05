@@ -414,31 +414,37 @@ export interface ParcelPropertiesLabel {
 
 export type ParcelPropertiesNeighborhood = '' | 'U' | 'V' | 'W';
 
-export type ParcelPropertiesUsage =
-  | '110' // Single family residence
-  | '120' // Multi family residence
-  | '130' // Other residential
-  | '190' // Current use
-  | '260' // Commercial / Industrial
-  | '300' // Town property
-  | '400' // State property
-  | '500' // State park
-  | '501' // Town forest
-  | '502'; // Conservation land
+export const parcelPropertiesUsage: Record<string, string> = {
+  '110': 'Single Family Residence',
+  '120': 'Multi Family Residence',
+  '130': 'Other Residential',
+  '190': 'Current Use',
+  '260': 'Commercial / Industrial',
+  '300': 'Town Property',
+  '400': 'State Property',
+  '500': 'State Park',
+  '501': 'Town Forest',
+  '502': 'Conservation Land'
+};
 
-export type ParcelPropertiesUse =
-  | ''
-  | 'CUDE' // Discretionary
-  | 'CUFL' // Farm land
-  | 'CUMH' // Managed hardwood
-  | 'CUMO' // Managed other
-  | 'CUMW' // Managed pine
-  | 'CUNS' // Xmas tree
-  | 'CUUH' // Unmanaged hardwood
-  | 'CUUL' // Unproductive
-  | 'CUUO' // Unmanaged other
-  | 'CUUW' // Unmanaged pine
-  | 'CUWL'; // Wetland
+export type ParcelPropertiesUsage = keyof typeof parcelPropertiesUsage;
+
+export const parcelPropertiesUse: Record<string, string> = {
+  '': null,
+  'CUWL': 'Wetland',
+  'CUFL': 'Farmland',
+  'CUMH': 'Managed Hardwood',
+  'CUUH': 'Unmanaged Hardwood',
+  'CUMW': 'Managed Pine',
+  'CUUW': 'Unmanaged Pine',
+  'CUMO': 'Managed (Other)',
+  'CUUO': 'Unmanaged (Other)',
+  'CUDE': 'Discretionary',
+  'CUNS': 'Christmas Tree',
+  'CUUL': 'Unproductive'
+};
+
+export type ParcelPropertiesUse = keyof typeof parcelPropertiesUse;
 
 export interface PlaceProperties {
   county: string;

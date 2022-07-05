@@ -6,14 +6,12 @@ import { Component } from '@angular/core';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { ConfirmDialogData } from '@lib/components/confirm-dialog';
 import { DeleteMap } from '@lib/state/map';
-import { Descriptor } from '@lib/services/typeregistry';
 import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { TypeRegistry } from '@lib/services/typeregistry';
 import { UpdateMap } from '@lib/state/map';
 import { ViewChild } from '@angular/core';
 
@@ -46,7 +44,6 @@ export class ControlPanelPropertiesComponent {
   constructor(
     private authState: AuthState,
     private dialog: MatDialog,
-    public registry: TypeRegistry,
     private root: RootPage,
     private router: Router,
     private store: Store
@@ -77,10 +74,6 @@ export class ControlPanelPropertiesComponent {
           this.router.navigate(['/create']);
         }
       });
-  }
-
-  trackByStyle(ix: number, item: [any, Descriptor]): string {
-    return item[0];
   }
 
   update(map: any): void {

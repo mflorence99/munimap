@@ -5,8 +5,8 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { Descriptor } from '@lib/services/typeregistry';
 import { Input } from '@angular/core';
+import { KeyValue } from '@angular/common';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -14,16 +14,18 @@ import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
-import { TypeRegistry } from '@lib/services/typeregistry';
 import { ValuesPipe } from 'ngx-pipes';
 import { ViewChild } from '@angular/core';
+
+import { parcelPropertiesUsage } from '@lib/common';
+import { parcelPropertiesUse } from '@lib/common';
 
 import OLFeature from 'ol/Feature';
 
 interface Value {
   conflict: boolean;
   label: string;
-  list: [any, Descriptor][];
+  list: Record<string, string>;
   prop: string;
   step: number;
   type: string;
@@ -38,8 +40,8 @@ const editables = [
   { prop: 'address', label: 'Parcel Address', type: 'text' },
   { prop: 'owner', label: 'Parcel Owner', type: 'text' },
   { prop: 'area', label: 'Acreage', type: 'number', step: 0.01 },
-  { prop: 'usage', label: 'Land Use' },
-  { prop: 'use', label: 'Current Use' },
+  { prop: 'usage', label: 'Land Use', list: parcelPropertiesUsage },
+  { prop: 'use', label: 'Current Use', list: parcelPropertiesUse },
   { prop: 'neighborhood', label: 'Neighborhood' },
   { prop: 'building$', label: 'Building Tax', type: 'number' },
   { prop: 'land$', label: 'Land Tax', type: 'number' },
@@ -73,7 +75,6 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   constructor(
     private authState: AuthState,
     private cdf: ChangeDetectorRef,
-    public registry: TypeRegistry,
     private store: Store
   ) {}
 
@@ -84,7 +85,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
       this.record[prop] = {
         conflict: false,
         label: editable.label,
-        list: this.registry.list('parcel', prop),
+        list: editable.list,
         prop: prop,
         step: editable.step ?? 1,
         type: editable.type,
@@ -151,8 +152,8 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     this.propertiesForm.form.markAsPristine();
   }
 
-  trackByOption(ix: number, option: [any, Descriptor]): string {
-    return option[0];
+  trackByOption(ix: number, option: KeyValue<string, string>): string {
+    return option.key;
   }
 
   trackByProp(ix: number, value: Value): string {

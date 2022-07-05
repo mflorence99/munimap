@@ -4,7 +4,9 @@ import { OLPopupSelectionComponent } from '../ol-popup-selection';
 import { Parcel } from '../../common';
 import { ParcelID } from '../../common';
 import { ParcelProperties } from '../../common';
-import { TypeRegistry } from '../../services/typeregistry';
+
+import { parcelPropertiesUsage } from '../../common';
+import { parcelPropertiesUse } from '../../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -43,6 +45,9 @@ export class OLPopupParcelPropertiesComponent {
 
   @Input() maxNumProperties = 3;
 
+  parcelPropertiesUsage = parcelPropertiesUsage;
+  parcelPropertiesUse = parcelPropertiesUse;
+
   properties: ParcelProperties[] = [];
 
   sameAddress: boolean;
@@ -58,7 +63,6 @@ export class OLPopupParcelPropertiesComponent {
     private cdf: ChangeDetectorRef,
     private map: OLMapComponent,
     private popper: OLPopupSelectionComponent,
-    public registry: TypeRegistry,
     private snackBar: MatSnackBar
   ) {
     // 👉 see above, no ngOnInit where we'd normally do this

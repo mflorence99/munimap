@@ -42,10 +42,10 @@
         [name]="value.prop"
       >
         <mat-option
-          *ngFor="let option of value.list; trackBy: trackByOption"
-          [value]="option[0]"
+          *ngFor="let option of value.list | keyvalue; trackBy: trackByOption"
+          [value]="option.key"
         >
-          {{ option[1].decoding }}
+          {{ option.value}}
         </mat-option>
       </mat-select>
       <fa-icon

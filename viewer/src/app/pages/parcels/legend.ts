@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Descriptor } from '@lib/services/typeregistry';
-import { TypeRegistry } from '@lib/services/typeregistry';
+import { KeyValue } from '@angular/common';
 import { VersionService } from '@lib/services/version';
+
+import { parcelPropertiesUsage } from '@lib/common';
+import { parcelPropertiesUse } from '@lib/common';
 
 import OLFillPattern from 'ol-ext/style/FillPattern';
 
@@ -19,13 +21,17 @@ export class ParcelsLegendComponent {
   floodplain = '#03a9f480';
   wetland = new OLFillPattern({ color: '#03a9f4', pattern: 'swamp' });
 
-  constructor(public registry: TypeRegistry, private version: VersionService) {}
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  parcelPropertiesUsage = parcelPropertiesUsage;
+  parcelPropertiesUse = parcelPropertiesUse;
+
+  constructor(private version: VersionService) {}
 
   reset(): void {
     this.version.hardReset();
   }
 
-  trackByUsage(ix: number, item: [any, Descriptor]): string {
-    return item[0];
+  trackByKeyValue(ix: number, item: KeyValue<string, string>): string {
+    return item.key;
   }
 }

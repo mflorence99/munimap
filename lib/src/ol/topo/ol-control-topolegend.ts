@@ -5,7 +5,6 @@ import { OLControlAbstractParcelsLegendComponent } from '../ol-control-abstractp
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../common';
 import { ParcelsState } from '../../state/parcels';
-import { TypeRegistry } from '../../services/typeregistry';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -55,10 +54,9 @@ export class OLControlTopoLegendComponent
     geoJSON: GeoJSONService,
     map: OLMapComponent,
     parcelsState: ParcelsState,
-    registry: TypeRegistry,
     route: ActivatedRoute
   ) {
-    super(cdf, destroy$, geoJSON, map, parcelsState, registry, route);
+    super(cdf, destroy$, geoJSON, map, parcelsState, route);
   }
 
   ngOnInit(): void {

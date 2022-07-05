@@ -1,4 +1,3 @@
-import { Descriptor } from '../services/typeregistry';
 import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { Mapable } from './ol-mapable';
@@ -7,12 +6,15 @@ import { Parcel } from '../common';
 import { ParcelID } from '../common';
 import { Parcels } from '../common';
 import { ParcelsState } from '../state/parcels';
-import { TypeRegistry } from '../services/typeregistry';
+
+import { parcelPropertiesUsage } from '../common';
+import { parcelPropertiesUse } from '../common';
 
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
+import { KeyValue } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
@@ -54,6 +56,8 @@ export abstract class OLControlAbstractParcelsLegendComponent
     scale: 0.66
   });
   olControl: OLControl;
+  parcelPropertiesUsage = parcelPropertiesUsage;
+  parcelPropertiesUse = parcelPropertiesUse;
 
   abstract county: string;
   abstract id: string;
@@ -69,7 +73,6 @@ export abstract class OLControlAbstractParcelsLegendComponent
     private geoJSON: GeoJSONService,
     private map: OLMapComponent,
     private parcelsState: ParcelsState,
-    public registry: TypeRegistry,
     private route: ActivatedRoute
   ) {}
 
@@ -172,7 +175,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     this.#handleStreams$();
   }
 
-  trackByUsage(ix: number, item: [any, Descriptor]): string {
-    return item[0];
+  trackByKeyValue(ix: number, item: KeyValue<string, string>): string {
+    return item.key;
   }
 }

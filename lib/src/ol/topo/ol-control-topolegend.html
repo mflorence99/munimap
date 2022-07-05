@@ -21,19 +21,21 @@
 
     <tbody>
       <ng-container
-        *ngFor="let usage of registry.list('parcel', 'usage'); trackBy: trackByUsage"
+        *ngFor="let usage of parcelPropertiesUsage | keyvalue; trackBy: trackByKeyValue"
       >
         <tr
-          *ngIf="['500', '501', '502'].includes(usage[0]) && areaByUsage[usage[0]]"
+          *ngIf="['500', '501', '502'].includes(usage.key) && areaByUsage[usage.key]"
         >
           <td class="usage">
             <figure
-              [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage[0] + '), 0.25)'"
+              [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.25)'"
               class="key"
             ></figure>
           </td>
-          <td class="desc">{{ usage[1].decoding }}</td>
-          <td class="numeric">{{ areaByUsage[usage[0]] | number: '1.0-0' }}</td>
+          <td class="desc">{{ usage.value.decoding }}</td>
+          <td class="numeric">
+            {{ areaByUsage[usage.key] | number: '1.0-0' }}
+          </td>
         </tr>
       </ng-container>
 

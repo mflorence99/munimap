@@ -51,10 +51,9 @@
         <tr *ngIf="sameUsage">
           <td>Land use</td>
           <td [attr.colspan]="properties.length">
-            {{ registry.decode('parcel', 'usage', properties[0].usage) }}
+            {{ parcelPropertiesUsage[properties[0].usage] }}
             <span *ngIf="properties[0].usage === '190'">
-              &nbsp;&mdash;&nbsp;{{ registry.decode('parcel', 'use',
-              properties[0].use) }}
+              &nbsp;&mdash;&nbsp;{{ parcelPropertiesUse[properties[0].use] }}
             </span>
           </td>
         </tr>
