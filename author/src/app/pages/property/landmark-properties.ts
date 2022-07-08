@@ -35,8 +35,6 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
 
   @Input() map: OLMapComponent;
 
-  metadataProps = ['xxx', 'yyy'] /* 🔥 TEMPORARY */;
-
   record: Partial<LandmarkProperties> = {};
 
   @Input() selectedIDs: LandmarkID[];

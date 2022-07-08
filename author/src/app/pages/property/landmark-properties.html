@@ -32,16 +32,6 @@
     />
   </mat-form-field>
 
-  <mat-form-field *ngFor="let prop of metadataProps">
-    <mat-label>{{ prop }}</mat-label>
-    <input
-      [(ngModel)]="record.metadata[prop]"
-      [name]="prop"
-      autocomplete="off"
-      matInput
-    />
-  </mat-form-field>
-
   <mat-checkbox
     *ngIf="['LineString', 'Polygon'].includes(geometryType)"
     [(ngModel)]="record.showDimension"
