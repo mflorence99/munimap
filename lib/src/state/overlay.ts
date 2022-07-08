@@ -71,6 +71,11 @@ export class OverlayState {
         attribute: 'width',
         value: 'sixty',
         caption: 'Parcels \u2264 60ft wide'
+      },
+      {
+        attribute: 'width',
+        value: 'hundred',
+        caption: 'Parcels \u2264 100ft wide'
       }
     ];
   }
@@ -97,6 +102,7 @@ export class OverlayState {
 
   #quantizeWidth(width: number): string {
     if (width <= 60) return 'sixty';
+    else if (width <= 100) return 'hundred';
     else return null;
   }
 
