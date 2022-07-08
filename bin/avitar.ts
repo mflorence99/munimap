@@ -3,6 +3,7 @@ import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 import DBFParser from 'node-dbf';
+import jsome from 'jsome';
 
 // 🔥 only washington has an avitar.dbf
 //    we'll have to change this a lot for others
@@ -43,9 +44,11 @@ const featureByID = geojson.features.reduce((acc, feature) => {
 
 function main(): void {
   try {
-    searchForAnomalies();
-    checkForOwnershipChanges();
-    saveGeoJSON();
+    jsome(avitarByID['20-137']);
+    jsome(avitarByID['20-138']);
+    // searchForAnomalies();
+    // checkForOwnershipChanges();
+    // saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
   }
