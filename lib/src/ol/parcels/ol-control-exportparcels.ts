@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { Store } from '@ngxs/store';
 
 import { saveAs } from 'file-saver';
 
@@ -38,7 +39,8 @@ export class OLControlExportParcelsComponent {
     private geoJSON: GeoJSONService,
     private map: OLMapComponent,
     private parcelsState: ParcelsState,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store
   ) {
     this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
@@ -51,7 +53,8 @@ export class OLControlExportParcelsComponent {
       this.#layer,
       this.map,
       this.parcelsState,
-      this.route
+      this.route,
+      this.store
     );
     this.#source.ngOnInit();
   }

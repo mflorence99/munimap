@@ -20,6 +20,7 @@ import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
@@ -52,9 +53,9 @@ export class OLSourceParcelsComponent implements OnInit {
 
   olVector: OLVector<any>;
 
-  @Select(OverlayState) overlay$: Observable<OverlayProperty[]>;
+  overlay$: Observable<OverlayProperty[]>;
 
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
+  parcels$: Observable<Parcel[]>;
 
   @Input() path: string;
 
@@ -64,7 +65,8 @@ export class OLSourceParcelsComponent implements OnInit {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private parcelsState: ParcelsState,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store
   ) {
     let strategy;
     if (this.map.loadingStrategy === 'all') strategy = allStrategy;
@@ -77,6 +79,10 @@ export class OLSourceParcelsComponent implements OnInit {
     });
     this.olVector.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olVector);
+    // 🔥 must do it this way so we can dynamically create component
+    //    this is new behavior with Angular 14
+    this.overlay$ = this.store.select((state) => state.overlay);
+    this.parcels$ = this.store.select((state) => state.parcels);
   }
 
   #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): Set<ParcelID> {
@@ -95,7 +101,7 @@ export class OLSourceParcelsComponent implements OnInit {
 
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
-    //    also with the oveylay, but we only care here if it has changed
+    //    also with the overlay, but we only care here if it has changed
     //    we'll look at its value when we come to style the parcels
     combineLatest([this.#geojson$, this.parcels$, this.overlay$])
       .pipe(takeUntil(this.destroy$))
