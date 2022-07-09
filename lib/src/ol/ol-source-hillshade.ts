@@ -23,8 +23,11 @@ export class OLSourceHillshadeComponent {
 
   olTileWMS: OLTileWMS;
 
+  // 👇 we have to disambiguate by version because the service can
+  //    sometimes be unreliable and cache bad images
+
   url =
-    'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256';
+    'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256&version=VVVVVV';
 
   constructor(
     private layer: OLLayerTileComponent,
@@ -52,6 +55,7 @@ export class OLSourceHillshadeComponent {
       environment.endpoints.proxy
     }/proxy/hillshade?url=${encodeURIComponent(
       this.url
+        .replace('VVVVVV', environment.package.version)
         .replace('XXXXXX', bbox)
         .replace('YYYYYY', JSON.stringify(renderingRule))
     )}`;

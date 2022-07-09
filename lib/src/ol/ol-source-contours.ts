@@ -37,15 +37,18 @@ export class OLSourceContoursComponent {
 
   olTileWMS: OLTileWMS;
 
+  // 👇 we have to disambiguate by version because the service can
+  //    sometimes be unreliable and cache bad images
+
   // 👇 the preferred source for contours is best because it
   //    includes an elevation annotation -- but it is unreliable,
   //    often throwing 503 or 504 errors
 
   urlFallback =
-    'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256';
+    'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256&version=VVVVVV';
 
   urlPreferred =
-    'https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer/export?bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&dpi=96&format=png32&transparent=true&layers=show:ZZZZZZ&f=image';
+    'https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer/export?bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&dpi=96&format=png32&transparent=true&layers=show:ZZZZZZ&f=image&version=VVVVVV';
 
   constructor(
     private http: HttpClient,
@@ -103,6 +106,7 @@ export class OLSourceContoursComponent {
       environment.endpoints.proxy
     }/proxy/contours?url=${encodeURIComponent(
       model
+        .replace('VVVVVV', environment.package.version)
         .replace('XXXXXX', bbox)
         .replace('YYYYYY', JSON.stringify(renderingRule))
         .replace('ZZZZZZ', this.layers.join(','))
