@@ -4,7 +4,6 @@ import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-se
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OverlayProperty } from '../state/overlay';
-import { OverlayState } from '../state/overlay';
 import { Parcel } from '../common';
 import { ParcelID } from '../common';
 import { Parcels } from '../common';
@@ -19,7 +18,6 @@ import { Coordinate } from 'ol/coordinate';
 import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
