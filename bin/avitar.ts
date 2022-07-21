@@ -46,9 +46,9 @@ function main(): void {
   try {
     jsome(avitarByID['20-137']);
     jsome(avitarByID['20-138']);
-    // searchForAnomalies();
-    // checkForOwnershipChanges();
-    // saveGeoJSON();
+    searchForAnomalies();
+    checkForOwnershipChanges();
+    saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
   }
