@@ -36,9 +36,12 @@
             "allowedCommonJsDependencies": [
               "concaveman",
               "debounce-decorator",
+              "fast-copy",
+              "file-saver",
               "geojson-rbush",
               "pbf",
               "polylabel",
+              "rbush",
               "url-parse"
             ],
             "assets": [
@@ -125,9 +128,12 @@
             "allowedCommonJsDependencies": [
               "concaveman",
               "debounce-decorator",
+              "fast-copy",
+              "file-saver",
               "geojson-rbush",
               "pbf",
               "polylabel",
+              "rbush",
               "url-parse"
             ],
             "assets": [
