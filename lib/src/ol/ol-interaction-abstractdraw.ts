@@ -77,7 +77,7 @@ export abstract class OLInteractionAbstractDrawComponent {
   // 👉 setFeature is called by the contextmenu code to initiate
   //    this interaction
 
-  startDraw(geometryType: string): void {
+  startDraw(geometryType: any): void {
     // 👇 layer into which new feature is drawn
     this.#source = new OLVectorSource();
     this.#layer = new OLVectorLayer({ source: this.#source });
