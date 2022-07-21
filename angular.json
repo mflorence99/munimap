@@ -34,14 +34,23 @@
           "defaultConfiguration": "",
           "options": {
             "allowedCommonJsDependencies": [
+              "@mapbox/togeojson",
               "concaveman",
               "debounce-decorator",
               "fast-copy",
               "file-saver",
+              "fuzzysort",
               "geojson-rbush",
+              "html2canvas",
+              "jszip",
+              "object-hash",
               "pbf",
+              "polygon-clipping",
               "polylabel",
               "rbush",
+              "ts-md5",
+              "turf-jsts",
+              "ua-parser-js",
               "url-parse"
             ],
             "assets": [
@@ -126,14 +135,23 @@
           "defaultConfiguration": "",
           "options": {
             "allowedCommonJsDependencies": [
+              "@mapbox/togeojson",
               "concaveman",
               "debounce-decorator",
               "fast-copy",
               "file-saver",
+              "fuzzysort",
               "geojson-rbush",
+              "html2canvas",
+              "jszip",
+              "object-hash",
               "pbf",
+              "polygon-clipping",
               "polylabel",
               "rbush",
+              "ts-md5",
+              "turf-jsts",
+              "ua-parser-js",
               "url-parse"
             ],
             "assets": [
