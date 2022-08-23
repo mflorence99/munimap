@@ -71,7 +71,7 @@ export class OLMapComponent
 
   @Input() // 👈 optionally circumscibes map
   get bbox(): Coordinate {
-    return this.#bbox ?? this.boundary.features[0].bbox;
+    return this.#bbox ?? this.boundary.features?.[0]?.bbox ?? [0, 0, 0, 0];
   }
   set bbox(bbox: Coordinate) {
     this.#bbox = bbox;
