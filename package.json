@@ -134,7 +134,7 @@
     "object-hash": "^3",
     "ol": "^6",
     "ol-ext": "^3",
-    "ol-mapbox-style": "^8",
+    "ol-mapbox-style": "^9",
     "polylabel": "^1",
     "proj4": "^2",
     "request": "^2",
@@ -149,7 +149,7 @@
     "url-parse": "^1",
     "uuid": "^8",
     "yargs": "^17",
-    "zone.js": "0.11.6"
+    "zone.js": "0.11.8"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14",
@@ -191,7 +191,7 @@
     "serverless-apigw-binary": "0.4.4",
     "serverless-domain-manager": "^6",
     "stylelint": "^14",
-    "stylelint-config-standard": "^26",
+    "stylelint-config-standard": "^28",
     "stylelint-order": "^5",
     "stylelint-scss": "^4",
     "ts-node": "^10",
