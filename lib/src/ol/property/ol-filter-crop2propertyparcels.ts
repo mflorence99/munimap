@@ -33,7 +33,7 @@ export class OLFilterCrop2PropertyParcelsComponent
   #format: OLGeoJSON;
   #layer: any;
 
-  olFilter: typeof Crop;
+  olFilter: Crop | Mask;
 
   @Input() opacity = 0.33;
 
@@ -74,7 +74,6 @@ export class OLFilterCrop2PropertyParcelsComponent
       // 👇 crop or mask?
       if (this.type === 'crop') {
         this.olFilter = new Crop({
-          active: true,
           feature: this.#format.readFeature(merged),
           inner: false
         });
@@ -82,7 +81,6 @@ export class OLFilterCrop2PropertyParcelsComponent
       // 👇 crop or mask?
       else if (this.type === 'mask') {
         this.olFilter = new Mask({
-          active: true,
           feature: this.#format.readFeature(merged),
           fill: new OLFill({ color: [128, 128, 128, this.opacity] }),
           inner: false

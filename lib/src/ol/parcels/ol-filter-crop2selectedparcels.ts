@@ -30,7 +30,7 @@ export class OLFilterCrop2SelectedParcelsComponent
   #format: OLGeoJSON;
   #layer: any;
 
-  olFilter: typeof Crop;
+  olFilter: Crop;
 
   constructor(
     private destroy$: DestroyService,
@@ -63,7 +63,6 @@ export class OLFilterCrop2SelectedParcelsComponent
         type: 'Feature'
       };
       this.olFilter = new Crop({
-        active: true,
         feature: this.#format.readFeature(merged),
         inner: false
       });
@@ -72,7 +71,6 @@ export class OLFilterCrop2SelectedParcelsComponent
     //    to ensure that everyting is cropped, until a selection is made
     else {
       this.olFilter = new Crop({
-        active: true,
         feature: this.#format.readFeature({
           geometry: {
             coordinates: [],

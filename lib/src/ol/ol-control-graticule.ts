@@ -62,7 +62,7 @@ export class OLControlGraticuleComponent
     //    constructor as there few "set" methods
     this.olControl = new OLGraticule({
       borderWidth: this.borderPixels,
-      formatCoord: (coord): string => `${coord.toFixed(dps)}°`,
+      formatCoord: (coord: any): string => `${coord.toFixed(dps)}°`,
       margin: this.margin,
       maxResolution: this.maxZoom
         ? this.map.olView.getResolutionForZoom(this.maxZoom)

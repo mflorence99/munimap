@@ -24,7 +24,7 @@ export class OLFilterCrop2BoundaryComponent
 {
   #layer: any;
 
-  olFilter: typeof Crop;
+  olFilter: Crop;
 
   constructor(
     @Optional() layer1: OLLayerTileComponent,
@@ -42,7 +42,6 @@ export class OLFilterCrop2BoundaryComponent
       .getGeometry()
       .transform(this.map.featureProjection, this.map.projection);
     this.olFilter = new Crop({
-      active: true,
       feature: feature,
       inner: false
     });

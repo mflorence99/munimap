@@ -372,9 +372,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             color: `rgba(${
               props.strokeOutline ? strokeOutlineColor : strokeColor
             }, ${props.strokeOpacity})`,
-            pattern: props.strokePattern,
-            scale: props.strokePatternScale,
-            width: strokePixels
+            pattern: props.strokePattern as any,
+            scale: props.strokePatternScale
           });
         } catch (ignored) {}
       }
@@ -665,13 +664,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           image: props.iconSymbol
             ? new OLFontSymbol({
                 color: `rgba(${iconColor}, ${props.iconOpacity})`,
+                fill: new OLFill({ color: `rgba(${iconOutlineColor}, 1)` }),
                 font: `'Font Awesome'`,
                 fontStyle: 'bold',
                 form: 'none',
                 radius: fontPixels,
                 stroke: props.iconOutline
                   ? new OLStroke({
-                      // 🔥 this always shows as black!!
                       color: `rgba(${iconOutlineColor}, 1)`,
                       width: fontPixels * this.fontOutlineRatio
                     })

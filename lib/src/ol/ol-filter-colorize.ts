@@ -3,7 +3,7 @@ import { OLLayerVectorComponent } from './ol-layer-vector';
 
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { Color } from 'ol/color';
+import { ColorLike } from 'ol/colorlike';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
@@ -31,18 +31,18 @@ type Operation =
   styles: [':host { display: none }']
 })
 export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
-  #color: Color = [0, 0, 0];
+  #color: ColorLike = '#000000';
   #layer: any;
   #operation: Operation;
   #value = 1;
 
-  olFilter: typeof Colorize;
+  olFilter: Colorize;
 
   @Input()
-  get color(): Color {
+  get color(): ColorLike {
     return this.#color;
   }
-  set color(color: Color) {
+  set color(color: ColorLike) {
     this.#color = color;
     this.#setFilter();
   }
@@ -72,9 +72,7 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
     // 👇 choose which layer parent
     this.#layer = layer1 ?? layer2;
     // 👇 build the filter
-    this.olFilter = new Colorize({
-      active: true
-    });
+    this.olFilter = new Colorize();
   }
 
   #setFilter(): void {
@@ -82,7 +80,7 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
       case 'grayscale':
       case 'invert':
       case 'sepia':
-        this.olFilter.setFilter(this.operation);
+        this.olFilter.setFilter({ operation: this.operation });
         break;
       default:
         this.olFilter.setFilter({

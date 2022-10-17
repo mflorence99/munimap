@@ -45,7 +45,7 @@ export class OLControlSplitScreenComponent
   }
 
   ngAfterContentInit(): void {
-    this.olControl.addLayer(this.onLeft.olLayer);
+    this.olControl.addLayer(this.onLeft.olLayer, false);
     this.olControl.addLayer(this.onRight.olLayer, true);
   }
 }
