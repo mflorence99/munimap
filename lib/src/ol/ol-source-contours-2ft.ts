@@ -27,7 +27,7 @@ const attribution =
 //    and read and composite them all
 
 // 🔥 PROBLEM: HUCs that don't apply for a given XYZ sometimes return
-//    an empty image (good, because we can cahe that) but sometimes
+//    an empty image (good, because we can cache that) but sometimes
 //    with a 404 (bad, because we can't but want to, as they'll
 //    never work) -- so we may need to "remember" the 404 to reduce
 //    network traffic to the proxy
