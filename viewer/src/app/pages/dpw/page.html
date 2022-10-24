@@ -151,6 +151,36 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
+      <app-ol-layer-vector>
+        <app-ol-adaptor-powerlines
+          ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
+        ></app-ol-adaptor-powerlines>
+        <app-ol-source-geojson
+          [layerKey]="'powerlines'"
+        ></app-ol-source-geojson>
+        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+      </app-ol-layer-vector>
+
+      <app-ol-layer-vector>
+        <app-ol-style-parcels
+          [borderOpacity]="0.5"
+          [labelOpacity]="0.5"
+          [fontSizeAcreageRatio]="0.5"
+          [showAcreage]="false"
+          [showAddress]="true"
+          [showBorder]="'always'"
+          [showDimensionContrast]="'never'"
+          [showDimensions]="'never'"
+          [showLabels]="'always'"
+          [showLabelContrast]="'never'"
+          [showSelection]="'never'"
+          [showStolen]="'never'"
+        ></app-ol-style-parcels>
+        <app-ol-source-parcels></app-ol-source-parcels>
+      </app-ol-layer-vector>
+
+      <!-- 📦 STATE'S LANDMARKS -->
+
       <app-ol-layer-vector #bridges>
         <app-ol-adaptor-bridges [bridgeWidth]="64">
           <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
@@ -172,16 +202,6 @@
           <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
         </app-ol-adaptor-floodhazards>
         <app-ol-source-floodhazards></app-ol-source-floodhazards>
-        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-      </app-ol-layer-vector>
-
-      <app-ol-layer-vector>
-        <app-ol-adaptor-powerlines
-          ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
-        ></app-ol-adaptor-powerlines>
-        <app-ol-source-geojson
-          [layerKey]="'powerlines'"
-        ></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -241,6 +261,23 @@
             ></app-ol-source-xyz
           >
         </app-ol-layer-tile>
+
+        <app-ol-layer-vector>
+          <app-ol-style-parcels
+            [borderOpacity]="0.5"
+            [labelOpacity]="0.5"
+            [showAcreage]="false"
+            [showAddress]="true"
+            [showBorder]="'always'"
+            [showDimensionContrast]="'never'"
+            [showDimensions]="'never'"
+            [showLabels]="'always'"
+            [showLabelContrast]="'always'"
+            [showSelection]="'never'"
+            [showStolen]="'never'"
+          ></app-ol-style-parcels>
+          <app-ol-source-parcels></app-ol-source-parcels>
+        </app-ol-layer-vector>
 
         <app-ol-layer-vector #bridges>
           <app-ol-adaptor-bridges [bridgeWidth]="64">

@@ -92,6 +92,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 
+  @Input() borderOpacity = 1;
   @Input() borderWidth = 10 /* 👈 feet */;
   @Input() borderWidthSelectRatio = 2;
   @Input() dimensionsFontSizeRatio = 0.5;
@@ -100,12 +101,15 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() forceAbutted = false /* 🔥 experimental */;
   @Input() forceRedrawn = false /* 🔥 experimental */;
   @Input() forceSelected = false /* 🔥 experimental */;
+  @Input() labelOpacity = 1;
   @Input() maxBorderPixels = 3;
   @Input() maxFontSize = 40;
   @Input() minFontSize = 6;
   @Input() opacity = 0.25;
   @Input() parcelIDs: ParcelID[];
   @Input() showAbutters: ShowStatus = 'never';
+  @Input() showAcreage = true;
+  @Input() showAddress = false;
   @Input() showBackground: ShowStatus = 'never';
   @Input() showBorder: ShowStatus = 'never';
   @Input() showDimensionContrast: ShowStatus = 'never';
@@ -409,14 +413,14 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       return labels.map((label) => {
         const text = new OLText({
           font: `${label.fontWeight} ${label.fontSize}px '${label.fontFamily}'`,
-          fill: new OLFill({ color: `rgba(${color}, 1)` }),
+          fill: new OLFill({ color: `rgba(${color}, ${this.labelOpacity})` }),
           offsetX: label.offsetX,
           offsetY: label.offsetY,
           overflow: true,
           rotation: label.rotation,
           stroke: contrast
             ? new OLStroke({
-                color: `rgba(${outline}, 1)`,
+                color: `rgba(${outline}, ${this.labelOpacity})`,
                 width: Math.min(label.fontSize / 8, this.maxBorderPixels)
               })
             : null,
@@ -460,7 +464,11 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           '  ',
           `normal ${fontSize * fAcres}px '${this.fontFamily}'`
         );
-        const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
+        // 👉 we'll show the address in place of the acres if requested
+        let acres;
+        if (this.showAcreage)
+          acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
+        else if (this.showAddress) acres = props.address;
         const mAcres = this.map.measureText(
           acres,
           `normal ${fontSize * fAcres}px '${this.fontFamily}'`
@@ -523,6 +531,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   }
 
   #splitation(props: ParcelProperties, ix: number): boolean {
+    // 👉 alwats split if showing address
+    if (this.showAddress) return true;
     const label = props.labels?.[ix];
     // 👉 we're ignoring split=false recommendations as that doesn't really
     //    work in the OpenLayers world
@@ -554,7 +564,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       return [
         new OLStyle({
           stroke: new OLStroke({
-            color: 'white',
+            color: `rgba(255, 255, 255, ${this.borderOpacity})`,
             lineCap: 'square',
             width: borderPixels
           })
@@ -562,7 +572,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         new OLStyle({
           fill: new OLFill({ color: [0, 0, 0, 0] }),
           stroke: new OLStroke({
-            color: `rgb(${outline})`,
+            color: `rgba(${outline}, ${this.borderOpacity})`,
             lineCap: 'square',
             lineDash:
               borderPixels > 1
@@ -598,7 +608,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     // 👉 necessary so we can select
     const fill = new OLFill({ color: [0, 0, 0, 0] });
     const stroke = new OLStroke({
-      color: `rgb(${outline})`,
+      color: `rgba(${outline}, ${this.borderOpacity})`,
       width: borderPixels
     });
     return [
