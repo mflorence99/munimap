@@ -394,8 +394,6 @@ export class OLMapComponent
   }
 
   numPixels(nominal: number): number {
-    // 🔥 EXPERIMENTAL -- number of pixels for a nominal value
-    //    to preserve the same experience as on screen
     return (this.dpi / this.#dpi) * nominal;
   }
 
