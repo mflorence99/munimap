@@ -11,7 +11,7 @@ import booleanIntersects from '@turf/boolean-intersects';
 import chalk from 'chalk';
 import copy from 'fast-copy';
 
-// 🔥 you need to run powerlines2.ts at least once first
+// 🔥 you need to run powerlines-prepare.ts at least once first
 
 const dist = './data';
 
