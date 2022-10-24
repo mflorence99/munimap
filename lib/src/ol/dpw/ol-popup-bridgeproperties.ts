@@ -1,4 +1,5 @@
 import { BridgeProperties } from '../../common';
+import { OLPopupDPWPropertiesComponent } from './ol-popup-dpwproperties';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -23,4 +24,6 @@ export class OLPopupBridgePropertiesComponent {
     ['Year Rebuilt', 'YEARRECON'],
     ['Owner', 'OWNER']
   ];
+
+  constructor(public container: OLPopupDPWPropertiesComponent) {}
 }

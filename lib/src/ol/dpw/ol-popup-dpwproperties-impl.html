@@ -4,5 +4,12 @@
       <td>{{ scheme[0]}}</td>
       <td>{{ properties?.[scheme[1]] || ''}} {{ scheme[2] || ''}}</td>
     </tr>
+
+    <tr>
+      <td></td>
+      <td>
+        <a [href]="container.googleLink()" target="_blank">Google view</a>
+      </td>
+    </tr>
   </tbody>
 </table>

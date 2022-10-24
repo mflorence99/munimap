@@ -1,4 +1,5 @@
 import { FloodHazardProperties } from '../../common';
+import { OLPopupDPWPropertiesComponent } from './ol-popup-dpwproperties';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -21,4 +22,6 @@ export class OLPopupFloodHazardPropertiesComponent {
     ['Previous Actions', 'MitAction'],
     ['Report Source', 'Source']
   ];
+
+  constructor(public container: OLPopupDPWPropertiesComponent) {}
 }

@@ -225,8 +225,7 @@ export class ParcelsState implements NgxsOnInit {
         undos.push({ ...(normalized as Parcel), $id: ref.id })
       );
     });
-    // TODO 🔥 we have a great opportunity here to "cull"
-    //         extraneous parcels
+    // 🔥 we have a great opportunity here to "cull" extraneous parcels
     batch
       .commit()
       .then(() => Promise.all(promises))

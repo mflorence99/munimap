@@ -1,4 +1,5 @@
 import { CulvertProperties } from '../../common';
+import { OLPopupDPWPropertiesComponent } from './ol-popup-dpwproperties';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -22,4 +23,6 @@ export class OLPopupCulvertPropertiesComponent {
     ['Flood Hazard', 'floodHazard'],
     ['Year Re/built', 'year']
   ];
+
+  constructor(public container: OLPopupDPWPropertiesComponent) {}
 }

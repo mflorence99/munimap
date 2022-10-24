@@ -1,3 +1,4 @@
+import { OLPopupDPWPropertiesComponent } from './ol-popup-dpwproperties';
 import { StreamCrossingProperties } from '../../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -23,4 +24,6 @@ export class OLPopupStreamCrossingPropertiesComponent {
     ['Outlet Material', 'DsWingwallMat'],
     ['Outlet Condition', 'DsHwCon']
   ];
+
+  constructor(public container: OLPopupDPWPropertiesComponent) {}
 }

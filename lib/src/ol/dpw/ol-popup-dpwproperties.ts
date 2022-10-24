@@ -66,6 +66,20 @@ export class OLPopupDPWPropertiesComponent {
     return this.popper.canClipboard();
   }
 
+  // 👉 https://developers.google.com/maps/documentation/urls/get-started
+  googleLink(): string {
+    const marker = this.properties.geometry
+      .clone()
+      .transform(this.map.projection, this.map.featureProjection)
+      .getCoordinates();
+    const link = `https://www.google.com/maps/search/?api=1&query=${
+      marker[1]
+    }%2C${marker[0]}&zoom=${Math.round(
+      this.map.olView.getZoom()
+    )}&basemap=terrain`;
+    return link;
+  }
+
   onClipboard(): void {
     this.popper.toClipboard(this.table);
   }
