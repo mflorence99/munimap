@@ -5,38 +5,30 @@ import { LandmarkPropertiesClass } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+
+// 🔥 highly experimental
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBuildingsComponent)
+      useExisting: forwardRef(() => OLAdaptorBuildingsAtNightComponent)
     }
   ],
-  selector: 'app-ol-adaptor-buildings',
+  selector: 'app-ol-adaptor-buildingsatnight',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLAdaptorBuildingsComponent implements Adaptor {
-  @Input() shadowLength = 6 /* 👈 feet */;
-
+export class OLAdaptorBuildingsAtNightComponent implements Adaptor {
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: '--map-building-fill',
-        fillOpacity: 1,
-        shadowColor: '--map-building-outline',
-        shadowOffsetFeet: [this.shadowLength, -this.shadowLength],
-        shadowOpacity: 0.75,
-        strokeColor: '--map-building-outline',
-        strokeFeet: 1,
-        strokeOpacity: 1,
-        strokeStyle: 'solid'
+        fillColor: '--map-buildingatnight-fill',
+        fillOpacity: 1
       })
     ];
   }

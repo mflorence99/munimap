@@ -127,6 +127,8 @@ $dark-app-theme: mat-dark-theme(
   --map-building-fill: var(--rgb-gray-400);
   --map-building-outline: var(--rgb-gray-700);
 
+  --map-buildingatnight-fill: var(--rgb-amber-500);
+
   --map-conservation-fill: var(--rgb-green-700);
   --map-conservation-outline: var(--rgb-green-700);
 
@@ -155,6 +157,8 @@ $dark-app-theme: mat-dark-theme(
   --map-landmark-hover: var(--rgb-indigo-a700);
   --map-landmark-redraw: var(--rgb-blue-a200);
   --map-landmark-select: var(--rgb-red-a700);
+
+  --map-moonlight-pattern: 229, 228, 226;
 
   --map-parcel-abutter: var(--rgb-blue-a200);
   --map-parcel-dimension-color: var(--rgb-blue-gray-900);

@@ -14,29 +14,23 @@ import { forwardRef } from '@angular/core';
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBuildingsComponent)
+      useExisting: forwardRef(() => OLAdaptorBackgroundComponent)
     }
   ],
-  selector: 'app-ol-adaptor-buildings',
+  selector: 'app-ol-adaptor-background',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLAdaptorBuildingsComponent implements Adaptor {
-  @Input() shadowLength = 6 /* 👈 feet */;
+export class OLAdaptorBackgroundComponent implements Adaptor {
+  @Input() fillColor = '--rgb-gray-900';
+  @Input() fillOpacity = 1;
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: '--map-building-fill',
-        fillOpacity: 1,
-        shadowColor: '--map-building-outline',
-        shadowOffsetFeet: [this.shadowLength, -this.shadowLength],
-        shadowOpacity: 0.75,
-        strokeColor: '--map-building-outline',
-        strokeFeet: 1,
-        strokeOpacity: 1,
-        strokeStyle: 'solid'
+        fillColor: this.fillColor,
+        fillOpacity: this.fillOpacity
       })
     ];
   }

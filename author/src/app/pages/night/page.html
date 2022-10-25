@@ -1,0 +1,116 @@
+<ng-container *ngIf="(mapState$ | async) as map">
+  <app-ol-map
+    #olMap
+    [loadingStrategy]="'bbox'"
+    [minZoom]="13"
+    [maxZoom]="20"
+    [path]="map.path"
+  >
+    <app-controlpanel-properties
+      [map]="map"
+      mapControlPanel1
+    ></app-controlpanel-properties>
+
+    <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
+
+    <app-ol-control-print
+      *ngIf="map.name"
+      [fileName]="map.name"
+      [printSize]="map.printSize"
+      mapControlPrint
+    ></app-ol-control-print>
+
+    <app-ol-control-zoom2extent
+      mapControlZoomToExtent
+    ></app-ol-control-zoom2extent>
+
+    <app-ol-control-attribution
+      mapControlAttribution
+    ></app-ol-control-attribution>
+
+    <ng-container *ngIf="olMap.initialized">
+      <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+
+      <app-ol-control-title
+        *ngIf="olMap.printing"
+        [showTitleContrast]="satelliteView$ | async"
+        [title]="map.name"
+      ></app-ol-control-title>
+
+      <app-ol-control-graticule *ngIf="olMap.printing"
+        ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
+      ></app-ol-control-graticule>
+
+      <app-ol-control-graticule *ngIf="!olMap.printing"
+        ><app-ol-style-graticule></app-ol-style-graticule
+      ></app-ol-control-graticule>
+
+      <!-- 📦 NORMAL (not satellite) LAYERS -->
+
+      <ng-container *ngIf="!(satelliteView$ | async)">
+        <!-- 📦 BG LAYER (outside town)-->
+
+        <!-- <app-ol-layer-vector>
+          <app-ol-adaptor-background [fillOpacity]="0.5">
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+          </app-ol-adaptor-background>
+          <app-ol-source-bbox></app-ol-source-bbox>
+        </app-ol-layer-vector> -->
+
+        <!-- 📦 BG LAYER (inside town) -->
+
+        <app-ol-layer-vector>
+          <app-ol-adaptor-background>
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+          </app-ol-adaptor-background>
+          <app-ol-source-boundary></app-ol-source-boundary>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <!-- 📦 Water under moonlight -->
+
+        <app-ol-layer-vector>
+          <app-ol-adaptor-moonlight>
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+          </app-ol-adaptor-moonlight>
+          <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
+          <app-ol-source-waterbodies
+            [exclude]="[466]"
+          ></app-ol-source-waterbodies>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+
+        <!-- 📦 Buildings with lights on -->
+
+        <app-ol-layer-vector>
+          <app-ol-adaptor-buildingsatnight>
+            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+          </app-ol-adaptor-buildingsatnight>
+          <app-ol-source-geojson
+            [layerKey]="'buildings'"
+          ></app-ol-source-geojson>
+          <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+        </app-ol-layer-vector>
+      </ng-container>
+
+      <!-- 📦 SATELLITE LAYER  -->
+
+      <ng-container *ngIf="satelliteView$ | async">
+        <app-ol-layer-tile>
+          <app-ol-source-xyz
+            [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+            [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
+            ><app-ol-attribution
+              >©
+              <a href="https://google.com" target="_blank"
+                >Google</a
+              ></app-ol-attribution
+            ></app-ol-source-xyz
+          >
+        </app-ol-layer-tile>
+      </ng-container>
+    </ng-container>
+
+    <!-- 📦 CONTROLS -->
+  </app-ol-map>
+</ng-container>

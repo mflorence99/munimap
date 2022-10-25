@@ -17,6 +17,7 @@ import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
+import { NightPage } from './pages/night/page';
 import { ParcelPropertiesComponent } from './pages/parcels/parcel-properties';
 import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
@@ -76,8 +77,10 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { OLAdaptorBackgroundComponent } from '@lib/ol/ol-adaptor-background';
 import { OLAdaptorBoundaryComponent } from '@lib/ol/ol-adaptor-boundary';
 import { OLAdaptorBridgesComponent } from '@lib/ol/ol-adaptor-bridges';
+import { OLAdaptorBuildingsAtNightComponent } from '@lib/ol/ol-adaptor-buildingsatnight';
 import { OLAdaptorBuildingsComponent } from '@lib/ol/ol-adaptor-buildings';
 import { OLAdaptorConservationsComponent } from '@lib/ol/ol-adaptor-conservations';
 import { OLAdaptorCulvertsComponent } from '@lib/ol/ol-adaptor-culverts';
@@ -86,6 +89,7 @@ import { OLAdaptorFloodHazardsComponent } from '@lib/ol/ol-adaptor-floodhazards'
 import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
 import { OLAdaptorGeoJSONComponent } from '@lib/ol/ol-adaptor-geojson';
 import { OLAdaptorLandmarksComponent } from '@lib/ol/ol-adaptor-landmarks';
+import { OLAdaptorMoonlightComponent } from '@lib/ol/ol-adaptor-moonlight';
 import { OLAdaptorPlacesComponent } from '@lib/ol/ol-adaptor-places';
 import { OLAdaptorPowerlinesComponent } from '@lib/ol/ol-adaptor-powerlines';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
@@ -128,6 +132,7 @@ import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
+import { OLSourceBBoxComponent } from '@lib/ol/ol-source-bbox';
 import { OLSourceBoundaryComponent } from '@lib/ol/ol-source-boundary';
 import { OLSourceBoundaryGridComponent } from '@lib/ol/ol-source-boundarygrid';
 import { OLSourceBridgesComponent } from '@lib/ol/ol-source-bridges';
@@ -248,9 +253,11 @@ const COMPONENTS = [
   MergeParcelsComponent,
   MessageDialogComponent,
   NavigatorComponent,
+  OLAdaptorBackgroundComponent,
   OLAdaptorBoundaryComponent,
   OLAdaptorBridgesComponent,
   OLAdaptorBuildingsComponent,
+  OLAdaptorBuildingsAtNightComponent,
   OLAdaptorConservationsComponent,
   OLAdaptorCulvertsComponent,
   OLAdaptorDPWLandmarksComponent,
@@ -258,6 +265,7 @@ const COMPONENTS = [
   OLAdaptorFloodplainsComponent,
   OLAdaptorGeoJSONComponent,
   OLAdaptorLandmarksComponent,
+  OLAdaptorMoonlightComponent,
   OLAdaptorPlacesComponent,
   OLAdaptorPowerlinesComponent,
   OLAdaptorRailroadsComponent,
@@ -300,6 +308,7 @@ const COMPONENTS = [
   OLMapComponent,
   OLOverlayLandmarkLabelComponent,
   OLOverlayParcelLabelComponent,
+  OLSourceBBoxComponent,
   OLSourceBoundaryComponent,
   OLSourceBoundaryGridComponent,
   OLSourceBridgesComponent,
@@ -347,6 +356,7 @@ const PAGES = [
   CreatePage,
   DPWPage,
   ListPage,
+  NightPage,
   ParcelsPage,
   PropertyPage,
   RootPage,
@@ -395,6 +405,11 @@ const ROUTES: any = [
         path: 'list',
         component: ListPage,
         data: { state: 'list' }
+      },
+      {
+        path: 'night/:id',
+        component: NightPage,
+        data: { state: 'night' }
       },
       {
         path: 'parcels/:id',
