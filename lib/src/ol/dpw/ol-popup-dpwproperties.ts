@@ -27,6 +27,7 @@ import OLFeature from 'ol/Feature';
 export class OLPopupDPWPropertiesComponent {
   #subToSelection: Subscription;
 
+  geometry: any /* 👈 in practice will be a Point */;
   properties: any /* 👈 could be bridge, stream crossing etc etc */;
 
   @ViewChild('table', { static: true }) table: ElementRef;
@@ -47,16 +48,18 @@ export class OLPopupDPWPropertiesComponent {
   #handleFeatureSelected$(): void {
     /* 🔥 this.#subToSelection = */ this.map.featuresSelected
       .pipe(
-        map((features: OLFeature<any>[]): any => {
+        map((features: OLFeature<any>[]): [any, any] => {
           // 🔥 feature may be landmark with metadata representing
           //    bridge, flood hazard or stream crossing
           let properties = features[0]?.getProperties();
+          const geometry = features[0]?.getGeometry();
           if (properties?.metadata) properties = properties.metadata;
-          return properties;
+          return [properties, geometry];
         })
       )
-      .subscribe((properties: any) => {
+      .subscribe(([properties, geometry]) => {
         this.properties = properties;
+        this.geometry = geometry;
         if (!this.properties) this.onClose();
         else this.cdf.markForCheck();
       });
@@ -68,7 +71,7 @@ export class OLPopupDPWPropertiesComponent {
 
   // 👉 https://developers.google.com/maps/documentation/urls/get-started
   googleLink(): string {
-    const marker = this.properties.geometry
+    const marker = this.geometry
       .clone()
       .transform(this.map.projection, this.map.featureProjection)
       .getCoordinates();
