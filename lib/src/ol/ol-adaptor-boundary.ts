@@ -23,27 +23,28 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorBoundaryComponent implements Adaptor {
+  @Input() borderOpacity = 0.5;
   @Input() borderPixels = 5;
-  @Input() opacity = 0.5;
-  @Input() pattern: OLFillPatternType = 'gravel';
+  @Input() fillOpacity = 1;
+  @Input() fillPattern: OLFillPatternType = 'gravel';
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fillColor: '--map-boundary-fill',
-        fillOpacity: 1,
+        fillOpacity: this.fillOpacity,
         zIndex: 1
       }),
       new LandmarkPropertiesClass({
         fillColor: '--map-boundary-pattern',
-        fillOpacity: 1,
-        fillPattern: this.pattern,
+        fillOpacity: this.fillOpacity,
+        fillPattern: this.fillPattern,
         zIndex: 2
       }),
       new LandmarkPropertiesClass({
         strokeColor: '--map-boundary-outline',
-        strokeOpacity: this.opacity,
+        strokeOpacity: this.borderOpacity,
         strokePixels: this.borderPixels,
         strokeStyle: 'solid',
         zIndex: 3

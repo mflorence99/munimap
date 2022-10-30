@@ -89,7 +89,6 @@ import { OLAdaptorFloodHazardsComponent } from '@lib/ol/ol-adaptor-floodhazards'
 import { OLAdaptorFloodplainsComponent } from '@lib/ol/ol-adaptor-floodplains';
 import { OLAdaptorGeoJSONComponent } from '@lib/ol/ol-adaptor-geojson';
 import { OLAdaptorLandmarksComponent } from '@lib/ol/ol-adaptor-landmarks';
-import { OLAdaptorMoonlightComponent } from '@lib/ol/ol-adaptor-moonlight';
 import { OLAdaptorPlacesComponent } from '@lib/ol/ol-adaptor-places';
 import { OLAdaptorPowerlinesComponent } from '@lib/ol/ol-adaptor-powerlines';
 import { OLAdaptorRailroadsComponent } from '@lib/ol/ol-adaptor-railroads';
@@ -97,6 +96,7 @@ import { OLAdaptorRoadsComponent } from '@lib/ol/ol-adaptor-roads';
 import { OLAdaptorStoneWallsComponent } from '@lib/ol/ol-adaptor-stonewalls';
 import { OLAdaptorStreamCrossingsComponent } from '@lib/ol/ol-adaptor-streamcrossings';
 import { OLAdaptorTrailsComponent } from '@lib/ol/ol-adaptor-trails';
+import { OLAdaptorWaterbodiesAtNightComponent } from '@lib/ol/ol-adaptor-waterbodiesatnight';
 import { OLAdaptorWaterbodiesComponent } from '@lib/ol/ol-adaptor-waterbodies';
 import { OLAdaptorWetlandsComponent } from '@lib/ol/ol-adaptor-wetlands';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
@@ -265,7 +265,6 @@ const COMPONENTS = [
   OLAdaptorFloodplainsComponent,
   OLAdaptorGeoJSONComponent,
   OLAdaptorLandmarksComponent,
-  OLAdaptorMoonlightComponent,
   OLAdaptorPlacesComponent,
   OLAdaptorPowerlinesComponent,
   OLAdaptorRailroadsComponent,
@@ -274,6 +273,7 @@ const COMPONENTS = [
   OLAdaptorStreamCrossingsComponent,
   OLAdaptorTrailsComponent,
   OLAdaptorWaterbodiesComponent,
+  OLAdaptorWaterbodiesAtNightComponent,
   OLAdaptorWetlandsComponent,
   OLAttributionComponent,
   OLControlAttributionComponent,

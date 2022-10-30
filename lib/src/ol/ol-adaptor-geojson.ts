@@ -24,9 +24,10 @@ export type FilterFunction = (name: string) => boolean;
   styles: [':host { display: none }']
 })
 export class OLAdaptorGeoJSONComponent implements Adaptor {
+  @Input() borderOpacity = 1;
   @Input() borderPixels = 3;
+  @Input() fillOpacity = 0.1;
   @Input() filter: FilterFunction;
-  @Input() opacity = 0.1;
 
   // 👇 construct LandmarkProperties
   adapt(source: any): LandmarkProperties[] {
@@ -34,9 +35,9 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fillColor: unselectable ? '--map-feature-disabled' : '--rgb-gray-50',
-        fillOpacity: unselectable ? this.opacity : 0,
+        fillOpacity: unselectable ? this.fillOpacity : 0,
         strokeColor: '--map-feature-outline',
-        strokeOpacity: 1,
+        strokeOpacity: this.borderOpacity,
         strokePixels: this.borderPixels,
         strokeStyle: 'solid'
       })
@@ -52,14 +53,14 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
       return [
         new LandmarkPropertiesClass({
           fillColor: '--map-feature-fill',
-          fillOpacity: this.opacity,
+          fillOpacity: this.fillOpacity,
           fontColor: '--map-feature-text-color',
           fontOpacity: 1,
           fontPixels: 20,
           fontStyle: 'bold',
           name: source.name,
           strokeColor: '--map-feature-outline',
-          strokeOpacity: 1,
+          strokeOpacity: this.borderOpacity,
           strokePixels: this.borderPixels,
           strokeStyle: 'solid'
         })
@@ -76,7 +77,7 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
       return [
         new LandmarkPropertiesClass({
           strokeColor: '--map-feature-outline',
-          strokeOpacity: 1,
+          strokeOpacity: this.borderOpacity,
           strokePixels: this.borderPixels,
           strokeStyle: 'solid'
         })

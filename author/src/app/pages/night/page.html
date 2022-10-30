@@ -50,12 +50,22 @@
       <ng-container *ngIf="!(satelliteView$ | async)">
         <!-- 📦 BG LAYER (outside town)-->
 
-        <!-- <app-ol-layer-vector>
-          <app-ol-adaptor-background [fillOpacity]="0.5">
-            <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-background>
-          <app-ol-source-bbox></app-ol-source-bbox>
-        </app-ol-layer-vector> -->
+        <app-ol-layer-tile>
+          <app-ol-source-xyz
+            [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+            ><app-ol-attribution
+              >©
+              <a href="https://mapbox.com" target="_blank"
+                >Mapbox</a
+              ></app-ol-attribution
+            ></app-ol-source-xyz
+          >
+          <app-ol-filter-colorize
+            [color]="[255, 255, 255]"
+            [operation]="'hue'"
+            [value]="0.9"
+          ></app-ol-filter-colorize>
+        </app-ol-layer-tile>
 
         <!-- 📦 BG LAYER (inside town) -->
 
@@ -70,9 +80,9 @@
         <!-- 📦 Water under moonlight -->
 
         <app-ol-layer-vector>
-          <app-ol-adaptor-moonlight>
+          <app-ol-adaptor-waterbodiesatnight>
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-          </app-ol-adaptor-moonlight>
+          </app-ol-adaptor-waterbodiesatnight>
           <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
           <app-ol-source-waterbodies
             [exclude]="[466]"

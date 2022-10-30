@@ -48,7 +48,7 @@ export class OLAdaptorPowerlinesComponent implements Adaptor {
   }
 
   // 👇 backdoor for lighning bolt icons we can't parameterize
-  //    declarativelt in LandmarkProperties
+  //    declaratively in LandmarkProperties
 
   backdoor(
     powerline: OLFeature<OLMultiLineString>,

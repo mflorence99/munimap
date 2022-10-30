@@ -23,25 +23,25 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorStoneWallsComponent implements Adaptor {
-  @Input() opacity = 0.5;
   @Input() pattern: OLStrokePatternType = 'rocks';
-  @Input() scale = 2;
+  @Input() patternOpacity = 0.5;
+  @Input() patternScale = 2;
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         strokeColor: '--map-stonewall-fill',
-        strokeOpacity: this.opacity,
+        strokeOpacity: this.patternOpacity,
         strokeStyle: 'solid',
         strokeWidth: 'thick',
         zIndex: 1
       }),
       new LandmarkPropertiesClass({
         strokeColor: '--map-stonewall-rocks',
-        strokeOpacity: this.opacity,
+        strokeOpacity: this.patternOpacity,
         strokePattern: this.pattern,
-        strokePatternScale: 2,
+        strokePatternScale: this.patternScale,
         strokeStyle: 'solid',
         strokeWidth: 'medium',
         zIndex: 2

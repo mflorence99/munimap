@@ -22,20 +22,24 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorBuildingsComponent implements Adaptor {
+  @Input() borderOpacity = 1;
+  @Input() borderWidth = 1 /* 👈 feet */;
+  @Input() fillOpacity = 1;
   @Input() shadowLength = 6 /* 👈 feet */;
+  @Input() shadowOpacity = 0.75;
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fillColor: '--map-building-fill',
-        fillOpacity: 1,
+        fillOpacity: this.fillOpacity,
         shadowColor: '--map-building-outline',
         shadowOffsetFeet: [this.shadowLength, -this.shadowLength],
-        shadowOpacity: 0.75,
+        shadowOpacity: this.shadowOpacity,
         strokeColor: '--map-building-outline',
-        strokeFeet: 1,
-        strokeOpacity: 1,
+        strokeFeet: this.borderWidth,
+        strokeOpacity: this.borderOpacity,
         strokeStyle: 'solid'
       })
     ];

@@ -17,24 +17,31 @@ import { forwardRef } from '@angular/core';
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorMoonlightComponent)
+      useExisting: forwardRef(() => OLAdaptorWaterbodiesAtNightComponent)
     }
   ],
-  selector: 'app-ol-adaptor-moonlight',
+  selector: 'app-ol-adaptor-waterbodiesatnight',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
 })
-export class OLAdaptorMoonlightComponent implements Adaptor {
-  @Input() pattern: OLFillPatternType = 'dot';
+export class OLAdaptorWaterbodiesAtNightComponent implements Adaptor {
+  @Input() fillOpacity = 1;
+  @Input() pattern: OLFillPatternType = 'conglomerate2';
+  @Input() patternOpacity = 1;
+  @Input() patternScale = 0.5;
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: '--map-moonlight-pattern',
-        fillOpacity: 1,
+        fillColor: '--map-waterbodyatnight-fill',
+        fillOpacity: this.fillOpacity
+      }),
+      new LandmarkPropertiesClass({
+        fillColor: '--map-waterbodyatnight-pattern',
+        fillOpacity: this.patternOpacity,
         fillPattern: this.pattern,
-        fillPatternScale: 0.25
+        fillPatternScale: this.patternScale
       })
     ];
   }

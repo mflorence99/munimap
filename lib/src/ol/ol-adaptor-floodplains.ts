@@ -22,14 +22,14 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorFloodplainsComponent implements Adaptor {
-  @Input() opacity = 0.1;
+  @Input() fillOpacity = 0.1;
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fillColor: '--map-floodplain-fill',
-        fillOpacity: this.opacity
+        fillOpacity: this.fillOpacity
       })
     ];
   }

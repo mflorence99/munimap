@@ -23,8 +23,9 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorConservationsComponent implements Adaptor {
+  @Input() borderOpacity = 1;
   @Input() borderPixels = 1;
-  @Input() opacity = 0.25;
+  @Input() fillOpacity = 0.25;
 
   // 👇 construct LandmarkProperties
   adapt(conservation: ParcelProperties): LandmarkProperties[] {
@@ -35,9 +36,9 @@ export class OLAdaptorConservationsComponent implements Adaptor {
       return [
         new LandmarkPropertiesClass({
           fillColor: `--map-parcel-fill-u${conservation.usage}`,
-          fillOpacity: this.opacity,
+          fillOpacity: this.fillOpacity,
           strokeColor: '--map-conservation-outline',
-          strokeOpacity: 1,
+          strokeOpacity: this.borderOpacity,
           strokePixels: this.borderPixels,
           strokeStyle: 'dashed'
         })

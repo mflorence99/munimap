@@ -26,6 +26,7 @@ import { forwardRef } from '@angular/core';
 export class OLAdaptorWetlandsComponent implements Adaptor {
   @Input() riverbank: OLFillPatternType = 'rocks';
   @Input() riverbankOpacity = 0.25;
+  @Input() riverbankScale = 2;
   @Input() swamp: OLFillPatternType = 'swamp';
   @Input() swampOpacity = 0.5;
 
@@ -50,7 +51,7 @@ export class OLAdaptorWetlandsComponent implements Adaptor {
             strokeColor: '--map-riverbank-rocks',
             strokeOpacity: this.riverbankOpacity,
             strokePattern: this.riverbank,
-            strokePatternScale: 2,
+            strokePatternScale: this.riverbankScale,
             strokeStyle: 'solid',
             strokeWidth: 'thick'
           })
