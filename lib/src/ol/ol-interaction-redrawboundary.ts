@@ -9,6 +9,7 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { click } from 'ol/events/condition';
+import { featureCollection } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
@@ -51,16 +52,11 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
   }
 
   #emitBoundary(): void {
-    const geojson: GeoJSON.FeatureCollection = {
-      features: [
-        JSON.parse(
-          this.#format.writeFeatures(
-            this.layer.olLayer.getSource().getFeatures()
-          )
-        )
-      ],
-      type: 'FeatureCollection'
-    };
+    const geojson = featureCollection([
+      JSON.parse(
+        this.#format.writeFeatures(this.layer.olLayer.getSource().getFeatures())
+      )
+    ]);
     // 👉 jam original bbox, which was calculated as 4:3
     geojson.features[0].bbox = this.map.boundary.features[0].bbox;
     // 👉 put the adjusted boundary on the clipboard

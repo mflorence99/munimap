@@ -20,6 +20,13 @@
       mapControlPrint
     ></app-ol-control-print>
 
+    <app-ol-control-exportlayers
+      *ngIf="map.name"
+      [fileName]="map.id + '-layers'"
+      [layerIDs]="['waterbodies']"
+      mapControlExport
+    ></app-ol-control-exportlayers>
+
     <app-ol-control-zoom2extent
       mapControlZoomToExtent
     ></app-ol-control-zoom2extent>
@@ -119,7 +126,7 @@
           <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         </app-ol-layer-vector>
 
-        <app-ol-layer-vector>
+        <app-ol-layer-vector [id]="'waterbodies'">
           <app-ol-adaptor-waterbodies>
             <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
           </app-ol-adaptor-waterbodies>

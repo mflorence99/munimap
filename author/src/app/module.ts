@@ -103,6 +103,7 @@ import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
 import { OLControlExportLandmarksComponent } from '@lib/ol/landmarks/ol-control-exportlandmarks';
+import { OLControlExportLayersComponent } from '@lib/ol/ol-control-exportlayers';
 import { OLControlExportParcelsComponent } from '@lib/ol/parcels/ol-control-exportparcels';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
 import { OLControlMousePositionComponent } from '@lib/ol/ol-control-mouseposition';
@@ -279,6 +280,7 @@ const COMPONENTS = [
   OLControlAttributionComponent,
   OLControlCreditsComponent,
   OLControlExportLandmarksComponent,
+  OLControlExportLayersComponent,
   OLControlExportParcelsComponent,
   OLControlGraticuleComponent,
   OLControlMousePositionComponent,

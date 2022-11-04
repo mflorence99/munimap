@@ -2,6 +2,8 @@ import { bboxByAspectRatio } from '../lib/src/common';
 import { simplify } from '../lib/src/common';
 import { theState } from '../lib/src/common';
 
+import * as turf from '@turf/turf';
+
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
@@ -28,7 +30,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   // 👉 we don't need the properties, but we do need the bbox
   //    for printing, we want the aspect ratio to be 4:3 (or 3:4)
   //    with mesurements rounded up to the nearest mile
-  feature.bbox = bboxByAspectRatio(feature, 4, 3, 'miles');
+  feature.bbox = bboxByAspectRatio(feature, 4, 3);
   feature.id = county;
   delete feature.properties;
 
@@ -45,10 +47,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   // 👉 gather all the counties in one file
   wholeState.push(feature);
 
-  const geojson: GeoJSON.FeatureCollection = {
-    features: [feature],
-    type: 'FeatureCollection'
-  };
+  const geojson = turf.featureCollection([feature]);
 
   // 👉 one file per county
   mkdirSync(`${dist}/${theState}/${county}`, { recursive: true });
@@ -60,10 +59,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
 
 // 👉 one file for all towns
 console.log(chalk.green(`... writing ${theState}/counties.geojson`));
-const geojson: GeoJSON.FeatureCollection = {
-  features: wholeState,
-  type: 'FeatureCollection'
-};
+const geojson = turf.featureCollection(wholeState);
 writeFileSync(
   `${dist}/${theState}/counties.geojson`,
   JSON.stringify(simplify(geojson))

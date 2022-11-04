@@ -6,6 +6,7 @@ import { normalizeParcel } from '../lib/src/common';
 import { simplify } from '../lib/src/common';
 import { theState } from '../lib/src/common';
 
+import * as turf from '@turf/turf';
 import * as yargs from 'yargs';
 
 import { mkdirSync } from 'fs';
@@ -119,10 +120,7 @@ async function main(): Promise<void> {
         // 👉 initialize all "by town" data structures
         countByTown[town] ??= 0;
         dupesByTown[town] ??= new Set<string>();
-        parcelsByTown[town] ??= {
-          features: [],
-          type: 'FeatureCollection'
-        } as any;
+        parcelsByTown[town] ??= turf.featureCollection([]);
         zeroAreaByTown[town] ??= 0;
 
         // 👉 occasionally, the data is dirty in that the same feature

@@ -1,3 +1,4 @@
+import { featureCollection } from '@turf/helpers';
 import { point } from '@turf/helpers';
 import { serverTimestamp } from 'firebase/firestore';
 
@@ -11,6 +12,7 @@ import polylabel from 'polylabel';
 import rhumbDestination from '@turf/rhumb-destination';
 import rhumbDistance from '@turf/rhumb-distance';
 import transformRotate from '@turf/transform-rotate';
+import truncate from '@turf/truncate';
 
 // 🔥 we need to share this code with the "bin" programs
 //    that's why it isn't an Angular service, for example
@@ -812,37 +814,6 @@ export function isIndex(name: string): boolean {
   return /^[A-Z ]*$/.test(name);
 }
 
-// 👉 calculate bbox based on desired dimensions
-
-export function bboxByDimensions(
-  geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
-  cxDesired: number,
-  cyDesired: number
-): GeoJSON.BBox {
-  // 👉 calculate bbox dimensions
-  const [minX, minY, maxX, maxY] = Array.isArray(geojson)
-    ? geojson
-    : bbox(geojson);
-  const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
-  // 👉 calculate amount of expansion needed
-  const cxDelta = (cxDesired - cx) / 2;
-  if (cxDelta < 0) console.error(`🔥 cx -ve ${cxDelta}`);
-  const cyDelta = (cyDesired - cy) / 2;
-  if (cyDelta < 0) console.error(`🔥 cy -ve ${cyDelta}`);
-  // 👉 calculate new extermities
-  const newMinX = rhumbDestination([minX, minY], cxDelta, -90);
-  const newMaxX = rhumbDestination([maxX, minY], cxDelta, 90);
-  const newMinY = rhumbDestination([minX, minY], cyDelta, 180);
-  const newMaxY = rhumbDestination([minX, maxY], cyDelta, 0);
-  // 👉 now we have the expanded bbox
-  return [
-    cxDelta ? newMinX.geometry.coordinates[0] : minX,
-    cyDelta ? newMinY.geometry.coordinates[1] : minY,
-    cxDelta ? newMaxX.geometry.coordinates[0] : maxX,
-    cyDelta ? newMaxY.geometry.coordinates[1] : maxY
-  ];
-}
-
 // 👉 calculate bbox based on desired aspect ratio
 //    we'll pick the best (inverting if necessary)
 //    then expand to the nearest whole "units"
@@ -897,6 +868,37 @@ function bboxByAspectRatioImpl(
     const dx = (dy * x) / y;
     return bboxByDimensions(geojson, cx + bx + dx, z + by + dy);
   }
+}
+
+// 👉 calculate bbox based on desired dimensions
+
+export function bboxByDimensions(
+  geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
+  cxDesired: number,
+  cyDesired: number
+): GeoJSON.BBox {
+  // 👉 calculate bbox dimensions
+  const [minX, minY, maxX, maxY] = Array.isArray(geojson)
+    ? geojson
+    : bbox(geojson);
+  const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+  // 👉 calculate amount of expansion needed
+  const cxDelta = (cxDesired - cx) / 2;
+  if (cxDelta < 0) console.error(`🔥 cx -ve ${cxDelta}`);
+  const cyDelta = (cyDesired - cy) / 2;
+  if (cyDelta < 0) console.error(`🔥 cy -ve ${cyDelta}`);
+  // 👉 calculate new extermities
+  const newMinX = rhumbDestination([minX, minY], cxDelta, -90);
+  const newMaxX = rhumbDestination([maxX, minY], cxDelta, 90);
+  const newMinY = rhumbDestination([minX, minY], cyDelta, 180);
+  const newMaxY = rhumbDestination([minX, maxY], cyDelta, 0);
+  // 👉 now we have the expanded bbox
+  return [
+    cxDelta ? newMinX.geometry.coordinates[0] : minX,
+    cyDelta ? newMinY.geometry.coordinates[1] : minY,
+    cxDelta ? newMaxX.geometry.coordinates[0] : maxX,
+    cyDelta ? newMaxY.geometry.coordinates[1] : maxY
+  ];
 }
 
 export function bboxDistance(
@@ -1063,10 +1065,7 @@ export function dedupe(geojsons: Buildings[]): Buildings {
     geojson.features.forEach((feature) => (acc[feature.id] = feature));
     return acc;
   }, {});
-  return {
-    features: Object.values(hash),
-    type: 'FeatureCollection'
-  };
+  return featureCollection(Object.values(hash));
 }
 
 export function deserializeLandmark(landmark: Partial<Landmark>): void {
@@ -1168,33 +1167,13 @@ export function serializeParcel(parcel: Partial<Parcel>): void {
   }
 }
 
-// 👉 trim all coordinates to 6 DP's
+// 👉 trim all coordinates to 7 DP's
+//    we used to use our own code, but now just use standard turf function
 //    http://wiki.gis.com/wiki/index.php/Decimal_degrees
 export function simplify(
-  geojson: GeoJSON.FeatureCollection
-): GeoJSON.FeatureCollection {
-  const trunc = (coords): number[] =>
-    coords.map((coord) =>
-      Number((Math.floor(coord * 1000000) / 1000000).toFixed(6))
-    );
-
-  const traverse = (array): void => {
-    for (let ix = 0; ix < array.length; ix++) {
-      if (
-        array[ix].length === 2 &&
-        !isNaN(array[ix][0]) &&
-        !isNaN(array[ix][1])
-      )
-        array[ix] = trunc(array[ix]);
-      else traverse(array[ix]);
-    }
-  };
-
-  geojson.features.forEach((feature: GeoJSON.Feature<any>) => {
-    if (feature.bbox) feature.bbox = trunc(feature.bbox) as GeoJSON.BBox;
-    if (feature.geometry?.coordinates) traverse(feature.geometry.coordinates);
-  });
-  return geojson;
+  geojson: GeoJSON.FeatureCollection<any>
+): GeoJSON.FeatureCollection<any> {
+  return truncate(geojson, { precision: 7 });
 }
 
 export function timestampParcel(parcel: Partial<Parcel>): void {

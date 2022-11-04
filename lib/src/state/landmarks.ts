@@ -35,6 +35,7 @@ import { combineLatest } from 'rxjs';
 import { deleteDoc } from '@angular/fire/firestore';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { doc } from '@angular/fire/firestore';
+import { featureCollection } from '@turf/helpers';
 import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
@@ -320,10 +321,7 @@ export class LandmarksState implements NgxsOnInit {
   }
 
   toGeoJSON(): Landmarks {
-    return {
-      features: this.store.snapshot().landmarks,
-      type: 'FeatureCollection'
-    };
+    return featureCollection(this.store.snapshot().landmarks);
   }
 
   @Action(Undo) undo(

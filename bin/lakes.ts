@@ -58,10 +58,7 @@ async function main(): Promise<void> {
           };
 
           lakesByCountyByTown[county] ??= {};
-          const geojson: GeoJSON.FeatureCollection = {
-            features: [],
-            type: 'FeatureCollection'
-          };
+          const geojson = turf.featureCollection([]);
           lakesByCountyByTown[county][town] ??= geojson;
           lakesByCountyByTown[county][town].features.push(lake);
         }

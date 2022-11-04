@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
+import { featureCollection } from '@turf/helpers';
 
 import bboxPolygon from '@turf/bbox-polygon';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -44,16 +45,11 @@ export class OLSourceBBoxComponent {
     success: Function
   ): void {
     // 👉 convert features into OL format
-    console.log({ bbox: this.map.bbox });
-    const features = this.olVector.getFormat().readFeatures(
-      {
-        features: [bboxPolygon(this.map.bbox as any)],
-        type: 'FeatureCollection'
-      },
-      {
+    const features = this.olVector
+      .getFormat()
+      .readFeatures(featureCollection([bboxPolygon(this.map.bbox as any)]), {
         featureProjection: this.map.projection
-      }
-    ) as OLFeature<any>[];
+      }) as OLFeature<any>[];
     // 👉 add feature to source
     this.olVector.addFeatures(features);
     success(features);

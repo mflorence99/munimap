@@ -34,7 +34,7 @@ export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: WetlandProperties = feature.attributes;
-        properties.type = ['Freshwater Pond', 'Lake', 'Riverine'].includes(
+        properties.type = ['Freshwater Pond', 'Riverine'].includes(
           properties.WETLAND_TY
         )
           ? 'water'

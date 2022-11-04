@@ -25,6 +25,10 @@ import OLTile from 'ol/layer/Tile';
 export class OLLayerTileComponent implements Mapable {
   olLayer: OLTile<any>;
 
+  @Input() set id(id: string) {
+    this.olLayer.set('id', id);
+  }
+
   @Input() set maxZoom(maxZoom: number) {
     this.olLayer.setMaxZoom(maxZoom);
   }

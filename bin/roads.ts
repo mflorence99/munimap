@@ -44,10 +44,7 @@ async function main(): Promise<void> {
       };
 
       roadsByCountyByTown[county] ??= {};
-      const geojson: GeoJSON.FeatureCollection = {
-        features: [],
-        type: 'FeatureCollection'
-      };
+      const geojson = turf.featureCollection([]);
       roadsByCountyByTown[county][town] ??= geojson;
       roadsByCountyByTown[county][town].features.push(feature);
     }

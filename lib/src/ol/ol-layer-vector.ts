@@ -33,6 +33,10 @@ export class OLLayerVectorComponent implements Mapable {
   @ContentChildren(StylerComponent, { descendants: true })
   stylers$: QueryList<any>;
 
+  @Input() set id(id: string) {
+    this.olLayer.set('id', id);
+  }
+
   @Input() set maxZoom(maxZoom: number) {
     this.olLayer.setMaxZoom(maxZoom);
   }

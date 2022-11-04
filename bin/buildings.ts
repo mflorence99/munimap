@@ -119,10 +119,7 @@ async function main(): Promise<void> {
           building.id = hash.MD5(building.geometry);
 
           buildingsByCountyByTown[county] ??= {};
-          const geojson: GeoJSON.FeatureCollection = {
-            features: [],
-            type: 'FeatureCollection'
-          };
+          const geojson = turf.featureCollection([]);
           buildingsByCountyByTown[county][town] ??= geojson;
           buildingsByCountyByTown[county][town].features.push(building);
         }

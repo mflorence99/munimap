@@ -63,10 +63,7 @@ powerlines.features.forEach((feature: GeoJSON.Feature) => {
         };
 
         linesByCountyByTown[county] ??= {};
-        const geojson: GeoJSON.FeatureCollection = {
-          features: [],
-          type: 'FeatureCollection'
-        };
+        const geojson = turf.featureCollection([]);
         linesByCountyByTown[county][town] ??= geojson;
         linesByCountyByTown[county][town].features.push(powerline);
       }

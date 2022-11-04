@@ -13,6 +13,7 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
+import { featureCollection } from '@turf/helpers';
 import { takeUntil } from 'rxjs/operators';
 
 import GeoJSON from 'ol/format/GeoJSON';
@@ -51,10 +52,7 @@ export class OLSourceLandmarksComponent implements OnInit {
   #handleStreams$(): void {
     this.landmarks$.pipe(takeUntil(this.destroy$)).subscribe((landmarks) => {
       // 👉 represent landmarks as geojson
-      const geojson = {
-        features: landmarks,
-        type: 'FeatureCollection'
-      };
+      const geojson = featureCollection(landmarks);
       // 👉 convert features into OL format
       const features = this.olVector.getFormat().readFeatures(geojson, {
         featureProjection: this.map.projection

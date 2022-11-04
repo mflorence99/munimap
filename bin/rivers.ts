@@ -66,10 +66,7 @@ async function main(): Promise<void> {
           };
 
           riversByCountyByTown[county] ??= {};
-          const geojson: GeoJSON.FeatureCollection = {
-            features: [],
-            type: 'FeatureCollection'
-          };
+          const geojson = turf.featureCollection([]);
           riversByCountyByTown[county][town] ??= geojson;
           riversByCountyByTown[county][town].features.push(river);
         }
