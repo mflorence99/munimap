@@ -140,8 +140,13 @@ async function main(): Promise<void> {
           properties: {
             address: makeAddress(feature),
             area:
-              Math.round(((feature.properties.Shape_Area ?? 0) / 43560) * 100) /
-              100 /* 👈 sq feet to acres to 2dps */,
+              Math.round(
+                turf.convertArea(
+                  feature.properties.Shape_Area ?? 0,
+                  'feet',
+                  'acres'
+                ) * 100
+              ) / 100 /* 👈 sq feet to acres to 2dps */,
             building$: feature.properties.TaxBldg,
             county: county,
             id: makeID(feature),

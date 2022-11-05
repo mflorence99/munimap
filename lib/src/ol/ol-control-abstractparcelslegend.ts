@@ -19,6 +19,7 @@ import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
+import { convertArea } from '@turf/helpers';
 import { takeUntil } from 'rxjs/operators';
 
 import area from '@turf/area';
@@ -123,8 +124,11 @@ export abstract class OLControlAbstractParcelsLegendComponent
           acc[use] += area;
           return acc;
         }, {});
-        this.areaOfTown =
-          area(this.map.boundary) * 0.000247105; /* 👈 to acres */
+        this.areaOfTown = convertArea(
+          area(this.map.boundary),
+          'meters',
+          'acres'
+        );
         this.areaOfParcels = Object.values(this.areaByUsage).reduce(
           (p, q) => p + q
         );

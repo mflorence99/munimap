@@ -15,6 +15,8 @@ import { Optional } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import { convertArea } from '@turf/helpers';
+import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getCenter } from 'ol/extent';
@@ -103,7 +105,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   #calcPixelsForFeet(feet: number, resolution: number): number {
     // 👇 resolution is meters per pixel
-    return feet / (resolution * 3.28084);
+    return feet / convertLength(resolution, 'meters', 'feet');
   }
 
   #calcStrokePixels(props: LandmarkProperties, resolution: number): number {
@@ -222,8 +224,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         );
         // 👉 offset is in feet, translation units are meters
         shadowLocation.translate(
-          props.shadowOffsetFeet[0] / 3.28084,
-          props.shadowOffsetFeet[1] / 3.28084
+          this.#translationOffset(props.shadowOffsetFeet[0]),
+          this.#translationOffset(props.shadowOffsetFeet[1])
         );
         const shadow = new OLStyle({
           fill: new OLFill({
@@ -246,7 +248,10 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   #offsetGeometry(feature: OLFeature<any>, offsetFeet: number[]): OLGeometry {
     const offset = new OLPolygon(feature.getGeometry().getCoordinates());
     // 👉 offset is in feet, translation units are meters
-    offset.translate(offsetFeet[0] / 3.28084, offsetFeet[1] / 3.28084);
+    offset.translate(
+      this.#translationOffset(offsetFeet[0]),
+      this.#translationOffset(offsetFeet[1])
+    );
     return offset;
   }
 
@@ -527,7 +532,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           text += ` (${this.decimal.transform(
-            length(geojson, { units: 'miles' }) * 5280 /* 👈 to feet */,
+            convertLength(length(geojson, { units: 'miles' }), 'miles', 'feet'),
             '1.0-0'
           )} ft)`;
         }
@@ -628,7 +633,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           text += `\n(${this.decimal.transform(
-            area(geojson) * 0.000247105 /* 👈 m2 to acres */,
+            convertArea(area(geojson), 'meters', 'acres'),
             '1.0-2'
           )} ac)`;
         }
@@ -643,8 +648,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           // 👉 offset is in feet, translation units are meters
           if (props.textOffsetFeet)
             textLocation.translate(
-              props.textOffsetFeet[0] / 3.28084,
-              props.textOffsetFeet[1] / 3.28084
+              this.#translationOffset(props.textOffsetFeet[0]),
+              this.#translationOffset(props.textOffsetFeet[1])
             );
         }
         // 👇 will the text rotate?
@@ -655,7 +660,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             .sort((a, b) => b.length - a.length)[0];
           const textLength = this.#measureText(longest, font, resolution);
           // 👉 textLength is in meters, minWidth in feet
-          if (textLength * 3.28084 < props.minWidth) textRotate = false;
+          if (convertLength(textLength, 'meters', 'feet') < props.minWidth)
+            textRotate = false;
         }
         // 👇 here's the style
         const style = new OLStyle({
@@ -704,6 +710,12 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       }
     }
     return styles;
+  }
+
+  #translationOffset(feet: number): number {
+    const negative = feet < 0;
+    const meters = convertLength(Math.abs(feet), 'feet', 'meters');
+    return meters * (negative ? -1 : +1);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

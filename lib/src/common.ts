@@ -1,3 +1,5 @@
+import { convertArea } from '@turf/helpers';
+import { convertLength } from '@turf/helpers';
 import { featureCollection } from '@turf/helpers';
 import { point } from '@turf/helpers';
 import { serverTimestamp } from 'firebase/firestore';
@@ -980,7 +982,7 @@ export function calculateParcel(parcel: Partial<Parcel>): void {
 export function calculateArea(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>
 ): number {
-  return area(polygon) * 0.000247105; /* 👈 to acres */
+  return convertArea(area(polygon), 'meters', 'acres');
 }
 
 export function calculateCenter(
@@ -1007,7 +1009,9 @@ export function calculateLengths(
       type: 'Feature'
     };
     lengths.push(
-      Math.round(length(lineString, { units: 'miles' }) * 5280 /* 👈 feet */)
+      Math.round(
+        convertLength(length(lineString, { units: 'miles' }), 'miles', 'feet')
+      )
     );
   }
   return lengths;
@@ -1022,7 +1026,7 @@ export function calculateMinWidth(
   const from = point([minX, minY]);
   const to = point([minX, maxY]);
   return Math.round(
-    distance(from, to, { units: 'miles' }) * 5280 /* 👈 feet */
+    convertLength(distance(from, to, { units: 'miles' }), 'miles', 'feet')
   );
 }
 
@@ -1055,8 +1059,11 @@ export function calculateSqarcity(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>,
   lengths: number[]
 ): number {
-  const perimeter =
-    lengths.reduce((sum, length) => sum + length) / 3.28084; /* 👈 to meters */
+  const perimeter = convertLength(
+    lengths.reduce((sum, length) => sum + length),
+    'feet',
+    'meters'
+  );
   return (area(polygon) / Math.pow(perimeter, 2)) * 4 * Math.PI;
 }
 

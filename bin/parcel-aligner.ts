@@ -1,3 +1,5 @@
+import { convertArea } from '@turf/helpers';
+import { convertLength } from '@turf/helpers';
 import { featureCollection } from '@turf/helpers';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
@@ -90,7 +92,11 @@ const isCloseTo = (
 ): boolean => {
   const from = point(p1);
   const to = point(p2);
-  const dist = distance(from, to, { units: 'miles' }) * 5280; /* 👈 feet */
+  const dist = convertLength(
+    distance(from, to, { units: 'miles' }),
+    'miles',
+    'feet'
+  );
   return dist <= tolerance;
 };
 
@@ -110,7 +116,10 @@ const writem = (
 // 👇 load the lakes >= 10 acres
 
 const lakes = loadem('./proxy/assets/washington-lakes.geojson')
-  .features.filter((feature) => feature.properties.Shape_Area / 43560 >= 10)
+  .features.filter(
+    (feature) =>
+      convertArea(feature.properties.Shape_Area, 'feet', 'acres') >= 10
+  )
   // 🔥 just for map viewer
   .map(
     (feature): GeoJSON.Feature<any, any> => ({
@@ -230,7 +239,9 @@ const roads = Object.values(segmentsByRoadName).map(
     // 👉 fatten the road to make a polygon as wide as the right of way
     //    width calculation more-or-less copied from ol-adaptor-roads.ts
     const width = Math.max(road.properties.width, 20) * 2;
-    return buffer(cleanCoords(road), width / 5280, { units: 'miles' });
+    return buffer(cleanCoords(road), convertLength(width, 'feet', 'miles'), {
+      units: 'miles'
+    });
   }
 );
 

@@ -13,6 +13,7 @@ import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
+import { convertArea } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
 
 import bbox from '@turf/bbox';
@@ -59,13 +60,10 @@ export class AddParcelComponent implements SidebarComponent {
   save(addition: Addition): void {
     // 👇 create a square centered on the context menu of area equal
     //    to the given area of the addition
-    const r =
-      Math.sqrt(addition.area * 43560 /* 👈 to sq ft */) /
-      2 /* 👈 diameter to radius */ /
-      5280; /* 👈 to miles */
+    const diameter = Math.sqrt(convertArea(addition.area, 'acres', 'miles'));
     const geojson = bboxPolygon(
       bbox(
-        circle(toLonLat(this.map.contextMenuAt), r, {
+        circle(toLonLat(this.map.contextMenuAt), diameter / 2, {
           steps: 16,
           units: 'miles'
         })

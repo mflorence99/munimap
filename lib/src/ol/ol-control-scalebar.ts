@@ -10,6 +10,7 @@ import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
+import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { getDistance } from 'ol/sphere';
 
@@ -75,7 +76,11 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
 
   #calculateMetrics(): void {
     const [minX, minY, maxX] = this.map.bbox;
-    const numFeet = getDistance([minX, minY], [maxX, minY]) * 3.28084;
+    const numFeet = convertLength(
+      getDistance([minX, minY], [maxX, minY]),
+      'meters',
+      'feet'
+    );
     this.ftUnit = Math.pow(10, Math.floor(numFeet).toString().length - 2);
     this.numUnits = Math.min(10, Math.round(numFeet / 4 / this.ftUnit));
     const numPixels = this.map.olMap.getSize()[0];

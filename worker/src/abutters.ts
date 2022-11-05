@@ -5,6 +5,8 @@
 import * as Comlink from 'comlink';
 import * as Sentry from '@sentry/angular';
 
+import { convertLength } from '@turf/helpers';
+
 import buffer from '@turf/buffer';
 import intersect from '@turf/intersect';
 
@@ -18,9 +20,13 @@ export class Abutters {
     const unique = selecteds
       .flatMap((selected) => {
         // 👉 inflate selected feature by N ft all around
-        const buffered = buffer(selected, abutterRange / 5280, {
-          units: 'miles'
-        });
+        const buffered = buffer(
+          selected,
+          convertLength(abutterRange, 'feet', 'miles'),
+          {
+            units: 'miles'
+          }
+        );
         return (
           allFeatures
             // 🔥 try to capture problem where some features appear to have

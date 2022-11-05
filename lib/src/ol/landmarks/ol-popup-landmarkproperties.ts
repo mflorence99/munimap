@@ -11,6 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
+import { convertArea } from '@turf/helpers';
+import { convertLength } from '@turf/helpers';
 import { map } from 'rxjs/operators';
 
 import area from '@turf/area';
@@ -80,7 +82,7 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   area(): number {
-    return area(this.landmark) * 0.000247105 /* 👈 m2 to acres */;
+    return convertArea(area(this.landmark), 'meters', 'acres');
   }
 
   canClipboard(): boolean {
@@ -88,7 +90,11 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   length(): number {
-    return length(this.landmark, { units: 'miles' }) * 5280 /* 👈 to feet */;
+    return convertLength(
+      length(this.landmark, { units: 'miles' }),
+      'miles',
+      'feet'
+    );
   }
 
   onClipboard(): void {
@@ -106,7 +112,9 @@ export class OLPopupLandmarkPropertiesComponent {
 
   toCoordinate(raw: any[]): Coordinate {
     return {
-      elevation: raw[2] ? Number(raw[2]) * 3.28084 : null,
+      elevation: raw[2]
+        ? convertLength(Number(raw[2]), 'meters', 'feet')
+        : null,
       latitude: raw[1],
       longitude: raw[0]
     };

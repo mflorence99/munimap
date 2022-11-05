@@ -19,6 +19,7 @@ import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { ViewChildren } from '@angular/core';
 
+import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getDistance } from 'ol/sphere';
@@ -132,7 +133,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     //    but no bigger than the max size specified
     return Math.min(
       this.maxBorderPixels,
-      this.borderWidth / (resolution * 3.28084)
+      this.borderWidth / convertLength(resolution, 'meters', 'feet')
     );
   }
 
@@ -261,8 +262,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       for (let ix = 1; ix < points.length; ix++) {
         const c1 = toLonLat(points[ix - 1]);
         const c2 = toLonLat(points[ix]);
-        const meters = getDistance(c1, c2);
-        lengths.push(meters * 3.28084);
+        const dist = getDistance(c1, c2);
+        lengths.push(convertLength(dist, 'meters', 'feet'));
       }
       lengthss.push(lengths);
     });
