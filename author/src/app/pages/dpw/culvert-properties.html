@@ -40,10 +40,24 @@
     <input
       #length="ngModel"
       [(ngModel)]="record.length"
-      [step]="10"
+      [step]="1"
       autocomplete="off"
       matInput
       name="length"
+      required
+      type="number"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Count (eg: 2 for double)</mat-label>
+    <input
+      #length="ngModel"
+      [(ngModel)]="record.count"
+      [step]="1"
+      autocomplete="off"
+      matInput
+      name="count"
       required
       type="number"
     />

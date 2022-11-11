@@ -60,6 +60,9 @@ export class ImportLandmarksComponent implements SidebarComponent {
     protected store: Store
   ) {}
 
+  // 🔥 this is a bit redundant now as makeLandmarkID() ONLY
+  //    allows one landmark with the same geometry to be uploaded
+  //    but we're not ready to give up on it yet
   async alreadyImported(importHash: string): Promise<boolean> {
     const workgroup = AuthState.workgroup(this.authState.currentProfile());
     console.log(
@@ -96,8 +99,12 @@ export class ImportLandmarksComponent implements SidebarComponent {
               this.errorMessages.push(
                 `No GPX or KML data found in ${file.name}`
               );
-            // 👇 convert each entry to GeoJSON
-            else
+            else {
+              // 🔥 NOTE EasyTrails hack where we only take the first of
+              //    Waypoint.gpx or Waypoint.kml
+              if (file.name.startsWith('EasyTrailsGPS_exported'))
+                entries.length = 1;
+              // 👇 convert each entry to GeoJSON
               for (const entry of entries) {
                 const raw = await entry.async('text');
                 const xml = new DOMParser().parseFromString(raw, 'text/xml');
@@ -107,6 +114,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
                     : toGeoJSON.kml(xml)
                 );
               }
+            }
           }
           // 👇 read GPX and KML files directly
           else {

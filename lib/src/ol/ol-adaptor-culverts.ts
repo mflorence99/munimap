@@ -40,7 +40,10 @@ export class OLAdaptorCulvertsComponent implements Adaptor {
         iconOutlineColor: '--map-culvert-line-color',
         iconOpacity: 1,
         iconSymbol: '\uf1ce' /* 👈 circle-notch */,
-        name: `${culvert.diameter}"x${culvert.length}'`,
+        name:
+          culvert.count > 1
+            ? `${culvert.count}x${culvert.diameter}"x${culvert.length}'`
+            : `${culvert.diameter}"x${culvert.length}'`,
         textAlign: 'center',
         textBaseline: 'bottom'
       })

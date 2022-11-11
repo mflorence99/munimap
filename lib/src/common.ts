@@ -134,12 +134,13 @@ export type CulvertHeadwall = typeof culvertHeadwalls[number];
 export type CulvertMaterial = typeof culvertMaterials[number];
 
 export interface CulvertProperties {
-  condition: CulvertCondition;
+  condition?: CulvertCondition;
+  count?: number /* 2x, 3x etc */;
   diameter: number /* 👈 inches */;
   floodHazard?: CulvertFloodHazard;
-  headwall: CulvertHeadwall;
+  headwall?: CulvertHeadwall;
   length: number /* 👈 feet */;
-  material: CulvertMaterial;
+  material?: CulvertMaterial;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'culvert';
   year?: number;

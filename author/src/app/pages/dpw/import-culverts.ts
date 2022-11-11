@@ -57,6 +57,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
     // 👇 model culvert
     const properties: Partial<CulvertProperties> = {
       condition: culvertConditions[0],
+      count: 1,
       diameter: 0,
       floodHazard: culvertFloodHazards[0],
       headwall: culvertHeadwalls[0],
@@ -73,6 +74,8 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
         .substring(1)
         .toLowerCase()}`;
       if (culvertConditions.includes(part)) properties.condition = part;
+      if (/^[\d]+x$/.test(part))
+        properties.count = Number(part.substring(0, part.length - 1));
       if (/^[\d]+"$/.test(part))
         properties.diameter = Number(part.substring(0, part.length - 1));
       if (culvertFloodHazards.includes(part)) properties.floodHazard = part;

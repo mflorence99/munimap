@@ -17,6 +17,7 @@ export class OLPopupCulvertPropertiesComponent {
   schema: [string, keyof CulvertProperties, string?][] = [
     ['Diameter', 'diameter', 'inches'],
     ['Length', 'length', 'feet'],
+    ['Count', 'count', 'x'],
     ['Material', 'material'],
     ['Condition', 'condition'],
     ['Headwall', 'headwall'],

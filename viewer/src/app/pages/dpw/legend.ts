@@ -100,7 +100,7 @@ export class DPWLegendComponent implements OnInit {
             acc[condition] = { count: 0, length: 0 };
             return acc;
           }, {});
-        breakdown[culvert.condition].count += 1;
+        breakdown[culvert.condition].count += culvert.count;
         breakdown[culvert.condition].length += culvert.length;
         this.breakdowns[metric.key][key] = breakdown;
       });

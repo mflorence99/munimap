@@ -95,6 +95,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
       properties: {
         metadata: {
           condition: culvertConditions[0],
+          count: 1,
           diameter: 12,
           floodHazard: culvertFloodHazards[0],
           headwall: culvertHeadwalls[0],
