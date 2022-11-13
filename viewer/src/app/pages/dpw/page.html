@@ -9,6 +9,11 @@
 >
   <!-- 📦 CONTROLS -->
 
+  <app-ol-control-searchparcels
+    *ngIf="(zoom$ | async) >= olMap.minUsefulZoom"
+    mapControlSearch
+  ></app-ol-control-searchparcels>
+
   <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
   <app-ol-control-attribution
@@ -161,7 +166,7 @@
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
-      <app-ol-layer-vector>
+      <app-ol-layer-vector *ngIf="(zoom$ | async) >= olMap.minUsefulZoom">
         <app-ol-style-parcels
           [borderOpacity]="0.5"
           [labelOpacity]="0.5"

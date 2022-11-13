@@ -3,6 +3,7 @@ import { Mapable } from '../ol-mapable';
 import { MapableComponent } from '../ol-mapable';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
+import { Parcel } from '../../common';
 import { Selector } from '../ol-selector';
 import { SelectorComponent } from '../ol-selector';
 
@@ -18,13 +19,16 @@ import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { click } from 'ol/events/condition';
+import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
 import { never } from 'ol/events/condition';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { pointerMove } from 'ol/events/condition';
 import { shiftKeyOnly } from 'ol/events/condition';
+import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
 
+import Debounce from 'debounce-decorator';
 import OLFeature from 'ol/Feature';
 import OLLayer from 'ol/layer/Layer';
 import OLSelect from 'ol/interaction/Select';
@@ -55,6 +59,8 @@ export class OLInteractionSelectLandmarksComponent
 
   @Input() layers: OLLayerVectorComponent[];
 
+  @Input() maxZoom = 19;
+
   @Input() multi: boolean;
 
   olHover: OLSelect;
@@ -75,6 +81,8 @@ export class OLInteractionSelectLandmarksComponent
   get selectedIDs(): any[] {
     return this.selected.map((feature) => feature.getId());
   }
+
+  @Input() zoomAnimationDuration = 200;
 
   constructor(
     // 👉 we need public access to go through the selector to its layer
@@ -174,6 +182,32 @@ export class OLInteractionSelectLandmarksComponent
     //    OL will reselect when features come in and out of view,
     //    so we need to jump through all the other hoops
     if (delta) this.#onSelect();
+  }
+
+  @Debounce(250) selectParcels(parcels: Parcel[]): void {
+    // 👇 assume these parcels are degenerate and that all we have
+    //    available is ID and bbox
+    const bbox = parcels.reduce(
+      (bbox, parcel) => extend(bbox, parcel.bbox),
+      [...parcels[0].bbox]
+    );
+    // 👉 that's the union of the extent
+    const extent = transformExtent(
+      bbox,
+      this.map.featureProjection,
+      this.map.projection
+    );
+    // 👇 zoom to the extent of all the selected parcels and select them
+    const minZoom = this.map.olView.getMinZoom();
+    this.map.olView.setMinZoom(this.map.minUsefulZoom);
+    this.map.olView.fit(extent, {
+      callback: () => {
+        this.map.olView.setMinZoom(minZoom);
+      },
+      duration: this.zoomAnimationDuration,
+      maxZoom: this.maxZoom ?? this.map.maxZoom,
+      size: this.map.olMap.getSize()
+    });
   }
 
   unselectLandmarks(): void {

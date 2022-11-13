@@ -44,7 +44,10 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
     super(authState, cdf, firestore, store);
   }
 
-  #makeCulvertProperties(description: string): Partial<CulvertProperties> {
+  #makeCulvertProperties(
+    description: string,
+    location: string
+  ): Partial<CulvertProperties> {
     // 👇 split description by line and eliminate decoration and smart quotes
     const parts = description
       .replace(/<div>/g, '\n')
@@ -62,6 +65,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       floodHazard: culvertFloodHazards[0],
       headwall: culvertHeadwalls[0],
       length: 0,
+      location: location,
       material: culvertMaterials[0],
       type: 'culvert',
       year: null
@@ -115,7 +119,8 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
               properties = {
                 metadata: this.#makeCulvertProperties(
                   feature.properties.description /* 👈 KML */ ??
-                    feature.properties.desc /* 👈 GPX */
+                    feature.properties.desc /* 👈 GPX */,
+                  feature.properties.name
                 )
               };
               break;

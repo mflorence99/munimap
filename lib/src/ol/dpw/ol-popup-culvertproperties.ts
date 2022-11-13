@@ -15,6 +15,7 @@ export class OLPopupCulvertPropertiesComponent {
   @Input() properties: any;
 
   schema: [string, keyof CulvertProperties, string?][] = [
+    ['Location', 'location'],
     ['Diameter', 'diameter', 'inches'],
     ['Length', 'length', 'feet'],
     ['Count', 'count', 'x'],

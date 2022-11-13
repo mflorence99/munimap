@@ -18,27 +18,23 @@
 -->
 
 <section #table [ngSwitch]="properties?.type" class="wrapper">
-  <table class="properties">
-    <tbody>
-      <app-ol-popup-bridgeproperties
-        *ngSwitchCase="'bridge'"
-        [properties]="properties"
-      ></app-ol-popup-bridgeproperties>
+  <app-ol-popup-bridgeproperties
+    *ngSwitchCase="'bridge'"
+    [properties]="properties"
+  ></app-ol-popup-bridgeproperties>
 
-      <app-ol-popup-culvertproperties
-        *ngSwitchCase="'culvert'"
-        [properties]="properties"
-      ></app-ol-popup-culvertproperties>
+  <app-ol-popup-culvertproperties
+    *ngSwitchCase="'culvert'"
+    [properties]="properties"
+  ></app-ol-popup-culvertproperties>
 
-      <app-ol-popup-floodhazardproperties
-        *ngSwitchCase="'flood hazard'"
-        [properties]="properties"
-      ></app-ol-popup-floodhazardproperties>
+  <app-ol-popup-floodhazardproperties
+    *ngSwitchCase="'flood hazard'"
+    [properties]="properties"
+  ></app-ol-popup-floodhazardproperties>
 
-      <app-ol-popup-streamcrossingproperties
-        *ngSwitchCase="'stream crossing'"
-        [properties]="properties"
-      ></app-ol-popup-streamcrossingproperties>
-    </tbody>
-  </table>
+  <app-ol-popup-streamcrossingproperties
+    *ngSwitchCase="'stream crossing'"
+    [properties]="properties"
+  ></app-ol-popup-streamcrossingproperties>
 </section>

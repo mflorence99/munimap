@@ -140,6 +140,7 @@ export interface CulvertProperties {
   floodHazard?: CulvertFloodHazard;
   headwall?: CulvertHeadwall;
   length: number /* 👈 feet */;
+  location?: string;
   material?: CulvertMaterial;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'culvert';
