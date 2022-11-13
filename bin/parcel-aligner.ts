@@ -1,7 +1,8 @@
 import { convertArea } from '@turf/helpers';
+import { convertLength } from '@turf/helpers';
 import { feature } from '@turf/helpers';
 import { featureCollection } from '@turf/helpers';
-import { flattenEach } from '@turf/meta';
+import { featureOf } from '@turf/invariant';
 import { flattenReduce } from '@turf/meta';
 import { getCoord } from '@turf/invariant';
 import { getCoords } from '@turf/invariant';
@@ -12,6 +13,7 @@ import { writeFileSync } from 'fs';
 
 import area from '@turf/area';
 import bearing from '@turf/bearing';
+import booleanClockwise from '@turf/boolean-clockwise';
 import booleanIntersects from '@turf/boolean-intersects';
 import buffer from '@turf/buffer';
 import chalk from 'chalk';
@@ -22,18 +24,51 @@ import difference from '@turf/difference';
 import distance from '@turf/distance';
 import flatten from '@turf/flatten';
 import jsome from 'jsome';
+import kinks from '@turf/kinks';
+import length from '@turf/length';
 import lineIntersect from '@turf/line-intersect';
 import lineOffset from '@turf/line-offset';
 import lineSlice from '@turf/line-slice';
 import lineToPolygon from '@turf/line-to-polygon';
 import midpoint from '@turf/midpoint';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
+import pointToLineDistance from '@turf/point-to-line-distance';
 import polygonTangents from '@turf/polygon-tangents';
 import polygonToLine from '@turf/polygon-to-line';
+import union from '@turf/union';
 
 // 👇 configure jsome
 
 jsome.params.lintable = true;
+
+// 👇 GeoJSON generics are really hard to use so we cheat
+//    we use featureOf assertions for runtime checks
+
+type FeatureCollection = GeoJSON.FeatureCollection<any, any>;
+type Feature = GeoJSON.Feature<any, any>;
+type Position = GeoJSON.Position;
+
+// 🔥 debugging
+
+const debugged = featureCollection<any, any>([]);
+
+const DEBUG = (features: Feature[], titles: string[], color: string): any =>
+  debugged.features.push(
+    ...features.map(
+      (feature, ix): Feature => ({
+        type: 'Feature',
+        geometry: feature.geometry,
+        properties: {
+          'fill': color,
+          'fill-opacity': 0.5,
+          'marker-color': color,
+          'stroke': color,
+          'stroke-width': 1,
+          'title': titles.at(ix)
+        }
+      })
+    )
+  );
 
 // 👇 source data
 
@@ -42,59 +77,59 @@ const theRoads = [
   'Garfield Dr',
   'Van Buren Cir',
   'McKinley Dr',
-  'Ashuelot Dr'
-  // 'Taft Rd'
+  'Ashuelot Dr',
+  'Taft Rd'
 ];
 
 const theParcels = [
-  '14-167'
-  // '14-168',
-  // '14-169',
-  // '14-170',
-  // '14-171',
-  // '14-172',
-  // '14-173',
-  // '14-174',
-  // '14-176',
-  // '14-177',
-  // '14-178',
-  // '14-179',
-  // '14-180',
-  // '14-181',
-  // '14-182',
-  // '14-183',
-  // '14-184',
-  // '14-185',
-  // '14-186',
-  // '14-187',
-  // '14-189',
-  // '14-190',
-  // '14-191',
-  // '14-192',
-  // '14-193',
-  // '14-194',
-  // '14-196',
-  // '14-197',
-  // '14-198',
-  // '14-199',
-  // '14-200',
-  // '14-201',
-  // '14-202',
-  // '14-203',
-  // '14-204',
-  // '14-205',
-  // '14-206'
-  // '14-237',
-  // '14-239',
-  // '14-240',
-  // '14-241',
-  // '14-242',
-  // '14-244',
-  // '14-245',
-  // '14-247',
-  // '14-256',
-  // '14-257',
-  // '14-263'
+  '14-167',
+  '14-168',
+  '14-169',
+  '14-170',
+  '14-171',
+  '14-172',
+  '14-173',
+  '14-174',
+  '14-176',
+  '14-177',
+  '14-178',
+  '14-179',
+  '14-180',
+  '14-181',
+  '14-182',
+  '14-183',
+  '14-184',
+  '14-185',
+  '14-186',
+  '14-187',
+  '14-189',
+  '14-190',
+  '14-191',
+  '14-192',
+  '14-193',
+  '14-194',
+  '14-196',
+  '14-197',
+  '14-198',
+  '14-199',
+  '14-200',
+  '14-201',
+  '14-202',
+  '14-203',
+  '14-204',
+  '14-205',
+  '14-206',
+  '14-237',
+  '14-239',
+  '14-240',
+  '14-241',
+  '14-242',
+  '14-244',
+  '14-245',
+  '14-247',
+  '14-256',
+  '14-257',
+  '14-263'
   // '12-49',
   // '16-78',
   // '16-79'
@@ -116,39 +151,49 @@ const notParcels = [];
 // 👇 helpers
 // ////////////////////////////////////////////////////////////////////
 
-const isCloseTo = (
-  p1: GeoJSON.Position,
-  p2: GeoJSON.Position,
-  tolerance = 10 /* 👈 feet */
-): boolean => {
-  const from = point(p1);
-  const to = point(p2);
-  const dist = distance(from, to, { units: 'feet' });
-  return dist <= tolerance;
-};
-
-const loadem = (fn: string): GeoJSON.FeatureCollection<any, any> => {
+const loadem = (fn: string): FeatureCollection => {
   console.log(chalk.blue(`... reading ${fn}`));
   return JSON.parse(readFileSync(fn).toString());
 };
 
-const writem = (
-  fn: string,
-  geojson: GeoJSON.FeatureCollection<any, any>
-): void => {
+const writem = (fn: string, geojson: FeatureCollection): void => {
   console.log(chalk.blue(`... writing ${fn}`));
   writeFileSync(fn, JSON.stringify(geojson, null, 2));
 };
 
 // ////////////////////////////////////////////////////////////////////
-// 👇 simplify Turf's lineOffset
+// 👇 specialize Turf's lineIntersect
+// ////////////////////////////////////////////////////////////////////
+
+const myLineIntersect = (
+  from: Feature,
+  to: Feature,
+  line: Feature
+): Feature => {
+  featureOf(from, 'Point', 'myLineIntersect');
+  featureOf(to, 'Point', 'myLineIntersect');
+  featureOf(line, 'LineString', 'myLineIntersect');
+  // 👉 1 meter is roughly 5 digits of lat/lon precision
+  const separation = pointToLineDistance(to, line, { units: 'meters' });
+  return separation <= 1
+    ? to
+    : lineIntersect(
+        lineString([getCoord(from), getCoord(to)]),
+        line
+      ).features.at(-1);
+};
+
+// ////////////////////////////////////////////////////////////////////
+// 👇 specialize Turf's lineOffset
 // ////////////////////////////////////////////////////////////////////
 
 const myLineOffset = (
-  coords: any,
+  line: Feature,
   offset: number,
   reverse = false
-): GeoJSON.Feature<any, any> => {
+): Feature => {
+  featureOf(line, 'LineString', 'myLineOffset');
+  const coords = getCoords(line);
   return lineOffset(
     {
       coordinates: reverse ? coords.slice().reverse() : coords,
@@ -157,6 +202,74 @@ const myLineOffset = (
     offset / 2,
     { units: 'feet' }
   );
+};
+
+// ////////////////////////////////////////////////////////////////////
+// 👇 specialize Turf's lineSlice
+// ////////////////////////////////////////////////////////////////////
+
+const myLineSlice = (from: Feature, to: Feature, line: Feature): Feature => {
+  featureOf(from, 'Point', 'myLineSlice');
+  featureOf(to, 'Point', 'myLineSlice');
+  // 👉 so far, so normal
+  const p1 = getCoord(from);
+  const p2 = getCoord(to);
+  const slice1 = lineSlice(p1, p2, line);
+  const coords = getCoords(line);
+  // 👉 but ... is the line a ring, as extracted from a Polygon
+  const isRing =
+    coords.at(0)[0] === coords.at(-1)[0] &&
+    coords.at(0)[1] === coords.at(-1)[1];
+  if (isRing) {
+    // 👉 if it is, reverse it and pick the shorter route
+    const l1 = length(slice1);
+    const reversed = feature<any, any>({
+      coordinates: coords.slice().reverse(),
+      type: 'LineString'
+    });
+    const slice2 = lineSlice(p1, p2, reversed);
+    const l2 = length(slice2);
+    return l1 < l2 ? slice1 : slice2;
+  } else return slice1;
+};
+
+// ////////////////////////////////////////////////////////////////////
+// 👇 specialize Turf's lineToPolygon
+// ////////////////////////////////////////////////////////////////////
+
+const myLinesToPolygon = (lines: Feature[]): Feature => {
+  lines.forEach((line) => featureOf(line, 'LineString', 'myLinesToPolygon'));
+  const clockwises = lines.map((line) => booleanClockwise(line));
+  const coordinates = lines.reduce((acc, line, ix) => {
+    const coords =
+      ix > 0 && clockwises.at(ix) === clockwises.at(ix - 1)
+        ? getCoords(line).slice().reverse()
+        : getCoords(line);
+    acc.push(...coords);
+    return acc;
+  }, []);
+  const polygon: Feature = lineToPolygon(
+    feature<any, any>({
+      coordinates,
+      type: 'LineString'
+    })
+  );
+  const deformed =
+    kinks(polygon).features.length > 1 ||
+    polygon.geometry.type === 'MultiPolygon';
+  return deformed ? null : polygon;
+};
+
+// ////////////////////////////////////////////////////////////////////
+// 👇 specialize Turf's midpoint
+// ////////////////////////////////////////////////////////////////////
+
+const myMidpoint = (points: Feature[], line: Feature): Feature => {
+  points.forEach((point) => featureOf(point, 'Point', 'myMidpoint'));
+  featureOf(line, 'LineString', 'myLinesToPolygon');
+  const p1 = points.at(0);
+  const p2 = points.at(-1);
+  return midpoint(p1, p2);
 };
 
 // ////////////////////////////////////////////////////////////////////
@@ -184,20 +297,17 @@ const parcels = loadem(
 // 👇 find all the parcel neighbors
 // ////////////////////////////////////////////////////////////////////
 
-const neighborsByParcelID: Record<string, GeoJSON.Feature<any, any>[]> =
-  parcels.reduce((acc, parcel) => {
+const neighborsByParcelID: Record<string, Feature[]> = parcels.reduce(
+  (acc, parcel) => {
     const fatso = buffer(parcel, 10, { units: 'feet' });
-    const neighbors: GeoJSON.Feature<any, any>[] = parcels.reduce(
-      (acc, neighbor) => {
-        if (
-          neighbor.properties.id !== parcel.properties.id &&
-          booleanIntersects(neighbor, fatso)
-        )
-          acc.push(neighbor);
-        return acc;
-      },
-      []
-    );
+    const neighbors: Feature[] = parcels.reduce((acc, neighbor) => {
+      if (
+        neighbor.properties.id !== parcel.properties.id &&
+        booleanIntersects(neighbor, fatso)
+      )
+        acc.push(neighbor);
+      return acc;
+    }, []);
     acc[parcel.properties.id] = neighbors;
     console.log(
       chalk.magenta(
@@ -207,19 +317,22 @@ const neighborsByParcelID: Record<string, GeoJSON.Feature<any, any>[]> =
       )
     );
     return acc;
-  }, {});
+  },
+  {}
+);
 
 // ////////////////////////////////////////////////////////////////////
 // 👇 load the roads joined into a single Polygon per road
 // ////////////////////////////////////////////////////////////////////
 
 interface Roadway {
-  centerLine: GeoJSON.Feature<any, any> /* 👈 road from database */;
-  leftEdge: GeoJSON.Feature<any, any> /* 👈 outside edge of road border */;
-  leftSide: GeoJSON.Feature<any, any> /* 👈 inside edge of road border */;
-  rightEdge: GeoJSON.Feature<any, any> /* 👈 outside edge of road border */;
-  rightSide: GeoJSON.Feature<any, any> /* 👈 inside edge of road border */;
-  road: GeoJSON.Feature<any, any> /* 👈 polygon of road at width 👇 */;
+  centerLine: Feature /* 👈 road from database */;
+  edgeFactor: number /* multiple of width for edge size */;
+  leftEdge: Feature /* 👈 outside edge of road border */;
+  leftSide: Feature /* 👈 inside edge of road border */;
+  rightEdge: Feature /* 👈 outside edge of road border */;
+  rightSide: Feature /* 👈 inside edge of road border */;
+  road: Feature /* 👈 polygon of road at width 👇 */;
   width: number;
 }
 
@@ -233,33 +346,35 @@ const roadSegments = loadem(
 );
 
 // 👉 gather all the segments for a road together
-const segmentsByRoadName: Record<string, GeoJSON.Feature<any, any>[]> =
-  roadSegments.reduce((acc, feature) => {
+const segmentsByRoadName: Record<string, Feature[]> = roadSegments.reduce(
+  (acc, feature) => {
     const segments = acc[feature.properties.name] ?? [];
     segments.push(feature);
     acc[feature.properties.name] = segments;
     return acc;
-  }, {});
+  },
+  {}
+);
 
 // 👉 for each road ...
 const roadways = Object.values(segmentsByRoadName).map(
-  (segments: GeoJSON.Feature<any, any>[]): Roadway => {
+  (segments: Feature[]): Roadway => {
     let centerLine = segments.at(0);
     const joined = new Set([segments.at(0)]);
     console.log(
       chalk.yellow(`...... concatenating ${centerLine.properties.name}`)
     );
+    // 👉 1 meter is roughly 5 digits of lat/lon precision
+    const near = (p1: Position, p2: Position): boolean =>
+      distance(point(p1), point(p2), { units: 'meters' }) <= 1;
     // 👉 helper function
-    const atBeginningOfRoad = (segment: GeoJSON.Feature<any, any>): boolean =>
-      isCloseTo(getCoords(centerLine).at(0), getCoords(segment).at(-1));
+    const atBeginningOfRoad = (segment: Feature): boolean =>
+      near(getCoords(centerLine).at(0), getCoords(segment).at(-1));
     // 👉 helper function
-    const atEndOfRoad = (segment: GeoJSON.Feature<any, any>): boolean =>
-      isCloseTo(getCoords(centerLine).at(-1), getCoords(segment).at(0));
+    const atEndOfRoad = (segment: Feature): boolean =>
+      near(getCoords(centerLine).at(-1), getCoords(segment).at(0));
     // 👉 helper function
-    const joinSegmentToRoadAt = (
-      segment: GeoJSON.Feature<any, any>,
-      ix: number
-    ): void => {
+    const joinSegmentToRoadAt = (segment: Feature, ix: number): void => {
       centerLine.geometry.coordinates.splice(
         ix,
         0,
@@ -273,7 +388,7 @@ const roadways = Object.values(segmentsByRoadName).map(
     };
     // 👉 join the segments into one continuous LineString
     while (joined.size !== segments.length) {
-      segments.forEach((segment: GeoJSON.Feature<any, any>) => {
+      segments.forEach((segment: Feature) => {
         if (!joined.has(segment)) {
           if (atBeginningOfRoad(segment)) joinSegmentToRoadAt(segment, 0);
           else if (atEndOfRoad(segment))
@@ -290,10 +405,11 @@ const roadways = Object.values(segmentsByRoadName).map(
     //    calculation more-or-less copied from ol-adaptor-roads.ts
     const width = Math.max(centerLine.properties.width, 20) * 2;
     // 👉 offset the centerLine right and left create road and border
-    const rightSide = myLineOffset(getCoords(centerLine), width / 2);
-    const rightEdge = myLineOffset(getCoords(rightSide), -width * 4, true);
-    const leftSide = myLineOffset(getCoords(centerLine), width / 2, true);
-    const leftEdge = myLineOffset(getCoords(leftSide), -width * 4, true);
+    const edgeFactor = 4;
+    const rightSide = myLineOffset(centerLine, width / 2);
+    const rightEdge = myLineOffset(rightSide, -width * edgeFactor, true);
+    const leftSide = myLineOffset(centerLine, width / 2, true);
+    const leftEdge = myLineOffset(leftSide, -width * edgeFactor, true);
     const road = lineToPolygon(
       feature({
         coordinates: [...getCoords(leftSide), ...getCoords(rightSide)],
@@ -309,6 +425,7 @@ const roadways = Object.values(segmentsByRoadName).map(
     // 👉 composite roadway
     return {
       centerLine,
+      edgeFactor,
       leftEdge,
       leftSide,
       rightEdge,
@@ -336,7 +453,7 @@ roadways.forEach((roadway: Roadway) => {
     .forEach((parcel) => {
       console.log(chalk.cyan(`......... clipping ${parcel.properties.id}`));
       // 👉 look at each polygon separately
-      const clipped: GeoJSON.FeatureCollection<any, any> = flattenReduce(
+      const clipped = flattenReduce(
         parcel,
         (acc, polygon) => {
           // 👉 delta is the polygon minus the road
@@ -348,7 +465,7 @@ roadways.forEach((roadway: Roadway) => {
           acc.features.push(delta.features.at(-1));
           return acc;
         },
-        featureCollection([])
+        featureCollection<any, any>([])
       );
       parcel.geometry = combine(clipped).features.at(0).geometry;
     });
@@ -358,7 +475,7 @@ roadways.forEach((roadway: Roadway) => {
 // 👇 clip each parcel that intersects with a lake > 10 acres
 // ////////////////////////////////////////////////////////////////////
 
-lakes.forEach((lake: GeoJSON.Feature<any, any>) => {
+lakes.forEach((lake: Feature) => {
   console.log(
     chalk.yellow(`...... clipping parcels to lake ${lake.properties.OBJECTID}`)
   );
@@ -373,10 +490,10 @@ lakes.forEach((lake: GeoJSON.Feature<any, any>) => {
 });
 
 // ////////////////////////////////////////////////////////////////////
-// 🔥 EXPERIMENTAL
+// 👇 this algorithm gives fairly good results for regular sized
+//    Polygons -- characteristic of most smaller lots
+//    we try to find the edge closest to the road and fill that gap
 // ////////////////////////////////////////////////////////////////////
-
-const interestingStuff = featureCollection([]);
 
 // 👉 for each road ...
 roadways.forEach((roadway: Roadway) => {
@@ -390,76 +507,79 @@ roadways.forEach((roadway: Roadway) => {
   // 👉 for each roadside edge and side ...
   edges.forEach((edge, ix) => {
     const side = sides.at(ix);
-    // 👉 for each parcel that intersects with the outside edge ...
+    // 👉 for each parcel that intersects with the outside edge
+    //    and has no more than 10 vertices and is a Polygon ...
     parcels
-      .filter((parcel) => booleanIntersects(parcel, edge))
+      .filter(
+        (parcel) =>
+          booleanIntersects(parcel, edge) &&
+          parcel.geometry.type === 'Polygon' &&
+          getCoords(parcel).length <= 10
+      )
       .forEach((parcel) => {
-        // 👉 look at each polygon separately
-        flattenEach(parcel, (polygon) => {
-          // 👉 we need at least 2 intersections with the outside edge
-          const intersections = lineIntersect(polygon, edge);
-          if (intersections.features.length < 2) return;
-          // 👉 project a line from the midpoint between the intersections,
-          //    through the centerline of the road and out the other side
-          const anchor1 = midpoint(
-            getCoord(intersections.features.at(0)),
-            getCoord(intersections.features.at(-1))
+        // 👉 we need at least 2 intersections with the outside edge
+        const intersections = lineIntersect(parcel, edge);
+        if (intersections.features.length < 2) return;
+        // 👉 project a line from the midpoint between the intersections,
+        //    through the centerline of the road and out the other side
+        const anchor1 = myMidpoint(intersections.features, edge);
+        const anchor2 = nearestPointOnLine(centerLine, anchor1);
+        const anchor3 = destination(
+          anchor2,
+          convertLength(roadway.width, 'feet', 'kilometers'),
+          bearing(anchor1, anchor2)
+        );
+        // DEBUG(
+        //   [anchor1, anchor2, anchor3],
+        //   ['anchor1', 'anchor2', 'anchor3'],
+        //   '#c2185b'
+        // );
+        // 👉 from the end of this line (outside the polygon and
+        //    looking back at it) the 2 tangents should mark the
+        //    edge of the polygon facing the road
+        const tangents = polygonTangents(
+          getCoord(anchor3),
+          parcel
+        ).features.filter(
+          (tangent, ix, array) => ix === 0 || ix === array.length - 1
+        );
+        if (tangents.length !== 2) return;
+        // DEBUG(tangents, ['tangent', 'tangent'], '#7b1fa2');
+        // 👉 now draw two "parallel" lines from "infinity"
+        //    to these 2 tangent points -- where the lines intersect
+        //    the inside edge should mark where the polygon must
+        //    meet the road -- if the tangents are REALLY close
+        //    to the road already, just use them
+        const infinity = destination(
+          anchor3,
+          1000 /* 👈 really, 1000km away */,
+          bearing(anchor1, anchor3)
+        );
+        const congruents = tangents
+          .map((tangent) => myLineIntersect(infinity, tangent, side))
+          .filter((congruent) => !!congruent);
+        if (congruents.length !== 2) return;
+        // DEBUG(congruents, ['congruent', 'congruent'], '#fbc02d');
+        // 👉 slice the inside edge between the congruent points
+        //    and the original polygon between the tangents to form
+        //    the polygon of the missing space between the parcel
+        //    and the road
+        const sides = [
+          [side, congruents],
+          [polygonToLine(parcel), tangents]
+        ];
+        const edges = sides.map(([line, points]: [Feature, Feature[]]) =>
+          myLineSlice(points.at(0), points.at(-1), line)
+        );
+        const missing = myLinesToPolygon(edges);
+        // 👉 expand the parcel with the missing polygon
+        if (missing) {
+          const expanded = union(parcel, missing);
+          console.log(
+            chalk.cyan(`......... expanding ${parcel.properties.id}`)
           );
-          const anchor2 = nearestPointOnLine(centerLine, anchor1);
-          const anchor3 = destination(
-            anchor2,
-            distance(getCoord(anchor1), getCoord(anchor2)),
-            bearing(anchor1, anchor2)
-          );
-          // 👉 from the end of this line (outside the polygon and
-          //    looking back at it) the 2 tangents should mark the
-          //    edge of the polygon facing the road
-          const tangents = polygonTangents(getCoord(anchor3), polygon);
-          jsome(tangents);
-          const tangent1 = tangents.features.at(0);
-          const tangent2 = tangents.features.at(-1);
-          if (!(tangent1 && tangent2)) return;
-          // 👉 now draw two "parallel" lines from "infinity"
-          //    to these 2 tangent points -- where the lines intersect
-          //    the inside edge should mark where the polygon must
-          //    meet the road
-          const infinity = destination(
-            anchor3,
-            1000 /* 👈 really, 1000km away */,
-            bearing(anchor1, anchor3)
-          );
-          const congruent1 = lineIntersect(
-            lineString([getCoord(infinity), getCoord(tangent1)]),
-            side
-          ).features.at(-1);
-          const congruent2 = lineIntersect(
-            lineString([getCoord(infinity), getCoord(tangent2)]),
-            side
-          ).features.at(-1);
-          if (!(congruent1 && congruent2)) return;
-          // 👉 slice the inside edge between the congruent points
-          //    and the original polygon between the tangents to form
-          //    the polygon of the missing space betwen the parcel
-          //    and the road
-          const edge1 = lineSlice(
-            getCoord(congruent1),
-            getCoord(congruent2),
-            side
-          );
-          const asLine = polygonToLine(polygon) as GeoJSON.Feature<any, any>;
-          jsome(asLine);
-          const edge2 = lineSlice(
-            getCoord(tangent1),
-            getCoord(tangent2),
-            asLine
-          );
-          const missing = featureCollection([
-            ...getCoords(edge1).map((coord) => point(coord)),
-            ...getCoords(edge2).map((coord) => point(coord))
-          ]);
-          // 🔥 TEST
-          interestingStuff.features.push(...missing.features);
-        });
+          parcel.geometry = expanded.geometry;
+        }
       });
   });
 });
@@ -473,7 +593,7 @@ writem(
   '/home/mflo/aligned.geojson',
   featureCollection([
     ...lakes.map(
-      (lake): GeoJSON.Feature<any, any> => ({
+      (lake): Feature => ({
         id: lake.id,
         type: 'Feature',
         geometry: lake.geometry,
@@ -487,7 +607,7 @@ writem(
       })
     ),
     ...parcels.map(
-      (parcel): GeoJSON.Feature<any, any> => ({
+      (parcel): Feature => ({
         id: parcel.id,
         type: 'Feature',
         geometry: parcel.geometry,
@@ -501,7 +621,7 @@ writem(
       })
     ),
     ...roadways.map(
-      (roadway): GeoJSON.Feature<any, any> => ({
+      (roadway): Feature => ({
         id: roadway.road.properties.name,
         type: 'Feature',
         geometry: roadway.road.geometry,
@@ -515,7 +635,7 @@ writem(
       })
     ),
     ...roadways.map(
-      (roadway): GeoJSON.Feature<any, any> => ({
+      (roadway): Feature => ({
         type: 'Feature',
         geometry: lineToPolygon(
           feature({
@@ -535,7 +655,7 @@ writem(
       })
     ),
     ...roadways.map(
-      (roadway): GeoJSON.Feature<any, any> => ({
+      (roadway): Feature => ({
         type: 'Feature',
         geometry: lineToPolygon(
           feature({
@@ -554,17 +674,6 @@ writem(
         }
       })
     ),
-    ...interestingStuff.features.map(
-      (thingy): GeoJSON.Feature<any, any> => ({
-        type: 'Feature',
-        geometry: thingy.geometry,
-        properties: {
-          'fill': '#8e24aa',
-          'fill-opacity': 0.75,
-          'stroke': '#8e24aa',
-          'stroke-width': 1
-        }
-      })
-    )
+    ...debugged.features
   ])
 );
