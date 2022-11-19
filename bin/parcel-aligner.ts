@@ -433,6 +433,8 @@ class Gap {
         // 👉 expand the parcel with the gap between it and the road
         if (gap) {
           const expanded = turf.union(this.parcel, gap);
+          if (this.parcel.geometry.type !== expanded.geometry.type)
+            throw new Error(`Geometry changed to ${expanded.geometry.type}`);
           console.log(chalk.cyan(`-- expanding ${this.parcel.id}`));
           this.parcel.geometry = expanded.geometry;
         }
@@ -622,9 +624,12 @@ parcels.forEach((parcel) => {
 // ////////////////////////////////////////////////////////////////////
 
 parcels.forEach((parcel) => {
-  const normalized = copy(parcel);
-  calculateParcel(normalized);
-  allParcels[normalized.id] = normalized;
+  const original = allParcelsByID[parcel.id];
+  if (original.geometry.type === parcel.geometry.type) {
+    const normalized = copy(parcel);
+    calculateParcel(normalized);
+    allParcels[normalized.id] = normalized;
+  }
 });
 
 writem(
