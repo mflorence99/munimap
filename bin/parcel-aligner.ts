@@ -259,7 +259,7 @@ const roadways = Object.values(segmentsByRoadName).map(
     centerLine = turf.cleanCoords(centerLine);
     // 👉 how wide is the right-of-way in miles?
     //    calculation more-or-less copied from ol-adaptor-roads.ts
-    const width = Math.max(centerLine.properties.width, 20) * 2.5;
+    const width = Math.max(centerLine.properties.width, 20) * 3;
     // 👉 offset the centerLine right and left create road and border
     const edgeFactor = 2;
     const rightInsideEdge = lineOffset(centerLine, width / 2);

@@ -520,12 +520,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   }
 
   #point(props: ParcelProperties, ix: number): OLPoint {
-    try {
-      return new OLPoint(fromLonLat(props.centers[ix]));
-    } catch (error) {
-      console.log(props);
-      throw error;
-    }
+    return new OLPoint(fromLonLat(props.centers[ix]));
   }
 
   #rotation(props: ParcelProperties, ix: number): number {
