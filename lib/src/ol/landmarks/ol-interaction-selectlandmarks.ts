@@ -184,6 +184,10 @@ export class OLInteractionSelectLandmarksComponent
     if (delta) this.#onSelect();
   }
 
+  // 🔥 this is a HACK!
+  //    we pretend we can select parcels, but instead we just zoom
+  //    the idea is to make ol-control-searchparcels.ts work
+
   @Debounce(250) selectParcels(parcels: Parcel[]): void {
     // 👇 assume these parcels are degenerate and that all we have
     //    available is ID and bbox

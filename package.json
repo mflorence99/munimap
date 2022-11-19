@@ -75,7 +75,8 @@
     "serve:viewer:ssl": "ws -p 8102 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/viewer --log.format dev",
     "serve:viewer:washington": "npm run assets:viewer:washington && ng serve viewer --port 4202 --allowed-hosts washington.lots.online",
     "xxx": "ng build author --watch",
-    "yyy": "npm run assets:viewer:washington && ng build viewer --watch"
+    "yyy": "npm run assets:viewer:washington && ng build viewer --watch",
+    "zzz": "./bin/parcel-aligner.sh"
   },
   "dependencies": {
     "@angular/animations": "^14",
