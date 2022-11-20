@@ -422,10 +422,10 @@ class Gap {
         // 👉 expand the parcel with the gap between it and the road
         if (gap) {
           const expanded = turf.union(this.parcel, gap);
-          // if (this.parcel.geometry.type !== expanded.geometry.type)
-          //   throw new Error(
-          //     `Geometry changed while expanding ${expanded.geometry.type}`
-          //   );
+          if (this.parcel.geometry.type !== expanded.geometry.type)
+            throw new Error(
+              `Geometry changed while expanding ${expanded.geometry.type}`
+            );
           console.log(chalk.cyan(`-- expanding ${this.parcel.id}`));
           this.parcel.geometry = expanded.geometry;
         }
