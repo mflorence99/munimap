@@ -63,7 +63,7 @@ const notRoads = [
   'Winding Way Rd'
 ];
 
-const theParcels = ['^1-[\\d]+'];
+const theParcels = ['^2-[\\d]+'];
 
 const notParcels = [];
 

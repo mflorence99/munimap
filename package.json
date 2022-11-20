@@ -9,8 +9,9 @@
   },
   "author": "Mark Florence",
   "scripts": {
-    "align:parcels": "./bin/parcel-aligner.sh",
     "align:parcels:curated": "./bin/parcel-aligner-curated.sh",
+    "align:parcels:deploy": "./bin/parcel-aligner-deploy.sh",
+    "align:parcels:test": "ts-node --dir bin parcel-aligner.ts",
     "assets:viewer:henniker": "cp ./data/'NEW HAMPSHIRE'/MERRIMACK/HENNIKER/*.geojson ./viewer/assets",
     "assets:viewer:washington": "cp ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/*.geojson ./viewer/assets",
     "build:author": "ng build author --configuration production",
@@ -48,7 +49,6 @@
     "proxy:explorer": "ts-node --dir bin explorer.ts",
     "proxy:indexer": "ts-node --dir bin indexer.ts",
     "proxy:lakes": "ts-node --dir bin lakes.ts",
-    "proxy:parcel:aligner": "ts-node --dir bin parcel-aligner.ts",
     "proxy:parcels": "npm run proxy:parcels:belknap && npm run proxy:parcels:carroll && npm run proxy:parcels:cheshire && npm run proxy:parcels:coos && npm run proxy:parcels:grafton && npm run proxy:parcels:hillsborough && npm run proxy:parcels:merrimack && npm run proxy:parcels:rockingham && npm run proxy:parcels:strafford && npm run proxy:parcels:sullivan && npm run proxy:parcels:curated",
     "proxy:parcels:belknap": "ts-node --dir bin parcels.ts --county BELKNAP",
     "proxy:parcels:carroll": "ts-node --dir bin parcels.ts --county CARROLL",

@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-npm run proxy:parcel:aligner
+npm run align:parcels:test
 
 cp ~/parcels.geojson ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/parcels.geojson 
 
