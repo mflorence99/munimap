@@ -63,7 +63,7 @@ const notRoads = [
   'Winding Way Rd'
 ];
 
-const theParcels = ['^2-[\\d]+'];
+const theParcels = ['^3-[\\d]+', '^4-[\\d]+', '^5-[\\d]+'];
 
 const notParcels = [];
 
@@ -422,8 +422,10 @@ class Gap {
         // 👉 expand the parcel with the gap between it and the road
         if (gap) {
           const expanded = turf.union(this.parcel, gap);
-          if (this.parcel.geometry.type !== expanded.geometry.type)
-            throw new Error(`Geometry changed to ${expanded.geometry.type}`);
+          // if (this.parcel.geometry.type !== expanded.geometry.type)
+          //   throw new Error(
+          //     `Geometry changed while expanding ${expanded.geometry.type}`
+          //   );
           console.log(chalk.cyan(`-- expanding ${this.parcel.id}`));
           this.parcel.geometry = expanded.geometry;
         }
