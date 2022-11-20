@@ -233,7 +233,7 @@ async function main(): Promise<void> {
         type: 'Feature'
       })
     );
-    writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
+    writeFileSync(fn, JSON.stringify(parcelsByTown[town]));
   });
 
   // 👉 the idea behind countables is to provide just enough data for
@@ -260,7 +260,7 @@ async function main(): Promise<void> {
         type: 'Feature'
       })
     );
-    writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
+    writeFileSync(fn, JSON.stringify(parcelsByTown[town]));
   });
 }
 

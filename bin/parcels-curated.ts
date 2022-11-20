@@ -66,7 +66,7 @@ Object.keys(curated).forEach((county) => {
     };
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/searchables.geojson`,
-      JSON.stringify(simplify(searchables))
+      JSON.stringify(searchables)
     );
 
     // 👉 the idea behind countables is to provide just enough data for
@@ -95,7 +95,7 @@ Object.keys(curated).forEach((county) => {
     };
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/countables.geojson`,
-      JSON.stringify(simplify(countables))
+      JSON.stringify(countables)
     );
   });
 });

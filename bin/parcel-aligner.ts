@@ -43,57 +43,28 @@ const DEBUG = (features: Feature[], color: string): any => {
   );
 };
 
-// 👇 source data
+// ////////////////////////////////////////////////////////////////////
+// 👇 source data and exceptions
+// ////////////////////////////////////////////////////////////////////
 
-const theRoads = [
-  'Adams Dr',
-  'Ashuelot Acre Rd',
-  'Ashuelot Dr',
-  'Brenda Ln',
-  'Buchanan',
-  'Coolidge Dr',
-  'Cottage Ln',
-  'Garfield Dr',
-  'Grant Rd',
-  'Harrison Rd',
-  'Harding Rd',
-  'Hayes Rd',
-  'Huntley Mtn Rd',
-  'Jackson Dr',
-  'Jefferson Dr',
-  'Karen Ln',
-  'Lang Rd',
-  'Lincoln Dr',
-  'Madison Dr',
-  'Marlow Rd',
-  'McKinley Dr',
-  'McKinnon Rd',
-  'Monroe Cir',
-  'Pierce Rd',
-  'Presidential Dr',
-  'Russell Millpond Rd',
-  'Stowell Rd',
-  'Taft Rd',
-  'Taylor Cir',
-  'Van Buren Cir'
+const theRoads = [];
 
-  // 'Ayers Pond Rd',
-  // 'Halfmoon Pond Rd'
+const dupeRoads = [
+  // 🔥 two roads with same name, or discontiguous road
+  'Purling Beck Rd'
 ];
 
-const theParcels = ['14-[\\d]+'];
-// const theParcels = ['3-4', '5-2', '6-1'];
-
-// ////////////////////////////////////////////////////////////////////
-// 👇 exceptions
-// ////////////////////////////////////////////////////////////////////
-
 const notRoads = [
+  'Gordon Rd',
+  'No Name',
   'Old Haying Rd',
   'Pillsbury State Park',
   'Ulrich Rd',
   'Winding Way Rd'
 ];
+
+const theParcels = ['^1-[\\d]+'];
+
 const notParcels = [];
 
 // ////////////////////////////////////////////////////////////////////
@@ -123,10 +94,12 @@ const allParcelsByID = allParcels.features.reduce((acc, parcel) => {
 
 const parcels = allParcels.features.filter(
   (parcel) =>
-    !theParcels.length ||
-    (theParcels.some((id) => new RegExp(id).test(String(parcel.id))) &&
-      !notParcels.includes(parcel.id))
+    (!theParcels.length ||
+      theParcels.some((id) => new RegExp(id).test(String(parcel.id)))) &&
+    !notParcels.includes(parcel.id)
 );
+
+const bbox = turf.bboxPolygon(turf.bbox(turf.featureCollection(parcels)));
 
 // ////////////////////////////////////////////////////////////////////
 // 👇 load the lakes >= 10 acres
@@ -178,17 +151,18 @@ const roadSegments = loadem(
   './proxy/assets/washington-roads.geojson'
 ).features.filter(
   (feature) =>
-    !theRoads.length ||
-    (theRoads.includes(feature.properties.name) &&
-      !notRoads.includes(feature.properties.name))
+    (!theRoads.length || theRoads.includes(feature.properties.name)) &&
+    !notRoads.includes(feature.properties.name)
 );
 
 // 👉 gather all the segments for a road together
 const segmentsByRoadName: Record<string, Feature[]> = roadSegments.reduce(
-  (acc, feature) => {
-    const segments = acc[feature.properties.name] ?? [];
+  (acc, feature, ix) => {
+    let nm = feature.properties.name;
+    if (dupeRoads.includes(nm)) nm = `${nm} ${ix + 1}`;
+    const segments = acc[nm] ?? [];
     segments.push(feature);
-    acc[feature.properties.name] = segments;
+    acc[nm] = segments;
     return acc;
   },
   {}
@@ -197,20 +171,20 @@ const segmentsByRoadName: Record<string, Feature[]> = roadSegments.reduce(
 // 👉 for each road ...
 const roadways = Object.values(segmentsByRoadName).map(
   (segments: Feature[]): Roadway => {
-    let centerLine = segments.at(0);
-    const joined = new Set([segments.at(0)]);
-    console.log(chalk.yellow(`- concatenating ${centerLine.properties.name}`));
     // 👉 1 meter is roughly 5 digits of lat/lon precision
     const near = (p1: Position, p2: Position): boolean =>
       turf.distance(turf.point(p1), turf.point(p2), {
         units: 'meters'
       }) <= 1;
-    // 👉 helper function
+    // 👉 helper functions
     const atBeginningOfRoad = (segment: Feature): boolean =>
       near(turf.getCoords(centerLine).at(0), turf.getCoords(segment).at(-1));
-    // 👉 helper function
     const atEndOfRoad = (segment: Feature): boolean =>
       near(turf.getCoords(centerLine).at(-1), turf.getCoords(segment).at(0));
+    const startsAtBeginning = (segment: Feature): boolean =>
+      near(turf.getCoords(centerLine).at(0), turf.getCoords(segment).at(0));
+    const endsAtEnd = (segment: Feature): boolean =>
+      near(turf.getCoords(centerLine).at(-1), turf.getCoords(segment).at(-1));
     // 👉 helper function
     const joinSegmentToRoadAt = (segment: Feature, ix: number): void => {
       centerLine.geometry.coordinates.splice(
@@ -242,7 +216,15 @@ const roadways = Object.values(segmentsByRoadName).map(
           units: 'feet'
         }
       );
+    // 👉 helper function
+    const rewind = (segment: Feature): Feature => {
+      segment.geometry.coordinates.reverse();
+      return segment;
+    };
     // 👉 join the segments into one continuous LineString
+    let centerLine = segments.at(0);
+    const joined = new Set([centerLine]);
+    console.log(chalk.yellow(`- concatenating ${centerLine.properties.name}`));
     while (joined.size !== segments.length) {
       segments.forEach((segment: Feature) => {
         if (!joined.has(segment)) {
@@ -250,6 +232,13 @@ const roadways = Object.values(segmentsByRoadName).map(
           else if (atEndOfRoad(segment))
             joinSegmentToRoadAt(
               segment,
+              centerLine.geometry.coordinates.length
+            );
+          else if (startsAtBeginning(segment))
+            joinSegmentToRoadAt(rewind(segment), 0);
+          else if (endsAtEnd(segment))
+            joinSegmentToRoadAt(
+              rewind(segment),
               centerLine.geometry.coordinates.length
             );
         }
@@ -509,13 +498,17 @@ roadways.forEach((roadway: Roadway) => {
   //    NOTE: sides must go in same direction
   [roadway.leftInsideEdge, roadway.rightInsideEdge].forEach((inside, ix) => {
     const parcels = [roadway.parcelsOnLeft, roadway.parcelsOnRight].at(ix);
+    // 👉 quick exit if no parcels
+    if (parcels.length === 0) return;
     // 👉 traverse each side N feet at a time
     //    looking for gaps between parcel and road
     let gap = new Gap(inside);
     const length = turf.length(inside, { units: 'feet' });
     for (let along = 0; along < length; along += 1) {
       // 👉 create a probe line perpendicular to the road
+      //    quick exit if outside bbox
       const onInside = turf.along(inside, along, { units: 'feet' });
+      if (!turf.booleanPointInPolygon(onInside, bbox)) continue;
       const onCenter = turf.nearestPointOnLine(roadway.centerLine, onInside);
       const onOutside = turf.destination(
         onInside,
