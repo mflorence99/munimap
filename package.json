@@ -9,9 +9,9 @@
   },
   "author": "Mark Florence",
   "scripts": {
-    "align:parcels:curated": "./bin/parcel-aligner-curated.sh",
-    "align:parcels:deploy": "./bin/parcel-aligner-deploy.sh",
+    "align:parcels:finalize": "./bin/parcel-aligner-finalize.sh",
     "align:parcels:test": "ts-node --dir bin parcel-aligner.ts",
+    "align:parcels:tweak": "./bin/parcel-aligner-tweak.sh",
     "assets:viewer:henniker": "cp ./data/'NEW HAMPSHIRE'/MERRIMACK/HENNIKER/*.geojson ./viewer/assets",
     "assets:viewer:washington": "cp ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/*.geojson ./viewer/assets",
     "build:author": "ng build author --configuration production",
