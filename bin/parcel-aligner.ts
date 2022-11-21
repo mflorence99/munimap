@@ -64,11 +64,16 @@ const notRoads = [
   'Winding Way Rd'
 ];
 
-const theParcels = ['^9-[\\d]+', '^10-[\\d]+', '^11-[\\d]+'];
+const theParcels = ['^12-[\\d]+', '^13-[\\d]+', '^15-[\\d]+'];
 
 // const theParcels = ['^3-4$'];
 
-const notParcels = [];
+const notParcels = [
+  '12-206' /* 👈 very small island that gets totally clipped by lake */,
+  '12-207' /* 👈 very small island that gets totally clipped by lake */,
+  '12-208' /* 👈 very small island that gets totally clipped by lake */,
+  '15-82' /* 👈 very small island that gets totally clipped by lake */
+];
 
 // ////////////////////////////////////////////////////////////////////
 // 👇 helpers
@@ -99,7 +104,7 @@ const parcels = allParcels.features.filter(
   (parcel) =>
     (!theParcels.length ||
       theParcels.some((id) => new RegExp(id).test(String(parcel.id)))) &&
-    !notParcels.includes(parcel.id)
+    !notParcels.includes(String(parcel.id))
 );
 
 const bbox = turf.bboxPolygon(turf.bbox(turf.featureCollection(parcels)));
