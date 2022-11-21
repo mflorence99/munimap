@@ -64,7 +64,7 @@ const notRoads = [
   'Winding Way Rd'
 ];
 
-const theParcels = ['^6-[\\d]+', '^7-[\\d]+', '^8-[\\d]+'];
+const theParcels = ['^9-[\\d]+', '^10-[\\d]+', '^11-[\\d]+'];
 
 // const theParcels = ['^3-4$'];
 
@@ -619,7 +619,7 @@ parcels.forEach((parcel) => {
 
 parcels.forEach((parcel) => {
   const original = allParcelsByID[parcel.id];
-  if (!deepEqual(parcel.geometry, original.geometry))
+  if (!deepEqual(parcel.geometry.coordinates, original.geometry.coordinates))
     console.log(chalk.white.bold(`- CHANGED ${parcel.id}`));
   const normalized = copy(parcel);
   calculateParcel(normalized);
