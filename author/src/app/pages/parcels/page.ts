@@ -9,6 +9,7 @@ import { SubdivideParcelComponent } from './subdivide-parcel';
 
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
+import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -25,11 +26,19 @@ import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interacti
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OnInit } from '@angular/core';
+import { Parcel } from '@lib/common';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
+
+import { point } from '@turf/helpers';
+import { polygon } from '@turf/helpers';
+
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,12 +84,52 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     return condition;
   }
 
+  #deletePolygon(feature: OLFeature<any>): void {
+    // 👉 we need to know which of the possible multiple ploygons
+    //    that make up the parcel we will be deleting
+    let ix = 0;
+    const polygons = feature.getGeometry().getPolygons();
+    for (ix = 0; ix < polygons.length; ix++) {
+      const pt = point(this.olMap.contextMenuAt);
+      const poly = polygon([polygons[ix].getCoordinates()[0]]);
+      if (booleanPointInPolygon(pt, poly)) break;
+    }
+    console.log('polygon #', ix);
+    // 👉 remove the indicated polygon
+    const coords = feature.getGeometry().getCoordinates();
+    coords.splice(ix, 1);
+    feature.getGeometry().setCoordinates(coords);
+    // 👉 remove the indicated polygon
+    const format = new OLGeoJSON({
+      dataProjection: this.olMap.featureProjection,
+      featureProjection: this.olMap.projection
+    });
+    const geojson = JSON.parse(format.writeFeature(feature));
+    const redrawnParcel: Parcel = {
+      action: 'modified',
+      geometry: geojson.geometry,
+      id: feature.getId(),
+      owner: this.authState.currentProfile().email,
+      path: this.olMap.path,
+      type: 'Feature'
+    };
+    this.store.dispatch(new AddParcels([redrawnParcel]));
+  }
+
   canAddParcel(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selectedIDs.length === 0);
   }
 
   canCreatePropertyMap(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selectedIDs.length >= 1);
+  }
+
+  canDeletePolygon(event?: MouseEvent): boolean {
+    return this.#can(
+      event,
+      this.olMap.selectedIDs.length === 1 &&
+        this.olMap.selected[0].getGeometry().getType() === 'MultiPolygon'
+    );
   }
 
   canMergeParcels(event?: MouseEvent): boolean {
@@ -121,6 +170,9 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         cFactory = this.resolver.resolveComponentFactory(
           CreatePropertyMapComponent
         );
+        break;
+      case 'delete-polygon':
+        this.#deletePolygon(this.olMap.selected[0]);
         break;
       case 'parcel-properties':
         cFactory = this.resolver.resolveComponentFactory(

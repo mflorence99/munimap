@@ -422,6 +422,15 @@
       </li>
 
       <li
+        (click)="canDeletePolygon($event) && onContextMenu('delete-polygon')"
+        [class.disabled]="!canDeletePolygon()"
+        class="item"
+      >
+        <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
+        <p>Remove parcel section</p>
+      </li>
+
+      <li
         (click)="canMergeParcels($event) && onContextMenu('merge-parcels')"
         [class.disabled]="!canMergeParcels()"
         class="item"
