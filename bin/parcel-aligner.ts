@@ -3,6 +3,7 @@ import { simplify } from '../lib/src/common';
 
 import * as turf from '@turf/turf';
 
+import { deepEqual } from 'fast-equals';
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
@@ -63,7 +64,7 @@ const notRoads = [
   'Winding Way Rd'
 ];
 
-const theParcels = ['^3-[\\d]+', '^4-[\\d]+', '^5-[\\d]+'];
+const theParcels = ['^6-[\\d]+', '^7-[\\d]+', '^8-[\\d]+'];
 
 // const theParcels = ['^3-4$'];
 
@@ -618,11 +619,11 @@ parcels.forEach((parcel) => {
 
 parcels.forEach((parcel) => {
   const original = allParcelsByID[parcel.id];
-  if (original.geometry.type === parcel.geometry.type) {
-    const normalized = copy(parcel);
-    calculateParcel(normalized);
-    allParcelsByID[normalized.id] = normalized;
-  }
+  if (!deepEqual(parcel.geometry, original.geometry))
+    console.log(chalk.white.bold(`- CHANGED ${parcel.id}`));
+  const normalized = copy(parcel);
+  calculateParcel(normalized);
+  allParcelsByID[parcel.id] = normalized;
 });
 
 writem(

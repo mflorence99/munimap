@@ -182,6 +182,7 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-import-splitnsort": "^1",
     "eslint-plugin-prefer-arrow": "^1",
+    "fast-equals": "^4",
     "firebase-admin": "^11",
     "inquirer": "^8",
     "jsome": "^2",
