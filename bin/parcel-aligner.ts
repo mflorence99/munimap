@@ -69,10 +69,11 @@ const theParcels = ['^12-[\\d]+', '^13-[\\d]+', '^15-[\\d]+'];
 // const theParcels = ['^3-4$'];
 
 const notParcels = [
-  '12-206' /* 👈 very small island that gets totally clipped by lake */,
-  '12-207' /* 👈 very small island that gets totally clipped by lake */,
-  '12-208' /* 👈 very small island that gets totally clipped by lake */,
-  '15-82' /* 👈 very small island that gets totally clipped by lake */
+  // 👇 very small islands that get totally clipped by lake
+  '12-206',
+  '12-207',
+  '12-208',
+  '15-82'
 ];
 
 // ////////////////////////////////////////////////////////////////////
