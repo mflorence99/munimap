@@ -63,9 +63,9 @@ const notRoads = [
   'Winding Way Rd'
 ];
 
-// const theParcels = ['^3-[\\d]+', '^4-[\\d]+', '^5-[\\d]+'];
+const theParcels = ['^3-[\\d]+', '^4-[\\d]+', '^5-[\\d]+'];
 
-const theParcels = ['^3-4$'];
+// const theParcels = ['^3-4$'];
 
 const notParcels = [];
 
@@ -410,7 +410,6 @@ class Gap {
 
   expand(): void {
     if (this.parcel) {
-      jsome(this.parcel);
       try {
         // 👉 slice the roadside and the parcel to form
         //    the polygon of the gap between the parcel and the road
@@ -425,12 +424,6 @@ class Gap {
         // 👉 expand the parcel with the gap between it and the road
         if (gap) {
           const expanded = turf.union(this.parcel, gap);
-          jsome(expanded);
-
-          if (this.parcel.geometry.type !== expanded.geometry.type)
-            throw new Error(
-              `Geometry changed while expanding ${expanded.geometry.type}`
-            );
           console.log(chalk.cyan(`-- expanding ${this.parcel.id}`));
           this.parcel.geometry = expanded.geometry;
         }
