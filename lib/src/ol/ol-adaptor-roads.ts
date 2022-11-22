@@ -35,6 +35,8 @@ export class OLAdaptorRoadsComponent implements Adaptor {
 
   // 👇 construct LandmarkProperties
   adapt(road: RoadProperties): LandmarkProperties[] {
+    // 👉 hack for not-really-a-road-name
+    const nm = road.name === 'No Name' ? '' : road.name;
     return [
       new LandmarkPropertiesClass({
         lineSpline: true,
@@ -67,7 +69,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
       new LandmarkPropertiesClass({
         lineChunk: true,
         lineSpline: true,
-        name: road.class === 'VI' ? `${road.name} (Class VI)` : road.name,
+        name: road.class === 'VI' ? `${nm} (Class VI)` : nm,
         fontColor: `--map-road-text-${road.class ?? '0'}`,
         fontFeet: this.#roadFeet(road) * this.roadNameRatio,
         fontOpacity: 1,
