@@ -64,7 +64,7 @@ const notRoads = [
   'Winding Way Rd'
 ];
 
-const theParcels = ['^22-[\\d]+', '^23-[\\d]+', '^24-[\\d]+'];
+const theParcels = ['^25-[\\d]+', '^26-[\\d]+', '^27-[\\d]+'];
 
 // const theParcels = ['^3-4$'];
 
