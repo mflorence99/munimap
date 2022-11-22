@@ -105,7 +105,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() labelOpacity = 1;
   @Input() maxBorderPixels = 3;
   @Input() maxFontSize = 40;
-  @Input() minFontSize = 6;
+  @Input() minFontSize = 10;
   @Input() opacity = 0.25;
   @Input() parcelIDs: ParcelID[];
   @Input() showAbutters: ShowStatus = 'never';
