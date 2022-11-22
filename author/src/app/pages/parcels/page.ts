@@ -33,12 +33,19 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
+import { convertArea } from '@turf/helpers';
+import { fromLonLat } from 'ol/proj';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
+import { toLonLat } from 'ol/proj';
 
+import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import circle from '@turf/circle';
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
+import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -79,6 +86,33 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     super(actions$, authState, destroy$, root, route, router, store, viewState);
   }
 
+  #addPolygon(feature: OLFeature<any>): void {
+    if (feature.getGeometry().getType() === 'Polygon')
+      feature.setGeometry(
+        new OLMultiPolygon([feature.getGeometry().getCoordinates()])
+      );
+    // 👇 create a square centered on the context menu of area equal
+    //    to half the area of the feature
+    const diameter = Math.sqrt(
+      convertArea(feature.getProperties().area, 'acres', 'miles')
+    );
+    const polygon = bboxPolygon(
+      bbox(
+        circle(toLonLat(this.olMap.contextMenuAt), diameter / 2, {
+          steps: 16,
+          units: 'miles'
+        })
+      )
+    );
+    // 👇 add the new polygon to the feature
+    const coords = feature.getGeometry().getCoordinates();
+    coords.push([
+      polygon.geometry.coordinates[0].map((coord: any) => fromLonLat(coord))
+    ]);
+    feature.getGeometry().setCoordinates(coords);
+    this.#modifyFeature(feature);
+  }
+
   #can(event: MouseEvent, condition: boolean): boolean {
     if (!condition && event) event.stopPropagation();
     return condition;
@@ -94,12 +128,14 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       const poly = polygon([polygons[ix].getCoordinates()[0]]);
       if (booleanPointInPolygon(pt, poly)) break;
     }
-    console.log('polygon #', ix);
     // 👉 remove the indicated polygon
     const coords = feature.getGeometry().getCoordinates();
     coords.splice(ix, 1);
     feature.getGeometry().setCoordinates(coords);
-    // 👉 remove the indicated polygon
+    this.#modifyFeature(feature);
+  }
+
+  #modifyFeature(feature: OLFeature<any>): void {
     const format = new OLGeoJSON({
       dataProjection: this.olMap.featureProjection,
       featureProjection: this.olMap.projection
@@ -118,6 +154,10 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
 
   canAddParcel(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selectedIDs.length === 0);
+  }
+
+  canAddPolygon(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selectedIDs.length === 1);
   }
 
   canCreatePropertyMap(event?: MouseEvent): boolean {
@@ -165,6 +205,9 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     switch (key) {
       case 'add-parcel':
         cFactory = this.resolver.resolveComponentFactory(AddParcelComponent);
+        break;
+      case 'add-polygon':
+        this.#addPolygon(this.olMap.selected[0]);
         break;
       case 'create-propertymap':
         cFactory = this.resolver.resolveComponentFactory(

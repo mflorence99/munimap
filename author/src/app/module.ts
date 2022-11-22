@@ -204,6 +204,7 @@ import { faObjectGroup as fasObjectGroup } from '@fortawesome/free-solid-svg-ico
 import { faObjectUngroup as fadObjectUngroup } from '@fortawesome/pro-duotone-svg-icons';
 import { faObjectUngroup as fasObjectUngroup } from '@fortawesome/free-solid-svg-icons';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faPlusSquare as fadPlusSquare } from '@fortawesome/pro-duotone-svg-icons';
 import { faPlusSquare as fasPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
@@ -574,6 +575,7 @@ export class RootModule {
       fadObjectUngroup,
       fasObjectUngroup,
       faPen,
+      faPlus,
       fadPlusSquare,
       fasPlusSquare,
       faPrint,
