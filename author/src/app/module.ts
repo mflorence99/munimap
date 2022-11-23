@@ -171,6 +171,7 @@ import { RouterState } from '@ngxs/router-plugin';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SubdivisionIDValidator } from '@lib/validators/subdivisionid';
 import { TimesPipe } from '@lib/pipes/times';
+import { TitleCasePipe } from '@angular/common';
 import { UndoState } from '@lib/state/undo';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
@@ -211,9 +212,11 @@ import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { faRecycle } from '@fortawesome/free-solid-svg-icons';
 import { faRedo } from '@fortawesome/pro-duotone-svg-icons';
+import { faRotate } from '@fortawesome/pro-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faSignIn } from '@fortawesome/pro-duotone-svg-icons';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faSplit } from '@fortawesome/pro-solid-svg-icons';
 import { faSync } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fadTasks } from '@fortawesome/pro-duotone-svg-icons';
 import { faTasks as fasTasks } from '@fortawesome/free-solid-svg-icons';
@@ -531,6 +534,7 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
 
   providers: [
     DecimalPipe,
+    TitleCasePipe,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAppProvider,
@@ -582,8 +586,10 @@ export class RootModule {
       faQuestionCircle,
       faRecycle,
       faRedo,
+      faRotate,
       faSearch,
       faSignIn,
+      faSplit,
       faSpinner,
       faSync,
       fadTasks,

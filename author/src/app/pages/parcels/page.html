@@ -469,6 +469,24 @@
         </li>
 
         <li
+          (click)="canSplitLabel($event) && onContextMenu('split-label')"
+          [class.disabled]="!canSplitLabel()"
+          class="item"
+        >
+          <fa-icon [fixedWidth]="true" [icon]="['fas', 'split']"></fa-icon>
+          <p>Split/unsplit label</p>
+        </li>
+
+        <li
+          (click)="canRotateLabel($event) && onContextMenu('rotate-label')"
+          [class.disabled]="!canRotateLabel()"
+          class="item"
+        >
+          <fa-icon [fixedWidth]="true" [icon]="['fas', 'rotate']"></fa-icon>
+          <p>Rotate/unrotate label</p>
+        </li>
+
+        <li
           (click)="canCreatePropertyMap($event) && onContextMenu('create-propertymap')"
           [class.disabled]="!canCreatePropertyMap()"
           class="item"

@@ -27,6 +27,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
 import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
+import { ParcelPropertiesLabel } from '@lib/common';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
@@ -106,7 +107,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       polygon.geometry.coordinates[0].map((coord: any) => fromLonLat(coord))
     ]);
     feature.getGeometry().setCoordinates(coords);
-    this.#modifyFeature(feature);
+    this.#modifyFeature(feature, true, false);
   }
 
   #can(event: MouseEvent, condition: boolean): boolean {
@@ -115,23 +116,17 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   }
 
   #deletePolygon(feature: OLFeature<any>): void {
-    // 👉 we need to know which of the possible multiple ploygons
-    //    that make up the parcel we will be deleting
-    let ix = 0;
-    const polygons = feature.getGeometry().getPolygons();
-    for (ix = 0; ix < polygons.length; ix++) {
-      const pt = point(this.olMap.contextMenuAt);
-      const poly = polygon([polygons[ix].getCoordinates()[0]]);
-      if (booleanPointInPolygon(pt, poly)) break;
-    }
-    // 👉 remove the indicated polygon
     const coords = feature.getGeometry().getCoordinates();
-    coords.splice(ix, 1);
+    coords.splice(this.#whichPolygon(feature), 1);
     feature.getGeometry().setCoordinates(coords);
-    this.#modifyFeature(feature);
+    this.#modifyFeature(feature, true, false);
   }
 
-  #modifyFeature(feature: OLFeature<any>): void {
+  #modifyFeature(
+    feature: OLFeature<any>,
+    doGeometry = false,
+    doProperties = false
+  ): void {
     const format = new OLGeoJSON({
       dataProjection: this.olMap.featureProjection,
       featureProjection: this.olMap.projection
@@ -143,13 +138,55 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     // 👉 record the modification
     const redrawnParcel: Parcel = {
       action: 'modified',
-      geometry: parcel.geometry,
+      geometry: doGeometry ? parcel.geometry : null,
       id: feature.getId(),
       owner: this.authState.currentProfile().email,
       path: this.olMap.path,
+      properties: doProperties ? parcel.properties : null,
       type: 'Feature'
     };
     this.store.dispatch(new AddParcels([redrawnParcel]));
+  }
+
+  #rotateLabel(feature: OLFeature<any>): void {
+    const ix = this.#whichPolygon(feature);
+    const labels: ParcelPropertiesLabel[] =
+      feature.getProperties().labels ?? [];
+    const label: ParcelPropertiesLabel = labels[ix] ?? {
+      split: null,
+      rotate: null
+    };
+    label.rotate = label.rotate ? false : true;
+    labels[ix] = label;
+    feature.setProperties({ labels });
+    this.#modifyFeature(feature, false, true);
+  }
+
+  #splitLabel(feature: OLFeature<any>): void {
+    const ix = this.#whichPolygon(feature);
+    const labels: ParcelPropertiesLabel[] =
+      feature.getProperties().labels ?? [];
+    const label: ParcelPropertiesLabel = labels[ix] ?? {
+      split: null,
+      rotate: null
+    };
+    label.split = label.split ? null : true;
+    labels[ix] = label;
+    feature.setProperties({ labels });
+    this.#modifyFeature(feature, false, true);
+  }
+
+  #whichPolygon(feature: OLFeature<any>): number {
+    let ix = 0;
+    if (feature.getGeometry().getType() === 'MultiPolygon') {
+      const polygons = feature.getGeometry().getPolygons();
+      for (ix = 0; ix < polygons.length; ix++) {
+        const pt = point(this.olMap.contextMenuAt);
+        const poly = polygon([polygons[ix].getCoordinates()[0]]);
+        if (booleanPointInPolygon(pt, poly)) break;
+      }
+    }
+    return ix;
   }
 
   canAddParcel(event?: MouseEvent): boolean {
@@ -185,6 +222,14 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   }
 
   canRedrawBoundary(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selectedIDs.length === 1);
+  }
+
+  canRotateLabel(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selectedIDs.length === 1);
+  }
+
+  canSplitLabel(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selectedIDs.length === 1);
   }
 
@@ -230,6 +275,12 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         break;
       case 'redraw-boundary':
         this.interactionRedraw.setFeature(this.olMap.selected[0]);
+        break;
+      case 'rotate-label':
+        this.#rotateLabel(this.olMap.selected[0]);
+        break;
+      case 'split-label':
+        this.#splitLabel(this.olMap.selected[0]);
         break;
       case 'subdivide-parcel':
         cFactory = this.resolver.resolveComponentFactory(

@@ -17,6 +17,7 @@ import { OnChanges } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
+import { TitleCasePipe } from '@angular/common';
 import { ViewChildren } from '@angular/core';
 
 import { convertLength } from '@turf/helpers';
@@ -99,6 +100,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() dimensionsFontSizeRatio = 0.5;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
+  @Input() fontSizeAddressRatio = 0.5;
   @Input() forceAbutted = false /* 🔥 experimental */;
   @Input() forceRedrawn = false /* 🔥 experimental */;
   @Input() forceSelected = false /* 🔥 experimental */;
@@ -109,8 +111,6 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() opacity = 0.25;
   @Input() parcelIDs: ParcelID[];
   @Input() showAbutters: ShowStatus = 'never';
-  @Input() showAcreage = true;
-  @Input() showAddress = false;
   @Input() showBackground: ShowStatus = 'never';
   @Input() showBorder: ShowStatus = 'never';
   @Input() showDimensionContrast: ShowStatus = 'never';
@@ -125,7 +125,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     private decimal: DecimalPipe,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
-    private overlayState: OverlayState
+    private overlayState: OverlayState,
+    private titleCase: TitleCasePipe
   ) {}
 
   #borderPixels(resolution: number): number {
@@ -357,7 +358,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   ): number {
     const acres = props.areas[ix];
     let nominal = 0;
-    // 👉 this is the nominal font size at zoom level 15.63 / resolution 3.1    //    it tracks the successful ramp we used in the legacy app
+    // 👉 this is the nominal font size at zoom level 15.63 / res 3.1
+    //    it tracks the successful ramp we used in the legacy app
     if (acres <= 0.25) nominal = 5;
     else if (acres <= 0.5) nominal = 6;
     else if (acres <= 0.75) nominal = 7;
@@ -441,7 +443,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     for (let ix = 0; ix < numLabels; ix++) {
       const fontSize = this.#labelFontSize(props, resolution, ix);
       // 👉 if the fontsize for the acreage is so small we can't
-      //    see it, don't show it
+      //    see it, only show the lot ID
       if (fontSize * this.fontSizeAcreageRatio < this.minFontSize) {
         labels.push({
           fontFamily: this.fontFamily,
@@ -454,46 +456,61 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           text: `${props.id}`
         });
       } else {
-        // 👉 measure up the parcel id and the acreage text
-        //    NOTE: the acreage font size is 80% smaller
-        const fAcres = this.fontSizeAcreageRatio;
+        // 👉 measure up the parcel id and the subtitle text
+        const fAcreage = this.fontSizeAcreageRatio;
+        const fAddress = this.fontSizeAddressRatio;
         const mID = this.map.measureText(
           `${props.id}`,
           `bold ${fontSize}px '${this.fontFamily}'`
         );
         const mGap = this.map.measureText(
-          '  ',
-          `normal ${fontSize * fAcres}px '${this.fontFamily}'`
+          ' ',
+          `normal ${fontSize * fAcreage}px '${this.fontFamily}'`
         );
-        // 👉 we'll show the address in place of the acres if requested
-        let acres;
-        if (this.showAcreage)
-          acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
-        else if (this.showAddress) acres = props.address;
+        // 👉 measure up the subtitles
+        const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
         const mAcres = this.map.measureText(
           acres,
-          `normal ${fontSize * fAcres}px '${this.fontFamily}'`
+          `normal ${fontSize * fAcreage}px '${this.fontFamily}'`
         );
+        const address = this.titleCase.transform(props.address);
+        // 👇 turns out we don't need this for now
+        // const mAddress = this.map.measureText(
+        //   address,
+        //   `normal ${fontSize * fAddress}px '${this.fontFamily}'`
+        // );
+        const showAddress =
+          fontSize * this.fontSizeAddressRatio >= this.minFontSize;
         // 👉 now compute the x and y offset, which depends
         //    on whether we're splitting the text or not
         let x1 = 0;
         let x2 = 0;
+        const x3 = 0;
         let y1 = 0;
         let y2 = 0;
+        let y3 = 0;
+        // 👉 Firefox doesn't support mID.fontBoundingBoxAscent
+        //    so rather than a huge polyfill, use an approximation
+        const height = isNaN(mID.fontBoundingBoxAscent)
+          ? mGap.width * 2.5
+          : mID.fontBoundingBoxAscent;
         if (!this.#splitation(props, ix)) {
           const total = mID.width + mGap.width + mAcres.width;
           x1 = -(total / 2) + mID.width / 2;
           x2 = total / 2 + -(mAcres.width / 2);
-        } else {
-          // 👉 Firefox doesn't support mID.fontBoundingBoxAscent
-          //    so rather than a huge polyfill, use an approximation
-          const height = isNaN(mID.fontBoundingBoxAscent)
-            ? mGap.width * 2.5
-            : mID.fontBoundingBoxAscent;
+          if (showAddress) {
+            y1 = -(height / 3);
+            y2 = y1;
+            y3 = height / 3;
+          }
+        } else if (!showAddress) {
           y1 = -(height / 2);
           y2 = height / 2;
+        } else {
+          y1 = -(height / 1.1);
+          y3 = height / 1.5;
         }
-        // 👉 finally styles are computed for both segments
+        // 👉 finally styles are computed for all segments
         labels.push({
           fontFamily: this.fontFamily,
           fontSize: fontSize,
@@ -506,7 +523,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         });
         labels.push({
           fontFamily: this.fontFamily,
-          fontSize: fontSize * fAcres,
+          fontSize: fontSize * fAcreage,
           fontWeight: 'normal',
           offsetX: x2,
           offsetY: y2,
@@ -514,6 +531,17 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           rotation: this.#rotation(props, ix),
           text: acres
         });
+        if (showAddress)
+          labels.push({
+            fontFamily: this.fontFamily,
+            fontSize: fontSize * fAddress,
+            fontWeight: 'normal',
+            offsetX: x3,
+            offsetY: y3,
+            point: this.#point(props, ix),
+            rotation: this.#rotation(props, ix),
+            text: address
+          });
       }
     }
     return labels;
@@ -537,8 +565,6 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   }
 
   #splitation(props: ParcelProperties, ix: number): boolean {
-    // 👉 alwats split if showing address
-    if (this.showAddress) return true;
     const label = props.labels?.[ix];
     // 👉 we're ignoring split=false recommendations as that doesn't really
     //    work in the OpenLayers world
