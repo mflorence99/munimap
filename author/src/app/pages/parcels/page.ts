@@ -33,7 +33,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
-import { convertArea } from '@turf/helpers';
+import { calculateParcel } from '@lib/common';
 import { fromLonLat } from 'ol/proj';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
@@ -91,16 +91,12 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       feature.setGeometry(
         new OLMultiPolygon([feature.getGeometry().getCoordinates()])
       );
-    // 👇 create a square centered on the context menu of area equal
-    //    to half the area of the feature
-    const diameter = Math.sqrt(
-      convertArea(feature.getProperties().area, 'acres', 'miles')
-    );
+    // 👇 create a square centered on the context menu
     const polygon = bboxPolygon(
       bbox(
-        circle(toLonLat(this.olMap.contextMenuAt), diameter / 2, {
+        circle(toLonLat(this.olMap.contextMenuAt), 100, {
           steps: 16,
-          units: 'miles'
+          units: 'feet'
         })
       )
     );
@@ -140,10 +136,14 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       dataProjection: this.olMap.featureProjection,
       featureProjection: this.olMap.projection
     });
-    const geojson = JSON.parse(format.writeFeature(feature));
+    // 👉 convert to feature to geojson and recalculate centers etc
+    const parcel = JSON.parse(format.writeFeature(feature));
+    calculateParcel(parcel);
+    feature.setProperties(parcel.properties);
+    // 👉 record the modification
     const redrawnParcel: Parcel = {
       action: 'modified',
-      geometry: geojson.geometry,
+      geometry: parcel.geometry,
       id: feature.getId(),
       owner: this.authState.currentProfile().email,
       path: this.olMap.path,
