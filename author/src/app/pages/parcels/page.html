@@ -447,35 +447,39 @@
         </p>
       </li>
 
-      <li
-        (click)="canAddPolygon($event) && onContextMenu('add-polygon')"
-        [class.disabled]="!canAddPolygon()"
-        class="item"
-      >
-        <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus']"></fa-icon>
-        <p>New parcel polygon</p>
-      </li>
+      <ng-container *ngIf="isPrivileged()">
+        <hr />
 
-      <li
-        (click)="canDeletePolygon($event) && onContextMenu('delete-polygon')"
-        [class.disabled]="!canDeletePolygon()"
-        class="item"
-      >
-        <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
-        <p>Remove parcel polygon</p>
-      </li>
+        <li
+          (click)="canAddPolygon($event) && onContextMenu('add-polygon')"
+          [class.disabled]="!canAddPolygon()"
+          class="item"
+        >
+          <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus']"></fa-icon>
+          <p>New parcel polygon</p>
+        </li>
 
-      <li
-        (click)="canCreatePropertyMap($event) && onContextMenu('create-propertymap')"
-        [class.disabled]="!canCreatePropertyMap()"
-        class="item"
-      >
-        <fa-icon
-          [fixedWidth]="true"
-          [icon]="['fas', 'location-plus']"
-        ></fa-icon>
-        <p>Create property map &hellip;</p>
-      </li>
+        <li
+          (click)="canDeletePolygon($event) && onContextMenu('delete-polygon')"
+          [class.disabled]="!canDeletePolygon()"
+          class="item"
+        >
+          <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
+          <p>Remove parcel polygon</p>
+        </li>
+
+        <li
+          (click)="canCreatePropertyMap($event) && onContextMenu('create-propertymap')"
+          [class.disabled]="!canCreatePropertyMap()"
+          class="item"
+        >
+          <fa-icon
+            [fixedWidth]="true"
+            [icon]="['fas', 'location-plus']"
+          ></fa-icon>
+          <p>Create property map &hellip;</p>
+        </li>
+      </ng-container>
     </ul>
   </nav>
 </ng-template>
