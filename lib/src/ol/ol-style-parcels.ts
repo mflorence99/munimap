@@ -129,6 +129,28 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     private titleCase: TitleCasePipe
   ) {}
 
+  #abbreviateAddress(address: string): string {
+    let abbr = this.titleCase.transform(address);
+    abbr = abbr.replace(/\bCircle\b/, ' Cir ');
+    abbr = abbr.replace(/\bDrive\b/, ' Dr ');
+    abbr = abbr.replace(/\bEast\b/, ' E ');
+    abbr = abbr.replace(/\bHeights\b/, ' Hgts ');
+    abbr = abbr.replace(/\bHillsborough\b/, ' Hillsboro ');
+    abbr = abbr.replace(/\bLane\b/, ' Ln ');
+    abbr = abbr.replace(/\bMountain\b/, ' Mtn ');
+    abbr = abbr.replace(/\bNorth\b/, ' N ');
+    abbr = abbr.replace(/\bPond\b/, ' Pd ');
+    abbr = abbr.replace(/\bRoad\b/, ' Rd ');
+    abbr = abbr.replace(/\bSouth\b/, ' S ');
+    abbr = abbr.replace(/\bSprings\b/, ' Spr ');
+    abbr = abbr.replace(/\bStreet\b/, ' St ');
+    abbr = abbr.replace(/\bTerrace\b/, ' Ter ');
+    abbr = abbr.replace(/\bWashington\b/, ' Wash. ');
+    abbr = abbr.replace(/\bWay\b/, ' Wy ');
+    abbr = abbr.replace(/\bWest\b/, ' W ');
+    return abbr.replace(/  +/g, ' ').trim();
+  }
+
   #borderPixels(resolution: number): number {
     // 👉 borderWidth is proportional to the resolution,
     //    but no bigger than the max size specified
@@ -474,7 +496,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           acres,
           `normal ${fontSize * fAcreage}px '${this.fontFamily}'`
         );
-        const address = this.titleCase.transform(props.address);
+        const address = this.#abbreviateAddress(props.address);
         // 👇 turns out we don't need this for now
         // const mAddress = this.map.measureText(
         //   address,
