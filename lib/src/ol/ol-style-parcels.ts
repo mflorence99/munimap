@@ -100,7 +100,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() dimensionsFontSizeRatio = 0.5;
   @Input() fontFamily = 'Roboto';
   @Input() fontSizeAcreageRatio = 0.75;
-  @Input() fontSizeAddressRatio = 0.5;
+  @Input() fontSizeAddressRatio = 0.66;
   @Input() forceAbutted = false /* 🔥 experimental */;
   @Input() forceRedrawn = false /* 🔥 experimental */;
   @Input() forceSelected = false /* 🔥 experimental */;
@@ -360,7 +360,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     let nominal = 0;
     // 👉 this is the nominal font size at zoom level 15.63 / res 3.1
     //    it tracks the successful ramp we used in the legacy app
-    if (acres <= 0.25) nominal = 5;
+    if (acres <= 0.1) nominal = 4;
+    else if (acres <= 0.25) nominal = 5;
     else if (acres <= 0.5) nominal = 6;
     else if (acres <= 0.75) nominal = 7;
     else if (acres <= 1) nominal = 8;
@@ -499,16 +500,17 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           x1 = -(total / 2) + mID.width / 2;
           x2 = total / 2 + -(mAcres.width / 2);
           if (showAddress) {
-            y1 = -(height / 3);
+            y1 = -(height / 2);
             y2 = y1;
-            y3 = height / 3;
+            y3 = height / 2;
           }
         } else if (!showAddress) {
           y1 = -(height / 2);
           y2 = height / 2;
         } else {
           y1 = -(height / 1.1);
-          y3 = height / 1.5;
+          y2 = 0;
+          y3 = height / 1.25;
         }
         // 👉 finally styles are computed for all segments
         labels.push({
@@ -566,13 +568,13 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
 
   #splitation(props: ParcelProperties, ix: number): boolean {
     const label = props.labels?.[ix];
-    // 👉 we're ignoring split=false recommendations as that doesn't really
-    //    work in the OpenLayers world
-    return label?.split === undefined || !label?.split
-      ? this.#isSmall(props, ix) ||
+    const split =
+      label?.split === undefined
+        ? this.#isSmall(props, ix) ||
           this.#isLarge(props, ix) ||
           this.#isSquare(props, ix)
-      : label?.split;
+        : label?.split;
+    return split;
   }
 
   // 👐 https://stackoverflow.com/questions/45740521
