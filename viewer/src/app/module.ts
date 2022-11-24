@@ -125,6 +125,7 @@ import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { TitleCasePipe } from '@angular/common';
 import { UndoState } from '@lib/state/undo';
 import { VersionDialogComponent } from '@lib/components/version-dialog';
 import { ViewState } from '@lib/state/view';
@@ -374,6 +375,7 @@ const STATES_SAVED = [OverlayState, ViewState];
   providers: [
     CurrencyPipe,
     DecimalPipe,
+    TitleCasePipe,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAppProvider,
