@@ -23,5 +23,5 @@
     "resolveJsonModule": true,
     "target": "es2015"
   },
-  "exclude": ["**/author/**/*.ts", "**/worker/**/*.ts"]
+  "exclude": ["**/viewer/**/*.ts", "**/worker/**/*.ts"]
 }
