@@ -11,7 +11,8 @@ const PROFILES = [
   },
   {
     email: 'mflo999+dpw@gmail.com',
-    workgroup: 'ethayer@washingtonnh.org'
+    workgroup:
+      'ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org mflo999@gmail.com'
   },
   {
     email: 'mflo999+flo@gmail.com',
@@ -25,7 +26,8 @@ const PROFILES = [
   },
   {
     email: 'ethayer@washingtonnh.org',
-    workgroup: 'mflo999+dpw@gmail.com'
+    workgroup:
+      'mflo999+dpw@gmail.com nick@mnassessing.com kchidester@washingtonnh.org mflo999@gmail.com'
   }
 ];
 
