@@ -11,16 +11,22 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "module": "es2020",
     "moduleResolution": "node",
     "outDir": "./dist/munimap/out-tsc",
     "paths": {
-      "@lib/*": ["./lib/src/*"]
+      "@lib/*": [
+        "./lib/src/*"
+      ]
     },
     "skipLibCheck": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "target": "es2015"
+    "target": "ES2022",
+    "useDefineForClassFields": false
   }
 }

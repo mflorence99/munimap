@@ -21,7 +21,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "target": "es2015"
+    "target": "es2022"
   },
   "include": ["**/*.ts"]
 }
