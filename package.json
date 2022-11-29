@@ -166,7 +166,7 @@
     "@types/node-fetch": "2.6.1",
     "@types/object-hash": "^2",
     "@types/ol": "^6",
-    "@types/ol-ext": "npm:@siedlerchr/types-ol-ext@^3",
+    "@types/ol-ext": "@siedlerchr/types-ol-ext@^3",
     "@types/proj4": "^2",
     "@types/recursive-readdir": "^2",
     "@types/shpjs": "3.4.1",
