@@ -152,7 +152,9 @@ export class ParcelsState implements NgxsOnInit {
           return parcels;
         }),
         // 👉 cut down on noise
-        distinctUntilChanged((p, q): boolean => hash.MD5(p) === hash.MD5(q))
+        distinctUntilChanged(
+          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q)
+        )
       )
       .subscribe((parcels: Parcel[]) => {
         this.store.dispatch(new SetParcels(parcels));

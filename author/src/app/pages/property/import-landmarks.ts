@@ -173,7 +173,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
         this.numImported += 1;
         this.cdf.markForCheck();
         // 👇 potentially one landmark per feature
-        const importHash = hash.MD5(feature);
+        const importHash = hash.MD5(feature as any);
         const alreadyImported = await this.alreadyImported(importHash);
         if (!alreadyImported) {
           // 👇 yes, I know this looks identical to the code in

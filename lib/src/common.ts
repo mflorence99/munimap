@@ -1107,7 +1107,7 @@ export function deserializeParcel(parcel: Partial<Parcel>): void {
 // 👇 we use this when landmarks are imported from an external source,
 //    so that they don't get duplicated
 export function makeLandmarkID(landmark: Partial<Landmark>): LandmarkID {
-  return hash.MD5(landmark.geometry);
+  return hash.MD5(landmark.geometry as any);
 }
 
 export function normalizeParcel(parcel: Partial<Parcel>): void {

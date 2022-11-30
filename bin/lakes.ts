@@ -48,7 +48,7 @@ async function main(): Promise<void> {
           // 👉 AU_ID in the original dataset isn't unique
           //    so let's at least use a hash of the geometry so that
           //    every time we load the same ID is used
-          lake.id = hash.MD5(lake.geometry);
+          lake.id = hash.MD5(lake.geometry as any);
 
           lake.bbox = turf.bbox(lake);
           lake.properties = {

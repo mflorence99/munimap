@@ -178,7 +178,9 @@ export class LandmarksState implements NgxsOnInit {
           return landmarks;
         }),
         // 👉 cut down on noise
-        distinctUntilChanged((p, q): boolean => hash.MD5(p) === hash.MD5(q))
+        distinctUntilChanged(
+          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q)
+        )
       )
       .subscribe((landmarks: Landmark[]) => {
         this.store.dispatch(new SetLandmarks(landmarks));

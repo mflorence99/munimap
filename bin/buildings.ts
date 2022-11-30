@@ -116,7 +116,7 @@ async function main(): Promise<void> {
           // 👉 the original dataset doesn't have an ID for buildings
           //    so let's at least use a hash of the geometry so that
           //    every time we load the same ID is used
-          building.id = hash.MD5(building.geometry);
+          building.id = hash.MD5(building.geometry as any);
 
           buildingsByCountyByTown[county] ??= {};
           const geojson = turf.featureCollection([]);

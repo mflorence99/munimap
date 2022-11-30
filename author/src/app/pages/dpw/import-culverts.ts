@@ -102,7 +102,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
         this.numImported += 1;
         this.cdf.markForCheck();
         // 👇 potentially one culvert per feature
-        const importHash = hash.MD5(feature);
+        const importHash = hash.MD5(feature as any);
         const alreadyImported = await this.alreadyImported(importHash);
         // 👇 only if not already imported
         if (!alreadyImported) {

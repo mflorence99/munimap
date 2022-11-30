@@ -83,7 +83,7 @@ async function main(): Promise<void> {
           // 👉 The original dataset doesn't give a reliable unique ID
           //    so let's at least use a hash of the geometry so that
           //    every time we load the same ID is used
-          trail.id = hash.MD5(trail.geometry);
+          trail.id = hash.MD5(trail.geometry as any);
 
           trail.bbox = turf.bbox(trail);
           trail.properties = {
@@ -94,7 +94,7 @@ async function main(): Promise<void> {
           };
 
           trailsByCountyByTown[county] ??= {};
-        const geojson = turf.featureCollection([]);
+          const geojson = turf.featureCollection([]);
           trailsByCountyByTown[county][town] ??= geojson;
           trailsByCountyByTown[county][town].features.push(trail);
         }

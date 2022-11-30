@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 @font-face {
   font-family: 'Bentham Regular';
   font-style: normal;
@@ -43,33 +45,34 @@
 }
 
 @import './colors.scss';
-@import '@angular/material/theming';
 
-@include mat-core();
+@include mat.core();
 
-$light-app-theme: mat-light-theme(
+$light-app-theme: mat.define-light-theme(
   (
     color: (
-      primary: mat-palette($mat-blue),
-      accent: mat-palette($mat-amber, A200, A100, A400),
-      warn: mat-palette($mat-red)
-    )
+      primary: mat.define-palette(mat.$blue-palette),
+      accent: mat.define-palette(mat.$amber-palette, A200, A100, A400),
+      warn: mat.define-palette(mat.$red-palette)
+    ),
+    typography: mat.define-typography-config()
   )
 );
 
-$dark-app-theme: mat-dark-theme(
+$dark-app-theme: mat.define-dark-theme(
   (
     color: (
-      primary: mat-palette($mat-blue),
-      accent: mat-palette($mat-amber, A200, A100, A400),
-      warn: mat-palette($mat-red)
-    )
+      primary: mat.define-palette(mat.$blue-palette),
+      accent: mat.define-palette(mat.$amber-palette, A200, A100, A400),
+      warn: mat.define-palette(mat.$red-palette)
+    ),
+    typography: mat.define-typography-config()
   )
 );
+
+@include mat.all-component-themes($light-app-theme);
 
 .light-theme {
-  @include angular-material-theme($light-app-theme);
-
   // 👉 bridge from Angular Material variables to CSS variables
 
   --primary-color: var(--mat-blue-a200);
@@ -88,7 +91,7 @@ $dark-app-theme: mat-dark-theme(
 }
 
 .dark-theme {
-  @include angular-material-color($dark-app-theme);
+  @include mat.all-component-colors($dark-app-theme);
 
   // 👉 bridge from Angular Material variables to CSS variables
 
@@ -350,7 +353,7 @@ select {
 
 // 👉 Angular Material styles
 
-a[mat-flat-button] {
+a[mat-mdc-flat-button] {
   color: var(--primary-color) !important;
   background-color: var(--background-color) !important;
   padding: 0 !important;
@@ -361,38 +364,38 @@ a[mat-flat-button] {
   }
 }
 
-.mat-button-toggle {
+.mat-mdc-button-toggle {
   --fa-primary-color: var(--text-color);
   --fa-secondary-color: var(--mat-gray-600);
 
   flex-shrink: 0;
 
-  &.mat-button-toggle-checked {
+  &.mat-mdc-button-toggle-checked {
     --fa-primary-color: var(--text-color);
     --fa-secondary-color: var(--accent-color);
   }
 }
 
-.mat-card,
-.mat-dialog-container,
-.mat-drawer,
-.mat-menu-content {
+.mat-mdc-card,
+.mat-mdc-dialog-container,
+.mat-mdc-drawer,
+.mat-mdc-menu-content {
   background-color: var(--background-color) !important;
   box-shadow: rgb(255 255 255 / 33%) 0px 8px 24px !important;
 }
 
-.mat-card-actions {
+.mat-mdc-card-actions {
   margin: 0 !important;
 }
 
-.mat-dialog-actions {
+.mat-mdc-dialog-actions {
   justify-content: flex-end !important;
 }
 
-.mat-icon-button {
+.mat-mdc-icon-button {
   line-height: 1 !important;
 
-  &.mat-button-disabled {
+  &.mat-mdc-button-disabled {
     --fa-primary-color: var(--text-color);
     --fa-secondary-color: var(--text-color);
     --fa-primary-opacity: 0.6;
@@ -402,17 +405,17 @@ a[mat-flat-button] {
   }
 }
 
-.mat-menu-panel {
+.mat-mdc-menu-panel {
   max-width: unset !important;
 }
 
-.mat-snack-bar-container {
+.mat-mdc-snack-bar-container {
   background-color: var(--background-color) !important;
   color: var(--text-color) !important;
   max-width: 99vw !important;
 }
 
-.mat-toolbar-single-row {
+.mat-mdc-toolbar-single-row {
   padding: 0 !important;
 }
 
