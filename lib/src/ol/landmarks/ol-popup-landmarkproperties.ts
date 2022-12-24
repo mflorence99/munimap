@@ -90,11 +90,7 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   length(): number {
-    return convertLength(
-      length(this.landmark, { units: 'miles' }),
-      'miles',
-      'feet'
-    );
+    return length(this.landmark, { units: 'feet' });
   }
 
   onClipboard(): void {

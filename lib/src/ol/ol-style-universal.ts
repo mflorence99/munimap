@@ -532,7 +532,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           text += ` (${this.decimal.transform(
-            convertLength(length(geojson, { units: 'miles' }), 'miles', 'feet'),
+            length(geojson, { units: 'feet' }),
             '1.0-0'
           )} ft)`;
         }

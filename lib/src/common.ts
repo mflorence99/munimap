@@ -1012,7 +1012,7 @@ export function calculateLengths(
     };
     lengths.push(
       Math.round(
-        convertLength(length(lineString, { units: 'miles' }), 'miles', 'feet')
+        length(lineString, { units: 'feet' })
       )
     );
   }
@@ -1028,7 +1028,7 @@ export function calculateMinWidth(
   const from = point([minX, minY]);
   const to = point([minX, maxY]);
   return Math.round(
-    convertLength(distance(from, to, { units: 'miles' }), 'miles', 'feet')
+    distance(from, to, { units: 'feet' })
   );
 }
 
