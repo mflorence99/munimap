@@ -82,7 +82,8 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
       'feet'
     );
     this.ftUnit = Math.pow(10, Math.floor(numFeet).toString().length - 2);
-    this.numUnits = Math.min(10, Math.round(numFeet / 4 / this.ftUnit));
+    // 🔥 force 10 units for now
+    this.numUnits = 10; // Math.min(10, Math.round(numFeet / 4 / this.ftUnit));
     const numPixels = this.map.olMap.getSize()[0];
     const cxFoot = numPixels / numFeet;
     this.cxUnit = this.ftUnit * cxFoot;

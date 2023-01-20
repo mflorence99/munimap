@@ -10,6 +10,14 @@
     &.contrast {
       color: var(--text-color);
       -webkit-text-stroke-color: var(--background-color);
+
+      ::ng-deep a {
+        color: var(--text-color);
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--background-color);
     }
 
     li,

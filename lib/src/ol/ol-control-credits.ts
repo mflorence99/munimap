@@ -64,7 +64,7 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
     return this.bottom;
   }
 
-  @Input() scaleFactor = 150;
+  @Input() scaleFactor = 125;
 
   @Input() showCreditsContrast: boolean;
 

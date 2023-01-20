@@ -14,6 +14,17 @@ const url =
 
 const dist = './data';
 
+// 👇 these roads are not mapped correctly
+
+const exceptions = {
+  SULLIVAN: {
+    WASHINGTON: [
+      'Juniper Dr', // 👈 id 124177
+      'Wolf Way' // 👈 id 125282
+    ]
+  }
+};
+
 const roadsByCountyByTown = {};
 
 async function main(): Promise<void> {
@@ -26,27 +37,31 @@ async function main(): Promise<void> {
     const town = (feature.properties.TOWN_NAME as string)?.toUpperCase();
 
     if (county && town) {
-      // 👉 some features have bbox on the geometry, we created our own
-      delete feature.geometry.bbox;
+      // 👉 except these
+      const except = exceptions[county][town] ?? [];
+      if (!except.includes(feature.properties.STREET)) {
+        // 👉 some features have bbox on the geometry, we created our own
+        delete feature.geometry.bbox;
 
-      // 👉 every feature must have an ID
-      //    let's hope that UNIQUE_ID is as unique as it claims to be!
-      feature.id = `${feature.properties.UNIQUE_ID}`;
+        // 👉 every feature must have an ID
+        //    let's hope that UNIQUE_ID is as unique as it claims to be!
+        feature.id = `${feature.properties.UNIQUE_ID}`;
 
-      feature.bbox = turf.bbox(feature);
-      feature.properties = {
-        class: feature.properties.LEGIS_CLAS,
-        county: feature.properties.COUNTY_NAM,
-        name: feature.properties.STREET,
-        owner: feature.properties.OWNERSHIP,
-        town: feature.properties.TOWN_NAME,
-        width: feature.properties.ROADWAY_WI
-      };
+        feature.bbox = turf.bbox(feature);
+        feature.properties = {
+          class: feature.properties.LEGIS_CLAS,
+          county: feature.properties.COUNTY_NAM,
+          name: feature.properties.STREET,
+          owner: feature.properties.OWNERSHIP,
+          town: feature.properties.TOWN_NAME,
+          width: feature.properties.ROADWAY_WI
+        };
 
-      roadsByCountyByTown[county] ??= {};
-      const geojson = turf.featureCollection([]);
-      roadsByCountyByTown[county][town] ??= geojson;
-      roadsByCountyByTown[county][town].features.push(feature);
+        roadsByCountyByTown[county] ??= {};
+        const geojson = turf.featureCollection([]);
+        roadsByCountyByTown[county][town] ??= geojson;
+        roadsByCountyByTown[county][town].features.push(feature);
+      }
     }
   });
 

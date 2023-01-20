@@ -44,11 +44,10 @@ const featureByID = geojson.features.reduce((acc, feature) => {
 
 function main(): void {
   try {
-    jsome(avitarByID['20-137']);
-    jsome(avitarByID['20-138']);
-    searchForAnomalies();
-    checkForOwnershipChanges();
-    saveGeoJSON();
+    jsome(avitarByID['9-7']);
+    // searchForAnomalies();
+    // checkForOwnershipChanges();
+    // saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
   }

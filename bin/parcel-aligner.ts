@@ -11,6 +11,8 @@ import chalk from 'chalk';
 import copy from 'fast-copy';
 import jsome from 'jsome';
 
+// 🔥 this is a one-time pass only -- do not repeat!
+
 // 👇 configure jsome
 
 jsome.params.lintable = true;

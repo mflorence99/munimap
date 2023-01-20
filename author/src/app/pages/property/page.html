@@ -77,25 +77,6 @@
         <!-- 📦 TERRAIN LAYERS -->
 
         <ng-container *ngIf="!(satelliteView$ | async)">
-          <!-- 📦 BG LAYER (outside parcels)-->
-
-          <app-ol-layer-tile>
-            <app-ol-source-xyz
-              [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-              ><app-ol-attribution
-                >©
-                <a href="https://mapbox.com" target="_blank"
-                  >Mapbox</a
-                ></app-ol-attribution
-              ></app-ol-source-xyz
-            >
-            <app-ol-filter-colorize
-              [color]="[255, 255, 255]"
-              [operation]="'color'"
-              [value]="0.5"
-            ></app-ol-filter-colorize>
-          </app-ol-layer-tile>
-
           <!-- 📦 HILLSHADE LAYER -->
 
           <app-ol-layer-tile *ngIf="!map.contours2ft">
@@ -108,7 +89,7 @@
             ></app-ol-filter-crop2propertyparcels>
             <app-ol-filter-colorize
               [operation]="'enhance'"
-              [value]="0.33"
+              [value]="0.25"
             ></app-ol-filter-colorize>
           </app-ol-layer-tile>
 
