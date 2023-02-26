@@ -79,19 +79,40 @@
         <ng-container *ngIf="!(satelliteView$ | async)">
           <!-- 📦 HILLSHADE LAYER -->
 
-          <app-ol-layer-tile *ngIf="!map.contours2ft">
-            <app-ol-source-hillshade [colorize]="true">
-            </app-ol-source-hillshade>
-            <app-ol-filter-crop2propertyparcels
-              [parcelIDs]="map.parcelIDs"
-              [source]="parcels"
-              [type]="'crop'"
-            ></app-ol-filter-crop2propertyparcels>
-            <app-ol-filter-colorize
-              [operation]="'enhance'"
-              [value]="0.25"
-            ></app-ol-filter-colorize>
-          </app-ol-layer-tile>
+          <ng-container *ngIf="!map.contours2ft">
+            <app-ol-layer-tile>
+              <app-ol-source-xyz
+                [maxZoom]="16"
+                [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
+              >
+                <app-ol-attribution
+                  >Powered by
+                  <a href="https://www.esri.com" target="_blank"
+                    >Esri</a
+                  ></app-ol-attribution
+                >
+              </app-ol-source-xyz>
+              <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              <app-ol-filter-colorize
+                [operation]="'enhance'"
+                [value]="0.33"
+              ></app-ol-filter-colorize>
+            </app-ol-layer-tile>
+
+            <app-ol-layer-tile>
+              <app-ol-source-hillshade [colorize]="true">
+              </app-ol-source-hillshade>
+              <app-ol-filter-crop2propertyparcels
+                [parcelIDs]="map.parcelIDs"
+                [source]="parcels"
+                [type]="'crop'"
+              ></app-ol-filter-crop2propertyparcels>
+              <app-ol-filter-colorize
+                [operation]="'enhance'"
+                [value]="0.25"
+              ></app-ol-filter-colorize>
+            </app-ol-layer-tile>
+          </ng-container>
 
           <!-- 📦 CONTOURS LAYER -->
 
@@ -184,7 +205,7 @@
           </app-ol-layer-vector>
 
           <app-ol-layer-vector>
-            <app-ol-adaptor-trails>
+            <app-ol-adaptor-trails [accentuate]="true">
               <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
             </app-ol-adaptor-trails>
             <app-ol-source-geojson

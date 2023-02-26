@@ -6,6 +6,7 @@ import { TrailProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 
@@ -22,6 +23,8 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorTrailsComponent implements Adaptor {
+  @Input() accentuate = false;
+
   // 👇 convert a Trail to a Landmark
   adapt(trail: TrailProperties): LandmarkProperties[] {
     return [
@@ -29,7 +32,7 @@ export class OLAdaptorTrailsComponent implements Adaptor {
         fontColor: '--map-trail-text-color',
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'medium',
+        fontSize: this.accentuate ? 'large' : 'medium',
         fontStyle: 'italic',
         lineChunk: true,
         lineSpline: true,
@@ -37,7 +40,7 @@ export class OLAdaptorTrailsComponent implements Adaptor {
         strokeColor: '--map-trail-line-color',
         strokeOpacity: 1,
         strokeStyle: 'dashed',
-        strokeWidth: 'medium',
+        strokeWidth: this.accentuate ? 'thick' : 'medium',
         zIndex: 1
       })
     ];

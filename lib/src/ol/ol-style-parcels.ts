@@ -515,7 +515,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         // 👉 Firefox doesn't support mID.fontBoundingBoxAscent
         //    so rather than a huge polyfill, use an approximation
         const height = isNaN(mID.fontBoundingBoxAscent)
-          ? mGap.width * 2.5
+          ? mGap.width * 5
           : mID.fontBoundingBoxAscent;
         if (!this.#splitation(props, ix)) {
           const total = mID.width + mGap.width + mAcres.width;
