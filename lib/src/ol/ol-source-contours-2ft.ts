@@ -20,7 +20,7 @@ import OLImageTile from 'ol/ImageTile';
 import OLXYZ from 'ol/source/XYZ';
 
 const attribution =
-  'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
+  '<a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
 // 🔥 we can't determine the HUC boundaries programmatically because
 //    we just don't know how -- so we do what GRANITView does

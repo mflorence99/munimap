@@ -9,7 +9,7 @@ import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
 const attribution =
-  'Powered by <a href="https://www.facebook.com/groups/NHstonewalls/" target="_blank">NH Stone Wall</a>';
+  '<a href="https://www.facebook.com/groups/NHstonewalls/" target="_blank">NH Stone Wall</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

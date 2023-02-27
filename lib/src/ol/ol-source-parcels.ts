@@ -36,7 +36,7 @@ import OLVector from 'ol/source/Vector';
 // 👇 parcels are different because they can be overridden by the user
 
 const attribution =
-  'Powered by <a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
+  '<a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

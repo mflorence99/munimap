@@ -10,7 +10,7 @@ import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
 const attribution =
-  'Powered by <a href="https://www.des.nh.gov/" target="_blank">NHSADES</a>';
+  '<a href="https://www.des.nh.gov/" target="_blank">NHSADES</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

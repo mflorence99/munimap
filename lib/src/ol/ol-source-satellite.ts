@@ -11,7 +11,7 @@ import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
 
 const attribution =
-  'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
+  '<a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
 const urls = {
   '2018':

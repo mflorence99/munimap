@@ -13,7 +13,7 @@ import { Input } from '@angular/core';
 // 👇 we replaced railroads.geojson with this data source
 
 const attribution =
-  'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
+  '<a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

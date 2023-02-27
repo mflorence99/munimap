@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import copy from 'fast-copy';
 
 const attribution =
-  'Powered by <a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
+  '<a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
 // 👇 we replaced rivers.geojson with this data source, as it has a
 //    LOT more data -- we just need to adapt the properties to match

@@ -4,6 +4,8 @@
     <li class="item">Version {{ env.package.version }}</li>
     <li class="item">Build {{ env.build.id }} {{ env.build.date | date }}</li>
 
+    <header class="header">Credits</header>
+
     <li
       *ngFor="let attribution of attributions; trackBy: trackByAttribution"
       [innerHTML]="attribution"
