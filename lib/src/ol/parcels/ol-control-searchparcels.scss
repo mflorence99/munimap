@@ -37,7 +37,14 @@
   .match {
     color: var(--mat-gray-900);
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
     padding: 0.25rem;
+
+    .count {
+      font-size: smaller;
+      font-style: italic;
+    }
   }
 }
 

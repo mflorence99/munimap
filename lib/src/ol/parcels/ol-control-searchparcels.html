@@ -21,9 +21,10 @@
 <ul [class.hidden]="matches.length === 0 || !theSearcher.value" class="matcher">
   <li
     *ngFor="let match of matches; trackBy: trackByMatch"
-    (click)="onSearch(match)"
+    (click)="onSearch(match.key)"
     class="match"
   >
-    {{ match }}
+    <div class="key">{{ match.key }}</div>
+    <div *ngIf="match.count > 1" class="count">({{ match.count }})</div>
   </li>
 </ul>

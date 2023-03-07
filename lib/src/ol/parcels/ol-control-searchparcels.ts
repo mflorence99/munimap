@@ -56,7 +56,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   @Input() fuzzyMinLength = 3;
   @Input() fuzzyThreshold = -10000;
 
-  matches: string[] = [];
+  matches: { count: number; key: string }[] = [];
 
   @Input() matchesMaxVisible = 20;
 
@@ -170,18 +170,29 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     }, {});
   }
 
-  #makeSearchTargets(searchables: SearchableParcel[]): any[] {
-    const keys = new Set<ParcelID>();
+  #makeSearchTargets(
+    searchables: SearchableParcel[]
+  ): { count: number; fuzzy: any }[] {
+    const counts: Record<string, number> = {};
+    // 👇 how to accumulate counts
+    const accum = (key: string): void => {
+      const count = counts[key];
+      counts[key] = count ? count + 1 : 1;
+    };
+    // 👇 accumulate counts
     searchables.forEach((searchable) => {
       const props = searchable.properties;
       const override = this.#overridesByID[searchable.id];
-      if (override?.address) keys.add(override.address);
-      else if (props.address) keys.add(props.address);
-      if (override?.owner) keys.add(override.owner);
-      else if (props.owner) keys.add(props.owner);
-      keys.add(props.id);
+      if (override?.address) accum(override.address);
+      else if (props.address) accum(props.address);
+      if (override?.owner) accum(override.owner);
+      else if (props.owner) accum(props.owner);
+      accum(props.id as string);
     });
-    return Array.from(keys).map((key) => fuzzysort.prepare(`${key}`));
+    return Object.keys(counts).map((key) => ({
+      fuzzy: fuzzysort.prepare(key),
+      count: counts[key]
+    }));
   }
 
   ngOnInit(): void {
@@ -214,11 +225,12 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       // 👉 no hit, but enough characters to go for a fuzzy match
       this.matches = fuzzysort
         .go(searchFor, this.#searchTargets, {
+          key: 'fuzzy',
           limit: this.fuzzyMaxResults,
           threshold: this.fuzzyThreshold
         })
-        .map((fuzzy) => fuzzy.target)
-        .sort();
+        .map((fuzzy) => ({ count: fuzzy.obj.count, key: fuzzy.target }))
+        .sort((p, q) => p.key.localeCompare(q.key));
     } else if (searchFor.length === 0) {
       // 👉 reset everything when the search string is cleared
       this.matches = [];
@@ -226,7 +238,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     return searchFor;
   }
 
-  trackByMatch(ix: number, match: string): string {
-    return match;
+  trackByMatch(ix: number, match: { count: number; key: string }): string {
+    return match.key;
   }
 }
