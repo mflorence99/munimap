@@ -32,6 +32,11 @@ interface Override {
   owner?: string;
 }
 
+interface SearchTarget {
+  count: number;
+  key: any;
+}
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -56,7 +61,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   @Input() fuzzyMinLength = 3;
   @Input() fuzzyThreshold = -10000;
 
-  matches: { count: number; key: string }[] = [];
+  matches: SearchTarget[] = [];
 
   @Input() matchesMaxVisible = 20;
 
@@ -170,9 +175,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     }, {});
   }
 
-  #makeSearchTargets(
-    searchables: SearchableParcel[]
-  ): { count: number; fuzzy: any }[] {
+  #makeSearchTargets(searchables: SearchableParcel[]): SearchTarget[] {
     const counts: Record<string, number> = {};
     // 👇 how to accumulate counts
     const accum = (key: string): void => {
@@ -190,8 +193,8 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       accum(props.id as string);
     });
     return Object.keys(counts).map((key) => ({
-      fuzzy: fuzzysort.prepare(key),
-      count: counts[key]
+      count: counts[key],
+      key: fuzzysort.prepare(key)
     }));
   }
 
@@ -225,7 +228,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       // 👉 no hit, but enough characters to go for a fuzzy match
       this.matches = fuzzysort
         .go(searchFor, this.#searchTargets, {
-          key: 'fuzzy',
+          key: 'key',
           limit: this.fuzzyMaxResults,
           threshold: this.fuzzyThreshold
         })
@@ -238,7 +241,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     return searchFor;
   }
 
-  trackByMatch(ix: number, match: { count: number; key: string }): string {
+  trackByMatch(ix: number, match: SearchTarget): string {
     return match.key;
   }
 }
