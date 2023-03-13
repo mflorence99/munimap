@@ -12,10 +12,17 @@
 
 <table class="form legend">
   <tbody>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>#Lots</th>
+      <th>Acres</th>
+    </tr>
+
     <ng-container
       *ngFor="let usage of parcelPropertiesUsage | keyvalue; trackBy: trackByKeyValue"
     >
-      <tr>
+      <tr *ngIf="countByUsage[usage.key] > 0">
         <td class="usage">
           <figure
             [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'"
@@ -23,10 +30,13 @@
           ></figure>
         </td>
         <td class="desc">{{ usage.value }}</td>
+        <td class="count">{{ countByUsage[usage.key] | number:'1.0-0' }}</td>
+        <td class="count">{{ areaByUsage[usage.key] | number:'1.0-0' }}</td>
+        <td></td>
       </tr>
 
       <tr *ngIf="usage.key === '190'">
-        <td class="use" colspan="2">
+        <td class="use" colspan="4">
           <article class="keys">
             <ng-container
               *ngFor="let use of parcelPropertiesUse | keyvalue; trackBy: trackByKeyValue"
@@ -47,22 +57,22 @@
     </ng-container>
 
     <tr>
-      <td colspan="2"></td>
+      <td colspan="4"></td>
     </tr>
 
     <tr>
-      <td class="des" colspan="2">
+      <td class="des" colspan="4">
         <article class="keys">
           DES
 
           <figure class="key">
-            <div [style.backgroundColor]="floodplain" class="icon"></div>
+            <div [style.backgroundColor]="iconFloodplain" class="icon"></div>
             <figcaption>FEMA Floodplain</figcaption>
           </figure>
 
           <figure class="key">
             <div
-              [style.backgroundImage]="'url(\'' + wetland.getImage().toDataURL() +  '\')'"
+              [style.backgroundImage]="'url(\'' + iconWetland.getImage().toDataURL() +  '\')'"
               class="icon"
             ></div>
             <figcaption>Wetland</figcaption>
@@ -72,14 +82,14 @@
     </tr>
 
     <tr>
-      <td colspan="2"></td>
+      <td colspan="4"></td>
     </tr>
 
     <tr>
       <td class="help">
         <fa-icon [icon]="['fas', 'question-circle']" size="2x"></fa-icon>
       </td>
-      <td class="desc">
+      <td class="desc" colspan="3">
         <a href="mailto:munimap.helpdesk@gmail.com" target="_blank"
           >munimap.helpdesk@gmail.com</a
         >

@@ -1,6 +1,8 @@
 import { DestroyService } from '../../services/destroy';
 import { GeoJSONService } from '../../services/geojson';
+import { Legend } from '../ol-control-abstractparcelslegend';
 import { MapableComponent } from '../ol-mapable';
+import { MapState } from '../../state/map';
 import { OLControlAbstractParcelsLegendComponent } from '../ol-control-abstractparcelslegend';
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../common';
@@ -17,7 +19,10 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
+import { convertArea } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
+
+import area from '@turf/area';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +41,8 @@ export class OLControlParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
+  areaOfTown: number;
+
   @Input() county: string;
 
   @Input() id: string;
@@ -52,14 +59,22 @@ export class OLControlParcelsLegendComponent
     cdf: ChangeDetectorRef,
     destroy$: DestroyService,
     geoJSON: GeoJSONService,
-    map: OLMapComponent,
+    private map: OLMapComponent,
+    mapState: MapState,
     parcelsState: ParcelsState,
     route: ActivatedRoute
   ) {
-    super(cdf, destroy$, geoJSON, map, parcelsState, route);
+    super(cdf, destroy$, geoJSON, mapState, parcelsState, route);
+    this.areaOfTown = convertArea(area(this.map.boundary), 'meters', 'acres');
+  }
+
+  addToMap(): void {
+    this.map.olMap.addControl(this.olControl);
   }
 
   ngOnInit(): void {
+    this.olControl = new Legend({ element: this.legend.nativeElement });
+    this.olControl.setProperties({ component: this }, true);
     this.onInit();
   }
 }

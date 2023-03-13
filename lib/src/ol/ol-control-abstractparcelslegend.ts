@@ -1,7 +1,7 @@
 import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { Mapable } from './ol-mapable';
-import { OLMapComponent } from './ol-map';
+import { MapState } from '../state/map';
 import { Parcel } from '../common';
 import { ParcelID } from '../common';
 import { Parcels } from '../common';
@@ -13,20 +13,17 @@ import { parcelPropertiesUse } from '../common';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
-import { ElementRef } from '@angular/core';
 import { KeyValue } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
-import { convertArea } from '@turf/helpers';
 import { takeUntil } from 'rxjs/operators';
 
-import area from '@turf/area';
 import copy from 'fast-copy';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 
-class Legend extends OLControl {
+export class Legend extends OLControl {
   constructor(opts: any) {
     super(opts);
   }
@@ -46,7 +43,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   areaByUsage: Record<string, number> = {};
   areaByUse: Record<string, number> = {};
   areaOfParcels: number;
-  areaOfTown: number;
+  countByUsage: Record<string, number> = {};
   // 👇 sucks we have to re-code these settings but they are approximations
   //    to the actual styles anyway, in order to contrast
   //    with a white background
@@ -62,7 +59,6 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   abstract county: string;
   abstract id: string;
-  abstract legend: ElementRef;
   abstract parcels$: Observable<Parcel[]>;
   abstract printing: boolean;
   abstract state: string;
@@ -72,7 +68,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
     private geoJSON: GeoJSONService,
-    private map: OLMapComponent,
+    private mapState: MapState,
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
   ) {}
@@ -91,7 +87,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   #handleGeoJSON$(): void {
     this.geoJSON
-      .loadByIndex(this.route, this.map.path, 'countables')
+      .loadByIndex(this.route, this.mapState.currentMap().path, 'countables')
       .subscribe((geojson: Parcels) => this.#geojson$.next(geojson));
   }
 
@@ -124,11 +120,14 @@ export abstract class OLControlAbstractParcelsLegendComponent
           acc[use] += area;
           return acc;
         }, {});
-        this.areaOfTown = convertArea(
-          area(this.map.boundary),
-          'meters',
-          'acres'
-        );
+        // 👉 aggregate count by usage
+        this.countByUsage = geojson.features.reduce((acc, feature) => {
+          const override = overridesByID[feature.id];
+          const usage = override?.usage ?? feature.properties.usage;
+          if (!acc[usage]) acc[usage] = 0;
+          acc[usage] += 1;
+          return acc;
+        }, {});
         this.areaOfParcels = Object.values(this.areaByUsage).reduce(
           (p, q) => p + q
         );
@@ -168,13 +167,9 @@ export abstract class OLControlAbstractParcelsLegendComponent
     }, {});
   }
 
-  addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
-  }
+  addToMap(): void {}
 
   onInit(): void {
-    this.olControl = new Legend({ element: this.legend.nativeElement });
-    this.olControl.setProperties({ component: this }, true);
     this.#handleGeoJSON$();
     this.#handleStreams$();
   }
