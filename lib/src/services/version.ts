@@ -157,9 +157,8 @@ export class VersionService {
   }
 
   hardReset(): void {
-    // 👉 we won't launch unless service workers are supported
     navigator.serviceWorker
-      .getRegistrations()
+      ?.getRegistrations()
       .then((registrations) => {
         console.log('%cUpdating all registrations...', 'color: violet');
         return Promise.all(
