@@ -1,6 +1,6 @@
 {
   "name": "munimap",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "description": "MuniMap",
   "license": "MIT",
   "repository": {
@@ -63,6 +63,7 @@
     "proxy:parcels:rockingham": "ts-node --dir bin parcels.ts --county ROCKINGHAM",
     "proxy:parcels:strafford": "ts-node --dir bin parcels.ts --county STRAFFORD",
     "proxy:parcels:sullivan": "ts-node --dir bin parcels.ts --county SULLIVAN",
+    "proxy:parcels:validate": "ts-node --dir bin parcel-validator.ts ",
     "proxy:places": "ts-node --dir bin places.ts",
     "proxy:powerlines": "ts-node --dir bin powerlines.ts",
     "proxy:powerlines:prepare": "ts-node --dir bin powerlines-prepare.ts",
