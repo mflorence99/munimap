@@ -17,10 +17,19 @@ export class Abutters {
     const selectedIDs = selecteds.map((selected) => selected.id);
     const unique = selecteds
       .flatMap((selected) => {
-        // 👉 inflate selected feature by N ft all around
-        const buffered = buffer(selected, abutterRange, {
-          units: 'feet'
-        });
+        let buffered;
+        try {
+          // 👉 inflate selected feature by N ft all around
+          buffered = buffer(selected, abutterRange, {
+            units: 'feet'
+          });
+        } catch (e) {
+          // 🔥 try to capture problem of invalid geometry
+          buffered = selected;
+          Sentry.captureMessage(
+            `Inflate failed for ${selected.id} ${e.message}`
+          );
+        }
         return (
           allFeatures
             // 🔥 try to capture problem where some features appear to have
