@@ -129,7 +129,8 @@ export abstract class OLControlAbstractParcelsLegendComponent
           return acc;
         }, {});
         this.areaOfParcels = Object.values(this.areaByUsage).reduce(
-          (p, q) => p + q
+          (p, q) => p + q,
+          0
         );
         this.cdf.markForCheck();
       });

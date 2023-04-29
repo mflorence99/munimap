@@ -39,6 +39,10 @@ export class OLAdaptorRoadsComponent implements Adaptor {
     let nm = road.name;
     if (nm === 'No Name') nm = '';
     else if (road.class === 'VI') nm = `${nm} - VI`;
+    // else if (road.class === 'IV') nm = `${nm} - IV`;
+    // else if (road.class === 'III') nm = `${nm} - III`;
+    // else if (road.class === 'II') nm = `${nm} - II`;
+    // else if (road.class === 'I') nm = `${nm} - I`;
     else if (road.owner === 'PRIVATE') nm = `${nm} - Pvt`;
     return [
       new LandmarkPropertiesClass({
