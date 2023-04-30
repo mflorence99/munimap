@@ -18,8 +18,6 @@ import { isIndex } from '@lib/common';
   templateUrl: './builder.html'
 })
 export class BuilderComponent {
-  index: Index;
-
   @Input() path: Path;
 
   @Output() pathChanged = new EventEmitter<Path>();
@@ -28,6 +26,8 @@ export class BuilderComponent {
   @Input() type: string;
 
   @Output() typeChanged = new EventEmitter<string>();
+
+  index: Index;
 
   constructor(private geoJSON: GeoJSONService, private route: ActivatedRoute) {
     this.index = this.geoJSON.findIndex(this.route);

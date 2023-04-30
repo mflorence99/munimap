@@ -33,6 +33,18 @@ export class ContextMenuComponent implements OnInit {
     public map: OLMapComponent
   ) {}
 
+  closeMenu(): void {
+    this.contextMenuTrigger.closeMenu();
+  }
+
+  ngOnInit(): void {
+    this.#handleContextMenu$();
+  }
+
+  openMenu(): void {
+    this.contextMenuTrigger.openMenu();
+  }
+
   #handleContextMenu$(): void {
     this.map.contextMenu$
       .pipe(takeUntil(this.destroy$))
@@ -50,17 +62,5 @@ export class ContextMenuComponent implements OnInit {
           this.contextMenuTrigger.openMenu();
         }
       });
-  }
-
-  closeMenu(): void {
-    this.contextMenuTrigger.closeMenu();
-  }
-
-  ngOnInit(): void {
-    this.#handleContextMenu$();
-  }
-
-  openMenu(): void {
-    this.contextMenuTrigger.openMenu();
   }
 }

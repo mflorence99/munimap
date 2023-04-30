@@ -68,44 +68,15 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
 
   @ViewChild('propertiesForm') propertiesForm: NgForm;
 
-  record: ValueRecord = {};
-
   @Input() selectedIDs: ParcelID[];
+
+  record: ValueRecord = {};
 
   constructor(
     private authState: AuthState,
     private cdf: ChangeDetectorRef,
     private store: Store
   ) {}
-
-  #makeRecord(): void {
-    this.record = {};
-    editables.forEach((editable) => {
-      const prop = editable.prop;
-      this.record[prop] = {
-        conflict: false,
-        label: editable.label,
-        list: editable.list,
-        prop: prop,
-        step: editable.step ?? 1,
-        type: editable.type,
-        value: undefined
-      };
-      // 👉 scan the input features -- these are the ones selected
-      this.features.forEach((feature) => {
-        const value = this.record[prop];
-        const fromFeature = feature.getProperties()[prop];
-        // 👉 if no value has been recorded yet, take the first we see
-        if (!value.conflict && value.value === undefined)
-          value.value = fromFeature;
-        // 👉 but if the value is different, we have to record a conflict
-        else if (value.value !== fromFeature) {
-          value.conflict = true;
-          value.value = undefined;
-        }
-      });
-    });
-  }
 
   cancel(): void {
     this.drawer.close();
@@ -158,5 +129,34 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
 
   trackByProp(ix: number, value: Value): string {
     return value.prop;
+  }
+
+  #makeRecord(): void {
+    this.record = {};
+    editables.forEach((editable) => {
+      const prop = editable.prop;
+      this.record[prop] = {
+        conflict: false,
+        label: editable.label,
+        list: editable.list,
+        prop: prop,
+        step: editable.step ?? 1,
+        type: editable.type,
+        value: undefined
+      };
+      // 👉 scan the input features -- these are the ones selected
+      this.features.forEach((feature) => {
+        const value = this.record[prop];
+        const fromFeature = feature.getProperties()[prop];
+        // 👉 if no value has been recorded yet, take the first we see
+        if (!value.conflict && value.value === undefined)
+          value.value = fromFeature;
+        // 👉 but if the value is different, we have to record a conflict
+        else if (value.value !== fromFeature) {
+          value.conflict = true;
+          value.value = undefined;
+        }
+      });
+    });
   }
 }

@@ -181,7 +181,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
-    "eslint-config-mflorence99": "^1.2.1",
+    "eslint-config-mflorence99": "^1.2.3",
     "eslint-config-prettier": "^8",
     "eslint-plugin-import": "^2",
     "eslint-plugin-import-splitnsort": "^1",

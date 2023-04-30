@@ -79,38 +79,6 @@ export class DPWPage extends AbstractMapPage implements OnInit {
     super(actions$, authState, destroy$, root, route, router, store, viewState);
   }
 
-  #can(event: MouseEvent, condition: boolean): boolean {
-    if (!condition && event) event.stopPropagation();
-    return condition;
-  }
-
-  #createCulvert(): void {
-    const landmark: Partial<Landmark> = {
-      geometry: {
-        coordinates: toLonLat(this.olMap.contextMenuAt),
-        type: 'Point'
-      },
-      owner: this.authState.currentProfile().email,
-      path: this.olMap.path,
-      properties: {
-        metadata: {
-          condition: culvertConditions[0],
-          count: 1,
-          diameter: 12,
-          floodHazard: culvertFloodHazards[0],
-          headwall: culvertHeadwalls[0],
-          length: 20,
-          material: culvertMaterials[0],
-          type: 'culvert',
-          year: null
-        } as Partial<CulvertProperties>
-      },
-      type: 'Feature'
-    };
-    landmark.id = makeLandmarkID(landmark);
-    this.store.dispatch(new AddLandmark(landmark));
-  }
-
   canAddCulvert(event?: MouseEvent): boolean {
     return this.#can(event, true);
   }
@@ -176,5 +144,37 @@ export class DPWPage extends AbstractMapPage implements OnInit {
     if (cFactory) this.onContextMenuImpl(cFactory);
     // 👇 in some cases, doesn't close itself
     this.contextMenu.closeMenu();
+  }
+
+  #can(event: MouseEvent, condition: boolean): boolean {
+    if (!condition && event) event.stopPropagation();
+    return condition;
+  }
+
+  #createCulvert(): void {
+    const landmark: Partial<Landmark> = {
+      geometry: {
+        coordinates: toLonLat(this.olMap.contextMenuAt),
+        type: 'Point'
+      },
+      owner: this.authState.currentProfile().email,
+      path: this.olMap.path,
+      properties: {
+        metadata: {
+          condition: culvertConditions[0],
+          count: 1,
+          diameter: 12,
+          floodHazard: culvertFloodHazards[0],
+          headwall: culvertHeadwalls[0],
+          length: 20,
+          material: culvertMaterials[0],
+          type: 'culvert',
+          year: null
+        } as Partial<CulvertProperties>
+      },
+      type: 'Feature'
+    };
+    landmark.id = makeLandmarkID(landmark);
+    this.store.dispatch(new AddLandmark(landmark));
   }
 }

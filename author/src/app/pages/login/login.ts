@@ -21,6 +21,8 @@ import { signInWithEmailAndPassword } from '@angular/fire/auth';
   templateUrl: './login.html'
 })
 export class LoginPage {
+  @ViewChild('loginForm') loginForm: NgForm;
+
   errorMessage = '';
 
   login = {
@@ -28,8 +30,6 @@ export class LoginPage {
     emailAddress: '',
     password: ''
   };
-
-  @ViewChild('loginForm') loginForm: NgForm;
 
   state: 'initial' | 'login' | 'signup' = 'initial';
 
@@ -39,11 +39,6 @@ export class LoginPage {
     private fireauth: Auth,
     private store: Store
   ) {}
-
-  #extractFirebaseMessage(message: any): string {
-    const match = message.match(/^Firebase: ([^(]*)/);
-    return match ? match[1] : message;
-  }
 
   // 👇 trial login with impossible password to see if user exists
   checkUserExists(): void {
@@ -121,5 +116,10 @@ export class LoginPage {
   startOver(): void {
     this.errorMessage = null;
     this.state = 'initial';
+  }
+
+  #extractFirebaseMessage(message: any): string {
+    const match = message.match(/^Firebase: ([^(]*)/);
+    return match ? match[1] : message;
   }
 }

@@ -40,12 +40,12 @@ interface Coordinate {
   ]
 })
 export class OLPopupLandmarkPropertiesComponent {
-  #format: OLGeoJSON;
-  #subToSelection: Subscription;
+  @ViewChild('table', { static: true }) table: ElementRef;
 
   landmark: Landmark;
 
-  @ViewChild('table', { static: true }) table: ElementRef;
+  #format: OLGeoJSON;
+  #subToSelection: Subscription;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -59,26 +59,6 @@ export class OLPopupLandmarkPropertiesComponent {
     });
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleFeatureSelected$();
-  }
-
-  // 👇 note only single selection is supported
-  //    and we could be selecting a bridge, stream crossing etc etc
-
-  #handleFeatureSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
-      .pipe(
-        map(
-          (features: OLFeature<any>[]): Landmark =>
-            features.length > 0
-              ? JSON.parse(this.#format.writeFeature(features[0]))
-              : null
-        )
-      )
-      .subscribe((landmark: Landmark) => {
-        this.landmark = landmark;
-        if (!this.landmark) this.onClose();
-        else this.cdf.markForCheck();
-      });
   }
 
   area(): number {
@@ -114,5 +94,25 @@ export class OLPopupLandmarkPropertiesComponent {
       latitude: raw[1],
       longitude: raw[0]
     };
+  }
+
+  // 👇 note only single selection is supported
+  //    and we could be selecting a bridge, stream crossing etc etc
+
+  #handleFeatureSelected$(): void {
+    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
+      .pipe(
+        map(
+          (features: OLFeature<any>[]): Landmark =>
+            features.length > 0
+              ? JSON.parse(this.#format.writeFeature(features[0]))
+              : null
+        )
+      )
+      .subscribe((landmark: Landmark) => {
+        this.landmark = landmark;
+        if (!this.landmark) this.onClose();
+        else this.cdf.markForCheck();
+      });
   }
 }

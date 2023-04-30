@@ -34,13 +34,13 @@ import { where } from '@angular/fire/firestore';
   templateUrl: './page.html'
 })
 export class ListPage implements OnInit {
-  columns = ['name', 'id', 'owner', 'type', 'path'];
-
-  dataSource: MatTableDataSource<Map>;
-
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
   @ViewChild(MatSort) sort: MatSort;
+
+  columns = ['name', 'id', 'owner', 'type', 'path'];
+
+  dataSource: MatTableDataSource<Map>;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -50,6 +50,22 @@ export class ListPage implements OnInit {
     private router: Router
   ) {
     this.root.setTitle('All Maps');
+  }
+
+  ngOnInit(): void {
+    this.#handleAllMaps$().subscribe((maps: Map[]) => {
+      this.dataSource = new MatTableDataSource(maps);
+      this.dataSource.sort = this.sort;
+      this.cdf.detectChanges();
+    });
+  }
+
+  onLoadMap(map: Map): void {
+    this.router.navigate([`/${map.type}/${map.id}`]);
+  }
+
+  onSearch(str: string): void {
+    this.dataSource.filter = str.trim().toLowerCase();
   }
 
   #handleAllMaps$(): Observable<Map[]> {
@@ -76,21 +92,5 @@ export class ListPage implements OnInit {
         }
       })
     );
-  }
-
-  ngOnInit(): void {
-    this.#handleAllMaps$().subscribe((maps: Map[]) => {
-      this.dataSource = new MatTableDataSource(maps);
-      this.dataSource.sort = this.sort;
-      this.cdf.detectChanges();
-    });
-  }
-
-  onLoadMap(map: Map): void {
-    this.router.navigate([`/${map.type}/${map.id}`]);
-  }
-
-  onSearch(str: string): void {
-    this.dataSource.filter = str.trim().toLowerCase();
   }
 }

@@ -25,12 +25,12 @@ import OLFeature from 'ol/Feature';
   styleUrls: ['../ol-popup-selection.scss', './ol-popup-dpwproperties.scss']
 })
 export class OLPopupDPWPropertiesComponent {
-  #subToSelection: Subscription;
+  @ViewChild('table', { static: true }) table: ElementRef;
 
   geometry: any /* 👈 in practice will be a Point */;
   properties: any /* 👈 could be bridge, stream crossing etc etc */;
 
-  @ViewChild('table', { static: true }) table: ElementRef;
+  #subToSelection: Subscription;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -44,26 +44,6 @@ export class OLPopupDPWPropertiesComponent {
 
   // 👇 note only single selection is supported
   //    and we could be selecting a bridge, stream crossing etc etc
-
-  #handleFeatureSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
-      .pipe(
-        map((features: OLFeature<any>[]): [any, any] => {
-          // 🔥 feature may be landmark with metadata representing
-          //    bridge, flood hazard or stream crossing
-          let properties = features[0]?.getProperties();
-          const geometry = features[0]?.getGeometry();
-          if (properties?.metadata) properties = properties.metadata;
-          return [properties, geometry];
-        })
-      )
-      .subscribe(([properties, geometry]) => {
-        this.properties = properties;
-        this.geometry = geometry;
-        if (!this.properties) this.onClose();
-        else this.cdf.markForCheck();
-      });
-  }
 
   canClipboard(): boolean {
     return this.popper.canClipboard();
@@ -94,5 +74,25 @@ export class OLPopupDPWPropertiesComponent {
     selector?.unselectLandmarks?.();
     // 🔥  this doesn't seem to work
     // this.#subToSelection?.unsubscribe();
+  }
+
+  #handleFeatureSelected$(): void {
+    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
+      .pipe(
+        map((features: OLFeature<any>[]): [any, any] => {
+          // 🔥 feature may be landmark with metadata representing
+          //    bridge, flood hazard or stream crossing
+          let properties = features[0]?.getProperties();
+          const geometry = features[0]?.getGeometry();
+          if (properties?.metadata) properties = properties.metadata;
+          return [properties, geometry];
+        })
+      )
+      .subscribe(([properties, geometry]) => {
+        this.properties = properties;
+        this.geometry = geometry;
+        if (!this.properties) this.onClose();
+        else this.cdf.markForCheck();
+      });
   }
 }

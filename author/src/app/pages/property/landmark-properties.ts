@@ -31,28 +31,15 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
 
   @Input() features: OLFeature<any>[];
 
-  geometryType: string;
-
   @Input() map: OLMapComponent;
-
-  record: Partial<LandmarkProperties> = {};
 
   @Input() selectedIDs: LandmarkID[];
 
-  constructor(private cdf: ChangeDetectorRef, private store: Store) {}
+  geometryType: string;
 
-  #makeRecord(): void {
-    // 👇 extract geometry type
-    this.geometryType = this.features[0].getGeometry().getType();
-    // 👇 extract ONLY the landmark properties
-    const base = copy(this.features[0].getProperties());
-    this.record = landmarkProperties.reduce((acc, nm) => {
-      acc[nm] = base[nm] ?? null;
-      return acc;
-    }, {});
-    // 👇 make sure there's metadata
-    this.record.metadata ??= {};
-  }
+  record: Partial<LandmarkProperties> = {};
+
+  constructor(private cdf: ChangeDetectorRef, private store: Store) {}
 
   cancel(): void {
     this.drawer.close();
@@ -74,5 +61,18 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
       type: 'Feature'
     };
     this.store.dispatch(new UpdateLandmark(landmark));
+  }
+
+  #makeRecord(): void {
+    // 👇 extract geometry type
+    this.geometryType = this.features[0].getGeometry().getType();
+    // 👇 extract ONLY the landmark properties
+    const base = copy(this.features[0].getProperties());
+    this.record = landmarkProperties.reduce((acc, nm) => {
+      acc[nm] = base[nm] ?? null;
+      return acc;
+    }, {});
+    // 👇 make sure there's metadata
+    this.record.metadata ??= {};
   }
 }

@@ -61,6 +61,23 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   @ViewChild(ContextMenuHostDirective)
   contextMenuHost: ContextMenuHostDirective;
 
+  @ViewChild(OLInteractionDrawLandmarksComponent)
+  drawLandmarks: OLInteractionDrawLandmarksComponent;
+
+  @ViewChild('drawer') drawer: MatDrawer;
+
+  @Select(MapState) mapState$: Observable<Map>;
+
+  @ViewChild(OLOverlayLandmarkLabelComponent)
+  moveLandmark: OLOverlayLandmarkLabelComponent;
+
+  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+
+  @ViewChild(OLInteractionRedrawLandmarkComponent)
+  redrawLandmark: OLInteractionRedrawLandmarkComponent;
+
+  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
+
   conversions: LandmarkConversion[] = [
     {
       converter: this.#convertToArea.bind(this),
@@ -134,23 +151,6 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     }
   ];
 
-  @ViewChild(OLInteractionDrawLandmarksComponent)
-  drawLandmarks: OLInteractionDrawLandmarksComponent;
-
-  @ViewChild('drawer') drawer: MatDrawer;
-
-  @Select(MapState) mapState$: Observable<Map>;
-
-  @ViewChild(OLOverlayLandmarkLabelComponent)
-  moveLandmark: OLOverlayLandmarkLabelComponent;
-
-  @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @ViewChild(OLInteractionRedrawLandmarkComponent)
-  redrawLandmark: OLInteractionRedrawLandmarkComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
-
   constructor(
     protected actions$: Actions,
     protected authState: AuthState,
@@ -163,6 +163,108 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     protected viewState: ViewState
   ) {
     super(actions$, authState, destroy$, root, route, router, store, viewState);
+  }
+
+  canConvertFor(conversion: LandmarkConversion): boolean {
+    const feature = this.olMap.selected[0];
+    return (
+      this.olMap.selected.length === 1 &&
+      conversion.geometryType === feature.getGeometry().getType()
+    );
+  }
+
+  canConvertLandmark(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 1);
+  }
+
+  canDeleteLandmarks(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length > 0);
+  }
+
+  canDrawLandmarks(event?: MouseEvent): boolean {
+    return this.#can(event, true);
+  }
+
+  canImportLandmarks(event?: MouseEvent): boolean {
+    return this.#can(event, true);
+  }
+
+  canLandmarkProperties(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 1);
+  }
+
+  canMoveLandmark(event?: MouseEvent): boolean {
+    const feature = this.olMap.selected[0];
+    return this.#can(
+      event,
+      this.olMap.selected.length === 1 &&
+        feature.get('name') &&
+        ['Point', 'Polygon'].includes(feature.getGeometry().getType())
+    );
+  }
+
+  canRedrawLandmark(event?: MouseEvent): boolean {
+    const feature = this.olMap.selected[0];
+    return this.#can(
+      event,
+      this.olMap.selected.length === 1 &&
+        ['LineString', 'Polygon'].includes(feature.getGeometry().getType())
+    );
+  }
+
+  canRenameLandmark(event?: MouseEvent): boolean {
+    return this.#can(event, this.olMap.selected.length === 1);
+  }
+
+  eatMe(event: MouseEvent): void {
+    event.stopPropagation();
+  }
+
+  getType(): MapType {
+    return 'property';
+  }
+
+  ngOnInit(): void {
+    this.onInit();
+  }
+
+  onContextMenu(key: string, opaque?: any): void {
+    let cFactory: ComponentFactory<SidebarComponent>;
+    switch (key) {
+      case 'convert-landmark':
+        this.#convertTo(opaque);
+        break;
+      case 'delete-landmarks':
+        this.store.dispatch(
+          this.olMap.selectedIDs.map((id) => new DeleteLandmark({ id }))
+        );
+        break;
+      case 'draw-landmarks':
+        if (opaque) this.drawLandmarks.startDraw(opaque);
+        break;
+      case 'import-landmarks':
+        cFactory = this.resolver.resolveComponentFactory(
+          ImportLandmarksComponent
+        );
+        break;
+      case 'landmark-properties':
+        cFactory = this.resolver.resolveComponentFactory(
+          LandmarkPropertiesComponent
+        );
+        break;
+      case 'move-landmark':
+        this.moveLandmark.setFeature(this.olMap.selected[0]);
+        break;
+      case 'redraw-landmark':
+        this.redrawLandmark.setFeature(this.olMap.selected[0]);
+        break;
+      case 'rename-landmark':
+        this.#renameTo(opaque);
+        break;
+    }
+    if (cFactory) this.onContextMenuImpl(cFactory);
+    // 👇 in some cases, doesn't close itself
+    this.contextMenu.closeMenu();
   }
 
   #can(event: MouseEvent, condition: boolean): boolean {
@@ -521,107 +623,5 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       type: 'Feature'
     };
     this.store.dispatch(new UpdateLandmark(landmark));
-  }
-
-  canConvertFor(conversion: LandmarkConversion): boolean {
-    const feature = this.olMap.selected[0];
-    return (
-      this.olMap.selected.length === 1 &&
-      conversion.geometryType === feature.getGeometry().getType()
-    );
-  }
-
-  canConvertLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 1);
-  }
-
-  canDeleteLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length > 0);
-  }
-
-  canDrawLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, true);
-  }
-
-  canImportLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, true);
-  }
-
-  canLandmarkProperties(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 1);
-  }
-
-  canMoveLandmark(event?: MouseEvent): boolean {
-    const feature = this.olMap.selected[0];
-    return this.#can(
-      event,
-      this.olMap.selected.length === 1 &&
-        feature.get('name') &&
-        ['Point', 'Polygon'].includes(feature.getGeometry().getType())
-    );
-  }
-
-  canRedrawLandmark(event?: MouseEvent): boolean {
-    const feature = this.olMap.selected[0];
-    return this.#can(
-      event,
-      this.olMap.selected.length === 1 &&
-        ['LineString', 'Polygon'].includes(feature.getGeometry().getType())
-    );
-  }
-
-  canRenameLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 1);
-  }
-
-  eatMe(event: MouseEvent): void {
-    event.stopPropagation();
-  }
-
-  getType(): MapType {
-    return 'property';
-  }
-
-  ngOnInit(): void {
-    this.onInit();
-  }
-
-  onContextMenu(key: string, opaque?: any): void {
-    let cFactory: ComponentFactory<SidebarComponent>;
-    switch (key) {
-      case 'convert-landmark':
-        this.#convertTo(opaque);
-        break;
-      case 'delete-landmarks':
-        this.store.dispatch(
-          this.olMap.selectedIDs.map((id) => new DeleteLandmark({ id }))
-        );
-        break;
-      case 'draw-landmarks':
-        if (opaque) this.drawLandmarks.startDraw(opaque);
-        break;
-      case 'import-landmarks':
-        cFactory = this.resolver.resolveComponentFactory(
-          ImportLandmarksComponent
-        );
-        break;
-      case 'landmark-properties':
-        cFactory = this.resolver.resolveComponentFactory(
-          LandmarkPropertiesComponent
-        );
-        break;
-      case 'move-landmark':
-        this.moveLandmark.setFeature(this.olMap.selected[0]);
-        break;
-      case 'redraw-landmark':
-        this.redrawLandmark.setFeature(this.olMap.selected[0]);
-        break;
-      case 'rename-landmark':
-        this.#renameTo(opaque);
-        break;
-    }
-    if (cFactory) this.onContextMenuImpl(cFactory);
-    // 👇 in some cases, doesn't close itself
-    this.contextMenu.closeMenu();
   }
 }

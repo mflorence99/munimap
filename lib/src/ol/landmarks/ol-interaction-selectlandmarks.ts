@@ -53,8 +53,6 @@ import OLStyle from 'ol/style/Style';
 export class OLInteractionSelectLandmarksComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
-  #selectKey: OLEventsKey;
-
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() layers: OLLayerVectorComponent[];
@@ -63,26 +61,12 @@ export class OLInteractionSelectLandmarksComponent
 
   @Input() multi: boolean;
 
+  @Input() zoomAnimationDuration = 200;
+
   olHover: OLSelect;
   olSelect: OLSelect;
 
-  // 👉 selection is read-only if any feature is drawn from any layer
-  //    which is not the primary layer
-  get roSelection(): boolean {
-    return this.selected.some(
-      (feature) => this.olSelect.getLayer(feature) !== this.layer.olLayer
-    );
-  }
-
-  get selected(): OLFeature<any>[] {
-    return this.olSelect.getFeatures().getArray();
-  }
-
-  get selectedIDs(): any[] {
-    return this.selected.map((feature) => feature.getId());
-  }
-
-  @Input() zoomAnimationDuration = 200;
+  #selectKey: OLEventsKey;
 
   constructor(
     // 👉 we need public access to go through the selector to its layer
@@ -120,35 +104,50 @@ export class OLInteractionSelectLandmarksComponent
     this.olSelect.setProperties({ component: this }, true);
   }
 
-  #hasSelectionChanged(ids: LandmarkID[]): boolean {
-    const diff = new Set(this.selectedIDs);
-    if (ids.length !== diff.size) return true;
-    for (const id of ids) diff.delete(id);
-    return diff.size > 0;
+  // 👉 selection is read-only if any feature is drawn from any layer
+  //    which is not the primary layer
+  get roSelection(): boolean {
+    return this.selected.some(
+      (feature) => this.olSelect.getLayer(feature) !== this.layer.olLayer
+    );
   }
 
-  #onSelect(_event?: OLSelectEvent): void {
-    const names = this.selected.map((selected) => selected.getId()).join(', ');
-    console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
-    this.featuresSelected.emit(this.selected);
+  get selected(): OLFeature<any>[] {
+    return this.olSelect.getFeatures().getArray();
   }
 
-  #styleWhenHovering(): OLStyleFunction {
-    return (feature: any, resolution: number): OLStyle[] => {
-      const layer: OLLayerVectorComponent = this.olHover
-        .getLayer(feature)
-        .get('component');
-      return layer?.styleWhenHovering?.()(feature, resolution) as OLStyle[];
-    };
+  get selectedIDs(): any[] {
+    return this.selected.map((feature) => feature.getId());
   }
 
-  #styleWhenSelected(): OLStyleFunction {
-    return (feature: any, resolution: number): OLStyle[] => {
-      const layer: OLLayerVectorComponent = this.olSelect
-        .getLayer(feature)
-        .get('component');
-      return layer?.styleWhenSelected?.()(feature, resolution) as OLStyle[];
-    };
+  // 🔥 this is a HACK!
+  //    we pretend we can select parcels, but instead we just zoom
+  //    the idea is to make ol-control-searchparcels.ts work
+
+  @Debounce(250) selectParcels(parcels: Parcel[]): void {
+    // 👇 assume these parcels are degenerate and that all we have
+    //    available is ID and bbox
+    const bbox = parcels.reduce(
+      (bbox, parcel) => extend(bbox, parcel.bbox),
+      [...parcels[0].bbox]
+    );
+    // 👉 that's the union of the extent
+    const extent = transformExtent(
+      bbox,
+      this.map.featureProjection,
+      this.map.projection
+    );
+    // 👇 zoom to the extent of all the selected parcels and select them
+    const minZoom = this.map.olView.getMinZoom();
+    this.map.olView.setMinZoom(this.map.minUsefulZoom);
+    this.map.olView.fit(extent, {
+      callback: () => {
+        this.map.olView.setMinZoom(minZoom);
+      },
+      duration: this.zoomAnimationDuration,
+      maxZoom: this.maxZoom ?? this.map.maxZoom,
+      size: this.map.olMap.getSize()
+    });
   }
 
   addToMap(): void {
@@ -184,37 +183,38 @@ export class OLInteractionSelectLandmarksComponent
     if (delta) this.#onSelect();
   }
 
-  // 🔥 this is a HACK!
-  //    we pretend we can select parcels, but instead we just zoom
-  //    the idea is to make ol-control-searchparcels.ts work
-
-  @Debounce(250) selectParcels(parcels: Parcel[]): void {
-    // 👇 assume these parcels are degenerate and that all we have
-    //    available is ID and bbox
-    const bbox = parcels.reduce(
-      (bbox, parcel) => extend(bbox, parcel.bbox),
-      [...parcels[0].bbox]
-    );
-    // 👉 that's the union of the extent
-    const extent = transformExtent(
-      bbox,
-      this.map.featureProjection,
-      this.map.projection
-    );
-    // 👇 zoom to the extent of all the selected parcels and select them
-    const minZoom = this.map.olView.getMinZoom();
-    this.map.olView.setMinZoom(this.map.minUsefulZoom);
-    this.map.olView.fit(extent, {
-      callback: () => {
-        this.map.olView.setMinZoom(minZoom);
-      },
-      duration: this.zoomAnimationDuration,
-      maxZoom: this.maxZoom ?? this.map.maxZoom,
-      size: this.map.olMap.getSize()
-    });
-  }
-
   unselectLandmarks(): void {
     this.selectLandmarks([]);
+  }
+
+  #hasSelectionChanged(ids: LandmarkID[]): boolean {
+    const diff = new Set(this.selectedIDs);
+    if (ids.length !== diff.size) return true;
+    for (const id of ids) diff.delete(id);
+    return diff.size > 0;
+  }
+
+  #onSelect(_event?: OLSelectEvent): void {
+    const names = this.selected.map((selected) => selected.getId()).join(', ');
+    console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
+    this.featuresSelected.emit(this.selected);
+  }
+
+  #styleWhenHovering(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      const layer: OLLayerVectorComponent = this.olHover
+        .getLayer(feature)
+        .get('component');
+      return layer?.styleWhenHovering?.()(feature, resolution) as OLStyle[];
+    };
+  }
+
+  #styleWhenSelected(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      const layer: OLLayerVectorComponent = this.olSelect
+        .getLayer(feature)
+        .get('component');
+      return layer?.styleWhenSelected?.()(feature, resolution) as OLStyle[];
+    };
   }
 }

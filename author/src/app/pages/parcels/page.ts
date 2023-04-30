@@ -87,108 +87,6 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     super(actions$, authState, destroy$, root, route, router, store, viewState);
   }
 
-  #addPolygon(feature: OLFeature<any>): void {
-    if (feature.getGeometry().getType() === 'Polygon')
-      feature.setGeometry(
-        new OLMultiPolygon([feature.getGeometry().getCoordinates()])
-      );
-    // 👇 create a square centered on the context menu
-    const polygon = bboxPolygon(
-      bbox(
-        circle(toLonLat(this.olMap.contextMenuAt), 100, {
-          steps: 16,
-          units: 'feet'
-        })
-      )
-    );
-    // 👇 add the new polygon to the feature
-    const coords = feature.getGeometry().getCoordinates();
-    coords.push([
-      polygon.geometry.coordinates[0].map((coord: any) => fromLonLat(coord))
-    ]);
-    feature.getGeometry().setCoordinates(coords);
-    this.#modifyFeature(feature, true, false);
-  }
-
-  #can(event: MouseEvent, condition: boolean): boolean {
-    if (!condition && event) event.stopPropagation();
-    return condition;
-  }
-
-  #deletePolygon(feature: OLFeature<any>): void {
-    const coords = feature.getGeometry().getCoordinates();
-    coords.splice(this.#whichPolygon(feature), 1);
-    feature.getGeometry().setCoordinates(coords);
-    this.#modifyFeature(feature, true, false);
-  }
-
-  #modifyFeature(
-    feature: OLFeature<any>,
-    doGeometry = false,
-    doProperties = false
-  ): void {
-    const format = new OLGeoJSON({
-      dataProjection: this.olMap.featureProjection,
-      featureProjection: this.olMap.projection
-    });
-    // 👉 convert to feature to geojson and recalculate centers etc
-    const parcel = JSON.parse(format.writeFeature(feature));
-    calculateParcel(parcel);
-    feature.setProperties(parcel.properties);
-    // 👉 record the modification
-    const redrawnParcel: Parcel = {
-      action: 'modified',
-      geometry: doGeometry ? parcel.geometry : null,
-      id: feature.getId(),
-      owner: this.authState.currentProfile().email,
-      path: this.olMap.path,
-      properties: doProperties ? parcel.properties : null,
-      type: 'Feature'
-    };
-    this.store.dispatch(new AddParcels([redrawnParcel]));
-  }
-
-  #rotateLabel(feature: OLFeature<any>): void {
-    const ix = this.#whichPolygon(feature);
-    const labels: ParcelPropertiesLabel[] =
-      feature.getProperties().labels ?? [];
-    const label: ParcelPropertiesLabel = labels[ix] ?? {
-      split: null,
-      rotate: null
-    };
-    label.rotate = label.rotate ? false : true;
-    labels[ix] = label;
-    feature.setProperties({ labels });
-    this.#modifyFeature(feature, false, true);
-  }
-
-  #splitLabel(feature: OLFeature<any>): void {
-    const ix = this.#whichPolygon(feature);
-    const labels: ParcelPropertiesLabel[] =
-      feature.getProperties().labels ?? [];
-    const label: ParcelPropertiesLabel = labels[ix] ?? {
-      split: null,
-      rotate: null
-    };
-    label.split = label.split ? null : true;
-    labels[ix] = label;
-    feature.setProperties({ labels });
-    this.#modifyFeature(feature, false, true);
-  }
-
-  #whichPolygon(feature: OLFeature<any>): number {
-    let ix = 0;
-    if (feature.getGeometry().getType() === 'MultiPolygon') {
-      const polygons = feature.getGeometry().getPolygons();
-      for (ix = 0; ix < polygons.length; ix++) {
-        const pt = point(this.olMap.contextMenuAt);
-        const poly = polygon([polygons[ix].getCoordinates()[0]]);
-        if (booleanPointInPolygon(pt, poly)) break;
-      }
-    }
-    return ix;
-  }
-
   canAddParcel(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selectedIDs.length === 0);
   }
@@ -289,5 +187,107 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         break;
     }
     if (cFactory) this.onContextMenuImpl(cFactory);
+  }
+
+  #addPolygon(feature: OLFeature<any>): void {
+    if (feature.getGeometry().getType() === 'Polygon')
+      feature.setGeometry(
+        new OLMultiPolygon([feature.getGeometry().getCoordinates()])
+      );
+    // 👇 create a square centered on the context menu
+    const polygon = bboxPolygon(
+      bbox(
+        circle(toLonLat(this.olMap.contextMenuAt), 100, {
+          steps: 16,
+          units: 'feet'
+        })
+      )
+    );
+    // 👇 add the new polygon to the feature
+    const coords = feature.getGeometry().getCoordinates();
+    coords.push([
+      polygon.geometry.coordinates[0].map((coord: any) => fromLonLat(coord))
+    ]);
+    feature.getGeometry().setCoordinates(coords);
+    this.#modifyFeature(feature, true, false);
+  }
+
+  #can(event: MouseEvent, condition: boolean): boolean {
+    if (!condition && event) event.stopPropagation();
+    return condition;
+  }
+
+  #deletePolygon(feature: OLFeature<any>): void {
+    const coords = feature.getGeometry().getCoordinates();
+    coords.splice(this.#whichPolygon(feature), 1);
+    feature.getGeometry().setCoordinates(coords);
+    this.#modifyFeature(feature, true, false);
+  }
+
+  #modifyFeature(
+    feature: OLFeature<any>,
+    doGeometry = false,
+    doProperties = false
+  ): void {
+    const format = new OLGeoJSON({
+      dataProjection: this.olMap.featureProjection,
+      featureProjection: this.olMap.projection
+    });
+    // 👉 convert to feature to geojson and recalculate centers etc
+    const parcel = JSON.parse(format.writeFeature(feature));
+    calculateParcel(parcel);
+    feature.setProperties(parcel.properties);
+    // 👉 record the modification
+    const redrawnParcel: Parcel = {
+      action: 'modified',
+      geometry: doGeometry ? parcel.geometry : null,
+      id: feature.getId(),
+      owner: this.authState.currentProfile().email,
+      path: this.olMap.path,
+      properties: doProperties ? parcel.properties : null,
+      type: 'Feature'
+    };
+    this.store.dispatch(new AddParcels([redrawnParcel]));
+  }
+
+  #rotateLabel(feature: OLFeature<any>): void {
+    const ix = this.#whichPolygon(feature);
+    const labels: ParcelPropertiesLabel[] =
+      feature.getProperties().labels ?? [];
+    const label: ParcelPropertiesLabel = labels[ix] ?? {
+      split: null,
+      rotate: null
+    };
+    label.rotate = label.rotate ? false : true;
+    labels[ix] = label;
+    feature.setProperties({ labels });
+    this.#modifyFeature(feature, false, true);
+  }
+
+  #splitLabel(feature: OLFeature<any>): void {
+    const ix = this.#whichPolygon(feature);
+    const labels: ParcelPropertiesLabel[] =
+      feature.getProperties().labels ?? [];
+    const label: ParcelPropertiesLabel = labels[ix] ?? {
+      split: null,
+      rotate: null
+    };
+    label.split = label.split ? null : true;
+    labels[ix] = label;
+    feature.setProperties({ labels });
+    this.#modifyFeature(feature, false, true);
+  }
+
+  #whichPolygon(feature: OLFeature<any>): number {
+    let ix = 0;
+    if (feature.getGeometry().getType() === 'MultiPolygon') {
+      const polygons = feature.getGeometry().getPolygons();
+      for (ix = 0; ix < polygons.length; ix++) {
+        const pt = point(this.olMap.contextMenuAt);
+        const poly = polygon([polygons[ix].getCoordinates()[0]]);
+        if (booleanPointInPolygon(pt, poly)) break;
+      }
+    }
+    return ix;
   }
 }

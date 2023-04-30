@@ -24,28 +24,12 @@ import copy from 'fast-copy';
   templateUrl: './profile.html'
 })
 export class ProfileComponent {
-  #profile: Profile;
-  #user: User;
+  @ViewChild('profileForm') profileForm: NgForm;
 
   errorMessage = '';
 
-  @Input()
-  get profile(): Profile {
-    return this.#profile;
-  }
-  set profile(profile: Profile) {
-    this.#profile = copy(profile);
-  }
-
-  @ViewChild('profileForm') profileForm: NgForm;
-
-  @Input()
-  get user(): User {
-    return this.#user;
-  }
-  set user(user: User) {
-    this.#user = copy(user);
-  }
+  #profile: Profile;
+  #user: User;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -54,9 +38,22 @@ export class ProfileComponent {
     private store: Store
   ) {}
 
-  #extractFirebaseMessage(message: any): string {
-    const match = message.match(/^Firebase: ([^(]*)/);
-    return match ? match[1] : message;
+  @Input()
+  get profile(): Profile {
+    return this.#profile;
+  }
+
+  @Input()
+  get user(): User {
+    return this.#user;
+  }
+
+  set profile(profile: Profile) {
+    this.#profile = copy(profile);
+  }
+
+  set user(user: User) {
+    this.#user = copy(user);
   }
 
   cancel(): void {
@@ -84,5 +81,10 @@ export class ProfileComponent {
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.profileForm.form.markAsPristine();
+  }
+
+  #extractFirebaseMessage(message: any): string {
+    const match = message.match(/^Firebase: ([^(]*)/);
+    return match ? match[1] : message;
   }
 }

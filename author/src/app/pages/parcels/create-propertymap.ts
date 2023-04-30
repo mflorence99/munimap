@@ -60,9 +60,7 @@ export class CreatePropertyMapComponent implements SidebarComponent {
 
   @Input() map: OLMapComponent;
 
-  get printSizes(): string[] {
-    return Object.keys(PRINT_SIZES);
-  }
+  @Input() selectedIDs: ParcelID[];
 
   record: PropertyMapRecord = {
     contours2ft: false,
@@ -72,9 +70,11 @@ export class CreatePropertyMapComponent implements SidebarComponent {
     printSize: null
   };
 
-  @Input() selectedIDs: ParcelID[];
-
   constructor(private authState: AuthState, private store: Store) {}
+
+  get printSizes(): string[] {
+    return Object.keys(PRINT_SIZES);
+  }
 
   cancel(): void {
     this.drawer.close();

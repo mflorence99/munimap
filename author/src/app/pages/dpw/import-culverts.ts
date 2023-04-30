@@ -44,6 +44,53 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
     super(authState, cdf, firestore, store);
   }
 
+  async makeLandmarks(
+    geojsons: GeoJSON.FeatureCollection<any>[]
+  ): Promise<void> {
+    for (const geojson of geojsons) {
+      if (this.cancelling) break;
+      for (const feature of geojson.features) {
+        if (this.cancelling) break;
+        this.numImported += 1;
+        this.cdf.markForCheck();
+        // 👇 potentially one culvert per feature
+        const importHash = hash.MD5(feature as any);
+        const alreadyImported = await this.alreadyImported(importHash);
+        // 👇 only if not already imported
+        if (!alreadyImported) {
+          const landmark: Partial<Landmark> = {
+            geometry: feature.geometry,
+            owner: this.authState.currentProfile().email,
+            path: this.map.path,
+            type: 'Feature'
+          };
+          let properties;
+          // 👇 only import waypoints
+          switch (feature.geometry?.type) {
+            case 'Point':
+              properties = {
+                metadata: this.#makeCulvertProperties(
+                  feature.properties.description /* 👈 KML */ ??
+                    feature.properties.desc /* 👈 GPX */,
+                  feature.properties.name
+                )
+              };
+              break;
+          }
+          // 👇 add the landmark if all above conditions met
+          if (properties) {
+            landmark.id = makeLandmarkID(landmark);
+            landmark.importHash = importHash;
+            landmark.properties = properties;
+            await firstValueFrom(
+              this.store.dispatch(new AddLandmark(landmark))
+            );
+          }
+        }
+      }
+    }
+  }
+
   #makeCulvertProperties(
     description: string,
     location: string
@@ -90,52 +137,5 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       if (/^\d{4}$/.test(part)) properties.year = Number(part);
     });
     return properties;
-  }
-
-  async makeLandmarks(
-    geojsons: GeoJSON.FeatureCollection<any>[]
-  ): Promise<void> {
-    for (const geojson of geojsons) {
-      if (this.cancelling) break;
-      for (const feature of geojson.features) {
-        if (this.cancelling) break;
-        this.numImported += 1;
-        this.cdf.markForCheck();
-        // 👇 potentially one culvert per feature
-        const importHash = hash.MD5(feature as any);
-        const alreadyImported = await this.alreadyImported(importHash);
-        // 👇 only if not already imported
-        if (!alreadyImported) {
-          const landmark: Partial<Landmark> = {
-            geometry: feature.geometry,
-            owner: this.authState.currentProfile().email,
-            path: this.map.path,
-            type: 'Feature'
-          };
-          let properties;
-          // 👇 only import waypoints
-          switch (feature.geometry?.type) {
-            case 'Point':
-              properties = {
-                metadata: this.#makeCulvertProperties(
-                  feature.properties.description /* 👈 KML */ ??
-                    feature.properties.desc /* 👈 GPX */,
-                  feature.properties.name
-                )
-              };
-              break;
-          }
-          // 👇 add the landmark if all above conditions met
-          if (properties) {
-            landmark.id = makeLandmarkID(landmark);
-            landmark.importHash = importHash;
-            landmark.properties = properties;
-            await firstValueFrom(
-              this.store.dispatch(new AddLandmark(landmark))
-            );
-          }
-        }
-      }
-    }
   }
 }

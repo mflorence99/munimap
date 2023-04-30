@@ -13,10 +13,6 @@ export class AutoFocusDirective implements AfterViewInit, OnChanges {
 
   constructor(private host: ElementRef) {}
 
-  #focus(): void {
-    if (this.appAutoFocus) this.host.nativeElement.focus();
-  }
-
   ngAfterViewInit(): void {
     this.#focus();
   }
@@ -25,5 +21,9 @@ export class AutoFocusDirective implements AfterViewInit, OnChanges {
     if (Object.values(changes).some((change) => !change.firstChange)) {
       this.#focus();
     }
+  }
+
+  #focus(): void {
+    if (this.appAutoFocus) this.host.nativeElement.focus();
   }
 }

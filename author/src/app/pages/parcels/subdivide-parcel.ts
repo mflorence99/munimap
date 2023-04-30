@@ -34,8 +34,6 @@ interface Subdivision {
   templateUrl: './subdivide-parcel.html'
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
-  #format: OLGeoJSON;
-
   @Input() drawer: MatDrawer;
 
   @Input() features: OLFeature<any>[];
@@ -47,6 +45,8 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   @ViewChild('subdivisionForm') subdivisionForm: NgForm;
 
   subdivisions: Subdivision[];
+
+  #format: OLGeoJSON;
 
   constructor(private authState: AuthState, private store: Store) {}
 

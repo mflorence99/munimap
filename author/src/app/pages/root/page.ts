@@ -52,20 +52,20 @@ import { useAnimation } from '@angular/animations';
   templateUrl: './page.html'
 })
 export class RootPage implements OnInit {
-  canRedo = false;
-  canUndo = false;
-
-  loading = false;
-
   @ViewChild(RouterOutlet) outlet;
 
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
-  title: string;
-
   @Select(AuthState.user) user$: Observable<User>;
+
+  canRedo = false;
+  canUndo = false;
+
+  loading = false;
+
+  title: string;
 
   working = 0;
 
@@ -78,6 +78,33 @@ export class RootPage implements OnInit {
     private store: Store,
     _version: VersionService /* 👈 just to get it loaded */
   ) {}
+
+  getState(): any {
+    return this.outlet?.activatedRouteData?.state;
+  }
+
+  ngOnInit(): void {
+    this.#handleMapErrorActions$();
+    this.#handleRouterEvents$();
+    this.#handleUndoActions$();
+    this.#handleWorkingActions$();
+  }
+
+  onSatelliteViewToggle(state: boolean): void {
+    this.store.dispatch(new SetSatelliteView(state));
+  }
+
+  redo(): void {
+    this.store.dispatch(new Redo());
+  }
+
+  setTitle(title: string): void {
+    this.title = title;
+  }
+
+  undo(): void {
+    this.store.dispatch(new Undo());
+  }
 
   #handleMapErrorActions$(): void {
     this.actions$
@@ -138,32 +165,5 @@ export class RootPage implements OnInit {
         console.log({ working: this.working });
         this.cdf.markForCheck();
       });
-  }
-
-  getState(): any {
-    return this.outlet?.activatedRouteData?.state;
-  }
-
-  ngOnInit(): void {
-    this.#handleMapErrorActions$();
-    this.#handleRouterEvents$();
-    this.#handleUndoActions$();
-    this.#handleWorkingActions$();
-  }
-
-  onSatelliteViewToggle(state: boolean): void {
-    this.store.dispatch(new SetSatelliteView(state));
-  }
-
-  redo(): void {
-    this.store.dispatch(new Redo());
-  }
-
-  setTitle(title: string): void {
-    this.title = title;
-  }
-
-  undo(): void {
-    this.store.dispatch(new Undo());
   }
 }

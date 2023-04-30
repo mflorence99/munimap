@@ -47,6 +47,55 @@ export abstract class AbstractMapPage {
     protected viewState: ViewState
   ) {}
 
+  getGeoJSONFormatter(): OLGeoJSON {
+    return new OLGeoJSON({
+      dataProjection: this.olMap.featureProjection,
+      featureProjection: this.olMap.projection
+    });
+  }
+
+  // 🔥 a very hacked up definition of privileged!
+  isPrivileged(): boolean {
+    return /^mflo999.*@gmail\.com$/.test(this.authState.currentProfile().email);
+  }
+
+  onContextMenuImpl(cFactory: ComponentFactory<SidebarComponent>): void {
+    this.drawer.open();
+    this.contextMenuHost.vcRef.clear();
+    const cRef: ComponentRef<SidebarComponent> =
+      this.contextMenuHost.vcRef.createComponent(cFactory);
+    // 👉 populate @Input() fields
+    const comp = cRef.instance;
+    comp.drawer = this.drawer;
+    comp.map = this.olMap;
+    let key;
+    const selector = this.olMap.selector;
+    if (selector) {
+      // 👉 the layer that contains the selector contains the features
+      //    that can be operated on
+      const source = selector.layer.olLayer.getSource();
+      comp.selectedIDs = selector.selectedIDs;
+      comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+      // 👉 watch for delta in features
+      key = source.on('featuresloadend', () => {
+        comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
+        comp.refresh();
+      });
+    } else {
+      comp.selectedIDs = [];
+      comp.features = [];
+    }
+    // 👉 when the sidebar closes, stop listening
+    this.drawer.closedStart.subscribe(() => {
+      unByKey(key);
+    });
+  }
+
+  onInit(): void {
+    this.#handleActions$();
+    this.#loadMap();
+  }
+
   #handleActions$(): void {
     this.actions$
       .pipe(ofActionSuccessful(SetMap), takeUntil(this.destroy$))
@@ -95,55 +144,6 @@ export abstract class AbstractMapPage {
     this.store.dispatch(new LoadMap(id, dflt, /* touch = */ true));
     // 👉 set the window title to something we know for now
     this.root.setTitle(path);
-  }
-
-  getGeoJSONFormatter(): OLGeoJSON {
-    return new OLGeoJSON({
-      dataProjection: this.olMap.featureProjection,
-      featureProjection: this.olMap.projection
-    });
-  }
-
-  // 🔥 a very hacked up definition of privileged!
-  isPrivileged(): boolean {
-    return /^mflo999.*@gmail\.com$/.test(this.authState.currentProfile().email);
-  }
-
-  onContextMenuImpl(cFactory: ComponentFactory<SidebarComponent>): void {
-    this.drawer.open();
-    this.contextMenuHost.vcRef.clear();
-    const cRef: ComponentRef<SidebarComponent> =
-      this.contextMenuHost.vcRef.createComponent(cFactory);
-    // 👉 populate @Input() fields
-    const comp = cRef.instance;
-    comp.drawer = this.drawer;
-    comp.map = this.olMap;
-    let key;
-    const selector = this.olMap.selector;
-    if (selector) {
-      // 👉 the layer that contains the selector contains the features
-      //    that can be operated on
-      const source = selector.layer.olLayer.getSource();
-      comp.selectedIDs = selector.selectedIDs;
-      comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
-      // 👉 watch for delta in features
-      key = source.on('featuresloadend', () => {
-        comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
-        comp.refresh();
-      });
-    } else {
-      comp.selectedIDs = [];
-      comp.features = [];
-    }
-    // 👉 when the sidebar closes, stop listening
-    this.drawer.closedStart.subscribe(() => {
-      unByKey(key);
-    });
-  }
-
-  onInit(): void {
-    this.#handleActions$();
-    this.#loadMap();
   }
 
   abstract getType(): MapType;

@@ -37,6 +37,24 @@ import { forwardRef } from '@angular/core';
 export class OLAdaptorDPWLandmarksComponent implements Adaptor {
   @Input() dpwLandmarkWidth = 36 /* feet */;
 
+  adapt(properties: LandmarkProperties): LandmarkProperties[] {
+    return this.#makeAdaptor(properties).adapt?.(
+      this.#makeProperties(properties)
+    );
+  }
+
+  adaptWhenHovering?(properties: LandmarkProperties): LandmarkProperties[] {
+    return this.#makeAdaptor(properties).adaptWhenHovering?.(
+      this.#makeProperties(properties)
+    );
+  }
+
+  adaptWhenSelected?(properties: LandmarkProperties): LandmarkProperties[] {
+    return this.#makeAdaptor(properties).adaptWhenSelected?.(
+      this.#makeProperties(properties)
+    );
+  }
+
   #makeAdaptor(properties: LandmarkProperties): Adaptor {
     let adaptor;
     switch (properties.metadata?.type) {
@@ -72,23 +90,5 @@ export class OLAdaptorDPWLandmarksComponent implements Adaptor {
     | LandmarkProperties
     | StreamCrossingProperties {
     return properties.metadata ?? properties;
-  }
-
-  adapt(properties: LandmarkProperties): LandmarkProperties[] {
-    return this.#makeAdaptor(properties).adapt?.(
-      this.#makeProperties(properties)
-    );
-  }
-
-  adaptWhenHovering?(properties: LandmarkProperties): LandmarkProperties[] {
-    return this.#makeAdaptor(properties).adaptWhenHovering?.(
-      this.#makeProperties(properties)
-    );
-  }
-
-  adaptWhenSelected?(properties: LandmarkProperties): LandmarkProperties[] {
-    return this.#makeAdaptor(properties).adaptWhenSelected?.(
-      this.#makeProperties(properties)
-    );
   }
 }

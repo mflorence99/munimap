@@ -27,11 +27,11 @@ import OLPoint from 'ol/geom/Point';
   styleUrls: ['./ol-overlay-landmarklabel.scss']
 })
 export class OLOverlayLandmarkLabelComponent implements OnInit {
-  #feature: OLFeature<any>;
-
   @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;
 
   olOverlay: OLOverlay;
+
+  #feature: OLFeature<any>;
 
   constructor(
     private destroy$: DestroyService,
@@ -44,12 +44,6 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.map.olMap.addOverlay(this.olOverlay);
-  }
-
-  #handleClick$(): void {
-    this.map.click$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 
   ngOnInit(): void {
@@ -105,5 +99,11 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
         this.olOverlay.setPosition(center);
       }
     }
+  }
+
+  #handleClick$(): void {
+    this.map.click$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 }

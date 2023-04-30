@@ -30,26 +30,19 @@ import OLFeature from 'ol/Feature';
   templateUrl: './culvert-properties.html'
 })
 export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
+  @Input() drawer: MatDrawer;
+  @Input() features: OLFeature<any>[];
+  @Input() map: OLMapComponent;
+  @Input() selectedIDs: LandmarkID[];
+
   allConditions = culvertConditions;
   allFloodHazards = culvertFloodHazards;
   allHeadwalls = culvertHeadwalls;
   allMaterials = culvertMaterials;
 
-  @Input() drawer: MatDrawer;
-
-  @Input() features: OLFeature<any>[];
-
-  @Input() map: OLMapComponent;
-
   record: Partial<CulvertProperties> = {};
 
-  @Input() selectedIDs: LandmarkID[];
-
   constructor(private cdf: ChangeDetectorRef, private store: Store) {}
-
-  #makeRecord(): void {
-    this.record = copy(this.features[0].get('metadata'));
-  }
 
   cancel(): void {
     this.drawer.close();
@@ -73,5 +66,9 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
       type: 'Feature'
     };
     this.store.dispatch(new UpdateLandmark(landmark));
+  }
+
+  #makeRecord(): void {
+    this.record = copy(this.features[0].get('metadata'));
   }
 }

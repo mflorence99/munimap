@@ -33,8 +33,6 @@ interface Addition {
   templateUrl: './add-parcel.html'
 })
 export class AddParcelComponent implements SidebarComponent {
-  addition: Addition = {} as Addition;
-
   @ViewChild('additionForm') additionForm: NgForm;
 
   @Input() drawer: MatDrawer;
@@ -44,6 +42,8 @@ export class AddParcelComponent implements SidebarComponent {
   @Input() map: OLMapComponent;
 
   @Input() selectedIDs: ParcelID[];
+
+  addition: Addition = {} as Addition;
 
   constructor(private authState: AuthState, private store: Store) {}
 

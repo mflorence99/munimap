@@ -24,12 +24,11 @@ import OLFeature from 'ol/Feature';
   templateUrl: './page.html'
 })
 export class CreatePage {
+  @ViewChild('selectables') selectables: OLLayerVectorComponent;
+
   env = environment;
   index: Index;
   path: Path;
-
-  @ViewChild('selectables') selectables: OLLayerVectorComponent;
-
   type = 'parcels';
 
   constructor(

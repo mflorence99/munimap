@@ -24,7 +24,19 @@ import copy from 'fast-copy';
   templateUrl: './controlpanel-properties.html'
 })
 export class ControlPanelPropertiesComponent {
+  @ViewChild('setupForm') setupForm: NgForm;
+
+  rolledup: boolean;
+
   #map: Map;
+
+  constructor(
+    private authState: AuthState,
+    private dialog: MatDialog,
+    private root: RootPage,
+    private router: Router,
+    private store: Store
+  ) {}
 
   @Input()
   get map(): Map {
@@ -36,18 +48,6 @@ export class ControlPanelPropertiesComponent {
     if (map.name) this.root.setTitle(map.name);
     this.rolledup = !!map.id;
   }
-
-  rolledup: boolean;
-
-  @ViewChild('setupForm') setupForm: NgForm;
-
-  constructor(
-    private authState: AuthState,
-    private dialog: MatDialog,
-    private root: RootPage,
-    private router: Router,
-    private store: Store
-  ) {}
 
   canDelete(): boolean {
     return (

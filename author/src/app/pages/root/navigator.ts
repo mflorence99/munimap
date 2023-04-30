@@ -36,9 +36,9 @@ export class NavigatorComponent implements OnInit {
 
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
-  state = theState;
-
   @Input() title: string;
+
+  state = theState;
 
   topMaps$: Observable<Map[]>;
 
@@ -48,6 +48,22 @@ export class NavigatorComponent implements OnInit {
     private firestore: Firestore,
     private version: VersionService
   ) {}
+
+  close(): void {
+    this.drawer.close();
+  }
+
+  ngOnInit(): void {
+    this.topMaps$ = this.#handleTopMaps$();
+  }
+
+  reset(): void {
+    this.version.hardReset();
+  }
+
+  trackByID(ix: number, map: Map): string {
+    return map.id;
+  }
 
   #handleTopMaps$(): Observable<Map[]> {
     return this.profile$.pipe(
@@ -74,21 +90,5 @@ export class NavigatorComponent implements OnInit {
         }
       })
     );
-  }
-
-  close(): void {
-    this.drawer.close();
-  }
-
-  ngOnInit(): void {
-    this.topMaps$ = this.#handleTopMaps$();
-  }
-
-  reset(): void {
-    this.version.hardReset();
-  }
-
-  trackByID(ix: number, map: Map): string {
-    return map.id;
   }
 }

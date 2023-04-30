@@ -36,11 +36,11 @@ export class MergeParcelsComponent implements SidebarComponent {
 
   @ViewChild('mergeForm') mergeForm: NgForm;
 
+  @Input() selectedIDs: ParcelID[];
+
   record: MergeRecord = {
     mergedID: null
   };
-
-  @Input() selectedIDs: ParcelID[];
 
   constructor(private authState: AuthState, private store: Store) {}
 

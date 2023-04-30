@@ -31,27 +31,24 @@ import toGeoJSON from '@mapbox/togeojson';
   templateUrl: './import-landmarks.html'
 })
 export class ImportLandmarksComponent implements SidebarComponent {
+  @Input() drawer: MatDrawer;
+  @Input() features: Feature<any>[];
+  @Input() map: OLMapComponent;
+  @Input() selectedIDs: (string | number)[];
+
   cancelling = false;
 
-  @Input() drawer: MatDrawer;
-
   errorMessages: string[] = [];
-
-  @Input() features: Feature<any>[];
 
   files: File[] = [];
 
   importing = false;
-
-  @Input() map: OLMapComponent;
 
   numImported = 0;
   numImporting = 0;
 
   // 👇 checkbox by file name for selection post-native dialog
   record: Record<string, boolean> = {};
-
-  @Input() selectedIDs: (string | number)[];
 
   constructor(
     protected authState: AuthState,
