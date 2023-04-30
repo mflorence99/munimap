@@ -42,6 +42,14 @@ export class OLStyleGraticuleComponent implements Styler {
     private map: OLMapComponent
   ) {}
 
+  style(): OLStyle {
+    return new OLStyle({
+      fill: this.#border(),
+      stroke: this.#line(),
+      text: this.#coords()
+    });
+  }
+
   #border(): OLFill {
     // 👉 this is the part of the border that isn't the same
     //    color as the lines
@@ -75,14 +83,6 @@ export class OLStyleGraticuleComponent implements Styler {
       lineCap: 'square',
       lineDash: this.lineDash,
       width: this.lineWidth
-    });
-  }
-
-  style(): OLStyle {
-    return new OLStyle({
-      fill: this.#border(),
-      stroke: this.#line(),
-      text: this.#coords()
     });
   }
 }

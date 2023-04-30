@@ -23,11 +23,11 @@ export class ParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
+  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
+
   // 🔥 not used: only to satisfy base control
   county: string;
   id: string;
-
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
   // 🔥 not used: only to satisfy base control
   printing: boolean;

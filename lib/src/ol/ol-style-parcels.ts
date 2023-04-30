@@ -129,6 +129,65 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     private titleCase: TitleCasePipe
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
+  }
+
+  // 🔥 the whole notion of "stolen" parcels to support multi-town
+  //    property maps is a possibly temporary hack, so we don't mind
+  //    for now the secret handshake that their parcel IDs are
+  //    wrapped in parentheses as in (12-4)
+
+  style(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      // 👉 stolen parcels
+      if (feature.getId().startsWith('(') && this.showStolen === 'never')
+        return null;
+      // 👉 normal parcels
+      else {
+        const props = feature.getProperties() as ParcelProperties;
+        const whenRedrawn = false;
+        const whenSelected = false;
+        // 👉 the selector MAY not be present
+        const selector = this.map
+          .selector as OLInteractionSelectParcelsComponent;
+        const whenAbutted =
+          this.showAbutters === 'whenSelected' &&
+          selector?.abutterIDs?.includes(props.id);
+        return this.#theStyles(
+          feature,
+          resolution,
+          whenRedrawn || this.forceRedrawn,
+          whenSelected || this.forceSelected,
+          whenAbutted || this.forceAbutted
+        );
+      }
+    };
+  }
+
+  styleWhenSelected(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      // 👉 stolen parcels
+      if (feature.getId().startsWith('(') && this.showStolen === 'never')
+        return null;
+      // 👉 normal parcels
+      else {
+        const whenRedrawn = !!feature.get('ol-interaction-redraw');
+        const whenSelected = true;
+        const whenAbutted = false;
+        return this.#theStyles(
+          feature,
+          resolution,
+          whenRedrawn,
+          whenSelected,
+          whenAbutted
+        );
+      }
+    };
+  }
+
   #abbreviateAddress(address: string): string {
     let abbr = this.titleCase.transform(address);
     abbr = abbr.replace(/\bCircle\b/, ' Cir ');
@@ -750,64 +809,5 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       if (strokes) styles.push(...strokes);
     }
     return styles;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (Object.values(changes).some((change) => !change.firstChange)) {
-      this.layer.olLayer.getSource().refresh();
-    }
-  }
-
-  // 🔥 the whole notion of "stolen" parcels to support multi-town
-  //    property maps is a possibly temporary hack, so we don't mind
-  //    for now the secret handshake that their parcel IDs are
-  //    wrapped in parentheses as in (12-4)
-
-  style(): OLStyleFunction {
-    return (feature: any, resolution: number): OLStyle[] => {
-      // 👉 stolen parcels
-      if (feature.getId().startsWith('(') && this.showStolen === 'never')
-        return null;
-      // 👉 normal parcels
-      else {
-        const props = feature.getProperties() as ParcelProperties;
-        const whenRedrawn = false;
-        const whenSelected = false;
-        // 👉 the selector MAY not be present
-        const selector = this.map
-          .selector as OLInteractionSelectParcelsComponent;
-        const whenAbutted =
-          this.showAbutters === 'whenSelected' &&
-          selector?.abutterIDs?.includes(props.id);
-        return this.#theStyles(
-          feature,
-          resolution,
-          whenRedrawn || this.forceRedrawn,
-          whenSelected || this.forceSelected,
-          whenAbutted || this.forceAbutted
-        );
-      }
-    };
-  }
-
-  styleWhenSelected(): OLStyleFunction {
-    return (feature: any, resolution: number): OLStyle[] => {
-      // 👉 stolen parcels
-      if (feature.getId().startsWith('(') && this.showStolen === 'never')
-        return null;
-      // 👉 normal parcels
-      else {
-        const whenRedrawn = !!feature.get('ol-interaction-redraw');
-        const whenSelected = true;
-        const whenAbutted = false;
-        return this.#theStyles(
-          feature,
-          resolution,
-          whenRedrawn,
-          whenSelected,
-          whenAbutted
-        );
-      }
-    };
   }
 }

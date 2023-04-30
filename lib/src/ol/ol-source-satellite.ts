@@ -45,17 +45,9 @@ export const satelliteYears = Object.keys(urls);
   styles: [':host { display: none }']
 })
 export class OLSourceSatelliteComponent {
-  #year: string;
-
   olTileWMS: OLTileWMS;
 
-  @Input() get year(): string {
-    return this.#year;
-  }
-  set year(value: string) {
-    if (this.#year && this.#year !== value) this.olTileWMS.refresh();
-    this.#year = value;
-  }
+  #year: string;
 
   constructor(
     private layer: OLLayerTileComponent,
@@ -70,6 +62,15 @@ export class OLSourceSatelliteComponent {
     });
     this.olTileWMS.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olTileWMS);
+  }
+
+  @Input() get year(): string {
+    return this.#year;
+  }
+
+  set year(value: string) {
+    if (this.#year && this.#year !== value) this.olTileWMS.refresh();
+    this.#year = value;
   }
 
   #loader(tile: OLImageTile, src: string): void {

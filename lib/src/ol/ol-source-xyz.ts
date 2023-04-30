@@ -25,11 +25,10 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
   attributions: QueryList<OLAttributionComponent>;
 
   @Input() maxZoom: number;
-
-  olXYZ: OLXYZ;
-
   @Input() s: string[] = [];
   @Input() url: string;
+
+  olXYZ: OLXYZ;
 
   constructor(private http: HttpClient, private layer: OLLayerTileComponent) {}
 
