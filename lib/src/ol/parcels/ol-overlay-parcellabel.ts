@@ -32,13 +32,13 @@ import OLOverlay from 'ol/Overlay';
   styleUrls: ['./ol-overlay-parcellabel.scss']
 })
 export class OLOverlayParcelLabelComponent implements OnInit {
-  #centers: number[][];
-  #id: ParcelID;
-  #ix: number;
-
   @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;
 
   olOverlay: OLOverlay;
+
+  #centers: number[][];
+  #id: ParcelID;
+  #ix: number;
 
   constructor(
     private authState: AuthState,
@@ -52,14 +52,6 @@ export class OLOverlayParcelLabelComponent implements OnInit {
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.map.olMap.addOverlay(this.olOverlay);
-  }
-
-  // 👇 the idea is that a selection change or ESC cancels the move
-
-  #handleStreams$(): void {
-    merge(this.map.click$, this.map.escape$, this.map.featuresSelected)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 
   ngOnInit(): void {
@@ -107,5 +99,13 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       }
     }
     this.olOverlay.setPosition(fromLonLat(this.#centers[this.#ix]));
+  }
+
+  // 👇 the idea is that a selection change or ESC cancels the move
+
+  #handleStreams$(): void {
+    merge(this.map.click$, this.map.escape$, this.map.featuresSelected)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 }

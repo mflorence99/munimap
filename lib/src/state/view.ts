@@ -72,10 +72,6 @@ export class ViewState {
     return state.satelliteYear || '' /* 👈 b/c satelliteYear was added later */;
   }
 
-  recentPath(): string {
-    return this.store.snapshot().view.recentPath;
-  }
-
   @Action(SetGPS) setGPS(
     ctx: StateContext<ViewStateModel>,
     action: SetGPS
@@ -106,5 +102,9 @@ export class ViewState {
     ctx.setState(
       patch({ recentPath: path, viewByPath: patch({ [path]: view }) })
     );
+  }
+
+  recentPath(): string {
+    return this.store.snapshot().view.recentPath;
   }
 }

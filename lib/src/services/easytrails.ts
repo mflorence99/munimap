@@ -15,9 +15,24 @@ export interface Track {
 
 @Injectable({ providedIn: 'root' })
 export class EasyTrailsService {
+  lastUsedURL = localStorage.getItem('easytrails.url') ?? '';
+
   #validationTimeout = 1000 /* 👈 ms */;
 
-  lastUsedURL = localStorage.getItem('easytrails.url') ?? '';
+  listTracks(): Observable<Track[]> {
+    return from(this.#fetch(this.lastUsedURL)).pipe(
+      map((html: string) => {
+        console.log(html);
+        return [];
+      })
+    );
+  }
+
+  validate(url: string): Observable<any> {
+    localStorage.setItem('easytrails.url', url);
+    this.lastUsedURL = url;
+    return from(this.#fetch(url)).pipe(timeout(this.#validationTimeout));
+  }
 
   // 👁️ https://www.educative.io/edpresso/how-to-dynamically-load-a-js-file-in-javascript
 
@@ -44,20 +59,5 @@ export class EasyTrailsService {
         document.head.removeChild(script);
       }
     });
-  }
-
-  listTracks(): Observable<Track[]> {
-    return from(this.#fetch(this.lastUsedURL)).pipe(
-      map((html: string) => {
-        console.log(html);
-        return [];
-      })
-    );
-  }
-
-  validate(url: string): Observable<any> {
-    localStorage.setItem('easytrails.url', url);
-    this.lastUsedURL = url;
-    return from(this.#fetch(url)).pipe(timeout(this.#validationTimeout));
   }
 }

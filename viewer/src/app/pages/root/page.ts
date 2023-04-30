@@ -37,12 +37,7 @@ import urlParse from 'url-parse';
   templateUrl: './page.html'
 })
 export class RootPage implements OnInit {
-  #url: any;
-
   @Select(ViewState.gps) gps$: Observable<boolean>;
-
-  hasLeftSidebar: boolean;
-  hasRightSidebar: boolean;
 
   @Select(MapState) map$: Observable<Map>;
 
@@ -50,13 +45,13 @@ export class RootPage implements OnInit {
 
   @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
 
-  get satelliteYears(): string[] {
-    return ['', ...satelliteYears.slice().reverse()];
-  }
+  @Select(AnonState.user) user$: Observable<User>;
+  hasLeftSidebar: boolean;
+  hasRightSidebar: boolean;
 
   title: string;
 
-  @Select(AnonState.user) user$: Observable<User>;
+  #url: any;
 
   constructor(
     private destroy$: DestroyService,
@@ -68,6 +63,39 @@ export class RootPage implements OnInit {
     private version: VersionService
   ) {
     this.#url = urlParse(this.location.path(), true);
+  }
+
+  get satelliteYears(): string[] {
+    return ['', ...satelliteYears.slice().reverse()];
+  }
+
+  canPickSatelliteYear(): boolean {
+    return window.innerWidth >= 480;
+  }
+
+  eatMe(event: Event): void {
+    event.stopPropagation();
+  }
+
+  ngOnInit(): void {
+    this.#handleMap$();
+    this.#handleUser$();
+  }
+
+  onGPSToggle(state: boolean): void {
+    this.store.dispatch(new SetGPS(state));
+  }
+
+  onSatelliteViewToggle(state: boolean): void {
+    this.store.dispatch(new SetSatelliteView(state));
+  }
+
+  onSatelliteYear(year: string): void {
+    this.store.dispatch(new SetSatelliteYear(year));
+  }
+
+  reset(): void {
+    this.version.hardReset();
   }
 
   // 👉 when we've loaded the map, we can load the profile of the
@@ -148,34 +176,5 @@ export class RootPage implements OnInit {
     if (inner.length > 0) parts.push(`(${inner.join('//')})`);
     parts.push(`?id=${map.id}`);
     return parts.join('');
-  }
-
-  canPickSatelliteYear(): boolean {
-    return window.innerWidth >= 480;
-  }
-
-  eatMe(event: Event): void {
-    event.stopPropagation();
-  }
-
-  ngOnInit(): void {
-    this.#handleMap$();
-    this.#handleUser$();
-  }
-
-  onGPSToggle(state: boolean): void {
-    this.store.dispatch(new SetGPS(state));
-  }
-
-  onSatelliteViewToggle(state: boolean): void {
-    this.store.dispatch(new SetSatelliteView(state));
-  }
-
-  onSatelliteYear(year: string): void {
-    this.store.dispatch(new SetSatelliteYear(year));
-  }
-
-  reset(): void {
-    this.version.hardReset();
   }
 }

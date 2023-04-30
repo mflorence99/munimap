@@ -33,9 +33,9 @@ export class OLSourceGeoJSONComponent {
 
   @Input() layerKey: string;
 
-  olVector: OLVector<any>;
-
   @Input() path: string;
+
+  olVector: OLVector<any>;
 
   constructor(
     private geoJSON: GeoJSONService,

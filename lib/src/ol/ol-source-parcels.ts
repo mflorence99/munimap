@@ -46,8 +46,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceParcelsComponent implements OnInit {
-  #geojson$ = new Subject<Parcels>();
-  #success: Function;
+  @Input() path: string;
 
   olVector: OLVector<any>;
 
@@ -55,7 +54,8 @@ export class OLSourceParcelsComponent implements OnInit {
 
   parcels$: Observable<Parcel[]>;
 
-  @Input() path: string;
+  #geojson$ = new Subject<Parcels>();
+  #success: Function;
 
   constructor(
     private destroy$: DestroyService,
@@ -81,6 +81,21 @@ export class OLSourceParcelsComponent implements OnInit {
     //    this is new behavior with Angular 14
     this.overlay$ = this.store.select((state) => state.overlay);
     this.parcels$ = this.store.select((state) => state.parcels);
+  }
+
+  // 👇 special backdoor to support "export parcels" functionality
+
+  export(
+    extent: Coordinate,
+    resolution: number,
+    projection: OLProjection,
+    success: Function
+  ): void {
+    this.#loader(extent, resolution, projection, success);
+  }
+
+  ngOnInit(): void {
+    this.#handleStreams$();
   }
 
   #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): Set<ParcelID> {
@@ -220,20 +235,5 @@ export class OLSourceParcelsComponent implements OnInit {
       }
       return feature;
     });
-  }
-
-  // 👇 special backdoor to support "export parcels" functionality
-
-  export(
-    extent: Coordinate,
-    resolution: number,
-    projection: OLProjection,
-    success: Function
-  ): void {
-    this.#loader(extent, resolution, projection, success);
-  }
-
-  ngOnInit(): void {
-    this.#handleStreams$();
   }
 }

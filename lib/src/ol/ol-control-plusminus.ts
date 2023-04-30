@@ -26,14 +26,6 @@ export class OLControlPlusMinusComponent implements OnInit {
     private map: OLMapComponent
   ) {}
 
-  #handleZoom$(): void {
-    this.map.zoomChange.pipe(takeUntil(this.destroy$)).subscribe((zoom) => {
-      this.zoom = zoom;
-      // 👉 because event is triggered out of the Angular zone
-      this.cdf.markForCheck();
-    });
-  }
-
   maxZoom(): number {
     return this.map.maxZoom;
   }
@@ -52,6 +44,14 @@ export class OLControlPlusMinusComponent implements OnInit {
     this.map.olView?.animate({
       duration: this.zoomAnimationDuration,
       zoom
+    });
+  }
+
+  #handleZoom$(): void {
+    this.map.zoomChange.pipe(takeUntil(this.destroy$)).subscribe((zoom) => {
+      this.zoom = zoom;
+      // 👉 because event is triggered out of the Angular zone
+      this.cdf.markForCheck();
     });
   }
 }

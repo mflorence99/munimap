@@ -15,10 +15,10 @@ import OLGeoJSON from 'ol/format/GeoJSON';
   styleUrls: ['./ol-control-exportlayers.scss']
 })
 export class OLControlExportLayersComponent {
-  #format: OLGeoJSON;
-
   @Input() fileName: string;
   @Input() layerIDs: string[];
+
+  #format: OLGeoJSON;
 
   constructor(private map: OLMapComponent) {
     // 👉 one to rule them all

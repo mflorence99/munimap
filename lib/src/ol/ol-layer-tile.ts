@@ -25,6 +25,11 @@ import OLTile from 'ol/layer/Tile';
 export class OLLayerTileComponent implements Mapable {
   olLayer: OLTile<any>;
 
+  constructor(private map: OLMapComponent) {
+    this.olLayer = new OLTile();
+    this.olLayer.setProperties({ component: this }, true);
+  }
+
   @Input() set id(id: string) {
     this.olLayer.set('id', id);
   }
@@ -35,11 +40,6 @@ export class OLLayerTileComponent implements Mapable {
 
   @Input() set opacity(opacity: number) {
     this.olLayer.setOpacity(opacity);
-  }
-
-  constructor(private map: OLMapComponent) {
-    this.olLayer = new OLTile();
-    this.olLayer.setProperties({ component: this }, true);
   }
 
   addToMap(): void {

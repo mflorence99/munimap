@@ -132,6 +132,150 @@ export class LandmarksState implements NgxsOnInit {
     private store: Store
   ) {}
 
+  @Action(AddLandmark) addLandmark(
+    ctx: StateContext<LandmarksStateModel>,
+    action: AddLandmark
+  ): Promise<void> {
+    const normalized = this.#normalize(action.landmark);
+    if (!normalized.id) normalized.id = makeLandmarkID(normalized);
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
+    // 👇 add the landmark
+    console.log(
+      `%cFirestore add: landmarks ${normalized.id} ${JSON.stringify(
+        normalized
+      )}`,
+      'color: crimson'
+    );
+    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
+    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    return setDoc(docRef, normalized).then(() => {
+      if (undoAction) undoStack.push(undoAction);
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
+    });
+    // 👉 side-effect of handleStreams$ will update state
+  }
+
+  @Action(DeleteLandmark) deleteLandmark(
+    ctx: StateContext<LandmarksStateModel>,
+    action: DeleteLandmark
+  ): Promise<void> {
+    // 👇 don't really need to normalize as only an ID is needed
+    //    just following the pattern
+    const normalized = this.#normalize(action.landmark);
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
+    // 👇 delete the landmark
+    console.log(
+      `%cFirestore delete: landmarks ${normalized.id}`,
+      'color: crimson'
+    );
+    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
+    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    return deleteDoc(docRef).then(() => {
+      if (undoAction) undoStack.push(undoAction);
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
+    });
+    // 👉 side-effect of handleStreams$ will update state
+  }
+
+  @Action(Redo) redo(
+    ctx: StateContext<LandmarksStateModel>,
+    _action: Redo
+  ): void {
+    // 👉 quick return if nothing to redo
+    if (redoStack.length === 0) return;
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
+    // 👉 prepare the undo/redo actions
+    const redoAction = redoStack.pop();
+    const undoAction = new redoAction.redoneBy(
+      this.#landmarkByID(ctx, redoAction.landmark.id),
+      /* undoable = */ false
+    );
+    // 👇 execute the redo action
+    ctx.dispatch(redoAction).subscribe(() => {
+      undoStack.push(undoAction);
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
+    });
+  }
+
+  @Action(SetLandmarks) setLandmarks(
+    ctx: StateContext<LandmarksStateModel>,
+    action: SetLandmarks
+  ): void {
+    // this.#logLandmarks(action.landmarks);
+    ctx.setState(action.landmarks);
+  }
+
+  @Action(Undo) undo(
+    ctx: StateContext<LandmarksStateModel>,
+    _action: Undo
+  ): void {
+    // 👉 quick return if nothing to undo
+    if (undoStack.length === 0) return;
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
+    // 👉 prepare the undo/redo actions
+    const undoAction = undoStack.pop();
+    const redoAction = new undoAction.redoneBy(
+      this.#landmarkByID(ctx, undoAction.landmark.id),
+      /* undoable = */ false
+    );
+    // 👇 execute the undo action
+    ctx.dispatch(undoAction).subscribe(() => {
+      redoStack.push(redoAction);
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
+    });
+  }
+
+  @Action(UpdateLandmark) updateLandmark(
+    ctx: StateContext<LandmarksStateModel>,
+    action: UpdateLandmark
+  ): Promise<void> {
+    const normalized = this.#normalize(action.landmark);
+    // 👉 block any other undo, redo until this is finished
+    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
+    // 👉 update the landmark
+    console.log(
+      `%cFirestore set: landmarks ${normalized.id} ${JSON.stringify(
+        normalized
+      )}`,
+      'color: chocolate'
+    );
+    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
+    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    return setDoc(docRef, normalized, { merge: true }).then(() => {
+      if (undoAction) undoStack.push(undoAction);
+      ctx.dispatch([
+        new CanDo(undoStack.length > 0, redoStack.length > 0),
+        new Working(-1)
+      ]);
+    });
+    // 👉 side-effect of handleStreams$ will update state
+  }
+
+  ngxsOnInit(): void {
+    this.#handleActions$();
+    this.#handleStreams$();
+  }
+
+  toGeoJSON(): Landmarks {
+    return featureCollection(this.store.snapshot().landmarks);
+  }
+
   #handleActions$(): void {
     this.actions$
       .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
@@ -230,149 +374,5 @@ export class LandmarksState implements NgxsOnInit {
     calculateLandmark(normalized);
     serializeLandmark(normalized);
     return normalized;
-  }
-
-  @Action(AddLandmark) addLandmark(
-    ctx: StateContext<LandmarksStateModel>,
-    action: AddLandmark
-  ): Promise<void> {
-    const normalized = this.#normalize(action.landmark);
-    if (!normalized.id) normalized.id = makeLandmarkID(normalized);
-    // 👉 block any other undo, redo until this is finished
-    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
-    // 👇 add the landmark
-    console.log(
-      `%cFirestore add: landmarks ${normalized.id} ${JSON.stringify(
-        normalized
-      )}`,
-      'color: crimson'
-    );
-    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.firestore, 'landmarks', normalized.id);
-    return setDoc(docRef, normalized).then(() => {
-      if (undoAction) undoStack.push(undoAction);
-      ctx.dispatch([
-        new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
-      ]);
-    });
-    // 👉 side-effect of handleStreams$ will update state
-  }
-
-  @Action(DeleteLandmark) deleteLandmark(
-    ctx: StateContext<LandmarksStateModel>,
-    action: DeleteLandmark
-  ): Promise<void> {
-    // 👇 don't really need to normalize as only an ID is needed
-    //    just following the pattern
-    const normalized = this.#normalize(action.landmark);
-    // 👉 block any other undo, redo until this is finished
-    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
-    // 👇 delete the landmark
-    console.log(
-      `%cFirestore delete: landmarks ${normalized.id}`,
-      'color: crimson'
-    );
-    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.firestore, 'landmarks', normalized.id);
-    return deleteDoc(docRef).then(() => {
-      if (undoAction) undoStack.push(undoAction);
-      ctx.dispatch([
-        new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
-      ]);
-    });
-    // 👉 side-effect of handleStreams$ will update state
-  }
-
-  ngxsOnInit(): void {
-    this.#handleActions$();
-    this.#handleStreams$();
-  }
-
-  @Action(Redo) redo(
-    ctx: StateContext<LandmarksStateModel>,
-    _action: Redo
-  ): void {
-    // 👉 quick return if nothing to redo
-    if (redoStack.length === 0) return;
-    // 👉 block any other undo, redo until this is finished
-    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
-    // 👉 prepare the undo/redo actions
-    const redoAction = redoStack.pop();
-    const undoAction = new redoAction.redoneBy(
-      this.#landmarkByID(ctx, redoAction.landmark.id),
-      /* undoable = */ false
-    );
-    // 👇 execute the redo action
-    ctx.dispatch(redoAction).subscribe(() => {
-      undoStack.push(undoAction);
-      ctx.dispatch([
-        new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
-      ]);
-    });
-  }
-
-  @Action(SetLandmarks) setLandmarks(
-    ctx: StateContext<LandmarksStateModel>,
-    action: SetLandmarks
-  ): void {
-    // this.#logLandmarks(action.landmarks);
-    ctx.setState(action.landmarks);
-  }
-
-  toGeoJSON(): Landmarks {
-    return featureCollection(this.store.snapshot().landmarks);
-  }
-
-  @Action(Undo) undo(
-    ctx: StateContext<LandmarksStateModel>,
-    _action: Undo
-  ): void {
-    // 👉 quick return if nothing to undo
-    if (undoStack.length === 0) return;
-    // 👉 block any other undo, redo until this is finished
-    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
-    // 👉 prepare the undo/redo actions
-    const undoAction = undoStack.pop();
-    const redoAction = new undoAction.redoneBy(
-      this.#landmarkByID(ctx, undoAction.landmark.id),
-      /* undoable = */ false
-    );
-    // 👇 execute the undo action
-    ctx.dispatch(undoAction).subscribe(() => {
-      redoStack.push(redoAction);
-      ctx.dispatch([
-        new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
-      ]);
-    });
-  }
-
-  @Action(UpdateLandmark) updateLandmark(
-    ctx: StateContext<LandmarksStateModel>,
-    action: UpdateLandmark
-  ): Promise<void> {
-    const normalized = this.#normalize(action.landmark);
-    // 👉 block any other undo, redo until this is finished
-    ctx.dispatch([new CanDo(false, false), new Working(+1)]);
-    // 👉 update the landmark
-    console.log(
-      `%cFirestore set: landmarks ${normalized.id} ${JSON.stringify(
-        normalized
-      )}`,
-      'color: chocolate'
-    );
-    const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.firestore, 'landmarks', normalized.id);
-    return setDoc(docRef, normalized, { merge: true }).then(() => {
-      if (undoAction) undoStack.push(undoAction);
-      ctx.dispatch([
-        new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
-      ]);
-    });
-    // 👉 side-effect of handleStreams$ will update state
   }
 }

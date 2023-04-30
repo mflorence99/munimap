@@ -33,15 +33,14 @@ export class OLControlGraticuleComponent
   @Input() borderPixels: number;
   @Input() margin: number;
   @Input() maxZoom: number;
-
-  olControl: OLGraticule;
-
   @Input() spacing: number;
   @Input() step = 0.01;
   @Input() stepCoord = 1;
 
   @ContentChildren(StylerComponent, { descendants: true })
   stylers$: QueryList<any>;
+
+  olControl: OLGraticule;
 
   constructor(private map: OLMapComponent) {}
 

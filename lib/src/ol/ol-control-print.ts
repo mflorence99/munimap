@@ -26,14 +26,6 @@ import html2canvas from 'html2canvas';
   styleUrls: ['./ol-control-print.scss']
 })
 export class OLControlPrintComponent {
-  #center: OLCoordinate;
-  #dpi: number;
-  #progressRef: MatDialogRef<OLControlPrintProgressComponent>;
-  #px: number;
-  #py: number;
-  #renderCompleteKey: OLEventsKey;
-  #zoom: number;
-
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
   @Input() dpi = 300;
@@ -44,7 +36,33 @@ export class OLControlPrintComponent {
 
   @Input() printSize: number[];
 
+  #center: OLCoordinate;
+  #dpi: number;
+  #progressRef: MatDialogRef<OLControlPrintProgressComponent>;
+  #px: number;
+  #py: number;
+  #renderCompleteKey: OLEventsKey;
+  #zoom: number;
+
   constructor(private dialog: MatDialog, private map: OLMapComponent) {}
+
+  print(): void {
+    const data: ConfirmDialogData = {
+      content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize[0]}" x ${this.printSize[1]}" paper.`,
+      title: 'Please confirm map print'
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.#renderCompleteKey = this.map.olMap.once('rendercomplete', () =>
+            this.#printImpl()
+          );
+          this.#setup();
+        }
+      });
+  }
 
   // 👇 we want a nomimal half-inch border around the map to accomodate
   //    the safe print area -- to preserve the aspect ratio, the border
@@ -163,23 +181,5 @@ export class OLControlPrintComponent {
     this.map.olView.setZoom(this.#zoom);
     // 👉 controls map configuration
     this.map.printing = false;
-  }
-
-  print(): void {
-    const data: ConfirmDialogData = {
-      content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize[0]}" x ${this.printSize[1]}" paper.`,
-      title: 'Please confirm map print'
-    };
-    this.dialog
-      .open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.#renderCompleteKey = this.map.olMap.once('rendercomplete', () =>
-            this.#printImpl()
-          );
-          this.#setup();
-        }
-      });
   }
 }

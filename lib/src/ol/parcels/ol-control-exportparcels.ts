@@ -28,11 +28,11 @@ import OLProjection from 'ol/proj/Projection';
   styleUrls: ['./ol-control-exportparcels.scss']
 })
 export class OLControlExportParcelsComponent {
+  @Input() fileName: string;
+
   #format: OLGeoJSON;
   #layer: OLLayerVectorComponent;
   #source: OLSourceParcelsComponent;
-
-  @Input() fileName: string;
 
   constructor(
     private destroy$: DestroyService,
@@ -59,6 +59,15 @@ export class OLControlExportParcelsComponent {
     this.#source.ngOnInit();
   }
 
+  export(): void {
+    this.#source.export(
+      this.map.boundaryExtent,
+      this.map.olView.getResolution(),
+      new OLProjection({ code: this.map.projection }),
+      this.#export.bind(this)
+    );
+  }
+
   #export(features: OLFeature<any>[]): void {
     const geojson = JSON.parse(this.#format.writeFeatures(features));
     geojson.features = geojson.features.map((feature) => {
@@ -69,14 +78,5 @@ export class OLControlExportParcelsComponent {
       type: 'text/plain;charset=utf-8'
     });
     saveAs(blob, `${this.fileName}.geojson`);
-  }
-
-  export(): void {
-    this.#source.export(
-      this.map.boundaryExtent,
-      this.map.olView.getResolution(),
-      new OLProjection({ code: this.map.projection }),
-      this.#export.bind(this)
-    );
   }
 }

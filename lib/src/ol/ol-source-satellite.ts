@@ -49,8 +49,7 @@ export class OLSourceSatelliteComponent {
 
   olTileWMS: OLTileWMS;
 
-  @Input()
-  get year(): string {
+  @Input() get year(): string {
     return this.#year;
   }
   set year(value: string) {

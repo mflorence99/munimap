@@ -29,19 +29,16 @@ import union from '@turf/union';
 export class OLFilterCrop2PropertyParcelsComponent
   implements OnDestroy, OnInit
 {
-  #featuresLoadedKey: OLEventsKey;
-  #format: OLGeoJSON;
-  #layer: any;
+  @Input() opacity = 0.33;
+  @Input() parcelIDs: ParcelID[];
+  @Input() source: OLSourceParcelsComponent;
+  @Input() type: 'crop' | 'mask';
 
   olFilter: Crop | Mask;
 
-  @Input() opacity = 0.33;
-
-  @Input() parcelIDs: ParcelID[];
-
-  @Input() source: OLSourceParcelsComponent;
-
-  @Input() type: 'crop' | 'mask';
+  #featuresLoadedKey: OLEventsKey;
+  #format: OLGeoJSON;
+  #layer: any;
 
   constructor(
     @Optional() layer1: OLLayerTileComponent,
@@ -54,6 +51,19 @@ export class OLFilterCrop2PropertyParcelsComponent
     });
     // 👇 choose which layer parent
     this.#layer = layer1 ?? layer2;
+  }
+
+  ngOnDestroy(): void {
+    if (this.#featuresLoadedKey) unByKey(this.#featuresLoadedKey);
+    // 👇 ol-ext has monkey-patched removeFilter
+    if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
+  }
+
+  ngOnInit(): void {
+    this.#addFilter();
+    this.#featuresLoadedKey = this.source.olVector.on('featuresloadend', () => {
+      this.#addFilter();
+    });
   }
 
   #addFilter(): void {
@@ -89,18 +99,5 @@ export class OLFilterCrop2PropertyParcelsComponent
       // 👇 ol-ext has monkey-patched addFilter
       this.#layer?.olLayer['addFilter'](this.olFilter);
     }
-  }
-
-  ngOnDestroy(): void {
-    if (this.#featuresLoadedKey) unByKey(this.#featuresLoadedKey);
-    // 👇 ol-ext has monkey-patched removeFilter
-    if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
-  }
-
-  ngOnInit(): void {
-    this.#addFilter();
-    this.#featuresLoadedKey = this.source.olVector.on('featuresloadend', () => {
-      this.#addFilter();
-    });
   }
 }

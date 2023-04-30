@@ -103,106 +103,6 @@ export class ParcelsState implements NgxsOnInit {
     private store: Store
   ) {}
 
-  // 👇 listen for "undo" actions directed at the proxy
-
-  #handleActions$(): void {
-    this.actions$
-      .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
-      .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
-        if (action instanceof ClearStacksProxy)
-          this.store.dispatch(new ClearStacks());
-        else if (action instanceof RedoProxy) this.store.dispatch(new Redo());
-        else if (action instanceof UndoProxy) this.store.dispatch(new Undo());
-      });
-  }
-
-  #handleStreams$(): void {
-    const either$ = merge(this.profile1$, this.profile2$);
-    combineLatest([this.map$, either$])
-      .pipe(
-        mergeMap(([map, profile]) => {
-          if (map == null || profile == null) {
-            redoStack.length = 0;
-            undoStack.length = 0;
-            return of([]);
-          } else {
-            const workgroup = AuthState.workgroup(profile);
-            console.log(
-              `%cFirestore query: parcels where owner in ${JSON.stringify(
-                workgroup
-              )} and path == "${map.path}" orderBy timestamp desc`,
-              'color: goldenrod'
-            );
-            return collectionData<Parcel>(
-              query(
-                collection(
-                  this.firestore,
-                  'parcels'
-                ) as CollectionReference<Parcel>,
-                where('owner', 'in', workgroup),
-                where('path', '==', map.path),
-                orderBy('timestamp', 'desc')
-              ),
-              { idField: '$id' }
-            );
-          }
-        }),
-        map((parcels: Parcel[]) => {
-          parcels.forEach((parcel) => deserializeParcel(parcel));
-          return parcels;
-        }),
-        // 👉 cut down on noise
-        distinctUntilChanged(
-          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q)
-        )
-      )
-      .subscribe((parcels: Parcel[]) => {
-        this.store.dispatch(new SetParcels(parcels));
-      });
-  }
-
-  // 👇 considering the parcels in reverse chronological order and ignoring
-  //    "modified" actions, was the last action "add" or "remove"?
-  #lastActionByParcelID(parcels: Parcel[]): Record<ParcelID, ParcelAction> {
-    return parcels
-      .filter((parcel) => parcel.action !== 'modified')
-      .reduce((acc, parcel) => {
-        if (!acc[parcel.id]) acc[parcel.id] = parcel.action;
-        return acc;
-      }, {});
-  }
-
-  #logParcels(parcels: Parcel[]): void {
-    console.table(
-      parcels.map((parcel) => {
-        return {
-          action: parcel.action,
-          id: parcel.id,
-          geometry: parcel.geometry?.type,
-          address: parcel.properties?.address,
-          area: parcel.properties?.area,
-          neighborhood: parcel.properties?.neighborhood,
-          owner: parcel.properties?.owner,
-          usage: parcel.properties?.usage,
-          use: parcel.properties?.use,
-          building$: parcel.properties?.building$,
-          land$: parcel.properties?.land$,
-          other$: parcel.properties?.other$,
-          taxed$: parcel.properties?.taxed$
-        };
-      })
-    );
-  }
-
-  #normalize(parcel: Partial<Parcel>): Partial<Parcel> {
-    const normalized = copy(parcel);
-    calculateParcel(normalized);
-    normalizeParcel(normalized);
-    serializeParcel(normalized);
-    timestampParcel(normalized);
-    return normalized;
-  }
-
   @Action(AddParcels) addParcels(
     ctx: StateContext<ParcelsStateModel>,
     action: AddParcels
@@ -247,36 +147,6 @@ export class ParcelsState implements NgxsOnInit {
     redoStack.length = 0;
     undoStack.length = 0;
     ctx.dispatch(new CanDo(false, false));
-  }
-
-  ngxsOnInit(): void {
-    this.#handleActions$();
-    this.#handleStreams$();
-  }
-
-  parcelsAdded(parcels: Parcel[]): Set<ParcelID> {
-    const hash = this.#lastActionByParcelID(parcels);
-    return new Set(Object.keys(hash).filter((id) => hash[id] === 'added'));
-  }
-
-  // 👉 consider the entire stream of parcels, in reverse timestamp order
-  //    separate them by ID -- once a "removed" action found,
-  //    ignore prior modifications
-  parcelsModified(parcels: Parcel[]): Record<ParcelID, Parcel[]> {
-    const removedIDs = new Set<ParcelID>();
-    return parcels.reduce((acc, parcel) => {
-      if (parcel.action === 'removed') removedIDs.add(parcel.id);
-      if (!removedIDs.has(parcel.id)) {
-        if (!acc[parcel.id]) acc[parcel.id] = [];
-        acc[parcel.id].push(parcel);
-      }
-      return acc;
-    }, {});
-  }
-
-  parcelsRemoved(parcels: Parcel[]): Set<ParcelID> {
-    const hash = this.#lastActionByParcelID(parcels);
-    return new Set(Object.keys(hash).filter((id) => hash[id] === 'removed'));
   }
 
   @Action(Redo) redo(
@@ -397,5 +267,135 @@ export class ParcelsState implements NgxsOnInit {
         ]);
       });
     // 👉 side-effect of handleStreams$ will update state
+  }
+
+  ngxsOnInit(): void {
+    this.#handleActions$();
+    this.#handleStreams$();
+  }
+
+  parcelsAdded(parcels: Parcel[]): Set<ParcelID> {
+    const hash = this.#lastActionByParcelID(parcels);
+    return new Set(Object.keys(hash).filter((id) => hash[id] === 'added'));
+  }
+
+  // 👉 consider the entire stream of parcels, in reverse timestamp order
+  //    separate them by ID -- once a "removed" action found,
+  //    ignore prior modifications
+  parcelsModified(parcels: Parcel[]): Record<ParcelID, Parcel[]> {
+    const removedIDs = new Set<ParcelID>();
+    return parcels.reduce((acc, parcel) => {
+      if (parcel.action === 'removed') removedIDs.add(parcel.id);
+      if (!removedIDs.has(parcel.id)) {
+        if (!acc[parcel.id]) acc[parcel.id] = [];
+        acc[parcel.id].push(parcel);
+      }
+      return acc;
+    }, {});
+  }
+
+  parcelsRemoved(parcels: Parcel[]): Set<ParcelID> {
+    const hash = this.#lastActionByParcelID(parcels);
+    return new Set(Object.keys(hash).filter((id) => hash[id] === 'removed'));
+  }
+
+  // 👇 listen for "undo" actions directed at the proxy
+
+  #handleActions$(): void {
+    this.actions$
+      .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
+      .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
+        if (action instanceof ClearStacksProxy)
+          this.store.dispatch(new ClearStacks());
+        else if (action instanceof RedoProxy) this.store.dispatch(new Redo());
+        else if (action instanceof UndoProxy) this.store.dispatch(new Undo());
+      });
+  }
+
+  #handleStreams$(): void {
+    const either$ = merge(this.profile1$, this.profile2$);
+    combineLatest([this.map$, either$])
+      .pipe(
+        mergeMap(([map, profile]) => {
+          if (map == null || profile == null) {
+            redoStack.length = 0;
+            undoStack.length = 0;
+            return of([]);
+          } else {
+            const workgroup = AuthState.workgroup(profile);
+            console.log(
+              `%cFirestore query: parcels where owner in ${JSON.stringify(
+                workgroup
+              )} and path == "${map.path}" orderBy timestamp desc`,
+              'color: goldenrod'
+            );
+            return collectionData<Parcel>(
+              query(
+                collection(
+                  this.firestore,
+                  'parcels'
+                ) as CollectionReference<Parcel>,
+                where('owner', 'in', workgroup),
+                where('path', '==', map.path),
+                orderBy('timestamp', 'desc')
+              ),
+              { idField: '$id' }
+            );
+          }
+        }),
+        map((parcels: Parcel[]) => {
+          parcels.forEach((parcel) => deserializeParcel(parcel));
+          return parcels;
+        }),
+        // 👉 cut down on noise
+        distinctUntilChanged(
+          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q)
+        )
+      )
+      .subscribe((parcels: Parcel[]) => {
+        this.store.dispatch(new SetParcels(parcels));
+      });
+  }
+
+  // 👇 considering the parcels in reverse chronological order and ignoring
+  //    "modified" actions, was the last action "add" or "remove"?
+  #lastActionByParcelID(parcels: Parcel[]): Record<ParcelID, ParcelAction> {
+    return parcels
+      .filter((parcel) => parcel.action !== 'modified')
+      .reduce((acc, parcel) => {
+        if (!acc[parcel.id]) acc[parcel.id] = parcel.action;
+        return acc;
+      }, {});
+  }
+
+  #logParcels(parcels: Parcel[]): void {
+    console.table(
+      parcels.map((parcel) => {
+        return {
+          action: parcel.action,
+          id: parcel.id,
+          geometry: parcel.geometry?.type,
+          address: parcel.properties?.address,
+          area: parcel.properties?.area,
+          neighborhood: parcel.properties?.neighborhood,
+          owner: parcel.properties?.owner,
+          usage: parcel.properties?.usage,
+          use: parcel.properties?.use,
+          building$: parcel.properties?.building$,
+          land$: parcel.properties?.land$,
+          other$: parcel.properties?.other$,
+          taxed$: parcel.properties?.taxed$
+        };
+      })
+    );
+  }
+
+  #normalize(parcel: Partial<Parcel>): Partial<Parcel> {
+    const normalized = copy(parcel);
+    calculateParcel(normalized);
+    normalizeParcel(normalized);
+    serializeParcel(normalized);
+    timestampParcel(normalized);
+    return normalized;
   }
 }

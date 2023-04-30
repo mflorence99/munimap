@@ -77,19 +77,11 @@ export class AuthState implements NgxsOnInit {
     private router: Router
   ) {}
 
-  @Selector() static profile(state: AuthStateModel): Profile {
-    return state.profile;
-  }
-
   static profileProps(obj: any): any {
     return {
       email: obj.email,
       workgroup: obj.workgroup
     };
-  }
-
-  @Selector() static user(state: AuthStateModel): User {
-    return state.user;
   }
 
   static userProps(obj: any): any {
@@ -110,50 +102,14 @@ export class AuthState implements NgxsOnInit {
     return workgroup;
   }
 
-  currentProfile(): Profile {
-    return this.store.snapshot().auth.profile;
-  }
-
-  currentUser(): User {
-    return this.store.snapshot().auth.user;
-  }
-
   @Action(Logout) logout(): void {
     // 👉 we relaod the app to cancel all the subscriptions
     //    that rely on a logged-in user
     signOut(this.fireauth).then(() => location.reload());
   }
 
-  ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
-    const deepLink = this.location.path();
-    const lastRoute = this.store.snapshot().router?.state.url;
-    // 👇 don't try to use ?? here, because deepLink and lastRoute
-    //    are blank when empty, not null or undefined
-    const forwardTo = deepLink || lastRoute || '/create';
-    // 👉 the user will be NULL on logout!
-    user(this.fireauth).subscribe((user) => {
-      ctx.dispatch(new SetUser(user));
-      if (user) {
-        console.log(
-          `%cFirestore get: profiles ${user.email}`,
-          'color: goldenrod'
-        );
-        // 👉 set the profile corresponding to the User
-        //    or an empty one if none found
-        const docRef = doc(this.firestore, 'profiles', user.email);
-        getDoc(docRef).then((doc) => {
-          if (doc.exists()) ctx.dispatch(new SetProfile(doc.data() as Profile));
-          else
-            ctx.dispatch(
-              new UpdateProfile({ email: user.email, workgroup: '' })
-            );
-        });
-        // 👉 no point in going to login if we're logged in!
-        this.router.navigateByUrl(
-          forwardTo === '/login' ? '/create' : forwardTo
-        );
-      }
-    });
+  @Selector() static profile(state: AuthStateModel): Profile {
+    return state.profile;
   }
 
   @Action(SetProfile) setProfile(
@@ -203,5 +159,49 @@ export class AuthState implements NgxsOnInit {
       this.fireauth.currentUser,
       AuthState.userProps(action.user)
     ).then(() => ctx.dispatch(new SetUser(action.user)));
+  }
+
+  @Selector() static user(state: AuthStateModel): User {
+    return state.user;
+  }
+
+  currentProfile(): Profile {
+    return this.store.snapshot().auth.profile;
+  }
+
+  currentUser(): User {
+    return this.store.snapshot().auth.user;
+  }
+
+  ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
+    const deepLink = this.location.path();
+    const lastRoute = this.store.snapshot().router?.state.url;
+    // 👇 don't try to use ?? here, because deepLink and lastRoute
+    //    are blank when empty, not null or undefined
+    const forwardTo = deepLink || lastRoute || '/create';
+    // 👉 the user will be NULL on logout!
+    user(this.fireauth).subscribe((user) => {
+      ctx.dispatch(new SetUser(user));
+      if (user) {
+        console.log(
+          `%cFirestore get: profiles ${user.email}`,
+          'color: goldenrod'
+        );
+        // 👉 set the profile corresponding to the User
+        //    or an empty one if none found
+        const docRef = doc(this.firestore, 'profiles', user.email);
+        getDoc(docRef).then((doc) => {
+          if (doc.exists()) ctx.dispatch(new SetProfile(doc.data() as Profile));
+          else
+            ctx.dispatch(
+              new UpdateProfile({ email: user.email, workgroup: '' })
+            );
+        });
+        // 👉 no point in going to login if we're logged in!
+        this.router.navigateByUrl(
+          forwardTo === '/login' ? '/create' : forwardTo
+        );
+      }
+    });
   }
 }

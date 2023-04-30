@@ -28,10 +28,15 @@ import OLVector from 'ol/layer/Vector';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerVectorComponent implements Mapable {
-  olLayer: OLVector<any>;
-
   @ContentChildren(StylerComponent, { descendants: true })
   stylers$: QueryList<any>;
+
+  olLayer: OLVector<any>;
+
+  constructor(private map: OLMapComponent) {
+    this.olLayer = new OLVector({ style: this.style() });
+    this.olLayer.setProperties({ component: this }, true);
+  }
 
   @Input() set id(id: string) {
     this.olLayer.set('id', id);
@@ -43,11 +48,6 @@ export class OLLayerVectorComponent implements Mapable {
 
   @Input() set opacity(opacity: number) {
     this.olLayer.setOpacity(opacity);
-  }
-
-  constructor(private map: OLMapComponent) {
-    this.olLayer = new OLVector({ style: this.style() });
-    this.olLayer.setProperties({ component: this }, true);
   }
 
   addToMap(): void {

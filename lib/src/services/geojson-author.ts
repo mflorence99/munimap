@@ -33,6 +33,22 @@ export class GeoJSONAuthorService extends GeoJSONService {
     super();
   }
 
+  loadByIndex(
+    route: ActivatedRoute,
+    path: string,
+    layerKey: string,
+    extent: Coordinate = []
+  ): Observable<GeoJSON.FeatureCollection<any, any>> {
+    const base = this.findIndex(route);
+    return this.#loadFromIndex(base, path, layerKey, extent);
+  }
+
+  loadIndex(): Observable<Index> {
+    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
+      params: this.#cacheBuster
+    });
+  }
+
   #indexFromPath(
     base: Index,
     path: Path
@@ -75,21 +91,5 @@ export class GeoJSONAuthorService extends GeoJSONService {
     const layer = index.layers[layerKey];
     const url = layer.url;
     return layer.available ? this.#load(url, extent) : of(this.empty);
-  }
-
-  loadByIndex(
-    route: ActivatedRoute,
-    path: string,
-    layerKey: string,
-    extent: Coordinate = []
-  ): Observable<GeoJSON.FeatureCollection<any, any>> {
-    const base = this.findIndex(route);
-    return this.#loadFromIndex(base, path, layerKey, extent);
-  }
-
-  loadIndex(): Observable<Index> {
-    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
-      params: this.#cacheBuster
-    });
   }
 }

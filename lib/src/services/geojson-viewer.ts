@@ -30,17 +30,6 @@ export class GeoJSONViewerService extends GeoJSONService {
     super();
   }
 
-  #load(layerKey: string): Observable<GeoJSON.FeatureCollection<any, any>> {
-    return this.http
-      .get<GeoJSON.FeatureCollection<any, any>>(`assets/${layerKey}.geojson`, {
-        params: this.#cacheBuster
-      })
-      .pipe(
-        catchError(() => of(this.empty)),
-        tap((geojson) => this.cache.set(layerKey, geojson))
-      );
-  }
-
   loadByIndex(
     route: ActivatedRoute,
     path: string,
@@ -60,5 +49,16 @@ export class GeoJSONViewerService extends GeoJSONService {
 
   loadIndex(): Observable<Index> {
     return of({});
+  }
+
+  #load(layerKey: string): Observable<GeoJSON.FeatureCollection<any, any>> {
+    return this.http
+      .get<GeoJSON.FeatureCollection<any, any>>(`assets/${layerKey}.geojson`, {
+        params: this.#cacheBuster
+      })
+      .pipe(
+        catchError(() => of(this.empty)),
+        tap((geojson) => this.cache.set(layerKey, geojson))
+      );
   }
 }

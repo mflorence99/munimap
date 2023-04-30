@@ -38,8 +38,6 @@ interface Override {
 export abstract class OLControlAbstractParcelsLegendComponent
   implements Mapable
 {
-  #geojson$ = new Subject<Parcels>();
-
   areaByUsage: Record<string, number> = {};
   areaByUse: Record<string, number> = {};
   areaOfParcels: number;
@@ -57,6 +55,8 @@ export abstract class OLControlAbstractParcelsLegendComponent
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
 
+  #geojson$ = new Subject<Parcels>();
+
   abstract county: string;
   abstract id: string;
   abstract parcels$: Observable<Parcel[]>;
@@ -72,6 +72,17 @@ export abstract class OLControlAbstractParcelsLegendComponent
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
   ) {}
+
+  addToMap(): void {}
+
+  onInit(): void {
+    this.#handleGeoJSON$();
+    this.#handleStreams$();
+  }
+
+  trackByKeyValue(ix: number, item: KeyValue<string, string>): string {
+    return item.key;
+  }
 
   #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
@@ -166,16 +177,5 @@ export abstract class OLControlAbstractParcelsLegendComponent
       acc[id] = override;
       return acc;
     }, {});
-  }
-
-  addToMap(): void {}
-
-  onInit(): void {
-    this.#handleGeoJSON$();
-    this.#handleStreams$();
-  }
-
-  trackByKeyValue(ix: number, item: KeyValue<string, string>): string {
-    return item.key;
   }
 }

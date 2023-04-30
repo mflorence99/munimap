@@ -80,39 +80,11 @@ export class OverlayState {
     ];
   }
 
-  #isSet(): boolean {
-    return this.currentProperties()?.some(
-      (property) => property.enabled && (property.fill || property.stroke)
-    );
-  }
-
-  #quantizeArea(area: number): string {
-    if (area <= 0.25) return 'quarter';
-    else if (area <= 0.5) return 'half';
-    else if (area <= 1) return 'one';
-    else if (area <= 2) return 'two';
-    else if (area <= 4) return 'four';
-    else return null;
-  }
-
-  #quantizeVacancy(neighborhood: string): string {
-    if (['U', 'V', 'W'].includes(neighborhood)) return 'vacant';
-    else return null;
-  }
-
-  #quantizeWidth(width: number): string {
-    if (width <= 60) return 'sixty';
-    else if (width <= 100) return 'hundred';
-    else return null;
-  }
-
-  // 👇 convert #rrggbb to [r, g, b]
-  #rgb(hex: string): [number, number, number] {
-    if (!hex) return null;
-    else {
-      const rgb = hex.substring(1).match(/.{1,2}/g);
-      return [parseInt(rgb[0], 16), parseInt(rgb[1], 16), parseInt(rgb[2], 16)];
-    }
+  @Action(UpdateProperties) updateProperties(
+    ctx: StateContext<OverlayStateModel>,
+    action: UpdateProperties
+  ): void {
+    ctx.setState(action.properties);
   }
 
   currentProperties(): OverlayProperty[] {
@@ -146,10 +118,38 @@ export class OverlayState {
     return { fill: this.#rgb(fill), stroke: this.#rgb(stroke) };
   }
 
-  @Action(UpdateProperties) updateProperties(
-    ctx: StateContext<OverlayStateModel>,
-    action: UpdateProperties
-  ): void {
-    ctx.setState(action.properties);
+  #isSet(): boolean {
+    return this.currentProperties()?.some(
+      (property) => property.enabled && (property.fill || property.stroke)
+    );
+  }
+
+  #quantizeArea(area: number): string {
+    if (area <= 0.25) return 'quarter';
+    else if (area <= 0.5) return 'half';
+    else if (area <= 1) return 'one';
+    else if (area <= 2) return 'two';
+    else if (area <= 4) return 'four';
+    else return null;
+  }
+
+  #quantizeVacancy(neighborhood: string): string {
+    if (['U', 'V', 'W'].includes(neighborhood)) return 'vacant';
+    else return null;
+  }
+
+  #quantizeWidth(width: number): string {
+    if (width <= 60) return 'sixty';
+    else if (width <= 100) return 'hundred';
+    else return null;
+  }
+
+  // 👇 convert #rrggbb to [r, g, b]
+  #rgb(hex: string): [number, number, number] {
+    if (!hex) return null;
+    else {
+      const rgb = hex.substring(1).match(/.{1,2}/g);
+      return [parseInt(rgb[0], 16), parseInt(rgb[1], 16), parseInt(rgb[2], 16)];
+    }
   }
 }

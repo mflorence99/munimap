@@ -52,36 +52,20 @@ import OLSelect from 'ol/interaction/Select';
 export class OLInteractionSelectParcelsComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
+  @Output() abuttersFound = new EventEmitter<Parcel[]>();
+  @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
+
+  @Input() findAbutters = false;
+  @Input() maxZoom = 19;
+  @Input() zoomAnimationDuration = 200;
+
+  abutters: Parcel[] = [];
+  olSelect: OLSelect;
+
   #abuttersWorker: any /* 👈 TypeScript no help here */;
   #featuresLoadEndKey: OLEventsKey;
   #format: OLGeoJSON;
   #selectKey: OLEventsKey;
-
-  abutters: Parcel[] = [];
-
-  @Output() abuttersFound = new EventEmitter<Parcel[]>();
-
-  get abutterIDs(): ParcelID[] {
-    return this.abutters.map((feature) => feature.id);
-  }
-
-  @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
-
-  @Input() findAbutters = false;
-
-  @Input() maxZoom = 19;
-
-  olSelect: OLSelect;
-
-  get selected(): OLFeature<any>[] {
-    return this.olSelect.getFeatures().getArray();
-  }
-
-  get selectedIDs(): ParcelID[] {
-    return this.selected.map((feature) => feature.getId());
-  }
-
-  @Input() zoomAnimationDuration = 200;
 
   constructor(
     // 👉 we need public access to go through the selector to its layer
@@ -107,6 +91,73 @@ export class OLInteractionSelectParcelsComponent
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
+  }
+
+  get abutterIDs(): ParcelID[] {
+    return this.abutters.map((feature) => feature.id);
+  }
+
+  get selected(): OLFeature<any>[] {
+    return this.olSelect.getFeatures().getArray();
+  }
+
+  get selectedIDs(): ParcelID[] {
+    return this.selected.map((feature) => feature.getId());
+  }
+
+  @Debounce(250) selectParcels(parcels: Parcel[]): void {
+    // 👇 assume these parcels are degenerate and that all we have
+    //    available is ID and bbox
+    const bbox = parcels.reduce(
+      (bbox, parcel) => extend(bbox, parcel.bbox),
+      [...parcels[0].bbox]
+    );
+    // 👉 that's the union of the extent
+    const extent = transformExtent(
+      bbox,
+      this.map.featureProjection,
+      this.map.projection
+    );
+    // 👇 setup a listener to select later if the zoom loads more parcels
+    const ids = parcels.map((parcel) => parcel.id);
+    if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
+    this.#featuresLoadEndKey = this.layer.olLayer
+      .getSource()
+      .once('featuresloadend', () => this.#selectParcels(ids));
+    // 👇 zoom to the extent of all the selected parcels and select them
+    const minZoom = this.map.olView.getMinZoom();
+    this.map.olView.setMinZoom(this.map.minUsefulZoom);
+    this.map.olView.fit(extent, {
+      callback: () => {
+        this.map.olView.setMinZoom(minZoom);
+        this.#selectParcels(ids);
+      },
+      duration: this.zoomAnimationDuration,
+      maxZoom: this.maxZoom ?? this.map.maxZoom,
+      size: this.map.olMap.getSize()
+    });
+  }
+
+  addToMap(): void {
+    this.map.olMap.addInteraction(this.olSelect);
+  }
+
+  ngOnDestroy(): void {
+    if (this.#selectKey) unByKey(this.#selectKey);
+    if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
+  }
+
+  ngOnInit(): void {
+    if (this.findAbutters) this.#createAbuttersWorker();
+    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+  }
+
+  reselectParcels(ids: ParcelID[]): void {
+    this.#selectParcels(ids);
+  }
+
+  unselectParcels(): void {
+    this.#selectParcels([]);
   }
 
   #createAbuttersWorker(): void {
@@ -164,60 +215,5 @@ export class OLInteractionSelectParcelsComponent
     //    OL will reselect when features come in and out of view,
     //    so we need to jump through all the other hoops
     if (delta) this.#onSelect();
-  }
-
-  addToMap(): void {
-    this.map.olMap.addInteraction(this.olSelect);
-  }
-
-  ngOnDestroy(): void {
-    if (this.#selectKey) unByKey(this.#selectKey);
-    if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
-  }
-
-  ngOnInit(): void {
-    if (this.findAbutters) this.#createAbuttersWorker();
-    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
-  }
-
-  reselectParcels(ids: ParcelID[]): void {
-    this.#selectParcels(ids);
-  }
-
-  @Debounce(250) selectParcels(parcels: Parcel[]): void {
-    // 👇 assume these parcels are degenerate and that all we have
-    //    available is ID and bbox
-    const bbox = parcels.reduce(
-      (bbox, parcel) => extend(bbox, parcel.bbox),
-      [...parcels[0].bbox]
-    );
-    // 👉 that's the union of the extent
-    const extent = transformExtent(
-      bbox,
-      this.map.featureProjection,
-      this.map.projection
-    );
-    // 👇 setup a listener to select later if the zoom loads more parcels
-    const ids = parcels.map((parcel) => parcel.id);
-    if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
-    this.#featuresLoadEndKey = this.layer.olLayer
-      .getSource()
-      .once('featuresloadend', () => this.#selectParcels(ids));
-    // 👇 zoom to the extent of all the selected parcels and select them
-    const minZoom = this.map.olView.getMinZoom();
-    this.map.olView.setMinZoom(this.map.minUsefulZoom);
-    this.map.olView.fit(extent, {
-      callback: () => {
-        this.map.olView.setMinZoom(minZoom);
-        this.#selectParcels(ids);
-      },
-      duration: this.zoomAnimationDuration,
-      maxZoom: this.maxZoom ?? this.map.maxZoom,
-      size: this.map.olMap.getSize()
-    });
-  }
-
-  unselectParcels(): void {
-    this.#selectParcels([]);
   }
 }

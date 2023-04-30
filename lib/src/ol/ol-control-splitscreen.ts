@@ -30,10 +30,10 @@ import OLSwipe from 'ol-ext/control/Swipe';
 export class OLControlSplitScreenComponent
   implements AfterContentInit, Mapable
 {
-  olControl: OLSwipe;
-
   @ContentChild('left', { static: true }) onLeft: any;
   @ContentChild('right', { static: true }) onRight: any;
+
+  olControl: OLSwipe;
 
   constructor(private map: OLMapComponent) {
     this.olControl = new OLSwipe();

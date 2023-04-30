@@ -115,10 +115,6 @@ export class MapState {
     });
   }
 
-  currentMap(): Map {
-    return this.store.snapshot().map;
-  }
-
   @Action(DeleteMap) deleteMap(
     ctx: StateContext<MapStateModel>,
     action: DeleteMap
@@ -191,5 +187,9 @@ export class MapState {
         ctx.dispatch(new SetMap(action.map))
       );
     }
+  }
+
+  currentMap(): Map {
+    return this.store.snapshot().map;
   }
 }

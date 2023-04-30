@@ -22,15 +22,15 @@ import OLPolygon from 'ol/geom/Polygon';
 import OLSnap from 'ol/interaction/Snap';
 
 export abstract class OLInteractionAbstractRedrawComponent {
-  #format: OLGeoJSON;
-  #modifyStartKey: OLEventsKey;
-  #touched = false;
-
   feature: OLFeature<OLLineString | OLPolygon>;
   geometry: OLLineString | OLPolygon;
 
   olModify: OLModify;
   olSnap: OLSnap;
+
+  #format: OLGeoJSON;
+  #modifyStartKey: OLEventsKey;
+  #touched = false;
 
   constructor(
     protected destroy$: DestroyService,
@@ -41,33 +41,6 @@ export abstract class OLInteractionAbstractRedrawComponent {
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
-  }
-
-  // 👇 the idea is that a selection change or ESC accepts the redraw
-
-  #handleStreams$(): void {
-    merge(this.map.escape$, this.map.featuresSelected)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.#touched) {
-          const geojson = JSON.parse(this.#format.writeFeature(this.feature));
-          this.saveRedraw(cleanCoords(geojson)).subscribe(() =>
-            this.#unsetFeature()
-          );
-        } else this.#unsetFeature();
-      });
-  }
-
-  #unsetFeature(): void {
-    if (this.#modifyStartKey) unByKey(this.#modifyStartKey);
-    if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
-    if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
-    if (this.feature) this.feature.set('ol-interaction-redraw', false);
-    this.#modifyStartKey = null;
-    this.olModify = null;
-    this.olSnap = null;
-    this.feature = null;
-    this.#touched = false;
   }
 
   onDestroy(): void {
@@ -107,6 +80,33 @@ export abstract class OLInteractionAbstractRedrawComponent {
     // 👇 create a standard OL Snap interaction
     this.olSnap = new OLSnap({ source: this.layer.olLayer.getSource() });
     this.map.olMap.addInteraction(this.olSnap);
+  }
+
+  // 👇 the idea is that a selection change or ESC accepts the redraw
+
+  #handleStreams$(): void {
+    merge(this.map.escape$, this.map.featuresSelected)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.#touched) {
+          const geojson = JSON.parse(this.#format.writeFeature(this.feature));
+          this.saveRedraw(cleanCoords(geojson)).subscribe(() =>
+            this.#unsetFeature()
+          );
+        } else this.#unsetFeature();
+      });
+  }
+
+  #unsetFeature(): void {
+    if (this.#modifyStartKey) unByKey(this.#modifyStartKey);
+    if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
+    if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
+    if (this.feature) this.feature.set('ol-interaction-redraw', false);
+    this.#modifyStartKey = null;
+    this.olModify = null;
+    this.olSnap = null;
+    this.feature = null;
+    this.#touched = false;
   }
 
   abstract saveRedraw(feature: GeoJSON.Feature<any>): Observable<boolean>;

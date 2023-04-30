@@ -27,10 +27,10 @@ import union from '@turf/union';
 export class OLFilterCrop2SelectedParcelsComponent
   implements AfterContentInit, OnDestroy, OnInit
 {
+  olFilter: Crop;
+
   #format: OLGeoJSON;
   #layer: any;
-
-  olFilter: Crop;
 
   constructor(
     private destroy$: DestroyService,
@@ -44,6 +44,19 @@ export class OLFilterCrop2SelectedParcelsComponent
     });
     // 👇 choose which layer parent
     this.#layer = layer1 ?? layer2;
+  }
+
+  ngAfterContentInit(): void {
+    this.#addFilter();
+  }
+
+  ngOnDestroy(): void {
+    // 👇 ol-ext has monkey-patched removeFilter
+    this.#layer?.olLayer['removeFilter'](this.olFilter);
+  }
+
+  ngOnInit(): void {
+    this.#handleFeaturesSelected$();
   }
 
   #addFilter(): void {
@@ -89,18 +102,5 @@ export class OLFilterCrop2SelectedParcelsComponent
     this.map.featuresSelected
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.#addFilter());
-  }
-
-  ngAfterContentInit(): void {
-    this.#addFilter();
-  }
-
-  ngOnDestroy(): void {
-    // 👇 ol-ext has monkey-patched removeFilter
-    this.#layer?.olLayer['removeFilter'](this.olFilter);
-  }
-
-  ngOnInit(): void {
-    this.#handleFeaturesSelected$();
   }
 }

@@ -30,11 +30,11 @@ const backoffMaxInterval = 1000;
   styleUrls: ['./ol-overlay-gps.scss']
 })
 export class OLOverlayGPSComponent implements OnDestroy, OnInit {
-  #lastTimestamp = 0;
+  @ViewChild('tracker', { static: true }) tracker: ElementRef<HTMLDivElement>;
 
   olOverlay: OLOverlay;
 
-  @ViewChild('tracker', { static: true }) tracker: ElementRef<HTMLDivElement>;
+  #lastTimestamp = 0;
 
   constructor(
     private destroy$: DestroyService,
@@ -54,6 +54,15 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.map.olMap.addOverlay(this.olOverlay);
+  }
+
+  ngOnDestroy(): void {
+    this.map.olMap.removeOverlay(this.olOverlay);
+  }
+
+  ngOnInit(): void {
+    this.olOverlay.setElement(this.tracker.nativeElement);
+    this.#handleGeolocation$();
   }
 
   #currentPositionLost(error: GeolocationPositionError): void {
@@ -129,14 +138,5 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
     const [left, bottom, right, top] = this.map.bbox;
     // 👉 https://gamedev.stackexchange.com/questions/586
     return !(x > right || x < left || y < bottom || y > top);
-  }
-
-  ngOnDestroy(): void {
-    this.map.olMap.removeOverlay(this.olOverlay);
-  }
-
-  ngOnInit(): void {
-    this.olOverlay.setElement(this.tracker.nativeElement);
-    this.#handleGeolocation$();
   }
 }

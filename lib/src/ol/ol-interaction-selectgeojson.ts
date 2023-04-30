@@ -44,8 +44,6 @@ export type FilterFunction = (name: number | string) => boolean;
 export class OLInteractionSelectGeoJSONComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
-  #selectKey: OLEventsKey;
-
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
   @Input() filter: FilterFunction;
@@ -53,13 +51,7 @@ export class OLInteractionSelectGeoJSONComponent
   olHover: OLSelect;
   olSelect: OLSelect;
 
-  get selected(): OLFeature<any>[] {
-    return this.olSelect.getFeatures().getArray();
-  }
-
-  get selectedIDs(): any[] {
-    return this.selected.map((feature) => feature.getId());
-  }
+  #selectKey: OLEventsKey;
 
   constructor(
     // 👉 we need public access to go through the selector to its layer
@@ -87,14 +79,12 @@ export class OLInteractionSelectGeoJSONComponent
     this.olSelect.setProperties({ component: this }, true);
   }
 
-  #filter(feature: OLFeature<any>): boolean {
-    return this.filter ? this.filter(feature.getId()) : true;
+  get selected(): OLFeature<any>[] {
+    return this.olSelect.getFeatures().getArray();
   }
 
-  #onSelect(_event?: OLSelectEvent): void {
-    const ids = this.selectedIDs.join(', ');
-    console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
-    this.featuresSelected.emit(this.selected);
+  get selectedIDs(): any[] {
+    return this.selected.map((feature) => feature.getId());
   }
 
   addToMap(): void {
@@ -108,5 +98,15 @@ export class OLInteractionSelectGeoJSONComponent
 
   ngOnInit(): void {
     this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+  }
+
+  #filter(feature: OLFeature<any>): boolean {
+    return this.filter ? this.filter(feature.getId()) : true;
+  }
+
+  #onSelect(_event?: OLSelectEvent): void {
+    const ids = this.selectedIDs.join(', ');
+    console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
+    this.featuresSelected.emit(this.selected);
   }
 }

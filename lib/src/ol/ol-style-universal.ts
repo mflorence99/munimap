@@ -53,8 +53,6 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleUniversalComponent implements OnChanges, Styler {
-  #format: OLGeoJSON;
-
   @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
 
   @Input() fontFamily = 'Roboto';
@@ -80,6 +78,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() strokeWidth_thick = 9 /* 👈 feet */;
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
 
+  #format: OLGeoJSON;
+
   constructor(
     @Optional() private adaptor: AdaptorComponent,
     private decimal: DecimalPipe,
@@ -90,6 +90,61 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.values(changes).some((change) => !change.firstChange)) {
+      this.layer.olLayer.getSource().refresh();
+    }
+  }
+
+  style(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      const propss = (this.adaptor as Adaptor).adapt(feature.getProperties());
+      const styles = this.#styleImpl(feature, resolution, propss);
+      // 👉 add any backdoor styles
+      if ((this.adaptor as Adaptor)?.backdoor)
+        styles.push(...(this.adaptor as Adaptor).backdoor(feature, resolution));
+      return styles;
+    };
+  }
+
+  styleWhenHovering(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      if ((this.adaptor as Adaptor)?.adaptWhenHovering) {
+        const propss = (this.adaptor as Adaptor).adaptWhenHovering(
+          feature.getProperties()
+        );
+        const whenHovering = true;
+        const whenSelected = false;
+        return this.#styleImpl(
+          feature,
+          resolution,
+          propss,
+          whenHovering,
+          whenSelected
+        );
+      } else return [];
+    };
+  }
+
+  styleWhenSelected(): OLStyleFunction {
+    return (feature: any, resolution: number): OLStyle[] => {
+      if ((this.adaptor as Adaptor)?.adaptWhenSelected) {
+        const propss = (this.adaptor as Adaptor).adaptWhenSelected(
+          feature.getProperties()
+        );
+        const whenHovering = false;
+        const whenSelected = true;
+        return this.#styleImpl(
+          feature,
+          resolution,
+          propss,
+          whenHovering,
+          whenSelected
+        );
+      } else return [];
+    };
   }
 
   #calcFontPixels(props: LandmarkProperties, resolution: number): number {
@@ -716,60 +771,5 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     const negative = feet < 0;
     const meters = convertLength(Math.abs(feet), 'feet', 'meters');
     return meters * (negative ? -1 : +1);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (Object.values(changes).some((change) => !change.firstChange)) {
-      this.layer.olLayer.getSource().refresh();
-    }
-  }
-
-  style(): OLStyleFunction {
-    return (feature: any, resolution: number): OLStyle[] => {
-      const propss = (this.adaptor as Adaptor).adapt(feature.getProperties());
-      const styles = this.#styleImpl(feature, resolution, propss);
-      // 👉 add any backdoor styles
-      if ((this.adaptor as Adaptor)?.backdoor)
-        styles.push(...(this.adaptor as Adaptor).backdoor(feature, resolution));
-      return styles;
-    };
-  }
-
-  styleWhenHovering(): OLStyleFunction {
-    return (feature: any, resolution: number): OLStyle[] => {
-      if ((this.adaptor as Adaptor)?.adaptWhenHovering) {
-        const propss = (this.adaptor as Adaptor).adaptWhenHovering(
-          feature.getProperties()
-        );
-        const whenHovering = true;
-        const whenSelected = false;
-        return this.#styleImpl(
-          feature,
-          resolution,
-          propss,
-          whenHovering,
-          whenSelected
-        );
-      } else return [];
-    };
-  }
-
-  styleWhenSelected(): OLStyleFunction {
-    return (feature: any, resolution: number): OLStyle[] => {
-      if ((this.adaptor as Adaptor)?.adaptWhenSelected) {
-        const propss = (this.adaptor as Adaptor).adaptWhenSelected(
-          feature.getProperties()
-        );
-        const whenHovering = false;
-        const whenSelected = true;
-        return this.#styleImpl(
-          feature,
-          resolution,
-          propss,
-          whenHovering,
-          whenSelected
-        );
-      } else return [];
-    };
   }
 }

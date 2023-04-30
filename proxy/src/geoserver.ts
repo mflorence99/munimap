@@ -50,26 +50,6 @@ export class GeoServer extends Handler {
       : GEO_SERVER_DEFAULT_OPTS;
   }
 
-  #filter(
-    geojson: GeoJSON.FeatureCollection,
-    minX: number,
-    minY: number,
-    maxX: number,
-    maxY: number
-  ): Buffer {
-    if (minX && minY && maxX && maxY) {
-      geojson = copy(geojson);
-      geojson.features = geojson.features.filter((feature) => {
-        // 👉 some features don't have a bbox, but we prefer
-        //    it if present as it is faster
-        const [left, bottom, right, top] = feature.bbox ?? bbox(feature);
-        // 👉 https://gamedev.stackexchange.com/questions/586
-        return !(minX > right || maxX < left || maxY < bottom || minY > top);
-      });
-    }
-    return Buffer.from(JSON.stringify(geojson));
-  }
-
   handle(message$: Observable<Message>): Observable<Message> {
     return message$.pipe(
       mergeMap((message: Message): Observable<Message> => {
@@ -146,5 +126,25 @@ export class GeoServer extends Handler {
         );
       })
     );
+  }
+
+  #filter(
+    geojson: GeoJSON.FeatureCollection,
+    minX: number,
+    minY: number,
+    maxX: number,
+    maxY: number
+  ): Buffer {
+    if (minX && minY && maxX && maxY) {
+      geojson = copy(geojson);
+      geojson.features = geojson.features.filter((feature) => {
+        // 👉 some features don't have a bbox, but we prefer
+        //    it if present as it is faster
+        const [left, bottom, right, top] = feature.bbox ?? bbox(feature);
+        // 👉 https://gamedev.stackexchange.com/questions/586
+        return !(minX > right || maxX < left || maxY < bottom || minY > top);
+      });
+    }
+    return Buffer.from(JSON.stringify(geojson));
   }
 }

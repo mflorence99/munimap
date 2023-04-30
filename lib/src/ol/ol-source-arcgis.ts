@@ -56,6 +56,10 @@ export abstract class OLSourceArcGISComponent {
     this.layer.olLayer.setSource(this.olVector);
   }
 
+  filter(arcgis: any): any {
+    return arcgis ?? { features: [] };
+  }
+
   #gridsFromBBox(projection: OLProjection): Coordinate[] {
     const visible = transformExtent(
       this.map.bbox,
@@ -189,10 +193,6 @@ export abstract class OLSourceArcGISComponent {
       js.push(`// 👇 translated ${this.getProxyPath()} schema`);
       console.log(`${js.join('\n')}\n`);
     }
-  }
-
-  filter(arcgis: any): any {
-    return arcgis ?? { features: [] };
   }
 
   abstract getAttribution(): string;

@@ -22,9 +22,8 @@ import Polygon from 'ol/geom/Polygon';
 export class OLFilterCrop2BoundaryComponent
   implements AfterContentInit, OnDestroy
 {
-  #layer: any;
-
   olFilter: Crop;
+  #layer: any;
 
   constructor(
     @Optional() layer1: OLLayerTileComponent,

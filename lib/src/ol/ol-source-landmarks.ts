@@ -29,11 +29,11 @@ import OLVector from 'ol/source/Vector';
   styles: [':host { display: none }']
 })
 export class OLSourceLandmarksComponent implements OnInit {
-  #success: Function;
-
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
 
   olVector: OLVector<any>;
+
+  #success: Function;
 
   constructor(
     private destroy$: DestroyService,
@@ -47,6 +47,10 @@ export class OLSourceLandmarksComponent implements OnInit {
     });
     this.olVector.setProperties({ component: this }, true);
     this.layer.olLayer.setSource(this.olVector);
+  }
+
+  ngOnInit(): void {
+    this.#handleStreams$();
   }
 
   #handleStreams$(): void {
@@ -77,9 +81,5 @@ export class OLSourceLandmarksComponent implements OnInit {
     success: Function
   ): void {
     this.#success = success;
-  }
-
-  ngOnInit(): void {
-    this.#handleStreams$();
   }
 }

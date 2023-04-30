@@ -28,19 +28,41 @@ export interface PrintProgressData {
   templateUrl: './ol-control-printprogress.html'
 })
 export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
-  #eventKeys: OLEventsKey[];
-  #interval: any;
-  #timestamp = Date.now();
-
   @Input() giveUpAfter = 30 * 1000 /* 👈 seconds */;
 
   numLoaded = 0;
   numLoading = 0;
 
+  #eventKeys: OLEventsKey[];
+  #interval: any;
+  #timestamp = Date.now();
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: PrintProgressData,
     private cdf: ChangeDetectorRef
   ) {}
+
+  isComplete(): boolean {
+    return this.numLoaded > 0 && this.numLoading === this.numLoaded;
+  }
+
+  isRunning(): boolean {
+    return this.numLoaded > 0 && this.numLoading !== this.numLoaded;
+  }
+
+  isStarting(): boolean {
+    return this.numLoaded === 0;
+  }
+
+  ngOnDestroy(): void {
+    this.#eventKeys.forEach((key) => unByKey(key));
+    clearInterval(this.#interval);
+  }
+
+  ngOnInit(): void {
+    this.#handleEvents();
+    this.#monitorActivity();
+  }
 
   #handleEvents(): void {
     const sources = this.data.map.olMap
@@ -78,27 +100,5 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
     else if (event.type === 'tileloadend') this.numLoaded += 1;
     this.#timestamp = Date.now();
     this.cdf.markForCheck();
-  }
-
-  isComplete(): boolean {
-    return this.numLoaded > 0 && this.numLoading === this.numLoaded;
-  }
-
-  isRunning(): boolean {
-    return this.numLoaded > 0 && this.numLoading !== this.numLoaded;
-  }
-
-  isStarting(): boolean {
-    return this.numLoaded === 0;
-  }
-
-  ngOnDestroy(): void {
-    this.#eventKeys.forEach((key) => unByKey(key));
-    clearInterval(this.#interval);
-  }
-
-  ngOnInit(): void {
-    this.#handleEvents();
-    this.#monitorActivity();
   }
 }

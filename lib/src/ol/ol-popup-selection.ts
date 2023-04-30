@@ -35,20 +35,6 @@ export class OLPopupSelectionComponent implements OnInit {
     private utils: UtilsService
   ) {}
 
-  #handleFeaturesSelected$(): void {
-    this.map.featuresSelected
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((features) => {
-        // 👇 the idea here is to keep the popup open until it is
-        //    manually dismissed, so that it can respond without
-        //    jank as new features are selected
-        if (features.length === 0) this.snackBar.dismiss();
-        else if (!this.snackBarRef || this.snackBarRef.instance.destroyed) {
-          this.snackBarRef = this.snackBar.openFromTemplate(this.popup);
-        }
-      });
-  }
-
   // 🔥 copy to clipboard does not seems to work under iOS
   canClipboard(): boolean {
     return typeof ClipboardItem !== 'undefined' && !this.utils.iOS();
@@ -77,6 +63,20 @@ export class OLPopupSelectionComponent implements OnInit {
       .catch(() => {
         console.error('🔥 Copy to clipboard failed');
         Sentry.captureMessage('Copy to clipboard failed');
+      });
+  }
+
+  #handleFeaturesSelected$(): void {
+    this.map.featuresSelected
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((features) => {
+        // 👇 the idea here is to keep the popup open until it is
+        //    manually dismissed, so that it can respond without
+        //    jank as new features are selected
+        if (features.length === 0) this.snackBar.dismiss();
+        else if (!this.snackBarRef || this.snackBarRef.instance.destroyed) {
+          this.snackBarRef = this.snackBar.openFromTemplate(this.popup);
+        }
       });
   }
 }

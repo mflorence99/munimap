@@ -25,15 +25,15 @@ import copy from 'fast-copy';
   templateUrl: './overlay.html'
 })
 export class ParcelsOverlayComponent implements OnInit {
-  #selectedProperty: [OverlayProperty, string];
-
   @Select(OverlayState) overlay$: Observable<OverlayProperty[]>;
+
+  @ViewChild('setupForm', { static: true }) setupForm: NgForm;
 
   record: OverlayProperty[] = [];
 
   schema = OverlayState.schema();
 
-  @ViewChild('setupForm', { static: true }) setupForm: NgForm;
+  #selectedProperty: [OverlayProperty, string];
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -41,13 +41,6 @@ export class ParcelsOverlayComponent implements OnInit {
     private drawer: MatDrawer,
     private store: Store
   ) {}
-
-  #handleOverlay$(): void {
-    this.overlay$.pipe(takeUntil(this.destroy$)).subscribe((properties) => {
-      this.record = copy(properties);
-      this.cdf.markForCheck();
-    });
-  }
 
   cancel(): void {
     this.drawer.close();
@@ -93,5 +86,12 @@ export class ParcelsOverlayComponent implements OnInit {
 
   trackByProp(ix: number, property: OverlayProperty): string {
     return property.attribute;
+  }
+
+  #handleOverlay$(): void {
+    this.overlay$.pipe(takeUntil(this.destroy$)).subscribe((properties) => {
+      this.record = copy(properties);
+      this.cdf.markForCheck();
+    });
   }
 }

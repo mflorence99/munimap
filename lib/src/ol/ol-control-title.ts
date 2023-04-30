@@ -33,14 +33,6 @@ class Title extends OLControl {
   styleUrls: ['./ol-control-title.scss']
 })
 export class OLControlTitleComponent implements Mapable, OnInit {
-  // 👇 set the font size proportional to the map size
-  get fontSize(): number {
-    const element = this.map.olMap.getTargetElement();
-    return element.clientHeight / this.scaleFactor;
-  }
-
-  olControl: OLControl;
-
   @Input() scaleFactor = 50;
 
   @Input() showTitleContrast: boolean;
@@ -49,13 +41,21 @@ export class OLControlTitleComponent implements Mapable, OnInit {
 
   @ViewChild('titleRef', { static: true }) titleRef: ElementRef;
 
+  olControl: OLControl;
+
+  constructor(private map: OLMapComponent) {}
+
+  // 👇 set the font size proportional to the map size
+  get fontSize(): number {
+    const element = this.map.olMap.getTargetElement();
+    return element.clientHeight / this.scaleFactor;
+  }
+
   // 👇 set the position proportional to the map size
   get top(): number {
     const element = this.map.olMap.getTargetElement();
     return element.clientHeight / this.scaleFactor;
   }
-
-  constructor(private map: OLMapComponent) {}
 
   addToMap(): void {
     this.map.olMap.addControl(this.olControl);

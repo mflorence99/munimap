@@ -51,25 +51,22 @@ interface SearchTarget {
   styleUrls: ['./ol-control-searchparcels.scss']
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
-  #geojson$ = new Subject<SearchableParcels>();
-
-  #overridesByID: Record<ParcelID, Override> = {};
-
-  #searchTargets = [];
-
   @Input() fuzzyMaxResults = 100;
   @Input() fuzzyMinLength = 3;
   @Input() fuzzyThreshold = -10000;
-
-  matches: SearchTarget[] = [];
-
   @Input() matchesMaxVisible = 20;
 
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
+  matches: SearchTarget[] = [];
+
   searchablesByAddress: Record<string, SearchableParcel[]> = {};
   searchablesByID: Record<ParcelID, SearchableParcel[]> = {};
   searchablesByOwner: Record<string, SearchableParcel[]> = {};
+
+  #geojson$ = new Subject<SearchableParcels>();
+  #overridesByID: Record<ParcelID, Override> = {};
+  #searchTargets = [];
 
   constructor(
     private destroy$: DestroyService,
@@ -78,6 +75,53 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     private parcelsState: ParcelsState,
     private route: ActivatedRoute
   ) {}
+
+  ngOnInit(): void {
+    this.#handleGeoJSON$();
+    this.#handleStreams$();
+  }
+
+  onSearch(str: string): string {
+    const searchFor = str.toUpperCase();
+    // 👉 let's see if we have a direct hit by ID, then address, then owner
+    const searchables =
+      this.searchablesByID[searchFor] ??
+      this.searchablesByAddress[searchFor] ??
+      this.searchablesByOwner[searchFor];
+    if (searchables) {
+      // 👉 we have a hit, tell the selector
+      this.matches = [];
+      const ids = searchables.map((searchable) => searchable.id).join(', ');
+      console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
+      // 👉 the selector MAY not be present
+      const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+      selector?.selectParcels(
+        searchables.map((searchable): any => {
+          const override = this.#overridesByID[searchable.id];
+          if (override?.bbox) return { ...searchable, bbox: override.bbox };
+          else return searchable;
+        })
+      );
+    } else if (searchFor.length > this.fuzzyMinLength) {
+      // 👉 no hit, but enough characters to go for a fuzzy match
+      this.matches = fuzzysort
+        .go(searchFor, this.#searchTargets, {
+          key: 'key',
+          limit: this.fuzzyMaxResults,
+          threshold: this.fuzzyThreshold
+        })
+        .map((fuzzy) => ({ count: fuzzy.obj.count, key: fuzzy.target }))
+        .sort((p, q) => p.key.localeCompare(q.key));
+    } else if (searchFor.length === 0) {
+      // 👉 reset everything when the search string is cleared
+      this.matches = [];
+    }
+    return searchFor;
+  }
+
+  trackByMatch(ix: number, match: SearchTarget): string {
+    return match.key;
+  }
 
   #filterRemovedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
@@ -196,52 +240,5 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       count: counts[key],
       key: fuzzysort.prepare(key)
     }));
-  }
-
-  ngOnInit(): void {
-    this.#handleGeoJSON$();
-    this.#handleStreams$();
-  }
-
-  onSearch(str: string): string {
-    const searchFor = str.toUpperCase();
-    // 👉 let's see if we have a direct hit by ID, then address, then owner
-    const searchables =
-      this.searchablesByID[searchFor] ??
-      this.searchablesByAddress[searchFor] ??
-      this.searchablesByOwner[searchFor];
-    if (searchables) {
-      // 👉 we have a hit, tell the selector
-      this.matches = [];
-      const ids = searchables.map((searchable) => searchable.id).join(', ');
-      console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
-      // 👉 the selector MAY not be present
-      const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-      selector?.selectParcels(
-        searchables.map((searchable): any => {
-          const override = this.#overridesByID[searchable.id];
-          if (override?.bbox) return { ...searchable, bbox: override.bbox };
-          else return searchable;
-        })
-      );
-    } else if (searchFor.length > this.fuzzyMinLength) {
-      // 👉 no hit, but enough characters to go for a fuzzy match
-      this.matches = fuzzysort
-        .go(searchFor, this.#searchTargets, {
-          key: 'key',
-          limit: this.fuzzyMaxResults,
-          threshold: this.fuzzyThreshold
-        })
-        .map((fuzzy) => ({ count: fuzzy.obj.count, key: fuzzy.target }))
-        .sort((p, q) => p.key.localeCompare(q.key));
-    } else if (searchFor.length === 0) {
-      // 👉 reset everything when the search string is cleared
-      this.matches = [];
-    }
-    return searchFor;
-  }
-
-  trackByMatch(ix: number, match: SearchTarget): string {
-    return match.key;
   }
 }

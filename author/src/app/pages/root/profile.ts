@@ -38,13 +38,11 @@ export class ProfileComponent {
     private store: Store
   ) {}
 
-  @Input()
-  get profile(): Profile {
+  @Input() get profile(): Profile {
     return this.#profile;
   }
 
-  @Input()
-  get user(): User {
+  @Input() get user(): User {
     return this.#user;
   }
 

@@ -38,8 +38,7 @@ export class ControlPanelPropertiesComponent {
     private store: Store
   ) {}
 
-  @Input()
-  get map(): Map {
+  @Input() get map(): Map {
     return this.#map;
   }
   set map(map: Map) {

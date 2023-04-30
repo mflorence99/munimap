@@ -34,15 +34,24 @@ class Credits extends OLControl {
   styleUrls: ['./ol-control-credits.scss']
 })
 export class OLControlCreditsComponent implements Mapable, OnInit {
+  @ViewChild('creditsRef', { static: true }) creditsRef: ElementRef;
+
+  @Input() scaleFactor = 125;
+
+  @Input() showCreditsContrast: boolean;
   attributions: string[] = [];
+
+  now = Date.now();
+
+  olControl: OLControl;
+
+  constructor(private cdf: ChangeDetectorRef, private map: OLMapComponent) {}
 
   // 👇 set the position proportional to the map size
   get bottom(): number {
     const element = this.map.olMap.getTargetElement();
     return element.clientHeight / this.scaleFactor;
   }
-
-  @ViewChild('creditsRef', { static: true }) creditsRef: ElementRef;
 
   // 👇 set the font size proportional to the map size
   get fontSize(): number {
@@ -55,20 +64,10 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
     return this.fontSize * 1.25;
   }
 
-  now = Date.now();
-
-  olControl: OLControl;
-
   // 👇 set the position proportional to the map size
   get right(): number {
     return this.bottom;
   }
-
-  @Input() scaleFactor = 125;
-
-  @Input() showCreditsContrast: boolean;
-
-  constructor(private cdf: ChangeDetectorRef, private map: OLMapComponent) {}
 
   addToMap(): void {
     this.map.olMap.addControl(this.olControl);

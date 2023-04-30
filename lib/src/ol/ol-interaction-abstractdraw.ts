@@ -16,13 +16,13 @@ import OLVectorSource from 'ol/source/Vector';
 import simplify from '@turf/simplify';
 
 export abstract class OLInteractionAbstractDrawComponent {
+  olDraw: OLDraw;
+
   #drawStartKey: OLEventsKey;
   #format: OLGeoJSON;
   #layer: OLVectorLayer<any>;
   #source: OLVectorSource<any>;
   #touched = false;
-
-  olDraw: OLDraw;
 
   constructor(
     protected destroy$: DestroyService,
@@ -33,33 +33,6 @@ export abstract class OLInteractionAbstractDrawComponent {
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
-  }
-
-  // 👇 the idea is that ESC accepts the draw
-
-  #handleStreams$(): void {
-    this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      if (this.#touched) {
-        const geojsons = this.#source.getFeatures().map((feature) => {
-          const geojson = JSON.parse(this.#format.writeFeature(feature));
-          return simplify(cleanCoords(geojson), {
-            tolerance: 0.00001,
-            highQuality: false
-          });
-        });
-        this.saveFeatures(geojsons).subscribe(() => this.#stopDraw());
-      } else this.#stopDraw();
-    });
-  }
-
-  #stopDraw(): void {
-    if (this.#drawStartKey) unByKey(this.#drawStartKey);
-    if (this.#layer) this.map.olMap.removeLayer(this.#layer);
-    if (this.olDraw) this.map.olMap.removeInteraction(this.olDraw);
-    this.#drawStartKey = null;
-    this.#layer = null;
-    this.olDraw = null;
-    this.#touched = false;
   }
 
   onDestroy(): void {
@@ -94,6 +67,33 @@ export abstract class OLInteractionAbstractDrawComponent {
       () => (this.#touched = true)
     );
     this.map.olMap.addInteraction(this.olDraw);
+  }
+
+  // 👇 the idea is that ESC accepts the draw
+
+  #handleStreams$(): void {
+    this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.#touched) {
+        const geojsons = this.#source.getFeatures().map((feature) => {
+          const geojson = JSON.parse(this.#format.writeFeature(feature));
+          return simplify(cleanCoords(geojson), {
+            tolerance: 0.00001,
+            highQuality: false
+          });
+        });
+        this.saveFeatures(geojsons).subscribe(() => this.#stopDraw());
+      } else this.#stopDraw();
+    });
+  }
+
+  #stopDraw(): void {
+    if (this.#drawStartKey) unByKey(this.#drawStartKey);
+    if (this.#layer) this.map.olMap.removeLayer(this.#layer);
+    if (this.olDraw) this.map.olMap.removeInteraction(this.olDraw);
+    this.#drawStartKey = null;
+    this.#layer = null;
+    this.olDraw = null;
+    this.#touched = false;
   }
 
   abstract saveFeatures(features: GeoJSON.Feature<any>[]): Observable<boolean>;

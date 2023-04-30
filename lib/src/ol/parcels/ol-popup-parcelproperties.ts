@@ -38,12 +38,11 @@ interface Abutter {
   styleUrls: ['../ol-popup-selection.scss', './ol-popup-parcelproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
-  #subToAbutters: Subscription;
-  #subToSelection: Subscription;
+  @Input() maxNumProperties = 3;
+
+  @ViewChild('tables', { static: true }) tables: ElementRef;
 
   abutters: Abutter[] = [];
-
-  @Input() maxNumProperties = 3;
 
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
@@ -57,7 +56,8 @@ export class OLPopupParcelPropertiesComponent {
   splitHorizontally = false;
   splitVertically = true;
 
-  @ViewChild('tables', { static: true }) tables: ElementRef;
+  #subToAbutters: Subscription;
+  #subToSelection: Subscription;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -68,6 +68,44 @@ export class OLPopupParcelPropertiesComponent {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleAbuttersFound$();
     this.#handleFeaturesSelected$();
+  }
+
+  canClipboard(): boolean {
+    return this.popper.canClipboard();
+  }
+
+  // 👉 https://developers.google.com/maps/documentation/urls/get-started
+  googleLink(property: ParcelProperties): string {
+    const link = `https://www.google.com/maps/@?api=1&map_action=map&center=${
+      property.centers[0][1]
+    }%2C${property.centers[0][0]}&zoom=${Math.round(
+      this.map.olView.getZoom()
+    )}&basemap=satellite`;
+    return link;
+  }
+
+  onClipboard(): void {
+    this.popper.toClipboard(this.tables);
+  }
+
+  onClose(): void {
+    this.snackBar.dismiss();
+    // 👉 the selector MAY not be present and may not be for parcels
+    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    selector?.unselectParcels?.();
+    // 🔥  this doesn't seem to work
+    // this.#subToAbutters?.unsubscribe();
+    // this.#subToSelection?.unsubscribe();
+  }
+
+  onSelect(abutterID: ParcelID): void {
+    // 👉 the selector MAY not be present and may not be for parcels
+    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    selector?.reselectParcels?.([abutterID]);
+  }
+
+  sum(array: number[]): number {
+    return array.reduce((acc, val) => acc + val);
   }
 
   #handleAbuttersFound$(): void {
@@ -129,43 +167,5 @@ export class OLPopupParcelPropertiesComponent {
           this.cdf.markForCheck();
         }
       });
-  }
-
-  canClipboard(): boolean {
-    return this.popper.canClipboard();
-  }
-
-  // 👉 https://developers.google.com/maps/documentation/urls/get-started
-  googleLink(property: ParcelProperties): string {
-    const link = `https://www.google.com/maps/@?api=1&map_action=map&center=${
-      property.centers[0][1]
-    }%2C${property.centers[0][0]}&zoom=${Math.round(
-      this.map.olView.getZoom()
-    )}&basemap=satellite`;
-    return link;
-  }
-
-  onClipboard(): void {
-    this.popper.toClipboard(this.tables);
-  }
-
-  onClose(): void {
-    this.snackBar.dismiss();
-    // 👉 the selector MAY not be present and may not be for parcels
-    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    selector?.unselectParcels?.();
-    // 🔥  this doesn't seem to work
-    // this.#subToAbutters?.unsubscribe();
-    // this.#subToSelection?.unsubscribe();
-  }
-
-  onSelect(abutterID: ParcelID): void {
-    // 👉 the selector MAY not be present and may not be for parcels
-    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
-    selector?.reselectParcels?.([abutterID]);
-  }
-
-  sum(array: number[]): number {
-    return array.reduce((acc, val) => acc + val);
   }
 }

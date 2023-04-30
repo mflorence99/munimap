@@ -37,14 +37,26 @@ class Scalebar extends OLControl {
 export class OLControlScaleBarComponent implements Mapable, OnInit {
   @ViewChild('barRef', { static: true }) barRef: ElementRef;
 
+  @Input() scaleFactor = 150;
+
+  @Input() showScaleContrast: boolean;
+
+  cxUnit: number;
+  cxWidth: number;
+
+  ftUnit: number;
+
+  numUnits: number;
+
+  olControl: OLControl;
+
+  constructor(private map: OLMapComponent) {}
+
   // 👇 set the position proportional to the map size
   get bottom(): number {
     const element = this.map.olMap.getTargetElement();
     return (element.clientHeight / this.scaleFactor) * 4;
   }
-
-  cxUnit: number;
-  cxWidth: number;
 
   // 👇 set the font size proportional to the map size
   get fontSize(): number {
@@ -52,27 +64,25 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
     return element.clientHeight / this.scaleFactor;
   }
 
-  ftUnit: number;
-
   // 👇 set the height proportional to the map size
   get height(): number {
     return this.fontSize;
   }
-
-  numUnits: number;
-
-  olControl: OLControl;
 
   // 👇 set the position proportional to the map size
   get left(): number {
     return this.bottom;
   }
 
-  @Input() scaleFactor = 150;
+  addToMap(): void {
+    this.map.olMap.addControl(this.olControl);
+  }
 
-  @Input() showScaleContrast: boolean;
-
-  constructor(private map: OLMapComponent) {}
+  ngOnInit(): void {
+    this.olControl = new Scalebar({ element: this.barRef.nativeElement });
+    this.olControl.setProperties({ component: this }, true);
+    this.#calculateMetrics();
+  }
 
   #calculateMetrics(): void {
     const [minX, minY, maxX] = this.map.bbox;
@@ -88,15 +98,5 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
     const cxFoot = numPixels / numFeet;
     this.cxUnit = this.ftUnit * cxFoot;
     this.cxWidth = this.cxUnit * this.numUnits;
-  }
-
-  addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
-  }
-
-  ngOnInit(): void {
-    this.olControl = new Scalebar({ element: this.barRef.nativeElement });
-    this.olControl.setProperties({ component: this }, true);
-    this.#calculateMetrics();
   }
 }

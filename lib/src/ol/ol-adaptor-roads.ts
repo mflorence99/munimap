@@ -29,10 +29,6 @@ export class OLAdaptorRoadsComponent implements Adaptor {
   @Input() roadLaneRatio = 0.9;
   @Input() roadNameRatio = 1.125;
 
-  #roadFeet(road: RoadProperties): number {
-    return Math.max(road.width, this.minRoadFeet) * this.rightOfWayRatio;
-  }
-
   // 👇 construct LandmarkProperties
   adapt(road: RoadProperties): LandmarkProperties[] {
     // 👉 munge road name
@@ -85,5 +81,9 @@ export class OLAdaptorRoadsComponent implements Adaptor {
         zIndex: 4
       })
     ];
+  }
+
+  #roadFeet(road: RoadProperties): number {
+    return Math.max(road.width, this.minRoadFeet) * this.rightOfWayRatio;
   }
 }

@@ -117,21 +117,6 @@ const ICONS: {
   styles: [':host { display: none }']
 })
 export class OLAdaptorPlacesComponent implements Adaptor {
-  #mungeName(name: string): string {
-    return (
-      name
-        // 👇 to title case
-        .replace(
-          /\w\S*/g,
-          (str) => str.charAt(0).toUpperCase() + str.substring(1).toLowerCase()
-        )
-        // 👇 remove excessive punctuation
-        .replace(/ - /g, ' ')
-        // 👇 spilt into lineDash
-        .replace(/ /g, '\n')
-    );
-  }
-
   // 👇 construct LandmarkProperties
   adapt(place: PlaceProperties): LandmarkProperties[] {
     // 🔥 HACK -- this entry appears to be noise -- it only
@@ -160,5 +145,20 @@ export class OLAdaptorPlacesComponent implements Adaptor {
         })
       ];
     }
+  }
+
+  #mungeName(name: string): string {
+    return (
+      name
+        // 👇 to title case
+        .replace(
+          /\w\S*/g,
+          (str) => str.charAt(0).toUpperCase() + str.substring(1).toLowerCase()
+        )
+        // 👇 remove excessive punctuation
+        .replace(/ - /g, ' ')
+        // 👇 spilt into lineDash
+        .replace(/ /g, '\n')
+    );
   }
 }

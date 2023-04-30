@@ -48,6 +48,34 @@ export class VersionService {
     this.#pollVersion();
   }
 
+  hardReset(): void {
+    navigator.serviceWorker
+      ?.getRegistrations()
+      .then((registrations) => {
+        console.log('%cUpdating all registrations...', 'color: violet');
+        return Promise.all(
+          registrations.map((registration) => {
+            console.log(`... ${registration.scope}`);
+            return registration.update().then(() => registration.unregister());
+          })
+        );
+      })
+      .then((_) => caches.keys())
+      .then((keys) => {
+        console.log('%cDeleting all caches...', 'color: orchid');
+        return Promise.all(
+          keys.map((key) => {
+            console.log(`... ${key}`);
+            return caches.delete(key);
+          })
+        );
+      })
+      .finally(() => {
+        console.log('%cHard reset', 'color: plum');
+        location.reload();
+      });
+  }
+
   #checkUnrecoverableServiceWorker(): void {
     this.swUpdate.unrecoverable.subscribe((event: UnrecoverableStateEvent) => {
       console.error('🔥 Unrecoverable PWA error', event.reason);
@@ -153,34 +181,6 @@ export class VersionService {
       .subscribe((): any => {
         console.log('%cPolling for new PWA version...', 'color: moccasin');
         this.swUpdate.checkForUpdate().then();
-      });
-  }
-
-  hardReset(): void {
-    navigator.serviceWorker
-      ?.getRegistrations()
-      .then((registrations) => {
-        console.log('%cUpdating all registrations...', 'color: violet');
-        return Promise.all(
-          registrations.map((registration) => {
-            console.log(`... ${registration.scope}`);
-            return registration.update().then(() => registration.unregister());
-          })
-        );
-      })
-      .then((_) => caches.keys())
-      .then((keys) => {
-        console.log('%cDeleting all caches...', 'color: orchid');
-        return Promise.all(
-          keys.map((key) => {
-            console.log(`... ${key}`);
-            return caches.delete(key);
-          })
-        );
-      })
-      .finally(() => {
-        console.log('%cHard reset', 'color: plum');
-        location.reload();
       });
   }
 }

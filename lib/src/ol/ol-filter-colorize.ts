@@ -31,39 +31,12 @@ type Operation =
   styles: [':host { display: none }']
 })
 export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
+  olFilter: Colorize;
+
   #color: ColorLike = '#000000';
   #layer: any;
   #operation: Operation;
   #value = 1;
-
-  olFilter: Colorize;
-
-  @Input()
-  get color(): ColorLike {
-    return this.#color;
-  }
-  set color(color: ColorLike) {
-    this.#color = color;
-    this.#setFilter();
-  }
-
-  @Input()
-  get operation(): Operation {
-    return this.#operation;
-  }
-  set operation(operation: Operation) {
-    this.#operation = operation;
-    this.#setFilter();
-  }
-
-  @Input()
-  get value(): number {
-    return this.#value;
-  }
-  set value(value: number) {
-    this.#value = value;
-    this.#setFilter();
-  }
 
   constructor(
     @Optional() layer1: OLLayerTileComponent,
@@ -73,6 +46,43 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
     this.#layer = layer1 ?? layer2;
     // 👇 build the filter
     this.olFilter = new Colorize();
+  }
+
+  @Input() get color(): ColorLike {
+    return this.#color;
+  }
+
+  @Input() get operation(): Operation {
+    return this.#operation;
+  }
+
+  @Input() get value(): number {
+    return this.#value;
+  }
+
+  set color(color: ColorLike) {
+    this.#color = color;
+    this.#setFilter();
+  }
+
+  set operation(operation: Operation) {
+    this.#operation = operation;
+    this.#setFilter();
+  }
+
+  set value(value: number) {
+    this.#value = value;
+    this.#setFilter();
+  }
+
+  ngAfterContentInit(): void {
+    // 👇 ol-ext has monkey-patched addFilter
+    this.#layer?.olLayer['addFilter'](this.olFilter);
+  }
+
+  ngOnDestroy(): void {
+    // 👇 ol-ext has monkey-patched removeFilter
+    this.#layer?.olLayer['removeFilter'](this.olFilter);
   }
 
   #setFilter(): void {
@@ -90,15 +100,5 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
         });
         break;
     }
-  }
-
-  ngAfterContentInit(): void {
-    // 👇 ol-ext has monkey-patched addFilter
-    this.#layer?.olLayer['addFilter'](this.olFilter);
-  }
-
-  ngOnDestroy(): void {
-    // 👇 ol-ext has monkey-patched removeFilter
-    this.#layer?.olLayer['removeFilter'](this.olFilter);
   }
 }

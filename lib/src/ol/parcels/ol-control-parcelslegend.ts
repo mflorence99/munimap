@@ -41,8 +41,6 @@ export class OLControlParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  areaOfTown: number;
-
   @Input() county: string;
 
   @Input() id: string;
@@ -54,6 +52,8 @@ export class OLControlParcelsLegendComponent
   @Input() printing: boolean;
   @Input() state: string;
   @Input() title: string;
+
+  areaOfTown: number;
 
   constructor(
     cdf: ChangeDetectorRef,

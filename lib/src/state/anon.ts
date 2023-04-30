@@ -50,22 +50,6 @@ export class AnonState implements NgxsOnInit {
     private store: Store
   ) {}
 
-  @Selector() static profile(state: AnonStateModel): Profile {
-    return state.profile;
-  }
-
-  @Selector() static user(state: AnonStateModel): User {
-    return state.user;
-  }
-
-  currentProfile(): Profile {
-    return this.store.snapshot().auth.profile;
-  }
-
-  currentUser(): User {
-    return this.store.snapshot().auth.user;
-  }
-
   @Action(LoadProfile) loadProfile(
     ctx: StateContext<AnonStateModel>,
     action: LoadProfile
@@ -80,14 +64,8 @@ export class AnonState implements NgxsOnInit {
     });
   }
 
-  ngxsOnInit(ctx: StateContext<AnonStateModel>): void {
-    signInAnonymously(this.fireauth)
-      .then(() => {
-        ctx.dispatch(new SetUser({} as User));
-      })
-      .catch(() => {
-        ctx.dispatch(new SetUser(null));
-      });
+  @Selector() static profile(state: AnonStateModel): Profile {
+    return state.profile;
   }
 
   @Action(SetProfile) setProfile(
@@ -110,5 +88,27 @@ export class AnonState implements NgxsOnInit {
       ...state,
       user: action.user ? AuthState.userProps(action.user) : null
     });
+  }
+
+  @Selector() static user(state: AnonStateModel): User {
+    return state.user;
+  }
+
+  currentProfile(): Profile {
+    return this.store.snapshot().auth.profile;
+  }
+
+  currentUser(): User {
+    return this.store.snapshot().auth.user;
+  }
+
+  ngxsOnInit(ctx: StateContext<AnonStateModel>): void {
+    signInAnonymously(this.fireauth)
+      .then(() => {
+        ctx.dispatch(new SetUser({} as User));
+      })
+      .catch(() => {
+        ctx.dispatch(new SetUser(null));
+      });
   }
 }

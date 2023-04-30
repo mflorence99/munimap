@@ -57,48 +57,11 @@ import squareGrid from '@turf/square-grid';
 export class OLMapComponent
   implements AfterContentInit, OnDestroy, OnInit, Searcher, Selector
 {
-  #bbox: Coordinate;
-  #changeKey: OLEventsKey;
-  #clickKey: OLEventsKey;
-  #dpi = 96 /* 👈 nominal pixels per inch of screen */;
-  #path: Path;
-  #printing = false;
-  #subToAbuttersFound: Subscription;
-  #subToFeaturesSelected: Subscription;
-
-  // 👉 proxy this from the real selector (if any) to ensure safe access
-  abuttersFound = new EventEmitter<Parcel[]>();
-
-  @Input() // 👈 optionally circumscribes map
-  get bbox(): Coordinate {
-    return this.#bbox ?? this.boundary.features?.[0]?.bbox ?? [0, 0, 0, 0];
-  }
-  set bbox(bbox: Coordinate) {
-    this.#bbox = bbox;
-  }
-
-  boundary: GeoJSON.FeatureCollection<any, any>;
-  boundaryExtent: Coordinate;
-  boundaryGrid: GeoJSON.FeatureCollection<any, any>;
-
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
 
-  click$ = new Subject<OLMapBrowserEvent<any>>();
-
-  contextMenu$ = new BehaviorSubject<PointerEvent>(null);
-  contextMenuAt: number[];
-
-  @Input() dpi = this.#dpi /* 👈 actual pixels per inch of media */;
-
-  escape$ = new Subject<KeyboardEvent>();
-  featureProjection = 'EPSG:4326';
-
-  // 👉 proxy this from the real selector (if any) to ensure safe access
-  featuresSelected = new EventEmitter<OLFeature<any>[]>();
+  @Input() dpi /* 👈 actual pixels per inch of media */;
 
   @Input() fitToBounds = false;
-
-  initialized = false;
 
   @Input() loadingStrategy: 'all' | 'bbox';
 
@@ -109,55 +72,47 @@ export class OLMapComponent
   @Input() minUsefulZoom = 15;
   @Input() minZoom;
 
-  olMap: OLMap;
-  olView: OLView;
-
-  get orientation(): 'landscape' | 'portrait' {
-    const [minX, minY, maxX, maxY] = this.bbox;
-    const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
-    return cx > cy ? 'landscape' : 'portrait';
-  }
-
-  @Input()
-  get path(): Path {
-    return this.#path;
-  }
-  set path(path: Path) {
-    this.#path = this.#initializeView(path);
-  }
-
-  get printing(): boolean {
-    return this.#printing;
-  }
-  set printing(printing: boolean) {
-    this.#printing = printing;
-    this.cdf.markForCheck();
-  }
-
-  projection = 'EPSG:3857';
-
-  // 👉 proxy this from the real selector (if any) to ensure safe access
-  get roSelection(): boolean {
-    return !!this.selector?.roSelection;
-  }
-
   @ContentChild(SearcherComponent) searcher: Searcher;
-
-  // 👉 proxy this from the real selector (if any) to ensure safe access
-  get selected(): OLFeature<any>[] {
-    return this.selector?.selected ?? [];
-  }
-
-  // 👉 proxy this from the real selector (if any) to ensure safe access
-  get selectedIDs(): any[] {
-    return this.selector?.selectedIDs ?? [];
-  }
 
   @ContentChild(SelectorComponent) selector: Selector;
 
+  @Output() zoomChange = new EventEmitter<number>();
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  abuttersFound = new EventEmitter<Parcel[]>();
+
+  boundary: GeoJSON.FeatureCollection<any, any>;
+  boundaryExtent: Coordinate;
+  boundaryGrid: GeoJSON.FeatureCollection<any, any>;
+
+  click$ = new Subject<OLMapBrowserEvent<any>>();
+
+  contextMenu$ = new BehaviorSubject<PointerEvent>(null);
+  contextMenuAt: number[];
+
+  escape$ = new Subject<KeyboardEvent>();
+  featureProjection = 'EPSG:4326';
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  featuresSelected = new EventEmitter<OLFeature<any>[]>();
+
+  initialized = false;
+
+  olMap: OLMap;
+  olView: OLView;
+
+  projection = 'EPSG:3857';
+
   vars: Record<string, string> = {};
 
-  @Output() zoomChange = new EventEmitter<number>();
+  #bbox: Coordinate;
+  #changeKey: OLEventsKey;
+  #clickKey: OLEventsKey;
+  #dpi = 96 /* 👈 nominal pixels per inch of screen */;
+  #path: Path;
+  #printing = false;
+  #subToAbuttersFound: Subscription;
+  #subToFeaturesSelected: Subscription;
 
   constructor(
     private cdf: ChangeDetectorRef,
@@ -166,6 +121,7 @@ export class OLMapComponent
     private route: ActivatedRoute,
     private store: Store
   ) {
+    this.dpi = this.#dpi;
     this.olMap = new OLMap({
       controls: [],
       layers: null,
@@ -178,6 +134,117 @@ export class OLMapComponent
     // 👉 get these up front, all at once,
     //    meaning we don't expect them to change
     this.vars = this.#findAllCustomVariables();
+  }
+
+  @Input() get bbox(): Coordinate {
+    // 👈 optionally circumscribes map
+    return this.#bbox ?? this.boundary.features?.[0]?.bbox ?? [0, 0, 0, 0];
+  }
+
+  @Input() get path(): Path {
+    return this.#path;
+  }
+
+  get orientation(): 'landscape' | 'portrait' {
+    const [minX, minY, maxX, maxY] = this.bbox;
+    const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+    return cx > cy ? 'landscape' : 'portrait';
+  }
+
+  get printing(): boolean {
+    return this.#printing;
+  }
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  get roSelection(): boolean {
+    return !!this.selector?.roSelection;
+  }
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  get selected(): OLFeature<any>[] {
+    return this.selector?.selected ?? [];
+  }
+
+  // 👉 proxy this from the real selector (if any) to ensure safe access
+  get selectedIDs(): any[] {
+    return this.selector?.selectedIDs ?? [];
+  }
+
+  set bbox(bbox: Coordinate) {
+    this.#bbox = bbox;
+  }
+
+  set path(path: Path) {
+    this.#path = this.#initializeView(path);
+  }
+
+  set printing(printing: boolean) {
+    this.#printing = printing;
+    this.cdf.markForCheck();
+  }
+
+  @HostListener('contextmenu', ['$event']) onContextMenu(
+    event: PointerEvent
+  ): void {
+    event.preventDefault();
+    this.contextMenuAt = this.coordinateFromEvent(event.clientX, event.clientY);
+    console.log(toLonLat(this.contextMenuAt));
+    this.contextMenu$.next(event);
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onEscape(
+    event: KeyboardEvent
+  ): void {
+    this.escape$.next(event);
+    event.stopPropagation();
+  }
+
+  coordinateFromEvent(x: number, y: number): Coordinate {
+    // 👉 need to hack Y offsets by the height of the toolbar
+    const style = getComputedStyle(document.documentElement);
+    const hack = Number(style.getPropertyValue('--map-cy-toolbar'));
+    return this.olMap.getCoordinateFromPixel([x, y - hack]);
+  }
+
+  currentCounty(): string {
+    return this.path?.split(':')[1];
+  }
+
+  currentState(): string {
+    return this.path?.split(':')[0];
+  }
+
+  currentTown(): string {
+    return this.path?.split(':')[2];
+  }
+
+  measureText(text: string, font: string): TextMetrics {
+    const ctx = this.canvas.nativeElement.getContext('2d');
+    ctx.font = font;
+    return ctx.measureText(text);
+  }
+
+  ngAfterContentInit(): void {
+    this.#handleMapables$();
+  }
+
+  ngOnDestroy(): void {
+    if (this.#changeKey) unByKey(this.#changeKey);
+    if (this.#clickKey) unByKey(this.#clickKey);
+  }
+
+  ngOnInit(): void {
+    this.#clickKey = this.olMap.on('click', this.#onClick.bind(this));
+    this.olMap.setTarget(this.host.nativeElement);
+  }
+
+  numPixels(nominal: number): number {
+    return (this.dpi / this.#dpi) * nominal;
+  }
+
+  zoomToBounds(): void {
+    this.olView.fit(this.boundaryExtent, { size: this.olMap.getSize() });
+    this.#onChange();
   }
 
   #cleanMap(): void {
@@ -352,69 +419,5 @@ export class OLMapComponent
 
   #onClick(event: OLMapBrowserEvent<any>): void {
     this.click$.next(event);
-  }
-
-  coordinateFromEvent(x: number, y: number): Coordinate {
-    // 👉 need to hack Y offsets by the height of the toolbar
-    const style = getComputedStyle(document.documentElement);
-    const hack = Number(style.getPropertyValue('--map-cy-toolbar'));
-    return this.olMap.getCoordinateFromPixel([x, y - hack]);
-  }
-
-  currentCounty(): string {
-    return this.path?.split(':')[1];
-  }
-
-  currentState(): string {
-    return this.path?.split(':')[0];
-  }
-
-  currentTown(): string {
-    return this.path?.split(':')[2];
-  }
-
-  measureText(text: string, font: string): TextMetrics {
-    const ctx = this.canvas.nativeElement.getContext('2d');
-    ctx.font = font;
-    return ctx.measureText(text);
-  }
-
-  ngAfterContentInit(): void {
-    this.#handleMapables$();
-  }
-
-  ngOnDestroy(): void {
-    if (this.#changeKey) unByKey(this.#changeKey);
-    if (this.#clickKey) unByKey(this.#clickKey);
-  }
-
-  ngOnInit(): void {
-    this.#clickKey = this.olMap.on('click', this.#onClick.bind(this));
-    this.olMap.setTarget(this.host.nativeElement);
-  }
-
-  numPixels(nominal: number): number {
-    return (this.dpi / this.#dpi) * nominal;
-  }
-
-  @HostListener('contextmenu', ['$event']) onContextMenu(
-    event: PointerEvent
-  ): void {
-    event.preventDefault();
-    this.contextMenuAt = this.coordinateFromEvent(event.clientX, event.clientY);
-    console.log(toLonLat(this.contextMenuAt));
-    this.contextMenu$.next(event);
-  }
-
-  @HostListener('document:keydown.escape', ['$event']) onEscape(
-    event: KeyboardEvent
-  ): void {
-    this.escape$.next(event);
-    event.stopPropagation();
-  }
-
-  zoomToBounds(): void {
-    this.olView.fit(this.boundaryExtent, { size: this.olMap.getSize() });
-    this.#onChange();
   }
 }

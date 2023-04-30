@@ -36,6 +36,8 @@ interface Statistics {
   templateUrl: './legend.html'
 })
 export class DPWLegendComponent implements OnInit {
+  @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
+
   allConditions = culvertConditions;
 
   allMetrics: Metric[] = [
@@ -81,13 +83,27 @@ export class DPWLegendComponent implements OnInit {
   // 👇 metric -> value -> condition -> { count, length }
   breakdowns: Record<string, Record<string, Record<string, Statistics>>> = {};
 
-  @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
-
   constructor(
     private cdf: ChangeDetectorRef,
     private destroy$: DestroyService,
     private version: VersionService
   ) {}
+
+  ngOnInit(): void {
+    this.#handleStreams$();
+  }
+
+  reset(): void {
+    this.version.hardReset();
+  }
+
+  trackByKey(ix: number, key: string): string {
+    return key;
+  }
+
+  trackByMetric(ix: number, metric: Metric): string {
+    return metric.key;
+  }
 
   #calcBreakdowns(culverts: CulvertProperties[]): void {
     this.allMetrics.forEach((metric) => {
@@ -125,21 +141,5 @@ export class DPWLegendComponent implements OnInit {
         this.#calcBreakdowns(culverts);
         this.cdf.detectChanges();
       });
-  }
-
-  ngOnInit(): void {
-    this.#handleStreams$();
-  }
-
-  reset(): void {
-    this.version.hardReset();
-  }
-
-  trackByKey(ix: number, key: string): string {
-    return key;
-  }
-
-  trackByMetric(ix: number, metric: Metric): string {
-    return metric.key;
   }
 }

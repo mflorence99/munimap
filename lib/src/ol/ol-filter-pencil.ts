@@ -16,9 +16,9 @@ import PencilSketch from 'ol-ext/filter/PencilSketch';
   styles: [':host { display: none }']
 })
 export class OLFilterPencilComponent implements AfterContentInit, OnDestroy {
-  #layer: any;
-
   olFilter: PencilSketch;
+
+  #layer: any;
 
   constructor(
     @Optional() layer1: OLLayerTileComponent,

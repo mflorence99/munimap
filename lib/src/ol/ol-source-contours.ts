@@ -25,8 +25,6 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceContoursComponent {
-  #origOpacity: number;
-
   // 👉 the fallback contours are WAAY to heavy
   @Input() fallbackOpacity = 0.33;
 
@@ -49,6 +47,8 @@ export class OLSourceContoursComponent {
 
   urlPreferred =
     'https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer/export?bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&dpi=96&format=png32&transparent=true&layers=show:ZZZZZZ&f=image&version=VVVVVV';
+
+  #origOpacity: number;
 
   constructor(
     private http: HttpClient,

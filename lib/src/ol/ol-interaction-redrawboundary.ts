@@ -35,9 +35,9 @@ import OLModify from 'ol/interaction/Modify';
   styles: [':host { display: none }']
 })
 export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
-  #format: OLGeoJSON;
-
   olModify: OLModify;
+
+  #format: OLGeoJSON;
 
   constructor(
     private destroy$: DestroyService,
@@ -49,6 +49,21 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
       dataProjection: this.map.featureProjection,
       featureProjection: this.map.projection
     });
+  }
+
+  addToMap(): void {
+    this.olModify = new OLModify({
+      deleteCondition: (event): boolean =>
+        click(event) && platformModifierKeyOnly(event),
+      hitDetection: this.layer.olLayer,
+      source: this.layer.olLayer.getSource()
+    });
+    this.olModify.setProperties({ component: this }, true);
+    this.map.olMap.addInteraction(this.olModify);
+  }
+
+  ngOnInit(): void {
+    this.#handleStreams$();
   }
 
   #emitBoundary(): void {
@@ -71,20 +86,5 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
     this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.#emitBoundary();
     });
-  }
-
-  addToMap(): void {
-    this.olModify = new OLModify({
-      deleteCondition: (event): boolean =>
-        click(event) && platformModifierKeyOnly(event),
-      hitDetection: this.layer.olLayer,
-      source: this.layer.olLayer.getSource()
-    });
-    this.olModify.setProperties({ component: this }, true);
-    this.map.olMap.addInteraction(this.olModify);
-  }
-
-  ngOnInit(): void {
-    this.#handleStreams$();
   }
 }
