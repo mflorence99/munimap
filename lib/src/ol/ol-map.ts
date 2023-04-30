@@ -69,7 +69,7 @@ export class OLMapComponent
   // 👉 proxy this from the real selector (if any) to ensure safe access
   abuttersFound = new EventEmitter<Parcel[]>();
 
-  @Input() // 👈 optionally circumscibes map
+  @Input() // 👈 optionally circumscribes map
   get bbox(): Coordinate {
     return this.#bbox ?? this.boundary.features?.[0]?.bbox ?? [0, 0, 0, 0];
   }
