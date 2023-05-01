@@ -1,6 +1,6 @@
 <!-- 📦 INITIAL STATE - REQUEST EMAIL -->
 
-<mat-card *ngIf="state === 'initial'" class="card">
+<mat-card appearance="outlined" *ngIf="state === 'initial'" class="card">
   <mat-card-header>
     <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
     <mat-card-title>Please Login or Signup</mat-card-title>
@@ -54,7 +54,7 @@
 
 <!-- 📦 LOGIN STATE -->
 
-<mat-card *ngIf="state === 'login'" class="card">
+<mat-card appearance="outlined" *ngIf="state === 'login'" class="card">
   <mat-card-header>
     <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
     <mat-card-title>Please Login</mat-card-title>
@@ -125,7 +125,7 @@
 
 <!-- 📦 SIGNUP STATE -->
 
-<mat-card *ngIf="state === 'signup'" class="card">
+<mat-card appearance="outlined" *ngIf="state === 'signup'" class="card">
   <mat-card-header>
     <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
     <mat-card-title>Signup for a New Account</mat-card-title>

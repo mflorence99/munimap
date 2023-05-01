@@ -57,13 +57,13 @@ table[mat-table] {
     text-transform: uppercase;
   }
 
-  tr.mat-row .mat-cell {
+  tr.mat-mdc-row .mat-mdc-cell {
     border-bottom: 1px solid transparent;
     border-top: 1px solid transparent;
     cursor: pointer;
   }
 
-  tr.mat-row:hover .mat-cell {
+  tr.mat-mdc-row:hover .mat-mdc-cell {
     border-color: var(--text-color);
   }
 }
