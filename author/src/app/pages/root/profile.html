@@ -1,14 +1,6 @@
 <header class="header">
-  <ngx-avatar
-    [gravatarId]="user.photoURL ? null : user.email"
-    [initialsSize]="2"
-    [name]="user.displayName"
-    [round]="true"
-    [size]="48"
-    [src]="user.photoURL"
-    class="icon"
-    mat-card-avatar
-  ></ngx-avatar>
+  <app-avatar [name]="user.displayName" class="icon"></app-avatar>
+
   <p class="title">{{ user.displayName || '&nbsp;' }}</p>
   <p class="subtitle">{{ user.email }}</p>
 </header>

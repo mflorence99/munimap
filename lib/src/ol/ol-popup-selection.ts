@@ -2,7 +2,7 @@ import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
 import { UtilsService } from '../services/utils';
 
-import * as Sentry from '@sentry/angular';
+import * as Sentry from '@sentry/angular-ivy';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

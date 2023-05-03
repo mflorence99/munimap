@@ -29,16 +29,11 @@
     </button>
 
     <ng-container *ngIf="user$ | async as user">
-      <ngx-avatar
+      <app-avatar
         (click)="setup.toggle()"
-        [gravatarId]="user.photoURL ? null : user.email"
-        [initialsSize]="2"
         [name]="user.displayName"
-        [round]="true"
-        [size]="48"
-        [src]="user.photoURL"
         class="avatar"
-      ></ngx-avatar>
+      ></app-avatar>
     </ng-container>
   </mat-toolbar>
 

@@ -2,7 +2,7 @@ import { VersionDialogComponent } from '../components/version-dialog';
 
 import { environment } from '../environment';
 
-import * as Sentry from '@sentry/angular';
+import * as Sentry from '@sentry/angular-ivy';
 
 import { ApplicationRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';

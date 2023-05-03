@@ -3,7 +3,7 @@
 /// <reference lib="webworker" />
 
 import * as Comlink from 'comlink';
-import * as Sentry from '@sentry/angular';
+import * as Sentry from '@sentry/angular-ivy';
 
 import buffer from '@turf/buffer';
 import intersect from '@turf/intersect';

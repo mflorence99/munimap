@@ -1,6 +1,7 @@
 import { AddParcelComponent } from './pages/parcels/add-parcel';
 import { AreaPage } from './pages/area/page';
 import { AutoFocusDirective } from './directives/autofocus';
+import { AvatarComponent } from './components/avatar';
 import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuComponent } from './components/contextmenu';
 import { ContextMenuHostDirective } from './directives/contextmenu-host';
@@ -27,13 +28,12 @@ import { SelectOnFocusDirective } from './directives/select-on-focus';
 import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
 import { TopoPage } from './pages/topo/page';
 
-import * as Sentry from '@sentry/angular';
+import * as Sentry from '@sentry/angular-ivy';
 
 import { APP_INITIALIZER } from '@angular/core';
 import { AuthGuard } from '@angular/fire/auth-guard';
 import { AuthPipe } from '@angular/fire/auth-guard';
 import { AuthState } from '@lib/state/auth';
-import { AvatarModule } from 'ngx-avatar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
@@ -244,6 +244,7 @@ export const persistenceEnabled = new Promise<boolean>((resolve) => {
 
 const COMPONENTS = [
   AddParcelComponent,
+  AvatarComponent,
   BuilderComponent,
   ConfirmDialogComponent,
   ContextMenuComponent,
@@ -458,7 +459,6 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
   entryComponents: [],
 
   imports: [
-    AvatarModule,
     BrowserAnimationsModule,
     BrowserModule,
     CommonModule,

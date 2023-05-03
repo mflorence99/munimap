@@ -7,7 +7,7 @@ import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { TopoPage } from './pages/topo/page';
 
-import * as Sentry from '@sentry/angular';
+import * as Sentry from '@sentry/angular-ivy';
 
 import { AnonState } from '@lib/state/anon';
 import { APP_INITIALIZER } from '@angular/core';
