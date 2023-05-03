@@ -22,6 +22,12 @@
   gap: 1rem;
   grid-template-rows: auto auto;
   padding: 0.5rem 1rem;
+
+  &.two-column {
+    grid-auto-flow: column;
+    grid-auto-columns: 50% 50%;
+    // grid-template-rows: repeat(6, auto);
+  }
 }
 
 .header {

@@ -34,21 +34,6 @@ interface Value {
 
 type ValueRecord = Record<string, Value>;
 
-// 👇 these are the properties we can edit
-
-const editables = [
-  { prop: 'address', label: 'Parcel Address', type: 'text' },
-  { prop: 'owner', label: 'Parcel Owner', type: 'text' },
-  { prop: 'area', label: 'Acreage', type: 'number', step: 0.01 },
-  { prop: 'usage', label: 'Land Use', list: parcelPropertiesUsage },
-  { prop: 'use', label: 'Current Use', list: parcelPropertiesUse },
-  { prop: 'neighborhood', label: 'Neighborhood' },
-  { prop: 'building$', label: 'Building Tax', type: 'number' },
-  { prop: 'land$', label: 'Land Tax', type: 'number' },
-  { prop: 'other$', label: 'Other Tax', type: 'number' },
-  { prop: 'taxed$', label: 'Total Tax', type: 'number' }
-];
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ValuesPipe],
@@ -69,6 +54,19 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   @ViewChild('propertiesForm') propertiesForm: NgForm;
 
   @Input() selectedIDs: ParcelID[];
+
+  editables = [
+    { prop: 'address', label: 'Parcel Address', type: 'text' },
+    { prop: 'owner', label: 'Parcel Owner', type: 'text' },
+    { prop: 'area', label: 'Acreage', type: 'number', step: 0.01 },
+    { prop: 'usage', label: 'Land Use', list: parcelPropertiesUsage },
+    { prop: 'use', label: 'Current Use', list: parcelPropertiesUse },
+    { prop: 'neighborhood', label: 'Neighborhood' },
+    { prop: 'building$', label: 'Building Tax', type: 'number' },
+    { prop: 'land$', label: 'Land Tax', type: 'number' },
+    { prop: 'other$', label: 'Other Tax', type: 'number' },
+    { prop: 'taxed$', label: 'Total Tax', type: 'number' }
+  ];
 
   record: ValueRecord = {};
 
@@ -105,7 +103,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
       };
       // 👇 some controls are conditional so they may no longer be
       //    in the form, in which case we don't record a value
-      editables.forEach((editable) => {
+      this.editables.forEach((editable) => {
         const prop = editable.prop;
         const control = this.propertiesForm.controls[prop];
         const value = record[prop].value;
@@ -133,7 +131,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
 
   #makeRecord(): void {
     this.record = {};
-    editables.forEach((editable) => {
+    this.editables.forEach((editable) => {
       const prop = editable.prop;
       this.record[prop] = {
         conflict: false,

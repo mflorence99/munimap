@@ -7,22 +7,23 @@
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
 
+<p *ngIf="selectedIDs.length > 1" class="instructions">
+  All selected parcels will be modified with the same settings.
+  <fa-icon [icon]="['fad', 'exclamation-triangle']"></fa-icon> indicates
+  settings that are currently different.
+</p>
+
 <form
   #propertiesForm="ngForm"
   (keydown.escape)="cancel()"
   (submit)="save(record)"
+  [ngStyle]="{'grid-template-rows': 'repeat(' + ((editables.length / 2) + 1) + ', auto)'}"
   autocomplete="off"
-  class="form"
+  class="form two-column"
   id="propertiesForm"
   novalidate
   spellcheck="false"
 >
-  <p *ngIf="selectedIDs.length > 1" class="instructions">
-    All selected parcels will be modified with the same settings.
-    <fa-icon [icon]="['fad', 'exclamation-triangle']"></fa-icon> indicates
-    settings that are currently different.
-  </p>
-
   <ng-container
     *ngFor="let value of (record | values); let ix = index; trackBy: trackByProp"
   >

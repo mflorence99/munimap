@@ -2,6 +2,10 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+// 🔥 this is a quick-and-dirty hack to replace ngx-avatar as
+//    it looks like that will not be updated for Ivy -- if that changes,
+//    we'll toss this component
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-avatar',

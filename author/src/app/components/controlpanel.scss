@@ -7,6 +7,7 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
+  padding: 16px;
 
   button {
     min-width: 6rem;
@@ -17,7 +18,7 @@
   overflow: hidden;
   position: relative;
   transition: width 0.25s, height 0.25s;
-  width: 25rem;
+  width: 30rem;
 
   &.rolledup {
     height: 5rem;
@@ -43,4 +44,8 @@
   border-radius: 0.25rem;
   cursor: pointer;
   padding: 1.15rem;
+
+  .mat-mdc-card-header {
+    padding: 0;
+  }
 }

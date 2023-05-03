@@ -351,7 +351,10 @@ select {
   width: 100%;
 }
 
+// ///////////////////////////////////////////////////////////////////////////
+
 // 👉 Angular Material styles
+// 🔥 this is an ad hoc MESS!
 
 a[mat-flat-button] {
   color: var(--primary-color) !important;
@@ -376,26 +379,29 @@ a[mat-flat-button] {
   }
 }
 
-.mat-card,
-.mat-dialog-container,
 .mat-drawer,
+.mat-mdc-card,
 .mat-mdc-menu-content {
   background-color: var(--background-color) !important;
   box-shadow: rgb(255 255 255 / 33%) 0px 8px 24px !important;
 }
 
-.mat-card-actions {
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: var(--background-color) !important;
+}
+
+.mat-mdc-card-actions {
   margin: 0 !important;
 }
 
-.mat-dialog-actions {
+.mat-mdc-dialog-actions {
   justify-content: flex-end !important;
 }
 
-.mat-icon-button {
+.mdc-icon-button {
   line-height: 1 !important;
 
-  &.mat-button-disabled {
+  &[disabled] {
     --fa-primary-color: var(--text-color);
     --fa-secondary-color: var(--text-color);
     --fa-primary-opacity: 0.6;
@@ -405,19 +411,29 @@ a[mat-flat-button] {
   }
 }
 
-.mat-menu-panel {
+.mat-mdc-menu-panel {
   max-width: unset !important;
 }
 
-.mat-snack-bar-container {
-  background-color: var(--background-color) !important;
-  color: var(--text-color) !important;
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--background-color) !important;
+  --mdc-snackbar-supporting-text-color: var(--text-color) !important;
   max-width: 99vw !important;
 }
 
 .mat-toolbar-single-row {
   padding: 0 !important;
 }
+
+.mdc-text-field----disabled {
+  background-color: rgba(var(--rgb-gray-850), 0.3) !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: rgba(var(--rgb-gray-850), 0.5) !important;
+}
+
+// ///////////////////////////////////////////////////////////////////////////
 
 // 👉 Color Picker styles
 
