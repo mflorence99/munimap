@@ -10,8 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { ComponentFactory } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core';
 import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
@@ -30,6 +28,7 @@ import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+import { Type } from '@angular/core';
 import { UpdateLandmark } from '@lib/state/landmarks';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
@@ -155,7 +154,6 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     protected actions$: Actions,
     protected authState: AuthState,
     protected destroy$: DestroyService,
-    protected resolver: ComponentFactoryResolver,
     protected root: RootPage,
     protected route: ActivatedRoute,
     protected router: Router,
@@ -229,7 +227,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   }
 
   onContextMenu(key: string, opaque?: any): void {
-    let cFactory: ComponentFactory<SidebarComponent>;
+    let component: Type<SidebarComponent>;
     switch (key) {
       case 'convert-landmark':
         this.#convertTo(opaque);
@@ -243,14 +241,10 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         if (opaque) this.drawLandmarks.startDraw(opaque);
         break;
       case 'import-landmarks':
-        cFactory = this.resolver.resolveComponentFactory(
-          ImportLandmarksComponent
-        );
+        component = ImportLandmarksComponent;
         break;
       case 'landmark-properties':
-        cFactory = this.resolver.resolveComponentFactory(
-          LandmarkPropertiesComponent
-        );
+        component = LandmarkPropertiesComponent;
         break;
       case 'move-landmark':
         this.moveLandmark.setFeature(this.olMap.selected[0]);
@@ -262,7 +256,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         this.#renameTo(opaque);
         break;
     }
-    if (cFactory) this.onContextMenuImpl(cFactory);
+    if (component) this.onContextMenuImpl(component);
     // 👇 in some cases, doesn't close itself
     this.contextMenu.closeMenu();
   }

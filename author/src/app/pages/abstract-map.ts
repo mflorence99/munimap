@@ -5,7 +5,6 @@ import { SidebarComponent } from '../components/sidebar-component';
 import { Actions } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
-import { ComponentFactory } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { LoadMap } from '@lib/state/map';
@@ -17,6 +16,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { Router } from '@angular/router';
 import { SetMap } from '@lib/state/map';
 import { Store } from '@ngxs/store';
+import { Type } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
@@ -59,11 +59,11 @@ export abstract class AbstractMapPage {
     return /^mflo999.*@gmail\.com$/.test(this.authState.currentProfile().email);
   }
 
-  onContextMenuImpl(cFactory: ComponentFactory<SidebarComponent>): void {
+  onContextMenuImpl(component: Type<SidebarComponent>): void {
     this.drawer.open();
     this.contextMenuHost.vcRef.clear();
     const cRef: ComponentRef<SidebarComponent> =
-      this.contextMenuHost.vcRef.createComponent(cFactory);
+      this.contextMenuHost.vcRef.createComponent(component);
     // 👉 populate @Input() fields
     const comp = cRef.instance;
     comp.drawer = this.drawer;

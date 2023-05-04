@@ -9,8 +9,6 @@ import { AddLandmark } from '@lib/state/landmarks';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { ComponentFactory } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core';
 import { ContextMenuComponent } from 'app/components/contextmenu';
 import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { CulvertProperties } from '@lib/common';
@@ -29,6 +27,7 @@ import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SidebarComponent } from 'app/components/sidebar-component';
 import { Store } from '@ngxs/store';
+import { Type } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
@@ -69,7 +68,6 @@ export class DPWPage extends AbstractMapPage implements OnInit {
     protected actions$: Actions,
     protected authState: AuthState,
     protected destroy$: DestroyService,
-    protected resolver: ComponentFactoryResolver,
     protected root: RootPage,
     protected route: ActivatedRoute,
     protected router: Router,
@@ -117,7 +115,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   }
 
   onContextMenu(key: string): void {
-    let cFactory: ComponentFactory<SidebarComponent>;
+    let component: Type<SidebarComponent>;
     switch (key) {
       case 'add-culvert':
         this.#createCulvert();
@@ -128,20 +126,16 @@ export class DPWPage extends AbstractMapPage implements OnInit {
         );
         break;
       case 'import-culverts':
-        cFactory = this.resolver.resolveComponentFactory(
-          ImportCulvertsComponent
-        );
+        component = ImportCulvertsComponent;
         break;
       case 'culvert-properties':
-        cFactory = this.resolver.resolveComponentFactory(
-          CulvertPropertiesComponent
-        );
+        component = CulvertPropertiesComponent;
         break;
       case 'move-culvert':
         this.moveLandmark.setFeature(this.olMap.selected[0]);
         break;
     }
-    if (cFactory) this.onContextMenuImpl(cFactory);
+    if (component) this.onContextMenuImpl(component);
     // 👇 in some cases, doesn't close itself
     this.contextMenu.closeMenu();
   }

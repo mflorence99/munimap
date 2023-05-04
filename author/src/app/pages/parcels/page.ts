@@ -13,8 +13,6 @@ import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { ComponentFactory } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core';
 import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { DestroyService } from '@lib/services/destroy';
 import { Map } from '@lib/state/map';
@@ -31,6 +29,7 @@ import { ParcelPropertiesLabel } from '@lib/common';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
+import { Type } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
@@ -77,7 +76,6 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     protected actions$: Actions,
     protected authState: AuthState,
     protected destroy$: DestroyService,
-    protected resolver: ComponentFactoryResolver,
     protected root: RootPage,
     protected route: ActivatedRoute,
     protected router: Router,
@@ -144,29 +142,25 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   }
 
   onContextMenu(key: string): void {
-    let cFactory: ComponentFactory<SidebarComponent>;
+    let component: Type<SidebarComponent>;
     switch (key) {
       case 'add-parcel':
-        cFactory = this.resolver.resolveComponentFactory(AddParcelComponent);
+        component = AddParcelComponent;
         break;
       case 'add-polygon':
         this.#addPolygon(this.olMap.selected[0]);
         break;
       case 'create-propertymap':
-        cFactory = this.resolver.resolveComponentFactory(
-          CreatePropertyMapComponent
-        );
+        component = CreatePropertyMapComponent;
         break;
       case 'delete-polygon':
         this.#deletePolygon(this.olMap.selected[0]);
         break;
       case 'parcel-properties':
-        cFactory = this.resolver.resolveComponentFactory(
-          ParcelPropertiesComponent
-        );
+        component = ParcelPropertiesComponent;
         break;
       case 'merge-parcels':
-        cFactory = this.resolver.resolveComponentFactory(MergeParcelsComponent);
+        component = MergeParcelsComponent;
         break;
       case 'recenter-label':
         this.overlayLabel.setFeature(this.olMap.selected[0]);
@@ -181,12 +175,10 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         this.#splitLabel(this.olMap.selected[0]);
         break;
       case 'subdivide-parcel':
-        cFactory = this.resolver.resolveComponentFactory(
-          SubdivideParcelComponent
-        );
+        component = SubdivideParcelComponent;
         break;
     }
-    if (cFactory) this.onContextMenuImpl(cFactory);
+    if (component) this.onContextMenuImpl(component);
   }
 
   #addPolygon(feature: OLFeature<any>): void {
