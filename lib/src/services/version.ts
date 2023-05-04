@@ -33,10 +33,8 @@ interface Build {
 export class VersionService {
   #checkVersionLegacy$ = new Subject<void>();
 
-  // 👀 https://stackoverflow.com/questions/51435349
-  // 👉 service worker update notification fails on iOS
-  #serviceWorkerCanNotify = this.swUpdate.isEnabled && this.swPush.isEnabled;
-  #serviceWorkerEnabled = this.swUpdate.isEnabled;
+  #serviceWorkerCanNotify: boolean;
+  #serviceWorkerEnabled: boolean;
 
   constructor(
     private appRef: ApplicationRef,
@@ -45,6 +43,11 @@ export class VersionService {
     private swPush: SwPush,
     private swUpdate: SwUpdate
   ) {
+    // 👀 https://stackoverflow.com/questions/51435349
+    // 👉 service worker update notification fails on iOS
+    this.#serviceWorkerCanNotify =
+      this.swUpdate.isEnabled && this.swPush.isEnabled;
+    this.#serviceWorkerEnabled = this.swUpdate.isEnabled;
     this.#pollVersion();
   }
 

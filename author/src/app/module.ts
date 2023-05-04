@@ -456,8 +456,6 @@ const STATES_SAVED = [OverlayState, RouterState, ViewState];
 
   declarations: [...COMPONENTS, ...DIRECTIVES, ...PAGES, ...PIPES],
 
-  entryComponents: [],
-
   imports: [
     BrowserAnimationsModule,
     BrowserModule,

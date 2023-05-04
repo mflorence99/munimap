@@ -314,8 +314,6 @@ const STATES_SAVED = [OverlayState, ViewState];
 
   declarations: [...COMPONENTS, ...DIRECTIVES, ...PAGES],
 
-  entryComponents: [],
-
   imports: [
     BrowserAnimationsModule,
     BrowserModule,

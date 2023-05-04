@@ -83,17 +83,17 @@
     "yyy": "npm run assets:viewer:washington && ng build viewer --watch"
   },
   "dependencies": {
-    "@angular/animations": "^15",
-    "@angular/cdk": "^15",
-    "@angular/common": "^15",
-    "@angular/core": "^15",
+    "@angular/animations": "^16",
+    "@angular/cdk": "^16",
+    "@angular/common": "^16",
+    "@angular/core": "^16",
     "@angular/fire": "^7",
-    "@angular/forms": "^15",
-    "@angular/material": "^15",
-    "@angular/platform-browser": "^15",
-    "@angular/platform-browser-dynamic": "^15",
-    "@angular/router": "^15",
-    "@angular/service-worker": "^15",
+    "@angular/forms": "^16",
+    "@angular/material": "^16",
+    "@angular/platform-browser": "^16",
+    "@angular/platform-browser-dynamic": "^16",
+    "@angular/router": "^16",
+    "@angular/service-worker": "^16",
     "@esri/arcgis-to-geojson-utils": "1.3.0",
     "@fortawesome/angular-fontawesome": "0.12.1",
     "@fortawesome/fontawesome-free": "^6",
@@ -156,14 +156,14 @@
     "zone.js": "0.13.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15",
-    "@angular-eslint/builder": "^15",
-    "@angular-eslint/eslint-plugin": "^15",
-    "@angular-eslint/eslint-plugin-template": "^15",
-    "@angular-eslint/template-parser": "^15",
-    "@angular/cli": "^15",
-    "@angular/compiler": "^15",
-    "@angular/compiler-cli": "^15",
+    "@angular-devkit/build-angular": "^16",
+    "@angular-eslint/builder": "^16",
+    "@angular-eslint/eslint-plugin": "^16",
+    "@angular-eslint/eslint-plugin-template": "^16",
+    "@angular-eslint/template-parser": "^16",
+    "@angular/cli": "^16",
+    "@angular/compiler": "^16",
+    "@angular/compiler-cli": "^16",
     "@types/file-saver": "^2",
     "@types/fontfaceobserver": "^2",
     "@types/node-fetch": "2.6.1",
@@ -199,6 +199,6 @@
     "stylelint-order": "^6",
     "stylelint-scss": "^5",
     "ts-node": "^10",
-    "typescript": "^4"
+    "typescript": "^5"
   }
 }
