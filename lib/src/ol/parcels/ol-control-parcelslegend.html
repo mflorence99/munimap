@@ -74,15 +74,12 @@
         <td class="des">
           <article class="keys">
             <figure class="key">
-              <div [style.backgroundColor]="iconFloodplain" class="icon"></div>
+              <img [src]="'assets/legend/floodplain.png'" class="icon" />
               <figcaption>FEMA Floodplain</figcaption>
             </figure>
 
             <figure class="key">
-              <div
-                [style.backgroundImage]="'url(\'' + iconWetland.getImage().toDataURL() +  '\')'"
-                class="icon"
-              ></div>
+              <img [src]="'assets/legend/CUWL.png'" class="icon" />
               <figcaption>Wetland</figcaption>
             </figure>
           </article>

@@ -42,15 +42,6 @@ export abstract class OLControlAbstractParcelsLegendComponent
   areaByUse: Record<string, number> = {};
   areaOfParcels: number;
   countByUsage: Record<string, number> = {};
-  // 👇 sucks we have to re-code these settings but they are approximations
-  //    to the actual styles anyway, in order to contrast
-  //    with a white background
-  iconFloodplain = '#0d47a180';
-  iconWetland = new OLFillPattern({
-    color: '#0d47a1',
-    pattern: 'swamp',
-    scale: 0.66
-  });
   olControl: OLControl;
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
