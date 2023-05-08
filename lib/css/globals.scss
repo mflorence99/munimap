@@ -354,11 +354,11 @@ select {
 // ///////////////////////////////////////////////////////////////////////////
 
 // 👉 Angular Material styles
-// 🔥 this is an ad hoc MESS!
+// 🔥 this is an ad hoc MESS! they say it will all change in v17
 
 a[mat-flat-button] {
-  color: var(--primary-color) !important;
   background-color: var(--background-color) !important;
+  color: var(--primary-color) !important;
   padding: 0 !important;
 
   &:hover {
@@ -467,9 +467,9 @@ color-picker {
   left: 20rem !important;
   max-height: unset !important;
   max-width: unset !important;
+  max-width: unset !important;
   overflow-x: unset !important;
   overflow-y: unset !important;
-  max-width: unset !important;
   position: absolute !important;
   top: 20rem !important;
 }
@@ -503,8 +503,8 @@ color-picker {
     border-style: solid;
     border-width: 0 1px 1px 1px;
     content: '';
-    left: 0;
     height: 50%;
+    left: 0;
     position: absolute;
     top: 50%;
     width: 100%;
