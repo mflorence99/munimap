@@ -5,7 +5,7 @@
       [bbox]="map.bbox"
       [loadingStrategy]="'all'"
       [minZoom]="13"
-      [maxZoom]="20"
+      [maxZoom]="22"
       [path]="map.path"
     >
       <app-contextmenu>
@@ -79,7 +79,7 @@
         <ng-container *ngIf="!(satelliteView$ | async)">
           <!-- 📦 HILLSHADE LAYER -->
 
-          <ng-container *ngIf="!map.contours2ft">
+          <ng-container>
             <app-ol-layer-tile>
               <app-ol-source-xyz
                 [maxZoom]="16"
@@ -317,6 +317,16 @@
             ></app-ol-style-parcels>
             <app-ol-source-parcels #parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
+
+          <!-- 📦 CONTOURS LAYER -->
+
+          <app-ol-layer-tile *ngIf="map.contours2ft">
+            <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
+          </app-ol-layer-tile>
+
+          <app-ol-layer-tile *ngIf="!map.contours2ft">
+            <app-ol-source-contours> </app-ol-source-contours>
+          </app-ol-layer-tile>
 
           <app-ol-layer-vector>
             <app-ol-adaptor-landmarks>

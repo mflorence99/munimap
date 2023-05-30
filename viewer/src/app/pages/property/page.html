@@ -30,7 +30,7 @@
     <ng-container *ngIf="!(satelliteView$ | async)">
       <!-- 📦 HILLSHADE LAYER -->
 
-      <ng-container *ngIf="!map.contours2ft">
+      <ng-container>
         <app-ol-layer-tile>
           <app-ol-source-xyz
             [maxZoom]="16"
