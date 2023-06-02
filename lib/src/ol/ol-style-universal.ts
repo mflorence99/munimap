@@ -249,24 +249,29 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         whenSelected
       );
       // 🐛 FillPattern sometimes throws InvalidStateError
-      let fill = new OLFill({
-        color: `rgba(${fillColor}, ${props.fillOpacity})`
-      });
-      if (props.fillPattern) {
-        try {
-          fill = new OLFillPattern({
-            color: `rgba(${fillColor}, ${props.fillOpacity})`,
-            pattern: props.fillPattern,
-            scale: props.fillPatternScale
-          });
-        } catch (ignored) {}
-      }
-      // 👇 here's the base style
-      const style = new OLStyle({
-        fill: fill,
+      let style = new OLStyle({
+        fill: new OLFill({
+          color: `rgba(${fillColor}, ${props.fillOpacity})`
+        }),
         zIndex: props.zIndex
       });
-      styles.push(style);
+      if (props.fillPattern) {
+        if (props.fillPatternAndColor) styles.push(style);
+        try {
+          style = new OLStyle({
+            fill: new OLFillPattern({
+              color: `rgba(${fillColor}, ${
+                props.fillPatternAndColor ? 1 : props.fillOpacity
+              })`,
+              pattern: props.fillPattern,
+              scale: props.fillPatternScale
+            }),
+            zIndex: props.zIndex
+          });
+        } finally {
+          styles.push(style);
+        }
+      } else styles.push(style);
       // 👇 here's the shadow style
       if (props.shadowColor && props.shadowOffsetFeet && props.shadowOpacity) {
         const shadowColor = this.#colorOf(

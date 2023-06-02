@@ -119,6 +119,11 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       label: 'forest'
     },
     {
+      converter: this.#convertToImpervious.bind(this),
+      geometryType: 'Polygon',
+      label: 'impervious'
+    },
+    {
       converter: this.#convertToPlace.bind(this),
       geometryType: 'Point',
       label: 'place'
@@ -142,6 +147,16 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       converter: this.#convertToTrail.bind(this),
       geometryType: 'LineString',
       label: 'trail'
+    },
+    {
+      converter: this.#convertToTree.bind(this),
+      geometryType: 'Point',
+      label: 'tree'
+    },
+    {
+      converter: this.#convertToWell.bind(this),
+      geometryType: 'Point',
+      label: 'well'
     },
     {
       converter: this.#convertToWetland.bind(this),
@@ -340,7 +355,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         name: 'Building',
         orientation: feature.get('orientation'),
         shadowColor: '--map-building-outline',
-        shadowOffsetFeet: [6, -6],
+        shadowOffsetFeet: [2, -2],
         shadowOpacity: 0.75,
         showDimension: false,
         strokeColor: '--map-building-outline',
@@ -443,6 +458,8 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       properties: new LandmarkPropertiesClass({
         fillColor: '--map-parcel-fill-u190',
         fillOpacity: 0.25,
+        fillPattern: 'grass',
+        fillPatternAndColor: true,
         fontColor: '--map-conservation-outline',
         fontOpacity: 1,
         fontOutline: true,
@@ -465,8 +482,9 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
         fillColor: '--map-parcel-fill-u501',
-        fillOpacity: 1,
+        fillOpacity: 0.5,
         fillPattern: 'mixtree2',
+        fillPatternAndColor: true,
         fontColor: '--map-conservation-outline',
         fontOpacity: 1,
         fontOutline: true,
@@ -474,6 +492,31 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         fontStyle: 'normal',
         minWidth: feature.get('minWidth'),
         name: 'Forest',
+        orientation: feature.get('orientation'),
+        showDimension: true,
+        textLocation: feature.get('textLocation'),
+        textRotate: true,
+        zIndex: 0
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToImpervious(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fillColor: '--rgb-gray-900',
+        fillOpacity: 0.5,
+        fillPattern: 'conglomerate',
+        fillPatternAndColor: true,
+        fontColor: '--rgb-gray-900',
+        fontOpacity: 1,
+        fontOutline: true,
+        fontSize: 'small',
+        fontStyle: 'normal',
+        minWidth: feature.get('minWidth'),
+        name: 'Impervious',
         orientation: feature.get('orientation'),
         showDimension: true,
         textLocation: feature.get('textLocation'),
@@ -583,12 +626,50 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     };
   }
 
+  #convertToTree(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--rgb-green-700',
+        fontFeet: 12,
+        fontOpacity: 1,
+        fontOutline: true,
+        fontStyle: 'normal',
+        iconOpacity: 1,
+        iconSymbol: '\uf1bb' /* 👈 tree */,
+        textAlign: 'center',
+        textBaseline: 'bottom',
+        zIndex: 3
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToWell(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--rgb-blue-700',
+        fontFeet: 6,
+        fontOpacity: 1,
+        fontOutline: true,
+        fontStyle: 'normal',
+        iconOpacity: 1,
+        iconSymbol: '\uf043' /* 👈 droplet */,
+        textAlign: 'center',
+        textBaseline: 'bottom',
+        zIndex: 3
+      }),
+      type: 'Feature'
+    };
+  }
+
   #convertToWetland(feature: OLFeature<any>): Partial<Landmark> {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
         fillColor: '--map-wetland-swamp',
-        fillOpacity: 0.75,
+        fillOpacity: 0.25,
         fillPattern: 'swamp',
         fontColor: '--map-place-water-color',
         fontOpacity: 1,

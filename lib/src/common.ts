@@ -128,10 +128,10 @@ export const culvertMaterials = [
   'Steel'
 ] as const;
 
-export type CulvertCondition = typeof culvertConditions[number];
-export type CulvertFloodHazard = typeof culvertFloodHazards[number];
-export type CulvertHeadwall = typeof culvertHeadwalls[number];
-export type CulvertMaterial = typeof culvertMaterials[number];
+export type CulvertCondition = (typeof culvertConditions)[number];
+export type CulvertFloodHazard = (typeof culvertFloodHazards)[number];
+export type CulvertHeadwall = (typeof culvertHeadwalls)[number];
+export type CulvertMaterial = (typeof culvertMaterials)[number];
 
 export interface CulvertProperties {
   condition?: CulvertCondition;
@@ -269,6 +269,7 @@ export class LandmarkPropertiesClass {
   public fillColor: string = null;
   public fillOpacity = 0;
   public fillPattern: string = null /* 👈 should be OLFillPatternType */;
+  public fillPatternAndColor = false;
   public fillPatternScale = 1;
   public fontColor: string = null;
   public fontFeet: number = null;
@@ -1010,11 +1011,7 @@ export function calculateLengths(
       properties: {},
       type: 'Feature'
     };
-    lengths.push(
-      Math.round(
-        length(lineString, { units: 'feet' })
-      )
-    );
+    lengths.push(Math.round(length(lineString, { units: 'feet' })));
   }
   return lengths;
 }
@@ -1027,9 +1024,7 @@ export function calculateMinWidth(
   const [minX, minY, , maxY] = bbox(rotated);
   const from = point([minX, minY]);
   const to = point([minX, maxY]);
-  return Math.round(
-    distance(from, to, { units: 'feet' })
-  );
+  return Math.round(distance(from, to, { units: 'feet' }));
 }
 
 export function calculateOrientation(

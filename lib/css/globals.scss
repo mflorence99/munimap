@@ -79,9 +79,9 @@ $dark-app-theme: mat.define-dark-theme(
   --accent-color: var(--mat-amber-a200);
   --warn-color: var(--mat-red-a200);
 
-  --text-color: var(--mat-grey-900);
-  --disabled-color: var(--mat-grey-500);
-  --background-color: var(--mat-grey-100);
+  --text-color: var(--mat-gray-900);
+  --disabled-color: var(--mat-gray-500);
+  --background-color: var(--mat-gray-100);
 
   --fa-primary-color: var(--text-color);
   --fa-secondary-color: var(--accent-color);
@@ -99,9 +99,9 @@ $dark-app-theme: mat.define-dark-theme(
   --accent-color: var(--mat-amber-a200);
   --warn-color: var(--mat-red-a200);
 
-  --text-color: var(--mat-grey-100);
-  --disabled-color: var(--mat-grey-500);
-  --background-color: var(--mat-grey-900);
+  --text-color: var(--mat-gray-100);
+  --disabled-color: var(--mat-gray-500);
+  --background-color: var(--mat-gray-900);
 
   --fa-primary-color: var(--text-color);
   --fa-secondary-color: var(--accent-color);
@@ -271,7 +271,7 @@ $dark-app-theme: mat.define-dark-theme(
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--mat-grey-700);
+  background-color: var(--mat-gray-700);
   border-radius: 0.25rem;
 }
 
