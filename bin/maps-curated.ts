@@ -18,7 +18,6 @@ import union from '@turf/union';
 
 const dist = './data';
 
-// 👇 this list is in REVERSE order of the timestamp we want
 const MAPS = [
   {
     bbox: null,
@@ -133,6 +132,19 @@ const MAPS = [
     printSize: [45, 60],
     timestamp: null,
     type: 'dpw'
+  },
+  {
+    bbox: null,
+    contours2ft: true,
+    id: 'tcv-library',
+    isDflt: false,
+    name: 'TCV - Library',
+    owner: 'mflo999@gmail.com',
+    parcelIDs: ['22-8', '22-9'],
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    printSize: [12, 18],
+    timestamp: null,
+    type: 'property'
   },
   {
     bbox: null,

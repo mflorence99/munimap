@@ -1,0 +1,8 @@
+{
+  "certificateName": "*.munimap.online",
+  "domainName": "tcv-library.munimap.online",
+  "provider": "aws",
+  "region": "us-east-1",
+  "service": "munimap-viewer-tcv-library",
+  "stage": "dev"
+}
