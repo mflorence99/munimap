@@ -66,8 +66,10 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() lineCap: CanvasLineCap = 'butt';
   @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
   @Input() lineJoin: CanvasLineJoin = 'bevel';
-  @Input() maxFontPixels = 40 /* 👈 pixels */;
+  @Input() maxFontPixels = 24 /* 👈 pixels */;
+  @Input() maxStrokePixels = 7 /* 👈 pixels */;
   @Input() minFontPixels = 6 /* 👈 pixels */;
+  @Input() minStrokePixels = 2 /* 👈 pixels */;
   @Input() overlaySelectable = false;
   @Input() showAll = false;
   @Input() showFill = false;
@@ -174,7 +176,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         this[`strokeWidth_${props.strokeWidth}`],
         resolution
       );
-    return strokePixels;
+    return Math.min(this.maxStrokePixels, strokePixels);
   }
 
   #chunkLine(

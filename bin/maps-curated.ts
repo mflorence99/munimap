@@ -135,11 +135,11 @@ const MAPS = [
   },
   {
     bbox: null,
-    contours2ft: true,
+    contours2ft: false,
     id: 'tcv-library',
     isDflt: false,
     name: 'TCV - Library',
-    owner: 'mflo999@gmail.com',
+    owner: 'mflo999+flo@gmail.com',
     parcelIDs: ['22-8', '22-9'],
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [12, 18],
