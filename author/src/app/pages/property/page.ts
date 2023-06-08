@@ -124,6 +124,11 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       label: 'impervious'
     },
     {
+      converter: this.#convertToObject.bind(this),
+      geometryType: 'Point',
+      label: 'object'
+    },
+    {
       converter: this.#convertToPlace.bind(this),
       geometryType: 'Point',
       label: 'place'
@@ -522,6 +527,26 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         textLocation: feature.get('textLocation'),
         textRotate: true,
         zIndex: 0
+      }),
+      type: 'Feature'
+    };
+  }
+
+  #convertToObject(feature: OLFeature<any>): Partial<Landmark> {
+    return {
+      id: feature.getId() as string,
+      properties: new LandmarkPropertiesClass({
+        fontColor: '--rgb-brown-700',
+        fontFeet: 6,
+        fontOpacity: 1,
+        fontOutline: true,
+        fontStyle: 'normal',
+        iconOpacity: 1,
+        iconOutline: true,
+        iconSymbol: '\uf00d' /* 👈 xmark */,
+        textAlign: 'center',
+        textBaseline: 'bottom',
+        zIndex: 3
       }),
       type: 'Feature'
     };
