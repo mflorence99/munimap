@@ -1,5 +1,11 @@
 {
   "extends": "stylelint-config-standard",
+  "overrides": [
+    {
+      "files": ["**/*.scss"],
+      "customSyntax": "postcss-scss"
+    }
+  ],
   "plugins": ["stylelint-order", "stylelint-scss"],
   "rules": {
     "at-rule-no-unknown": null,
@@ -7,7 +13,9 @@
     "color-hex-length": "long",
     "custom-property-empty-line-before": null,
     "declaration-colon-newline-after": null,
+    "function-no-unknown": null,
     "no-descending-specificity": null,
+    "no-invalid-position-at-import-rule": null,
     "order/order": ["custom-properties", "declarations"],
     "order/properties-alphabetical-order": true,
     "rule-empty-line-before": null,

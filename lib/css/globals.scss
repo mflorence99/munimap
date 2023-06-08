@@ -29,7 +29,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   font-style: normal;
   font-weight: normal;
   src: url('../assets/roboto-latin-400.woff2') format('woff2'),
@@ -37,14 +37,14 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   font-style: normal;
   font-weight: bold;
   src: url('../assets/roboto-latin-700.woff2') format('woff2'),
     url('../assets/roboto-latin-700.woff') format('woff');
 }
 
-@import './colors.scss';
+@import url('./colors.scss');
 
 @include mat.core();
 
@@ -253,11 +253,11 @@ $dark-app-theme: mat.define-dark-theme(
   padding: 0;
 }
 
-::-webkit-input-placeholder {
+::input-placeholder {
   color: var(--mat-gray-600);
 }
 
-::-moz-placeholder {
+::placeholder {
   color: var(--mat-gray-600);
 }
 
@@ -293,7 +293,7 @@ a {
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 1rem;
   font-weight: 400;
   height: 100%;
@@ -383,7 +383,7 @@ a[mat-flat-button] {
 .mat-mdc-card,
 .mat-mdc-menu-content {
   background-color: var(--background-color) !important;
-  box-shadow: rgb(255 255 255 / 33%) 0px 8px 24px !important;
+  box-shadow: rgb(255 255 255 / 33%) 0 8px 24px !important;
 }
 
 .mat-mdc-dialog-container {
@@ -418,6 +418,7 @@ a[mat-flat-button] {
 .mat-mdc-snack-bar-container {
   --mdc-snackbar-container-color: var(--background-color) !important;
   --mdc-snackbar-supporting-text-color: var(--text-color) !important;
+
   max-width: 99vw !important;
 }
 
@@ -426,11 +427,11 @@ a[mat-flat-button] {
 }
 
 .mdc-text-field----disabled {
-  background-color: rgba(var(--rgb-gray-850), 0.3) !important;
+  background-color: rgb(var(--rgb-gray-850) 0.3) !important;
 }
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-  background-color: rgba(var(--rgb-gray-850), 0.5) !important;
+  background-color: rgb(var(--rgb-gray-850) 0.5) !important;
 }
 
 // ///////////////////////////////////////////////////////////////////////////
@@ -467,7 +468,6 @@ color-picker {
   left: 20rem !important;
   max-height: unset !important;
   max-width: unset !important;
-  max-width: unset !important;
   overflow-x: unset !important;
   overflow-y: unset !important;
   position: absolute !important;
@@ -486,7 +486,7 @@ color-picker {
 }
 
 .ol-scaleline-line {
-  background-color: rgba(var(--rgb-gray-100), 0.75);
+  background-color: rgb(var(--rgb-gray-100) 0.75);
   bottom: 1rem;
   left: 1rem;
   padding: 0.5rem;
@@ -501,7 +501,7 @@ color-picker {
   .ol-scaleline-line-inner::after {
     border-color: var(--background-color);
     border-style: solid;
-    border-width: 0 1px 1px 1px;
+    border-width: 0 1px 1px;
     content: '';
     height: 50%;
     left: 0;

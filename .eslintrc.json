@@ -12,7 +12,8 @@
   "plugins": [
     "eslint-plugin-import",
     "eslint-plugin-import-splitnsort",
-    "eslint-plugin-prefer-arrow"
+    "eslint-plugin-prefer-arrow",
+    "eslint-plugin-prettier"
   ],
   "root": true,
   "rules": {
