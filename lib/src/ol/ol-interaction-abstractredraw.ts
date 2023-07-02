@@ -69,8 +69,9 @@ export abstract class OLInteractionAbstractRedrawComponent {
     this.olModify = new OLModify({
       deleteCondition: (event): boolean =>
         click(event) && platformModifierKeyOnly(event),
-      features,
-      hitDetection: this.layer.olLayer
+      features
+      // 🔥 why does thus no longer work?
+      // hitDetection: this.layer.olLayer
     });
     this.#modifyStartKey = this.olModify.on(
       'modifystart',

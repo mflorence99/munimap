@@ -153,7 +153,7 @@
     "unzipper": "0.10.14",
     "url-parse": "^1",
     "yargs": "^17",
-    "zone.js": "0.13.0"
+    "zone.js": "0.13.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16",
