@@ -307,16 +307,6 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return metrics.width * resolution /* 👈 length of text in meters */;
   }
 
-  #offsetGeometry(feature: OLFeature<any>, offsetFeet: number[]): OLGeometry {
-    const offset = new OLPolygon(feature.getGeometry().getCoordinates());
-    // 👉 offset is in feet, translation units are meters
-    offset.translate(
-      this.#translationOffset(offsetFeet[0]),
-      this.#translationOffset(offsetFeet[1])
-    );
-    return offset;
-  }
-
   #splineLine(feature: OLFeature<any>): OLLineString {
     return new OLLineString(
       cspline(feature.getGeometry().getCoordinates(), {

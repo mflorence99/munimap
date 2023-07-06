@@ -56,7 +56,10 @@ export class OLSourceLandmarksComponent implements OnInit {
   #handleStreams$(): void {
     this.landmarks$.pipe(takeUntil(this.destroy$)).subscribe((landmarks) => {
       // 👉 represent landmarks as geojson
-      const geojson = featureCollection(landmarks);
+      const geojson = featureCollection(
+        // 👇 I did this to create a current use map for the assessors
+        landmarks /* .filter((l) => l.properties.name === 'Fine Mowing') */
+      );
       // 👉 convert features into OL format
       const features = this.olVector.getFormat().readFeatures(geojson, {
         featureProjection: this.map.projection
