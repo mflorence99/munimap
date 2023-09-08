@@ -406,7 +406,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     return appPattern
       ? new OLIcon({
           img: appPattern.host.nativeElement,
-          imgSize: appPattern.size()
+          width: appPattern.size()[0],
+          height: appPattern.size()[1]
         })
       : null;
   }
