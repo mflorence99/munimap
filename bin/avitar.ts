@@ -31,11 +31,9 @@ parser.parse();
 
 // 👇 load base geojson
 
-const geojson = JSON.parse(
+const featureByID = JSON.parse(
   readFileSync('./proxy/assets/washington-parcels.geojson').toString()
-);
-
-const featureByID = geojson.features.reduce((acc, feature) => {
+).features.reduce((acc, feature) => {
   acc[feature.id] = feature;
   return acc;
 }, {});
@@ -44,32 +42,28 @@ const featureByID = geojson.features.reduce((acc, feature) => {
 
 function main(): void {
   try {
-    jsome(avitarByID['9-7']);
-    // searchForAnomalies();
-    // checkForOwnershipChanges();
-    // saveGeoJSON();
+    eliminateStolenParcels();
+    searchForAnomalies();
+    updateFromAvitar();
+    // jsome(avitarByID['9-7']);
+    // jsome(featureByID['9-7']);
+    saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
   }
 }
 
-function checkForOwnershipChanges(): void {
-  console.log(chalk.yellow('\n\nOwnership changes:'));
-  Object.keys(avitarByID).forEach((id) => {
-    const alot = avitarByID[id];
-    const plot = featureByID[id];
-    if (plot && alot.OWNER !== plot.properties.owner) {
-      console.log(
-        `${chalk.cyan(id)} owner changed to "${chalk.blue(
-          alot.OWNER
-        )}" from "${chalk.green(plot.properties.owner)}"`
-      );
-      plot.properties.owner = alot.OWNER;
-    }
-  });
+function eliminateStolenParcels(): void {
+  Object.keys(featureByID)
+    .filter((id) => id.startsWith('(') && id.endsWith(')'))
+    .forEach((id) => delete featureByID[id]);
 }
 
 function saveGeoJSON(): void {
+  const geojson = {
+    type: 'FeatureCollection',
+    features: Object.values(featureByID)
+  };
   writeFileSync(
     './proxy/assets/washington-parcels.geojson',
     JSON.stringify(geojson)
@@ -80,18 +74,19 @@ function searchForAnomalies(): void {
   // ///////////////////////////////////////////////////////////////////////
   // 👇 these lots are no longer in the Avitar database
   // ///////////////////////////////////////////////////////////////////////
-  const missingFromAvitar = geojson.features.filter(
-    (feature) => !avitarByID[feature.id]
+  const missingFromAvitar = Object.keys(featureByID).filter(
+    (id) => !avitarByID[id]
   );
   if (missingFromAvitar.length > 0) {
     console.log(
       chalk.red(`\n\n${missingFromAvitar.length} LOTS NOT FOUND IN Avitar:`)
     );
-    missingFromAvitar.forEach((feature) =>
+    missingFromAvitar.forEach((id) => {
+      const feature = featureByID[id];
       console.log(
         `${feature.id}\t${feature.properties.address}\t${feature.properties.owner}`
-      )
-    );
+      );
+    });
   }
   // ///////////////////////////////////////////////////////////////////////
   // 👇 these lots are in Avitar but new to us
@@ -110,6 +105,25 @@ function searchForAnomalies(): void {
       console.log(`${id}\t${assessors.ADDRESS}\t${assessors.OWNER}`);
     });
   }
+}
+
+function updateFromAvitar(): void {
+  Object.keys(avitarByID)
+    .map((id) => [avitarByID[id], featureByID[id]])
+    .filter(([_, feature]) => !!feature)
+    .forEach(([avitar, feature]) => {
+      // 👇 assessment
+      feature.properties.building$ = avitar.BLDTXVAL;
+      feature.properties.land$ = avitar.LNDTXVAL;
+      feature.properties.other$ = avitar.FEATXVAL;
+      feature.properties.taxed$ = avitar.TOTTXVAL;
+      // 👇 other data
+      feature.properties.addressOfOwner =
+        `${avitar.ADDRESS} ${avitar.ADDRESS2} ${avitar.CITY} ${avitar.STATE} ${avitar.ZIP}`
+          .replace(/\s\s+/g, ' ')
+          .trim();
+      feature.properties.neighborhood = avitar.NGHBRHD;
+    });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

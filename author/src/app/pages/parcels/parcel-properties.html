@@ -17,7 +17,7 @@
   #propertiesForm="ngForm"
   (keydown.escape)="cancel()"
   (submit)="save(record)"
-  [ngStyle]="{'grid-template-rows': 'repeat(' + ((editables.length / 2) + 1) + ', auto)'}"
+  [ngStyle]="{'grid-template-rows': 'repeat(' + round(editables.length / 2) + ', auto)'}"
   autocomplete="off"
   class="form two-column"
   id="propertiesForm"

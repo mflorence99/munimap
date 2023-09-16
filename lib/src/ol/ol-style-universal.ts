@@ -31,7 +31,6 @@ import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
 import OLGeoJSON from 'ol/format/GeoJSON';
-import OLGeometry from 'ol/geom/Geometry';
 import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
 import OLPolygon from 'ol/geom/Polygon';
@@ -66,10 +65,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() lineCap: CanvasLineCap = 'butt';
   @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
   @Input() lineJoin: CanvasLineJoin = 'bevel';
-  @Input() maxFontPixels = 24 /* 👈 pixels */;
-  @Input() maxStrokePixels = 7 /* 👈 pixels */;
+  @Input() maxFontPixels = 32 /* 👈 pixels */;
   @Input() minFontPixels = 6 /* 👈 pixels */;
-  @Input() minStrokePixels = 2 /* 👈 pixels */;
   @Input() overlaySelectable = false;
   @Input() showAll = false;
   @Input() showFill = false;
@@ -176,7 +173,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         this[`strokeWidth_${props.strokeWidth}`],
         resolution
       );
-    return Math.min(this.maxStrokePixels, strokePixels);
+    return strokePixels;
   }
 
   #chunkLine(

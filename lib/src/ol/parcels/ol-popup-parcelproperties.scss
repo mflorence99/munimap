@@ -21,6 +21,11 @@
     white-space: nowrap;
   }
 
+  td.wrappable {
+    max-width: 14rem;
+    white-space: unset;
+  }
+
   td:first-child,
   th:first-child {
     font-weight: bold;

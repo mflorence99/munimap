@@ -48,6 +48,13 @@
           <td [attr.colspan]="properties.length">{{ properties[0].owner }}</td>
         </tr>
 
+        <tr *ngIf="sameOwner && properties[0].addressOfOwner">
+          <td></td>
+          <td [attr.colspan]="properties.length" class="wrappable">
+            {{ properties[0].addressOfOwner }}
+          </td>
+        </tr>
+
         <tr *ngIf="sameUsage">
           <td>Land use</td>
           <td [attr.colspan]="properties.length">
@@ -115,12 +122,18 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let abutter of abutters">
-          <td>
-            <a (click)="onSelect(abutter.id)">{{ abutter.id }}</a>
-          </td>
-          <td>{{ abutter.owner ?? abutter.address }}</td>
-        </tr>
+        <ng-container *ngFor="let abutter of abutters">
+          <tr>
+            <td>
+              <a (click)="onSelect(abutter.id)">{{ abutter.id }}</a>
+            </td>
+            <td>{{ abutter.owner ?? abutter.address }}</td>
+          </tr>
+          <tr *ngIf="abutter.addressOfOwner ">
+            <td></td>
+            <td class="wrappable">{{ abutter.addressOfOwner }}</td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
   </aside>

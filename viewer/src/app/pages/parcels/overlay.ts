@@ -88,9 +88,23 @@ export class ParcelsOverlayComponent implements OnInit {
     return property.attribute;
   }
 
+  // 👇 these gyrations are needed for when new overlay attributes are added
   #handleOverlay$(): void {
+    // 👇 index the defaults
+    const dfltByAttr = OverlayState.defaultState().reduce((acc, dflt) => {
+      acc[dflt.attribute + dflt.value] = dflt;
+      return acc;
+    }, {});
+    // 👇 handle changes in the overlay attributes
+    //    adding in any defaults for new overlay attributes
     this.overlay$.pipe(takeUntil(this.destroy$)).subscribe((properties) => {
-      this.record = copy(properties);
+      const propByAttr = properties.reduce((acc, prop) => {
+        acc[prop.attribute + prop.value] = prop;
+        return acc;
+      }, {});
+      const combo = { ...dfltByAttr, ...propByAttr };
+      console.log({ combo });
+      this.record = copy(Object.values(combo));
       this.cdf.markForCheck();
     });
   }

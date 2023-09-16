@@ -58,6 +58,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   editables = [
     { prop: 'address', label: 'Parcel Address', type: 'text' },
     { prop: 'owner', label: 'Parcel Owner', type: 'text' },
+    { prop: 'addressOfOwner', label: 'Owner Address', type: 'text' },
     { prop: 'area', label: 'Acreage', type: 'number', step: 0.01 },
     { prop: 'usage', label: 'Land Use', list: parcelPropertiesUsage },
     { prop: 'use', label: 'Current Use', list: parcelPropertiesUse },
@@ -87,6 +88,11 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   refresh(): void {
     this.#makeRecord();
     this.cdf.markForCheck();
+  }
+
+  // 👇 why can't we use Math.round() in template!!
+  round(n: number): number {
+    return Math.round(n);
   }
 
   save(record: ValueRecord): void {
@@ -156,5 +162,6 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
         }
       });
     });
+    console.log({ record: this.record });
   }
 }

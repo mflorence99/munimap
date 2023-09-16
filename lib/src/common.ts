@@ -373,6 +373,7 @@ export type ParcelID = string | number;
 export class ParcelPropertiesClass {
   public abutters: string[] /* 👈 legacy support */ = [];
   public address = '';
+  public addressOfOwner = '';
   public area = 0;
   public areas: number[] = [];
   public building$ = null;
@@ -1108,7 +1109,8 @@ export function makeLandmarkID(landmark: Partial<Landmark>): LandmarkID {
 export function normalizeParcel(parcel: Partial<Parcel>): void {
   if (parcel.properties) {
     normalizeAddress(parcel);
-    normalizeOwner(parcel);
+    normalizeFld(parcel, 'addressOfOwner');
+    normalizeFld(parcel, 'owner');
   }
 }
 
@@ -1135,10 +1137,10 @@ export function normalizeAddress(parcel: Partial<Parcel>): void {
   }
 }
 
-export function normalizeOwner(parcel: Partial<Parcel>): void {
-  if (parcel.properties.owner) {
-    const normalized = parcel.properties.owner.trim().toUpperCase();
-    parcel.properties.owner = normalized;
+export function normalizeFld(parcel: Partial<Parcel>, fld: string): void {
+  if (parcel.properties[fld]) {
+    const normalized = parcel.properties[fld].trim().toUpperCase();
+    parcel.properties[fld] = normalized;
   }
 }
 

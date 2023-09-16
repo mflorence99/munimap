@@ -115,6 +115,7 @@ export class OLPopupParcelPropertiesComponent {
           features
             .map((feature) => ({
               address: feature.properties.address,
+              addressOfOwner: feature.properties.addressOfOwner,
               id: feature.id,
               owner: feature.properties.owner
             }))

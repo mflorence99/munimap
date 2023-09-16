@@ -50,6 +50,11 @@ export class OverlayState {
   static schema(): OverlaySchema[] {
     return [
       {
+        attribute: 'addressOfOwner',
+        value: 'oot',
+        caption: 'Non-residents'
+      },
+      {
         attribute: 'neighborhood',
         value: 'vacant',
         caption: 'Vacant parcels'
@@ -100,6 +105,7 @@ export class OverlayState {
     if (this.#isSet()) {
       // 👉 these are the parameters for the overlay
       const model = {
+        addressOfOwner: this.#quantizeAddressOfOwner(props.addressOfOwner),
         area: this.#quantizeArea(props.area),
         vacancy: this.#quantizeVacancy(props.neighborhood),
         width: this.#quantizeWidth(Math.min(...props.minWidths))
@@ -122,6 +128,11 @@ export class OverlayState {
     return this.currentProperties()?.some(
       (property) => property.enabled && (property.fill || property.stroke)
     );
+  }
+
+  #quantizeAddressOfOwner(addressOfOwner: string): string {
+    if (addressOfOwner && !addressOfOwner.includes('03280')) return 'oot';
+    else return null;
   }
 
   #quantizeArea(area: number): string {

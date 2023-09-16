@@ -27,7 +27,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
   @Input() minRoadFeet = 20 /* 👈 feet */;
   @Input() rightOfWayRatio = 3;
   @Input() roadLaneRatio = 0.9;
-  @Input() roadNameRatio = 1.125;
+  @Input() roadNameRatio = 1.5;
 
   // 👇 construct LandmarkProperties
   adapt(road: RoadProperties): LandmarkProperties[] {
