@@ -51,7 +51,12 @@ export class OverlayState {
     return [
       {
         attribute: 'addressOfOwner',
-        value: 'oot',
+        value: 'resident',
+        caption: 'Residents'
+      },
+      {
+        attribute: 'addressOfOwner',
+        value: 'non-resident',
         caption: 'Non-residents'
       },
       {
@@ -130,9 +135,14 @@ export class OverlayState {
     );
   }
 
+  // 🔥 this is a HACK for WASHINGTON only!!
+  //    looking for Washington, Hillsborough or Marlow
   #quantizeAddressOfOwner(addressOfOwner: string): string {
-    if (addressOfOwner && !addressOfOwner.includes('03280')) return 'oot';
-    else return null;
+    return addressOfOwner?.includes('03280') ||
+      addressOfOwner?.includes('03244') ||
+      addressOfOwner?.includes('03456')
+      ? 'resident'
+      : 'non-resident';
   }
 
   #quantizeArea(area: number): string {

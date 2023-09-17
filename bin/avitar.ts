@@ -45,8 +45,8 @@ function main(): void {
     eliminateStolenParcels();
     searchForAnomalies();
     updateFromAvitar();
-    // jsome(avitarByID['9-7']);
-    // jsome(featureByID['9-7']);
+    jsome(avitarByID['9-7']);
+    jsome(featureByID['9-7']);
     saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
