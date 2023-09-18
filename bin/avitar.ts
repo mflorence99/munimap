@@ -20,6 +20,7 @@ parser.on('record', (record) => {
     id = `${id}-${sub}`;
   }
   avitarByID[id] = record;
+  if (record.OWNER.startsWith('NONNO')) jsome(record);
 });
 
 parser.on('end', () => {
@@ -42,12 +43,12 @@ const featureByID = JSON.parse(
 
 function main(): void {
   try {
-    eliminateStolenParcels();
-    searchForAnomalies();
-    updateFromAvitar();
-    jsome(avitarByID['9-7']);
-    jsome(featureByID['9-7']);
-    saveGeoJSON();
+    // eliminateStolenParcels();
+    // searchForAnomalies();
+    // updateFromAvitar();
+    // jsome(avitarByID['15-70-01']);
+    // jsome(featureByID['9-7']);
+    // saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
   }

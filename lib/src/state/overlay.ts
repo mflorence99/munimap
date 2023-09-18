@@ -155,7 +155,7 @@ export class OverlayState {
   }
 
   #quantizeVacancy(neighborhood: string): string {
-    if (['U', 'V', 'W'].includes(neighborhood)) return 'vacant';
+    if (['N-U', 'N-V', 'N-W'].includes(neighborhood)) return 'vacant';
     else return null;
   }
 

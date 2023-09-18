@@ -27,7 +27,7 @@
               {{ property.id }}
 
               <mark
-                *ngIf="['U', 'V', 'W'].includes(property.neighborhood) && ['110', '120'].includes(property.usage)"
+                *ngIf="['N-U', 'N-V', 'N-W'].includes(property.neighborhood) && ['110', '120'].includes(property.usage)"
                 >VACANT</mark
               >
             </th>

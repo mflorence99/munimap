@@ -30,3 +30,11 @@ const descending = Object.entries(countByOwner)
   .slice(0, 9);
 
 jsome(descending);
+
+const neighborhoods = new Set<string>();
+
+geojson.features.forEach((feature) =>
+  neighborhoods.add(feature.properties.neighborhood)
+);
+
+jsome(Array.from(neighborhoods));
