@@ -60,6 +60,11 @@ export class OverlayState {
         caption: 'Non-residents'
       },
       {
+        attribute: 'usage',
+        value: 'public',
+        caption: 'Institutional'
+      },
+      {
         attribute: 'neighborhood',
         value: 'vacant',
         caption: 'Vacant parcels'
@@ -110,8 +115,12 @@ export class OverlayState {
     if (this.#isSet()) {
       // 👉 these are the parameters for the overlay
       const model = {
-        addressOfOwner: this.#quantizeAddressOfOwner(props.addressOfOwner),
+        addressOfOwner: this.#quantizeAddressOfOwner(
+          props.addressOfOwner,
+          props.usage
+        ),
         area: this.#quantizeArea(props.area),
+        usage: this.#quantizeUsage(props.usage),
         vacancy: this.#quantizeVacancy(props.neighborhood),
         width: this.#quantizeWidth(Math.min(...props.minWidths))
       };
@@ -137,7 +146,10 @@ export class OverlayState {
 
   // 🔥 this is a HACK for WASHINGTON only!!
   //    looking for Washington, Hillsborough or Marlow
-  #quantizeAddressOfOwner(addressOfOwner: string): string {
+  #quantizeAddressOfOwner(addressOfOwner: string, usage: string): string {
+    // 🔥 TEMPORARY HACK
+    if (['300', '400', '500', '501', '502'].includes(usage)) return 'null';
+    // 🔥 TOTALLY Washington only!!
     return addressOfOwner?.includes('03280') ||
       addressOfOwner?.includes('03244') ||
       addressOfOwner?.includes('03456')
@@ -151,6 +163,11 @@ export class OverlayState {
     else if (area <= 1) return 'one';
     else if (area <= 2) return 'two';
     else if (area <= 4) return 'four';
+    else return null;
+  }
+
+  #quantizeUsage(usage: string): string {
+    if (['300', '400', '500', '501', '502'].includes(usage)) return 'public';
     else return null;
   }
 
