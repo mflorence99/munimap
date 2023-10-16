@@ -63,10 +63,10 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     { prop: 'usage', label: 'Land Use', list: parcelPropertiesUsage },
     { prop: 'use', label: 'Current Use', list: parcelPropertiesUse },
     { prop: 'neighborhood', label: 'Neighborhood' },
-    { prop: 'building$', label: 'Building Tax', type: 'number' },
-    { prop: 'land$', label: 'Land Tax', type: 'number' },
-    { prop: 'other$', label: 'Other Tax', type: 'number' },
-    { prop: 'taxed$', label: 'Total Tax', type: 'number' }
+    { prop: 'building$', label: 'Building', type: 'number' },
+    { prop: 'land$', label: 'Land', type: 'number' },
+    { prop: 'other$', label: 'Other', type: 'number' },
+    { prop: 'taxed$', label: 'Total', type: 'number' }
   ];
 
   record: ValueRecord = {};
