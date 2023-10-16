@@ -21,7 +21,6 @@ import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
-import OLFillPattern from 'ol-ext/style/FillPattern';
 
 export class Legend extends OLControl {
   constructor(opts: any) {
@@ -83,7 +82,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   }
 
   // 👉 the idea behind "countables" is to provide just enough data for
-  //    parcels to be searched -- we do this because we MUST have ALL
+  //    parcels to be aggregated -- we do this because we MUST have ALL
   //    the data available -- so countables are degenerate parcels with
   //    just area, usage and use
 
