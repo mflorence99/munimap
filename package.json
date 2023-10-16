@@ -106,7 +106,7 @@
     "@fortawesome/pro-light-svg-icons": "^6",
     "@fortawesome/pro-regular-svg-icons": "^6",
     "@fortawesome/pro-solid-svg-icons": "^6",
-    "@mapbox/togeojson": "0.16.1",
+    "@mapbox/togeojson": "0.16.2",
     "@ngxs/devtools-plugin": "^3",
     "@ngxs/logger-plugin": "^3",
     "@ngxs/router-plugin": "^3",
@@ -133,7 +133,7 @@
     "jszip": "^3",
     "material-design-icons": "^3",
     "md5-file": "^5",
-    "ngx-color-picker": "^14",
+    "ngx-color-picker": "^15",
     "ngx-pipes": "^3",
     "ngx-router-animations": "^13",
     "node-fetch": "2.6.7",
@@ -154,7 +154,7 @@
     "unzipper": "0.10.14",
     "url-parse": "^1",
     "yargs": "^17",
-    "zone.js": "0.13.3"
+    "zone.js": "0.14.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16",
