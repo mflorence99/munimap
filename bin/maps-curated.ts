@@ -135,6 +135,20 @@ const MAPS = [
   },
   {
     bbox: null,
+    cxFeet: 15840,
+    cyFeet: 15840,
+    id: 'apdvd',
+    isDflt: false,
+    name: 'APDVD Redistricting',
+    origin: [-72.18, 43.19],
+    owner: 'mflo999+flo@gmail.com',
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    printSize: [36, 36],
+    timestamp: null,
+    type: 'area'
+  },
+  {
+    bbox: null,
     contours2ft: false,
     id: 'tcv-library',
     isDflt: false,
@@ -264,7 +278,6 @@ function bboxFromDimensions(map, border: number): number[] {
   const minX = map.origin[0];
   const minY = map.origin[1] - (map.cyFeet / R_EARTH) * RAD2DEG;
   const maxX =
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     map.origin[0] +
     ((map.cxFeet / R_EARTH) * RAD2DEG) / Math.cos(map.origin[1] * DEG2RAD);
   const maxY = map.origin[1];
