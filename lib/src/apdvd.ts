@@ -17,7 +17,7 @@ const existingExcept = new Set<ParcelID>([
 
 const existingStreets = [
   'ADAMS',
-  'ASHUELOT',
+  'ASHUELOT DRIVE',
   'BUCHANAN',
   'CLEVELAND',
   'COOLIDGE',

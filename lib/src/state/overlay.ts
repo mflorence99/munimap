@@ -117,7 +117,7 @@ export class OverlayState {
     let stroke: string = null;
     // 🔥 HACK FOR APDVD
     const map = this.store.selectSnapshot(MapState);
-    if (map.id === 'apdvd') fill = getAPDVDFill(props);
+    if (map?.id === 'apdvd') fill = getAPDVDFill(props);
     // 🔥 HACK FOR APDVD
     if (this.#isSet()) {
       // 👉 these are the parameters for the overlay
