@@ -1,0 +1,44 @@
+<header class="header">
+  <figure class="icon palette">
+    <fa-icon [icon]="['fad', 'palette']" size="2x"></fa-icon>
+  </figure>
+
+  <p class="title">Color code parcels</p>
+  <p class="subtitle">Parcel color-coding strategy</p>
+</header>
+
+<form
+  #setupForm="ngForm"
+  (keydown.escape)="cancel()"
+  (submit)="save(record)"
+  autocomplete="off"
+  class="form"
+  id="setupForm"
+  novalidate
+  spellcheck="false"
+>
+  <mat-radio-group
+    [(ngModel)]="record.strategy"
+    class="strategies"
+    name="strategy"
+    required
+  >
+    <mat-radio-button value="use">By land use</mat-radio-button>
+    <mat-radio-button value="ownership">By ownership</mat-radio-button>
+    <mat-radio-button value="conformity">By conformity</mat-radio-button>
+  </mat-radio-group>
+</form>
+
+<article class="actions">
+  <button (click)="cancel()" mat-flat-button>DONE</button>
+
+  <button
+    [disabled]="!setupForm.dirty"
+    color="primary"
+    form="setupForm"
+    mat-flat-button
+    type="submit"
+  >
+    SAVE
+  </button>
+</article>

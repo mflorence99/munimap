@@ -7,6 +7,7 @@ const existingExcept = new Set<ParcelID>([
   '10-3',
   '10-4',
   '10-6',
+  '10-26', // 👈 watch out for this one!
   '14-187',
   '14-487',
   '15-06',
@@ -166,11 +167,17 @@ const proposed = new Set<ParcelID>([
 ]);
 
 export function getAPDVDFill(props: ParcelProperties): string {
-  if (proposed.has(props.id)) return '#0000FF';
-  else if (
+  const isExisting =
     !existingExcept.has(props.id) &&
-    existingStreets.some((street) => props.address.includes(street))
-  )
-    return '#FF0000';
+    existingStreets.some((street) => props.address.includes(street));
+  const isProposed = proposed.has(props.id);
+  const isResident = false; // 👈 we don't want to do this
+  // props.addressOfOwner?.includes('03280') ||
+  // props.addressOfOwner?.includes('03244') ||
+  // props.addressOfOwner?.includes('03456');
+  if (isProposed && isResident) return '#0000FF';
+  if (isProposed && !isResident) return '#8080FF';
+  else if (isExisting && isResident) return '#FF0000';
+  else if (isExisting && !isResident) return '#FF8080';
   else return '#FFFFFF';
 }

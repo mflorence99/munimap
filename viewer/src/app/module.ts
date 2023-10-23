@@ -1,5 +1,6 @@
 import { DPWLegendComponent } from './pages/dpw/legend';
 import { DPWPage } from './pages/dpw/page';
+import { ParcelsColorCodeComponent } from './pages/parcels/colorcode';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsOverlayComponent } from './pages/parcels/overlay';
 import { ParcelsPage } from './pages/parcels/page';
@@ -13,6 +14,7 @@ import { AnonState } from '@lib/state/anon';
 import { APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { ColorCodeState } from '@lib/state/colorcode';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
@@ -37,6 +39,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -244,6 +247,7 @@ const COMPONENTS = [
   OLStyleParcelsComponent,
   OLStylePatternDirective,
   OLStyleUniversalComponent,
+  ParcelsColorCodeComponent,
   ParcelsLegendComponent,
   ParcelsOverlayComponent,
   VersionDialogComponent
@@ -281,8 +285,8 @@ const ROUTES: any = [
         outlet: 'leftSidebar'
       },
       {
-        path: 'parcels-overlay',
-        component: ParcelsOverlayComponent,
+        path: 'parcels-colorcode',
+        component: ParcelsColorCodeComponent,
         outlet: 'rightSidebar'
       },
       {
@@ -299,6 +303,7 @@ const ROUTES: any = [
 
 const STATES = [
   AnonState,
+  ColorCodeState,
   LandmarksState,
   MapState,
   OverlayState,
@@ -307,7 +312,7 @@ const STATES = [
   ViewState,
   WorkingState
 ];
-const STATES_SAVED = [OverlayState, ViewState];
+const STATES_SAVED = [ColorCodeState, OverlayState, ViewState];
 
 @NgModule({
   bootstrap: [RootPage],
@@ -327,6 +332,7 @@ const STATES_SAVED = [OverlayState, ViewState];
     MatCheckboxModule,
     MatDialogModule,
     MatMenuModule,
+    MatRadioModule,
     MatSidenavModule,
     MatSnackBarModule,
     MatToolbarModule,
