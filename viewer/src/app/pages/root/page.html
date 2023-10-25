@@ -47,7 +47,11 @@
       <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
     </mat-button-toggle>
 
-    <mat-button-toggle *ngIf="hasRightSidebar" (change)="rightSidebar.toggle()">
+    <mat-button-toggle
+      *ngIf="hasRightSidebar"
+      (change)="rightSidebar.toggle()"
+      [checked]="rightSidebar.opened"
+    >
       <fa-icon [icon]="['fad', 'palette']" size="lg"></fa-icon>
     </mat-button-toggle>
 

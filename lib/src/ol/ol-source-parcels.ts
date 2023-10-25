@@ -1,3 +1,4 @@
+import { ColorCodeStateModel } from '../state/colorcode';
 import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
@@ -48,6 +49,8 @@ const attribution =
 export class OLSourceParcelsComponent implements OnInit {
   @Input() path: string;
 
+  colorCode$: Observable<ColorCodeStateModel>;
+
   olVector: OLVector<any>;
 
   overlay$: Observable<OverlayProperty[]>;
@@ -79,6 +82,7 @@ export class OLSourceParcelsComponent implements OnInit {
     this.layer.olLayer.setSource(this.olVector);
     // 🔥 must do it this way so we can dynamically create component
     //    this is new behavior with Angular 14
+    this.colorCode$ = this.store.select((state) => state.colorcode);
     this.overlay$ = this.store.select((state) => state.overlay);
     this.parcels$ = this.store.select((state) => state.parcels);
   }
@@ -114,9 +118,15 @@ export class OLSourceParcelsComponent implements OnInit {
 
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
-    //    also with the overlay, but we only care here if it has changed
+    //    also with the overlay plus color code,
+    //    but we only care here if it has changed
     //    we'll look at its value when we come to style the parcels
-    combineLatest([this.#geojson$, this.parcels$, this.overlay$])
+    combineLatest([
+      this.#geojson$,
+      this.parcels$,
+      this.overlay$,
+      this.colorCode$
+    ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([original, parcels]) => {
         const originalsByID = original.features.reduce((acc, feature) => {

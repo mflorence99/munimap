@@ -1,3 +1,7 @@
+import { ColorCodeState } from '../state/colorcode';
+import { ColorCodeStateModel } from '../state/colorcode';
+import { Map } from '../state/map';
+import { MapState } from '../state/map';
 import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -8,6 +12,8 @@ import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
 
+import { getAPDVDFill } from '../apdvd';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate as OLCoordinate } from 'ol/coordinate';
@@ -16,6 +22,7 @@ import { Input } from '@angular/core';
 import { OnChanges } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { TitleCasePipe } from '@angular/common';
 import { ViewChildren } from '@angular/core';
@@ -126,6 +133,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
     private overlayState: OverlayState,
+    private store: Store,
     private titleCase: TitleCasePipe
   ) {}
 
@@ -194,7 +202,6 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     abbr = abbr.replace(/\bDrive\b/, ' Dr ');
     abbr = abbr.replace(/\bEast\b/, ' E ');
     abbr = abbr.replace(/\bHeights\b/, ' Hgts ');
-    abbr = abbr.replace(/\bHillsborough\b/, ' Hillsboro ');
     abbr = abbr.replace(/\bLane\b/, ' Ln ');
     abbr = abbr.replace(/\bMountain\b/, ' Mtn ');
     abbr = abbr.replace(/\bNorth\b/, ' N ');
@@ -204,7 +211,6 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     abbr = abbr.replace(/\bSprings\b/, ' Spr ');
     abbr = abbr.replace(/\bStreet\b/, ' St ');
     abbr = abbr.replace(/\bTerrace\b/, ' Ter ');
-    abbr = abbr.replace(/\bWashington\b/, ' Wash. ');
     abbr = abbr.replace(/\bWay\b/, ' Wy ');
     abbr = abbr.replace(/\bWest\b/, ' W ');
     return abbr.replace(/  +/g, ' ').trim();
@@ -358,9 +364,32 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     numPolygons: number,
     overlayFill: [number, number, number]
   ): OLStyle[] {
-    const fill = overlayFill
-      ? overlayFill.join(',')
-      : this.map.vars[`--map-parcel-fill-u${props.usage}`];
+    // 👇 deduce the fill from the color code strategy
+    let fill;
+    const strategy =
+      this.store.selectSnapshot<ColorCodeStateModel>(ColorCodeState).strategy;
+    // 🔥 HACK FOR APDVD
+    const map = this.store.selectSnapshot<Map>(MapState);
+    if (map?.id === 'apdvd') fill = getAPDVDFill(props);
+    else if (overlayFill) fill = overlayFill.join(',');
+    else if (strategy === 'usage')
+      fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
+    else if (strategy === 'ownership')
+      fill = this.map.vars[`--map-parcel-fill-o${props.ownership}`];
+    else if (strategy === 'conformity') {
+      // 🔥 this only works for Washington!!
+      const conforming = 4; // 👈 acres
+      const deficit = conforming - props.area;
+      if (deficit <= 0) fill = '255, 255, 255';
+      else {
+        // 👇 convert lack of conformity to a scale 0..9
+        fill =
+          this.map.vars[
+            `--map-parcel-fill-c${Math.trunc(deficit * (10 / conforming))}`
+          ];
+      }
+    }
+    // 👇 determine the patterns
     const patterns = [];
     if (this.map.olView.getZoomForResolution(resolution) >= 15) {
       // 👉 current use pattern comes from the use field (CUUH etc)

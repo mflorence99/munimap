@@ -32,7 +32,8 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
-  src: url('../assets/roboto-latin-400.woff2') format('woff2'),
+  src:
+    url('../assets/roboto-latin-400.woff2') format('woff2'),
     url('../assets/roboto-latin-400.woff') format('woff');
 }
 
@@ -40,7 +41,8 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: bold;
-  src: url('../assets/roboto-latin-700.woff2') format('woff2'),
+  src:
+    url('../assets/roboto-latin-700.woff2') format('woff2'),
     url('../assets/roboto-latin-700.woff') format('woff');
 }
 
@@ -170,7 +172,25 @@ $dark-app-theme: mat.define-dark-theme(
   --map-parcel-text-color: 0, 0, 0;
   --map-parcel-text-inverse: 255, 255, 255;
 
-  // land use color shading
+  // conformity color coding
+  --map-parcel-fill-c0: var(--rgb-red-50);
+  --map-parcel-fill-c1: var(--rgb-red-100);
+  --map-parcel-fill-c2: var(--rgb-red-200);
+  --map-parcel-fill-c3: var(--rgb-red-300);
+  --map-parcel-fill-c4: var(--rgb-red-400);
+  --map-parcel-fill-c5: var(--rgb-red-500);
+  --map-parcel-fill-c6: var(--rgb-red-600);
+  --map-parcel-fill-c7: var(--rgb-red-700);
+  --map-parcel-fill-c8: var(--rgb-red-800);
+  --map-parcel-fill-c9: var(--rgb-red-900);
+
+  // ownership color coding
+  --map-parcel-fill-oI: var(--rgb-green-700);
+  --map-parcel-fill-oN: var(--rgb-blue-700);
+  --map-parcel-fill-oR: var(--rgb-yellow-700);
+  --map-parcel-fill-oX: 255, 255, 255;
+
+  // usage color shading
   // 👀  https://www.gismanual.com/style/ColorConventions.pdf
   --map-parcel-fill-u110: var(--rgb-brown-700);
   --map-parcel-fill-u120: var(--rgb-orange-700);

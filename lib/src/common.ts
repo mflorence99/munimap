@@ -390,6 +390,7 @@ export class ParcelPropertiesClass {
   public orientations: number[] = [];
   public other$ = 0;
   public owner = '';
+  public ownership: ParcelPropertiesOwnership = null;
   public perimeters: number[] = [];
   public sqarcities: number[] = [];
   public taxed$ = 0;
@@ -421,6 +422,15 @@ export interface ParcelPropertiesLabel {
 }
 
 export type ParcelPropertiesNeighborhood = '' | 'U' | 'V' | 'W';
+
+export const parcelPropertiesOwnership: Record<string, string> = {
+  R: 'Resident',
+  N: 'Non-resident',
+  I: 'Institution',
+  X: 'Unknown'
+};
+
+export type ParcelPropertiesOwnership = keyof typeof parcelPropertiesOwnership;
 
 export const parcelPropertiesUsage: Record<string, string> = {
   '110': 'Single Family Residence',
@@ -611,7 +621,7 @@ export interface StreamCrossingProperties {
   DsBFW2: number /* 👈 83) Downstream - Bankful Width 2 (ft) */;
   DsBFW3: number /* 👈 84) Downstream - Bankful Width 3 (ft) */;
   DsBankArmo: string /* 👈 77) Downstream - Bank Armoring */;
-  DsBankEros: string /* 👈 86) Downstream - Bank Erosion */;
+  DsBankEros: string /* 👈 86) Downland usestream - Bank Erosion */;
   DsBankHigh: string /* 👈 87) DS Bank Heights Taller than US Banks */;
   DsBeavDam: string /* 👈 91) Downstream - Beaver Dam Near Structure */;
   DsBedrockP: string /* 👈 88) Downstream - Bedrock Present */;
@@ -1111,6 +1121,7 @@ export function normalizeParcel(parcel: Partial<Parcel>): void {
     normalizeAddress(parcel);
     normalizeFld(parcel, 'addressOfOwner');
     normalizeFld(parcel, 'owner');
+    normalizeOwnership(parcel);
   }
 }
 
@@ -1142,6 +1153,21 @@ export function normalizeFld(parcel: Partial<Parcel>, fld: string): void {
     const normalized = parcel.properties[fld].trim().toUpperCase();
     parcel.properties[fld] = normalized;
   }
+}
+
+// 🔥 this only works for Washington!!
+export function normalizeOwnership(parcel: Partial<Parcel>): void {
+  if (parcel.properties.addressOfOwner) {
+    if (['300', '400', '500', '501', '502'].includes(parcel.properties.usage))
+      parcel.properties.ownership = 'I';
+    else if (
+      parcel.properties.addressOfOwner.includes('03280') ||
+      parcel.properties.addressOfOwner.includes('03244') ||
+      parcel.properties.addressOfOwner.includes('03456')
+    )
+      parcel.properties.ownership = 'R';
+    else parcel.properties.ownership = 'N';
+  } else parcel.properties.ownership = 'X';
 }
 
 export function serializeLandmark(landmark: Partial<Landmark>): void {

@@ -103,7 +103,6 @@ export class ParcelsOverlayComponent implements OnInit {
         return acc;
       }, {});
       const combo = { ...dfltByAttr, ...propByAttr };
-      console.log({ combo });
       this.record = copy(Object.values(combo));
       this.cdf.markForCheck();
     });

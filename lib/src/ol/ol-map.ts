@@ -8,6 +8,7 @@ import { Selector } from './ol-selector';
 import { SelectorComponent } from './ol-selector';
 import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
+import { ViewStateModel } from '../state/view';
 
 import { bboxDistance } from '../common';
 
@@ -303,7 +304,9 @@ export class OLMapComponent
     this.olMap.setView(this.olView);
     // 👉 if center, zoom available use them else fit to bounds
     const viewState =
-      this.store.selectSnapshot(ViewState).viewByPath[this.path];
+      this.store.selectSnapshot<ViewStateModel>(ViewState).viewByPath[
+        this.path
+      ];
     if (this.fitToBounds) this.zoomToBounds();
     else if (viewState?.center && viewState?.zoom) {
       this.olView.setCenter(fromLonLat(viewState.center));

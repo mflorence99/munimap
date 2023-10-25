@@ -237,7 +237,7 @@ async function main(): Promise<void> {
   });
 
   // 👉 the idea behind countables is to provide just enough data for
-  //    parcels to be searched -- we do this because we MUST have ALL
+  //    parcels to be counted -- we do this because we MUST have ALL
   //    the data available
 
   Object.keys(parcelsByTown).forEach((town) => {
@@ -254,6 +254,7 @@ async function main(): Promise<void> {
         id: feature.id,
         properties: {
           area: feature.properties.area,
+          ownership: feature.properties.ownership,
           usage: feature.properties.usage,
           use: feature.properties.use
         },

@@ -1,5 +1,6 @@
 import { Parcels } from '../lib/src/common';
 
+import { normalizeParcel } from '../lib/src/common';
 import { simplify } from '../lib/src/common';
 import { theState } from '../lib/src/common';
 
@@ -29,6 +30,11 @@ const dist = './data';
 Object.keys(curated).forEach((county) => {
   Object.keys(curated[county]).forEach((town) => {
     const geojson = curated[county][town];
+
+    // 👇 we need to do this to account for derived fields
+    geojson.features.forEach((feature: any): void => {
+      normalizeParcel(feature);
+    });
 
     console.log(
       chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
@@ -86,6 +92,7 @@ Object.keys(curated).forEach((county) => {
         id: feature.id,
         properties: {
           area: feature.properties.area,
+          ownership: feature.properties.ownership,
           usage: feature.properties.usage,
           use: feature.properties.use
         },

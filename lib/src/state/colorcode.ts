@@ -9,7 +9,7 @@ export class SetColorCode {
   constructor(public state: Partial<ColorCodeStateModel>) {}
 }
 
-export type ColorCodeStrategy = 'use' | 'ownership' | 'conformity';
+export type ColorCodeStrategy = 'usage' | 'ownership' | 'conformity';
 
 export interface ColorCodeStateModel {
   strategy: ColorCodeStrategy;
@@ -23,7 +23,7 @@ export interface ColorCodeStateModel {
 export class ColorCodeState {
   static defaultState(): ColorCodeStateModel {
     return {
-      strategy: 'use'
+      strategy: 'usage'
     };
   }
 

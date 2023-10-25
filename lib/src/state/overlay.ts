@@ -1,7 +1,4 @@
-import { MapState } from './map';
 import { ParcelProperties } from '../common';
-
-import { getAPDVDFill } from '../apdvd';
 
 import { Action } from '@ngxs/store';
 import { Injectable } from '@angular/core';
@@ -115,10 +112,6 @@ export class OverlayState {
   } {
     let fill: string = null;
     let stroke: string = null;
-    // 🔥 HACK FOR APDVD
-    const map = this.store.selectSnapshot(MapState);
-    if (map?.id === 'apdvd') fill = getAPDVDFill(props);
-    // 🔥 HACK FOR APDVD
     if (this.#isSet()) {
       // 👉 these are the parameters for the overlay
       const model = {

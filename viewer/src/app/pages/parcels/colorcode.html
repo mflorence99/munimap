@@ -17,13 +17,18 @@
   novalidate
   spellcheck="false"
 >
+  <p class="instructions">
+    Consult the <em>legend</em> in the left sidebar for the key to the
+    color-coding.
+  </p>
+
   <mat-radio-group
     [(ngModel)]="record.strategy"
     class="strategies"
     name="strategy"
     required
   >
-    <mat-radio-button value="use">By land use</mat-radio-button>
+    <mat-radio-button value="usage">By land use</mat-radio-button>
     <mat-radio-button value="ownership">By ownership</mat-radio-button>
     <mat-radio-button value="conformity">By conformity</mat-radio-button>
   </mat-radio-group>
