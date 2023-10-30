@@ -1,6 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
+import { ColorCodeState } from '@lib/state/colorcode';
+import { ColorCodeStateModel } from '@lib/state/colorcode';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { GeoJSONService } from '@lib/services/geojson';
@@ -23,6 +25,7 @@ export class ParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
+  @Select(ColorCodeState) colorCode$: Observable<ColorCodeStateModel>;
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
   // 🔥 not used: only to satisfy base control

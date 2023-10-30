@@ -2,7 +2,6 @@ import { DPWLegendComponent } from './pages/dpw/legend';
 import { DPWPage } from './pages/dpw/page';
 import { ParcelsColorCodeComponent } from './pages/parcels/colorcode';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
-import { ParcelsOverlayComponent } from './pages/parcels/overlay';
 import { ParcelsPage } from './pages/parcels/page';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
@@ -122,7 +121,6 @@ import { OLStyleGraticuleComponent } from '@lib/ol/ol-style-graticule';
 import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStyleUniversalComponent } from '@lib/ol/ol-style-universal';
-import { OverlayState } from '@lib/state/overlay';
 import { ParcelsState } from '@lib/state/parcels';
 import { PathLocationStrategy } from '@angular/common';
 import { ReadyResolver } from '@lib/resolvers/ready';
@@ -249,7 +247,6 @@ const COMPONENTS = [
   OLStyleUniversalComponent,
   ParcelsColorCodeComponent,
   ParcelsLegendComponent,
-  ParcelsOverlayComponent,
   VersionDialogComponent
 ];
 
@@ -306,13 +303,12 @@ const STATES = [
   ColorCodeState,
   LandmarksState,
   MapState,
-  OverlayState,
   ParcelsState,
   UndoState,
   ViewState,
   WorkingState
 ];
-const STATES_SAVED = [ColorCodeState, OverlayState, ViewState];
+const STATES_SAVED = [ColorCodeState, ViewState];
 
 @NgModule({
   bootstrap: [RootPage],

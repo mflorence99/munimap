@@ -162,7 +162,6 @@ import { OLStyleParcelsComponent } from '@lib/ol/ol-style-parcels';
 import { OLStylePatternDirective } from '@lib/ol/ol-style-pattern';
 import { OLStyleUniversalComponent } from '@lib/ol/ol-style-universal';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { OverlayState } from '@lib/state/overlay';
 import { ParcelIDValidator } from '@lib/validators/parcelid';
 import { ParcelsState } from '@lib/state/parcels';
 import { PathLocationStrategy } from '@angular/common';
@@ -445,13 +444,12 @@ const STATES = [
   ColorCodeState,
   LandmarksState,
   MapState,
-  OverlayState,
   ParcelsState,
   UndoState,
   ViewState,
   WorkingState
 ];
-const STATES_SAVED = [ColorCodeState, OverlayState, RouterState, ViewState];
+const STATES_SAVED = [ColorCodeState, RouterState, ViewState];
 
 @NgModule({
   bootstrap: [RootPage],

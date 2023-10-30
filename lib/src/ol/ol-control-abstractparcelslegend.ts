@@ -7,6 +7,7 @@ import { ParcelID } from '../common';
 import { Parcels } from '../common';
 import { ParcelsState } from '../state/parcels';
 
+import { parcelPropertiesOwnership } from '../common';
 import { parcelPropertiesUsage } from '../common';
 import { parcelPropertiesUse } from '../common';
 
@@ -46,6 +47,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   areaByOwnership: Accumulator;
   areaByUsage: Accumulator;
   areaOfParcels: number;
+  // 🔥 this only works for Washington
   conformities: Conformity[] = [
     ['\u00bc acre', 0.25],
     ['\u00bd acre', 0.5],
@@ -59,6 +61,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   countByOwnership: Accumulator;
   countByUsage: Accumulator;
   olControl: OLControl;
+  parcelPropertiesOwnership = parcelPropertiesOwnership;
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
 
@@ -86,6 +89,15 @@ export abstract class OLControlAbstractParcelsLegendComponent
     this.#resetCounters();
     this.#handleGeoJSON$();
     this.#handleStreams$();
+  }
+
+  quantizeConformingArea(area: number): number {
+    const conforming = this.conformities.at(-1)[1];
+    return Math.trunc((conforming - area) * (10 / conforming));
+  }
+
+  trackByKey(ix: number, key: string): string {
+    return key;
   }
 
   trackByKeyValue(ix: number, item: KeyValue<string, string>): string {

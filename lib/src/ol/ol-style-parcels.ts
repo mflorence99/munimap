@@ -6,7 +6,6 @@ import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-se
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
-import { OverlayState } from '../state/overlay';
 import { ParcelID } from '../common';
 import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
@@ -132,7 +131,6 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     private decimal: DecimalPipe,
     private layer: OLLayerVectorComponent,
     private map: OLMapComponent,
-    private overlayState: OverlayState,
     private store: Store,
     private titleCase: TitleCasePipe
   ) {}
@@ -358,12 +356,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     return lengthss;
   }
 
-  #fill(
-    props: ParcelProperties,
-    resolution: number,
-    numPolygons: number,
-    overlayFill: [number, number, number]
-  ): OLStyle[] {
+  #fill(props: ParcelProperties, resolution: number): OLStyle[] {
     // 👇 deduce the fill from the color code strategy
     let fill;
     const strategy =
@@ -371,7 +364,6 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     // 🔥 HACK FOR APDVD
     const map = this.store.selectSnapshot<Map>(MapState);
     if (map?.id === 'apdvd') fill = getAPDVDFill(props);
-    else if (overlayFill) fill = overlayFill.join(',');
     else if (strategy === 'usage')
       fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
     else if (strategy === 'ownership')
@@ -692,8 +684,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #strokeBorder(
     props: ParcelProperties,
     resolution: number,
-    numPolygons: number,
-    overlayStroke: [number, number, number]
+    numPolygons: number
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
     if (
@@ -702,9 +693,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       return null;
     else {
       const borderPixels = this.#borderPixels(resolution);
-      const outline = overlayStroke
-        ? overlayStroke.join(',')
-        : this.map.vars['--map-parcel-outline'];
+      const outline = this.map.vars['--map-parcel-outline'];
       // 👉 alternating light, dark outline
       return [
         new OLStyle({
@@ -779,22 +768,14 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     //    depending on the number of polygons and other factors
     const styles: OLStyle[] = [];
     const props = feature.getProperties() as ParcelProperties;
-    // 👇 normal stroke and fill may be overlaid
-    const { fill: overlayFill, stroke: overlayStroke } =
-      this.overlayState.makeOverlayForParcelProperties(props);
     // 👇 background
     if (this.#canShow(feature, this.showBackground, whenSelected)) {
-      const fills = this.#fill(props, resolution, numPolygons, overlayFill);
+      const fills = this.#fill(props, resolution);
       if (fills) styles.push(...fills);
     }
     // 👇 border
     if (this.#canShow(feature, this.showBorder, whenSelected)) {
-      const strokes = this.#strokeBorder(
-        props,
-        resolution,
-        numPolygons,
-        overlayStroke
-      );
+      const strokes = this.#strokeBorder(props, resolution, numPolygons);
       if (strokes) styles.push(...strokes);
     }
     // 👇 dimensions

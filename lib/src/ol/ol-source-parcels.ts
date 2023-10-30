@@ -4,7 +4,6 @@ import { GeoJSONService } from '../services/geojson';
 import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
-import { OverlayProperty } from '../state/overlay';
 import { Parcel } from '../common';
 import { ParcelID } from '../common';
 import { Parcels } from '../common';
@@ -53,8 +52,6 @@ export class OLSourceParcelsComponent implements OnInit {
 
   olVector: OLVector<any>;
 
-  overlay$: Observable<OverlayProperty[]>;
-
   parcels$: Observable<Parcel[]>;
 
   #geojson$ = new Subject<Parcels>();
@@ -83,7 +80,6 @@ export class OLSourceParcelsComponent implements OnInit {
     // 🔥 must do it this way so we can dynamically create component
     //    this is new behavior with Angular 14
     this.colorCode$ = this.store.select((state) => state.colorcode);
-    this.overlay$ = this.store.select((state) => state.overlay);
     this.parcels$ = this.store.select((state) => state.parcels);
   }
 
@@ -121,12 +117,7 @@ export class OLSourceParcelsComponent implements OnInit {
     //    also with the overlay plus color code,
     //    but we only care here if it has changed
     //    we'll look at its value when we come to style the parcels
-    combineLatest([
-      this.#geojson$,
-      this.parcels$,
-      this.overlay$,
-      this.colorCode$
-    ])
+    combineLatest([this.#geojson$, this.parcels$, this.colorCode$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([original, parcels]) => {
         const originalsByID = original.features.reduce((acc, feature) => {

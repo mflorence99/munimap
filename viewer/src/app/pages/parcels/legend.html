@@ -2,95 +2,164 @@
   <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
 </button>
 
-<header class="header">
-  <figure class="icon">
-    <fa-icon [icon]="['fad', 'map']" size="2x"></fa-icon>
-  </figure>
-  <p class="title">Legend</p>
-  <p class="subtitle">Color-coded parcel usage</p>
-</header>
+<ng-container *ngIf="colorCode$ | async as colorCode">
+  <header class="header">
+    <figure class="icon">
+      <fa-icon [icon]="['fad', 'map']" size="2x"></fa-icon>
+    </figure>
+    <p class="title">Legend</p>
+    <p class="subtitle">Color-coded parcel {{ colorCode.strategy }}</p>
+  </header>
 
-<table class="form legend">
-  <tbody>
-    <tr>
-      <th></th>
-      <th></th>
-      <th>#Lots</th>
-      <th>Acres</th>
-    </tr>
-
-    <ng-container
-      *ngFor="let usage of parcelPropertiesUsage | keyvalue; trackBy: trackByKeyValue"
-    >
-      <tr *ngIf="countByUsage[usage.key] > 0">
-        <td class="usage">
-          <figure
-            [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'"
-            class="key"
-          ></figure>
-        </td>
-        <td class="desc">{{ usage.value }}</td>
-        <td class="count">{{ countByUsage[usage.key] | number:'1.0-0' }}</td>
-        <td class="count">{{ areaByUsage[usage.key] | number:'1.0-0' }}</td>
-        <td></td>
+  <table class="form legend">
+    <tbody>
+      <tr>
+        <th></th>
+        <th>
+          <div *ngIf="colorCode.strategy === 'conformity'">Smaller than</div>
+        </th>
+        <th>#Lots</th>
+        <th>Acres</th>
       </tr>
 
-      <tr *ngIf="usage.key === '190'">
-        <td class="use" colspan="4">
+      <ng-container [ngSwitch]="colorCode.strategy">
+        <!-- 📦 CONFORMITY -->
+
+        <ng-container *ngSwitchCase="'conformity'">
+          <ng-container
+            *ngFor="let conformity of conformities; trackBy: trackByKey"
+          >
+            <tr *ngIf="countByConformity[conformity[0]] > 0">
+              <td class="conformity">
+                <figure
+                  [style.backgroundColor]="'rgba(var(--map-parcel-fill-c' + quantizeConformingArea(conformity[1]) + '), 0.5)'"
+                  class="key"
+                ></figure>
+              </td>
+              <td class="desc">{{ conformity[0] }}</td>
+              <td class="count">
+                {{ countByConformity[conformity[0]] | number:'1.0-0' }}
+              </td>
+              <td class="count">
+                {{ areaByConformity[conformity[0]] | number:'1.0-0' }}
+              </td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+
+        <!-- 📦 OWNERSHIP -->
+
+        <ng-container *ngSwitchCase="'ownership'">
+          <ng-container
+            *ngFor="let ownership of parcelPropertiesOwnership | keyvalue; trackBy: trackByKeyValue"
+          >
+            <tr *ngIf="countByOwnership[ownership.key] > 0">
+              <td class="ownership">
+                <figure
+                  [style.backgroundColor]="'rgba(var(--map-parcel-fill-o' + ownership.key + '), 0.5)'"
+                  class="key"
+                ></figure>
+              </td>
+              <td class="desc">{{ ownership.value }}</td>
+              <td class="count">
+                {{ countByOwnership[ownership.key] | number:'1.0-0' }}
+              </td>
+              <td class="count">
+                {{ areaByOwnership[ownership.key] | number:'1.0-0' }}
+              </td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+
+        <!-- 📦 USAGE -->
+
+        <ng-container *ngSwitchCase="'usage'">
+          <ng-container
+            *ngFor="let usage of parcelPropertiesUsage | keyvalue; trackBy: trackByKeyValue"
+          >
+            <tr *ngIf="countByUsage[usage.key] > 0">
+              <td class="usage">
+                <figure
+                  [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'"
+                  class="key"
+                ></figure>
+              </td>
+              <td class="desc">{{ usage.value }}</td>
+              <td class="count">
+                {{ countByUsage[usage.key] | number:'1.0-0' }}
+              </td>
+              <td class="count">
+                {{ areaByUsage[usage.key] | number:'1.0-0' }}
+              </td>
+              <td></td>
+            </tr>
+
+            <tr *ngIf="usage.key === '190'">
+              <td class="use" colspan="4">
+                <article class="keys">
+                  <ng-container
+                    *ngFor="let use of parcelPropertiesUse | keyvalue; trackBy: trackByKeyValue"
+                  >
+                    <!-- 🔥 TEMPORARY - WASHINGTON ONLY -->
+                    <figure
+                      *ngIf="['CUFL', 'CUMH', 'CUMW', 'CUUH', 'CUUW', 'CUWL'].includes(use.key)"
+                      class="key"
+                    >
+                      <img
+                        [src]="'assets/legend/' + use.key +'.png'"
+                        class="icon"
+                      />
+                      <figcaption>{{ use.value }}</figcaption>
+                    </figure>
+                  </ng-container>
+                </article>
+              </td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <tr>
+        <td colspan="4"></td>
+      </tr>
+
+      <tr>
+        <td class="des" colspan="4">
           <article class="keys">
-            <ng-container
-              *ngFor="let use of parcelPropertiesUse | keyvalue; trackBy: trackByKeyValue"
-            >
-              <!-- 🔥 TEMPORARY - WASHINGTON ONLY -->
-              <figure
-                *ngIf="['CUFL', 'CUMH', 'CUMW', 'CUUH', 'CUUW', 'CUWL'].includes(use.key)"
-                class="key"
-              >
-                <img [src]="'assets/legend/' + use.key +'.png'" class="icon" />
-                <figcaption>{{ use.value }}</figcaption>
-              </figure>
-            </ng-container>
+            DES
+
+            <figure class="key">
+              <img [src]="'assets/legend/floodplain.png'" class="icon" />
+              <figcaption>FEMA Floodplain</figcaption>
+            </figure>
+
+            <figure class="key">
+              <img [src]="'assets/legend/CUWL.png'" class="icon" />
+              <figcaption>Wetland</figcaption>
+            </figure>
           </article>
         </td>
-        <td></td>
       </tr>
-    </ng-container>
 
-    <tr>
-      <td colspan="4"></td>
-    </tr>
+      <tr>
+        <td colspan="4"></td>
+      </tr>
 
-    <tr>
-      <td class="des" colspan="4">
-        <article class="keys">
-          DES
+      <tr>
+        <td class="help">
+          <fa-icon [icon]="['fas', 'question-circle']" size="2x"></fa-icon>
+        </td>
+        <td class="desc" colspan="3">
+          <a href="mailto:munimap.helpdesk@gmail.com" target="_blank"
+            >munimap.helpdesk@gmail.com</a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-          <figure class="key">
-            <img [src]="'assets/legend/floodplain.png'" class="icon" />
-            <figcaption>FEMA Floodplain</figcaption>
-          </figure>
-
-          <figure class="key">
-            <img [src]="'assets/legend/CUWL.png'" class="icon" />
-            <figcaption>Wetland</figcaption>
-          </figure>
-        </article>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="4"></td>
-    </tr>
-
-    <tr>
-      <td class="help">
-        <fa-icon [icon]="['fas', 'question-circle']" size="2x"></fa-icon>
-      </td>
-      <td class="desc" colspan="3">
-        <a href="mailto:munimap.helpdesk@gmail.com" target="_blank"
-          >munimap.helpdesk@gmail.com</a
-        >
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <ng-container> </ng-container
+></ng-container>
