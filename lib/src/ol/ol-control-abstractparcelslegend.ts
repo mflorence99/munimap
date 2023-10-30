@@ -22,25 +22,42 @@ import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
 
+type Accumulator = Record<string, number>;
+
+type Conformity = [tag: string, area: number];
+
+interface Countable {
+  area?: number;
+  ownership?: string;
+  usage?: string;
+  use?: string;
+}
+
 export class Legend extends OLControl {
   constructor(opts: any) {
     super(opts);
   }
 }
 
-interface Override {
-  area?: number;
-  usage?: string;
-  use?: string;
-}
-
 export abstract class OLControlAbstractParcelsLegendComponent
   implements Mapable
 {
-  areaByUsage: Record<string, number> = {};
-  areaByUse: Record<string, number> = {};
+  areaByConformity: Accumulator;
+  areaByOwnership: Accumulator;
+  areaByUsage: Accumulator;
   areaOfParcels: number;
-  countByUsage: Record<string, number> = {};
+  conformities: Conformity[] = [
+    ['\u00bc acre', 0.25],
+    ['\u00bd acre', 0.5],
+    ['\u00be acre', 0.75],
+    ['1 acre', 1],
+    ['2 acres', 2],
+    ['3 acres', 3],
+    ['4 acres', 4]
+  ];
+  countByConformity: Accumulator;
+  countByOwnership: Accumulator;
+  countByUsage: Accumulator;
   olControl: OLControl;
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
@@ -66,12 +83,54 @@ export abstract class OLControlAbstractParcelsLegendComponent
   addToMap(): void {}
 
   onInit(): void {
+    this.#resetCounters();
     this.#handleGeoJSON$();
     this.#handleStreams$();
   }
 
   trackByKeyValue(ix: number, item: KeyValue<string, string>): string {
     return item.key;
+  }
+
+  #aggregateFeature(acc: Accumulator, by: string, value: number): void {
+    if (!acc[by]) acc[by] = 0;
+    acc[by] += value;
+  }
+
+  #aggregateParcels(geojson: Parcels, parcels: Parcel[]): void {
+    this.#resetCounters();
+    // 👉 build aggregate data structures
+    this.#insertAddedFeatures(geojson, parcels);
+    this.#filterRemovedFeatures(geojson, parcels);
+    const overridesByID = this.#makeOverridesByID(parcels);
+    // 👇 for each feature ...
+    geojson.features.forEach((feature) => {
+      const override = overridesByID[feature.id];
+      const props = override ?? feature.properties;
+      // 👇 simple aggregation by property
+      this.#aggregateFeature(this.areaByOwnership, props.ownership, props.area);
+      this.#aggregateFeature(this.countByOwnership, props.ownership, 1);
+      this.#aggregateFeature(this.areaByUsage, props.usage, props.area);
+      this.#aggregateFeature(this.countByUsage, props.usage, 1);
+      // 👇 quantization by area
+      this.#filterConformities(props.area).forEach((conformity) => {
+        this.#aggregateFeature(
+          this.areaByConformity,
+          conformity[0],
+          props.area
+        );
+        this.#aggregateFeature(this.countByConformity, conformity[0], 1);
+      });
+    });
+    // 👉 count the total area of all parcels
+    this.areaOfParcels = Object.values(this.areaByUsage).reduce(
+      (p, q) => p + q,
+      0
+    );
+  }
+
+  #filterConformities(area: number): Conformity[] {
+    return this.conformities.filter((conformity) => area < conformity[1]);
   }
 
   #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): void {
@@ -99,40 +158,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
       .subscribe(([original, parcels]) => {
         // 👉 take a copy of the geojson before we change it
         const geojson = copy(original);
-        // 👉 build aggregate data structures
-        this.#insertAddedFeatures(geojson, parcels);
-        this.#filterRemovedFeatures(geojson, parcels);
-        const overridesByID = this.#makeOverridesByID(parcels);
-        // 👉 aggregate area by usage
-        this.areaByUsage = geojson.features.reduce((acc, feature) => {
-          const override = overridesByID[feature.id];
-          const area = override?.area ?? feature.properties.area;
-          const usage = override?.usage ?? feature.properties.usage;
-          if (!acc[usage]) acc[usage] = 0;
-          acc[usage] += area;
-          return acc;
-        }, {});
-        // 👉 aggregate area by use
-        this.areaByUse = geojson.features.reduce((acc, feature) => {
-          const override = overridesByID[feature.id];
-          const area = override?.area ?? feature.properties.area;
-          const use = override?.use ?? feature.properties.use;
-          if (!acc[use]) acc[use] = 0;
-          acc[use] += area;
-          return acc;
-        }, {});
-        // 👉 aggregate count by usage
-        this.countByUsage = geojson.features.reduce((acc, feature) => {
-          const override = overridesByID[feature.id];
-          const usage = override?.usage ?? feature.properties.usage;
-          if (!acc[usage]) acc[usage] = 0;
-          acc[usage] += 1;
-          return acc;
-        }, {});
-        this.areaOfParcels = Object.values(this.areaByUsage).reduce(
-          (p, q) => p + q,
-          0
-        );
+        this.#aggregateParcels(geojson, parcels);
         this.cdf.markForCheck();
       });
   }
@@ -150,15 +176,15 @@ export abstract class OLControlAbstractParcelsLegendComponent
     });
   }
 
-  #makeOverridesByID(parcels: Parcel[]): Record<ParcelID, Override> {
+  #makeOverridesByID(parcels: Parcel[]): Record<ParcelID, Countable> {
     const modified = this.parcelsState.parcelsModified(parcels);
     // 👉 merge all the modifications into a single override
     return Object.keys(modified).reduce((acc, id) => {
-      const override: Override = {};
+      const override: Countable = {};
       modified[id].forEach((parcel) => {
         const props = parcel.properties;
         if (props) {
-          ['area', 'usage', 'use'].forEach((prop) => {
+          ['area', 'ownership', 'usage', 'use'].forEach((prop) => {
             if (props[prop] !== undefined && override[prop] === undefined)
               override[prop] = props[prop];
           });
@@ -167,5 +193,14 @@ export abstract class OLControlAbstractParcelsLegendComponent
       acc[id] = override;
       return acc;
     }, {});
+  }
+
+  #resetCounters(): void {
+    this.areaByConformity = {};
+    this.areaByOwnership = {};
+    this.areaByUsage = {};
+    this.countByConformity = {};
+    this.countByOwnership = {};
+    this.countByUsage = {};
   }
 }
