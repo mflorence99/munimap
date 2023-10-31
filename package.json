@@ -1,12 +1,12 @@
 {
   "name": "munimap",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "MuniMap",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/mflorence99/munimap.git"
   },
+  "license": "MIT",
   "author": "Mark Florence",
   "scripts": {
     "align:parcels:finalize": "./bin/parcel-aligner-finalize.sh",
@@ -31,16 +31,18 @@
     "firebase:emulators:landmarks:curated": "ts-node --dir bin landmarks-curated.ts --useEmulator",
     "firebase:emulators:maps:curated": "ts-node --dir bin maps-curated.ts --useEmulator",
     "firebase:emulators:parcels:curated": "ts-node --dir bin parcel-stealer.ts --useEmulator",
+    "firebase:emulators:restore": "ts-node --dir bin restore.ts --useEmulator",
     "firebase:emulators:users:curated": "ts-node --dir bin users-curated.ts --useEmulator",
     "firebase:live:backup": "ts-node --dir bin backup.ts",
     "firebase:live:clean": "ts-node --dir bin clean.ts && ts-node --dir bin parcel-stealer.ts",
     "firebase:live:landmarks:curated": "ts-node --dir bin landmarks-curated.ts",
     "firebase:live:maps:curated": "ts-node --dir bin maps-curated.ts",
     "firebase:live:parcels:curated": "ts-node --dir bin parcel-stealer.ts",
+    "firebase:live:restore": "ts-node --dir bin restore.ts",
     "firebase:live:users:curated": "ts-node --dir bin users-curated.ts",
+    "postinstall": "npm run patcher",
     "lint": "TIMING=1 time eslint --ext ts ./",
     "patcher": "ts-node --dir bin patcher.ts",
-    "postinstall": "npm run patcher",
     "prettier": "prettier --write .",
     "proxy:all": "npm run proxy:state && npm run proxy:counties && npm run proxy:towns && npm run proxy:indexer && npm run proxy:buildings && npm run proxy:lakes && npm run proxy:parcels && npm run proxy:places && npm run proxy:powerlines && npm run proxy:railroads && npm run proxy:rivers && npm run proxy:roads && npm run proxy:trails && npm run proxy:indexer && npm run proxy:curated",
     "proxy:avitar": "ts-node --dir bin avitar.ts",
@@ -79,9 +81,7 @@
     "serve:proxy": "npm run compile:proxy && node dist/proxy/server.js --port 4201",
     "serve:viewer:henniker": "npm run assets:viewer:henniker && ng serve viewer --port 4202 --allowed-hosts henniker.lots.online",
     "serve:viewer:ssl": "ws -p 8102 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/viewer --log.format dev",
-    "serve:viewer:washington": "npm run assets:viewer:washington && ng serve viewer --port 4202 --allowed-hosts washington.lots.online",
-    "xxx": "ng build author --watch",
-    "yyy": "npm run assets:viewer:washington && ng build viewer --watch"
+    "serve:viewer:washington": "npm run assets:viewer:washington && ng serve viewer --port 4202 --allowed-hosts washington.lots.online"
   },
   "dependencies": {
     "@angular/animations": "^16",

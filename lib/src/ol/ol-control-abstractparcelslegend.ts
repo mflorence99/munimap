@@ -118,7 +118,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     // 👇 for each feature ...
     geojson.features.forEach((feature) => {
       const override = overridesByID[feature.id];
-      const props = override ?? feature.properties;
+      const props = Object.assign(feature.properties, override);
       // 👇 simple aggregation by property
       this.#aggregateFeature(this.areaByOwnership, props.ownership, props.area);
       this.#aggregateFeature(this.countByOwnership, props.ownership, 1);

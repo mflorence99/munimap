@@ -19,9 +19,10 @@ import jsome from 'jsome';
 
 // main();
 
-const nfhl = JSON.parse(
-  readFileSync('/home/mflo/Downloads/fema/S_FLD_HAZ_LN.geojson').toString()
+const geojson = JSON.parse(
+  readFileSync(
+    './data/NEW HAMPSHIRE/SULLIVAN/WASHINGTON/countables.geojson'
+  ).toString()
 );
 
-jsome(nfhl.features[0]);
-jsome(nfhl.features[1000]);
+jsome(`# features ${geojson.features.length}`);

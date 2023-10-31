@@ -405,13 +405,12 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         }
       }
       // 👇 develop the lineDash
-      let lineDash;
-      if (props.strokeStyle === 'dashed')
+      let lineDash = null;
+      if (props.strokeStyle === 'dashed' && props.lineDash)
         lineDash = [
           strokePixels * props.lineDash[0],
           strokePixels * props.lineDash[1]
         ];
-      else if (props.strokeStyle === 'solid') lineDash = null;
       // 🐛 StrokePattern sometimes throws InvalidStateError
       let stroke = new OLStroke({
         color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
