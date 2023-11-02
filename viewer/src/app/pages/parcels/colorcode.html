@@ -29,13 +29,25 @@
     required
   >
     <mat-radio-button value="usage">By land use</mat-radio-button>
-    <mat-radio-button value="ownership">By ownership</mat-radio-button>
-    <mat-radio-button value="conformity">By conformity</mat-radio-button>
+    <mat-radio-button value="ownership"
+      >By ownership <sup>[1]</sup></mat-radio-button
+    >
+    <mat-radio-button value="conformity"
+      >By conformity <sup>[1]</sup></mat-radio-button
+    >
   </mat-radio-group>
+
+  <p class="instructions">
+    <sup>[1]</sup> These color-codings are experimental. Contact
+    <a href="mailto:munimap.helpdesk@gmail.com" target="_blank"
+      >munimap.helpdesk@gmail.com</a
+    >
+    with questions or suggestions.
+  </p>
 </form>
 
 <article class="actions">
-  <button (click)="cancel()" mat-flat-button>DONE</button>
+  <button (click)="cancel()" mat-flat-button>CANCEL</button>
 
   <button
     [disabled]="!setupForm.dirty"

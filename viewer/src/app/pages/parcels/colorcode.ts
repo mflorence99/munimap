@@ -47,9 +47,7 @@ export class ParcelsColorCodeComponent implements OnInit {
 
   save(record: ColorCodeStateModel): void {
     this.store.dispatch(new SetColorCode(record));
-    // 👉 this resets the dirty flag, disabling SAVE until
-    //    additional data entered
-    this.setupForm.form.markAsPristine();
+    this.drawer.close();
   }
 
   #handleColorCode$(): void {
