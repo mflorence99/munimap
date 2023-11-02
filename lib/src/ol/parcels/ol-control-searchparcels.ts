@@ -10,6 +10,8 @@ import { SearchableParcels } from '../../common';
 import { Searcher } from '../ol-searcher';
 import { SearcherComponent } from '../ol-searcher';
 
+import { isParcelStollen } from '../../common';
+
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -123,10 +125,11 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     return match.key;
   }
 
+  // 👇 stolen parcels don't count!
   #filterRemovedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
-      (feature) => !removed.has(feature.id)
+      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
     );
   }
 

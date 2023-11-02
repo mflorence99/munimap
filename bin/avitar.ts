@@ -1,3 +1,5 @@
+import { isParcelStollen } from '../lib/src/common';
+
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
@@ -56,7 +58,7 @@ function main(): void {
 
 function eliminateStolenParcels(): void {
   Object.keys(featureByID)
-    .filter((id) => id.startsWith('(') && id.endsWith(')'))
+    .filter((id) => isParcelStollen(id))
     .forEach((id) => delete featureByID[id]);
 }
 

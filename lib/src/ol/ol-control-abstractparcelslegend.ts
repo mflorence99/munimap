@@ -1,12 +1,13 @@
+import { CountableParcels } from '../common';
 import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { Mapable } from './ol-mapable';
 import { MapState } from '../state/map';
 import { Parcel } from '../common';
 import { ParcelID } from '../common';
-import { Parcels } from '../common';
 import { ParcelsState } from '../state/parcels';
 
+import { isParcelStollen } from '../common';
 import { parcelPropertiesOwnership } from '../common';
 import { parcelPropertiesUsage } from '../common';
 import { parcelPropertiesUse } from '../common';
@@ -65,7 +66,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
 
-  #geojson$ = new Subject<Parcels>();
+  #geojson$ = new Subject<CountableParcels>();
 
   abstract county: string;
   abstract id: string;
@@ -109,7 +110,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     acc[by] += value;
   }
 
-  #aggregateParcels(geojson: Parcels, parcels: Parcel[]): void {
+  #aggregateParcels(geojson: CountableParcels, parcels: Parcel[]): void {
     this.#resetCounters();
     // 👉 build aggregate data structures
     this.#insertAddedFeatures(geojson, parcels);
@@ -145,10 +146,11 @@ export abstract class OLControlAbstractParcelsLegendComponent
     return this.conformities.filter((conformity) => area < conformity[1]);
   }
 
-  #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): void {
+  // 👇 stolen parcels don't count!
+  #filterRemovedFeatures(geojson: CountableParcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
-      (feature) => !removed.has(feature.id)
+      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
     );
   }
 
@@ -160,7 +162,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #handleGeoJSON$(): void {
     this.geoJSON
       .loadByIndex(this.route, this.mapState.currentMap().path, 'countables')
-      .subscribe((geojson: Parcels) => this.#geojson$.next(geojson));
+      .subscribe((geojson: CountableParcels) => this.#geojson$.next(geojson));
   }
 
   #handleStreams$(): void {
@@ -175,7 +177,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
       });
   }
 
-  #insertAddedFeatures(geojson: Parcels, parcels: Parcel[]): void {
+  #insertAddedFeatures(geojson: CountableParcels, parcels: Parcel[]): void {
     const added = this.parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
     added.forEach((id) => {

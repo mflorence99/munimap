@@ -12,6 +12,7 @@ import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
 
 import { getAPDVDFill } from '../apdvd';
+import { isParcelStollen } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -140,16 +141,10 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       this.layer.olLayer.getSource().refresh();
     }
   }
-
-  // 🔥 the whole notion of "stolen" parcels to support multi-town
-  //    property maps is a possibly temporary hack, so we don't mind
-  //    for now the secret handshake that their parcel IDs are
-  //    wrapped in parentheses as in (12-4)
-
   style(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
       // 👉 stolen parcels
-      if (feature.getId().startsWith('(') && this.showStolen === 'never')
+      if (isParcelStollen(feature.getId()) && this.showStolen === 'never')
         return null;
       // 👉 normal parcels
       else {
@@ -176,7 +171,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   styleWhenSelected(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
       // 👉 stolen parcels
-      if (feature.getId().startsWith('(') && this.showStolen === 'never')
+      if (isParcelStollen(feature.getId()) && this.showStolen === 'never')
         return null;
       // 👉 normal parcels
       else {

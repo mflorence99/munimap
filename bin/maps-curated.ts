@@ -4,6 +4,7 @@ import { Parcels } from '../lib/src/common';
 
 import { bboxByAspectRatio } from '../lib/src/common';
 import { deserializeParcel } from '../lib/src/common';
+import { isParcelStollen } from '../lib/src/common';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
@@ -289,7 +290,7 @@ async function bboxFromParcelIDs(map, border: number): Promise<number[]> {
   const parcelsByID = loadGeoJSON(map);
   const stolenByID = await loadStolenParcels();
   const parcels: any[] = map.parcelIDs.map((parcelID) => {
-    if (parcelID.startsWith('(')) return stolenByID[parcelID];
+    if (isParcelStollen(parcelID)) return stolenByID[parcelID];
     else return parcelsByID[parcelID];
   });
   const bounds: GeoJSON.Feature = {

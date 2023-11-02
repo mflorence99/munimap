@@ -362,6 +362,8 @@ export type Parcels = GeoJSON.FeatureCollection<
   ParcelProperties
 >;
 
+export type CountableParcels = Partial<Parcels>;
+
 export type SearchableParcels = Partial<Parcels>;
 
 export type ParcelAction = 'added' | 'modified' | 'removed';
@@ -1108,6 +1110,17 @@ export function deserializeParcel(parcel: Partial<Parcel>): void {
         parcel.properties[prop] = JSON.parse(parcel.properties[prop]);
     });
   }
+}
+
+// 🔥 the whole notion of "stolen" parcels to support multi-town
+//    property maps is a possibly temporary hack, so we don't mind
+//    for now the secret handshake that their parcel IDs are
+//    wrapped in parentheses as in (12-4)
+
+// 👉 yes, we really did mean to misspell "stollen"
+
+export function isParcelStollen(id: ParcelID): boolean {
+  return typeof id === 'string' && id.startsWith('(') && id.endsWith(')');
 }
 
 // 👇 we use this when landmarks are imported from an external source,

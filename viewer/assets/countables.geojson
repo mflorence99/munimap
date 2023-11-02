@@ -20142,7 +20142,12 @@
     },
     {
       "id": "11-27-6",
-      "properties": { "area": 15, "ownership": "X", "usage": "190", "use": "" },
+      "properties": {
+        "area": 15,
+        "ownership": "X",
+        "usage": "190",
+        "use": ""
+      },
       "type": "Feature"
     },
     {
@@ -20157,12 +20162,22 @@
     },
     {
       "id": "11-27-2",
-      "properties": { "area": 12, "ownership": "X", "usage": "190", "use": "" },
+      "properties": {
+        "area": 12,
+        "ownership": "X",
+        "usage": "190",
+        "use": ""
+      },
       "type": "Feature"
     },
     {
       "id": "21-4-01",
-      "properties": { "area": 32, "ownership": "N", "usage": "190", "use": "" },
+      "properties": {
+        "area": 32,
+        "ownership": "N",
+        "usage": "190",
+        "use": ""
+      },
       "type": "Feature"
     },
     {
@@ -20177,12 +20192,22 @@
     },
     {
       "id": "9-36-1",
-      "properties": { "area": 20, "ownership": "X", "usage": "110", "use": "" },
+      "properties": {
+        "area": 20,
+        "ownership": "X",
+        "usage": "110",
+        "use": ""
+      },
       "type": "Feature"
     },
     {
       "id": "15-70-1",
-      "properties": { "area": 12, "ownership": "X", "usage": "110", "use": "" },
+      "properties": {
+        "area": 12,
+        "ownership": "X",
+        "usage": "110",
+        "use": ""
+      },
       "type": "Feature"
     },
     {

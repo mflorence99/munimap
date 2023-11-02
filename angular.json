@@ -49,7 +49,6 @@
               "polylabel",
               "rbush",
               "ts-md5",
-              "turf-jsts",
               "ua-parser-js",
               "url-parse"
             ],
@@ -150,7 +149,6 @@
               "polylabel",
               "rbush",
               "ts-md5",
-              "turf-jsts",
               "ua-parser-js",
               "url-parse"
             ],

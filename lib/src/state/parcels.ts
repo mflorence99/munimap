@@ -14,6 +14,7 @@ import { Working } from './working';
 
 import { calculateParcel } from '../common';
 import { deserializeParcel } from '../common';
+import { normalizeOwnership } from '../common';
 import { normalizeParcel } from '../common';
 import { serializeParcel } from '../common';
 import { timestampParcel } from '../common';
@@ -344,7 +345,17 @@ export class ParcelsState implements NgxsOnInit {
           }
         }),
         map((parcels: Parcel[]) => {
-          parcels.forEach((parcel) => deserializeParcel(parcel));
+          parcels.forEach((parcel) => {
+            deserializeParcel(parcel);
+            // 🔥 we need this because ownership was added later as a derived
+            //    property dependent on addressOfOwner, but there are parcels
+            //    in the wild on firebase that were created BEFORE this change
+            if (
+              parcel.properties.addressOfOwner &&
+              !parcel.properties.ownership
+            )
+              normalizeOwnership(parcel);
+          });
           return parcels;
         }),
         // 👉 cut down on noise
