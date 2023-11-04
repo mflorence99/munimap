@@ -5,6 +5,7 @@ import { Mapable } from './ol-mapable';
 import { MapState } from '../state/map';
 import { Parcel } from '../common';
 import { ParcelID } from '../common';
+import { ParcelProperties } from '../common';
 import { ParcelsState } from '../state/parcels';
 
 import { isParcelStollen } from '../common';
@@ -86,6 +87,9 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   addToMap(): void {}
 
+  // 👉 may be implemented by subclass
+  aggregateParcelImpl(_props: ParcelProperties): void {}
+
   onInit(): void {
     this.#resetCounters();
     this.#handleGeoJSON$();
@@ -96,6 +100,9 @@ export abstract class OLControlAbstractParcelsLegendComponent
     const conforming = this.conformities.at(-1)[1];
     return Math.trunc((conforming - area) * (10 / conforming));
   }
+
+  // 👉 may be implemented by subclass
+  resetCountersImpl(): void {}
 
   trackByKey(ix: number, key: string): string {
     return key;
@@ -110,6 +117,21 @@ export abstract class OLControlAbstractParcelsLegendComponent
     acc[by] += value;
   }
 
+  #aggregateParcel(props: ParcelProperties): void {
+    // 👇 simple aggregation by property
+    this.#aggregateFeature(this.areaByOwnership, props.ownership, props.area);
+    this.#aggregateFeature(this.countByOwnership, props.ownership, 1);
+    this.#aggregateFeature(this.areaByUsage, props.usage, props.area);
+    this.#aggregateFeature(this.countByUsage, props.usage, 1);
+    // 👇 quantization by area
+    this.#filterConformities(props.area).forEach((conformity) => {
+      this.#aggregateFeature(this.areaByConformity, conformity[0], props.area);
+      this.#aggregateFeature(this.countByConformity, conformity[0], 1);
+    });
+    // 👇 any additional aggregation
+    this.aggregateParcelImpl(props);
+  }
+
   #aggregateParcels(geojson: CountableParcels, parcels: Parcel[]): void {
     this.#resetCounters();
     // 👉 build aggregate data structures
@@ -120,20 +142,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     geojson.features.forEach((feature) => {
       const override = overridesByID[feature.id];
       const props = Object.assign(feature.properties, override);
-      // 👇 simple aggregation by property
-      this.#aggregateFeature(this.areaByOwnership, props.ownership, props.area);
-      this.#aggregateFeature(this.countByOwnership, props.ownership, 1);
-      this.#aggregateFeature(this.areaByUsage, props.usage, props.area);
-      this.#aggregateFeature(this.countByUsage, props.usage, 1);
-      // 👇 quantization by area
-      this.#filterConformities(props.area).forEach((conformity) => {
-        this.#aggregateFeature(
-          this.areaByConformity,
-          conformity[0],
-          props.area
-        );
-        this.#aggregateFeature(this.countByConformity, conformity[0], 1);
-      });
+      this.#aggregateParcel(props);
     });
     // 👉 count the total area of all parcels
     this.areaOfParcels = Object.values(this.areaByUsage).reduce(
@@ -216,5 +225,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     this.countByConformity = {};
     this.countByOwnership = {};
     this.countByUsage = {};
+    // 👇 addtional counters
+    this.resetCountersImpl();
   }
 }

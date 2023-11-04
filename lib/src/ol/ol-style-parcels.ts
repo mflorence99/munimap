@@ -11,7 +11,7 @@ import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
 
-import { getAPDVDFill } from '../apdvd';
+import { getAPDVDFill } from './apdvd/ol-apdvd';
 import { isParcelStollen } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';

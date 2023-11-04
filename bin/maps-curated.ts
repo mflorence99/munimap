@@ -146,7 +146,7 @@ const MAPS = [
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [36, 36],
     timestamp: null,
-    type: 'area'
+    type: 'apdvd'
   },
   {
     bbox: null,

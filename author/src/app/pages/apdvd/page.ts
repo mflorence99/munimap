@@ -26,11 +26,11 @@ import { ViewState } from '@lib/state/view';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-area',
+  selector: 'app-apdvd',
   styleUrls: ['../abstract-map.scss'],
   templateUrl: './page.html'
 })
-export class AreaPage extends AbstractMapPage implements OnInit {
+export class APDVDPage extends AbstractMapPage implements OnInit {
   @ViewChild(ContextMenuHostDirective)
   contextMenuHost: ContextMenuHostDirective;
 
@@ -56,7 +56,7 @@ export class AreaPage extends AbstractMapPage implements OnInit {
   }
 
   getType(): MapType {
-    return 'area';
+    return 'apdvd';
   }
 
   ngOnInit(): void {

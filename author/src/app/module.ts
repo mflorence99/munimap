@@ -1,4 +1,5 @@
 import { AddParcelComponent } from './pages/parcels/add-parcel';
+import { APDVDPage } from './pages/apdvd/page';
 import { AreaPage } from './pages/area/page';
 import { AutoFocusDirective } from './directives/autofocus';
 import { AvatarComponent } from './components/avatar';
@@ -101,6 +102,7 @@ import { OLAdaptorWaterbodiesAtNightComponent } from '@lib/ol/ol-adaptor-waterbo
 import { OLAdaptorWaterbodiesComponent } from '@lib/ol/ol-adaptor-waterbodies';
 import { OLAdaptorWetlandsComponent } from '@lib/ol/ol-adaptor-wetlands';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
+import { OLControlAPDVDLegendComponent } from '@lib/ol/apdvd/ol-control-apdvdlegend';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
 import { OLControlExportLandmarksComponent } from '@lib/ol/landmarks/ol-control-exportlandmarks';
@@ -282,6 +284,7 @@ const COMPONENTS = [
   OLAdaptorWaterbodiesAtNightComponent,
   OLAdaptorWetlandsComponent,
   OLAttributionComponent,
+  OLControlAPDVDLegendComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,
   OLControlExportLandmarksComponent,
@@ -358,6 +361,7 @@ const DIRECTIVES = [
 ];
 
 const PAGES = [
+  APDVDPage,
   AreaPage,
   LoginPage,
   CreatePage,
@@ -393,6 +397,11 @@ const ROUTES: any = [
       ready: ReadyResolver
     },
     children: [
+      {
+        path: 'apdvd/:id',
+        component: APDVDPage,
+        data: { state: 'apdvd' }
+      },
       {
         path: 'area/:id',
         component: AreaPage,

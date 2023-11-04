@@ -1,7 +1,7 @@
 // 🔥 HACK FOR APDVD
 
-import { ParcelID } from './common';
-import { ParcelProperties } from './common';
+import { ParcelID } from '../../common';
+import { ParcelProperties } from '../../common';
 
 const existingExcept = new Set<ParcelID>([
   '10-3',
@@ -176,12 +176,28 @@ const proposed = new Set<ParcelID>([
   '18-36'
 ]);
 
+export const colorOfAPDVDExcluded = '255, 255, 255';
+export const colorOfAPDVDExisting = '255, 0, 0';
+export const colorOfAPDVDProposed = '0, 0, 255';
+
 export function getAPDVDFill(props: ParcelProperties): string {
-  const isExisting =
+  if (isAPDVDExcluded(props)) return colorOfAPDVDExcluded;
+  if (isAPDVDExisting(props)) return colorOfAPDVDExisting;
+  if (isAPDVDProposed(props)) return colorOfAPDVDProposed;
+}
+
+export function isAPDVDExcluded(props: ParcelProperties): boolean {
+  return !isAPDVDExisting(props) && !isAPDVDProposed(props);
+}
+
+export function isAPDVDExisting(props: ParcelProperties): boolean {
+  return (
+    !isAPDVDProposed(props) &&
     !existingExcept.has(props.id) &&
-    existingStreets.some((street) => props.address.includes(street));
-  const isProposed = proposed.has(props.id);
-  if (isProposed) return '0, 0, 255';
-  else if (isExisting) return '255, 0, 0';
-  else return '255, 255, 255';
+    existingStreets.some((street) => props.address.includes(street))
+  );
+}
+
+export function isAPDVDProposed(props: ParcelProperties): boolean {
+  return proposed.has(props.id);
 }

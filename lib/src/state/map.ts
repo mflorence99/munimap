@@ -38,7 +38,11 @@ export class DeleteMap {
 
 export class LoadMap {
   static readonly type = '[Map] LoadMap';
-  constructor(public id: string, public dflt: Map, public touch = false) {}
+  constructor(
+    public id: string,
+    public dflt: Map,
+    public touch = false
+  ) {}
 }
 
 export class SetMap {
@@ -48,7 +52,10 @@ export class SetMap {
 
 export class UpdateMap {
   static readonly type = '[Map] UpdateMap';
-  constructor(public map: Map, public refresh = false) {}
+  constructor(
+    public map: Map,
+    public refresh = false
+  ) {}
 }
 
 export class UpdateMapError {
@@ -57,6 +64,7 @@ export class UpdateMapError {
 }
 
 export type MapType =
+  | 'apdvd'
   | 'area'
   | 'dpw'
   | 'night'
@@ -86,7 +94,10 @@ export type MapStateModel = Map;
 })
 @Injectable()
 export class MapState {
-  constructor(private firestore: Firestore, private store: Store) {}
+  constructor(
+    private firestore: Firestore,
+    private store: Store
+  ) {}
 
   @Action(ClearMap) clearMap(
     ctx: StateContext<MapStateModel>,
