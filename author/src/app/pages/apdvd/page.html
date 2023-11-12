@@ -6,46 +6,40 @@
   [loadingStrategy]="'bbox'"
   [minZoom]="15"
   [maxZoom]="20"
-  [path]="map.path"
->
+  [path]="map.path">
   <app-controlpanel-properties
     [map]="map"
-    mapControlPanel1
-  ></app-controlpanel-properties>
+    mapControlPanel1></app-controlpanel-properties>
 
   <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
   <app-ol-control-print
     [fileName]="map.name"
     [printSize]="map.printSize"
-    mapControlPrint
-  ></app-ol-control-print>
+    mapControlPrint></app-ol-control-print>
 
   <app-ol-control-zoom2extent
-    mapControlZoomToExtent
-  ></app-ol-control-zoom2extent>
+    mapControlZoomToExtent></app-ol-control-zoom2extent>
 
   <app-ol-control-attribution
-    mapControlAttribution
-  ></app-ol-control-attribution>
+    mapControlAttribution></app-ol-control-attribution>
 
   @if (olMap.initialized) {
 
   <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
   @if (olMap.printing) {
-  <app-ol-control-graticule
-    ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
-  ></app-ol-control-graticule>
+  <app-ol-control-graticule>
+    <app-ol-style-graticule [printing]="true"></app-ol-style-graticule>
+  </app-ol-control-graticule>
   } @if (!olMap.printing) {
-  <app-ol-control-graticule
-    ><app-ol-style-graticule></app-ol-style-graticule
-  ></app-ol-control-graticule>
+  <app-ol-control-graticule>
+    <app-ol-style-graticule></app-ol-style-graticule>
+  </app-ol-control-graticule>
   } @if (map.name) {
   <app-ol-control-apdvdlegend
     [printing]="olMap.printing"
-    [title]="map.name"
-  ></app-ol-control-apdvdlegend>
+    [title]="map.name"></app-ol-control-apdvdlegend>
   }
 
   <!-- 🔥 TOO OBTRUSIVE ?? <app-ol-control-scalebar *ngIf="olMap.printing"></app-ol-control-scalebar> -->
@@ -65,19 +59,16 @@
   @if (olMap.printing) {
   <app-ol-layer-tile>
     <app-ol-source-xyz
-      [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-      ><app-ol-attribution
-        >©
-        <a href="https://mapbox.com" target="_blank"
-          >Mapbox</a
-        ></app-ol-attribution
-      ></app-ol-source-xyz
-    >
+      [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey">
+      <app-ol-attribution>
+        ©
+        <a href="https://mapbox.com" target="_blank">Mapbox</a>
+      </app-ol-attribution>
+    </app-ol-source-xyz>
     <app-ol-filter-colorize
       [color]="[255, 255, 255]"
       [operation]="'hue'"
-      [value]="0.9"
-    ></app-ol-filter-colorize>
+      [value]="0.9"></app-ol-filter-colorize>
   </app-ol-layer-tile>
   }
 
@@ -96,19 +87,15 @@
   <app-ol-layer-tile>
     <app-ol-source-xyz
       [maxZoom]="16"
-      [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
-    >
+      [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'">
       <app-ol-attribution>
-        <a href="https://www.esri.com" target="_blank"
-          >Esri</a
-        ></app-ol-attribution
-      >
+        <a href="https://www.esri.com" target="_blank">Esri</a>
+      </app-ol-attribution>
     </app-ol-source-xyz>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     <app-ol-filter-colorize
       [operation]="'enhance'"
-      [value]="0.33"
-    ></app-ol-filter-colorize>
+      [value]="0.33"></app-ol-filter-colorize>
   </app-ol-layer-tile>
 
   <!-- 📦 NH GranIT VECTOR LAYERS -->
@@ -178,8 +165,8 @@
 
   <app-ol-layer-vector>
     <app-ol-adaptor-roads>
-      <app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-    ></app-ol-adaptor-roads>
+      <app-ol-style-universal [showStroke]="true"></app-ol-style-universal>
+    </app-ol-adaptor-roads>
     <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
   </app-ol-layer-vector>
@@ -207,8 +194,7 @@
     <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
     <app-ol-source-geojson
       [exclude]="['dam', 'park']"
-      [layerKey]="'places'"
-    ></app-ol-source-geojson>
+      [layerKey]="'places'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
   </app-ol-layer-vector>
 
@@ -221,9 +207,9 @@
   </app-ol-layer-vector>
 
   <app-ol-layer-vector>
-    <app-ol-adaptor-powerlines
-      ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
-    ></app-ol-adaptor-powerlines>
+    <app-ol-adaptor-powerlines>
+      <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+    </app-ol-adaptor-powerlines>
     <app-ol-source-geojson [layerKey]="'powerlines'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
   </app-ol-layer-vector>
@@ -231,8 +217,8 @@
   <app-ol-layer-vector>
     <!-- 👇 user landmarks here are really map amendments -->
     <app-ol-adaptor-landmarks>
-      <app-ol-style-universal [showAll]="true"></app-ol-style-universal
-    ></app-ol-adaptor-landmarks>
+      <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+    </app-ol-adaptor-landmarks>
     <app-ol-source-landmarks></app-ol-source-landmarks>
   </app-ol-layer-vector>
 
@@ -245,14 +231,12 @@
   <app-ol-layer-tile>
     <app-ol-source-xyz
       [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-      [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
-      ><app-ol-attribution
-        >©
-        <a href="https://google.com" target="_blank"
-          >Google</a
-        ></app-ol-attribution
-      ></app-ol-source-xyz
-    >
+      [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey">
+      <app-ol-attribution>
+        ©
+        <a href="https://google.com" target="_blank">Google</a>
+      </app-ol-attribution>
+    </app-ol-source-xyz>
   </app-ol-layer-tile>
 
   }
@@ -263,8 +247,7 @@
   <app-ol-layer-vector>
     <app-ol-style-parcels
       [showBorder]="'always'"
-      [showLabels]="'always'"
-    ></app-ol-style-parcels>
+      [showLabels]="'always'"></app-ol-style-parcels>
     <app-ol-source-parcels></app-ol-source-parcels>
   </app-ol-layer-vector>
   }
@@ -279,8 +262,7 @@
       [showDimensionContrast]="(satelliteView$ | async) ? 'always' : 'never'"
       [showLabels]="'always'"
       [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'never'"
-      [showSelection]="'always'"
-    ></app-ol-style-parcels>
+      [showSelection]="'always'"></app-ol-style-parcels>
     <app-ol-source-parcels></app-ol-source-parcels>
     <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
   </app-ol-layer-vector>
@@ -291,8 +273,8 @@
   @if (!(satelliteView$ | async)) {
   <app-ol-layer-vector>
     <app-ol-adaptor-roads>
-      <app-ol-style-universal [showText]="true"></app-ol-style-universal
-    ></app-ol-adaptor-roads>
+      <app-ol-style-universal [showText]="true"></app-ol-style-universal>
+    </app-ol-adaptor-roads>
     <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
   </app-ol-layer-vector>
@@ -301,9 +283,9 @@
   <!-- 📦 BOUNDARY LAYER (above selection so we can interact with it) -->
 
   <app-ol-layer-vector>
-    <app-ol-adaptor-boundary
-      ><app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-    ></app-ol-adaptor-boundary>
+    <app-ol-adaptor-boundary>
+      <app-ol-style-universal [showStroke]="true"></app-ol-style-universal>
+    </app-ol-adaptor-boundary>
     <app-ol-source-boundary></app-ol-source-boundary>
   </app-ol-layer-vector>
 

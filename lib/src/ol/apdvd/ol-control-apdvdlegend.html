@@ -1,8 +1,7 @@
 <article
   #legend
   [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
-  class="legend ol-legend ol-unselectable ol-control"
->
+  class="legend ol-legend ol-unselectable ol-control">
   <header class="header">
     <h1 class="title">{{ title }}</h1>
     <h2 class="subtitle">December 9, 2023</h2>
@@ -23,8 +22,7 @@
         <td class="usage">
           <figure
             [style.backgroundColor]="'rgba(' + colorOfAPDVDExisting + ', 0.25)'"
-            class="key"
-          ></figure>
+            class="key"></figure>
         </td>
         <td class="desc">Existing District</td>
         <td class="numeric">{{ countOfExisting | number: '1.0-0' }}</td>
@@ -35,8 +33,7 @@
         <td class="usage">
           <figure
             [style.backgroundColor]="'rgba(' + colorOfAPDVDProposed + ', 0.25)'"
-            class="key"
-          ></figure>
+            class="key"></figure>
         </td>
         <td class="desc">Proposed Expansion</td>
         <td class="numeric">{{ countOfProposed | number: '1.0-0' }}</td>

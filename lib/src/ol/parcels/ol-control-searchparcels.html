@@ -6,14 +6,12 @@
     (focus)="onSearch($event.srcElement.value)"
     (input)="onSearch($event.srcElement.value)"
     class="searcher"
-    placeholder="Search by parcel, address or owner"
-  />
+    placeholder="Search by parcel, address or owner" />
 
   <button
     (click)="theSearcher.value = ''"
     [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
-    mat-icon-button
-  >
+    mat-icon-button>
     <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>
   </button>
 </article>

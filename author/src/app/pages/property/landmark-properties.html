@@ -5,8 +5,9 @@
 
   <p class="title">Modify landmark settings</p>
   <p class="subtitle">
-    Use the <fa-icon [icon]="['fad', 'undo']"></fa-icon> tool to reverse any
-    changes
+    Use the
+    <fa-icon [icon]="['fad', 'undo']"></fa-icon>
+    tool to reverse any changes
   </p>
 </header>
 
@@ -18,8 +19,7 @@
   class="form"
   id="propertiesForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <mat-form-field>
     <mat-label>Name</mat-label>
     <input
@@ -28,14 +28,13 @@
       [appSelectOnFocus]="true"
       autocomplete="off"
       matInput
-      name="name"
-    />
+      name="name" />
   </mat-form-field>
 
   @if (['LineString', 'Polygon'].includes(geometryType)) {
-  <mat-checkbox [(ngModel)]="record.showDimension" name="showDimension"
-    >Show dimension</mat-checkbox
-  >
+  <mat-checkbox [(ngModel)]="record.showDimension" name="showDimension">
+    Show dimension
+  </mat-checkbox>
   }
 </form>
 
@@ -47,8 +46,7 @@
     color="primary"
     form="propertiesForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

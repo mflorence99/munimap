@@ -15,8 +15,7 @@
       class="form"
       id="loginForm"
       novalidate
-      spellcheck="false"
-    >
+      spellcheck="false">
       <mat-form-field>
         <mat-label>Email Address</mat-label>
         <input
@@ -29,10 +28,9 @@
           matInput
           name="emailAddress"
           required
-          type="text"
-        />
+          type="text" />
         @if (emailAddress.errors) {
-        <mat-error>Email address is required and must be valid </mat-error>
+        <mat-error>Email address is required and must be valid</mat-error>
         }
       </mat-form-field>
 
@@ -48,8 +46,7 @@
       color="primary"
       form="loginForm"
       mat-flat-button
-      type="submit"
-    >
+      type="submit">
       NEXT
     </button>
   </mat-card-actions>
@@ -63,12 +60,10 @@
   <mat-card-header>
     <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
     <mat-card-title>Please Login</mat-card-title>
-    <mat-card-subtitle
-      >Next, enter your password.
-      <a (click)="resetPassword()">
-        Forgot your password?
-      </a></mat-card-subtitle
-    >
+    <mat-card-subtitle>
+      Next, enter your password.
+      <a (click)="resetPassword()">Forgot your password?</a>
+    </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -78,8 +73,7 @@
       class="form"
       id="loginForm"
       novalidate
-      spellcheck="false"
-    >
+      spellcheck="false">
       <mat-form-field>
         <mat-label>Email Address</mat-label>
         <input
@@ -88,8 +82,7 @@
           disabled
           matInput
           name="emailAddress"
-          type="text"
-        />
+          type="text" />
       </mat-form-field>
 
       <mat-form-field>
@@ -103,8 +96,7 @@
           matInput
           name="password"
           required
-          type="password"
-        />
+          type="password" />
       </mat-form-field>
 
       @if (errorMessage) {
@@ -114,7 +106,7 @@
   </mat-card-content>
 
   <mat-card-actions class="actions">
-    <a (click)="startOver()" mat-flat-button> Start Over </a>
+    <a (click)="startOver()" mat-flat-button>Start Over</a>
 
     <div class="filler"></div>
 
@@ -123,8 +115,7 @@
       color="primary"
       form="loginForm"
       mat-flat-button
-      type="submit"
-    >
+      type="submit">
       LOGIN
     </button>
   </mat-card-actions>
@@ -148,8 +139,7 @@
       class="form"
       id="loginForm"
       novalidate
-      spellcheck="false"
-    >
+      spellcheck="false">
       <mat-form-field>
         <mat-label>Email Address</mat-label>
         <input
@@ -158,8 +148,7 @@
           disabled
           matInput
           name="emailAddress"
-          type="text"
-        />
+          type="text" />
       </mat-form-field>
 
       <mat-form-field>
@@ -173,8 +162,7 @@
           matInput
           name="displayName"
           required
-          type="text"
-        />
+          type="text" />
       </mat-form-field>
 
       <mat-form-field>
@@ -187,8 +175,7 @@
           matInput
           name="password"
           required
-          type="password"
-        />
+          type="password" />
       </mat-form-field>
 
       @if (errorMessage) {
@@ -198,7 +185,7 @@
   </mat-card-content>
 
   <mat-card-actions class="actions">
-    <a (click)="startOver()" mat-flat-button> Start Over </a>
+    <a (click)="startOver()" mat-flat-button>Start Over</a>
 
     <div class="filler"></div>
 
@@ -207,8 +194,7 @@
       color="primary"
       form="loginForm"
       mat-flat-button
-      type="submit"
-    >
+      type="submit">
       SIGNUP
     </button>
   </mat-card-actions>

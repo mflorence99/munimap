@@ -13,21 +13,18 @@
     <mat-button-toggle
       #satelliteViewToggle
       (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
-      [checked]="satelliteView$ | async"
-    >
+      [checked]="satelliteView$ | async">
       <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
       @if (canPickSatelliteYear()) { &nbsp;
       <select
         (change)="onSatelliteYear($event.target.value)"
         (click)="eatMe($event)"
-        [disabled]="!(satelliteView$ | async)"
-      >
+        [disabled]="!(satelliteView$ | async)">
         @for (year of satelliteYears; track year) {
 
         <option
           [attr.selected]="year === (satelliteYear$ | async) ? 'true' : null"
-          [value]="year"
-        >
+          [value]="year">
           {{ year || 'Latest' }}
         </option>
 
@@ -40,16 +37,14 @@
     <mat-button-toggle
       #gpsToggle
       (change)="onGPSToggle(gpsToggle.checked)"
-      [checked]="gps$ | async"
-    >
+      [checked]="gps$ | async">
       <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
     </mat-button-toggle>
 
     @if (hasRightSidebar) {
     <mat-button-toggle
       (change)="rightSidebar.toggle()"
-      [checked]="rightSidebar.opened"
-    >
+      [checked]="rightSidebar.opened">
       <fa-icon [icon]="['fad', 'palette']" size="lg"></fa-icon>
     </mat-button-toggle>
     } @if (!hasLeftSidebar) {

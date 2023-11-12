@@ -14,12 +14,15 @@
   class="form"
   id="subdivisionForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <p class="instructions">
-    Specify the ID and acreage of each subdivision. After <em>SAVE</em>, use
-    <em>Redraw parcel boundary</em> and <em>Modify parcel settings</em> to
-    complete the subdivision.
+    Specify the ID and acreage of each subdivision. After
+    <em>SAVE</em>
+    , use
+    <em>Redraw parcel boundary</em>
+    and
+    <em>Modify parcel settings</em>
+    to complete the subdivision.
   </p>
 
   <article class="subdivisions">
@@ -38,10 +41,9 @@
         [required]="ix < 2"
         autocomplete="off"
         matInput
-        type="text"
-      />
+        type="text" />
       @if (subdivisionID.errors?.duplicate) {
-      <mat-error>Subdivision ID is a duplicate. </mat-error>
+      <mat-error>Subdivision ID is a duplicate.</mat-error>
       }
     </mat-form-field>
 
@@ -56,8 +58,7 @@
         [step]="0.01"
         autocomplete="off"
         matInput
-        type="number"
-      />
+        type="number" />
     </mat-form-field>
 
     }
@@ -76,8 +77,7 @@
     color="primary"
     form="subdivisionForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

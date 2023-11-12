@@ -5,8 +5,7 @@
   [minZoom]="13"
   [maxZoom]="22"
   [path]="map.path"
-  class="content"
->
+  class="content">
   <!-- 📦 CONTROLS -->
 
   @if ((zoom$ | async) >= olMap.minUsefulZoom) {
@@ -16,16 +15,15 @@
   <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
   <app-ol-control-attribution
-    mapControlAttribution
-  ></app-ol-control-attribution>
+    mapControlAttribution></app-ol-control-attribution>
 
   @if (olMap.initialized) {
 
   <!-- 📦 OL CONTROLS -->
 
-  <app-ol-control-graticule
-    ><app-ol-style-graticule></app-ol-style-graticule
-  ></app-ol-control-graticule>
+  <app-ol-control-graticule>
+    <app-ol-style-graticule></app-ol-style-graticule>
+  </app-ol-control-graticule>
 
   <app-ol-control-scaleline></app-ol-control-scaleline>
 
@@ -38,19 +36,16 @@
   @if ((zoom$ | async) < olMap.minUsefulZoom) {
   <app-ol-layer-tile>
     <app-ol-source-xyz
-      [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-      ><app-ol-attribution
-        >©
-        <a href="https://mapbox.com" target="_blank"
-          >Mapbox</a
-        ></app-ol-attribution
-      ></app-ol-source-xyz
-    >
+      [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey">
+      <app-ol-attribution>
+        ©
+        <a href="https://mapbox.com" target="_blank">Mapbox</a>
+      </app-ol-attribution>
+    </app-ol-source-xyz>
     <app-ol-filter-colorize
       [color]="[255, 255, 255]"
       [operation]="'hue'"
-      [value]="0.9"
-    ></app-ol-filter-colorize>
+      [value]="0.9"></app-ol-filter-colorize>
   </app-ol-layer-tile>
   }
 
@@ -69,19 +64,15 @@
   <app-ol-layer-tile>
     <app-ol-source-xyz
       [maxZoom]="16"
-      [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
-    >
+      [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'">
       <app-ol-attribution>
-        <a href="https://www.esri.com" target="_blank"
-          >Esri</a
-        ></app-ol-attribution
-      >
+        <a href="https://www.esri.com" target="_blank">Esri</a>
+      </app-ol-attribution>
     </app-ol-source-xyz>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
     <app-ol-filter-colorize
       [operation]="'enhance'"
-      [value]="0.33"
-    ></app-ol-filter-colorize>
+      [value]="0.33"></app-ol-filter-colorize>
   </app-ol-layer-tile>
 
   <!-- 📦 NH GranIT VECTOR LAYERS -->
@@ -157,8 +148,8 @@
 
   <app-ol-layer-vector>
     <app-ol-adaptor-roads>
-      <app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-    ></app-ol-adaptor-roads>
+      <app-ol-style-universal [showStroke]="true"></app-ol-style-universal>
+    </app-ol-adaptor-roads>
     <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
   </app-ol-layer-vector>
@@ -187,8 +178,7 @@
     <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
     <app-ol-source-geojson
       [exclude]="['dam', 'park']"
-      [layerKey]="'places'"
-    ></app-ol-source-geojson>
+      [layerKey]="'places'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
   </app-ol-layer-vector>
   } @if ((zoom$ | async) >= olMap.minUsefulZoom) {
@@ -202,17 +192,17 @@
   }
 
   <app-ol-layer-vector>
-    <app-ol-adaptor-powerlines
-      ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
-    ></app-ol-adaptor-powerlines>
+    <app-ol-adaptor-powerlines>
+      <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+    </app-ol-adaptor-powerlines>
     <app-ol-source-geojson [layerKey]="'powerlines'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
 
     <app-ol-layer-vector>
       <!-- 👇 user landmarks here are really map amendments -->
       <app-ol-adaptor-landmarks>
-        <app-ol-style-universal [showAll]="true"></app-ol-style-universal
-      ></app-ol-adaptor-landmarks>
+        <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+      </app-ol-adaptor-landmarks>
       <app-ol-source-landmarks></app-ol-source-landmarks>
     </app-ol-layer-vector>
   </app-ol-layer-vector>
@@ -223,14 +213,12 @@
   <app-ol-layer-tile>
     <app-ol-source-xyz
       [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-      [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
-      ><app-ol-attribution
-        >©
-        <a href="https://google.com" target="_blank"
-          >Google</a
-        ></app-ol-attribution
-      ></app-ol-source-xyz
-    >
+      [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey">
+      <app-ol-attribution>
+        ©
+        <a href="https://google.com" target="_blank">Google</a>
+      </app-ol-attribution>
+    </app-ol-source-xyz>
     <app-ol-filter-crop2selectedparcels></app-ol-filter-crop2selectedparcels>
   </app-ol-layer-tile>
   } }
@@ -247,20 +235,17 @@
     <app-ol-layer-tile #left>
       <app-ol-source-xyz
         [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-        [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
-        ><app-ol-attribution
-          >©
-          <a href="https://google.com" target="_blank"
-            >Google</a
-          ></app-ol-attribution
-        ></app-ol-source-xyz
-      >
+        [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey">
+        <app-ol-attribution>
+          ©
+          <a href="https://google.com" target="_blank">Google</a>
+        </app-ol-attribution>
+      </app-ol-source-xyz>
     </app-ol-layer-tile>
 
     <app-ol-layer-tile #right>
       <app-ol-source-satellite
-        [year]="ctx.satelliteYear"
-      ></app-ol-source-satellite>
+        [year]="ctx.satelliteYear"></app-ol-source-satellite>
     </app-ol-layer-tile>
   </app-ol-control-splitscreen>
   }
@@ -271,14 +256,12 @@
   <app-ol-layer-tile>
     <app-ol-source-xyz
       [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-      [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
-      ><app-ol-attribution
-        >©
-        <a href="https://google.com" target="_blank"
-          >Google</a
-        ></app-ol-attribution
-      ></app-ol-source-xyz
-    >
+      [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey">
+      <app-ol-attribution>
+        ©
+        <a href="https://google.com" target="_blank">Google</a>
+      </app-ol-attribution>
+    </app-ol-source-xyz>
   </app-ol-layer-tile>
   } } }
 
@@ -293,11 +276,10 @@
       [showDimensionContrast]="'always'"
       [showLabels]="'always'"
       [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'whenSelected'"
-      [showSelection]="'always'"
-    ></app-ol-style-parcels>
+      [showSelection]="'always'"></app-ol-style-parcels>
     <app-ol-source-parcels></app-ol-source-parcels>
-    <app-ol-interaction-selectparcels [findAbutters]="true">
-    </app-ol-interaction-selectparcels>
+    <app-ol-interaction-selectparcels
+      [findAbutters]="true"></app-ol-interaction-selectparcels>
   </app-ol-layer-vector>
   }
 
@@ -306,8 +288,8 @@
   @if (!(satelliteView$ | async)) {
   <app-ol-layer-vector>
     <app-ol-adaptor-roads>
-      <app-ol-style-universal [showText]="true"></app-ol-style-universal
-    ></app-ol-adaptor-roads>
+      <app-ol-style-universal [showText]="true"></app-ol-style-universal>
+    </app-ol-adaptor-roads>
     <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
   </app-ol-layer-vector>
@@ -316,9 +298,9 @@
   <!-- 📦 BOUNDARY LAYER  -->
 
   <app-ol-layer-vector>
-    <app-ol-adaptor-boundary
-      ><app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-    ></app-ol-adaptor-boundary>
+    <app-ol-adaptor-boundary>
+      <app-ol-style-universal [showStroke]="true"></app-ol-style-universal>
+    </app-ol-adaptor-boundary>
     <app-ol-source-boundary></app-ol-source-boundary>
   </app-ol-layer-vector>
 

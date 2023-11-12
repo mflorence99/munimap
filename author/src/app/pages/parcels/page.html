@@ -6,8 +6,7 @@
       [loadingStrategy]="'bbox'"
       [minZoom]="15"
       [maxZoom]="22"
-      [path]="map.path"
-    >
+      [path]="map.path">
       <app-contextmenu>
         <mat-menu mapContextMenu>
           <ng-template matMenuContent>
@@ -19,14 +18,12 @@
       <app-controlpanel-properties
         [map]="map"
         class="setup"
-        mapControlPanel1
-      ></app-controlpanel-properties>
+        mapControlPanel1></app-controlpanel-properties>
 
       <!-- 📦 CONTROLS -->
 
       <app-ol-control-searchparcels
-        mapControlSearch
-      ></app-ol-control-searchparcels>
+        mapControlSearch></app-ol-control-searchparcels>
 
       <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
@@ -34,43 +31,38 @@
       <app-ol-control-print
         [fileName]="map.name"
         [printSize]="map.printSize"
-        mapControlPrint
-      ></app-ol-control-print>
+        mapControlPrint></app-ol-control-print>
       } @if (map.name) {
       <app-ol-control-exportparcels
         [fileName]="map.id + '-parcels'"
-        mapControlExport
-      ></app-ol-control-exportparcels>
+        mapControlExport></app-ol-control-exportparcels>
       }
 
       <app-ol-control-zoom2extent
-        mapControlZoomToExtent
-      ></app-ol-control-zoom2extent>
+        mapControlZoomToExtent></app-ol-control-zoom2extent>
 
       <app-ol-control-attribution
-        mapControlAttribution
-      ></app-ol-control-attribution>
+        mapControlAttribution></app-ol-control-attribution>
 
       @if (olMap.initialized) {
 
       <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
       @if (olMap.printing) {
-      <app-ol-control-graticule
-        ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
-      ></app-ol-control-graticule>
+      <app-ol-control-graticule>
+        <app-ol-style-graticule [printing]="true"></app-ol-style-graticule>
+      </app-ol-control-graticule>
       } @if (!olMap.printing) {
-      <app-ol-control-graticule
-        ><app-ol-style-graticule></app-ol-style-graticule
-      ></app-ol-control-graticule>
+      <app-ol-control-graticule>
+        <app-ol-style-graticule></app-ol-style-graticule>
+      </app-ol-control-graticule>
       } @if (map.name && olMap.printing) {
       <app-ol-control-parcelslegend
         [county]="map.path.split(':')[1]"
         [id]="map.id"
         [printing]="olMap.printing"
         [state]="map.path.split(':')[0]"
-        [title]="map.name"
-      ></app-ol-control-parcelslegend>
+        [title]="map.name"></app-ol-control-parcelslegend>
       } @if (olMap.printing) {
       <app-ol-control-scalebar></app-ol-control-scalebar>
       } @if (!olMap.printing) {
@@ -88,19 +80,16 @@
       @if (olMap.printing) {
       <app-ol-layer-tile>
         <app-ol-source-xyz
-          [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-          ><app-ol-attribution
-            >©
-            <a href="https://mapbox.com" target="_blank"
-              >Mapbox</a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
+          [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey">
+          <app-ol-attribution>
+            ©
+            <a href="https://mapbox.com" target="_blank">Mapbox</a>
+          </app-ol-attribution>
+        </app-ol-source-xyz>
         <app-ol-filter-colorize
           [color]="[255, 255, 255]"
           [operation]="'hue'"
-          [value]="0.9"
-        ></app-ol-filter-colorize>
+          [value]="0.9"></app-ol-filter-colorize>
       </app-ol-layer-tile>
       }
 
@@ -119,19 +108,15 @@
       <app-ol-layer-tile>
         <app-ol-source-xyz
           [maxZoom]="16"
-          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'"
-        >
+          [url]="'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'">
           <app-ol-attribution>
-            <a href="https://www.esri.com" target="_blank"
-              >Esri</a
-            ></app-ol-attribution
-          >
+            <a href="https://www.esri.com" target="_blank">Esri</a>
+          </app-ol-attribution>
         </app-ol-source-xyz>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
         <app-ol-filter-colorize
           [operation]="'enhance'"
-          [value]="0.33"
-        ></app-ol-filter-colorize>
+          [value]="0.33"></app-ol-filter-colorize>
       </app-ol-layer-tile>
 
       <!-- 📦 NH GranIT VECTOR LAYERS -->
@@ -139,8 +124,7 @@
       <app-ol-layer-vector>
         <app-ol-style-parcels
           [showBackground]="'always'"
-          [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"
-        ></app-ol-style-parcels>
+          [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
 
@@ -167,8 +151,7 @@
         </app-ol-adaptor-waterbodies>
         <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
         <app-ol-source-waterbodies
-          [exclude]="[466]"
-        ></app-ol-source-waterbodies>
+          [exclude]="[466]"></app-ol-source-waterbodies>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -206,8 +189,8 @@
 
       <app-ol-layer-vector>
         <app-ol-adaptor-roads>
-          <app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-        ></app-ol-adaptor-roads>
+          <app-ol-style-universal [showStroke]="true"></app-ol-style-universal>
+        </app-ol-adaptor-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
@@ -235,8 +218,7 @@
         <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
         <app-ol-source-geojson
           [exclude]="['dam', 'park']"
-          [layerKey]="'places'"
-        ></app-ol-source-geojson>
+          [layerKey]="'places'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -249,20 +231,19 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-adaptor-powerlines
-          ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
-        ></app-ol-adaptor-powerlines>
+        <app-ol-adaptor-powerlines>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-powerlines>
         <app-ol-source-geojson
-          [layerKey]="'powerlines'"
-        ></app-ol-source-geojson>
+          [layerKey]="'powerlines'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
         <!-- 👇 user landmarks here are really map amendments -->
         <app-ol-adaptor-landmarks>
-          <app-ol-style-universal [showAll]="true"></app-ol-style-universal
-        ></app-ol-adaptor-landmarks>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-landmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
       </app-ol-layer-vector>
 
@@ -275,14 +256,12 @@
       <app-ol-layer-tile>
         <app-ol-source-xyz
           [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-          [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
-          ><app-ol-attribution
-            >©
-            <a href="https://google.com" target="_blank"
-              >Google</a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
+          [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey">
+          <app-ol-attribution>
+            ©
+            <a href="https://google.com" target="_blank">Google</a>
+          </app-ol-attribution>
+        </app-ol-source-xyz>
       </app-ol-layer-tile>
 
       }
@@ -294,8 +273,7 @@
         <app-ol-style-parcels
           [showBorder]="'always'"
           [showLabels]="'always'"
-          [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"
-        ></app-ol-style-parcels>
+          [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
       }
@@ -311,10 +289,9 @@
           [showLabels]="'always'"
           [showLabelContrast]="(satelliteView$ | async) ? 'always' : 'never'"
           [showSelection]="'always'"
-          [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"
-        ></app-ol-style-parcels>
+          [showStolen]="isPrivileged() && !olMap.printing ? 'always' : 'never'"></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
-        <app-ol-interaction-selectparcels> </app-ol-interaction-selectparcels>
+        <app-ol-interaction-selectparcels></app-ol-interaction-selectparcels>
         <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
       </app-ol-layer-vector>
       }
@@ -324,8 +301,8 @@
       @if (!(satelliteView$ | async)) {
       <app-ol-layer-vector>
         <app-ol-adaptor-roads>
-          <app-ol-style-universal [showText]="true"></app-ol-style-universal
-        ></app-ol-adaptor-roads>
+          <app-ol-style-universal [showText]="true"></app-ol-style-universal>
+        </app-ol-adaptor-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
@@ -334,9 +311,9 @@
       <!-- 📦 BOUNDARY LAYER (above selection so we can interact with it) -->
 
       <app-ol-layer-vector>
-        <app-ol-adaptor-boundary
-          ><app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-        ></app-ol-adaptor-boundary>
+        <app-ol-adaptor-boundary>
+          <app-ol-style-universal [showStroke]="true"></app-ol-style-universal>
+        </app-ol-adaptor-boundary>
         <app-ol-source-boundary></app-ol-source-boundary>
         @if (isPrivileged()) {
         <app-ol-interaction-redrawboundary></app-ol-interaction-redrawboundary>
@@ -371,8 +348,7 @@
       <li
         (click)="canParcelProperties($event) && onContextMenu('parcel-properties')"
         [class.disabled]="!canParcelProperties()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
         <p>Modify parcel settings &hellip;</p>
       </li>
@@ -380,8 +356,7 @@
       <li
         (click)="canAddParcel($event) && onContextMenu('add-parcel')"
         [class.disabled]="!canAddParcel()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus-square']"></fa-icon>
         <p>New parcel &hellip;</p>
       </li>
@@ -389,37 +364,32 @@
       <li
         (click)="canSubdivideParcel($event) && onContextMenu('subdivide-parcel')"
         [class.disabled]="!canSubdivideParcel()"
-        class="item"
-      >
+        class="item">
         <fa-icon
           [fixedWidth]="true"
-          [icon]="['fas', 'object-ungroup']"
-        ></fa-icon>
+          [icon]="['fas', 'object-ungroup']"></fa-icon>
         <p>Subdivide parcel &hellip;</p>
       </li>
 
       <li
         (click)="canRedrawBoundary($event) && onContextMenu('redraw-boundary')"
         [class.disabled]="!canRedrawBoundary()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'draw-polygon']"></fa-icon>
         <p>
           Redraw parcel boundary
-          <em
-            ><fa-icon
+          <em>
+            <fa-icon
               [icon]="['fas', 'question-circle']"
-              matTooltip="Click and drag the blue perimeter points. Click+Ctrl to delete a point. ESC when finished."
-            ></fa-icon
-          ></em>
+              matTooltip="Click and drag the blue perimeter points. Click+Ctrl to delete a point. ESC when finished."></fa-icon>
+          </em>
         </p>
       </li>
 
       <li
         (click)="canMergeParcels($event) && onContextMenu('merge-parcels')"
         [class.disabled]="!canMergeParcels()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'object-group']"></fa-icon>
         <p>Merge parcels &hellip;</p>
       </li>
@@ -427,17 +397,15 @@
       <li
         (click)="canRecenterLabel($event) && onContextMenu('recenter-label')"
         [class.disabled]="!canRecenterLabel()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
         <p>
           Recenter label in parcel
-          <em
-            ><fa-icon
+          <em>
+            <fa-icon
               [icon]="['fas', 'question-circle']"
-              matTooltip="Click and drag the target icon to the new label position"
-            ></fa-icon
-          ></em>
+              matTooltip="Click and drag the target icon to the new label position"></fa-icon>
+          </em>
         </p>
       </li>
 
@@ -448,8 +416,7 @@
       <li
         (click)="canAddPolygon($event) && onContextMenu('add-polygon')"
         [class.disabled]="!canAddPolygon()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus']"></fa-icon>
         <p>New parcel polygon</p>
       </li>
@@ -457,8 +424,7 @@
       <li
         (click)="canDeletePolygon($event) && onContextMenu('delete-polygon')"
         [class.disabled]="!canDeletePolygon()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
         <p>Remove parcel polygon</p>
       </li>
@@ -466,8 +432,7 @@
       <li
         (click)="canSplitLabel($event) && onContextMenu('split-label')"
         [class.disabled]="!canSplitLabel()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'split']"></fa-icon>
         <p>Split/unsplit label</p>
       </li>
@@ -475,8 +440,7 @@
       <li
         (click)="canRotateLabel($event) && onContextMenu('rotate-label')"
         [class.disabled]="!canRotateLabel()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'rotate']"></fa-icon>
         <p>Rotate/unrotate label</p>
       </li>
@@ -484,12 +448,10 @@
       <li
         (click)="canCreatePropertyMap($event) && onContextMenu('create-propertymap')"
         [class.disabled]="!canCreatePropertyMap()"
-        class="item"
-      >
+        class="item">
         <fa-icon
           [fixedWidth]="true"
-          [icon]="['fas', 'location-plus']"
-        ></fa-icon>
+          [icon]="['fas', 'location-plus']"></fa-icon>
         <p>Create property map &hellip;</p>
       </li>
 

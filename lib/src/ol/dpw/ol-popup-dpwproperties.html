@@ -17,19 +17,15 @@
 <section #table class="wrapper">
   @switch (properties?.type) { @case ('bridge') {
   <app-ol-popup-bridgeproperties
-    [properties]="properties"
-  ></app-ol-popup-bridgeproperties>
+    [properties]="properties"></app-ol-popup-bridgeproperties>
   } @case ('culvert') {
   <app-ol-popup-culvertproperties
-    [properties]="properties"
-  ></app-ol-popup-culvertproperties>
+    [properties]="properties"></app-ol-popup-culvertproperties>
   } @case ('flood hazard') {
   <app-ol-popup-floodhazardproperties
-    [properties]="properties"
-  ></app-ol-popup-floodhazardproperties>
+    [properties]="properties"></app-ol-popup-floodhazardproperties>
   } @case ('stream crossing') {
   <app-ol-popup-streamcrossingproperties
-    [properties]="properties"
-  ></app-ol-popup-streamcrossingproperties>
+    [properties]="properties"></app-ol-popup-streamcrossingproperties>
   } }
 </section>

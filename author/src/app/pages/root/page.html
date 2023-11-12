@@ -3,8 +3,7 @@
     <button
       (click)="nav.toggle()"
       [disabled]="!(user$ | async)"
-      mat-icon-button
-    >
+      mat-icon-button>
       <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
     </button>
 
@@ -13,8 +12,7 @@
     <mat-button-toggle
       #satelliteViewToggle
       (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
-      [checked]="satelliteView$ | async"
-    >
+      [checked]="satelliteView$ | async">
       <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
     </mat-button-toggle>
 
@@ -31,14 +29,13 @@
     <app-avatar
       (click)="setup.toggle()"
       [name]="user.displayName"
-      class="avatar"
-    ></app-avatar>
+      class="avatar"></app-avatar>
 
     }
   </mat-toolbar>
 
   @if (loading || working) {
-  <mat-progress-bar color="primary" mode="indeterminate"> </mat-progress-bar>
+  <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
   }
 
   <mat-drawer-container class="container">

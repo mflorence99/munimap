@@ -5,8 +5,9 @@
 
   <p class="title">New parcel</p>
   <p class="subtitle">
-    Use the <fa-icon [icon]="['fad', 'undo']"></fa-icon> tool to reverse any
-    changes
+    Use the
+    <fa-icon [icon]="['fad', 'undo']"></fa-icon>
+    tool to reverse any changes
   </p>
 </header>
 
@@ -17,12 +18,15 @@
   class="form"
   id="additionForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <p class="instructions">
-    Specify the ID and acreage of the new parcel. After <em>SAVE</em>, use
-    <em>Redraw parcel boundary</em> and <em>Modify parcel settings</em> to
-    complete the addition.
+    Specify the ID and acreage of the new parcel. After
+    <em>SAVE</em>
+    , use
+    <em>Redraw parcel boundary</em>
+    and
+    <em>Modify parcel settings</em>
+    to complete the addition.
   </p>
 
   <article class="addition">
@@ -37,10 +41,9 @@
         matInput
         name="id"
         type="text"
-        required
-      />
+        required />
       @if (parcelID.errors?.duplicate) {
-      <mat-error>Parcel ID is a duplicate. </mat-error>
+      <mat-error>Parcel ID is a duplicate.</mat-error>
       }
     </mat-form-field>
 
@@ -54,8 +57,7 @@
         matInput
         name="area"
         type="number"
-        required
-      />
+        required />
     </mat-form-field>
   </article>
 </form>
@@ -68,8 +70,7 @@
     color="primary"
     form="additionForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

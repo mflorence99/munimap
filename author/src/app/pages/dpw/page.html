@@ -6,8 +6,7 @@
       [loadingStrategy]="'bbox'"
       [minZoom]="13"
       [maxZoom]="20"
-      [path]="map.path"
-    >
+      [path]="map.path">
       <app-contextmenu>
         <mat-menu mapContextMenu>
           <ng-template matMenuContent>
@@ -18,14 +17,12 @@
 
       <app-controlpanel-properties
         [map]="map"
-        mapControlPanel1
-      ></app-controlpanel-properties>
+        mapControlPanel1></app-controlpanel-properties>
 
       <!-- 📦 CONTROLS -->
 
       <app-ol-control-searchparcels
-        mapControlSearch
-      ></app-ol-control-searchparcels>
+        mapControlSearch></app-ol-control-searchparcels>
 
       <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
@@ -33,35 +30,31 @@
       <app-ol-control-print
         [fileName]="map.name"
         [printSize]="map.printSize"
-        mapControlPrint
-      ></app-ol-control-print>
+        mapControlPrint></app-ol-control-print>
       } @if (map.name) {
       <app-ol-control-exportlandmarks
         [fileName]="map.id + '-sites'"
-        mapControlExport
-      ></app-ol-control-exportlandmarks>
+        mapControlExport></app-ol-control-exportlandmarks>
       }
 
       <app-ol-control-zoom2extent
-        mapControlZoomToExtent
-      ></app-ol-control-zoom2extent>
+        mapControlZoomToExtent></app-ol-control-zoom2extent>
 
       <app-ol-control-attribution
-        mapControlAttribution
-      ></app-ol-control-attribution>
+        mapControlAttribution></app-ol-control-attribution>
 
       @if (olMap.initialized) {
 
       <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
       @if (olMap.printing) {
-      <app-ol-control-graticule
-        ><app-ol-style-graticule [printing]="true"></app-ol-style-graticule
-      ></app-ol-control-graticule>
+      <app-ol-control-graticule>
+        <app-ol-style-graticule [printing]="true"></app-ol-style-graticule>
+      </app-ol-control-graticule>
       } @if (!olMap.printing) {
-      <app-ol-control-graticule
-        ><app-ol-style-graticule></app-ol-style-graticule
-      ></app-ol-control-graticule>
+      <app-ol-control-graticule>
+        <app-ol-style-graticule></app-ol-style-graticule>
+      </app-ol-control-graticule>
       } @if (olMap.printing) {
       <app-ol-control-scalebar></app-ol-control-scalebar>
       } @if (!olMap.printing) {
@@ -79,26 +72,23 @@
       @if (olMap.printing) {
       <app-ol-layer-tile>
         <app-ol-source-xyz
-          [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-          ><app-ol-attribution
-            >©
-            <a href="https://mapbox.com" target="_blank"
-              >Mapbox</a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
+          [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey">
+          <app-ol-attribution>
+            ©
+            <a href="https://mapbox.com" target="_blank">Mapbox</a>
+          </app-ol-attribution>
+        </app-ol-source-xyz>
         <app-ol-filter-colorize
           [color]="[255, 255, 255]"
           [operation]="'hue'"
-          [value]="0.9"
-        ></app-ol-filter-colorize>
+          [value]="0.9"></app-ol-filter-colorize>
       </app-ol-layer-tile>
       }
 
       <!-- 📦 HILLSHADE LAYER =-->
 
       <app-ol-layer-tile [opacity]="0.5">
-        <app-ol-source-hillshade [colorize]="true"> </app-ol-source-hillshade>
+        <app-ol-source-hillshade [colorize]="true"></app-ol-source-hillshade>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-tile>
 
@@ -127,8 +117,7 @@
         </app-ol-adaptor-waterbodies>
         <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
         <app-ol-source-waterbodies
-          [exclude]="[466]"
-        ></app-ol-source-waterbodies>
+          [exclude]="[466]"></app-ol-source-waterbodies>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -165,9 +154,9 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-adaptor-roads
-          ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
-        ></app-ol-adaptor-roads>
+        <app-ol-adaptor-roads>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-roads>
         <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
@@ -187,8 +176,7 @@
         <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
         <app-ol-source-geojson
           [exclude]="['dam', 'park']"
-          [layerKey]="'places'"
-        ></app-ol-source-geojson>
+          [layerKey]="'places'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -201,12 +189,11 @@
       </app-ol-layer-vector>
 
       <app-ol-layer-vector>
-        <app-ol-adaptor-powerlines
-          ><app-ol-style-universal [showAll]="true"></app-ol-style-universal
-        ></app-ol-adaptor-powerlines>
+        <app-ol-adaptor-powerlines>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-powerlines>
         <app-ol-source-geojson
-          [layerKey]="'powerlines'"
-        ></app-ol-source-geojson>
+          [layerKey]="'powerlines'"></app-ol-source-geojson>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
       </app-ol-layer-vector>
 
@@ -220,8 +207,7 @@
           [showLabels]="'always'"
           [showLabelContrast]="'never'"
           [showSelection]="'never'"
-          [showStolen]="'never'"
-        ></app-ol-style-parcels>
+          [showStolen]="'never'"></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
 
@@ -255,14 +241,12 @@
 
       <app-ol-layer-vector #landmarks>
         <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="64">
-          <app-ol-style-universal [showAll]="true"></app-ol-style-universal
-        ></app-ol-adaptor-dpwlandmarks>
+          <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-dpwlandmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
         <app-ol-interaction-selectlandmarks
           [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
-          [multi]="false"
-        >
-        </app-ol-interaction-selectlandmarks>
+          [multi]="false"></app-ol-interaction-selectlandmarks>
       </app-ol-layer-vector>
 
       }
@@ -274,14 +258,12 @@
       <app-ol-layer-tile>
         <app-ol-source-xyz
           [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-          [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey"
-          ><app-ol-attribution
-            >©
-            <a href="https://google.com" target="_blank"
-              >Google</a
-            ></app-ol-attribution
-          ></app-ol-source-xyz
-        >
+          [url]="'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' + env.google.apiKey">
+          <app-ol-attribution>
+            ©
+            <a href="https://google.com" target="_blank">Google</a>
+          </app-ol-attribution>
+        </app-ol-source-xyz>
       </app-ol-layer-tile>
 
       <app-ol-layer-vector>
@@ -294,8 +276,7 @@
           [showLabels]="'always'"
           [showLabelContrast]="'always'"
           [showSelection]="'never'"
-          [showStolen]="'never'"
-        ></app-ol-style-parcels>
+          [showStolen]="'never'"></app-ol-style-parcels>
         <app-ol-source-parcels></app-ol-source-parcels>
       </app-ol-layer-vector>
 
@@ -303,8 +284,7 @@
         <app-ol-adaptor-bridges [bridgeWidth]="64">
           <app-ol-style-universal
             [contrast]="'whiteOnBlack'"
-            [showAll]="true"
-          ></app-ol-style-universal>
+            [showAll]="true"></app-ol-style-universal>
         </app-ol-adaptor-bridges>
         <app-ol-source-bridges></app-ol-source-bridges>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -314,8 +294,7 @@
         <app-ol-adaptor-streamcrossings [streamCrossingWidth]="64">
           <app-ol-style-universal
             [contrast]="'whiteOnBlack'"
-            [showAll]="true"
-          ></app-ol-style-universal>
+            [showAll]="true"></app-ol-style-universal>
         </app-ol-adaptor-streamcrossings>
         <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -325,8 +304,7 @@
         <app-ol-adaptor-floodhazards [floodHazardWidth]="64">
           <app-ol-style-universal
             [contrast]="'whiteOnBlack'"
-            [showAll]="true"
-          ></app-ol-style-universal>
+            [showAll]="true"></app-ol-style-universal>
         </app-ol-adaptor-floodhazards>
         <app-ol-source-floodhazards></app-ol-source-floodhazards>
         <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
@@ -336,15 +314,12 @@
         <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="64">
           <app-ol-style-universal
             [contrast]="'whiteOnBlack'"
-            [showAll]="true"
-          ></app-ol-style-universal
-        ></app-ol-adaptor-dpwlandmarks>
+            [showAll]="true"></app-ol-style-universal>
+        </app-ol-adaptor-dpwlandmarks>
         <app-ol-source-landmarks></app-ol-source-landmarks>
         <app-ol-interaction-selectlandmarks
           [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
-          [multi]="false"
-        >
-        </app-ol-interaction-selectlandmarks>
+          [multi]="false"></app-ol-interaction-selectlandmarks>
       </app-ol-layer-vector>
 
       }
@@ -352,9 +327,9 @@
       <!-- 📦 BOUNDARY LAYER -->
 
       <app-ol-layer-vector>
-        <app-ol-adaptor-boundary
-          ><app-ol-style-universal [showStroke]="true"></app-ol-style-universal
-        ></app-ol-adaptor-boundary>
+        <app-ol-adaptor-boundary>
+          <app-ol-style-universal [showStroke]="true"></app-ol-style-universal>
+        </app-ol-adaptor-boundary>
         <app-ol-source-boundary></app-ol-source-boundary>
       </app-ol-layer-vector>
 
@@ -382,8 +357,7 @@
       <li
         (click)="canImportCulverts($event) && onContextMenu('import-culverts')"
         [class.disabled]="!canImportCulverts()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['far', 'file-import']"></fa-icon>
         <p>Import from GPX or KML files &hellip;</p>
       </li>
@@ -391,8 +365,7 @@
       <li
         (click)="canAddCulvert($event) && onContextMenu('add-culvert')"
         [class.disabled]="!canAddCulvert()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'plus-square']"></fa-icon>
         <p>New culvert here</p>
       </li>
@@ -400,8 +373,7 @@
       <li
         (click)="canCulvertProperties($event) && onContextMenu('culvert-properties')"
         [class.disabled]="!canCulvertProperties()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
         <p>Modify culvert settings &hellip;</p>
       </li>
@@ -409,25 +381,22 @@
       <li
         (click)="canMoveCulvert($event) && onContextMenu('move-culvert')"
         [class.disabled]="!canMoveCulvert()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'crosshairs']"></fa-icon>
         <p>
           Move culvert
-          <em
-            ><fa-icon
+          <em>
+            <fa-icon
               [icon]="['fas', 'question-circle']"
-              matTooltip="Click and drag the target icon to the new position"
-            ></fa-icon
-          ></em>
+              matTooltip="Click and drag the target icon to the new position"></fa-icon>
+          </em>
         </p>
       </li>
 
       <li
         (click)="canDeleteCulvert($event) && onContextMenu('delete-culvert')"
         [class.disabled]="!canDeleteCulvert()"
-        class="item"
-      >
+        class="item">
         <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
         <p>Delete culvert</p>
       </li>

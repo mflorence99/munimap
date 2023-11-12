@@ -15,37 +15,37 @@
   class="form"
   id="importForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <input
     #fileList
     (change)="setImportedFiles($event.target.files)"
     accept=".zip,.gpx,.kml"
     hidden
     multiple
-    type="file"
-  />
+    type="file" />
 
   <p class="instructions">
     First,
     <a (click)="fileList.click()">select one or more GPX, KML or ZIP files</a>
-    to import. <em>NOTE</em> multiple GPX and KML files can be compressed into a
-    single ZIP file.
+    to import.
+    <em>NOTE</em>
+    multiple GPX and KML files can be compressed into a single ZIP file.
   </p>
 
   @if ( files.length > 0) {
 
   <fieldset class="imported-files">
     @for (file of files; track file) {
-    <mat-checkbox [(ngModel)]="record[file.name]" [name]="file.name"
-      >{{ file.name }}</mat-checkbox
-    >
+    <mat-checkbox [(ngModel)]="record[file.name]" [name]="file.name">
+      {{ file.name }}
+    </mat-checkbox>
     }
   </fieldset>
 
   <p class="instructions">
     Double-check the files to be imported from the list above then hit
-    <em>IMPORT</em>. Landmarks previously imported won't be re-imported.
+    <em>IMPORT</em>
+    . Landmarks previously imported won't be re-imported.
   </p>
 
   } @for (errorMessage of errorMessages; track errorMessage) {
@@ -61,8 +61,7 @@
 
   <mat-progress-bar
     [mode]="'determinate' "
-    [value]="(numImported / numImporting) * 100"
-  ></mat-progress-bar>
+    [value]="(numImported / numImporting) * 100"></mat-progress-bar>
 </article>
 }
 
@@ -74,8 +73,7 @@
     color="primary"
     form="importForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     @if (importing) {
     <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
     } @if (!importing) {

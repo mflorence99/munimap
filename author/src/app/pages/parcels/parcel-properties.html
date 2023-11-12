@@ -10,8 +10,8 @@
 @if (selectedIDs.length > 1) {
 <p class="instructions">
   All selected parcels will be modified with the same settings.
-  <fa-icon [icon]="['fad', 'exclamation-triangle']"></fa-icon> indicates
-  settings that are currently different.
+  <fa-icon [icon]="['fad', 'exclamation-triangle']"></fa-icon>
+  indicates settings that are currently different.
 </p>
 }
 
@@ -24,8 +24,7 @@
   class="form two-column"
   id="propertiesForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   @for (value of (record | values); track value.prop; let ix = $index) {
 
   <!-- 
@@ -39,10 +38,9 @@
       [(ngModel)]="value.value"
       [attr.ngControl]="value.prop"
       [appAutoFocus]="ix === 0"
-      [name]="value.prop"
-    >
+      [name]="value.prop">
       @for (option of value.list | keyvalue; track option.key) {
-      <mat-option [value]="option.key"> {{ option.value}} </mat-option>
+      <mat-option [value]="option.key">{{ option.value}}</mat-option>
       }
     </mat-select>
     @if (value.conflict) {
@@ -63,8 +61,7 @@
       [name]="value.prop"
       [type]="value.type ?? 'text'"
       [step]="value.step"
-      matInput
-    />
+      matInput />
     @if (value.conflict) {
     <fa-icon [icon]="['fad', 'exclamation-triangle']" matSuffix></fa-icon>
     }
@@ -80,8 +77,7 @@
     color="primary"
     form="propertiesForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

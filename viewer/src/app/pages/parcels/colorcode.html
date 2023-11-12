@@ -15,33 +15,35 @@
   class="form"
   id="setupForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <p class="instructions">
-    Consult the <em>legend</em> in the left sidebar for the key to the
-    color-coding.
+    Consult the
+    <em>legend</em>
+    in the left sidebar for the key to the color-coding.
   </p>
 
   <mat-radio-group
     [(ngModel)]="record.strategy"
     class="strategies"
     name="strategy"
-    required
-  >
+    required>
     <mat-radio-button value="usage">By land use</mat-radio-button>
-    <mat-radio-button value="ownership"
-      >By ownership <sup>[1]</sup></mat-radio-button
-    >
-    <mat-radio-button value="conformity"
-      >By conformity <sup>[1]</sup></mat-radio-button
-    >
+    <mat-radio-button value="ownership">
+      By ownership
+      <sup>[1]</sup>
+    </mat-radio-button>
+    <mat-radio-button value="conformity">
+      By conformity
+      <sup>[1]</sup>
+    </mat-radio-button>
   </mat-radio-group>
 
   <p class="instructions">
-    <sup>[1]</sup> These color-codings are experimental. Contact
-    <a href="mailto:munimap.helpdesk@gmail.com" target="_blank"
-      >munimap.helpdesk&#64;gmail.com</a
-    >
+    <sup>[1]</sup>
+    These color-codings are experimental. Contact
+    <a href="mailto:munimap.helpdesk@gmail.com" target="_blank">
+      munimap.helpdesk&#64;gmail.com
+    </a>
     with questions or suggestions.
   </p>
 </form>
@@ -54,8 +56,7 @@
     color="primary"
     form="setupForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

@@ -1,8 +1,7 @@
 <article
   #legend
   [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
-  class="legend ol-legend ol-unselectable ol-control"
->
+  class="legend ol-legend ol-unselectable ol-control">
   <header class="header">
     <h1 class="title">{{ title }}</h1>
     <h2 class="subtitle">{{ county }} Co</h2>
@@ -26,8 +25,7 @@
         <td class="usage">
           <figure
             [style.backgroundColor]="'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.25)'"
-            class="key"
-          ></figure>
+            class="key"></figure>
         </td>
         <td class="desc">{{ usage.value }}</td>
         <td class="numeric">{{ areaByUsage[usage.key] | number: '1.0-0' }}</td>

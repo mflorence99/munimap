@@ -1,13 +1,11 @@
 <article
   #creditsRef
   [ngStyle]="{'bottom.px': bottom, 'right.px': right}"
-  class="credits ol-unselectable"
->
+  class="credits ol-unselectable">
   <footer
     [ngClass]="{contrast: showCreditsContrast}"
     [ngStyle]="{'fontSize.px': fontSize, 'height.px': height}"
-    class="footer"
-  >
+    class="footer">
     {{ now | date: 'longDate' }}&nbsp;|&nbsp;Credits:&nbsp;
     <ul>
       @for (attribution of attributions; track attribution) {

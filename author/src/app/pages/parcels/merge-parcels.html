@@ -15,16 +15,16 @@
   class="form"
   id="mergeForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <p class="instructions">
     Indicate which parcel will remain after the merge is complete. Then use
-    <em>Modify parcel settings</em> to complete the merge.
+    <em>Modify parcel settings</em>
+    to complete the merge.
   </p>
 
   <mat-radio-group [(ngModel)]="record.mergedID" class="ids" name="targetID">
     @for (id of selectedIDs; track id) {
-    <mat-radio-button [value]="id"> {{ id }} </mat-radio-button>
+    <mat-radio-button [value]="id">{{ id }}</mat-radio-button>
     }
   </mat-radio-group>
 </form>
@@ -37,8 +37,7 @@
     color="primary"
     form="mergeForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

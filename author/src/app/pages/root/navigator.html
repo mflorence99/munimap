@@ -5,8 +5,7 @@
         [class.selected]="title?.startsWith(state)"
         [icon]="['fad', 'layer-plus']"
         class="icon"
-        size="3x"
-      ></fa-icon>
+        size="3x"></fa-icon>
       <div class="title">Create a new map</div>
       <div class="subtitle">Choose the county and town.</div>
     </li>
@@ -22,14 +21,12 @@
     <li
       (click)="close()"
       class="item"
-      routerLink="/{{ map.type }}/{{ map.id }}"
-    >
+      routerLink="/{{ map.type }}/{{ map.id }}">
       <fa-icon
         [class.selected]="title === map.name"
         [icon]="['fad', 'layer-group']"
         class="icon"
-        size="3x"
-      ></fa-icon>
+        size="3x"></fa-icon>
 
       <div class="title">{{ map.name }}</div>
       <div class="subtitle">{{ map.owner }}</div>
@@ -43,8 +40,7 @@
         [class.selected]="title === 'All Maps'"
         [icon]="['fad', 'list']"
         class="icon"
-        size="2x"
-      ></fa-icon>
+        size="2x"></fa-icon>
       <div class="title">All Maps</div>
       <div class="subtitle">Sortable and selectable list of all maps.</div>
     </li>
@@ -55,8 +51,7 @@
       <fa-icon
         [icon]="['fad', 'sync']"
         class="icon selected"
-        size="2x"
-      ></fa-icon>
+        size="2x"></fa-icon>
       <div class="title">Reload MuniMap</div>
       <div class="subtitle">App will be updated to the latest version.</div>
     </li>

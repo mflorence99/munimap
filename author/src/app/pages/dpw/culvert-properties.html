@@ -5,8 +5,9 @@
 
   <p class="title">Modify {{ record.type }} settings</p>
   <p class="subtitle">
-    Use the <fa-icon [icon]="['fad', 'undo']"></fa-icon> tool to reverse any
-    changes
+    Use the
+    <fa-icon [icon]="['fad', 'undo']"></fa-icon>
+    tool to reverse any changes
   </p>
 </header>
 
@@ -18,8 +19,7 @@
   class="form"
   id="propertiesForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <mat-form-field>
     <mat-label>Location</mat-label>
     <input
@@ -30,8 +30,7 @@
       matInput
       name="location"
       required
-      type="text"
-    />
+      type="text" />
   </mat-form-field>
 
   <mat-form-field>
@@ -44,8 +43,7 @@
       matInput
       name="diameter"
       required
-      type="number"
-    />
+      type="number" />
   </mat-form-field>
 
   <mat-form-field>
@@ -58,8 +56,7 @@
       matInput
       name="length"
       required
-      type="number"
-    />
+      type="number" />
   </mat-form-field>
 
   <mat-form-field>
@@ -72,8 +69,7 @@
       matInput
       name="count"
       required
-      type="number"
-    />
+      type="number" />
   </mat-form-field>
 
   <mat-form-field>
@@ -82,8 +78,7 @@
       #material="ngModel"
       [(ngModel)]="record.material"
       name="material"
-      required
-    >
+      required>
       @for (material of allMaterials; track material) {
       <mat-option [value]="material">{{ material }}</mat-option>
       }
@@ -96,8 +91,7 @@
       #condition="ngModel"
       [(ngModel)]="record.condition"
       name="condition"
-      required
-    >
+      required>
       @for (condition of allConditions; track condition) {
       <mat-option [value]="condition">{{ condition }}</mat-option>
       }
@@ -110,8 +104,7 @@
       #headwall="ngModel"
       [(ngModel)]="record.headwall"
       name="headwall"
-      required
-    >
+      required>
       @for (headwall of allHeadwalls; track headwall) {
       <mat-option [value]="headwall">{{ headwall }}</mat-option>
       }
@@ -124,8 +117,7 @@
       #floodHazard="ngModel"
       [(ngModel)]="record.floodHazard"
       name="floodHazard"
-      required
-    >
+      required>
       @for (floodHazard of allFloodHazards; track floodHazard) {
       <mat-option [value]="floodHazard">{{ floodHazard }}</mat-option>
       }
@@ -141,8 +133,7 @@
       autocomplete="off"
       matInput
       name="year"
-      type="number"
-    />
+      type="number" />
   </mat-form-field>
 </form>
 
@@ -154,8 +145,7 @@
     color="primary"
     form="propertiesForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

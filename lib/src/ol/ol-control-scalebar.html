@@ -1,8 +1,7 @@
 <article
   #barRef
   [ngStyle]="{'bottom.px': bottom, 'gap.px': height / 4, 'left.px': left}"
-  class="scalebar ol-unselectable"
->
+  class="scalebar ol-unselectable">
   <div class="annotations" [ngStyle]="{'marginLeft.px': -cxUnit / 2}">
     @for (unit of numUnits + 1 | times; track unit; let first = $first; let last
     = $last) {
@@ -11,8 +10,7 @@
       [class.first]="first"
       [class.last]="last"
       [ngStyle]="{'fontSize.px': fontSize, 'height.px': height, 'width.px': cxUnit}"
-      class="annotation"
-    >
+      class="annotation">
       {{ unit * ftUnit }}'
     </div>
     }
@@ -24,8 +22,7 @@
       [class.black]="black"
       [class.white]="white"
       [ngStyle]="{'height.px': height, 'width.px': cxUnit}"
-      class="unit"
-    ></div>
+      class="unit"></div>
     }
   </div>
 </article>

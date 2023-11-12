@@ -17,9 +17,34 @@
   ],
   "root": true,
   "rules": {
-    "no-constant-condition": ["error", { "checkLoops": false }],
-    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
+        "leadingUnderscore": "allow",
+        "selector": "default"
+      },
+      {
+        "format": null,
+        "modifiers": ["requiresQuotes"],
+        "selector": "property"
+      },
+      {
+        "format": ["PascalCase"],
+        "selector": "typeLike"
+      }
+    ],
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": false
+      }
+    ],
+    "@typescript-eslint/no-duplicate-type-constituents": "off",
     "@typescript-eslint/unbound-method": "off",
-    "@typescript-eslint/naming-convention": "off"
+    "jest/unbound-method": "off",
+    "no-constant-condition": ["error", { "checkLoops": false }],
+    "no-unused-private-class-members": "error"
   }
 }

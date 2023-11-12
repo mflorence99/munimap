@@ -3,8 +3,7 @@
     <img
       (click)="rolledup = !rolledup"
       mat-card-avatar
-      src="assets/favicon.svg"
-    />
+      src="assets/favicon.svg" />
 
     <mat-card-title>Identify Your Map</mat-card-title>
     <mat-card-subtitle>Name will appear on printed version</mat-card-subtitle>
@@ -18,8 +17,7 @@
       class="form"
       id="setupForm"
       novalidate
-      spellcheck="false"
-    >
+      spellcheck="false">
       <mat-form-field>
         <mat-label>Give your map a name</mat-label>
         <input
@@ -31,8 +29,7 @@
           matInput
           name="name"
           placeholder="eg: My Old Town"
-          required
-        />
+          required />
         @if (name.errors) {
         <mat-error>A map name is required</mat-error>
         }
@@ -50,18 +47,16 @@
           name="id"
           pattern="[a-z0-9-_]+"
           placeholder="eg: myoldtown"
-          required
-        />
+          required />
         @if (id.errors) {
-        <mat-error
-          >Use only lowercase letters and numbers, plus dash and
-          underscore</mat-error
-        >
+        <mat-error>
+          Use only lowercase letters and numbers, plus dash and underscore
+        </mat-error>
         } @if (!id.errors) {
-        <mat-hint
-          >Viewer app URL:
-          <em>https://{{ map.id }}.munimap.online</em></mat-hint
-        >
+        <mat-hint>
+          Viewer app URL:
+          <em>https://{{ map.id }}.munimap.online</em>
+        </mat-hint>
         }
       </mat-form-field>
     </form>
@@ -69,7 +64,7 @@
 
   <mat-card-actions class="actions">
     @if (canDelete()) {
-    <a (click)="delete(map)" mat-flat-button> Delete ths map &hellip; </a>
+    <a (click)="delete(map)" mat-flat-button>Delete ths map &hellip;</a>
     }
 
     <div class="filler"></div>
@@ -81,8 +76,7 @@
       color="primary"
       form="setupForm"
       mat-flat-button
-      type="submit"
-    >
+      type="submit">
       SAVE
     </button>
   </mat-card-actions>

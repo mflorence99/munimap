@@ -15,11 +15,13 @@
   class="form"
   id="createForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <p class="instructions">
-    Property parcels are initialized from those selected. After <em>SAVE</em>,
-    use the <em>menu</em> to navgate to the new property map.
+    Property parcels are initialized from those selected. After
+    <em>SAVE</em>
+    , use the
+    <em>menu</em>
+    to navgate to the new property map.
   </p>
 
   <mat-form-field>
@@ -32,8 +34,7 @@
       matInput
       name="name"
       placeholder="eg: My Huge Estate"
-      required
-    />
+      required />
     @if (name.errors) {
     <mat-error>A map name is required</mat-error>
     }
@@ -49,17 +50,16 @@
       name="id"
       pattern="[a-z0-9-_]+"
       placeholder="eg: rockefeller"
-      required
-    />
+      required />
     @if (id.errors) {
-    <mat-error
-      >Use only lowercase letters and numbers, plus dash and
-      underscore</mat-error
-    >
+    <mat-error>
+      Use only lowercase letters and numbers, plus dash and underscore
+    </mat-error>
     } @if (!id.errors) {
-    <mat-hint
-      >Viewer app URL: <em>https://{{ record.id }}.munimap.online</em></mat-hint
-    >
+    <mat-hint>
+      Viewer app URL:
+      <em>https://{{ record.id }}.munimap.online</em>
+    </mat-hint>
     }
   </mat-form-field>
 
@@ -71,8 +71,7 @@
     [(ngModel)]="record.contours2ft"
     class="map-format"
     name="contours2ft"
-    required
-  >
+    required>
     <mat-radio-button [value]="false">Hillshade</mat-radio-button>
     <mat-radio-button [value]="true">2ft contours</mat-radio-button>
   </mat-radio-group>
@@ -81,8 +80,8 @@
     Choose the size at which the map will be printed. The aspect ratio
     determines the map's boundary box. These sizes are all available via the
     <a href="https://www.posterburner.com/makecustomposters" target="_blank">
-      PosterBurner</a
-    >
+      PosterBurner
+    </a>
     print service.
   </p>
 
@@ -90,10 +89,9 @@
     [(ngModel)]="record.printSize"
     class="print-sizes"
     name="printSize"
-    required
-  >
+    required>
     @for (printSize of printSizes; track printSize) {
-    <mat-radio-button [value]="printSize"> {{ printSize }} </mat-radio-button>
+    <mat-radio-button [value]="printSize">{{ printSize }}</mat-radio-button>
     }
   </mat-radio-group>
 </form>
@@ -106,8 +104,7 @@
     color="primary"
     form="createForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     SAVE
   </button>
 </article>

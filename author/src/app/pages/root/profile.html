@@ -12,8 +12,7 @@
   class="form"
   id="profileForm"
   novalidate
-  spellcheck="false"
->
+  spellcheck="false">
   <mat-form-field>
     <mat-label>Display Name</mat-label>
     <input
@@ -25,10 +24,9 @@
       matInput
       name="displayName"
       required
-      type="text"
-    />
+      type="text" />
     @if (displayName.errors) {
-    <mat-error>A display name is required </mat-error>
+    <mat-error>A display name is required</mat-error>
     }
   </mat-form-field>
 
@@ -41,17 +39,16 @@
       autocomplete="off"
       cdkTextareaAutosize
       matInput
-      name="workgroup"
-    ></textarea>
+      name="workgroup"></textarea>
     @if (workgroup.errors?.tooMany) {
-    <mat-error>A maximum of 10 email addresses is allowed. </mat-error>
+    <mat-error>A maximum of 10 email addresses is allowed.</mat-error>
     } @if (workgroup.errors?.invalidEmail) {
-    <mat-error>At least one email address is invalid. </mat-error>
+    <mat-error>At least one email address is invalid.</mat-error>
     } @if (!workgroup.errors) {
-    <mat-hint
-      >Give the email addresses of up to 10 colleagues with whom you share maps,
-      each on a new line.</mat-hint
-    >
+    <mat-hint>
+      Give the email addresses of up to 10 colleagues with whom you share maps,
+      each on a new line.
+    </mat-hint>
     }
   </mat-form-field>
 
@@ -65,8 +62,7 @@
       autocomplete="off"
       matInput
       name="password"
-      type="password"
-    />
+      type="password" />
   </mat-form-field>
 
   @if (errorMessage) {
@@ -75,7 +71,7 @@
 </form>
 
 <article class="actions">
-  <a (click)="logout()" mat-flat-button> Sign Out </a>
+  <a (click)="logout()" mat-flat-button>Sign Out</a>
 
   <div class="filler"></div>
 
@@ -86,8 +82,7 @@
     color="primary"
     form="profileForm"
     mat-flat-button
-    type="submit"
-  >
+    type="submit">
     UPDATE
   </button>
 </article>
