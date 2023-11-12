@@ -15,7 +15,8 @@
   class="form"
   id="setupForm"
   novalidate
-  spellcheck="false">
+  spellcheck="false"
+>
   <p class="instructions">
     Consult the
     <em>legend</em>
@@ -26,7 +27,8 @@
     [(ngModel)]="record.strategy"
     class="strategies"
     name="strategy"
-    required>
+    required
+  >
     <mat-radio-button value="usage">By land use</mat-radio-button>
     <mat-radio-button value="ownership">
       By ownership
@@ -56,7 +58,8 @@
     color="primary"
     form="setupForm"
     mat-flat-button
-    type="submit">
+    type="submit"
+  >
     SAVE
   </button>
 </article>
