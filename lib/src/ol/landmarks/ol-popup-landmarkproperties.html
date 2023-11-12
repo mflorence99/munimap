@@ -2,65 +2,58 @@
   <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
 </button>
 
-<button
-  *ngIf="canClipboard()"
-  (click)="onClipboard()"
-  class="clipboard"
-  mat-icon-button
->
+@if (canClipboard()) {
+<button (click)="onClipboard()" class="clipboard" mat-icon-button>
   <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
 </button>
-
-<table *ngIf="landmark" class="properties">
-  <tr *ngIf="landmark.properties.name">
+} @if (landmark) {
+<table class="properties">
+  @if (landmark.properties.name) {
+  <tr>
     <td colspan="2">{{ landmark.properties.name }}</td>
   </tr>
+  } @switch (landmark.geometry.type) { @case ('LineString') {
 
-  <ng-container [ngSwitch]="landmark.geometry.type">
-    <ng-container *ngSwitchCase="'LineString'">
-      <tr>
-        <td>Length</td>
-        <td>{{ length() | number: '1.0-0' }}'</td>
-      </tr>
-    </ng-container>
+  <tr>
+    <td>Length</td>
+    <td>{{ length() | number: '1.0-0' }}'</td>
+  </tr>
 
-    <ng-container *ngSwitchCase="'Point'">
-      <ng-container
-        *ngIf="toCoordinate(landmark.geometry.coordinates) as coordinate"
-      >
-        <tr>
-          <td>Latitude</td>
-          <td>{{ coordinate.latitude | number: '1.0-6' }}</td>
-        </tr>
-        <tr>
-          <td>Longitude</td>
-          <td>{{coordinate.longitude | number: '1.0-6' }}</td>
-        </tr>
-        <tr *ngIf="landmark.geometry.coordinates[2]">
-          <td>Elevation</td>
-          <td>{{ coordinate.elevation | number: '1.0-0' }}'</td>
-        </tr>
-      </ng-container>
-    </ng-container>
+  } @case ('Point') { @if (toCoordinate(landmark.geometry.coordinates); as
+  coordinate) {
 
-    <ng-container *ngSwitchCase="'Polygon'">
-      <tr>
-        <td>Area</td>
-        <td>{{ area() | number: '1.0-2' }} acres</td>
-      </tr>
-      <tr>
-        <td>Perimeter</td>
-        <td>{{ length() | number: '1.0-0' }}'</td>
-      </tr>
-    </ng-container>
-  </ng-container>
+  <tr>
+    <td>Latitude</td>
+    <td>{{ coordinate.latitude | number: '1.0-6' }}</td>
+  </tr>
+  <tr>
+    <td>Longitude</td>
+    <td>{{coordinate.longitude | number: '1.0-6' }}</td>
+  </tr>
+  @if (landmark.geometry.coordinates[2]) {
+  <tr>
+    <td>Elevation</td>
+    <td>{{ coordinate.elevation | number: '1.0-0' }}'</td>
+  </tr>
+  } } } @case ('Polygon') {
 
-  <ng-container *ngIf="landmark.properties.metadata as metadata">
-    <ng-container *ngFor="let item of metadata | keyvalue">
-      <tr>
-        <td>{{ item.key }}</td>
-        <td>{{ item.value }}</td>
-      </tr>
-    </ng-container>
-  </ng-container>
+  <tr>
+    <td>Area</td>
+    <td>{{ area() | number: '1.0-2' }} acres</td>
+  </tr>
+  <tr>
+    <td>Perimeter</td>
+    <td>{{ length() | number: '1.0-0' }}'</td>
+  </tr>
+
+  } } @if (landmark.properties.metadata; as metadata) { @for (item of metadata |
+  keyvalue; track item) {
+
+  <tr>
+    <td>{{ item.key }}</td>
+    <td>{{ item.value }}</td>
+  </tr>
+
+  } }
 </table>
+}

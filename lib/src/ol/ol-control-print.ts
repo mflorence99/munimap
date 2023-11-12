@@ -44,7 +44,10 @@ export class OLControlPrintComponent {
   #renderCompleteKey: OLEventsKey;
   #zoom: number;
 
-  constructor(private dialog: MatDialog, private map: OLMapComponent) {}
+  constructor(
+    private dialog: MatDialog,
+    private map: OLMapComponent
+  ) {}
 
   print(): void {
     const data: ConfirmDialogData = {

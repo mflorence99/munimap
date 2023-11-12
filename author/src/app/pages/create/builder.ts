@@ -29,7 +29,10 @@ export class BuilderComponent {
 
   index: Index;
 
-  constructor(private geoJSON: GeoJSONService, private route: ActivatedRoute) {
+  constructor(
+    private geoJSON: GeoJSONService,
+    private route: ActivatedRoute
+  ) {
     this.index = this.geoJSON.findIndex(this.route);
   }
 
@@ -98,9 +101,5 @@ export class BuilderComponent {
   switchType(type: string): void {
     this.type = type;
     this.typeChanged.emit(this.currentType());
-  }
-
-  trackByItem(ix: number, item: string): string {
-    return item;
   }
 }

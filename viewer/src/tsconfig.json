@@ -1,5 +1,6 @@
 {
   "angularCompilerOptions": {
+    "_enabledBlockTypes": ["if", "switch", "for", "defer"],
     "disableTypeScriptVersionCheck": true,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
@@ -11,17 +12,12 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "module": "es2020",
     "moduleResolution": "node",
     "outDir": "../../dist/viewer/out-tsc",
     "paths": {
-      "@lib/*": [
-        "../../lib/src/*"
-      ]
+      "@lib/*": ["../../lib/src/*"]
     },
     "skipLibCheck": true,
     "sourceMap": true,

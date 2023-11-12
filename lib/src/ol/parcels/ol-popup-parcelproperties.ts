@@ -27,6 +27,7 @@ import OLFeature from 'ol/Feature';
 
 interface Abutter {
   address: string;
+  addressOfOwner: string;
   id: ParcelID;
   owner: string;
 }

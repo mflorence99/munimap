@@ -1,6 +1,7 @@
 <!-- 📦 INITIAL STATE - REQUEST EMAIL -->
 
-<mat-card appearance="outlined" *ngIf="state === 'initial'" class="card">
+@if (state === 'initial') {
+<mat-card appearance="outlined" class="card">
   <mat-card-header>
     <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
     <mat-card-title>Please Login or Signup</mat-card-title>
@@ -30,12 +31,14 @@
           required
           type="text"
         />
-        <mat-error *ngIf="emailAddress.errors"
-          >Email address is required and must be valid
-        </mat-error>
+        @if (emailAddress.errors) {
+        <mat-error>Email address is required and must be valid </mat-error>
+        }
       </mat-form-field>
 
-      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+      @if (errorMessage) {
+      <mat-error>{{ errorMessage }}</mat-error>
+      }
     </form>
   </mat-card-content>
 
@@ -51,10 +54,12 @@
     </button>
   </mat-card-actions>
 </mat-card>
+}
 
 <!-- 📦 LOGIN STATE -->
 
-<mat-card appearance="outlined" *ngIf="state === 'login'" class="card">
+@if (state === 'login') {
+<mat-card appearance="outlined" class="card">
   <mat-card-header>
     <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
     <mat-card-title>Please Login</mat-card-title>
@@ -102,7 +107,9 @@
         />
       </mat-form-field>
 
-      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+      @if (errorMessage) {
+      <mat-error>{{ errorMessage }}</mat-error>
+      }
     </form>
   </mat-card-content>
 
@@ -122,10 +129,12 @@
     </button>
   </mat-card-actions>
 </mat-card>
+}
 
 <!-- 📦 SIGNUP STATE -->
 
-<mat-card appearance="outlined" *ngIf="state === 'signup'" class="card">
+@if (state === 'signup') {
+<mat-card appearance="outlined" class="card">
   <mat-card-header>
     <fa-icon [icon]="['fad', 'sign-in']" mat-card-avatar size="3x"></fa-icon>
     <mat-card-title>Signup for a New Account</mat-card-title>
@@ -182,7 +191,9 @@
         />
       </mat-form-field>
 
-      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+      @if (errorMessage) {
+      <mat-error>{{ errorMessage }}</mat-error>
+      }
     </form>
   </mat-card-content>
 
@@ -202,3 +213,4 @@
     </button>
   </mat-card-actions>
 </mat-card>
+}

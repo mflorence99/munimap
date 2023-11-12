@@ -40,8 +40,4 @@ export class OLControlAttributionComponent {
       });
     }
   }
-
-  trackByAttribution(ix: number, attribution: string): string {
-    return attribution;
-  }
 }

@@ -86,11 +86,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "author:build:production"
+              "buildTarget": "author:build:production"
             }
           },
           "options": {
-            "browserTarget": "author:build"
+            "buildTarget": "author:build"
           }
         }
       },
@@ -186,11 +186,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "viewer:build:production"
+              "buildTarget": "viewer:build:production"
             }
           },
           "options": {
-            "browserTarget": "viewer:build"
+            "buildTarget": "viewer:build"
           }
         }
       },

@@ -32,12 +32,11 @@
     />
   </mat-form-field>
 
-  <mat-checkbox
-    *ngIf="['LineString', 'Polygon'].includes(geometryType)"
-    [(ngModel)]="record.showDimension"
-    name="showDimension"
+  @if (['LineString', 'Polygon'].includes(geometryType)) {
+  <mat-checkbox [(ngModel)]="record.showDimension" name="showDimension"
     >Show dimension</mat-checkbox
   >
+  }
 </form>
 
 <article class="actions">

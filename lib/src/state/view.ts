@@ -26,7 +26,10 @@ export class SetSatelliteYear {
 
 export class UpdateView {
   static readonly type = '[View] UpdateView';
-  constructor(public path: Path, public view: View) {}
+  constructor(
+    public path: Path,
+    public view: View
+  ) {}
 }
 
 export type Path = string;

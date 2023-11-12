@@ -17,7 +17,9 @@
 .card {
   overflow: hidden;
   position: relative;
-  transition: width 0.25s, height 0.25s;
+  transition:
+    width 0.25s,
+    height 0.25s;
   width: 30rem;
 
   &.rolledup {

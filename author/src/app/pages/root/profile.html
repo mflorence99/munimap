@@ -27,9 +27,9 @@
       required
       type="text"
     />
-    <mat-error *ngIf="displayName.errors"
-      >A display name is required
-    </mat-error>
+    @if (displayName.errors) {
+    <mat-error>A display name is required </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field>
@@ -43,16 +43,16 @@
       matInput
       name="workgroup"
     ></textarea>
-    <mat-error *ngIf="workgroup.errors?.tooMany"
-      >A maximum of 10 email addresses is allowed.
-    </mat-error>
-    <mat-error *ngIf="workgroup.errors?.invalidEmail"
-      >At least one email address is invalid.
-    </mat-error>
-    <mat-hint *ngIf="!workgroup.errors"
+    @if (workgroup.errors?.tooMany) {
+    <mat-error>A maximum of 10 email addresses is allowed. </mat-error>
+    } @if (workgroup.errors?.invalidEmail) {
+    <mat-error>At least one email address is invalid. </mat-error>
+    } @if (!workgroup.errors) {
+    <mat-hint
       >Give the email addresses of up to 10 colleagues with whom you share maps,
       each on a new line.</mat-hint
     >
+    }
   </mat-form-field>
 
   <br />
@@ -69,7 +69,9 @@
     />
   </mat-form-field>
 
-  <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+  @if (errorMessage) {
+  <mat-error>{{ errorMessage }}</mat-error>
+  }
 </form>
 
 <article class="actions">

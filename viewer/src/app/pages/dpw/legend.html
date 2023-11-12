@@ -11,40 +11,46 @@
 </header>
 
 <article class="form">
-  <table
-    *ngFor="let metric of allMetrics; trackBy: trackByMetric"
-    class="legend"
-  >
+  @for (metric of allMetrics; track metric.key) {
+  <table class="legend">
     <thead>
       <tr>
         <th>{{ metric.tag }}</th>
-        <th *ngFor="let condition of allConditions">
+        @for (condition of allConditions; track condition) {
+        <th>
           <fa-icon
             [icon]="['fas', 'circle']"
             [style.color]="'rgba(var(--map-culvert-' + condition.toLowerCase() + '-icon-color), 1)'"
           ></fa-icon>
         </th>
+        }
       </tr>
     </thead>
 
-    <tbody *ngIf="metric.enum() as keys">
-      <tr *ngFor="let key of keys; trackBy: trackByKey">
+    @if (metric.enum(); as keys) {
+    <tbody>
+      @for (key of keys; track key) {
+      <tr>
         <td [style.width.%]="25">
-          {{ key }} <span *ngIf="metric.key === 'diameter'">"</span>
+          {{ key }} @if (metric.key === 'diameter') {
+          <span>"</span>
+          }
         </td>
 
-        <ng-container *ngFor="let condition of allConditions">
-          <ng-container
-            *ngIf="breakdowns[metric.key]?.[key]?.[condition] as stats"
-          >
-            <td [style.width.%]="75 / allConditions.length">
-              <span *ngIf="stats.count && stats.length"
-                >{{ stats.count }}&ndash;{{ stats.length }}'</span
-              >
-            </td>
-          </ng-container>
-        </ng-container>
+        @for (condition of allConditions; track condition) { @if
+        (breakdowns[metric.key]?.[key]?.[condition]; as stats) {
+
+        <td [style.width.%]="75 / allConditions.length">
+          @if (stats.count && stats.length) {
+          <span>{{ stats.count }}&ndash;{{ stats.length }}'</span>
+          }
+        </td>
+
+        } }
       </tr>
+      }
     </tbody>
+    }
   </table>
+  }
 </article>

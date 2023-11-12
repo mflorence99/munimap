@@ -23,44 +23,44 @@
   </p>
 
   <article class="subdivisions">
-    <ng-container
-      *ngFor="let subdivision of subdivisions; let ix = index; trackBy: trackByIndex"
-    >
-      <mat-form-field>
-        <mat-label>Subdivision</mat-label>
-        <input
-          #subdivisionID="ngModel"
-          [(ngModel)]="subdivision.id"
-          [appAutoFocus]="ix === 0"
-          [appParcelID]="[map.searcher, subdivision.id]"
-          [appSelectOnFocus]="true"
-          [appSubdivisionID]="[subdivisions, ix]"
-          [name]="'id' + ix"
-          [required]="ix < 2"
-          autocomplete="off"
-          matInput
-          type="text"
-        />
-        <mat-error *ngIf="subdivisionID.errors?.duplicate"
-          >Subdivision ID is a duplicate.
-        </mat-error>
-      </mat-form-field>
+    @for (subdivision of subdivisions; track subdivision.id; let ix = $index) {
 
-      <mat-form-field>
-        <mat-label>Acreage</mat-label>
-        <input
-          #area="ngModel"
-          [(ngModel)]="subdivision.area"
-          [appSelectOnFocus]="true"
-          [name]="'area' + ix"
-          [required]="ix < 2"
-          [step]="0.01"
-          autocomplete="off"
-          matInput
-          type="number"
-        />
-      </mat-form-field>
-    </ng-container>
+    <mat-form-field>
+      <mat-label>Subdivision</mat-label>
+      <input
+        #subdivisionID="ngModel"
+        [(ngModel)]="subdivision.id"
+        [appAutoFocus]="ix === 0"
+        [appParcelID]="[map.searcher, subdivision.id]"
+        [appSelectOnFocus]="true"
+        [appSubdivisionID]="[subdivisions, ix]"
+        [name]="'id' + ix"
+        [required]="ix < 2"
+        autocomplete="off"
+        matInput
+        type="text"
+      />
+      @if (subdivisionID.errors?.duplicate) {
+      <mat-error>Subdivision ID is a duplicate. </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Acreage</mat-label>
+      <input
+        #area="ngModel"
+        [(ngModel)]="subdivision.area"
+        [appSelectOnFocus]="true"
+        [name]="'area' + ix"
+        [required]="ix < 2"
+        [step]="0.01"
+        autocomplete="off"
+        matInput
+        type="number"
+      />
+    </mat-form-field>
+
+    }
   </article>
 </form>
 

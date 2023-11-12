@@ -61,10 +61,6 @@ export class NavigatorComponent implements OnInit {
     this.version.hardReset();
   }
 
-  trackByID(ix: number, map: Map): string {
-    return map.id;
-  }
-
   #handleTopMaps$(): Observable<Map[]> {
     return this.profile$.pipe(
       takeUntil(this.destroy$),

@@ -23,12 +23,9 @@
   </p>
 
   <mat-radio-group [(ngModel)]="record.mergedID" class="ids" name="targetID">
-    <mat-radio-button
-      *ngFor="let id of selectedIDs; trackBy: trackByID"
-      [value]="id"
-    >
-      {{ id }}
-    </mat-radio-button>
+    @for (id of selectedIDs; track id) {
+    <mat-radio-button [value]="id"> {{ id }} </mat-radio-button>
+    }
   </mat-radio-group>
 </form>
 

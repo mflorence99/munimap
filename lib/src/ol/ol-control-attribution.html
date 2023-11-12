@@ -6,11 +6,9 @@
 
     <header class="header">Credits</header>
 
-    <li
-      *ngFor="let attribution of attributions; trackBy: trackByAttribution"
-      [innerHTML]="attribution"
-      class="item"
-    ></li>
+    @for (attribution of attributions; track attribution) {
+    <li [innerHTML]="attribution" class="item"></li>
+    }
   </ul>
 
   <button (click)="toggleAttributions()" mat-icon-button>

@@ -4,8 +4,9 @@
   class="scalebar ol-unselectable"
 >
   <div class="annotations" [ngStyle]="{'marginLeft.px': -cxUnit / 2}">
+    @for (unit of numUnits + 1 | times; track unit; let first = $first; let last
+    = $last) {
     <div
-      *ngFor="let unit of numUnits + 1 | times; first as first; last as last"
       [class.contrast]="showScaleContrast"
       [class.first]="first"
       [class.last]="last"
@@ -14,18 +15,17 @@
     >
       {{ unit * ftUnit }}'
     </div>
+    }
   </div>
   <div class="units" [ngStyle]="{'width.px': cxWidth}">
+    @for ( unit of numUnits | times; track unit; let white = $odd; let black =
+    $even) {
     <div
-      *ngFor="
-          let unit of numUnits | times;
-          odd as white;
-          even as black
-        "
       [class.black]="black"
       [class.white]="white"
       [ngStyle]="{'height.px': height, 'width.px': cxUnit}"
       class="unit"
     ></div>
+    }
   </div>
 </article>

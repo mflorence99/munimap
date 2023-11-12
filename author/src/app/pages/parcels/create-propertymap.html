@@ -34,7 +34,9 @@
       placeholder="eg: My Huge Estate"
       required
     />
-    <mat-error *ngIf="name.errors">A map name is required</mat-error>
+    @if (name.errors) {
+    <mat-error>A map name is required</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field>
@@ -49,13 +51,16 @@
       placeholder="eg: rockefeller"
       required
     />
-    <mat-error *ngIf="id.errors"
+    @if (id.errors) {
+    <mat-error
       >Use only lowercase letters and numbers, plus dash and
       underscore</mat-error
     >
-    <mat-hint *ngIf="!id.errors"
+    } @if (!id.errors) {
+    <mat-hint
       >Viewer app URL: <em>https://{{ record.id }}.munimap.online</em></mat-hint
     >
+    }
   </mat-form-field>
 
   <br />
@@ -87,12 +92,9 @@
     name="printSize"
     required
   >
-    <mat-radio-button
-      *ngFor="let printSize of printSizes; trackBy: trackByID"
-      [value]="printSize"
-    >
-      {{ printSize }}
-    </mat-radio-button>
+    @for (printSize of printSizes; track printSize) {
+    <mat-radio-button [value]="printSize"> {{ printSize }} </mat-radio-button>
+    }
   </mat-radio-group>
 </form>
 

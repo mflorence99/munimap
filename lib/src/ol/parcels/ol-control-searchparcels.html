@@ -19,12 +19,12 @@
 </article>
 
 <ul [class.hidden]="matches.length === 0 || !theSearcher.value" class="matcher">
-  <li
-    *ngFor="let match of matches; trackBy: trackByMatch"
-    (click)="onSearch(match.key)"
-    class="match"
-  >
+  @for (match of matches; track match.key) {
+  <li (click)="onSearch(match.key)" class="match">
     <div class="key">{{ match.key }}</div>
-    <div *ngIf="match.count > 1" class="count">({{ match.count }})</div>
+    @if (match.count > 1) {
+    <div class="count">({{ match.count }})</div>
+    }
   </li>
+  }
 </ul>

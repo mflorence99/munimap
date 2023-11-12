@@ -45,7 +45,10 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
 
   olControl: OLControl;
 
-  constructor(private cdf: ChangeDetectorRef, private map: OLMapComponent) {}
+  constructor(
+    private cdf: ChangeDetectorRef,
+    private map: OLMapComponent
+  ) {}
 
   // 👇 set the position proportional to the map size
   get bottom(): number {

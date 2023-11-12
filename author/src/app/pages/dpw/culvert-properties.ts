@@ -42,7 +42,10 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
 
   record: Partial<CulvertProperties> = {};
 
-  constructor(private cdf: ChangeDetectorRef, private store: Store) {}
+  constructor(
+    private cdf: ChangeDetectorRef,
+    private store: Store
+  ) {}
 
   cancel(): void {
     this.drawer.close();

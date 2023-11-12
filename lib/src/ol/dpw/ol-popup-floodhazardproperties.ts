@@ -14,7 +14,7 @@ import { Input } from '@angular/core';
 export class OLPopupFloodHazardPropertiesComponent {
   @Input() properties: any;
 
-  schema: [string, keyof FloodHazardProperties][] = [
+  schema = [
     ['Location', 'Location'],
     ['Description', 'FloodDesc'],
     ['Flood Type', 'FloodType'],

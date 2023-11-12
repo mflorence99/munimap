@@ -7,11 +7,13 @@
   <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
 </header>
 
-<p *ngIf="selectedIDs.length > 1" class="instructions">
+@if (selectedIDs.length > 1) {
+<p class="instructions">
   All selected parcels will be modified with the same settings.
   <fa-icon [icon]="['fad', 'exclamation-triangle']"></fa-icon> indicates
   settings that are currently different.
 </p>
+}
 
 <form
   #propertiesForm="ngForm"
@@ -24,58 +26,50 @@
   novalidate
   spellcheck="false"
 >
-  <ng-container
-    *ngFor="let value of (record | values); let ix = index; trackBy: trackByProp"
-  >
-    <!-- 
+  @for (value of (record | values); track value.prop; let ix = $index) {
+
+  <!-- 
       👇 this control for props with a list 
         NOTE: use only appears if usage === current use
     -->
-    <mat-form-field
-      *ngIf="value.list && (value.prop !== 'use' || record.usage.value === '190')"
-      floatLabel="always"
+  @if (value.list && (value.prop !== 'use' || record.usage.value === '190')) {
+  <mat-form-field floatLabel="always">
+    <mat-label>{{ value.label }}</mat-label>
+    <mat-select
+      [(ngModel)]="value.value"
+      [attr.ngControl]="value.prop"
+      [appAutoFocus]="ix === 0"
+      [name]="value.prop"
     >
-      <mat-label>{{ value.label }}</mat-label>
-      <mat-select
-        [(ngModel)]="value.value"
-        [attr.ngControl]="value.prop"
-        [appAutoFocus]="ix === 0"
-        [name]="value.prop"
-      >
-        <mat-option
-          *ngFor="let option of value.list | keyvalue; trackBy: trackByOption"
-          [value]="option.key"
-        >
-          {{ option.value}}
-        </mat-option>
-      </mat-select>
-      <fa-icon
-        *ngIf="value.conflict"
-        [icon]="['fad', 'exclamation-triangle']"
-        matSuffix
-      ></fa-icon>
-    </mat-form-field>
+      @for (option of value.list | keyvalue; track option.key) {
+      <mat-option [value]="option.key"> {{ option.value}} </mat-option>
+      }
+    </mat-select>
+    @if (value.conflict) {
+    <fa-icon [icon]="['fad', 'exclamation-triangle']" matSuffix></fa-icon>
+    }
+  </mat-form-field>
+  }
 
-    <!-- 👇 this control for type-in props -->
-    <mat-form-field *ngIf="!value.list" floatLabel="always">
-      <mat-label>{{ value.label }}</mat-label>
-      <input
-        [(ngModel)]="value.value"
-        [attr.ngControl]="value.prop"
-        [appAutoFocus]="ix === 0"
-        [appSelectOnFocus]="true"
-        [name]="value.prop"
-        [type]="value.type ?? 'text'"
-        [step]="value.step"
-        matInput
-      />
-      <fa-icon
-        *ngIf="value.conflict"
-        [icon]="['fad', 'exclamation-triangle']"
-        matSuffix
-      ></fa-icon>
-    </mat-form-field>
-  </ng-container>
+  <!-- 👇 this control for type-in props -->
+  @if (!value.list) {
+  <mat-form-field floatLabel="always">
+    <mat-label>{{ value.label }}</mat-label>
+    <input
+      [(ngModel)]="value.value"
+      [attr.ngControl]="value.prop"
+      [appAutoFocus]="ix === 0"
+      [appSelectOnFocus]="true"
+      [name]="value.prop"
+      [type]="value.type ?? 'text'"
+      [step]="value.step"
+      matInput
+    />
+    @if (value.conflict) {
+    <fa-icon [icon]="['fad', 'exclamation-triangle']" matSuffix></fa-icon>
+    }
+  </mat-form-field>
+  } }
 </form>
 
 <article class="actions">

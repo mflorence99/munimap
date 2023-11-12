@@ -1,5 +1,6 @@
 {
   "angularCompilerOptions": {
+    "_enabledBlockTypes": ["if", "switch", "for", "defer"],
     "disableTypeScriptVersionCheck": true,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true

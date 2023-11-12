@@ -71,7 +71,10 @@ export class CreatePropertyMapComponent implements SidebarComponent {
     printSize: null
   };
 
-  constructor(private authState: AuthState, private store: Store) {}
+  constructor(
+    private authState: AuthState,
+    private store: Store
+  ) {}
 
   get printSizes(): string[] {
     return Object.keys(PRINT_SIZES);
@@ -116,9 +119,5 @@ export class CreatePropertyMapComponent implements SidebarComponent {
     };
     this.store.dispatch(new CreateMap(map));
     this.drawer.close();
-  }
-
-  trackByID(ix: number, id: string): string {
-    return id;
   }
 }

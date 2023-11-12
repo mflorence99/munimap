@@ -39,9 +39,9 @@
         type="text"
         required
       />
-      <mat-error *ngIf="parcelID.errors?.duplicate"
-        >Parcel ID is a duplicate.
-      </mat-error>
+      @if (parcelID.errors?.duplicate) {
+      <mat-error>Parcel ID is a duplicate. </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>

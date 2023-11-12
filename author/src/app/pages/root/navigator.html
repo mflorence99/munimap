@@ -18,8 +18,8 @@
       <div class="title">RECENTLY USED MAPS</div>
     </li>
 
+    @for (map of topMaps$ | async; track map.id) {
     <li
-      *ngFor="let map of topMaps$ | async; trackBy: trackByID"
       (click)="close()"
       class="item"
       routerLink="/{{ map.type }}/{{ map.id }}"
@@ -34,6 +34,7 @@
       <div class="title">{{ map.name }}</div>
       <div class="subtitle">{{ map.owner }}</div>
     </li>
+    }
 
     <hr />
 

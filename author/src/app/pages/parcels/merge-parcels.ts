@@ -42,7 +42,10 @@ export class MergeParcelsComponent implements SidebarComponent {
     mergedID: null
   };
 
-  constructor(private authState: AuthState, private store: Store) {}
+  constructor(
+    private authState: AuthState,
+    private store: Store
+  ) {}
 
   cancel(): void {
     this.drawer.close();
@@ -91,9 +94,5 @@ export class MergeParcelsComponent implements SidebarComponent {
     // 👉 that's it!
     this.store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
     this.drawer.close();
-  }
-
-  trackByID(ix: number, id: string): string {
-    return id;
   }
 }

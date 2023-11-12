@@ -84,9 +84,9 @@
       name="material"
       required
     >
-      <mat-option *ngFor="let material of allMaterials" [value]="material"
-        >{{ material }}</mat-option
-      >
+      @for (material of allMaterials; track material) {
+      <mat-option [value]="material">{{ material }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -98,9 +98,9 @@
       name="condition"
       required
     >
-      <mat-option *ngFor="let condition of allConditions" [value]="condition"
-        >{{ condition }}</mat-option
-      >
+      @for (condition of allConditions; track condition) {
+      <mat-option [value]="condition">{{ condition }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -112,9 +112,9 @@
       name="headwall"
       required
     >
-      <mat-option *ngFor="let headwall of allHeadwalls" [value]="headwall"
-        >{{ headwall }}</mat-option
-      >
+      @for (headwall of allHeadwalls; track headwall) {
+      <mat-option [value]="headwall">{{ headwall }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -126,11 +126,9 @@
       name="floodHazard"
       required
     >
-      <mat-option
-        *ngFor="let floodHazard of allFloodHazards"
-        [value]="floodHazard"
-        >{{ floodHazard }}</mat-option
-      >
+      @for (floodHazard of allFloodHazards; track floodHazard) {
+      <mat-option [value]="floodHazard">{{ floodHazard }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 

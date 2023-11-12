@@ -10,10 +10,9 @@
   >
     {{ now | date: 'longDate' }}&nbsp;|&nbsp;Credits:&nbsp;
     <ul>
-      <li
-        *ngFor="let attribution of attributions"
-        [innerHTML]="attribution"
-      ></li>
+      @for (attribution of attributions; track attribution) {
+      <li [innerHTML]="attribution"></li>
+      }
     </ul>
   </footer>
 </article>

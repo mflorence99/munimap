@@ -33,7 +33,9 @@
           placeholder="eg: My Old Town"
           required
         />
-        <mat-error *ngIf="name.errors">A map name is required</mat-error>
+        @if (name.errors) {
+        <mat-error>A map name is required</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field>
@@ -50,22 +52,25 @@
           placeholder="eg: myoldtown"
           required
         />
-        <mat-error *ngIf="id.errors"
+        @if (id.errors) {
+        <mat-error
           >Use only lowercase letters and numbers, plus dash and
           underscore</mat-error
         >
-        <mat-hint *ngIf="!id.errors"
+        } @if (!id.errors) {
+        <mat-hint
           >Viewer app URL:
           <em>https://{{ map.id }}.munimap.online</em></mat-hint
         >
+        }
       </mat-form-field>
     </form>
   </mat-card-content>
 
   <mat-card-actions class="actions">
-    <a *ngIf="canDelete()" (click)="delete(map)" mat-flat-button>
-      Delete ths map &hellip;
-    </a>
+    @if (canDelete()) {
+    <a (click)="delete(map)" mat-flat-button> Delete ths map &hellip; </a>
+    }
 
     <div class="filler"></div>
 

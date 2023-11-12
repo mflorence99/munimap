@@ -45,7 +45,10 @@ export class AddParcelComponent implements SidebarComponent {
 
   addition: Addition = {} as Addition;
 
-  constructor(private authState: AuthState, private store: Store) {}
+  constructor(
+    private authState: AuthState,
+    private store: Store
+  ) {}
 
   cancel(): void {
     this.drawer.close();

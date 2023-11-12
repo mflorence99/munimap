@@ -1,13 +1,13 @@
 <h1 mat-dialog-title>Print Progress</h1>
 
 <article mat-dialog-content>
-  <p *ngIf="isStarting()">Preparing map for printing &hellip;</p>
-
-  <p *ngIf="isComplete()">Cleaning up &hellip;</p>
-
-  <p *ngIf="isRunning()">
-    Loaded {{ numLoaded }} of {{ numLoading }} tiles &hellip;
-  </p>
+  @if (isStarting()) {
+  <p>Preparing map for printing &hellip;</p>
+  } @if (isComplete()) {
+  <p>Cleaning up &hellip;</p>
+  } @if (isRunning()) {
+  <p>Loaded {{ numLoaded }} of {{ numLoading }} tiles &hellip;</p>
+  }
 
   <br />
 

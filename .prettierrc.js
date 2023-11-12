@@ -1,9 +1,10 @@
 module.exports = {
   arrowParens: 'always',
   bracketSpacing: true,
+  cssDeclarationSorterOrder: 'alphabetical',
   endOfLine: 'lf',
   htmlWhitespaceSensitivity: 'css',
-  order: 'alphabetical',
+  plugins: ['prettier-plugin-css-order', 'prettier-plugin-package'],
   printWidth: 80,
   proseWrap: 'never',
   quoteProps: 'consistent',

@@ -51,12 +51,18 @@ import hash from 'object-hash';
 class Undoable {
   redoneBy: typeof Undoable;
   undoneBy: typeof Undoable;
-  constructor(public landmark: Partial<Landmark>, public undoable: boolean) {}
+  constructor(
+    public landmark: Partial<Landmark>,
+    public undoable: boolean
+  ) {}
 }
 
 export class AddLandmark extends Undoable {
   static readonly type = '[Landmarks] AddLandmark';
-  constructor(public landmark: Partial<Landmark>, public undoable = true) {
+  constructor(
+    public landmark: Partial<Landmark>,
+    public undoable = true
+  ) {
     super(landmark, undoable);
     this.redoneBy = AddLandmark;
     this.undoneBy = DeleteLandmark;
@@ -70,7 +76,10 @@ export class ClearStacks {
 
 export class DeleteLandmark extends Undoable {
   static readonly type = '[Landmarks] DeleteLandmark';
-  constructor(public landmark: Partial<Landmark>, public undoable = true) {
+  constructor(
+    public landmark: Partial<Landmark>,
+    public undoable = true
+  ) {
     super(landmark, undoable);
     this.redoneBy = DeleteLandmark;
     this.undoneBy = AddLandmark;
@@ -94,7 +103,10 @@ export class Undo {
 
 export class UpdateLandmark extends Undoable {
   static readonly type = '[Landmarks] UpdateLandmark';
-  constructor(public landmark: Partial<Landmark>, public undoable = true) {
+  constructor(
+    public landmark: Partial<Landmark>,
+    public undoable = true
+  ) {
     super(landmark, undoable);
     this.redoneBy = UpdateLandmark;
     this.undoneBy = UpdateLandmark;

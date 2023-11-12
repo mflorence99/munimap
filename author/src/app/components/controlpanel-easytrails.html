@@ -48,15 +48,19 @@
           placeholder="eg: http://192.168.1.13"
           required
         />
-        <mat-error *ngIf="url.errors">The sharing URL is required</mat-error>
+        @if (url.errors) {
+        <mat-error>The sharing URL is required</mat-error>
+        }
       </mat-form-field>
     </form>
 
-    <p *ngIf="invalidURL" class="instructions">
+    @if (invalidURL) {
+    <p class="instructions">
       <fa-icon [icon]="['fad', 'circle-exclamation']"></fa-icon> Unable to
       connect to URL. Make sure that you have entered it correctly and that your
       computer is on the exact same network as your iPhone.
     </p>
+    }
   </mat-card-content>
 
   <mat-card-actions class="actions">
@@ -68,12 +72,11 @@
       mat-flat-button
       type="submit"
     >
-      <fa-icon
-        *ngIf="validating"
-        [icon]="['fas', 'spinner']"
-        [spin]="true"
-      ></fa-icon>
-      <span *ngIf="!validating">IMPORT</span>
+      @if (validating) {
+      <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+      } @if (!validating) {
+      <span>IMPORT</span>
+      }
     </button>
   </mat-card-actions>
 </mat-card>

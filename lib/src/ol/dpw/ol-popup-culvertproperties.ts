@@ -14,7 +14,7 @@ import { Input } from '@angular/core';
 export class OLPopupCulvertPropertiesComponent {
   @Input() properties: any;
 
-  schema: [string, keyof CulvertProperties, string?][] = [
+  schema = [
     ['Location', 'location'],
     ['Diameter', 'diameter', 'inches'],
     ['Length', 'length', 'feet'],

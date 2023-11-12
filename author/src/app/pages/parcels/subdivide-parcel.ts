@@ -48,7 +48,10 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
 
   #format: OLGeoJSON;
 
-  constructor(private authState: AuthState, private store: Store) {}
+  constructor(
+    private authState: AuthState,
+    private store: Store
+  ) {}
 
   cancel(): void {
     this.drawer.close();
@@ -151,9 +154,5 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
       new AddParcels([...removedParcels, ...subdividedParcels])
     );
     this.drawer.close();
-  }
-
-  trackByIndex(ix: number): number {
-    return ix;
   }
 }

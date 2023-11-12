@@ -24,8 +24,8 @@
   padding: 0.5rem 1rem;
 
   &.two-column {
-    grid-auto-flow: column;
     grid-auto-columns: 50% 50%;
+    grid-auto-flow: column;
     // grid-template-rows: repeat(6, auto);
   }
 }

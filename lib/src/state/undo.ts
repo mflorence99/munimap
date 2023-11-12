@@ -7,7 +7,10 @@ import { State } from '@ngxs/store';
 
 export class CanDo {
   static readonly type = '[Undo] CanDo';
-  constructor(public canUndo: boolean, public canRedo: boolean) {}
+  constructor(
+    public canUndo: boolean,
+    public canRedo: boolean
+  ) {}
 }
 
 export class ClearStacks {

@@ -32,34 +32,15 @@
         </mat-select>
       </mat-form-field>
 
-      <!-- <mat-form-field>
-        <mat-label>Select a State</mat-label>
-        <mat-select
-          [disabled]="true"
-          (selectionChange)="switchState($event.value)"
-          [value]="currentState()"
-        >
-          <mat-option
-            *ngFor="let state of allStates(); trackBy: trackByItem"
-            [value]="state"
-          >
-            {{ state }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field> -->
-
       <mat-form-field>
         <mat-label>Select a County</mat-label>
         <mat-select
           (selectionChange)="switchCounty($event.value)"
           [value]="currentCounty()"
         >
-          <mat-option
-            *ngFor="let county of allCounties(); trackBy: trackByItem"
-            [value]="county"
-          >
-            {{ county }}
-          </mat-option>
+          @for (county of allCounties(); track county) {
+          <mat-option [value]="county"> {{ county }} </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
@@ -69,21 +50,18 @@
           (selectionChange)="switchTown($event.value)"
           [value]="currentTown()"
         >
-          <mat-option
-            *ngFor="let town of allTowns(); trackBy: trackByItem"
-            [value]="town"
-          >
-            {{ town }}
-          </mat-option>
+          @for (town of allTowns(); track town) {
+          <mat-option [value]="town"> {{ town }} </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </form>
   </mat-card-content>
 
   <mat-card-actions class="actions">
-    <a *ngIf="currentCounty()" (click)="reset()" mat-flat-button>
-      Start Over
-    </a>
+    @if (currentCounty()) {
+    <a (click)="reset()" mat-flat-button> Start Over </a>
+    }
 
     <div class="filler"></div>
 

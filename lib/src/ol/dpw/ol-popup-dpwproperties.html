@@ -2,14 +2,11 @@
   <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
 </button>
 
-<button
-  *ngIf="canClipboard()"
-  (click)="onClipboard()"
-  class="clipboard"
-  mat-icon-button
->
+@if (canClipboard()) {
+<button (click)="onClipboard()" class="clipboard" mat-icon-button>
   <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
 </button>
+}
 
 <!-- 
   🔥 see Bridge... Culvert... FloodHazard... and StreamCrossingProperties 
@@ -17,24 +14,22 @@
      discriminated by a common type property
 -->
 
-<section #table [ngSwitch]="properties?.type" class="wrapper">
+<section #table class="wrapper">
+  @switch (properties?.type) { @case ('bridge') {
   <app-ol-popup-bridgeproperties
-    *ngSwitchCase="'bridge'"
     [properties]="properties"
   ></app-ol-popup-bridgeproperties>
-
+  } @case ('culvert') {
   <app-ol-popup-culvertproperties
-    *ngSwitchCase="'culvert'"
     [properties]="properties"
   ></app-ol-popup-culvertproperties>
-
+  } @case ('flood hazard') {
   <app-ol-popup-floodhazardproperties
-    *ngSwitchCase="'flood hazard'"
     [properties]="properties"
   ></app-ol-popup-floodhazardproperties>
-
+  } @case ('stream crossing') {
   <app-ol-popup-streamcrossingproperties
-    *ngSwitchCase="'stream crossing'"
     [properties]="properties"
   ></app-ol-popup-streamcrossingproperties>
+  } }
 </section>

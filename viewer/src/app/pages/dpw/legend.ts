@@ -97,14 +97,6 @@ export class DPWLegendComponent implements OnInit {
     this.version.hardReset();
   }
 
-  trackByKey(ix: number, key: string): string {
-    return key;
-  }
-
-  trackByMetric(ix: number, metric: Metric): string {
-    return metric.key;
-  }
-
   #calcBreakdowns(culverts: CulvertProperties[]): void {
     this.allMetrics.forEach((metric) => {
       this.breakdowns[metric.key] = {};

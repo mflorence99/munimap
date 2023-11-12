@@ -16,7 +16,6 @@ import { parcelPropertiesUse } from '../common';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
-import { KeyValue } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
@@ -103,14 +102,6 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   // 👉 may be implemented by subclass
   resetCountersImpl(): void {}
-
-  trackByKey(ix: number, key: string): string {
-    return key;
-  }
-
-  trackByKeyValue(ix: number, item: KeyValue<string, string>): string {
-    return item.key;
-  }
 
   #aggregateFeature(acc: Accumulator, by: string, value: number): void {
     if (!acc[by]) acc[by] = 0;

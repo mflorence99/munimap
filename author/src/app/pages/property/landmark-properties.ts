@@ -39,7 +39,10 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
 
   record: Partial<LandmarkProperties> = {};
 
-  constructor(private cdf: ChangeDetectorRef, private store: Store) {}
+  constructor(
+    private cdf: ChangeDetectorRef,
+    private store: Store
+  ) {}
 
   cancel(): void {
     this.drawer.close();

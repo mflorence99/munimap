@@ -19,51 +19,54 @@
     mapControlAttribution
   ></app-ol-control-attribution>
 
-  <ng-container *ngIf="olMap.initialized">
-    <!-- 📦 OL CONTROLS -->
+  @if (olMap.initialized) {
 
-    <app-ol-control-graticule
-      ><app-ol-style-graticule></app-ol-style-graticule
-    ></app-ol-control-graticule>
+  <!-- 📦 OL CONTROLS -->
 
-    <app-ol-control-scaleline></app-ol-control-scaleline>
+  <app-ol-control-graticule
+    ><app-ol-style-graticule></app-ol-style-graticule
+  ></app-ol-control-graticule>
 
-    <!-- 📦 BG LAYER -->
+  <app-ol-control-scaleline></app-ol-control-scaleline>
 
-    <app-ol-layer-tile>
-      <app-ol-source-xyz
-        [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
-        ><app-ol-attribution
-          >©
-          <a href="https://mapbox.com" target="_blank"
-            >Mapbox</a
-          ></app-ol-attribution
-        ></app-ol-source-xyz
-      >
-    </app-ol-layer-tile>
+  <!-- 📦 BG LAYER -->
 
-    <!-- 📦 SELECTABLES LAYER -->
+  <app-ol-layer-tile>
+    <app-ol-source-xyz
+      [url]="'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' + env.mapbox.apiKey"
+      ><app-ol-attribution
+        >©
+        <a href="https://mapbox.com" target="_blank"
+          >Mapbox</a
+        ></app-ol-attribution
+      ></app-ol-source-xyz
+    >
+  </app-ol-layer-tile>
 
-    <app-ol-layer-vector *ngIf="!atTownLevel(path)" #selectables>
-      <app-ol-adaptor-geojson [filter]="filter()">
-        <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-      </app-ol-adaptor-geojson>
-      <app-ol-source-geojson [layerKey]="'selectables'">
-      </app-ol-source-geojson>
-      <app-ol-interaction-selectgeojson
-        (featuresSelected)="onFeaturesSelected($event)"
-        [filter]="filter()"
-      >
-      </app-ol-interaction-selectgeojson>
-    </app-ol-layer-vector>
+  <!-- 📦 SELECTABLES LAYER -->
 
-    <!-- 📦 BOUNDARY LAYER -->
+  @if (!atTownLevel(path)) {
+  <app-ol-layer-vector #selectables>
+    <app-ol-adaptor-geojson [filter]="filter()">
+      <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+    </app-ol-adaptor-geojson>
+    <app-ol-source-geojson [layerKey]="'selectables'"> </app-ol-source-geojson>
+    <app-ol-interaction-selectgeojson
+      (featuresSelected)="onFeaturesSelected($event)"
+      [filter]="filter()"
+    >
+    </app-ol-interaction-selectgeojson>
+  </app-ol-layer-vector>
+  }
 
-    <app-ol-layer-vector *ngIf="atTownLevel(path)">
-      <app-ol-adaptor-geojson>
-        <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
-      </app-ol-adaptor-geojson>
-      <app-ol-source-boundary></app-ol-source-boundary>
-    </app-ol-layer-vector>
-  </ng-container>
+  <!-- 📦 BOUNDARY LAYER -->
+
+  @if (atTownLevel(path)) {
+  <app-ol-layer-vector>
+    <app-ol-adaptor-geojson>
+      <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+    </app-ol-adaptor-geojson>
+    <app-ol-source-boundary></app-ol-source-boundary>
+  </app-ol-layer-vector>
+  } }
 </app-ol-map>

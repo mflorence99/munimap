@@ -1,16 +1,12 @@
 <main class="page">
   <mat-toolbar class="toolbar">
-    <button
-      *ngIf="hasLeftSidebar"
-      (click)="leftSidebar.toggle()"
-      mat-icon-button
-    >
+    @if (hasLeftSidebar) {
+    <button (click)="leftSidebar.toggle()" mat-icon-button>
       <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
     </button>
+    }
 
-    <h1 class="title">
-      <ng-container *ngIf="title"> {{ title }} </ng-container>
-    </h1>
+    <h1 class="title">@if (title) { {{ title }} }</h1>
 
     <div class="filler"></div>
 
@@ -20,23 +16,25 @@
       [checked]="satelliteView$ | async"
     >
       <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
-      <ng-container *ngIf="canPickSatelliteYear()">
-        &nbsp;
-        <select
-          (change)="onSatelliteYear($event.target.value)"
-          (click)="eatMe($event)"
-          [disabled]="!(satelliteView$ | async)"
+      @if (canPickSatelliteYear()) { &nbsp;
+      <select
+        (change)="onSatelliteYear($event.target.value)"
+        (click)="eatMe($event)"
+        [disabled]="!(satelliteView$ | async)"
+      >
+        @for (year of satelliteYears; track year) {
+
+        <option
+          [attr.selected]="year === (satelliteYear$ | async) ? 'true' : null"
+          [value]="year"
         >
-          <ng-container *ngFor="let year of satelliteYears">
-            <option
-              [attr.selected]="year === (satelliteYear$ | async) ? 'true' : null"
-              [value]="year"
-            >
-              {{ year || 'Latest' }}
-            </option>
-          </ng-container>
-        </select>
-      </ng-container>
+          {{ year || 'Latest' }}
+        </option>
+
+        }
+      </select>
+
+      }
     </mat-button-toggle>
 
     <mat-button-toggle
@@ -47,17 +45,18 @@
       <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
     </mat-button-toggle>
 
+    @if (hasRightSidebar) {
     <mat-button-toggle
-      *ngIf="hasRightSidebar"
       (change)="rightSidebar.toggle()"
       [checked]="rightSidebar.opened"
     >
       <fa-icon [icon]="['fad', 'palette']" size="lg"></fa-icon>
     </mat-button-toggle>
-
-    <button *ngIf="!hasLeftSidebar" (click)="reset()" mat-icon-button>
+    } @if (!hasLeftSidebar) {
+    <button (click)="reset()" mat-icon-button>
       <fa-icon [icon]="['fas', 'sync']" size="2x"></fa-icon>
     </button>
+    }
   </mat-toolbar>
 
   <mat-drawer-container class="container">

@@ -14,7 +14,7 @@ import { Input } from '@angular/core';
 export class OLPopupStreamCrossingPropertiesComponent {
   @Input() properties: any;
 
-  schema: [string, keyof StreamCrossingProperties][] = [
+  schema = [
     ['Location', 'RoadNameF'],
     ['Structure Type', 'StructType'],
     ['Structure Material', 'StructMat'],

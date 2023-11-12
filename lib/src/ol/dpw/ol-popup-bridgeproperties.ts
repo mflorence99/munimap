@@ -14,7 +14,7 @@ import { Input } from '@angular/core';
 export class OLPopupBridgePropertiesComponent {
   @Input() properties: any;
 
-  schema: [string, keyof BridgeProperties][] = [
+  schema = [
     ['Location', 'FACILITY'],
     ['', 'LOCATION'],
     ['Bridge Condition', 'RYGB'],

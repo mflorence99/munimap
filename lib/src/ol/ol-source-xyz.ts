@@ -30,7 +30,10 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
 
   olXYZ: OLXYZ;
 
-  constructor(private http: HttpClient, private layer: OLLayerTileComponent) {}
+  constructor(
+    private http: HttpClient,
+    private layer: OLLayerTileComponent
+  ) {}
 
   ngAfterContentInit(): void {
     // 👉 note that we're saying we don't expect

@@ -26,7 +26,10 @@ export class GeoJSONViewerService extends GeoJSONService {
     version: environment.package.version
   };
 
-  constructor(private cache: CacheService, private http: HttpClient) {
+  constructor(
+    private cache: CacheService,
+    private http: HttpClient
+  ) {
     super();
   }
 

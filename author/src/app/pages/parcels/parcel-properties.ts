@@ -127,14 +127,6 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     this.propertiesForm.form.markAsPristine();
   }
 
-  trackByOption(ix: number, option: KeyValue<string, string>): string {
-    return option.key;
-  }
-
-  trackByProp(ix: number, value: Value): string {
-    return value.prop;
-  }
-
   #makeRecord(): void {
     this.record = {};
     this.editables.forEach((editable) => {

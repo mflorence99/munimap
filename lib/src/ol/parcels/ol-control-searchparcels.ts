@@ -121,10 +121,6 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     return searchFor;
   }
 
-  trackByMatch(ix: number, match: SearchTarget): string {
-    return match.key;
-  }
-
   // 👇 stolen parcels don't count!
   #filterRemovedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
