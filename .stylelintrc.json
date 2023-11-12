@@ -2,21 +2,22 @@
   "extends": "stylelint-config-standard",
   "overrides": [
     {
-      "files": ["**/*.scss"],
-      "customSyntax": "postcss-scss"
+      "customSyntax": "postcss-scss",
+      "files": ["**/*.scss"]
     },
     {
-      "files": ["**/*.ts"],
-      "customSyntax": "postcss-angular"
+      "customSyntax": "postcss-angular",
+      "files": ["**/*.mts", "**/*.ts"]
     }
   ],
-  "plugins": ["stylelint-order", "stylelint-scss"],
+  "plugins": ["stylelint-order"],
   "rules": {
     "at-rule-no-unknown": null,
     "block-closing-brace-empty-line-before": null,
     "color-hex-case": "lower",
     "color-hex-length": "long",
     "custom-property-empty-line-before": null,
+    "custom-property-pattern": null,
     "declaration-block-no-redundant-longhand-properties": null,
     "declaration-colon-newline-after": null,
     "function-no-unknown": null,
@@ -26,10 +27,11 @@
     "order/order": ["custom-properties", "declarations"],
     "order/properties-alphabetical-order": true,
     "rule-empty-line-before": null,
+    "selector-class-pattern": null,
     "selector-pseudo-element-no-unknown": [
       true,
       {
-        "ignorePseudoElements": ["ng-deep"]
+        "ignorePseudoElements": ["input-placeholder", "ng-deep"]
       }
     ],
     "selector-type-no-unknown": [
@@ -38,6 +40,7 @@
         "ignore": "custom-elements"
       }
     ],
+    "shorthand-property-no-redundant-values": null,
     "value-keyword-case": null
   }
 }
