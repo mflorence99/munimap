@@ -1,3 +1,5 @@
+import { SidebarComponent } from '../../components/sidebar-component';
+
 import { AddLandmark } from '@lib/state/landmarks';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -9,7 +11,6 @@ import { Landmark } from '@lib/common';
 import { LandmarkPropertiesClass } from '@lib/common';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { SidebarComponent } from 'app/components/sidebar-component';
 import { Store } from '@ngxs/store';
 
 import { collection } from '@angular/fire/firestore';

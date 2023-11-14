@@ -52,8 +52,96 @@ import squareGrid from '@turf/square-grid';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-map',
-  templateUrl: './ol-map.html',
-  styleUrls: ['./ol-map.scss']
+  template: `
+    <section class="controls">
+      <article class="panels">
+        <ng-content select="[mapControlPanel1]"></ng-content>
+        <ng-content select="[mapControlPanel2]"></ng-content>
+        <ng-content select="[mapControlPanel3]"></ng-content>
+      </article>
+
+      <article class="light-theme buttons">
+        <ng-content select="[mapControlSearch]"></ng-content>
+        <div class="filler"></div>
+        <div class="lower">
+          <ng-content select="[mapControlZoom]"></ng-content>
+          <ng-content select="[mapControlZoomToExtent]"></ng-content>
+          <ng-content select="[mapControlExport]"></ng-content>
+          <ng-content select="[mapControlPrint]"></ng-content>
+          <ng-content select="[mapControlAttribution]"></ng-content>
+        </div>
+      </article>
+    </section>
+
+    <ng-content></ng-content>
+
+    <canvas #canvas hidden></canvas>
+  `,
+  styles: [
+    `
+      :host {
+        background: white;
+        display: block;
+        height: 100%;
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+      }
+
+      .buttons {
+        align-items: flex-end;
+        color: var(--mat-gray-800);
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        grid-area: buttons;
+        justify-content: flex-end;
+
+        > * {
+          flex-shrink: 0;
+        }
+
+        .lower {
+          background-color: rgba(var(--rgb-gray-100), 0.67);
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          justify-content: flex-end;
+          padding: 0.33rem 0;
+        }
+      }
+
+      .controls {
+        display: grid;
+        grid-template-areas: 'panels . buttons';
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: 1fr;
+        height: 100%;
+        padding: 1rem;
+        pointer-events: none;
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+
+        > * {
+          flex-shrink: 0;
+        }
+      }
+
+      .filler {
+        flex-grow: 1;
+      }
+
+      .panels {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        grid-area: panels;
+        justify-content: flex-start;
+      }
+    `
+  ]
 })
 export class OLMapComponent
   implements AfterContentInit, OnDestroy, OnInit, Searcher, Selector

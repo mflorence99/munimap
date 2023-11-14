@@ -20,8 +20,99 @@ import copy from 'fast-copy';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-profile',
-  styleUrls: ['../../../../../lib/css/sidebar.scss', './profile.scss'],
-  templateUrl: './profile.html'
+  template: `
+    <header class="header">
+      <app-avatar [name]="user.displayName" class="icon"></app-avatar>
+
+      <p class="title">{{ user.displayName || '&nbsp;' }}</p>
+      <p class="subtitle">{{ user.email }}</p>
+    </header>
+
+    <form
+      #profileForm="ngForm"
+      (keydown.escape)="cancel()"
+      (submit)="update(user, profile)"
+      class="form"
+      id="profileForm"
+      novalidate
+      spellcheck="false">
+      <mat-form-field>
+        <mat-label>Display Name</mat-label>
+        <input
+          #displayName="ngModel"
+          [(ngModel)]="user.displayName"
+          [appAutoFocus]="true"
+          [appSelectOnFocus]="true"
+          autocomplete="off"
+          matInput
+          name="displayName"
+          required
+          type="text" />
+        @if (displayName.errors) {
+          <mat-error>A display name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Workgroup</mat-label>
+        <textarea
+          #workgroup="ngModel"
+          [(ngModel)]="profile.workgroup"
+          appWorkgroup
+          autocomplete="off"
+          cdkTextareaAutosize
+          matInput
+          name="workgroup"></textarea>
+        @if (workgroup.errors?.tooMany) {
+          <mat-error>A maximum of 10 email addresses is allowed.</mat-error>
+        }
+        @if (workgroup.errors?.invalidEmail) {
+          <mat-error>At least one email address is invalid.</mat-error>
+        }
+        @if (!workgroup.errors) {
+          <mat-hint>
+            Give the email addresses of up to 10 colleagues with whom you share
+            maps, each on a new line.
+          </mat-hint>
+        }
+      </mat-form-field>
+
+      <br />
+
+      <mat-form-field>
+        <mat-label>New Password</mat-label>
+        <input
+          #password="ngModel"
+          [(ngModel)]="user.password"
+          autocomplete="off"
+          matInput
+          name="password"
+          type="password" />
+      </mat-form-field>
+
+      @if (errorMessage) {
+        <mat-error>{{ errorMessage }}</mat-error>
+      }
+    </form>
+
+    <article class="actions">
+      <a (click)="logout()" mat-flat-button>Sign Out</a>
+
+      <div class="filler"></div>
+
+      <button (click)="cancel()" mat-flat-button>DONE</button>
+
+      <button
+        [disabled]="profileForm.invalid || !profileForm.dirty"
+        color="primary"
+        form="profileForm"
+        mat-flat-button
+        type="submit">
+        UPDATE
+      </button>
+    </article>
+  `,
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class ProfileComponent {
   @ViewChild('profileForm') profileForm: NgForm;

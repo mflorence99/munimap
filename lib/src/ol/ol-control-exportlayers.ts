@@ -11,8 +11,11 @@ import OLGeoJSON from 'ol/format/GeoJSON';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-exportlayers',
-  templateUrl: './ol-control-exportlayers.html',
-  styleUrls: ['./ol-control-exportlayers.scss']
+  template: `
+    <button (click)="export()" mat-icon-button>
+      <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
+    </button>
+  `
 })
 export class OLControlExportLayersComponent {
   @Input() fileName: string;

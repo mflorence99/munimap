@@ -31,8 +31,90 @@ class Scalebar extends OLControl {
     }
   ],
   selector: 'app-ol-control-scalebar',
-  templateUrl: './ol-control-scalebar.html',
-  styleUrls: ['./ol-control-scalebar.scss']
+  template: `
+    <article
+      #barRef
+      [ngStyle]="{ 'bottom.px': bottom, 'gap.px': height / 4, 'left.px': left }"
+      class="scalebar ol-unselectable">
+      <div class="annotations" [ngStyle]="{ 'marginLeft.px': -cxUnit / 2 }">
+        @for (
+          unit of numUnits + 1 | times;
+          track unit;
+          let first = $first;
+          let last = $last
+        ) {
+          <div
+            [class.contrast]="showScaleContrast"
+            [class.first]="first"
+            [class.last]="last"
+            [ngStyle]="{
+              'fontSize.px': fontSize,
+              'height.px': height,
+              'width.px': cxUnit
+            }"
+            class="annotation">
+            {{ unit * ftUnit }}'
+          </div>
+        }
+      </div>
+      <div class="units" [ngStyle]="{ 'width.px': cxWidth }">
+        @for (
+          unit of numUnits | times;
+          track unit;
+          let white = $odd;
+          let black = $even
+        ) {
+          <div
+            [class.black]="black"
+            [class.white]="white"
+            [ngStyle]="{ 'height.px': height, 'width.px': cxUnit }"
+            class="unit"></div>
+        }
+      </div>
+    </article>
+  `,
+  styles: [
+    `
+      .scalebar {
+        color: var(--background-color);
+        display: grid;
+        grid-template-rows: auto auto;
+        position: absolute;
+
+        .annotations {
+          display: flex;
+
+          .annotation {
+            text-align: center;
+            visibility: hidden;
+
+            &.contrast {
+              color: var(--text-color);
+              -webkit-text-stroke-color: var(--background-color);
+            }
+          }
+
+          .annotation.first,
+          .annotation.last {
+            visibility: visible;
+          }
+        }
+
+        .units {
+          border: 1px solid var(--mat-gray-900);
+          display: flex;
+
+          .unit.black {
+            background-color: var(--mat-gray-900);
+          }
+
+          .unit.white {
+            background-color: var(--mat-gray-50);
+          }
+        }
+      }
+    `
+  ]
 })
 export class OLControlScaleBarComponent implements Mapable, OnInit {
   @ViewChild('barRef', { static: true }) barRef: ElementRef;

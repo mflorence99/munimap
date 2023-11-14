@@ -403,7 +403,7 @@ a[mat-flat-button] {
 .mat-mdc-card,
 .mat-mdc-menu-content {
   background-color: var(--background-color) !important;
-  box-shadow: rgb(255 255 255 / 33%) 0 8px 24px !important;
+  box-shadow: rgb(255, 255, 255, 33%) 0 8px 24px !important;
 }
 
 .mat-mdc-dialog-container {
@@ -447,11 +447,11 @@ a[mat-flat-button] {
 }
 
 .mdc-text-field--disabled {
-  background-color: rgb(var(--rgb-gray-850) 0.3) !important;
+  background-color: rgb(var(--rgb-gray-850), 0.3) !important;
 }
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-  background-color: rgb(var(--rgb-gray-850) 0.5) !important;
+  background-color: rgb(var(--rgb-gray-850), 0.5) !important;
 }
 
 // ///////////////////////////////////////////////////////////////////////////
@@ -506,7 +506,7 @@ color-picker {
 }
 
 .ol-scaleline-line {
-  background-color: rgb(var(--rgb-gray-100) 0.75);
+  background-color: rgb(var(--rgb-gray-100), 0.75);
   bottom: 1rem;
   left: 1rem;
   padding: 0.5rem;

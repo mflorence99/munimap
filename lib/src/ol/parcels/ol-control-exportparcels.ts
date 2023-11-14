@@ -24,8 +24,19 @@ import OLProjection from 'ol/proj/Projection';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-ol-control-exportparcels',
-  templateUrl: './ol-control-exportparcels.html',
-  styleUrls: ['./ol-control-exportparcels.scss']
+  template: `
+    <button (click)="export()" mat-icon-button>
+      <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
+    </button>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+    `
+  ]
 })
 export class OLControlExportParcelsComponent {
   @Input() fileName: string;

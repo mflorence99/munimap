@@ -184,6 +184,7 @@ export function getAPDVDFill(props: ParcelProperties): string {
   if (isAPDVDExcluded(props)) return colorOfAPDVDExcluded;
   if (isAPDVDExisting(props)) return colorOfAPDVDExisting;
   if (isAPDVDProposed(props)) return colorOfAPDVDProposed;
+  return null;
 }
 
 export function isAPDVDExcluded(props: ParcelProperties): boolean {

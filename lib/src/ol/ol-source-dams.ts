@@ -33,7 +33,7 @@ export class OLSourceDamsComponent extends OLSourceArcGISComponent {
 
   // 👇 see PlaceProperties
 
-  filter(arcgis: any): any {
+  override filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: DamProperties = feature.attributes;

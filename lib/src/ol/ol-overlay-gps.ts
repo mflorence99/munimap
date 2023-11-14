@@ -26,8 +26,60 @@ const backoffMaxInterval = 1000;
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-ol-overlay-gps',
-  templateUrl: './ol-overlay-gps.html',
-  styleUrls: ['./ol-overlay-gps.scss']
+  template: `
+    <div #tracker class="tracker">
+      <svg viewPort="0 0 96 96" [attr.width]="96" [attr.height]="96">
+        <g transform="translate(48, 48)">
+          <circle class="outer" />
+          <circle class="inner" />
+        </g>
+      </svg>
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        position: absolute;
+      }
+
+      .tracker {
+        .inner {
+          animation: ANIMATE_TRACKER 3s ease-in-out infinite;
+          fill: var(--mat-blue-a200);
+          r: 0.8rem;
+        }
+
+        .outer {
+          fill: white;
+          r: 1rem;
+          stroke: var(--mat-blue-a200);
+        }
+      }
+
+      .tracker.disabled {
+        .inner {
+          fill: var(--mat-gray-600);
+        }
+
+        .outer {
+          stroke: var(--mat-gray-600);
+        }
+      }
+
+      @keyframes ANIMATE_TRACKER {
+        0% {
+          r: 10px;
+        }
+        50% {
+          r: 7px;
+        }
+        100% {
+          r: 10px;
+        }
+      }
+    `
+  ]
 })
 export class OLOverlayGPSComponent implements OnDestroy, OnInit {
   @ViewChild('tracker', { static: true }) tracker: ElementRef<HTMLDivElement>;

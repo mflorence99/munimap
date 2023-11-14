@@ -35,7 +35,7 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
 
   // 👇 see PlaceProperties
 
-  filter(arcgis: any): any {
+  override filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: RiverProperties = feature.attributes;

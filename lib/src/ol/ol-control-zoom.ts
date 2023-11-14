@@ -13,8 +13,59 @@ import { takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.Default,
   providers: [DestroyService],
   selector: 'app-ol-control-zoom',
-  templateUrl: './ol-control-zoom.html',
-  styleUrls: ['./ol-control-zoom.scss']
+  template: `
+    <p class="annotation">{{ resolution | number: '1.0-2' }}</p>
+
+    <div class="slider-wrapper">
+      <input
+        (change)="onZoomChange($any($event.srcElement).value)"
+        [max]="maxZoom()"
+        [min]="minZoom()"
+        [step]="1"
+        [value]="zoom"
+        class="slider"
+        orient="horizontal"
+        type="range" />
+    </div>
+
+    <p class="annotation">{{ zoom | number: '1.0-2' }}</p>
+  `,
+  styles: [
+    `
+      :host {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        justify-content: center;
+        padding: 0.25rem;
+        pointer-events: auto;
+        width: 3rem;
+      }
+
+      input[type='range'] {
+        accent-color: var(--mat-gray-800);
+      }
+
+      .annotation {
+        color: var(--mat-gray-700);
+        font-size: 0.75rem;
+        text-align: center;
+      }
+
+      .slider {
+        height: 3rem;
+        margin: 0;
+        transform: rotate(-90deg);
+        transform-origin: 5rem 5rem;
+        width: 10rem;
+      }
+
+      .slider-wrapper {
+        height: 10rem;
+        padding: 0;
+        width: 3rem;
+      }
+    `
+  ]
 })
 export class OLControlZoomComponent implements OnInit {
   @Input() resolution: number;

@@ -10,8 +10,23 @@ export interface MessageDialogData {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-message-dialog',
-  styleUrls: ['./message-dialog.scss'],
-  templateUrl: './message-dialog.html'
+  template: `
+    <p mat-dialog-content>{{ data.message }}</p>
+
+    <article mat-dialog-actions>
+      <button [mat-dialog-close]="true" color="primary" mat-flat-button>
+        OK
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        width: 30rem;
+      }
+    `
+  ]
 })
 export class MessageDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: MessageDialogData) {}

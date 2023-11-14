@@ -12,8 +12,66 @@ import OLLayer from 'ol/layer/Layer';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-attribution',
-  templateUrl: './ol-control-attribution.html',
-  styleUrls: ['./ol-control-attribution.scss']
+  template: `
+    <article class="control">
+      <ul #attribution class="attribution" [class.collapsed]="collapsed">
+        <header class="header">For Information Only</header>
+        <li class="item">Version {{ env.package.version }}</li>
+        <li class="item">
+          Build {{ env.build.id }} {{ env.build.date | date }}
+        </li>
+
+        <header class="header">Credits</header>
+
+        @for (attribution of attributions; track attribution) {
+          <li [innerHTML]="attribution" class="item"></li>
+        }
+      </ul>
+
+      <button (click)="toggleAttributions()" mat-icon-button>
+        <fa-icon [icon]="['fas', 'info-circle']" size="2x"></fa-icon>
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+
+      .attribution {
+        align-items: center;
+        background-color: rgba(var(--rgb-gray-100), 0.75);
+        bottom: -0.25rem;
+        opacity: 1;
+        padding: 0.5rem;
+        position: absolute;
+        right: 3.25rem;
+        transition: opacity 0.25s ease-in-out;
+        width: auto;
+
+        .item {
+          white-space: nowrap;
+        }
+      }
+
+      .attribution.collapsed {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .control {
+        align-items: center;
+        display: flex;
+        position: relative;
+      }
+
+      .header {
+        font-weight: bold;
+      }
+    `
+  ]
 })
 export class OLControlAttributionComponent {
   @ViewChild('attribution') attribution: ElementRef<HTMLParagraphElement>;

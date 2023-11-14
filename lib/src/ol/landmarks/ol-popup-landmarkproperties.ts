@@ -33,11 +33,71 @@ interface Coordinate {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-landmarkproperties',
-  templateUrl: './ol-popup-landmarkproperties.html',
-  styleUrls: [
-    '../ol-popup-selection.scss',
-    './ol-popup-landmarkproperties.scss'
-  ]
+  template: `
+    <button (click)="onClose()" class="closer" mat-icon-button>
+      <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
+    </button>
+
+    @if (canClipboard()) {
+      <button (click)="onClipboard()" class="clipboard" mat-icon-button>
+        <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
+      </button>
+    }
+    @if (landmark) {
+      <table class="properties">
+        @if (landmark.properties.name) {
+          <tr>
+            <td colspan="2">{{ landmark.properties.name }}</td>
+          </tr>
+        }
+        @switch (landmark.geometry.type) {
+          @case ('LineString') {
+            <tr>
+              <td>Length</td>
+              <td>{{ length() | number: '1.0-0' }}'</td>
+            </tr>
+          }
+          @case ('Point') {
+            @if (toCoordinate(landmark.geometry.coordinates); as coordinate) {
+              <tr>
+                <td>Latitude</td>
+                <td>{{ coordinate.latitude | number: '1.0-6' }}</td>
+              </tr>
+              <tr>
+                <td>Longitude</td>
+                <td>{{ coordinate.longitude | number: '1.0-6' }}</td>
+              </tr>
+              @if (landmark.geometry.coordinates[2]) {
+                <tr>
+                  <td>Elevation</td>
+                  <td>{{ coordinate.elevation | number: '1.0-0' }}'</td>
+                </tr>
+              }
+            }
+          }
+          @case ('Polygon') {
+            <tr>
+              <td>Area</td>
+              <td>{{ area() | number: '1.0-2' }} acres</td>
+            </tr>
+            <tr>
+              <td>Perimeter</td>
+              <td>{{ length() | number: '1.0-0' }}'</td>
+            </tr>
+          }
+        }
+        @if (landmark.properties.metadata; as metadata) {
+          @for (item of metadata | keyvalue; track item) {
+            <tr>
+              <td>{{ item.key }}</td>
+              <td>{{ item.value }}</td>
+            </tr>
+          }
+        }
+      </table>
+    }
+  `,
+  styleUrls: ['../ol-popup-selection.scss']
 })
 export class OLPopupLandmarkPropertiesComponent {
   @ViewChild('table', { static: true }) table: ElementRef;

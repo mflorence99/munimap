@@ -24,8 +24,64 @@ interface MergeRecord {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-merge-parcels',
-  styleUrls: ['./merge-parcels.scss', '../../../../../lib/css/sidebar.scss'],
-  templateUrl: './merge-parcels.html'
+  template: `
+    <header class="header">
+      <figure class="icon">
+        <fa-icon [icon]="['fad', 'object-group']" size="2x"></fa-icon>
+      </figure>
+
+      <p class="title">Merge parcels</p>
+      <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
+    </header>
+
+    <form
+      #mergeForm="ngForm"
+      (keydown.escape)="cancel()"
+      (submit)="save(record)"
+      autocomplete="off"
+      class="form"
+      id="mergeForm"
+      novalidate
+      spellcheck="false">
+      <p class="instructions">
+        Indicate which parcel will remain after the merge is complete. Then use
+        <em>Modify parcel settings</em>
+        to complete the merge.
+      </p>
+
+      <mat-radio-group
+        [(ngModel)]="record.mergedID"
+        class="ids"
+        name="targetID">
+        @for (id of selectedIDs; track id) {
+          <mat-radio-button [value]="id">{{ id }}</mat-radio-button>
+        }
+      </mat-radio-group>
+    </form>
+
+    <article class="actions">
+      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+      <button
+        [disabled]="!mergeForm.dirty"
+        color="primary"
+        form="mergeForm"
+        mat-flat-button
+        type="submit">
+        SAVE
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      .ids {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 33.3% 33.3% 33.3%;
+      }
+    `
+  ],
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class MergeParcelsComponent implements SidebarComponent {
   @Input() drawer: MatDrawer;

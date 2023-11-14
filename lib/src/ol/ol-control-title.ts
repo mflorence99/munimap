@@ -29,8 +29,42 @@ class Title extends OLControl {
     }
   ],
   selector: 'app-ol-control-title',
-  templateUrl: './ol-control-title.html',
-  styleUrls: ['./ol-control-title.scss']
+  template: `
+    <article
+      #titleRef
+      [ngStyle]="{ 'top.px': top }"
+      class="title ol-unselectable">
+      <header
+        [ngClass]="{ contrast: showTitleContrast }"
+        [ngStyle]="{ 'fontSize.px': fontSize }"
+        class="header">
+        {{ title }}
+      </header>
+    </article>
+  `,
+  styles: [
+    `
+      .title {
+        left: 0;
+        position: absolute;
+        right: 0;
+
+        .header {
+          color: var(--background-color);
+          font-family: 'Bentham Regular', sans-serif;
+          font-weight: bold;
+          text-align: center;
+          -webkit-text-stroke-color: var(--text-color);
+          -webkit-text-stroke-width: 1px;
+
+          &.contrast {
+            color: var(--text-color);
+            -webkit-text-stroke-color: var(--background-color);
+          }
+        }
+      }
+    `
+  ]
 })
 export class OLControlTitleComponent implements Mapable, OnInit {
   @Input() scaleFactor = 50;

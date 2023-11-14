@@ -30,7 +30,7 @@ export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
 
   // 👇 see WetlandProperties
 
-  filter(arcgis: any): any {
+  override filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: WetlandProperties = feature.attributes;

@@ -28,8 +28,109 @@ import { where } from '@angular/fire/firestore';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-navigator',
-  styleUrls: ['./navigator.scss', '../../../../../lib/css/sidebar.scss'],
-  templateUrl: './navigator.html'
+  template: `
+    <nav class="form navigator">
+      <ul>
+        <li (click)="close()" routerLink="/create" class="item">
+          <fa-icon
+            [class.selected]="title?.startsWith(state)"
+            [icon]="['fad', 'layer-plus']"
+            class="icon"
+            size="3x"></fa-icon>
+          <div class="title">Create a new map</div>
+          <div class="subtitle">Choose the county and town.</div>
+        </li>
+
+        <hr />
+
+        <li class="item">
+          <div></div>
+          <div class="title">RECENTLY USED MAPS</div>
+        </li>
+
+        @for (map of topMaps$ | async; track map.id) {
+          <li
+            (click)="close()"
+            class="item"
+            routerLink="/{{ map.type }}/{{ map.id }}">
+            <fa-icon
+              [class.selected]="title === map.name"
+              [icon]="['fad', 'layer-group']"
+              class="icon"
+              size="3x"></fa-icon>
+
+            <div class="title">{{ map.name }}</div>
+            <div class="subtitle">{{ map.owner }}</div>
+          </li>
+        }
+
+        <hr />
+
+        <li (click)="close()" class="item" routerLink="/list">
+          <fa-icon
+            [class.selected]="title === 'All Maps'"
+            [icon]="['fad', 'list']"
+            class="icon"
+            size="2x"></fa-icon>
+          <div class="title">All Maps</div>
+          <div class="subtitle">Sortable and selectable list of all maps.</div>
+        </li>
+
+        <hr />
+
+        <li (click)="reset()" class="item">
+          <fa-icon
+            [icon]="['fad', 'sync']"
+            class="icon selected"
+            size="2x"></fa-icon>
+          <div class="title">Reload MuniMap</div>
+          <div class="subtitle">App will be updated to the latest version.</div>
+        </li>
+      </ul>
+    </nav>
+  `,
+  styles: [
+    `
+      .navigator {
+        .item {
+          align-items: center;
+          cursor: pointer;
+          display: grid;
+          grid-column-gap: 1rem;
+          grid-template-areas: 'icon title' 'icon subtitle';
+          grid-template-columns: 3.5rem 1fr;
+          padding: 0.5rem 0;
+
+          .icon {
+            --fa-primary-color: var(--text-color);
+            --fa-secondary-color: var(--text-color);
+
+            grid-area: icon;
+            justify-self: center;
+
+            &.selected {
+              --fa-primary-color: var(--text-color);
+              --fa-secondary-color: var(--accent-color);
+            }
+          }
+
+          .title {
+            align-self: end;
+            font-size: larger;
+            font-weight: bold;
+            grid-area: title;
+          }
+
+          .subtitle {
+            align-self: start;
+            font-size: smaller;
+            grid-area: subtitle;
+          }
+        }
+      }
+    `
+  ],
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class NavigatorComponent implements OnInit {
   @Input() maxMapCount = 5;

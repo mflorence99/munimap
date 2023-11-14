@@ -30,8 +30,111 @@ interface Subdivision {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-subdivide-parcel',
-  styleUrls: ['./subdivide-parcel.scss', '../../../../../lib/css/sidebar.scss'],
-  templateUrl: './subdivide-parcel.html'
+  template: `
+    <header class="header">
+      <figure class="icon">
+        <fa-icon [icon]="['fad', 'object-ungroup']" size="2x"></fa-icon>
+      </figure>
+
+      <p class="title">Subdivide parcel</p>
+      <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
+    </header>
+
+    <form
+      #subdivisionForm="ngForm"
+      (keydown.escape)="cancel()"
+      (submit)="save(subdivisions)"
+      class="form"
+      id="subdivisionForm"
+      novalidate
+      spellcheck="false">
+      <p class="instructions">
+        Specify the ID and acreage of each subdivision. After
+        <em>SAVE</em>
+        , use
+        <em>Redraw parcel boundary</em>
+        and
+        <em>Modify parcel settings</em>
+        to complete the subdivision.
+      </p>
+
+      <article class="subdivisions">
+        @for (
+          subdivision of subdivisions;
+          track subdivision.id;
+          let ix = $index
+        ) {
+          <mat-form-field>
+            <mat-label>Subdivision</mat-label>
+            <input
+              #subdivisionID="ngModel"
+              [(ngModel)]="subdivision.id"
+              [appAutoFocus]="ix === 0"
+              [appParcelID]="[$any(map.searcher), subdivision.id]"
+              [appSelectOnFocus]="true"
+              [appSubdivisionID]="[subdivisions, ix]"
+              [name]="'id' + ix"
+              [required]="ix < 2"
+              autocomplete="off"
+              matInput
+              type="text" />
+            @if (subdivisionID.errors?.duplicate) {
+              <mat-error>Subdivision ID is a duplicate.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Acreage</mat-label>
+            <input
+              #area="ngModel"
+              [(ngModel)]="subdivision.area"
+              [appSelectOnFocus]="true"
+              [name]="'area' + ix"
+              [required]="ix < 2"
+              [step]="0.01"
+              autocomplete="off"
+              matInput
+              type="number" />
+          </mat-form-field>
+        }
+      </article>
+    </form>
+
+    <article class="actions">
+      <a (click)="more()" mat-flat-button>More &hellip;</a>
+
+      <div class="filler"></div>
+
+      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+      <button
+        [disabled]="subdivisionForm.invalid || !subdivisionForm.dirty"
+        color="primary"
+        form="subdivisionForm"
+        mat-flat-button
+        type="submit">
+        SAVE
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      .filler {
+        flex-grow: 1;
+      }
+
+      .subdivisions {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: space-between;
+
+        .mat-mdc-form-field {
+          width: 10rem;
+        }
+      }
+    `
+  ],
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   @Input() drawer: MatDrawer;

@@ -24,8 +24,41 @@ export interface PrintProgressData {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'ol-control-printprogress',
-  styleUrls: ['./ol-control-printprogress.scss'],
-  templateUrl: './ol-control-printprogress.html'
+  template: `
+    <h1 mat-dialog-title>Print Progress</h1>
+
+    <article mat-dialog-content>
+      @if (isStarting()) {
+        <p>Preparing map for printing &hellip;</p>
+      }
+      @if (isComplete()) {
+        <p>Cleaning up &hellip;</p>
+      }
+      @if (isRunning()) {
+        <p>Loaded {{ numLoaded }} of {{ numLoading }} tiles &hellip;</p>
+      }
+
+      <br />
+
+      <mat-progress-bar
+        [mode]="isRunning() ? 'determinate' : 'indeterminate'"
+        [value]="(numLoaded / numLoading) * 100"></mat-progress-bar>
+    </article>
+
+    <article mat-dialog-actions>
+      <button [mat-dialog-close]="true" color="primary" mat-flat-button>
+        CANCEL
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        width: 30rem;
+      }
+    `
+  ]
 })
 export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   @Input() giveUpAfter = 30 * 1000 /* 👈 seconds */;

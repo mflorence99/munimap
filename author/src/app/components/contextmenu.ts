@@ -15,8 +15,27 @@ import { takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-contextmenu',
-  templateUrl: './contextmenu.html',
-  styleUrls: ['./contextmenu.scss']
+  template: `
+    @if (contextMenu) {
+      <div
+        #trigger
+        class="trigger"
+        [matMenuTriggerData]="{ selected: map.selected }"
+        [matMenuTriggerFor]="contextMenu"
+        [style.left.px]="menuPosition.x"
+        [style.top.px]="menuPosition.y"></div>
+    }
+
+    <ng-content select="[mapContextMenu]"></ng-content>
+  `,
+  styles: [
+    `
+      .trigger {
+        position: absolute;
+        visibility: fixed;
+      }
+    `
+  ]
 })
 export class ContextMenuComponent implements OnInit {
   @ContentChild(MatMenu) contextMenu: MatMenu;

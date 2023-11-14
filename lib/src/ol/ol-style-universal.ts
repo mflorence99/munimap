@@ -602,8 +602,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           geometry: props.lineChunk
             ? chunked.getGeometry()
             : props.lineSpline
-            ? this.#splineLine(feature)
-            : null,
+              ? this.#splineLine(feature)
+              : null,
           text: new OLText({
             fill: new OLFill({
               color: `rgba(${fontColor}, ${props.fontOpacity})`

@@ -1,5 +1,6 @@
 import { AbstractMapPage } from '../abstract-map';
 import { ContextMenuComponent } from '../../components/contextmenu';
+import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
 import { ImportLandmarksComponent } from './import-landmarks';
 import { LandmarkPropertiesComponent } from './landmark-properties';
 import { RootPage } from '../root/page';
@@ -10,7 +11,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { ContextMenuHostDirective } from 'app/directives/contextmenu-host';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
@@ -51,8 +51,587 @@ interface LandmarkConversion {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-property',
-  styleUrls: ['../abstract-map.scss', './page.scss'],
-  templateUrl: './page.html'
+  template: `
+    @if (mapState$ | async; as map) {
+      <mat-drawer-container class="container">
+        <mat-drawer-content class="content">
+          <app-ol-map
+            #olMap
+            [bbox]="map.bbox"
+            [loadingStrategy]="'all'"
+            [minZoom]="13"
+            [maxZoom]="22"
+            [path]="map.path">
+            <app-contextmenu>
+              <mat-menu mapContextMenu>
+                <ng-template matMenuContent>
+                  <ng-template [ngTemplateOutlet]="contextmenu"></ng-template>
+                </ng-template>
+              </mat-menu>
+            </app-contextmenu>
+
+            <app-controlpanel-properties
+              [map]="map"
+              mapControlPanel1></app-controlpanel-properties>
+
+            <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
+
+            <app-ol-control-print
+              [fileName]="map.name"
+              [printSize]="map.printSize"
+              mapControlPrint></app-ol-control-print>
+
+            @if (map.name) {
+              <app-ol-control-exportlandmarks
+                [fileName]="map.id + '-landmarks'"
+                mapControlExport></app-ol-control-exportlandmarks>
+            }
+
+            <app-ol-control-zoom2extent
+              mapControlZoomToExtent></app-ol-control-zoom2extent>
+
+            <app-ol-control-attribution
+              mapControlAttribution></app-ol-control-attribution>
+
+            @if (olMap.initialized) {
+              <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+
+              @if (olMap.printing) {
+                <app-ol-control-title
+                  [showTitleContrast]="satelliteView$ | async"
+                  [title]="map.name"></app-ol-control-title>
+              }
+              @if (olMap.printing) {
+                <app-ol-control-graticule [step]="0.0025">
+                  <app-ol-style-graticule
+                    [printing]="true"></app-ol-style-graticule>
+                </app-ol-control-graticule>
+              }
+              @if (!olMap.printing) {
+                <app-ol-control-graticule [step]="0.0025">
+                  <app-ol-style-graticule></app-ol-style-graticule>
+                </app-ol-control-graticule>
+              }
+              @if (olMap.printing) {
+                <app-ol-control-scalebar
+                  [showScaleContrast]="
+                    satelliteView$ | async
+                  "></app-ol-control-scalebar>
+              }
+              @if (!olMap.printing) {
+                <app-ol-control-scaleline></app-ol-control-scaleline>
+              }
+              @if (olMap.printing) {
+                <app-ol-control-credits
+                  [showCreditsContrast]="
+                    satelliteView$ | async
+                  "></app-ol-control-credits>
+              }
+
+              <!-- 📦 TERRAIN LAYERS -->
+
+              @if (!(satelliteView$ | async)) {
+                <!-- 📦 HILLSHADE LAYER -->
+
+                <ng-container>
+                  <app-ol-layer-tile>
+                    <app-ol-source-xyz
+                      [maxZoom]="16"
+                      [url]="
+                        'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'
+                      ">
+                      <app-ol-attribution>
+                        <a href="https://www.esri.com" target="_blank">Esri</a>
+                      </app-ol-attribution>
+                    </app-ol-source-xyz>
+                    <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                    <app-ol-filter-colorize
+                      [operation]="'enhance'"
+                      [value]="0.33"></app-ol-filter-colorize>
+                  </app-ol-layer-tile>
+
+                  <app-ol-layer-tile>
+                    <app-ol-source-hillshade
+                      [colorize]="true"></app-ol-source-hillshade>
+                    <app-ol-filter-crop2propertyparcels
+                      [parcelIDs]="map.parcelIDs"
+                      [source]="parcels"
+                      [type]="'crop'"></app-ol-filter-crop2propertyparcels>
+                    <app-ol-filter-colorize
+                      [operation]="'enhance'"
+                      [value]="0.25"></app-ol-filter-colorize>
+                  </app-ol-layer-tile>
+                </ng-container>
+
+                <!-- 📦 CONTOURS LAYER -->
+
+                @if (map.contours2ft) {
+                  <app-ol-layer-tile>
+                    <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
+                  </app-ol-layer-tile>
+                }
+                @if (!map.contours2ft) {
+                  <app-ol-layer-tile>
+                    <app-ol-source-contours></app-ol-source-contours>
+                  </app-ol-layer-tile>
+                }
+
+                <!-- 📦 USER'S LANDMARKS (shapes only) -->
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-landmarks>
+                    <app-ol-style-universal
+                      [showFill]="true"
+                      [showStroke]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-landmarks>
+                  <app-ol-source-landmarks></app-ol-source-landmarks>
+                </app-ol-layer-vector>
+
+                <!-- 📦 NH GranIT VECTOR LAYERS -->
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-wetlands>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-wetlands>
+                  <app-ol-source-wetlands></app-ol-source-wetlands>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <!-- 👇 only drawing labels here - waterbodies draws actual river -->
+                  <app-ol-adaptor-places>
+                    <app-ol-style-universal
+                      [showText]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-places>
+                  <app-ol-source-rivers></app-ol-source-rivers>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-waterbodies>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-waterbodies>
+                  <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
+                  <app-ol-source-waterbodies
+                    [exclude]="[466]"></app-ol-source-waterbodies>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-stonewalls>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-stonewalls>
+                  <app-ol-source-stonewalls></app-ol-source-stonewalls>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-floodplains>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-floodplains>
+                  <app-ol-source-floodplains></app-ol-source-floodplains>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-buildings>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-buildings>
+                  <app-ol-source-geojson
+                    [layerKey]="'buildings'"></app-ol-source-geojson>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-railroads>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-railroads>
+                  <app-ol-source-railroads></app-ol-source-railroads>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-roads>
+                    <app-ol-style-universal
+                      [showStroke]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-roads>
+                  <app-ol-source-geojson
+                    [layerKey]="'roads'"></app-ol-source-geojson>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-trails [accentuate]="true">
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-trails>
+                  <app-ol-source-geojson
+                    [layerKey]="'trails'"></app-ol-source-geojson>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-places>
+                    <app-ol-style-universal
+                      [showText]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-places>
+                  <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
+                  <app-ol-source-geojson
+                    [exclude]="['dam', 'park']"
+                    [layerKey]="'places'"></app-ol-source-geojson>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-places>
+                    <app-ol-style-universal
+                      [showText]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-places>
+                  <app-ol-source-dams></app-ol-source-dams>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-powerlines>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-powerlines>
+                  <app-ol-source-geojson
+                    [layerKey]="'powerlines'"></app-ol-source-geojson>
+                </app-ol-layer-vector>
+
+                <app-ol-layer-vector>
+                  <app-ol-style-parcels
+                    [forceSelected]="map.contours2ft"
+                    [parcelIDs]="map.parcelIDs"
+                    [showBorder]="'always'"
+                    [showDimensions]="'onlyParcelIDs'"
+                    [showDimensionContrast]="'never'"
+                    [showLabels]="'always'"
+                    [showLabelContrast]="'never'"
+                    [showSelection]="
+                      map.contours2ft ? 'onlyParcelIDs' : 'never'
+                    "
+                    [showStolen]="'always'"></app-ol-style-parcels>
+                  <app-ol-source-parcels #parcels></app-ol-source-parcels>
+                </app-ol-layer-vector>
+
+                <!-- 👇 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-roads>
+                    <app-ol-style-universal
+                      [showText]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-roads>
+                  <app-ol-source-geojson
+                    [layerKey]="'roads'"></app-ol-source-geojson>
+                </app-ol-layer-vector>
+
+                <!-- 📦 USER'S LANDMARKS (text, on top of everything else) -->
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-landmarks>
+                    <app-ol-style-universal
+                      [overlaySelectable]="true"
+                      [showText]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-landmarks>
+                  <app-ol-source-landmarks></app-ol-source-landmarks>
+                  <app-ol-interaction-selectlandmarks
+                    [multi]="true"></app-ol-interaction-selectlandmarks>
+                  <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
+                  <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
+                </app-ol-layer-vector>
+              }
+
+              <!-- 📦 SATELLITE LAYER  -->
+
+              @if (satelliteView$ | async) {
+                <app-ol-layer-tile>
+                  <app-ol-source-xyz
+                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+                    [url]="
+                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
+                      env.google.apiKey
+                    ">
+                    <app-ol-attribution>
+                      ©
+                      <a href="https://google.com" target="_blank">Google</a>
+                    </app-ol-attribution>
+                  </app-ol-source-xyz>
+                  <app-ol-filter-crop2propertyparcels
+                    [opacity]="0.33"
+                    [parcelIDs]="map.parcelIDs"
+                    [source]="parcels"
+                    [type]="'mask'"></app-ol-filter-crop2propertyparcels>
+                </app-ol-layer-tile>
+
+                <app-ol-layer-vector>
+                  <app-ol-style-parcels
+                    [parcelIDs]="map.parcelIDs"
+                    [showBorder]="'always'"
+                    [showDimensions]="'onlyParcelIDs'"
+                    [showDimensionContrast]="'always'"
+                    [showLabels]="'always'"
+                    [showLabelContrast]="'always'"
+                    [showStolen]="'always'"></app-ol-style-parcels>
+                  <app-ol-source-parcels #parcels></app-ol-source-parcels>
+                </app-ol-layer-vector>
+
+                @if (map.contours2ft) {
+                  <app-ol-layer-tile>
+                    <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
+                  </app-ol-layer-tile>
+                }
+                @if (!map.contours2ft) {
+                  <app-ol-layer-tile>
+                    <app-ol-source-contours></app-ol-source-contours>
+                  </app-ol-layer-tile>
+                }
+
+                <app-ol-layer-vector>
+                  <app-ol-adaptor-landmarks>
+                    <app-ol-style-universal
+                      [contrast]="'normal'"
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-landmarks>
+                  <app-ol-source-landmarks></app-ol-source-landmarks>
+                  <app-ol-interaction-selectlandmarks
+                    [multi]="true"></app-ol-interaction-selectlandmarks>
+                  <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
+                  <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
+                </app-ol-layer-vector>
+              }
+
+              <!-- 📦 BOUNDARY LAYER -->
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-boundary>
+                  <app-ol-style-universal
+                    [showStroke]="true"></app-ol-style-universal>
+                </app-ol-adaptor-boundary>
+                <app-ol-source-boundary></app-ol-source-boundary>
+              </app-ol-layer-vector>
+
+              <!-- 📦 OVERLAY TO MOVE LANDMARK -->
+
+              @if (!olMap.printing) {
+                <app-ol-overlay-landmarklabel></app-ol-overlay-landmarklabel>
+              }
+            }
+          </app-ol-map>
+        </mat-drawer-content>
+
+        <!-- 📦 DYNAMIC SIDEBAR-->
+
+        <mat-drawer #drawer class="sidebar" mode="over" position="end">
+          <ng-container appContextMenuHost></ng-container>
+        </mat-drawer>
+      </mat-drawer-container>
+    }
+
+    <!-- 📦 CONTEXT MENU -->
+
+    <ng-template #contextmenu>
+      <nav class="contextmenu">
+        @if (olMap.selectedIDs.length !== 0) {
+          <header class="header">
+            <p [ngPlural]="olMap.selected.length">
+              <ng-template ngPluralCase="one">
+                {{ olMap.selected[0].get('name') }}
+              </ng-template>
+              <ng-template ngPluralCase="other">Multiple landmarks</ng-template>
+            </p>
+          </header>
+        }
+
+        <ul>
+          <li
+            (click)="
+              canImportLandmarks($event) && onContextMenu('import-landmarks')
+            "
+            [class.disabled]="!canImportLandmarks()"
+            class="item">
+            <fa-icon
+              [fixedWidth]="true"
+              [icon]="['far', 'file-import']"></fa-icon>
+            <p>Import landmarks from GPX or KML files &hellip;</p>
+          </li>
+
+          <li [class.disabled]="!canDrawLandmarks()" class="item">
+            <fa-icon [fixedWidth]="true" [icon]="['fas', 'pen']"></fa-icon>
+            <p>
+              Draw new
+              <select
+                #geometryType
+                (input)="
+                  canDrawLandmarks($any($event)) &&
+                    onContextMenu('draw-landmarks', geometryType.value)
+                "
+                [disabled]="!canDrawLandmarks()">
+                <option [value]="''" selected>-select-</option>
+                <option [value]="'Point'">point</option>
+                <option [value]="'LineString'">linear</option>
+                <option [value]="'Polygon'">area</option>
+              </select>
+              landmarks
+              <em>
+                <fa-icon
+                  [icon]="['fas', 'question-circle']"
+                  matTooltip="Click to place a points, click and drag to draw lines or areas. ESC when finished. Use the redraw tool to modify later."></fa-icon>
+              </em>
+            </p>
+          </li>
+
+          <li
+            (click)="
+              canLandmarkProperties($any($event)) &&
+                onContextMenu('landmark-properties')
+            "
+            [class.disabled]="!canLandmarkProperties()"
+            class="item">
+            <fa-icon [fixedWidth]="true" [icon]="['fas', 'tasks']"></fa-icon>
+            <p>Modify landmark settings &hellip;</p>
+          </li>
+
+          <li [class.disabled]="!canConvertLandmark()" class="item">
+            <fa-icon [fixedWidth]="true" [icon]="['fas', 'recycle']"></fa-icon>
+            <p>
+              Convert landmark into
+              <select
+                #conversionType
+                (input)="
+                  canConvertLandmark($any($event)) &&
+                    onContextMenu('convert-landmark', conversionType.value)
+                "
+                [disabled]="!canConvertLandmark()">
+                <option [value]="''" selected>-select-</option>
+                @for (conversion of conversions; track conversion) {
+                  @if (canConvertFor(conversion)) {
+                    <option [value]="conversion.label">
+                      {{ conversion.label }}
+                    </option>
+                  }
+                }
+              </select>
+            </p>
+          </li>
+
+          <li [class.disabled]="!canRenameLandmark()" class="item">
+            <fa-icon
+              [fixedWidth]="true"
+              [icon]="['far', 'file-signature']"></fa-icon>
+            <p (click)="eatMe($event)">
+              Rename landmark
+              <input
+                #newName
+                (click)="eatMe($event)"
+                [disabled]="!canRenameLandmark()"
+                [value]="olMap.selected[0]?.get('name')"
+                type="text" />
+
+              <button
+                (click)="
+                  canRenameLandmark($event) &&
+                    onContextMenu('rename-landmark', newName.value)
+                "
+                mat-icon-button>
+                <fa-icon
+                  [icon]="['fas', 'check']"
+                  [fixedWidth]="true"
+                  size="lg"></fa-icon>
+              </button>
+
+              <button (click)="newName.value = ''" mat-icon-button>
+                <fa-icon
+                  [icon]="['fas', 'xmark']"
+                  [fixedWidth]="true"
+                  size="lg"></fa-icon>
+              </button>
+
+              &nbsp;
+
+              <em>
+                <fa-icon
+                  [icon]="['fas', 'question-circle']"
+                  matTooltip="Click the checkmark to save the new name"></fa-icon>
+              </em>
+            </p>
+          </li>
+
+          <li
+            (click)="
+              canRedrawLandmark($event) && onContextMenu('redraw-landmark')
+            "
+            [class.disabled]="!canRedrawLandmark()"
+            class="item">
+            <fa-icon
+              [fixedWidth]="true"
+              [icon]="['fas', 'draw-polygon']"></fa-icon>
+            <p>
+              Redraw landmark alignment
+              <em>
+                <fa-icon
+                  [icon]="['fas', 'question-circle']"
+                  matTooltip="Click and drag the blue perimeter points. Click+Ctrl to delete a point. ESC when finished."></fa-icon>
+              </em>
+            </p>
+          </li>
+
+          <li
+            (click)="canMoveLandmark($event) && onContextMenu('move-landmark')"
+            [class.disabled]="!canMoveLandmark()"
+            class="item">
+            <fa-icon
+              [fixedWidth]="true"
+              [icon]="['fas', 'crosshairs']"></fa-icon>
+            <p>
+              Move landmark label
+              <em>
+                <fa-icon
+                  [icon]="['fas', 'question-circle']"
+                  matTooltip="Click and drag the target icon to the new position"></fa-icon>
+              </em>
+            </p>
+          </li>
+
+          <li
+            (click)="
+              canDeleteLandmarks($event) && onContextMenu('delete-landmarks')
+            "
+            [class.disabled]="!canDeleteLandmarks()"
+            class="item">
+            <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
+            <p [ngPlural]="olMap.selected.length">
+              <ng-template ngPluralCase="one">Delete landmark</ng-template>
+              <ng-template ngPluralCase="other">Delete landmarks</ng-template>
+            </p>
+          </li>
+        </ul>
+      </nav>
+    </ng-template>
+  `,
+  styles: [
+    `
+      button {
+        height: 1.5rem;
+        width: 1.5rem;
+      }
+
+      input {
+        height: 1.5rem;
+        width: 8rem;
+      }
+
+      select {
+        appearance: auto;
+        background-color: var(--text-color);
+        color: var(--background-color);
+        display: inline;
+        height: 1.5rem;
+        width: unset;
+
+        option {
+          background-color: var(--mat-gray-800);
+          color: var(--text-color);
+        }
+      }
+    `
+  ],
+  styleUrls: ['../abstract-map.scss']
 })
 export class PropertyPage extends AbstractMapPage implements OnInit {
   @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
@@ -171,14 +750,14 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   ];
 
   constructor(
-    protected actions$: Actions,
-    protected authState: AuthState,
-    protected destroy$: DestroyService,
-    protected root: RootPage,
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected store: Store,
-    protected viewState: ViewState
+    protected override actions$: Actions,
+    protected override authState: AuthState,
+    protected override destroy$: DestroyService,
+    protected override root: RootPage,
+    protected override route: ActivatedRoute,
+    protected override router: Router,
+    protected override store: Store,
+    protected override viewState: ViewState
   ) {
     super(actions$, authState, destroy$, root, route, router, store, viewState);
   }

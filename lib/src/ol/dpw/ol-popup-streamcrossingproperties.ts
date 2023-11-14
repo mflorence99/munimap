@@ -1,5 +1,4 @@
 import { OLPopupDPWPropertiesComponent } from './ol-popup-dpwproperties';
-import { StreamCrossingProperties } from '../../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -9,7 +8,7 @@ import { Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-streamcrossingproperties',
   templateUrl: './ol-popup-dpwproperties-impl.html',
-  styleUrls: ['../ol-popup-selection.scss', './ol-popup-dpwproperties.scss']
+  styleUrls: ['../ol-popup-selection.scss']
 })
 export class OLPopupStreamCrossingPropertiesComponent {
   @Input() properties: any;

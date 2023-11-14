@@ -49,8 +49,99 @@ interface SearchTarget {
     DestroyService
   ],
   selector: 'app-ol-control-searchparcels',
-  templateUrl: './ol-control-searchparcels.html',
-  styleUrls: ['./ol-control-searchparcels.scss']
+  template: `
+    <article class="control">
+      <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+      <input
+        #theSearcher
+        (focus)="onSearch($any($event.srcElement).value)"
+        (input)="onSearch($any($event.srcElement).value)"
+        class="searcher"
+        placeholder="Search by parcel, address or owner" />
+
+      <button
+        (click)="theSearcher.value = ''"
+        [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
+        mat-icon-button>
+        <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>
+      </button>
+    </article>
+
+    <ul
+      [class.hidden]="matches.length === 0 || !theSearcher.value"
+      class="matcher">
+      @for (match of matches; track match.key) {
+        <li (click)="onSearch(match.key)" class="match">
+          <div class="key">{{ match.key }}</div>
+          @if (match.count > 1) {
+            <div class="count">({{ match.count }})</div>
+          }
+        </li>
+      }
+    </ul>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+        position: relative;
+      }
+
+      .closer {
+        cursor: pointer;
+      }
+
+      .control {
+        align-items: center;
+        background-color: rgba(var(--rgb-gray-100), 0.66);
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: auto 1fr auto;
+        height: 3rem;
+        max-width: 90vmin;
+        padding: 0 0.5rem;
+        position: absolute;
+        right: 0;
+        width: 30rem;
+      }
+
+      .matcher {
+        background-color: rgba(var(--rgb-gray-100), 0.66);
+        max-width: 90vmin;
+        position: absolute;
+        right: 0;
+        top: 3.1rem;
+        width: 24.5rem;
+
+        &.hidden {
+          display: none;
+        }
+
+        .match {
+          color: var(--mat-gray-900);
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          padding: 0.25rem;
+
+          .count {
+            font-size: smaller;
+            font-style: italic;
+          }
+        }
+      }
+
+      .searcher {
+        background-color: transparent;
+        border: none;
+        color: var(--mat-gray-900);
+        font-size: 1rem;
+        height: 100%;
+      }
+    `
+  ]
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   @Input() fuzzyMaxResults = 100;

@@ -9,8 +9,23 @@ import { Input } from '@angular/core';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-avatar',
-  templateUrl: './avatar.html',
-  styleUrls: ['./avatar.scss']
+  template: `
+    <section class="avatar">{{ name }}</section>
+  `,
+  styles: [
+    `
+      .avatar {
+        align-items: center;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        color: var(--mat-gray-50);
+        display: flex;
+        height: 48px;
+        justify-content: center;
+        width: 48px;
+      }
+    `
+  ]
 })
 export class AvatarComponent {
   #name: string;

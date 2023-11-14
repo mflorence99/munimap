@@ -210,7 +210,7 @@ export class OLSourceParcelsComponent implements OnInit {
               } else if (parcel.properties[prop] !== undefined) {
                 feature.properties[prop] = copy(parcel.properties[prop]);
                 return true;
-              }
+              } else return false;
             });
         });
         // 👇 then a similar process for geometry overrides
@@ -231,7 +231,7 @@ export class OLSourceParcelsComponent implements OnInit {
               feature.bbox = parcel.bbox;
               feature.geometry = parcel.geometry;
               return true;
-            }
+            } else return false;
           });
       }
       return feature;

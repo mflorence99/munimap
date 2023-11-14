@@ -20,8 +20,86 @@ import OLFeature from 'ol/Feature';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-create',
-  styleUrls: ['./page.scss'],
-  templateUrl: './page.html'
+  template: `
+    <app-ol-map #olMap [fitToBounds]="true" [path]="path">
+      <app-builder
+        (pathChanged)="onPathChanged($event)"
+        (pathSelected)="onPathSelected($event)"
+        (typeChanged)="onTypeChanged($event)"
+        [path]="path"
+        [type]="type"
+        mapControlPanel1></app-builder>
+
+      <!-- 📦 CUSTOM CONTROLS -->
+
+      <app-ol-control-zoom2extent
+        mapControlZoomToExtent></app-ol-control-zoom2extent>
+
+      <app-ol-control-attribution
+        mapControlAttribution></app-ol-control-attribution>
+
+      @if (olMap.initialized) {
+        <!-- 📦 OL CONTROLS -->
+
+        <app-ol-control-graticule>
+          <app-ol-style-graticule></app-ol-style-graticule>
+        </app-ol-control-graticule>
+
+        <app-ol-control-scaleline></app-ol-control-scaleline>
+
+        <!-- 📦 BG LAYER -->
+
+        <app-ol-layer-tile>
+          <app-ol-source-xyz
+            [url]="
+              'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' +
+              env.mapbox.apiKey
+            ">
+            <app-ol-attribution>
+              ©
+              <a href="https://mapbox.com" target="_blank">Mapbox</a>
+            </app-ol-attribution>
+          </app-ol-source-xyz>
+        </app-ol-layer-tile>
+
+        <!-- 📦 SELECTABLES LAYER -->
+
+        @if (!atTownLevel(path)) {
+          <app-ol-layer-vector #selectables>
+            <app-ol-adaptor-geojson [filter]="filter()">
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-geojson>
+            <app-ol-source-geojson
+              [layerKey]="'selectables'"></app-ol-source-geojson>
+            <app-ol-interaction-selectgeojson
+              (featuresSelected)="onFeaturesSelected($event)"
+              [filter]="filter()"></app-ol-interaction-selectgeojson>
+          </app-ol-layer-vector>
+        }
+
+        <!-- 📦 BOUNDARY LAYER -->
+
+        @if (atTownLevel(path)) {
+          <app-ol-layer-vector>
+            <app-ol-adaptor-geojson>
+              <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
+            </app-ol-adaptor-geojson>
+            <app-ol-source-boundary></app-ol-source-boundary>
+          </app-ol-layer-vector>
+        }
+      }
+    </app-ol-map>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+      }
+    `
+  ]
 })
 export class CreatePage {
   @ViewChild('selectables') selectables: OLLayerVectorComponent;

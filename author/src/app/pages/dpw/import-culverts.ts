@@ -36,15 +36,15 @@ import hash from 'object-hash';
 })
 export class ImportCulvertsComponent extends ImportLandmarksComponent {
   constructor(
-    protected authState: AuthState,
-    protected cdf: ChangeDetectorRef,
-    protected firestore: Firestore,
-    protected store: Store
+    protected override authState: AuthState,
+    protected override cdf: ChangeDetectorRef,
+    protected override firestore: Firestore,
+    protected override store: Store
   ) {
     super(authState, cdf, firestore, store);
   }
 
-  async makeLandmarks(
+  override async makeLandmarks(
     geojsons: GeoJSON.FeatureCollection<any>[]
   ): Promise<void> {
     for (const geojson of geojsons) {

@@ -38,11 +38,108 @@ type ValueRecord = Record<string, Value>;
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ValuesPipe],
   selector: 'app-parcel-properties',
-  styleUrls: [
-    './parcel-properties.scss',
-    '../../../../../lib/css/sidebar.scss'
+  template: `
+    <header class="header">
+      <figure class="icon">
+        <fa-icon [icon]="['fad', 'tasks']" size="2x"></fa-icon>
+      </figure>
+
+      <p class="title">Modify parcel settings</p>
+      <p class="subtitle">{{ selectedIDs.join(', ') }}</p>
+    </header>
+
+    @if (selectedIDs.length > 1) {
+      <p class="instructions">
+        All selected parcels will be modified with the same settings.
+        <fa-icon [icon]="['fad', 'exclamation-triangle']"></fa-icon>
+        indicates settings that are currently different.
+      </p>
+    }
+
+    <form
+      #propertiesForm="ngForm"
+      (keydown.escape)="cancel()"
+      (submit)="save(record)"
+      [ngStyle]="{
+        'grid-template-rows':
+          'repeat(' + round(editables.length / 2) + ', auto)'
+      }"
+      autocomplete="off"
+      class="form two-column"
+      id="propertiesForm"
+      novalidate
+      spellcheck="false">
+      @for (value of record | values; track value.prop; let ix = $index) {
+        <!-- 
+      👇 this control for props with a list 
+        NOTE: use only appears if usage === current use
+    -->
+        @if (
+          value.list && (value.prop !== 'use' || record.usage.value === '190')
+        ) {
+          <mat-form-field floatLabel="always">
+            <mat-label>{{ value.label }}</mat-label>
+            <mat-select
+              [(ngModel)]="value.value"
+              [attr.ngControl]="value.prop"
+              [appAutoFocus]="ix === 0"
+              [name]="value.prop">
+              @for (option of value.list | keyvalue; track option.key) {
+                <mat-option [value]="option.key">{{ option.value }}</mat-option>
+              }
+            </mat-select>
+            @if (value.conflict) {
+              <fa-icon
+                [icon]="['fad', 'exclamation-triangle']"
+                matSuffix></fa-icon>
+            }
+          </mat-form-field>
+        }
+
+        <!-- 👇 this control for type-in props -->
+        @if (!value.list) {
+          <mat-form-field floatLabel="always">
+            <mat-label>{{ value.label }}</mat-label>
+            <input
+              [(ngModel)]="value.value"
+              [attr.ngControl]="value.prop"
+              [appAutoFocus]="ix === 0"
+              [appSelectOnFocus]="true"
+              [name]="value.prop"
+              [type]="value.type ?? 'text'"
+              [step]="value.step"
+              matInput />
+            @if (value.conflict) {
+              <fa-icon
+                [icon]="['fad', 'exclamation-triangle']"
+                matSuffix></fa-icon>
+            }
+          </mat-form-field>
+        }
+      }
+    </form>
+
+    <article class="actions">
+      <button (click)="cancel()" mat-flat-button>DONE</button>
+
+      <button
+        [disabled]="!propertiesForm.dirty"
+        color="primary"
+        form="propertiesForm"
+        mat-flat-button
+        type="submit">
+        SAVE
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      :host {
+        width: 50rem !important;
+      }
+    `
   ],
-  templateUrl: './parcel-properties.html'
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   @Input() drawer: MatDrawer;

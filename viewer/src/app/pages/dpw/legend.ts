@@ -32,8 +32,103 @@ interface Statistics {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-dpw-legend',
-  styleUrls: ['./legend.scss', '../../../../../lib/css/sidebar.scss'],
-  templateUrl: './legend.html'
+  template: `
+    <button (click)="reset()" class="reloader" mat-icon-button>
+      <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
+    </button>
+
+    <header class="header">
+      <figure class="icon">
+        <fa-icon [icon]="['fad', 'circle-notch']" size="2x"></fa-icon>
+      </figure>
+      <p class="title">Culverts</p>
+      <p class="subtitle">Distribution and usage</p>
+    </header>
+
+    <article class="form">
+      @for (metric of allMetrics; track metric.key) {
+        <table class="legend">
+          <thead>
+            <tr>
+              <th>{{ metric.tag }}</th>
+              @for (condition of allConditions; track condition) {
+                <th>
+                  <fa-icon
+                    [icon]="['fas', 'circle']"
+                    [style.color]="
+                      'rgba(var(--map-culvert-' +
+                      condition.toLowerCase() +
+                      '-icon-color), 1)'
+                    "></fa-icon>
+                </th>
+              }
+            </tr>
+          </thead>
+
+          @if (metric.enum(); as keys) {
+            <tbody>
+              @for (key of keys; track key) {
+                <tr>
+                  <td [style.width.%]="25">
+                    {{ key }}
+                    @if (metric.key === 'diameter') {
+                      <span>"</span>
+                    }
+                  </td>
+
+                  @for (condition of allConditions; track condition) {
+                    @if (breakdowns[metric.key]?.[key]?.[condition]; as stats) {
+                      <td [style.width.%]="75 / allConditions.length">
+                        @if (stats.count && stats.length) {
+                          <span>
+                            {{ stats.count }}&ndash;{{ stats.length }}'
+                          </span>
+                        }
+                      </td>
+                    }
+                  }
+                </tr>
+              }
+            </tbody>
+          }
+        </table>
+      }
+    </article>
+  `,
+  styles: [
+    `
+      .legend {
+        border-collapse: collapse;
+        width: 100%;
+
+        td:not(:first-child) {
+          font-size: smaller;
+          text-align: right;
+        }
+
+        th {
+          vertical-align: bottom;
+        }
+
+        th:first-child {
+          text-align: left;
+          text-transform: uppercase;
+        }
+
+        th:not(:first-child) {
+          text-align: right;
+        }
+      }
+
+      .reloader {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        z-index: 2;
+      }
+    `
+  ],
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class DPWLegendComponent implements OnInit {
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;

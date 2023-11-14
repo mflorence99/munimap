@@ -11,8 +11,26 @@ export interface ConfirmDialogData {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-confirm-dialog',
-  styleUrls: ['./confirm-dialog.scss'],
-  templateUrl: './confirm-dialog.html'
+  template: `
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+
+    <article mat-dialog-content>{{ data.content }}</article>
+
+    <article mat-dialog-actions>
+      <button [mat-dialog-close]="false" mat-flat-button>CANCEL</button>
+      <button [mat-dialog-close]="true" color="primary" mat-flat-button>
+        OK
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        width: 30rem;
+      }
+    `
+  ]
 })
 export class ConfirmDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {}

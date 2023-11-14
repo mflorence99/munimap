@@ -29,8 +29,98 @@ interface Addition {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-add-parcel',
-  styleUrls: ['./add-parcel.scss', '../../../../../lib/css/sidebar.scss'],
-  templateUrl: './add-parcel.html'
+  template: `
+    <header class="header">
+      <figure class="icon">
+        <fa-icon [icon]="['fad', 'plus-square']" size="2x"></fa-icon>
+      </figure>
+
+      <p class="title">New parcel</p>
+      <p class="subtitle">
+        Use the
+        <fa-icon [icon]="['fad', 'undo']"></fa-icon>
+        tool to reverse any changes
+      </p>
+    </header>
+
+    <form
+      #additionForm="ngForm"
+      (keydown.escape)="cancel()"
+      (submit)="save(addition)"
+      class="form"
+      id="additionForm"
+      novalidate
+      spellcheck="false">
+      <p class="instructions">
+        Specify the ID and acreage of the new parcel. After
+        <em>SAVE</em>
+        , use
+        <em>Redraw parcel boundary</em>
+        and
+        <em>Modify parcel settings</em>
+        to complete the addition.
+      </p>
+
+      <article class="addition">
+        <mat-form-field>
+          <mat-label>Parcel ID</mat-label>
+          <input
+            #parcelID="ngModel"
+            [(ngModel)]="addition.id"
+            [appAutoFocus]="true"
+            [appParcelID]="[$any(map.searcher), addition.id]"
+            autocomplete="off"
+            matInput
+            name="id"
+            type="text"
+            required />
+          @if (parcelID.errors?.duplicate) {
+            <mat-error>Parcel ID is a duplicate.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Acreage</mat-label>
+          <input
+            #area="ngModel"
+            [(ngModel)]="addition.area"
+            [step]="0.01"
+            autocomplete="off"
+            matInput
+            name="area"
+            type="number"
+            required />
+        </mat-form-field>
+      </article>
+    </form>
+
+    <article class="actions">
+      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+
+      <button
+        [disabled]="additionForm.invalid || !additionForm.dirty"
+        color="primary"
+        form="additionForm"
+        mat-flat-button
+        type="submit">
+        SAVE
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      .addition {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: space-between;
+
+        .mat-mdc-form-field {
+          width: 10rem;
+        }
+      }
+    `
+  ],
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class AddParcelComponent implements SidebarComponent {
   @ViewChild('additionForm') additionForm: NgForm;

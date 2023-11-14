@@ -30,7 +30,7 @@ export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
 
   // 👇 see BridgeProperties
 
-  filter(arcgis: any): any {
+  override filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: StreamCrossingProperties = feature.attributes;

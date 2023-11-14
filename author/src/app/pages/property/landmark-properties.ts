@@ -1,3 +1,5 @@
+import { SidebarComponent } from '../../components/sidebar-component';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
@@ -8,7 +10,6 @@ import { LandmarkProperties } from '@lib/common';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
-import { SidebarComponent } from 'app/components/sidebar-component';
 import { Store } from '@ngxs/store';
 import { UpdateLandmark } from '@lib/state/landmarks';
 
@@ -20,11 +21,61 @@ import OLFeature from 'ol/Feature';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-landmark-properties',
-  styleUrls: [
-    './landmark-properties.scss',
-    '../../../../../lib/css/sidebar.scss'
-  ],
-  templateUrl: './landmark-properties.html'
+  template: `
+    <header class="header">
+      <figure class="icon">
+        <fa-icon [icon]="['fad', 'tasks']" size="2x"></fa-icon>
+      </figure>
+
+      <p class="title">Modify landmark settings</p>
+      <p class="subtitle">
+        Use the
+        <fa-icon [icon]="['fad', 'undo']"></fa-icon>
+        tool to reverse any changes
+      </p>
+    </header>
+
+    <form
+      #propertiesForm="ngForm"
+      (keydown.escape)="cancel()"
+      (submit)="save(record)"
+      autocomplete="off"
+      class="form"
+      id="propertiesForm"
+      novalidate
+      spellcheck="false">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          #name="ngModel"
+          [(ngModel)]="record.name"
+          [appSelectOnFocus]="true"
+          autocomplete="off"
+          matInput
+          name="name" />
+      </mat-form-field>
+
+      @if (['LineString', 'Polygon'].includes(geometryType)) {
+        <mat-checkbox [(ngModel)]="record.showDimension" name="showDimension">
+          Show dimension
+        </mat-checkbox>
+      }
+    </form>
+
+    <article class="actions">
+      <button (click)="cancel()" mat-flat-button>DONE</button>
+
+      <button
+        [disabled]="!propertiesForm.dirty"
+        color="primary"
+        form="propertiesForm"
+        mat-flat-button
+        type="submit">
+        SAVE
+      </button>
+    </article>
+  `,
+  styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
   @Input() drawer: MatDrawer;

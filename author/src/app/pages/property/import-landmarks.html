@@ -18,7 +18,7 @@
   spellcheck="false">
   <input
     #fileList
-    (change)="setImportedFiles($event.target.files)"
+    (change)="setImportedFiles($any($event.target).files)"
     accept=".zip,.gpx,.kml"
     hidden
     multiple

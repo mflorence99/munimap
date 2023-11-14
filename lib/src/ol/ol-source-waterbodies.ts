@@ -25,7 +25,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
-  @Input() exclude: string[];
+  @Input() exclude: (number | string)[];
 
   constructor(
     cache: CacheService,
@@ -36,7 +36,7 @@ export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
     super(cache, http, layer, map);
   }
 
-  filter(arcgis: any): any {
+  override filter(arcgis: any): any {
     if (arcgis && this.exclude) {
       const filtered = copy(arcgis);
       filtered.features = arcgis.features.filter((feature) => {

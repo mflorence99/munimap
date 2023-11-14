@@ -34,7 +34,76 @@ import area from '@turf/area';
     DestroyService
   ],
   selector: 'app-ol-control-topolegend',
-  templateUrl: './ol-control-topolegend.html',
+  template: `
+    <article
+      #legend
+      [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
+      class="legend ol-legend ol-unselectable ol-control">
+      <header class="header">
+        <h1 class="title">{{ title }}</h1>
+        <h2 class="subtitle">{{ county }} Co</h2>
+        <h2 class="subtitle">{{ state }}</h2>
+        <h3 class="link">{{ id }}.munimap.online</h3>
+      </header>
+
+      <table class="areaByUsage">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th class="numeric">Acres</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (usage of parcelPropertiesUsage | keyvalue; track usage.value) {
+            @if (
+              ['500', '501', '502'].includes(usage.key) &&
+              areaByUsage[usage.key]
+            ) {
+              <tr>
+                <td class="usage">
+                  <figure
+                    [style.backgroundColor]="
+                      'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.25)'
+                    "
+                    class="key"></figure>
+                </td>
+                <td class="desc">{{ usage.value }}</td>
+                <td class="numeric">
+                  {{ areaByUsage[usage.key] | number: '1.0-0' }}
+                </td>
+              </tr>
+            }
+          }
+
+          <tr>
+            <td></td>
+            <td class="des">
+              <article class="keys">
+                <figure class="key">
+                  <img [src]="'assets/legend/floodplain.png'" class="icon" />
+                  <figcaption>FEMA Floodplain</figcaption>
+                </figure>
+
+                <figure class="key">
+                  <img [src]="'assets/legend/CUWL.png'" class="icon" />
+                  <figcaption>Wetland</figcaption>
+                </figure>
+              </article>
+            </td>
+            <td></td>
+          </tr>
+
+          <tr class="total">
+            <td></td>
+            <td class="desc">Total</td>
+            <td class="numeric">{{ areaOfTown | number: '1.0-0' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+  `,
   styleUrls: ['../ol-control-abstractparcelslegend.scss']
 })
 export class OLControlTopoLegendComponent
@@ -68,7 +137,7 @@ export class OLControlTopoLegendComponent
     this.areaOfTown = convertArea(area(this.map.boundary), 'meters', 'acres');
   }
 
-  addToMap(): void {
+  override addToMap(): void {
     this.map.olMap.addControl(this.olControl);
   }
 

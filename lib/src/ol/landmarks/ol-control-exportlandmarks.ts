@@ -9,8 +9,11 @@ import { saveAs } from 'file-saver';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-exportlandmarks',
-  templateUrl: './ol-control-exportlandmarks.html',
-  styleUrls: ['./ol-control-exportlandmarks.scss']
+  template: `
+    <button (click)="export()" mat-icon-button>
+      <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
+    </button>
+  `
 })
 export class OLControlExportLandmarksComponent {
   @Input() fileName: string;

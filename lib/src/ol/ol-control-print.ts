@@ -22,8 +22,21 @@ import html2canvas from 'html2canvas';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-print',
-  templateUrl: './ol-control-print.html',
-  styleUrls: ['./ol-control-print.scss']
+  template: `
+    <button (click)="print()" mat-icon-button>
+      <fa-icon [icon]="['fas', 'print']" size="2x"></fa-icon>
+    </button>
+
+    <canvas #canvas hidden></canvas>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+    `
+  ]
 })
 export class OLControlPrintComponent {
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;

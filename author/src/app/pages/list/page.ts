@@ -30,8 +30,131 @@ import { where } from '@angular/fire/firestore';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-list',
-  styleUrls: ['./page.scss'],
-  templateUrl: './page.html'
+  template: `
+    <table matSort mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Map Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Unique ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="owner">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Owner</th>
+        <td mat-cell *matCellDef="let element">{{ element.owner }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="path">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Path</th>
+        <td mat-cell *matCellDef="let element">{{ element.path }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+      <tr
+        (click)="onLoadMap(row)"
+        mat-row
+        *matRowDef="let row; columns: columns"></tr>
+    </table>
+
+    <article class="filter">
+      <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+      <input
+        #theSearcher
+        (focus)="onSearch($any($event.srcElement).value)"
+        (input)="onSearch($any($event.srcElement).value)"
+        class="searcher"
+        placeholder="Search text" />
+
+      <button
+        (click)="(theSearcher.value = '') || onSearch('')"
+        [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
+        mat-icon-button>
+        <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>
+      </button>
+    </article>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100%;
+        overflow: auto;
+        position: absolute;
+        width: 100%;
+      }
+
+      .filter {
+        align-items: center;
+        background-color: rgba(var(--rgb-gray-100), 0.25);
+        column-gap: 0.5rem;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        height: 3rem;
+        padding: 0 0.5rem;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+        z-index: 9999;
+      }
+
+      .searcher {
+        background-color: transparent;
+        border: none;
+        color: var(--text-color);
+        font-size: 1rem;
+        height: 100%;
+        width: 10rem;
+      }
+
+      .searcher::placeholder {
+        color: rgba(var(--rgb-gray-50), 0.33);
+      }
+
+      table[mat-table] {
+        width: 100%;
+
+        td.mat-column-id {
+          color: var(--accent-color);
+        }
+
+        td.mat-column-name {
+          font-size: larger;
+          font-weight: bold;
+        }
+
+        td.mat-column-path {
+          font-family: monospace;
+        }
+
+        td.mat-column-type {
+          color: var(--primary-color);
+        }
+
+        td.mat-column-type::first-letter {
+          text-transform: uppercase;
+        }
+
+        tr.mat-mdc-row .mat-mdc-cell {
+          border-bottom: 1px solid transparent;
+          border-top: 1px solid transparent;
+          cursor: pointer;
+        }
+
+        tr.mat-mdc-row:hover .mat-mdc-cell {
+          border-color: var(--text-color);
+        }
+      }
+    `
+  ]
 })
 export class ListPage implements OnInit {
   @Select(AuthState.profile) profile$: Observable<Profile>;

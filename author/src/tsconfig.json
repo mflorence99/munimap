@@ -1,29 +1,7 @@
 {
-  "angularCompilerOptions": {
-    "_enabledBlockTypes": ["if", "switch", "for", "defer"],
-    "disableTypeScriptVersionCheck": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  },
+  "extends": "../../angular-tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "declaration": false,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "lib": ["es2020", "dom"],
-    "module": "es2020",
-    "moduleResolution": "node",
-    "outDir": "../../dist/author/out-tsc",
-    "paths": {
-      "@lib/*": ["../../lib/src/*"]
-    },
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "target": "ES2022",
-    "useDefineForClassFields": false
+    "outDir": "../../dist/author/out-tsc"
   },
   "exclude": ["**/viewer/**/*.ts", "**/worker/**/*.ts"]
 }

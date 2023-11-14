@@ -29,7 +29,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceGeoJSONComponent {
-  @Input() exclude: string[];
+  @Input() exclude: (number | string)[];
 
   @Input() layerKey: string;
 

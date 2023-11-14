@@ -22,7 +22,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
-  @Input() exclude: string[];
+  @Input() exclude: (number | string)[];
 
   constructor(
     cache: CacheService,
@@ -35,7 +35,7 @@ export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
 
   // 👇 see ConservationProperties
 
-  filter(arcgis: any): any {
+  override filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: ConservationProperties = feature.attributes;

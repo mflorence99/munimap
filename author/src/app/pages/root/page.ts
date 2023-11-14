@@ -48,8 +48,118 @@ import { useAnimation } from '@angular/animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-root',
-  styleUrls: ['./page.scss'],
-  templateUrl: './page.html'
+  template: `
+    <main class="page">
+      <mat-toolbar class="toolbar">
+        <button
+          (click)="nav.toggle()"
+          [disabled]="!(user$ | async)"
+          mat-icon-button>
+          <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
+        </button>
+
+        <h1>
+          @if (title) {
+            {{ title }}
+          }
+        </h1>
+
+        <mat-button-toggle
+          #satelliteViewToggle
+          (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
+          [checked]="satelliteView$ | async">
+          <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
+        </mat-button-toggle>
+
+        <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
+          <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
+        </button>
+
+        <button (click)="undo()" [disabled]="!canUndo" mat-icon-button>
+          <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>
+        </button>
+
+        @if (user$ | async; as user) {
+          <app-avatar
+            (click)="setup.toggle()"
+            [name]="user.displayName"
+            class="avatar"></app-avatar>
+        }
+      </mat-toolbar>
+
+      @if (loading || working) {
+        <mat-progress-bar
+          color="primary"
+          mode="indeterminate"></mat-progress-bar>
+      }
+
+      <mat-drawer-container class="container">
+        <mat-drawer #nav class="sidebar" mode="over" position="start">
+          <app-navigator [title]="title"></app-navigator>
+        </mat-drawer>
+
+        <mat-drawer #setup class="sidebar" mode="over" position="end">
+          @if (user$ | async; as user) {
+            @if (profile$ | async; as profile) {
+              <app-profile [profile]="profile" [user]="user"></app-profile>
+            }
+          }
+        </mat-drawer>
+
+        <mat-drawer-content [@moveFromLeftFade]="getState()" class="content">
+          <router-outlet></router-outlet>
+        </mat-drawer-content>
+      </mat-drawer-container>
+    </main>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+
+      .avatar {
+        cursor: pointer;
+      }
+
+      .container {
+        height: calc(100% - (var(--map-cy-toolbar) * 1px));
+        position: absolute;
+        top: calc(var(--map-cy-toolbar) * 1px);
+        width: 100%;
+      }
+
+      .content {
+        height: 100%;
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+      }
+
+      .page {
+        height: 100%;
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+      }
+
+      .sidebar {
+        height: 100%;
+      }
+
+      .toolbar {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: auto 1fr auto auto auto auto;
+        height: calc(var(--map-cy-toolbar) * 1px);
+        padding: 0 0.5rem !important;
+        position: absolute;
+        width: 100%;
+      }
+    `
+  ]
 })
 export class RootPage implements OnInit {
   @ViewChild(RouterOutlet) outlet;

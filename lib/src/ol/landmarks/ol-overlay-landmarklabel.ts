@@ -23,8 +23,24 @@ import OLPoint from 'ol/geom/Point';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-ol-overlay-landmarklabel',
-  templateUrl: './ol-overlay-landmarklabel.html',
-  styleUrls: ['./ol-overlay-landmarklabel.scss']
+  template: `
+    <div #label (cdkDragEnded)="onDragEnd($event)" cdkDrag>
+      <fa-icon [icon]="['fas', 'crosshairs']" class="icon" size="2x"></fa-icon>
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        cursor: pointer;
+        display: block;
+        position: absolute;
+      }
+
+      .icon {
+        color: var(--background-color);
+      }
+    `
+  ]
 })
 export class OLOverlayLandmarkLabelComponent implements OnInit {
   @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;

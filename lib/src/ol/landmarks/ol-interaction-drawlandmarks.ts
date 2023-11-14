@@ -36,9 +36,9 @@ export class OLInteractionDrawLandmarksComponent
   constructor(
     private authState: AuthState,
     private dialog: MatDialog,
-    protected destroy$: DestroyService,
-    protected layer: OLLayerVectorComponent,
-    protected map: OLMapComponent,
+    protected override destroy$: DestroyService,
+    protected override layer: OLLayerVectorComponent,
+    protected override map: OLMapComponent,
     private store: Store
   ) {
     super(destroy$, layer, map);

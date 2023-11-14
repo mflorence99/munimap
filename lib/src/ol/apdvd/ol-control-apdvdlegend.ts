@@ -37,7 +37,56 @@ import { forwardRef } from '@angular/core';
     DestroyService
   ],
   selector: 'app-ol-control-apdvdlegend',
-  templateUrl: './ol-control-apdvdlegend.html',
+  template: `
+    <article
+      #legend
+      [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
+      class="legend ol-legend ol-unselectable ol-control">
+      <header class="header">
+        <h1 class="title">{{ title }}</h1>
+        <h2 class="subtitle">December 9, 2023</h2>
+      </header>
+
+      <table class="areaByUsage">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th class="numeric">Lots</th>
+            <th class="numeric">Acres</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="usage">
+              <figure
+                [style.backgroundColor]="
+                  'rgba(' + colorOfAPDVDExisting + ', 0.25)'
+                "
+                class="key"></figure>
+            </td>
+            <td class="desc">Existing District</td>
+            <td class="numeric">{{ countOfExisting | number: '1.0-0' }}</td>
+            <td class="numeric">{{ areaOfExisting | number: '1.0-0' }}</td>
+          </tr>
+
+          <tr>
+            <td class="usage">
+              <figure
+                [style.backgroundColor]="
+                  'rgba(' + colorOfAPDVDProposed + ', 0.25)'
+                "
+                class="key"></figure>
+            </td>
+            <td class="desc">Proposed Expansion</td>
+            <td class="numeric">{{ countOfProposed | number: '1.0-0' }}</td>
+            <td class="numeric">{{ areaOfProposed | number: '1.0-0' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+  `,
   styleUrls: ['../ol-control-abstractparcelslegend.scss']
 })
 export class OLControlAPDVDLegendComponent
@@ -79,7 +128,7 @@ export class OLControlAPDVDLegendComponent
     super(cdf, destroy$, geoJSON, mapState, parcelsState, route);
   }
 
-  addToMap(): void {
+  override addToMap(): void {
     this.map.olMap.addControl(this.olControl);
   }
 

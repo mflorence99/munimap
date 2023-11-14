@@ -60,8 +60,8 @@ class Undoable {
 export class AddLandmark extends Undoable {
   static readonly type = '[Landmarks] AddLandmark';
   constructor(
-    public landmark: Partial<Landmark>,
-    public undoable = true
+    public override landmark: Partial<Landmark>,
+    public override undoable = true
   ) {
     super(landmark, undoable);
     this.redoneBy = AddLandmark;
@@ -77,8 +77,8 @@ export class ClearStacks {
 export class DeleteLandmark extends Undoable {
   static readonly type = '[Landmarks] DeleteLandmark';
   constructor(
-    public landmark: Partial<Landmark>,
-    public undoable = true
+    public override landmark: Partial<Landmark>,
+    public override undoable = true
   ) {
     super(landmark, undoable);
     this.redoneBy = DeleteLandmark;
@@ -104,8 +104,8 @@ export class Undo {
 export class UpdateLandmark extends Undoable {
   static readonly type = '[Landmarks] UpdateLandmark';
   constructor(
-    public landmark: Partial<Landmark>,
-    public undoable = true
+    public override landmark: Partial<Landmark>,
+    public override undoable = true
   ) {
     super(landmark, undoable);
     this.redoneBy = UpdateLandmark;
@@ -225,7 +225,7 @@ export class LandmarksState implements NgxsOnInit {
     ctx: StateContext<LandmarksStateModel>,
     action: SetLandmarks
   ): void {
-    // this.#logLandmarks(action.landmarks);
+    this.#logLandmarks(action.landmarks);
     ctx.setState(action.landmarks);
   }
 

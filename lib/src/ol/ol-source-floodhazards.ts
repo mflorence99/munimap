@@ -30,7 +30,7 @@ export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
 
   // 👇 see FloodHazardProperties
 
-  filter(arcgis: any): any {
+  override filter(arcgis: any): any {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: FloodHazardProperties = feature.attributes;

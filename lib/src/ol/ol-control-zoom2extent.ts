@@ -6,8 +6,19 @@ import { Component } from '@angular/core';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-zoom2extent',
-  templateUrl: './ol-control-zoom2extent.html',
-  styleUrls: ['./ol-control-zoom2extent.scss']
+  template: `
+    <button (click)="zoom2extent()" mat-icon-button>
+      <fa-icon [icon]="['fas', 'expand-arrows']" size="2x"></fa-icon>
+    </button>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+    `
+  ]
 })
 export class OLControlZoomToExtentComponent {
   constructor(private map: OLMapComponent) {}

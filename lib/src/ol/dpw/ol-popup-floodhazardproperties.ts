@@ -1,4 +1,3 @@
-import { FloodHazardProperties } from '../../common';
 import { OLPopupDPWPropertiesComponent } from './ol-popup-dpwproperties';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -9,7 +8,7 @@ import { Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-floodhazardproperties',
   templateUrl: './ol-popup-dpwproperties-impl.html',
-  styleUrls: ['../ol-popup-selection.scss', './ol-popup-dpwproperties.scss']
+  styleUrls: ['../ol-popup-selection.scss']
 })
 export class OLPopupFloodHazardPropertiesComponent {
   @Input() properties: any;

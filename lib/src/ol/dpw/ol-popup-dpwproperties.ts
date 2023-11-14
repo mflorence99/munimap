@@ -7,7 +7,6 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
 import { map } from 'rxjs/operators';
@@ -21,8 +20,45 @@ import OLFeature from 'ol/Feature';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-dpwproperties',
-  templateUrl: './ol-popup-dpwproperties.html',
-  styleUrls: ['../ol-popup-selection.scss', './ol-popup-dpwproperties.scss']
+  template: `
+    <button (click)="onClose()" class="closer" mat-icon-button>
+      <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
+    </button>
+
+    @if (canClipboard()) {
+      <button (click)="onClipboard()" class="clipboard" mat-icon-button>
+        <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
+      </button>
+    }
+
+    <!-- 
+  🔥 see Bridge... Culvert... FloodHazard... and StreamCrossingProperties 
+     the original DES properties are untouched and these are 
+     discriminated by a common type property
+-->
+
+    <section #table class="wrapper">
+      @switch (properties?.type) {
+        @case ('bridge') {
+          <app-ol-popup-bridgeproperties
+            [properties]="properties"></app-ol-popup-bridgeproperties>
+        }
+        @case ('culvert') {
+          <app-ol-popup-culvertproperties
+            [properties]="properties"></app-ol-popup-culvertproperties>
+        }
+        @case ('flood hazard') {
+          <app-ol-popup-floodhazardproperties
+            [properties]="properties"></app-ol-popup-floodhazardproperties>
+        }
+        @case ('stream crossing') {
+          <app-ol-popup-streamcrossingproperties
+            [properties]="properties"></app-ol-popup-streamcrossingproperties>
+        }
+      }
+    </section>
+  `,
+  styleUrls: ['../ol-popup-selection.scss']
 })
 export class OLPopupDPWPropertiesComponent {
   @ViewChild('table', { static: true }) table: ElementRef;
@@ -30,7 +66,8 @@ export class OLPopupDPWPropertiesComponent {
   geometry: any /* 👈 in practice will be a Point */;
   properties: any /* 👈 could be bridge, stream crossing etc etc */;
 
-  #subToSelection: Subscription;
+  // 🔥  this doesn't seem to work
+  // #subToSelection: Subscription;
 
   constructor(
     private cdf: ChangeDetectorRef,
