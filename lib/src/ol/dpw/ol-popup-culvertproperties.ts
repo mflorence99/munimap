@@ -8,7 +8,7 @@ import { Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-culvertproperties',
   templateUrl: './ol-popup-dpwproperties-impl.html',
-  styleUrls: ['../ol-popup-selection.scss']
+  styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupCulvertPropertiesComponent {
   @Input() properties: any;

@@ -58,7 +58,7 @@ import OLFeature from 'ol/Feature';
       }
     </section>
   `,
-  styleUrls: ['../ol-popup-selection.scss']
+  styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupDPWPropertiesComponent {
   @ViewChild('table', { static: true }) table: ElementRef;

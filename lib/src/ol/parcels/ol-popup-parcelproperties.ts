@@ -273,7 +273,7 @@ interface Abutter {
       }
     `
   ],
-  styleUrls: ['../ol-popup-selection.scss']
+  styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
   @Input() maxNumProperties = 3;

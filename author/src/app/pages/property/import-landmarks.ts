@@ -28,8 +28,8 @@ import toGeoJSON from '@mapbox/togeojson';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-import-landmarks',
-  styleUrls: ['./import-landmarks.scss', '../../../../../lib/css/sidebar.scss'],
-  templateUrl: './import-landmarks.html'
+  styleUrls: ['../abstract-import.scss', '../../../../../lib/css/sidebar.scss'],
+  templateUrl: '../abstract-import.html'
 })
 export class ImportLandmarksComponent implements SidebarComponent {
   @Input() drawer: MatDrawer;

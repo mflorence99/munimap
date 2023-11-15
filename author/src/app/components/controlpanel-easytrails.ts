@@ -90,7 +90,7 @@ import { EasyTrailsService } from '@lib/services/easytrails';
       </mat-card-actions>
     </mat-card>
   `,
-  styleUrls: ['./controlpanel.scss']
+  styleUrls: ['./abstract-controlpanel.scss']
 })
 export class ControlPanelEasyTrailsComponent {
   invalidURL = false;

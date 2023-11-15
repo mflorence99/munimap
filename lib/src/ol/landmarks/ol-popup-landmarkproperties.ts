@@ -8,7 +8,6 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 import { ViewChild } from '@angular/core';
 
 import { convertArea } from '@turf/helpers';
@@ -97,7 +96,7 @@ interface Coordinate {
       </table>
     }
   `,
-  styleUrls: ['../ol-popup-selection.scss']
+  styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupLandmarkPropertiesComponent {
   @ViewChild('table', { static: true }) table: ElementRef;
@@ -105,7 +104,9 @@ export class OLPopupLandmarkPropertiesComponent {
   landmark: Landmark;
 
   #format: OLGeoJSON;
-  #subToSelection: Subscription;
+
+  // 🔥  this doesn't seem to work
+  // #subToSelection: Subscription;
 
   constructor(
     private cdf: ChangeDetectorRef,

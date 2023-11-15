@@ -108,7 +108,7 @@ import copy from 'fast-copy';
       </mat-card-actions>
     </mat-card>
   `,
-  styleUrls: ['./controlpanel.scss']
+  styleUrls: ['./abstract-controlpanel.scss']
 })
 export class ControlPanelPropertiesComponent {
   @ViewChild('setupForm') setupForm: NgForm;
