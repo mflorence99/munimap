@@ -15,18 +15,18 @@ export interface ColorCodeStateModel {
   strategy: ColorCodeStrategy;
 }
 
+export function defaultColorCode(): ColorCodeStateModel {
+  return {
+    strategy: 'usage'
+  };
+}
+
 @State<ColorCodeStateModel>({
   name: 'colorcode',
-  defaults: ColorCodeState.defaultState()
+  defaults: defaultColorCode()
 })
 @Injectable()
 export class ColorCodeState {
-  static defaultState(): ColorCodeStateModel {
-    return {
-      strategy: 'usage'
-    };
-  }
-
   // 👇 NOTE: utility action, as not all have to be set at once
   @Action(SetColorCode) setColorCode(
     { setState },

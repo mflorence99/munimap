@@ -28,23 +28,23 @@ type Position = GeoJSON.Position;
 
 const debugged = turf.featureCollection<any, any>([]);
 
-const DEBUG = (features: Feature[], color: string): any => {
-  debugged.features.push(
-    ...features.map(
-      (feature): Feature => ({
-        type: 'Feature',
-        geometry: feature.geometry,
-        properties: {
-          'fill': color,
-          'fill-opacity': 0.5,
-          'marker-color': color,
-          'stroke': color,
-          'stroke-width': 1
-        }
-      })
-    )
-  );
-};
+// const DEBUG = (features: Feature[], color: string): any => {
+//   debugged.features.push(
+//     ...features.map(
+//       (feature): Feature => ({
+//         type: 'Feature',
+//         geometry: feature.geometry,
+//         properties: {
+//           'fill': color,
+//           'fill-opacity': 0.5,
+//           'marker-color': color,
+//           'stroke': color,
+//           'stroke-width': 1
+//         }
+//       })
+//     )
+//   );
+// };
 
 // ////////////////////////////////////////////////////////////////////
 // 👇 source data and exceptions

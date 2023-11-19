@@ -299,7 +299,9 @@ function makeID(feature: GeoJSON.Feature): string {
   return parts.join('-');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
+
 const sample = {
   OBJECTID: 549240,
   ParcelOID: 591063,

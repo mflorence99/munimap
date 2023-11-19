@@ -34,7 +34,7 @@ export class OLFilterCrop2PropertyParcelsComponent
   @Input() source: OLSourceParcelsComponent;
   @Input() type: 'crop' | 'mask';
 
-  olFilter: Crop | Mask;
+  olFilter: any;
 
   #featuresLoadedKey: OLEventsKey;
   #format: OLGeoJSON;

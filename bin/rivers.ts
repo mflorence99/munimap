@@ -90,7 +90,9 @@ async function main(): Promise<void> {
 
 main();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
+
 const sample = {
   LENGTH: 179.100757838,
   DR24K_: 569,

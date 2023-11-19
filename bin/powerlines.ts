@@ -86,7 +86,9 @@ Object.keys(linesByCountyByTown).forEach((county) => {
   });
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
+
 const sample = {
   OBJECTID: 1,
   ID: '212144',

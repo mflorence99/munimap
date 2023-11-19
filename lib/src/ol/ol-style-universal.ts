@@ -54,6 +54,8 @@ import OLText from 'ol/style/Text';
 export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
 
+  /* eslint-disable @typescript-eslint/naming-convention */
+
   @Input() fontFamily = 'Roboto';
   @Input() fontOutlineRatio = 0.1 /* 👈 outline width : fontSize */;
   @Input() fontSize_huge = 32 /* 👈 pixels */;
@@ -76,6 +78,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() strokeWidth_medium = 6 /* 👈 feet */;
   @Input() strokeWidth_thick = 9 /* 👈 feet */;
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
+
+  /* eslint-enable @typescript-eslint/naming-convention */
 
   #format: OLGeoJSON;
 
@@ -176,10 +180,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return strokePixels;
   }
 
-  #chunkLine(
-    feature: OLFeature<any>,
-    length: number /* 👈 meters */
-  ): OLFeature<any> {
+  #chunkLine(feature: OLFeature<any>, length: number /* 👈 meters */): any {
     const geojson = JSON.parse(this.#format.writeFeature(feature));
     const chunks = lineChunk(geojson, length / 1000 /* 👈 km */);
     const multiline = combine(chunks).features[0];

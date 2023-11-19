@@ -42,7 +42,9 @@ writeFileSync(
   JSON.stringify(simplify(railroads))
 );
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
+
 const sample = {
   OBJECTID: 1,
   NAME: 'Spur Boston and Maine Corp - 2a',

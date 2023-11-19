@@ -82,7 +82,9 @@ async function main(): Promise<void> {
 
 main();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
+
 const sample = {
   UNIQUE_ID: 146879,
   SRI: 'C0990001__',

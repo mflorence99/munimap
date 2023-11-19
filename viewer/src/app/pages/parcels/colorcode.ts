@@ -13,6 +13,7 @@ import { SetColorCode } from '@lib/state/colorcode';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
+import { defaultColorCode } from '@lib/state/colorcode';
 import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
@@ -105,7 +106,7 @@ export class ParcelsColorCodeComponent implements OnInit {
 
   @ViewChild('setupForm', { static: true }) setupForm: NgForm;
 
-  record: ColorCodeStateModel = ColorCodeState.defaultState();
+  record: ColorCodeStateModel = defaultColorCode();
 
   constructor(
     private cdf: ChangeDetectorRef,
