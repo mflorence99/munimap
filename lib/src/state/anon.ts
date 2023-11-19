@@ -1,8 +1,10 @@
-import { AuthState } from './auth';
 import { AuthStateModel } from './auth';
 import { Profile } from './auth';
 import { User } from './auth';
 import { User as FirebaseUser } from './auth';
+
+import { profileProps } from './auth';
+import { userProps } from './auth';
 
 import { Action } from '@ngxs/store';
 import { Auth } from '@angular/fire/auth';
@@ -75,7 +77,7 @@ export class AnonState implements NgxsOnInit {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      profile: AuthState.profileProps(action.profile)
+      profile: profileProps(action.profile)
     });
   }
 
@@ -86,7 +88,7 @@ export class AnonState implements NgxsOnInit {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      user: action.user ? AuthState.userProps(action.user) : null
+      user: action.user ? userProps(action.user) : null
     });
   }
 

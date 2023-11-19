@@ -60,6 +60,31 @@ export interface AuthStateModel {
   user: User;
 }
 
+export function profileProps(obj: any): any {
+  return {
+    email: obj.email,
+    workgroup: obj.workgroup
+  };
+}
+
+export function userProps(obj: any): any {
+  return {
+    displayName: obj.displayName,
+    email: obj.email,
+    photoURL: obj.photoURL ?? '',
+    uid: obj.uid
+  };
+}
+
+export function workgroup(profile: Profile): string[] {
+  let workgroup = [profile.email];
+  if (profile.workgroup)
+    workgroup = workgroup
+      .concat(profile.workgroup.split(/[\n ;]+/g))
+      .filter((email) => !!email);
+  return workgroup;
+}
+
 @State<AuthStateModel>({
   name: 'auth',
   defaults: {
@@ -76,31 +101,6 @@ export class AuthState implements NgxsOnInit {
     private store: Store,
     private router: Router
   ) {}
-
-  static profileProps(obj: any): any {
-    return {
-      email: obj.email,
-      workgroup: obj.workgroup
-    };
-  }
-
-  static userProps(obj: any): any {
-    return {
-      displayName: obj.displayName,
-      email: obj.email,
-      photoURL: obj.photoURL ?? '',
-      uid: obj.uid
-    };
-  }
-
-  static workgroup(profile: Profile): string[] {
-    let workgroup = [profile.email];
-    if (profile.workgroup)
-      workgroup = workgroup
-        .concat(profile.workgroup.split(/[\n ;]+/g))
-        .filter((email) => !!email);
-    return workgroup;
-  }
 
   @Action(Logout) logout(): void {
     // 👉 we relaod the app to cancel all the subscriptions
@@ -119,7 +119,7 @@ export class AuthState implements NgxsOnInit {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      profile: AuthState.profileProps(action.profile)
+      profile: profileProps(action.profile)
     });
   }
 
@@ -130,7 +130,7 @@ export class AuthState implements NgxsOnInit {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      user: action.user ? AuthState.userProps(action.user) : null
+      user: action.user ? userProps(action.user) : null
     });
   }
 
@@ -146,7 +146,7 @@ export class AuthState implements NgxsOnInit {
       'color: chocolate'
     );
     const docRef = doc(this.firestore, 'profiles', user.email);
-    setDoc(docRef, AuthState.profileProps(action.profile), {
+    setDoc(docRef, profileProps(action.profile), {
       merge: true
     }).then(() => ctx.dispatch(new SetProfile(action.profile)));
   }
@@ -155,10 +155,9 @@ export class AuthState implements NgxsOnInit {
     ctx: StateContext<AuthStateModel>,
     action: UpdateUser
   ): void {
-    updateProfile(
-      this.fireauth.currentUser,
-      AuthState.userProps(action.user)
-    ).then(() => ctx.dispatch(new SetUser(action.user)));
+    updateProfile(this.fireauth.currentUser, userProps(action.user)).then(() =>
+      ctx.dispatch(new SetUser(action.user))
+    );
   }
 
   @Selector() static user(state: AuthStateModel): User {

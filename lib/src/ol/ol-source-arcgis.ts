@@ -31,9 +31,9 @@ import OLVector from 'ol/source/Vector';
 // 👇 we don't care about the ArcGIS schema as defined in
 //    @arcgis/core because we immediately convert it to GeoJSON
 
-export abstract class OLSourceArcGISComponent {
-  static schemaAlreadyAnalyzed: Record<string, boolean> = {};
+const schemaAlreadyAnalyzed: Record<string, boolean> = {};
 
+export abstract class OLSourceArcGISComponent {
   maxRequests = 8;
   olVector: OLVector<any>;
 
@@ -166,9 +166,9 @@ export abstract class OLSourceArcGISComponent {
   #schema(arcgis: any): void {
     if (
       arcgis.fields?.length > 0 &&
-      !OLSourceArcGISComponent.schemaAlreadyAnalyzed[this.getProxyPath()]
+      !schemaAlreadyAnalyzed[this.getProxyPath()]
     ) {
-      OLSourceArcGISComponent.schemaAlreadyAnalyzed[this.getProxyPath()] = true;
+      schemaAlreadyAnalyzed[this.getProxyPath()] = true;
       const fields = arcgis.fields.sort((p, q) => p.name.localeCompare(q.name));
       const js = fields.map((field) => {
         let type;

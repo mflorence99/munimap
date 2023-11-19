@@ -18,6 +18,7 @@ import { normalizeOwnership } from '../common';
 import { normalizeParcel } from '../common';
 import { serializeParcel } from '../common';
 import { timestampParcel } from '../common';
+import { workgroup } from './auth';
 
 import { Action } from '@ngxs/store';
 import { Actions } from '@ngxs/store';
@@ -323,10 +324,9 @@ export class ParcelsState implements NgxsOnInit {
             undoStack.length = 0;
             return of([]);
           } else {
-            const workgroup = AuthState.workgroup(profile);
             console.log(
               `%cFirestore query: parcels where owner in ${JSON.stringify(
-                workgroup
+                workgroup(profile)
               )} and path == "${map.path}" orderBy timestamp desc`,
               'color: goldenrod'
             );
@@ -336,7 +336,7 @@ export class ParcelsState implements NgxsOnInit {
                   this.firestore,
                   'parcels'
                 ) as CollectionReference<Parcel>,
-                where('owner', 'in', workgroup),
+                where('owner', 'in', workgroup(profile)),
                 where('path', '==', map.path),
                 orderBy('timestamp', 'desc')
               ),

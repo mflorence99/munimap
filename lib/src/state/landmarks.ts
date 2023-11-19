@@ -16,6 +16,7 @@ import { calculateLandmark } from '../common';
 import { deserializeLandmark } from '../common';
 import { makeLandmarkID } from '../common';
 import { serializeLandmark } from '../common';
+import { workgroup } from './auth';
 
 import { Action } from '@ngxs/store';
 import { Actions } from '@ngxs/store';
@@ -309,10 +310,9 @@ export class LandmarksState implements NgxsOnInit {
             undoStack.length = 0;
             return of([]);
           } else {
-            const workgroup = AuthState.workgroup(profile);
             console.log(
               `%cFirestore query: landmarks where owner in ${JSON.stringify(
-                workgroup
+                workgroup(profile)
               )} and path == "${map.path}"`,
               'color: goldenrod'
             );
@@ -322,7 +322,7 @@ export class LandmarksState implements NgxsOnInit {
                   this.firestore,
                   'landmarks'
                 ) as CollectionReference<Landmark>,
-                where('owner', 'in', workgroup),
+                where('owner', 'in', workgroup(profile)),
                 where('path', '==', map.path)
               ),
               { idField: '$id' }
