@@ -25,6 +25,7 @@ import { orderBy } from '@angular/fire/firestore';
 import { query } from '@angular/fire/firestore';
 import { takeUntil } from 'rxjs/operators';
 import { where } from '@angular/fire/firestore';
+import { workgroup } from '@lib/state/auth';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -198,17 +199,16 @@ export class ListPage implements OnInit {
         if (!profile?.email) return of([]);
         else {
           // 👇 show the N most recently-used maps
-          const workgroup = AuthState.workgroup(profile);
           console.log(
             `%cFirestore query: maps where owner in ${JSON.stringify(
-              workgroup
+              workgroup(profile)
             )} orderBy timestamp desc`,
             'color: goldenrod'
           );
           return collectionData<Map>(
             query(
               collection(this.firestore, 'maps') as CollectionReference<Map>,
-              where('owner', 'in', workgroup),
+              where('owner', 'in', workgroup(profile)),
               orderBy('name')
             )
           );

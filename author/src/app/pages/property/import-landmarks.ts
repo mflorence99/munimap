@@ -19,6 +19,7 @@ import { getDocs } from '@angular/fire/firestore';
 import { makeLandmarkID } from '@lib/common';
 import { query } from '@angular/fire/firestore';
 import { where } from '@angular/fire/firestore';
+import { workgroup } from '@lib/state/auth';
 
 import Feature from 'ol/Feature';
 import hash from 'object-hash';
@@ -62,17 +63,16 @@ export class ImportLandmarksComponent implements SidebarComponent {
   //    allows one landmark with the same geometry to be uploaded
   //    but we're not ready to give up on it yet
   async alreadyImported(importHash: string): Promise<boolean> {
-    const workgroup = AuthState.workgroup(this.authState.currentProfile());
     console.log(
       `%cFirestore query: landmarks where owner in ${JSON.stringify(
-        workgroup
+        workgroup(this.authState.currentProfile())
       )} and importHash = ${importHash}`,
       'color: goldenrod'
     );
     const docs = await getDocs(
       query(
         collection(this.firestore, 'landmarks'),
-        where('owner', 'in', workgroup),
+        where('owner', 'in', workgroup(this.authState.currentProfile())),
         where('importHash', '==', importHash)
       )
     );
