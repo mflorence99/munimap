@@ -456,21 +456,6 @@ a[mat-flat-button] {
 
 // ///////////////////////////////////////////////////////////////////////////
 
-// 👉 Color Picker styles
-
-color-picker {
-  // 🔥 now THAT'S a hack -- but the color-picker is surprisingly
-  //    hard to style b/c it is yanked out of the DOM
-  justify-self: center;
-
-  .cp-cancel-button-class {
-    background-color: var(--mat-gray-300) !important;
-    color: var(--mat-gray-800) !important;
-    font-size: 1rem !important;
-    padding: 0.25rem 0.5rem !important;
-  }
-}
-
 // 👉 Firebase styles
 
 .firebase-emulator-warning {

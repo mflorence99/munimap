@@ -133,7 +133,6 @@
     "jszip": "^3",
     "material-design-icons": "^3",
     "md5-file": "^5",
-    "ngx-color-picker": "^15",
     "ngx-pipes": "^3",
     "ngx-router-animations": "^13",
     "node-fetch": "2.6.7",

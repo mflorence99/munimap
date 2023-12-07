@@ -14,7 +14,6 @@ import { APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { ColorCodeState } from '@lib/state/colorcode';
-import { ColorPickerModule } from 'ngx-color-picker';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { CurrencyPipe } from '@angular/common';
@@ -318,7 +317,6 @@ const STATES_SAVED = [ColorCodeState, ViewState];
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
-    ColorPickerModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,
