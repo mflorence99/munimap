@@ -133,35 +133,22 @@ interface LandmarkConversion {
               @if (!(satelliteView$ | async)) {
                 <!-- 📦 HILLSHADE LAYER -->
 
-                <ng-container>
-                  <app-ol-layer-tile>
-                    <app-ol-source-xyz
-                      [maxZoom]="16"
-                      [url]="
-                        'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'
-                      ">
-                      <app-ol-attribution>
-                        <a href="https://www.esri.com" target="_blank">Esri</a>
-                      </app-ol-attribution>
-                    </app-ol-source-xyz>
-                    <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                    <app-ol-filter-colorize
-                      [operation]="'enhance'"
-                      [value]="0.33"></app-ol-filter-colorize>
-                  </app-ol-layer-tile>
-
-                  <app-ol-layer-tile>
-                    <app-ol-source-hillshade
-                      [colorize]="true"></app-ol-source-hillshade>
-                    <app-ol-filter-crop2propertyparcels
-                      [parcelIDs]="map.parcelIDs"
-                      [source]="parcels"
-                      [type]="'crop'"></app-ol-filter-crop2propertyparcels>
-                    <app-ol-filter-colorize
-                      [operation]="'enhance'"
-                      [value]="0.25"></app-ol-filter-colorize>
-                  </app-ol-layer-tile>
-                </ng-container>
+                <app-ol-layer-tile>
+                  <app-ol-source-xyz
+                    [maxZoom]="16"
+                    [url]="
+                      'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'
+                    ">
+                    <app-ol-attribution>
+                      <a href="https://www.esri.com" target="_blank">Esri</a>
+                    </app-ol-attribution>
+                  </app-ol-source-xyz>
+                  <app-ol-filter-colorize
+                    [color]="'#f8fc03'"
+                    [operation]="'color'"
+                    [value]="0.1"></app-ol-filter-colorize>
+                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                </app-ol-layer-tile>
 
                 <!-- 📦 CONTOURS LAYER -->
 

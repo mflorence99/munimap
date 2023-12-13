@@ -10,6 +10,8 @@ import { Input } from '@angular/core';
 import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
 
+// 🔥 this appears to be throwing 502 errors in prod 12/13/2023
+
 const attribution = '<a href="https://www.usgs.gov/" target="_blank">USGS</a>';
 
 @Component({

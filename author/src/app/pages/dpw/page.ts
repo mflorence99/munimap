@@ -139,11 +139,30 @@ import { toLonLat } from 'ol/proj';
                   </app-ol-layer-tile>
                 }
 
-                <!-- 📦 HILLSHADE LAYER =-->
+                <!-- 📦 HILLSHADE LAYER 🔥 appears to throw 502 12/13/2023 -->
 
-                <app-ol-layer-tile [opacity]="0.5">
-                  <app-ol-source-hillshade
-                    [colorize]="true"></app-ol-source-hillshade>
+                <!-- <app-ol-layer-tile [opacity]="0.5">
+              <app-ol-source-hillshade
+                [colorize]="true"></app-ol-source-hillshade>
+              <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+            </app-ol-layer-tile> -->
+
+                <!-- 📦 HILLSHADE LAYER 🔥 replaces above -->
+
+                <app-ol-layer-tile>
+                  <app-ol-source-xyz
+                    [maxZoom]="16"
+                    [url]="
+                      'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'
+                    ">
+                    <app-ol-attribution>
+                      <a href="https://www.esri.com" target="_blank">Esri</a>
+                    </app-ol-attribution>
+                  </app-ol-source-xyz>
+                  <app-ol-filter-colorize
+                    [color]="'#f8fc03'"
+                    [operation]="'color'"
+                    [value]="0.1"></app-ol-filter-colorize>
                   <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                 </app-ol-layer-tile>
 
