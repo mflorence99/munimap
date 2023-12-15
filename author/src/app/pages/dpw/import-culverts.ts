@@ -21,7 +21,7 @@ import hash from 'object-hash';
 
 // 🔥 this is a stripped down version of the more generalized
 //    implementation in property/import-landmarks.ts and is designed
-//    to ONLY import DPW landmarks like stream crossings, etc.
+//    to ONLY import DPW landmarks like culverts
 
 // 🔥 only "Point" features are supported and they are assumed to be  culverts
 
@@ -114,7 +114,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       type: 'culvert',
       year: null
     };
-    // 👇 the data on each line in unambiduous with respect to
+    // 👇 the data on each line in unambiguous with respect to
     //    culvert property
     parts.forEach((part: any) => {
       part = part.trim();
