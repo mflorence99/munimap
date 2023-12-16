@@ -1,6 +1,6 @@
 {
   "name": "munimap",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "MuniMap",
   "repository": {
     "type": "git",
@@ -201,7 +201,6 @@
     "stylelint": "^16",
     "stylelint-config-standard": "^35",
     "stylelint-order": "^6",
-    "stylelint-scss": "^5",
     "ts-node": "^10",
     "typescript": "^5"
   }

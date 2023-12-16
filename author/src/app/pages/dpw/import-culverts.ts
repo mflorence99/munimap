@@ -66,11 +66,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
           switch (feature.geometry?.type) {
             case 'Point':
               properties = {
-                metadata: this.#makeCulvertProperties(
-                  feature.properties.description /* 👈 KML */ ??
-                    feature.properties.desc /* 👈 GPX */,
-                  feature.properties.name
-                )
+                metadata: this.#makeCulvertProperties(feature.properties.name)
               };
               break;
           }
@@ -88,19 +84,17 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
     }
   }
 
-  #makeCulvertProperties(
-    description: string,
-    location: string
-  ): Partial<CulvertProperties> {
-    // 👇 split description by line and eliminate decoration and smart quotes
-    const parts = description
+  #makeCulvertProperties(props: string): Partial<CulvertProperties> {
+    // 👇 split props and eliminate decoration and smart quotes
+    const parts = props
       .replace(/<div>/g, '\n')
       .replace(/<\/div>/g, '')
+      .replace(/<\./g, '')
       .replace(/<br>/g, '')
       .replace(/[\u2018\u2019]/g, "'")
       .replace(/[\u201C\u201D]/g, '"')
       .trim()
-      .split('\n');
+      .split(/[\n ]+/);
     // 👇 model culvert
     const properties: Partial<CulvertProperties> = {
       condition: culvertConditions[0],
@@ -109,7 +103,6 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       floodHazard: culvertFloodHazards[0],
       headwall: culvertHeadwalls[0],
       length: 0,
-      location: location,
       material: culvertMaterials[0],
       type: 'culvert',
       year: null

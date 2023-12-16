@@ -12,7 +12,7 @@ const PROFILES = [
   {
     email: 'mflo999+dpw@gmail.com',
     workgroup:
-      'ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org mflo999@gmail.com'
+      'ethayer@washingtonnh.org ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org'
   },
   {
     email: 'mflo999+flo@gmail.com',
@@ -25,9 +25,14 @@ const PROFILES = [
     email: 'marshal@gsinet.net'
   },
   {
+    email: 'ljg@gsinet.net',
+    workgroup:
+      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org'
+  },
+  {
     email: 'ethayer@washingtonnh.org',
     workgroup:
-      'mflo999+dpw@gmail.com nick@mnassessing.com kchidester@washingtonnh.org mflo999@gmail.com'
+      'mflo999+dpw@gmail.com ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org'
   }
 ];
 
@@ -51,6 +56,11 @@ const USERS = [
     email: 'cmoskey@gmail.com',
     password: 'password',
     displayName: 'Carl Moskey'
+  },
+  {
+    email: 'ljg@gsinet.net',
+    password: 'password',
+    displayName: 'Lawrence Gaskell'
   },
   {
     email: 'ethayer@washingtonnh.org',
