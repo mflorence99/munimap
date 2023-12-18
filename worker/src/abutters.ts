@@ -41,11 +41,19 @@ export class Abutters {
               return hasGeometry;
             })
             // 👉 match those in range
-            .filter(
-              (feature) =>
-                !selectedIDs.includes(feature.id) &&
-                intersect(feature, buffered)
-            )
+            .filter((feature) => {
+              try {
+                return (
+                  !selectedIDs.includes(feature.id) &&
+                  intersect(feature, buffered)
+                );
+              } catch (e) {
+                Sentry.captureMessage(
+                  `Intersect failed for ${feature.id} with ${selected.id} ${e.message}`
+                );
+                return false;
+              }
+            })
         );
       })
       .reduce((acc, abutter) => {
