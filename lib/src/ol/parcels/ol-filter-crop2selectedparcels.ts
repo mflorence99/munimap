@@ -90,20 +90,6 @@ export class OLFilterCrop2SelectedParcelsComponent
         Sentry.captureMessage(message);
       }
     }
-    // 👇 probably a crap way to do it, but this is meant
-    //    to ensure that everyting is cropped, until a selection is made
-    else {
-      this.olFilter = new Crop({
-        feature: this.#format.readFeature({
-          geometry: {
-            coordinates: [],
-            type: 'Polygon'
-          },
-          type: 'Feature'
-        }),
-        inner: false
-      });
-    }
     // 👇 ol-ext has monkey-patched addFilter
     if (this.olFilter) this.#layer?.olLayer['addFilter'](this.olFilter);
   }
