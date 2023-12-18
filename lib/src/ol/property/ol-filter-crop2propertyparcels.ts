@@ -4,6 +4,8 @@ import { OLMapComponent } from '../ol-map';
 import { OLSourceParcelsComponent } from '../ol-source-parcels';
 import { ParcelID } from '../../common';
 
+import * as Sentry from '@sentry/angular-ivy';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
@@ -68,7 +70,8 @@ export class OLFilterCrop2PropertyParcelsComponent
 
   #addFilter(): void {
     // 👉 remove prior filter
-    if (this.olFilter) this.#layer.olLayer['removeFilter'](this.olFilter);
+    if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
+    this.olFilter = null;
     const features = this.source.olVector.getFeatures();
     if (features.length > 0) {
       // 👉 union all features to make crop/mask
@@ -81,23 +84,29 @@ export class OLFilterCrop2PropertyParcelsComponent
         properties: {},
         type: 'Feature'
       };
-      // 👇 crop or mask?
-      if (this.type === 'crop') {
-        this.olFilter = new Crop({
-          feature: this.#format.readFeature(merged),
-          inner: false
-        });
-      }
-      // 👇 crop or mask?
-      else if (this.type === 'mask') {
-        this.olFilter = new Mask({
-          feature: this.#format.readFeature(merged),
-          fill: new OLFill({ color: [128, 128, 128, this.opacity] }),
-          inner: false
-        });
+      // 👇 this may fail!
+      try {
+        if (this.type === 'crop') {
+          this.olFilter = new Crop({
+            feature: this.#format.readFeature(merged),
+            inner: false
+          });
+        }
+        // 👇 crop or mask?
+        else if (this.type === 'mask') {
+          this.olFilter = new Mask({
+            feature: this.#format.readFeature(merged),
+            fill: new OLFill({ color: [128, 128, 128, this.opacity] }),
+            inner: false
+          });
+        }
+      } catch (e) {
+        const message = `🔥 Crop/Mask filter failed ${e}`;
+        console.error(message);
+        Sentry.captureMessage(message);
       }
       // 👇 ol-ext has monkey-patched addFilter
-      this.#layer?.olLayer['addFilter'](this.olFilter);
+      if (this.olFilter) this.#layer?.olLayer['addFilter'](this.olFilter);
     }
   }
 }

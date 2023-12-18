@@ -4,6 +4,8 @@ import { OLLayerTileComponent } from '../ol-layer-tile';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
 
+import * as Sentry from '@sentry/angular-ivy';
+
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -61,7 +63,8 @@ export class OLFilterCrop2SelectedParcelsComponent
 
   #addFilter(): void {
     // 👉 remove prior filter
-    if (this.olFilter) this.#layer.olLayer['removeFilter'](this.olFilter);
+    if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
+    this.olFilter = null;
     // 👉 the selector MAY not be present
     const selector = this.map.selector as OLInteractionSelectParcelsComponent;
     // 👇 build a new filter as the union of all the selected parcels
@@ -75,10 +78,17 @@ export class OLFilterCrop2SelectedParcelsComponent
         properties: {},
         type: 'Feature'
       };
-      this.olFilter = new Crop({
-        feature: this.#format.readFeature(merged),
-        inner: false
-      });
+      // 👇 this may fail!
+      try {
+        this.olFilter = new Crop({
+          feature: this.#format.readFeature(merged),
+          inner: false
+        });
+      } catch (e) {
+        const message = `🔥 Crop filter failed for ${selector.selectedIDs} ${e}`;
+        console.error(message);
+        Sentry.captureMessage(message);
+      }
     }
     // 👇 probably a crap way to do it, but this is meant
     //    to ensure that everyting is cropped, until a selection is made
@@ -95,7 +105,7 @@ export class OLFilterCrop2SelectedParcelsComponent
       });
     }
     // 👇 ol-ext has monkey-patched addFilter
-    this.#layer?.olLayer['addFilter'](this.olFilter);
+    if (this.olFilter) this.#layer?.olLayer['addFilter'](this.olFilter);
   }
 
   #handleFeaturesSelected$(): void {
