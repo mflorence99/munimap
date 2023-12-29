@@ -66,7 +66,11 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
           switch (feature.geometry?.type) {
             case 'Point':
               properties = {
-                metadata: this.#makeCulvertProperties(feature.properties.name)
+                metadata: this.#makeCulvertProperties(
+                  // 🔥 non-standard GeoJSON field for convenience
+                  geojson['filename'],
+                  feature.properties.name
+                )
               };
               break;
           }
@@ -84,7 +88,10 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
     }
   }
 
-  #makeCulvertProperties(props: string): Partial<CulvertProperties> {
+  #makeCulvertProperties(
+    filename: string,
+    props: string
+  ): Partial<CulvertProperties> {
     // 👇 split props and eliminate decoration and smart quotes
     const parts = props
       .replace(/<div>/g, '\n')
@@ -103,6 +110,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       floodHazard: culvertFloodHazards[0],
       headwall: culvertHeadwalls[0],
       length: 0,
+      location: filename.toUpperCase().substring(0, filename.lastIndexOf('.')),
       material: culvertMaterials[0],
       type: 'culvert',
       year: null

@@ -106,11 +106,12 @@ export class ImportLandmarksComponent implements SidebarComponent {
               for (const entry of entries) {
                 const raw = await entry.async('text');
                 const xml = new DOMParser().parseFromString(raw, 'text/xml');
-                geojsons.push(
-                  entry.name.toLowerCase().endsWith('.gpx')
-                    ? toGeoJSON.gpx(xml)
-                    : toGeoJSON.kml(xml)
-                );
+                const geojson = entry.name.toLowerCase().endsWith('.gpx')
+                  ? toGeoJSON.gpx(xml)
+                  : toGeoJSON.kml(xml);
+                // 🔥 non-standard GeoJSON field for convenience
+                geojson['filename'] = file.name;
+                geojsons.push(geojson);
               }
             }
           }
@@ -118,11 +119,12 @@ export class ImportLandmarksComponent implements SidebarComponent {
           else {
             const raw = await file.text();
             const xml = new DOMParser().parseFromString(raw, 'text/xml');
-            geojsons.push(
-              file.name.toLowerCase().endsWith('.gpx')
-                ? toGeoJSON.gpx(xml)
-                : toGeoJSON.kml(xml)
-            );
+            const geojson = file.name.toLowerCase().endsWith('.gpx')
+              ? toGeoJSON.gpx(xml)
+              : toGeoJSON.kml(xml);
+            // 🔥 non-standard GeoJSON field for convenience
+            geojson['filename'] = file.name;
+            geojsons.push(geojson);
           }
         }
       }

@@ -48,6 +48,19 @@ import OLFeature from 'ol/Feature';
       novalidate
       spellcheck="false">
       <mat-form-field>
+        <mat-label>Location</mat-label>
+        <input
+          #diameter="ngModel"
+          [(ngModel)]="record.location"
+          [appSelectOnFocus]="true"
+          autocomplete="off"
+          matInput
+          name="location"
+          required
+          type="text" />
+      </mat-form-field>
+
+      <mat-form-field>
         <mat-label>Diameter (inches)</mat-label>
         <input
           #diameter="ngModel"
