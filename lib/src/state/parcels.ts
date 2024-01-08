@@ -351,8 +351,8 @@ export class ParcelsState implements NgxsOnInit {
             //    property dependent on addressOfOwner, but there are parcels
             //    in the wild on firebase that were created BEFORE this change
             if (
-              parcel.properties.addressOfOwner &&
-              !parcel.properties.ownership
+              parcel.properties?.addressOfOwner &&
+              !parcel.properties?.ownership
             )
               normalizeOwnership(parcel);
           });
