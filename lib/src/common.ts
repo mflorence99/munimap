@@ -138,14 +138,16 @@ export type CulvertMaterial = (typeof culvertMaterials)[number];
 export interface CulvertProperties {
   condition?: CulvertCondition;
   count?: number /* 2x, 3x etc */;
-  diameter: number /* 👈 inches */;
+  diameter: number /* 👈 inches, circular pipes */;
   floodHazard?: CulvertFloodHazard;
   headwall?: CulvertHeadwall;
+  height: number /* 👈 inches, elliptical pipes */;
   length: number /* 👈 feet */;
   location?: string;
   material?: CulvertMaterial;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
   type: 'culvert';
+  width: number /* 👈 inches, elliptical pipes */;
   year?: number;
 }
 

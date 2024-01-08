@@ -60,18 +60,58 @@ import OLFeature from 'ol/Feature';
           type="text" />
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Diameter (inches)</mat-label>
-        <input
-          #diameter="ngModel"
-          [(ngModel)]="record.diameter"
-          [step]="1"
-          autocomplete="off"
-          matInput
-          name="diameter"
-          required
-          type="number" />
-      </mat-form-field>
+      <mat-radio-group
+        (change)="shape = $event.value"
+        [value]="shape"
+        class="field two-column">
+        <mat-radio-button value="circular">Circular</mat-radio-button>
+        <mat-radio-button value="elliptical">Elliptical</mat-radio-button>
+      </mat-radio-group>
+
+      @if (shape === 'circular') {
+        <mat-form-field>
+          <mat-label>Diameter (inches)</mat-label>
+          <input
+            #diameter="ngModel"
+            [(ngModel)]="record.diameter"
+            [step]="1"
+            autocomplete="off"
+            matInput
+            name="diameter"
+            required
+            type="number" />
+        </mat-form-field>
+      }
+
+      @if (shape === 'elliptical') {
+        <article class="field two-column">
+          <mat-form-field>
+            <mat-label>Width (inches)</mat-label>
+            <input
+              #diameter="ngModel"
+              [(ngModel)]="record.width"
+              [step]="1"
+              autocomplete="off"
+              matInput
+              name="width"
+              required
+              type="number" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Height (inches)</mat-label>
+            <input
+              #diameter="ngModel"
+              [(ngModel)]="record.height"
+              [step]="1"
+              autocomplete="off"
+              matInput
+              name="height"
+              required
+              type="number" />
+          </mat-form-field>
+        </article>
+      }
 
       <mat-form-field>
         <mat-label>Length (feet)</mat-label>
@@ -192,6 +232,8 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
 
   record: Partial<CulvertProperties> = {};
 
+  shape: 'circular' | 'elliptical';
+
   constructor(
     private cdf: ChangeDetectorRef,
     private store: Store
@@ -211,6 +253,8 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
   }
 
   save(record: Partial<CulvertProperties>): void {
+    if (this.shape === 'circular') record.height = record.width = 0;
+    else if (this.shape === 'elliptical') record.diameter = 0;
     const landmark: Partial<Landmark> = {
       id: this.features[0].getId() as string,
       properties: {
@@ -223,5 +267,8 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
 
   #makeRecord(): void {
     this.record = copy(this.features[0].get('metadata'));
+    if (this.record.diameter > 0) this.shape = 'circular';
+    if (this.record.width > 0 && this.record.height > 0)
+      this.shape = 'elliptical';
   }
 }

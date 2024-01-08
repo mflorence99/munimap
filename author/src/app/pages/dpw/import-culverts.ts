@@ -109,14 +109,15 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       diameter: 0,
       floodHazard: culvertFloodHazards[0],
       headwall: culvertHeadwalls[0],
+      height: 0,
       length: 0,
       location: filename.toUpperCase().substring(0, filename.lastIndexOf('.')),
       material: culvertMaterials[0],
       type: 'culvert',
+      width: 0,
       year: null
     };
-    // 👇 the data on each line in unambiguous with respect to
-    //    culvert property
+    // 👇 the data in each part in unambiguous with respect to culvert property
     parts.forEach((part: any) => {
       part = part.trim();
       part = `${part.substring(0, 1).toUpperCase()}${part
@@ -127,6 +128,14 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
         properties.count = Number(part.substring(0, part.length - 1));
       if (/^[\d]+"$/.test(part))
         properties.diameter = Number(part.substring(0, part.length - 1));
+      if (/^[\d]+"?x[\d]+"?$/.test(part)) {
+        const dims = part.replaceAll('"', '').split('x');
+        properties.height = Number(dims[1]);
+        properties.width = Number(dims[0]);
+        // 👇 convert toinches if in feet
+        if (properties.height < 12) properties.height *= 12;
+        if (properties.width < 12) properties.width *= 12;
+      }
       if (culvertFloodHazards.includes(part)) properties.floodHazard = part;
       if (culvertHeadwalls.includes(part)) properties.headwall = part;
       if (/^[\d]+'$/.test(part))

@@ -4,6 +4,8 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+import copy from 'fast-copy';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-culvertproperties',
@@ -11,11 +13,9 @@ import { Input } from '@angular/core';
   styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupCulvertPropertiesComponent {
-  @Input() properties: any;
-
   schema = [
     ['Location', 'location'],
-    ['Diameter', 'diameter', 'inches'],
+    ['Opening', 'dimension', 'inches'],
     ['Length', 'length', 'feet'],
     ['Count', 'count', 'x'],
     ['Material', 'material'],
@@ -25,5 +25,22 @@ export class OLPopupCulvertPropertiesComponent {
     ['Year Re/built', 'year']
   ];
 
+  #properties: any;
+
   constructor(public container: OLPopupDPWPropertiesComponent) {}
+
+  @Input() get properties(): any {
+    return this.#properties;
+  }
+
+  set properties(properties: any) {
+    if (properties) {
+      this.#properties = copy(properties);
+      Object.defineProperty(this.#properties, 'dimension', {
+        get: () =>
+          this.#properties.diameter ||
+          `${this.#properties.width}x${this.#properties.height}`
+      });
+    } else this.#properties = null;
+  }
 }

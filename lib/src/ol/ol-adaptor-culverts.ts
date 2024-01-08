@@ -40,10 +40,7 @@ export class OLAdaptorCulvertsComponent implements Adaptor {
         iconOutlineColor: '--map-culvert-line-color',
         iconOpacity: 1,
         iconSymbol: '\uf1ce' /* 👈 circle-notch */,
-        name:
-          culvert.count > 1
-            ? `${culvert.count}x${culvert.diameter}"x${culvert.length}'`
-            : `${culvert.diameter}"x${culvert.length}'`,
+        name: this.#makeCulvertName(culvert),
         textAlign: 'center',
         textBaseline: 'bottom'
       })
@@ -64,5 +61,15 @@ export class OLAdaptorCulvertsComponent implements Adaptor {
     selected.fontColor = '--map-landmark-select';
     selected.iconColor = '--map-landmark-select';
     return [selected];
+  }
+
+  #makeCulvertName(culvert: CulvertProperties): string {
+    const count = culvert.count > 1 ? `${culvert.count}x` : '';
+    let dim = '';
+    if (culvert.diameter) dim = `${culvert.diameter}"x`;
+    else if (culvert.width && culvert.height)
+      dim = `${culvert.width}"x${culvert.height}"x`;
+    const length = `${culvert.length}'`;
+    return `${count}${dim}${length}`;
   }
 }

@@ -141,7 +141,7 @@ export class DPWLegendComponent implements OnInit {
         return [undefined];
       },
       key: '$fake$' /* 👈 fakeroo field in every row */,
-      tag: 'All Culverts'
+      tag: 'All'
     },
     {
       enum: (): string[] => {
@@ -150,28 +150,28 @@ export class DPWLegendComponent implements OnInit {
         );
       },
       key: 'diameter',
-      tag: 'By Diameter'
+      tag: 'Opening'
     },
     {
       enum: (): string[] => {
         return culvertMaterials as any;
       },
       key: 'material',
-      tag: 'By Material'
+      tag: 'Material'
     },
     {
       enum: (): string[] => {
         return culvertHeadwalls as any;
       },
       key: 'headwall',
-      tag: 'By Headwall'
+      tag: 'Headwall'
     },
     {
       enum: (): string[] => {
         return culvertFloodHazards as any;
       },
       key: 'floodHazard',
-      tag: 'By Flood Hazard'
+      tag: 'Hazard'
     }
   ];
 

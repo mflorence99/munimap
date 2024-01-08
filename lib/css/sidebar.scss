@@ -28,6 +28,14 @@
     grid-auto-flow: column;
     // grid-template-rows: repeat(6, auto);
   }
+
+  .field {
+    &.two-column {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 0.5fr 0.5fr;
+    }
+  }
 }
 
 .header {

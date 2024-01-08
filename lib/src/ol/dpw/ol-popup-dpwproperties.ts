@@ -32,10 +32,10 @@ import OLFeature from 'ol/Feature';
     }
 
     <!-- 
-  🔥 see Bridge... Culvert... FloodHazard... and StreamCrossingProperties 
-     the original DES properties are untouched and these are 
-     discriminated by a common type property
--->
+      🔥 see Bridge... Culvert... FloodHazard... and StreamCrossingProperties 
+        the original DES properties are untouched and these are 
+        discriminated by a common type property
+    -->
 
     <section #table class="wrapper">
       @switch (properties?.type) {
