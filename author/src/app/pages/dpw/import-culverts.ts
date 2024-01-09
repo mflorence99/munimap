@@ -128,8 +128,8 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
         properties.count = Number(part.substring(0, part.length - 1));
       if (/^[\d]+"$/.test(part))
         properties.diameter = Number(part.substring(0, part.length - 1));
-      if (/^[\d]+"?x[\d]+"?$/.test(part)) {
-        const dims = part.replaceAll('"', '').split('x');
+      if (/^[\d]+["']?x[\d]+["']?$/.test(part)) {
+        const dims = part.replaceAll(/["']/g, '').split('x');
         properties.height = Number(dims[1]);
         properties.width = Number(dims[0]);
         // 👇 convert toinches if in feet

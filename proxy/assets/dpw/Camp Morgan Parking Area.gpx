@@ -1,0 +1,36 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+>
+  <wpt lat="43.173874" lon="-72.11501">
+    <ele>497.12878</ele>
+    <time>2024-01-04T13:46:49Z</time>
+    <name><![CDATA[15" 20' good steel handmade Waypoint 4]]></name>
+    <desc><![CDATA[Beach acces&nbsp;]]></desc>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.174774" lon="-72.11558">
+    <ele>497.7384</ele>
+    <time>2024-01-04T13:40:30Z</time>
+    <name><![CDATA[32"x48" 40' fair steel handmade Waypoint 3]]></name>
+    <desc><![CDATA[Beach entrance]]></desc>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17517" lon="-72.11557">
+    <ele>503.2248</ele>
+    <time>2024-01-04T13:37:33Z</time>
+    <name><![CDATA[3" 5' fair steel handmade Waypoint 2]]></name>
+    <desc><![CDATA[Above beach entrance]]></desc>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17603" lon="-72.11441">
+    <ele>491.9472</ele>
+    <time>2024-01-04T13:30:32Z</time>
+    <name><![CDATA[12" 50' good plastic handmade Waypoint 1]]></name>
+    <desc><![CDATA[Wolf way entrance]]></desc>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+</gpx>

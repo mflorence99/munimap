@@ -1,0 +1,144 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+>
+  <wpt lat="43.169662" lon="-72.12281">
+    <ele>493.776</ele>
+    <time>2023-12-28T19:46:39Z</time>
+    <name><![CDATA[18" 35' good plastic handmade Waypoint 22]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17011" lon="-72.12243">
+    <ele>493.4712</ele>
+    <time>2023-12-28T19:39:14Z</time>
+    <name><![CDATA[12" 20' poor steel handmade Waypoint 21]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.170277" lon="-72.12228">
+    <ele>496.2144</ele>
+    <time>2023-12-28T19:37:38Z</time>
+    <name><![CDATA[15" 55' good plastic handmade Waypoint 20]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17124" lon="-72.12146">
+    <ele>495.6048</ele>
+    <time>2023-12-28T19:15:43Z</time>
+    <name><![CDATA[12" 30' fair steel handmade Waypoint 19]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17147" lon="-72.12104">
+    <ele>493.776</ele>
+    <time>2023-12-28T19:04:47Z</time>
+    <name><![CDATA[12" 30' poor steel handmade Waypoint 18]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17274" lon="-72.1188">
+    <ele>491.0328</ele>
+    <time>2023-12-28T18:54:11Z</time>
+    <name><![CDATA[30" 40' good plastic handmade Waypoint 17]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.172806" lon="-72.1181">
+    <ele>488.2896</ele>
+    <time>2023-12-28T18:40:58Z</time>
+    <name><![CDATA[12" 40' good steel handmade Waypoint 16]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+
+  <wpt lat="43.17309920589872" lon="-72.11753713351247">
+    <ele>0.0</ele>
+    <time>2023-12-28T18:32:59Z</time>
+    <name><![CDATA[25" 30' good plastic handmade Waypoint 15]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17331477561797" lon="-72.11706826817267">
+    <ele>489.8136</ele>
+    <time>2023-12-28T18:23:29Z</time>
+    <name><![CDATA[3x4 40' fair steel homemade Waypoint 14]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+
+  <wpt lat="43.187008" lon="-71.82285">
+    <ele>0.0</ele>
+    <time>2023-12-28T18:14:47Z</time>
+    <name><![CDATA[3x5 30' fair steel handmade Waypoint 13]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17524" lon="-72.11407">
+    <ele>496.5192</ele>
+    <time>2023-12-28T17:56:07Z</time>
+    <name><![CDATA[12" 240' good plastic handmade Waypoint 12]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17551" lon="-72.11285">
+    <ele>491.3376</ele>
+    <time>2023-12-28T16:56:32Z</time>
+    <name><![CDATA[18" 45' good plastic handmade Waypoint 11]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.176476" lon="-72.11331">
+    <ele>490.728</ele>
+    <time>2023-12-28T16:54:17Z</time>
+    <name><![CDATA[12" 40' good plastic handmade Waypoint 10]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.175953" lon="-72.113014">
+    <ele>497.12878</ele>
+    <time>2023-12-28T16:46:49Z</time>
+    <name><![CDATA[12" 40' good plastic handmade Waypoint 9]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17641" lon="-72.11253">
+    <ele>518.7696</ele>
+    <time>2023-12-28T16:36:18Z</time>
+    <name><![CDATA[15" 60' poor steel handmade Waypoint 8]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.17649" lon="-72.11096">
+    <ele>481.58398</ele>
+    <time>2023-12-28T16:29:21Z</time>
+    <name><![CDATA[16" 40' poor steel handmade Waypoint 7]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.176613" lon="-72.10991">
+    <ele>487.0704</ele>
+    <time>2023-12-28T16:16:14Z</time>
+    <name><![CDATA[12" 40' good plastic handmade Waypoint 6]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+
+  <wpt lat="43.1760279156463" lon="-72.10846560845967">
+    <ele>469.0872</ele>
+    <time>2023-12-28T16:03:23Z</time>
+    <name><![CDATA[3x5 30' fair steel handmade Waypoint 5]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+
+  <wpt lat="43.175755" lon="-72.10795">
+    <ele>479.1456</ele>
+    <time>2023-12-28T16:00:47Z</time>
+    <name><![CDATA[15" 30' good steel handmade Waypoint 4]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.175575" lon="-72.107285">
+    <ele>471.2208</ele>
+    <time>2023-12-28T15:52:47Z</time>
+    <name><![CDATA[12" 30' poor steel handmade Waypoint 3]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.175564" lon="-72.10655">
+    <ele>477.9264</ele>
+    <time>2023-12-28T15:50:21Z</time>
+    <name><![CDATA[12" 40' good plastic handmade Waypoint 2]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.175095" lon="-72.10525">
+    <ele>441.3504</ele>
+    <time>2023-12-28T15:45:35Z</time>
+    <name><![CDATA[24" 40' fair steel hand made Waypoint 1]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+</gpx>

@@ -19,7 +19,7 @@ import { takeUntil } from 'rxjs/operators';
 
 interface Metric {
   enum: () => string[];
-  key: string;
+  key: (culvert) => string;
   tag: string;
 }
 
@@ -71,13 +71,13 @@ interface Statistics {
                 <tr>
                   <td [style.width.%]="25">
                     {{ key }}
-                    @if (metric.key === 'diameter') {
+                    @if (metric.tag === 'Opening') {
                       <span>"</span>
                     }
                   </td>
 
                   @for (condition of allConditions; track condition) {
-                    @if (breakdowns[metric.key]?.[key]?.[condition]; as stats) {
+                    @if (breakdowns[metric.tag]?.[key]?.[condition]; as stats) {
                       <td [style.width.%]="75 / allConditions.length">
                         @if (stats.count && stats.length) {
                           <span>
@@ -140,37 +140,38 @@ export class DPWLegendComponent implements OnInit {
       enum: (): string[] => {
         return [undefined];
       },
-      key: '$fake$' /* 👈 fakeroo field in every row */,
+      key: () => '$fake$' /* 👈 fakeroo field in every row */,
       tag: 'All'
     },
     {
       enum: (): string[] => {
-        return Object.keys(this.breakdowns['diameter'] ?? {}).sort(
+        return Object.keys(this.breakdowns['Opening'] ?? {}).sort(
           (p, q) => Number(p) - Number(q)
         );
       },
-      key: 'diameter',
+      key: (culvert) =>
+        culvert.diameter || `${culvert.width}x${culvert.height}`,
       tag: 'Opening'
     },
     {
       enum: (): string[] => {
         return culvertMaterials as any;
       },
-      key: 'material',
+      key: (culvert) => culvert.material,
       tag: 'Material'
     },
     {
       enum: (): string[] => {
         return culvertHeadwalls as any;
       },
-      key: 'headwall',
+      key: (culvert) => culvert.headwall,
       tag: 'Headwall'
     },
     {
       enum: (): string[] => {
         return culvertFloodHazards as any;
       },
-      key: 'floodHazard',
+      key: (culvert) => culvert.floodHazard,
       tag: 'Hazard'
     }
   ];
@@ -194,18 +195,18 @@ export class DPWLegendComponent implements OnInit {
 
   #calcBreakdowns(culverts: CulvertProperties[]): void {
     this.allMetrics.forEach((metric) => {
-      this.breakdowns[metric.key] = {};
+      this.breakdowns[metric.tag] = {};
       culverts.forEach((culvert) => {
-        const key = culvert[metric.key];
+        const key = metric.key(culvert);
         const breakdown =
-          this.breakdowns[metric.key][key] ??
+          this.breakdowns[metric.tag][key] ??
           culvertConditions.reduce((acc, condition) => {
             acc[condition] = { count: 0, length: 0 };
             return acc;
           }, {});
         breakdown[culvert.condition].count += culvert.count;
         breakdown[culvert.condition].length += culvert.length;
-        this.breakdowns[metric.key][key] = breakdown;
+        this.breakdowns[metric.tag][key] = breakdown;
       });
     });
   }

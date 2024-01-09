@@ -1,0 +1,44 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+>
+  <wpt lat="43.136917" lon="-72.127625">
+    <ele>0.0</ele>
+    <time>2024-01-04T16:56:12Z</time>
+    <name><![CDATA[18" 30' fair steel handmade Waypoint 44]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.2034" lon="-72.27246">
+    <ele>0.0</ele>
+    <time>2024-01-04T16:53:23Z</time>
+    <name><![CDATA[12" 20' good plastic handmade Waypoint 43]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.145206" lon="-72.12847">
+    <ele>503.8344</ele>
+    <time>2024-01-04T16:48:36Z</time>
+    <name><![CDATA[12" 32' good plastic handmade Waypoint 42]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.149935012808356" lon="-72.1264958854958">
+    <ele>453.2376</ele>
+    <time>2024-01-04T16:44:13Z</time>
+    <name><![CDATA[3'x6' 30' good steel handmade Waypoint 41]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.15165" lon="-72.12697">
+    <ele>460.8576</ele>
+    <time>2024-01-04T16:42:23Z</time>
+    <name><![CDATA[3'x4' 30' fair steel handmade Waypoint 40]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.15364" lon="-72.126686">
+    <ele>467.5632</ele>
+    <time>2024-01-04T16:38:17Z</time>
+    <name><![CDATA[12" 30' poor steel handmade Waypoint 39]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+</gpx>
