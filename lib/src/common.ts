@@ -1184,7 +1184,7 @@ export function normalizeOwnership(parcel: Partial<Parcel>): void {
     )
       parcel.properties.ownership = 'R';
     else parcel.properties.ownership = 'N';
-  } else parcel.properties.ownership = 'X';
+  }
 }
 
 export function serializeLandmark(landmark: Partial<Landmark>): void {
