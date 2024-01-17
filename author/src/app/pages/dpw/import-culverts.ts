@@ -111,7 +111,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       headwall: culvertHeadwalls[0],
       height: 0,
       length: 0,
-      location: filename.toUpperCase().substring(0, filename.lastIndexOf('.')),
+      location: filename.toUpperCase().substring(0, filename.indexOf('.')),
       material: culvertMaterials[0],
       type: 'culvert',
       width: 0,
