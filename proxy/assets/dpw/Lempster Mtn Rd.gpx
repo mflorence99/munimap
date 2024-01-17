@@ -3,8 +3,7 @@
   creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
   version="1.1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
->
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <wpt lat="43.177414" lon="-72.099075">
     <ele>480.06</ele>
     <time>2023-12-27T15:20:04Z</time>
@@ -30,12 +29,14 @@
     <name><![CDATA[12" 36' good concrete handmade.Waypoint 21]]></name>
     <type><![CDATA[Not specified]]></type>
   </wpt>
-  <wpt lat="0.0" lon="0.0">
+
+  <wpt lat="43.179" lon="-72.10105">
     <ele>481.58398</ele>
     <time>2023-12-27T15:09:10Z</time>
     <name><![CDATA[12" 40' good plastic handmade Waypoint 20]]></name>
     <type><![CDATA[Not specified]]></type>
   </wpt>
+
   <wpt lat="43.17947" lon="-72.1019">
     <ele>481.2792</ele>
     <time>2023-12-27T15:07:14Z</time>
@@ -108,12 +109,14 @@
     <name><![CDATA[12" 40' poor concrete/steel handmade Waypoint 8]]></name>
     <type><![CDATA[Not specified]]></type>
   </wpt>
-  <wpt lat="0.0" lon="0.0">
+
+  <wpt lat="43.1899" lon="-72.115">
     <ele>551.07837</ele>
     <time>2023-12-27T14:24:38Z</time>
     <name><![CDATA[18" 36' fair concrete handmade Waypoint 7]]></name>
     <type><![CDATA[Not specified]]></type>
   </wpt>
+
   <wpt lat="43.190956" lon="-72.11685">
     <ele>556.26</ele>
     <time>2023-12-27T14:22:48Z</time>
