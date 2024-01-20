@@ -80,9 +80,9 @@ import { toLonLat } from 'ol/proj';
                 mapControlPrint></app-ol-control-print>
             }
             @if (map.name) {
-              <app-ol-control-exportlandmarks
-                [fileName]="map.id + '-sites'"
-                mapControlExport></app-ol-control-exportlandmarks>
+              <app-ol-control-exportculverts
+                [fileName]="map.id + '-culverts'"
+                mapControlExport></app-ol-control-exportculverts>
             }
 
             <app-ol-control-zoom2extent

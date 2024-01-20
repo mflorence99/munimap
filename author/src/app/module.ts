@@ -105,6 +105,7 @@ import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAPDVDLegendComponent } from '@lib/ol/apdvd/ol-control-apdvdlegend';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlCreditsComponent } from '@lib/ol/ol-control-credits';
+import { OLControlExportCulvertsComponent } from '@lib/ol/dpw/ol-control-exportculverts';
 import { OLControlExportLandmarksComponent } from '@lib/ol/landmarks/ol-control-exportlandmarks';
 import { OLControlExportLayersComponent } from '@lib/ol/ol-control-exportlayers';
 import { OLControlExportParcelsComponent } from '@lib/ol/parcels/ol-control-exportparcels';
@@ -287,6 +288,7 @@ const COMPONENTS = [
   OLControlAPDVDLegendComponent,
   OLControlAttributionComponent,
   OLControlCreditsComponent,
+  OLControlExportCulvertsComponent,
   OLControlExportLandmarksComponent,
   OLControlExportLayersComponent,
   OLControlExportParcelsComponent,

@@ -81,7 +81,9 @@ import copy from 'fast-copy';
             @if (!id.errors) {
               <mat-hint>
                 Viewer app URL:
-                <em>https://{{ map.id }}.munimap.online</em>
+                <a href="https://{{ map.id }}.munimap.online" target="_blank">
+                  <em>https://{{ map.id }}.munimap.online</em>
+                </a>
               </mat-hint>
             }
           </mat-form-field>

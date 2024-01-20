@@ -30,6 +30,8 @@
   }
 
   .field {
+    width: 100%;
+
     &.two-column {
       display: grid;
       gap: 1rem;

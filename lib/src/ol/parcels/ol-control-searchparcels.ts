@@ -61,7 +61,7 @@ interface SearchTarget {
         placeholder="Search by parcel, address or owner" />
 
       <button
-        (click)="theSearcher.value = ''"
+        (click)="(theSearcher.value = '') || theSearcher.focus()"
         [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
         mat-icon-button>
         <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>

@@ -31,6 +31,16 @@ const descending = Object.entries(countByOwner)
 
 jsome(descending);
 
+geojson.features
+  .filter((feature) => [' ', 'X'].includes(feature.properties.ownership))
+  .forEach((feature) =>
+    jsome([
+      feature.id,
+      feature.properties.ownership,
+      feature.properties.addressOfOwner
+    ])
+  );
+
 const neighborhoods = new Set<string>();
 
 geojson.features.forEach((feature) =>

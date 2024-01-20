@@ -45,7 +45,13 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
     geojsons: GeoJSON.FeatureCollection<any>[]
   ): Promise<void> {
     for (const geojson of geojsons) {
+      // 🔥 non-standard GeoJSON field for convenience
+      const filename = geojson['filename']
+        .toUpperCase()
+        .substring(0, geojson['filename'].indexOf('.'));
+      // 👇 cancel??
       if (this.cancelling) break;
+      // 👇 for each feature imported
       for (const feature of geojson.features) {
         if (this.cancelling) break;
         this.numImported += 1;
@@ -67,9 +73,10 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
             case 'Point':
               properties = {
                 metadata: this.#makeCulvertProperties(
-                  // 🔥 non-standard GeoJSON field for convenience
-                  geojson['filename'],
-                  feature.properties.name
+                  feature.properties.keywords ?? filename,
+                  feature.properties.name,
+                  feature.properties.description /* 👈 KML */ ??
+                    feature.properties.desc /* 👈 GPX */
                 )
               };
               break;
@@ -89,8 +96,9 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
   }
 
   #makeCulvertProperties(
-    filename: string,
-    props: string
+    location: string,
+    props: string,
+    description = ''
   ): Partial<CulvertProperties> {
     // 👇 split props and eliminate decoration and smart quotes
     const parts = props
@@ -103,15 +111,19 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       .trim()
       .split(/[\n ]+/);
     // 👇 model culvert
-    const properties: Partial<CulvertProperties> = {
+    const properties: CulvertProperties = {
       condition: culvertConditions[0],
       count: 1,
+      description: description
+        .replace(/<div>/g, '')
+        .replace(/<\/div>/g, '')
+        .replace(/&nbsp;/g, ' '),
       diameter: 0,
       floodHazard: culvertFloodHazards[0],
       headwall: culvertHeadwalls[0],
       height: 0,
       length: 0,
-      location: filename.toUpperCase().substring(0, filename.indexOf('.')),
+      location,
       material: culvertMaterials[0],
       type: 'culvert',
       width: 0,

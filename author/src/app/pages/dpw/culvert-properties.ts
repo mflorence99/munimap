@@ -43,11 +43,12 @@ import OLFeature from 'ol/Feature';
       (keydown.escape)="cancel()"
       (submit)="save(record)"
       autocomplete="off"
-      class="form"
+      class="form two-column"
       id="propertiesForm"
       novalidate
-      spellcheck="false">
-      <mat-form-field>
+      spellcheck="false"
+      style="grid-template-rows: repeat(6, auto)">
+      <mat-form-field style="grid-column: 1/3">
         <mat-label>Location</mat-label>
         <input
           #diameter="ngModel"
@@ -60,83 +61,16 @@ import OLFeature from 'ol/Feature';
           type="text" />
       </mat-form-field>
 
-      <mat-radio-group
-        (change)="shape = $event.value"
-        [value]="shape"
-        class="field two-column">
-        <mat-radio-button value="circular">Circular</mat-radio-button>
-        <mat-radio-button value="elliptical">Elliptical</mat-radio-button>
-      </mat-radio-group>
-
-      @if (shape === 'circular') {
-        <mat-form-field>
-          <mat-label>Diameter (inches)</mat-label>
-          <input
-            #diameter="ngModel"
-            [(ngModel)]="record.diameter"
-            [step]="1"
-            autocomplete="off"
-            matInput
-            name="diameter"
-            required
-            type="number" />
-        </mat-form-field>
-      }
-
-      @if (shape === 'elliptical') {
-        <article class="field two-column">
-          <mat-form-field>
-            <mat-label>Width (inches)</mat-label>
-            <input
-              #diameter="ngModel"
-              [(ngModel)]="record.width"
-              [step]="1"
-              autocomplete="off"
-              matInput
-              name="width"
-              required
-              type="number" />
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Height (inches)</mat-label>
-            <input
-              #diameter="ngModel"
-              [(ngModel)]="record.height"
-              [step]="1"
-              autocomplete="off"
-              matInput
-              name="height"
-              required
-              type="number" />
-          </mat-form-field>
-        </article>
-      }
-
       <mat-form-field>
-        <mat-label>Length (feet)</mat-label>
-        <input
-          #length="ngModel"
-          [(ngModel)]="record.length"
-          [step]="1"
+        <mat-label>Description</mat-label>
+        <textarea
+          #description="ngModel"
+          [(ngModel)]="record.description"
+          [appSelectOnFocus]="true"
           autocomplete="off"
           matInput
-          name="length"
-          required
-          type="number" />
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Count (eg: 2 for double)</mat-label>
-        <input
-          #length="ngModel"
-          [(ngModel)]="record.count"
-          [step]="1"
-          autocomplete="off"
-          matInput
-          name="count"
-          required
-          type="number" />
+          name="description"
+          rows="2"></textarea>
       </mat-form-field>
 
       <mat-form-field>
@@ -191,6 +125,87 @@ import OLFeature from 'ol/Feature';
         </mat-select>
       </mat-form-field>
 
+      <article>
+        <mat-radio-group
+          (change)="shape = $event.value"
+          [value]="shape"
+          class="field two-column">
+          <mat-radio-button value="circular">Circular</mat-radio-button>
+          <mat-radio-button value="elliptical">Elliptical</mat-radio-button>
+        </mat-radio-group>
+
+        @if (shape === 'circular') {
+          <mat-form-field class="field">
+            <mat-label>Diameter (inches)</mat-label>
+            <input
+              #diameter="ngModel"
+              [(ngModel)]="record.diameter"
+              [step]="1"
+              autocomplete="off"
+              matInput
+              name="diameter"
+              required
+              type="number" />
+          </mat-form-field>
+        }
+
+        @if (shape === 'elliptical') {
+          <article class="field two-column">
+            <mat-form-field>
+              <mat-label>Width (inches)</mat-label>
+              <input
+                #diameter="ngModel"
+                [(ngModel)]="record.width"
+                [step]="1"
+                autocomplete="off"
+                matInput
+                name="width"
+                required
+                type="number" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Height (inches)</mat-label>
+              <input
+                #diameter="ngModel"
+                [(ngModel)]="record.height"
+                [step]="1"
+                autocomplete="off"
+                matInput
+                name="height"
+                required
+                type="number" />
+            </mat-form-field>
+          </article>
+        }
+      </article>
+
+      <mat-form-field>
+        <mat-label>Length (feet)</mat-label>
+        <input
+          #length="ngModel"
+          [(ngModel)]="record.length"
+          [step]="1"
+          autocomplete="off"
+          matInput
+          name="length"
+          required
+          type="number" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Count (eg: 2 for double)</mat-label>
+        <input
+          #length="ngModel"
+          [(ngModel)]="record.count"
+          [step]="1"
+          autocomplete="off"
+          matInput
+          name="count"
+          required
+          type="number" />
+      </mat-form-field>
+
       <mat-form-field>
         <mat-label>Year Built/Reconstructed</mat-label>
         <input
@@ -217,6 +232,13 @@ import OLFeature from 'ol/Feature';
       </button>
     </article>
   `,
+  styles: [
+    `
+      :host {
+        width: 50rem !important;
+      }
+    `
+  ],
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class CulvertPropertiesComponent implements SidebarComponent, OnInit {

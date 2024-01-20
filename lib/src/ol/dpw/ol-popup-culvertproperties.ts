@@ -15,6 +15,7 @@ import copy from 'fast-copy';
 export class OLPopupCulvertPropertiesComponent {
   schema = [
     ['Location', 'location'],
+    ['Description', 'description'],
     ['Opening', 'dimension', 'inches'],
     ['Length', 'length', 'feet'],
     ['Count', 'count', 'x'],

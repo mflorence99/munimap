@@ -13,7 +13,15 @@ import { saveAs } from 'file-saver';
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
-  `
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+    `
+  ]
 })
 export class OLControlExportLandmarksComponent {
   @Input() fileName: string;
