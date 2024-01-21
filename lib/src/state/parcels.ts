@@ -14,7 +14,6 @@ import { Working } from './working';
 
 import { calculateParcel } from '../common';
 import { deserializeParcel } from '../common';
-import { normalizeOwnership } from '../common';
 import { normalizeParcel } from '../common';
 import { serializeParcel } from '../common';
 import { timestampParcel } from '../common';
