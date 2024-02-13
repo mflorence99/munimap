@@ -71,6 +71,7 @@
     "proxy:powerlines": "ts-node --dir bin powerlines.ts",
     "proxy:powerlines:prepare": "ts-node --dir bin powerlines-prepare.ts",
     "proxy:railroads": "ts-node --dir bin railroads.ts",
+    "proxy:residents": "ts-node --dir bin residents.ts",
     "proxy:rivers": "ts-node --dir bin rivers.ts",
     "proxy:roads": "ts-node --dir bin roads.ts",
     "proxy:state": "ts-node --dir bin state.ts",
