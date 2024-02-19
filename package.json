@@ -40,9 +40,9 @@
     "firebase:live:parcels:curated": "ts-node --dir bin parcel-stealer.ts",
     "firebase:live:restore": "ts-node --dir bin restore.ts",
     "firebase:live:users:curated": "ts-node --dir bin users-curated.ts",
-    "postinstall": "npm run patcher",
     "lint": "TIMING=1 time eslint --ext ts ./",
     "patcher": "ts-node --dir bin patcher.ts",
+    "postinstall": "npm run patcher",
     "prettier": "prettier --write .",
     "proxy:all": "npm run proxy:state && npm run proxy:counties && npm run proxy:towns && npm run proxy:indexer && npm run proxy:buildings && npm run proxy:lakes && npm run proxy:parcels && npm run proxy:places && npm run proxy:powerlines && npm run proxy:railroads && npm run proxy:rivers && npm run proxy:roads && npm run proxy:trails && npm run proxy:indexer && npm run proxy:curated",
     "proxy:avitar": "ts-node --dir bin avitar.ts",
@@ -154,7 +154,7 @@
     "unzipper": "0.10.14",
     "url-parse": "^1",
     "yargs": "^17",
-    "zone.js": "~0.14.2"
+    "zone.js": "~0.14.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17",
@@ -177,8 +177,8 @@
     "@types/unzipper": "0.10.9",
     "@types/url-parse": "^1",
     "@types/yargs": "^17",
-    "@typescript-eslint/eslint-plugin": "^6",
-    "@typescript-eslint/parser": "^6",
+    "@typescript-eslint/eslint-plugin": "^7",
+    "@typescript-eslint/parser": "^7",
     "eslint": "^8",
     "eslint-config-mflorence99": "^1.2.5",
     "eslint-config-prettier": "^9",
