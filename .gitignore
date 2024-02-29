@@ -3,6 +3,8 @@
 /dist
 /node_modules
 /viewer/assets/*.geojson
+**/logs
+**/*.Identifier
 **/*.log
 firebase-admin.json
 .eslintcache
