@@ -8,15 +8,11 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
@@ -28,23 +24,30 @@ import { ViewState } from '@lib/state/view';
   providers: [DestroyService],
   selector: 'app-apdvd',
   template: `
-    @if (mapState$ | async; as map) {
+    <app-sink
+      #sink
+      [map]="root.mapState$ | async"
+      [profile]="root.profile$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [user]="root.user$ | async" />
+
+    @if (sink.map) {
       <app-ol-map
         #olMap
-        [bbox]="map.bbox"
+        [bbox]="sink.map.bbox"
         [loadingStrategy]="'bbox'"
         [minZoom]="15"
         [maxZoom]="20"
-        [path]="map.path">
+        [path]="sink.map.path">
         <app-controlpanel-properties
-          [map]="map"
+          [map]="sink.map"
           mapControlPanel1></app-controlpanel-properties>
 
         <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
         <app-ol-control-print
-          [fileName]="map.name"
-          [printSize]="map.printSize"
+          [fileName]="sink.map.name"
+          [printSize]="sink.map.printSize"
           mapControlPrint></app-ol-control-print>
 
         <app-ol-control-zoom2extent
@@ -67,10 +70,10 @@ import { ViewState } from '@lib/state/view';
               <app-ol-style-graticule></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
-          @if (map.name) {
+          @if (sink.map.name && olMap.printing) {
             <app-ol-control-apdvdlegend
               [printing]="olMap.printing"
-              [title]="map.name"></app-ol-control-apdvdlegend>
+              [title]="sink.map.name"></app-ol-control-apdvdlegend>
           }
 
           <!-- 🔥 TOO OBTRUSIVE ?? <app-ol-control-scalebar *ngIf="olMap.printing"></app-ol-control-scalebar> -->
@@ -84,7 +87,7 @@ import { ViewState } from '@lib/state/view';
 
           <!-- 📦 NORMAL (not satellite) LAYERS -->
 
-          @if (!(satelliteView$ | async)) {
+          @if (!sink.satelliteView) {
             <!-- 📦 BG LAYER (outside town)-->
 
             @if (olMap.printing) {
@@ -282,7 +285,7 @@ import { ViewState } from '@lib/state/view';
 
           <!-- 📦 SATELLITE LAYERS  -->
 
-          @if (satelliteView$ | async) {
+          @if (sink.satelliteView) {
             <app-ol-layer-tile>
               <app-ol-source-xyz
                 [s]="['mt0', 'mt1', 'mt2', 'mt3']"
@@ -317,12 +320,10 @@ import { ViewState } from '@lib/state/view';
                 [showBorder]="'always'"
                 [showDimensions]="'whenSelected'"
                 [showDimensionContrast]="
-                  (satelliteView$ | async) ? 'always' : 'never'
+                  sink.satelliteView ? 'always' : 'never'
                 "
                 [showLabels]="'always'"
-                [showLabelContrast]="
-                  (satelliteView$ | async) ? 'always' : 'never'
-                "
+                [showLabelContrast]="sink.satelliteView ? 'always' : 'never'"
                 [showSelection]="'always'"></app-ol-style-parcels>
               <app-ol-source-parcels></app-ol-source-parcels>
               <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
@@ -331,7 +332,7 @@ import { ViewState } from '@lib/state/view';
 
           <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
 
-          @if (!(satelliteView$ | async)) {
+          @if (!sink.satelliteView) {
             <app-ol-layer-vector>
               <app-ol-adaptor-roads>
                 <app-ol-style-universal
@@ -370,11 +371,7 @@ export class APDVDPage extends AbstractMapPage implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer;
 
-  @Select(MapState) mapState$: Observable<Map>;
-
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected override actions$: Actions,

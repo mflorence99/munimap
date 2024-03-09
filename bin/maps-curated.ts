@@ -142,7 +142,7 @@ const MAPS = [
     isDflt: false,
     name: 'APDVD Redistricting',
     origin: [-72.18, 43.18429544567368],
-    owner: 'mflo999+flo@gmail.com',
+    owner: 'mflo999@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     printSize: [36, 36],
     timestamp: null,

@@ -8,15 +8,11 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
@@ -26,28 +22,35 @@ import { ViewState } from '@lib/state/view';
   providers: [DestroyService],
   selector: 'app-topo',
   template: `
-    @if (mapState$ | async; as map) {
+    <app-sink
+      #sink
+      [map]="root.mapState$ | async"
+      [profile]="root.profile$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [user]="root.user$ | async" />
+
+    @if (sink.map) {
       <app-ol-map
         #olMap
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="20"
-        [path]="map.path">
+        [path]="sink.map.path">
         <app-controlpanel-properties
-          [map]="map"
+          [map]="sink.map"
           mapControlPanel1></app-controlpanel-properties>
 
         <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-        @if (map.name) {
+        @if (sink.map.name) {
           <app-ol-control-print
-            [fileName]="map.name"
-            [printSize]="map.printSize"
+            [fileName]="sink.map.name"
+            [printSize]="sink.map.printSize"
             mapControlPrint></app-ol-control-print>
         }
-        @if (map.name) {
+        @if (sink.map.name) {
           <app-ol-control-exportlayers
-            [fileName]="map.id + '-layers'"
+            [fileName]="sink.map.id + '-layers'"
             [layerIDs]="['waterbodies']"
             mapControlExport></app-ol-control-exportlayers>
         }
@@ -72,13 +75,13 @@ import { ViewState } from '@lib/state/view';
               <app-ol-style-graticule></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
-          @if (map.name && olMap.printing) {
+          @if (sink.map.name && olMap.printing) {
             <app-ol-control-topolegend
-              [county]="map.path.split(':')[1]"
-              [id]="map.id"
+              [county]="sink.map.path.split(':')[1]"
+              [id]="sink.map.id"
               [printing]="olMap.printing"
-              [state]="map.path.split(':')[0]"
-              [title]="map.name"></app-ol-control-topolegend>
+              [state]="sink.map.path.split(':')[0]"
+              [title]="sink.map.name"></app-ol-control-topolegend>
           }
           @if (olMap.printing) {
             <app-ol-control-scalebar></app-ol-control-scalebar>
@@ -92,7 +95,7 @@ import { ViewState } from '@lib/state/view';
 
           <!-- 📦 NORMAL (not satellite) LAYERS -->
 
-          @if (!(satelliteView$ | async)) {
+          @if (!sink.satelliteView) {
             <!-- 📦 BG LAYER (outside town)-->
 
             @if (olMap.printing) {
@@ -300,7 +303,7 @@ import { ViewState } from '@lib/state/view';
 
           <!-- 📦 SATELLITE LAYER  -->
 
-          @if (satelliteView$ | async) {
+          @if (sink.satelliteView) {
             <app-ol-layer-tile>
               <app-ol-source-xyz
                 [s]="['mt0', 'mt1', 'mt2', 'mt3']"
@@ -339,11 +342,7 @@ export class TopoPage extends AbstractMapPage implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer;
 
-  @Select(MapState) mapState$: Observable<Map>;
-
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected override actions$: Actions,

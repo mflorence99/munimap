@@ -11,7 +11,6 @@ import { LoadMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { Router } from '@angular/router';
 import { SetMap } from '@lib/state/map';
@@ -32,9 +31,7 @@ export abstract class AbstractMapPage {
 
   abstract contextMenuHost: ContextMenuHostDirective;
   abstract drawer: MatDrawer;
-  abstract mapState$: Observable<Map>;
   abstract olMap: OLMapComponent;
-  abstract satelliteView$: Observable<boolean>;
 
   constructor(
     protected actions$: Actions,

@@ -89,6 +89,12 @@ export abstract class OLControlAbstractParcelsLegendComponent
   // 👉 may be implemented by subclass
   aggregateParcelImpl(_props: ParcelProperties): void {}
 
+  // 🔥 may be overridden by subclasses
+  //    we onky had to "invent" this for APDVD
+  countables(): string {
+    return 'countables';
+  }
+
   onInit(): void {
     this.#resetCounters();
     this.#handleGeoJSON$();
@@ -161,7 +167,11 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   #handleGeoJSON$(): void {
     this.geoJSON
-      .loadByIndex(this.route, this.mapState.currentMap().path, 'countables')
+      .loadByIndex(
+        this.route,
+        this.mapState.currentMap().path,
+        this.countables()
+      )
       .subscribe((geojson: CountableParcels) => this.#geojson$.next(geojson));
   }
 

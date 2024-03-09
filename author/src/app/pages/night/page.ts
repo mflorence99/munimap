@@ -8,15 +8,11 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
@@ -26,23 +22,30 @@ import { ViewState } from '@lib/state/view';
   providers: [DestroyService],
   selector: 'app-night',
   template: `
-    @if (mapState$ | async; as map) {
+    <app-sink
+      #sink
+      [map]="root.mapState$ | async"
+      [profile]="root.profile$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [user]="root.user$ | async" />
+
+    @if (sink.map) {
       <app-ol-map
         #olMap
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="20"
-        [path]="map.path">
+        [path]="sink.map.path">
         <app-controlpanel-properties
-          [map]="map"
+          [map]="sink.map"
           mapControlPanel1></app-controlpanel-properties>
 
         <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-        @if (map.name) {
+        @if (sink.map.name) {
           <app-ol-control-print
-            [fileName]="map.name"
-            [printSize]="map.printSize"
+            [fileName]="sink.map.name"
+            [printSize]="sink.map.printSize"
             mapControlPrint></app-ol-control-print>
         }
 
@@ -57,8 +60,8 @@ import { ViewState } from '@lib/state/view';
 
           @if (olMap.printing) {
             <app-ol-control-title
-              [showTitleContrast]="satelliteView$ | async"
-              [title]="map.name"></app-ol-control-title>
+              [showTitleContrast]="sink.satelliteView"
+              [title]="sink.map.name"></app-ol-control-title>
           }
           @if (olMap.printing) {
             <app-ol-control-graticule>
@@ -74,7 +77,7 @@ import { ViewState } from '@lib/state/view';
 
           <!-- 📦 NORMAL (not satellite) LAYERS -->
 
-          @if (!(satelliteView$ | async)) {
+          @if (!sink.satelliteView) {
             <!-- 📦 BG LAYER (outside town)-->
 
             <app-ol-layer-tile>
@@ -133,7 +136,7 @@ import { ViewState } from '@lib/state/view';
 
           <!-- 📦 SATELLITE LAYER  -->
 
-          @if (satelliteView$ | async) {
+          @if (sink.satelliteView) {
             <app-ol-layer-tile>
               <app-ol-source-xyz
                 [s]="['mt0', 'mt1', 'mt2', 'mt3']"
@@ -162,11 +165,7 @@ export class NightPage extends AbstractMapPage implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer;
 
-  @Select(MapState) mapState$: Observable<Map>;
-
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected override actions$: Actions,

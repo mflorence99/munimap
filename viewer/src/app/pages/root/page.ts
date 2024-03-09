@@ -22,8 +22,11 @@ import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
 import { ViewState } from '@lib/state/view';
+import { ViewStateModel } from '@lib/state/view';
 
+import { combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { satelliteYears } from '@lib/ol/ol-source-satellite';
 import { takeUntil } from 'rxjs/operators';
 
@@ -180,10 +183,15 @@ export class RootPage implements OnInit {
   @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
 
   @Select(AnonState.user) user$: Observable<User>;
+
+  @Select(ViewState) view$: Observable<ViewStateModel>;
+
   hasLeftSidebar: boolean;
   hasRightSidebar: boolean;
 
   title: string;
+
+  zoom$: Observable<number>;
 
   #url: any;
 
@@ -196,6 +204,10 @@ export class RootPage implements OnInit {
     private titleService: Title,
     private version: VersionService
   ) {
+    this.zoom$ = combineLatest([this.map$, this.view$]).pipe(
+      // 🔥 sometimes triggered by ???
+      map(([map, view]) => view.viewByPath[map.path]?.zoom ?? 15)
+    );
     this.#url = urlParse(this.location.path(), true);
   }
 

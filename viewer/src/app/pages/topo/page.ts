@@ -1,26 +1,30 @@
-import { AbstractMapPage } from '../abstract-map';
+import { RootPage } from '../root/page';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
-import { Observable } from 'rxjs';
-import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
-import { ViewState } from '@lib/state/view';
-import { ViewStateModel } from '@lib/state/view';
+
+import { environment } from '@lib/environment';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-topo',
   template: `
-    @if (map$ | async; as map) {
+    <app-sink
+      #sink
+      [gps]="root.gps$ | async"
+      [map]="root.map$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [satelliteYear]="root.satelliteYear$ | async"
+      [user]="root.user$ | async"
+      [zoom]="root.zoom$ | async" />
+
+    @if (sink.map) {
       <app-ol-map
         #olMap
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="20"
-        [path]="map.path"
+        [path]="sink.map.path"
         class="content">
         <!-- 📦 CONTROLS -->
 
@@ -40,10 +44,10 @@ import { ViewStateModel } from '@lib/state/view';
 
           <!-- 📦 NORMAL (not satellite) LAYERS -->
 
-          @if (!(satelliteView$ | async)) {
+          @if (!sink.satelliteView) {
             <!-- 📦 BG LAYER (outside town)-->
 
-            @if ((zoom$ | async) < olMap.minUsefulZoom) {
+            @if (sink.zoom < olMap.minUsefulZoom) {
               <app-ol-layer-tile>
                 <app-ol-source-xyz
                   [url]="
@@ -107,7 +111,7 @@ import { ViewStateModel } from '@lib/state/view';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-wetlands>
                   <app-ol-style-universal
@@ -117,7 +121,7 @@ import { ViewStateModel } from '@lib/state/view';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <!-- 👇 only drawing labels here - waterbodies draws actual river -->
                 <app-ol-adaptor-places>
@@ -140,7 +144,7 @@ import { ViewStateModel } from '@lib/state/view';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-stonewalls>
                   <app-ol-style-universal
@@ -160,7 +164,7 @@ import { ViewStateModel } from '@lib/state/view';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-buildings>
                   <app-ol-style-universal
@@ -171,7 +175,7 @@ import { ViewStateModel } from '@lib/state/view';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-railroads>
                   <app-ol-style-universal
@@ -192,7 +196,7 @@ import { ViewStateModel } from '@lib/state/view';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-trails>
                   <app-ol-style-universal
@@ -203,7 +207,7 @@ import { ViewStateModel } from '@lib/state/view';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-places>
                   <app-ol-style-universal
@@ -216,7 +220,7 @@ import { ViewStateModel } from '@lib/state/view';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-places>
                   <app-ol-style-universal
@@ -226,7 +230,7 @@ import { ViewStateModel } from '@lib/state/view';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if ((zoom$ | async) >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-places>
                   <app-ol-style-universal
@@ -261,8 +265,8 @@ import { ViewStateModel } from '@lib/state/view';
 
           <!-- 📦 SATELLITE LAYERS  -->
 
-          @if (satelliteView$ | async) {
-            @if ({ satelliteYear: satelliteYear$ | async }; as ctx) {
+          @if (sink.satelliteView) {
+            @if ({ satelliteYear: sink.satelliteYear }; as ctx) {
               <!-- 👇 split screen if year selected  -->
 
               @if (ctx.satelliteYear) {
@@ -320,7 +324,7 @@ import { ViewStateModel } from '@lib/state/view';
 
           <!-- 📦 OVERLAY FOR GPS -->
 
-          @if ((gps$ | async) && (zoom$ | async) >= olMap.minUsefulZoom) {
+          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom) {
             <app-ol-overlay-gps></app-ol-overlay-gps>
           }
         }
@@ -329,18 +333,8 @@ import { ViewStateModel } from '@lib/state/view';
   `,
   styleUrls: ['../abstract-map.scss']
 })
-export class TopoPage extends AbstractMapPage implements OnInit {
-  @Select(ViewState.gps) gps$: Observable<boolean>;
+export class TopoPage {
+  env = environment;
 
-  @Select(MapState) map$: Observable<Map>;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
-
-  @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
-
-  @Select(ViewState) view$: Observable<ViewStateModel>;
-
-  ngOnInit(): void {
-    this.onInit();
-  }
+  constructor(public root: RootPage) {}
 }

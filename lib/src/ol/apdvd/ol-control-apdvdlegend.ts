@@ -143,6 +143,12 @@ export class OLControlAPDVDLegendComponent
     }
   }
 
+  // 🔥 need to do this for APDVD as not enough data in actual
+  //    countables to prodfuce legend
+  override countables(): string {
+    return 'parcels';
+  }
+
   ngOnInit(): void {
     this.olControl = new Legend({ element: this.legend.nativeElement });
     this.olControl.setProperties({ component: this }, true);

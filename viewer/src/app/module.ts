@@ -5,6 +5,7 @@ import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsPage } from './pages/parcels/page';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
+import { SinkComponent } from './pages/root/sink';
 import { TopoPage } from './pages/topo/page';
 
 import * as Sentry from '@sentry/angular-ivy';
@@ -246,6 +247,7 @@ const COMPONENTS = [
   OLStyleUniversalComponent,
   ParcelsColorCodeComponent,
   ParcelsLegendComponent,
+  SinkComponent,
   VersionDialogComponent
 ];
 

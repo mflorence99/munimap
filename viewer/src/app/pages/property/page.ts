@@ -1,27 +1,31 @@
-import { AbstractMapPage } from '../abstract-map';
+import { RootPage } from '../root/page';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
-import { Observable } from 'rxjs';
-import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
-import { ViewState } from '@lib/state/view';
-import { ViewStateModel } from '@lib/state/view';
+
+import { environment } from '@lib/environment';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-property',
   template: `
-    @if (map$ | async; as map) {
+    <app-sink
+      #sink
+      [gps]="root.gps$ | async"
+      [map]="root.map$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [satelliteYear]="root.satelliteYear$ | async"
+      [user]="root.user$ | async"
+      [zoom]="root.zoom$ | async" />
+
+    @if (sink.map) {
       <app-ol-map
         #olMap
-        [bbox]="map.bbox"
+        [bbox]="sink.map.bbox"
         [loadingStrategy]="'all'"
         [minZoom]="13"
         [maxZoom]="22"
-        [path]="map.path"
+        [path]="sink.map.path"
         class="content">
         <!-- 📦 CONTROLS -->
 
@@ -41,7 +45,7 @@ import { ViewStateModel } from '@lib/state/view';
 
           <!-- 📦 TERRAIN LAYERS -->
 
-          @if (!(satelliteView$ | async)) {
+          @if (!sink.satelliteView) {
             <!-- 📦 HILLSHADE LAYER -->
 
             <app-ol-layer-tile>
@@ -63,12 +67,12 @@ import { ViewStateModel } from '@lib/state/view';
 
             <!-- 📦 CONTOURS LAYER -->
 
-            @if (map.contours2ft) {
+            @if (sink.map.contours2ft) {
               <app-ol-layer-tile>
                 <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
               </app-ol-layer-tile>
             }
-            @if (!map.contours2ft) {
+            @if (!sink.map.contours2ft) {
               <app-ol-layer-tile>
                 <app-ol-source-contours></app-ol-source-contours>
               </app-ol-layer-tile>
@@ -195,14 +199,16 @@ import { ViewStateModel } from '@lib/state/view';
 
             <app-ol-layer-vector>
               <app-ol-style-parcels
-                [forceSelected]="map.contours2ft"
-                [parcelIDs]="map.parcelIDs"
+                [forceSelected]="sink.map.contours2ft"
+                [parcelIDs]="sink.map.parcelIDs"
                 [showBorder]="'always'"
                 [showDimensionContrast]="'never'"
                 [showDimensions]="'onlyParcelIDs'"
                 [showLabels]="'always'"
                 [showLabelContrast]="'never'"
-                [showSelection]="map.contours2ft ? 'onlyParcelIDs' : 'never'"
+                [showSelection]="
+                  sink.map.contours2ft ? 'onlyParcelIDs' : 'never'
+                "
                 [showStolen]="'always'"></app-ol-style-parcels>
               <app-ol-source-parcels #parcels></app-ol-source-parcels>
             </app-ol-layer-vector>
@@ -234,8 +240,8 @@ import { ViewStateModel } from '@lib/state/view';
 
           <!-- 📦 SATELLITE LAYER  -->
 
-          @if (satelliteView$ | async) {
-            @if ({ satelliteYear: satelliteYear$ | async }; as ctx) {
+          @if (sink.satelliteView) {
+            @if ({ satelliteYear: sink.satelliteYear }; as ctx) {
               <!-- 👇 split screen if year selected  -->
 
               @if (ctx.satelliteYear) {
@@ -254,7 +260,7 @@ import { ViewStateModel } from '@lib/state/view';
                     </app-ol-source-xyz>
                     <app-ol-filter-crop2propertyparcels
                       [opacity]="0.33"
-                      [parcelIDs]="map.parcelIDs"
+                      [parcelIDs]="sink.map.parcelIDs"
                       [source]="parcels"
                       [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                   </app-ol-layer-tile>
@@ -265,7 +271,7 @@ import { ViewStateModel } from '@lib/state/view';
                   </app-ol-layer-tile>
                   <app-ol-filter-crop2propertyparcels
                     [opacity]="0.33"
-                    [parcelIDs]="map.parcelIDs"
+                    [parcelIDs]="sink.map.parcelIDs"
                     [source]="parcels"
                     [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-control-splitscreen>
@@ -288,7 +294,7 @@ import { ViewStateModel } from '@lib/state/view';
                   </app-ol-source-xyz>
                   <app-ol-filter-crop2propertyparcels
                     [opacity]="0.33"
-                    [parcelIDs]="map.parcelIDs"
+                    [parcelIDs]="sink.map.parcelIDs"
                     [source]="parcels"
                     [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-layer-tile>
@@ -296,7 +302,7 @@ import { ViewStateModel } from '@lib/state/view';
 
               <app-ol-layer-vector>
                 <app-ol-style-parcels
-                  [parcelIDs]="map.parcelIDs"
+                  [parcelIDs]="sink.map.parcelIDs"
                   [showBorder]="'always'"
                   [showDimensions]="'onlyParcelIDs'"
                   [showDimensionContrast]="'always'"
@@ -306,12 +312,12 @@ import { ViewStateModel } from '@lib/state/view';
                 <app-ol-source-parcels #parcels></app-ol-source-parcels>
               </app-ol-layer-vector>
 
-              @if (map.contours2ft) {
+              @if (sink.map.contours2ft) {
                 <app-ol-layer-tile>
                   <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
                 </app-ol-layer-tile>
               }
-              @if (!map.contours2ft) {
+              @if (!sink.map.contours2ft) {
                 <app-ol-layer-tile>
                   <app-ol-source-contours></app-ol-source-contours>
                 </app-ol-layer-tile>
@@ -348,7 +354,7 @@ import { ViewStateModel } from '@lib/state/view';
 
           <!-- 📦 OVERLAY FOR GPS -->
 
-          @if ((gps$ | async) && (zoom$ | async) >= olMap.minUsefulZoom) {
+          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom) {
             <app-ol-overlay-gps></app-ol-overlay-gps>
           }
         }
@@ -357,18 +363,8 @@ import { ViewStateModel } from '@lib/state/view';
   `,
   styleUrls: ['../abstract-map.scss']
 })
-export class PropertyPage extends AbstractMapPage implements OnInit {
-  @Select(ViewState.gps) gps$: Observable<boolean>;
+export class PropertyPage {
+  env = environment;
 
-  @Select(MapState) map$: Observable<Map>;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
-
-  @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
-
-  @Select(ViewState) view$: Observable<ViewStateModel>;
-
-  ngOnInit(): void {
-    this.onInit();
-  }
+  constructor(public root: RootPage) {}
 }

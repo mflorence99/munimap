@@ -8,6 +8,8 @@ import { Component } from '@angular/core';
 import { CreateMapError } from '@lib/state/map';
 import { DestroyService } from '@lib/services/destroy';
 import { Event } from '@angular/router';
+import { Map } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { MessageDialogData } from '@lib/components/message-dialog';
@@ -162,13 +164,16 @@ import { useAnimation } from '@angular/animations';
   ]
 })
 export class RootPage implements OnInit {
-  @ViewChild(RouterOutlet) outlet;
+  @Select(MapState) mapState$: Observable<Map>;
 
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   @Select(AuthState.user) user$: Observable<User>;
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  @ViewChild(RouterOutlet) outlet;
 
   canRedo = false;
   canUndo = false;

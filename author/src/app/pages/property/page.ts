@@ -15,18 +15,14 @@ import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
 import { LandmarkPropertiesClass } from '@lib/common';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLInteractionDrawLandmarksComponent } from '@lib/ol/landmarks/ol-interaction-drawlandmarks';
 import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-interaction-redrawlandmark';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
 import { UpdateLandmark } from '@lib/state/landmarks';
@@ -52,16 +48,23 @@ interface LandmarkConversion {
   providers: [DestroyService],
   selector: 'app-property',
   template: `
-    @if (mapState$ | async; as map) {
+    <app-sink
+      #sink
+      [map]="root.mapState$ | async"
+      [profile]="root.profile$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [user]="root.user$ | async" />
+
+    @if (sink.map) {
       <mat-drawer-container class="container">
         <mat-drawer-content class="content">
           <app-ol-map
             #olMap
-            [bbox]="map.bbox"
+            [bbox]="sink.map.bbox"
             [loadingStrategy]="'all'"
             [minZoom]="13"
             [maxZoom]="22"
-            [path]="map.path">
+            [path]="sink.map.path">
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -71,19 +74,19 @@ interface LandmarkConversion {
             </app-contextmenu>
 
             <app-controlpanel-properties
-              [map]="map"
+              [map]="sink.map"
               mapControlPanel1></app-controlpanel-properties>
 
             <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
             <app-ol-control-print
-              [fileName]="map.name"
-              [printSize]="map.printSize"
+              [fileName]="sink.map.name"
+              [printSize]="sink.map.printSize"
               mapControlPrint></app-ol-control-print>
 
-            @if (map.name) {
+            @if (sink.map.name) {
               <app-ol-control-exportlandmarks
-                [fileName]="map.id + '-landmarks'"
+                [fileName]="sink.map.id + '-landmarks'"
                 mapControlExport></app-ol-control-exportlandmarks>
             }
 
@@ -98,8 +101,8 @@ interface LandmarkConversion {
 
               @if (olMap.printing) {
                 <app-ol-control-title
-                  [showTitleContrast]="satelliteView$ | async"
-                  [title]="map.name"></app-ol-control-title>
+                  [showTitleContrast]="sink.satelliteView"
+                  [title]="sink.map.name"></app-ol-control-title>
               }
               @if (olMap.printing) {
                 <app-ol-control-graticule [step]="0.0025">
@@ -115,7 +118,7 @@ interface LandmarkConversion {
               @if (olMap.printing) {
                 <app-ol-control-scalebar
                   [showScaleContrast]="
-                    satelliteView$ | async
+                    sink.satelliteView
                   "></app-ol-control-scalebar>
               }
               @if (!olMap.printing) {
@@ -124,13 +127,13 @@ interface LandmarkConversion {
               @if (olMap.printing) {
                 <app-ol-control-credits
                   [showCreditsContrast]="
-                    satelliteView$ | async
+                    sink.satelliteView
                   "></app-ol-control-credits>
               }
 
               <!-- 📦 TERRAIN LAYERS -->
 
-              @if (!(satelliteView$ | async)) {
+              @if (!sink.satelliteView) {
                 <!-- 📦 HILLSHADE LAYER -->
 
                 <app-ol-layer-tile>
@@ -152,12 +155,12 @@ interface LandmarkConversion {
 
                 <!-- 📦 CONTOURS LAYER -->
 
-                @if (map.contours2ft) {
+                @if (sink.map.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
                   </app-ol-layer-tile>
                 }
-                @if (!map.contours2ft) {
+                @if (!sink.map.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours></app-ol-source-contours>
                   </app-ol-layer-tile>
@@ -284,15 +287,15 @@ interface LandmarkConversion {
 
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
-                    [forceSelected]="map.contours2ft"
-                    [parcelIDs]="map.parcelIDs"
+                    [forceSelected]="sink.map.contours2ft"
+                    [parcelIDs]="sink.map.parcelIDs"
                     [showBorder]="'always'"
                     [showDimensions]="'onlyParcelIDs'"
                     [showDimensionContrast]="'never'"
                     [showLabels]="'always'"
                     [showLabelContrast]="'never'"
                     [showSelection]="
-                      map.contours2ft ? 'onlyParcelIDs' : 'never'
+                      sink.map.contours2ft ? 'onlyParcelIDs' : 'never'
                     "
                     [showStolen]="'always'"></app-ol-style-parcels>
                   <app-ol-source-parcels #parcels></app-ol-source-parcels>
@@ -326,7 +329,7 @@ interface LandmarkConversion {
 
               <!-- 📦 SATELLITE LAYER  -->
 
-              @if (satelliteView$ | async) {
+              @if (sink.satelliteView) {
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
                     [s]="['mt0', 'mt1', 'mt2', 'mt3']"
@@ -341,14 +344,14 @@ interface LandmarkConversion {
                   </app-ol-source-xyz>
                   <app-ol-filter-crop2propertyparcels
                     [opacity]="0.33"
-                    [parcelIDs]="map.parcelIDs"
+                    [parcelIDs]="sink.map.parcelIDs"
                     [source]="parcels"
                     [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-layer-tile>
 
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
-                    [parcelIDs]="map.parcelIDs"
+                    [parcelIDs]="sink.map.parcelIDs"
                     [showBorder]="'always'"
                     [showDimensions]="'onlyParcelIDs'"
                     [showDimensionContrast]="'always'"
@@ -358,12 +361,12 @@ interface LandmarkConversion {
                   <app-ol-source-parcels #parcels></app-ol-source-parcels>
                 </app-ol-layer-vector>
 
-                @if (map.contours2ft) {
+                @if (sink.map.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
                   </app-ol-layer-tile>
                 }
-                @if (!map.contours2ft) {
+                @if (!sink.map.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours></app-ol-source-contours>
                   </app-ol-layer-tile>
@@ -631,8 +634,6 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer;
 
-  @Select(MapState) mapState$: Observable<Map>;
-
   @ViewChild(OLOverlayLandmarkLabelComponent)
   moveLandmark: OLOverlayLandmarkLabelComponent;
 
@@ -640,8 +641,6 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
 
   @ViewChild(OLInteractionRedrawLandmarkComponent)
   redrawLandmark: OLInteractionRedrawLandmarkComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   conversions: LandmarkConversion[] = [
     {

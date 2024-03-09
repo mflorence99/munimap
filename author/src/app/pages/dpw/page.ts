@@ -16,16 +16,12 @@ import { CulvertProperties } from '@lib/common';
 import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
 import { ViewChild } from '@angular/core';
@@ -45,7 +41,14 @@ import { toLonLat } from 'ol/proj';
   providers: [DestroyService],
   selector: 'app-dpw',
   template: `
-    @if (mapState$ | async; as map) {
+    <app-sink
+      #sink
+      [map]="root.mapState$ | async"
+      [profile]="root.profile$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [user]="root.user$ | async" />
+
+    @if (sink.map) {
       <mat-drawer-container class="container">
         <mat-drawer-content class="content">
           <app-ol-map
@@ -53,7 +56,7 @@ import { toLonLat } from 'ol/proj';
             [loadingStrategy]="'bbox'"
             [minZoom]="13"
             [maxZoom]="20"
-            [path]="map.path">
+            [path]="sink.map.path">
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -63,7 +66,7 @@ import { toLonLat } from 'ol/proj';
             </app-contextmenu>
 
             <app-controlpanel-properties
-              [map]="map"
+              [map]="sink.map"
               mapControlPanel1></app-controlpanel-properties>
 
             <!-- 📦 CONTROLS -->
@@ -73,15 +76,15 @@ import { toLonLat } from 'ol/proj';
 
             <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-            @if (map.name) {
+            @if (sink.map.name) {
               <app-ol-control-print
-                [fileName]="map.name"
-                [printSize]="map.printSize"
+                [fileName]="sink.map.name"
+                [printSize]="sink.map.printSize"
                 mapControlPrint></app-ol-control-print>
             }
-            @if (map.name) {
+            @if (sink.map.name) {
               <app-ol-control-exportculverts
-                [fileName]="map.id + '-culverts'"
+                [fileName]="sink.map.id + '-culverts'"
                 mapControlExport></app-ol-control-exportculverts>
             }
 
@@ -117,7 +120,7 @@ import { toLonLat } from 'ol/proj';
 
               <!-- 📦 NORMAL (not satellite) LAYERS -->
 
-              @if (!(satelliteView$ | async)) {
+              @if (!sink.satelliteView) {
                 <!-- 📦 BG LAYER (outside town)-->
 
                 @if (olMap.printing) {
@@ -350,7 +353,7 @@ import { toLonLat } from 'ol/proj';
 
               <!-- 📦 SATELLITE LAYER  -->
 
-              @if (satelliteView$ | async) {
+              @if (sink.satelliteView) {
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
                     [s]="['mt0', 'mt1', 'mt2', 'mt3']"
@@ -532,14 +535,10 @@ export class DPWPage extends AbstractMapPage implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer;
 
-  @Select(MapState) mapState$: Observable<Map>;
-
   @ViewChild(OLOverlayLandmarkLabelComponent)
   moveLandmark: OLOverlayLandmarkLabelComponent;
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected override actions$: Actions,

@@ -15,11 +15,8 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
-import { Map } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 import { OLInteractionRedrawParcelComponent } from '@lib/ol/parcels/ol-interaction-redrawparcel';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcellabel';
@@ -27,7 +24,6 @@ import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelPropertiesLabel } from '@lib/common';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
 import { ViewChild } from '@angular/core';
@@ -52,7 +48,14 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
   providers: [DestroyService],
   selector: 'app-parcels',
   template: `
-    @if (mapState$ | async; as map) {
+    <app-sink
+      #sink
+      [map]="root.mapState$ | async"
+      [profile]="root.profile$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [user]="root.user$ | async" />
+
+    @if (sink.map) {
       <mat-drawer-container class="container">
         <mat-drawer-content class="content">
           <app-ol-map
@@ -60,7 +63,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
             [loadingStrategy]="'bbox'"
             [minZoom]="15"
             [maxZoom]="22"
-            [path]="map.path">
+            [path]="sink.map.path">
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -70,7 +73,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
             </app-contextmenu>
 
             <app-controlpanel-properties
-              [map]="map"
+              [map]="sink.map"
               class="setup"
               mapControlPanel1></app-controlpanel-properties>
 
@@ -81,15 +84,15 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
             <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-            @if (map.name) {
+            @if (sink.map.name) {
               <app-ol-control-print
-                [fileName]="map.name"
-                [printSize]="map.printSize"
+                [fileName]="sink.map.name"
+                [printSize]="sink.map.printSize"
                 mapControlPrint></app-ol-control-print>
             }
-            @if (map.name) {
+            @if (sink.map.name) {
               <app-ol-control-exportparcels
-                [fileName]="map.id + '-parcels'"
+                [fileName]="sink.map.id + '-parcels'"
                 mapControlExport></app-ol-control-exportparcels>
             }
 
@@ -113,13 +116,13 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   <app-ol-style-graticule></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (map.name && olMap.printing) {
+              @if (sink.map.name && olMap.printing) {
                 <app-ol-control-parcelslegend
-                  [county]="map.path.split(':')[1]"
-                  [id]="map.id"
+                  [county]="sink.map.path.split(':')[1]"
+                  [id]="sink.map.id"
                   [printing]="olMap.printing"
-                  [state]="map.path.split(':')[0]"
-                  [title]="map.name"></app-ol-control-parcelslegend>
+                  [state]="sink.map.path.split(':')[0]"
+                  [title]="sink.map.name"></app-ol-control-parcelslegend>
               }
               @if (olMap.printing) {
                 <app-ol-control-scalebar></app-ol-control-scalebar>
@@ -133,7 +136,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
               <!-- 📦 NORMAL (not satellite) LAYERS -->
 
-              @if (!(satelliteView$ | async)) {
+              @if (!sink.satelliteView) {
                 <!-- 📦 BG LAYER (outside town)-->
 
                 @if (olMap.printing) {
@@ -334,7 +337,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
               <!-- 📦 SATELLITE LAYERS  -->
 
-              @if (satelliteView$ | async) {
+              @if (sink.satelliteView) {
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
                     [s]="['mt0', 'mt1', 'mt2', 'mt3']"
@@ -372,11 +375,11 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                     [showBorder]="'always'"
                     [showDimensions]="'whenSelected'"
                     [showDimensionContrast]="
-                      (satelliteView$ | async) ? 'always' : 'never'
+                      sink.satelliteView ? 'always' : 'never'
                     "
                     [showLabels]="'always'"
                     [showLabelContrast]="
-                      (satelliteView$ | async) ? 'always' : 'never'
+                      sink.satelliteView ? 'always' : 'never'
                     "
                     [showSelection]="'always'"
                     [showStolen]="
@@ -390,7 +393,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
               <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
 
-              @if (!(satelliteView$ | async)) {
+              @if (!sink.satelliteView) {
                 <app-ol-layer-vector>
                   <app-ol-adaptor-roads>
                     <app-ol-style-universal
@@ -588,14 +591,10 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   @ViewChild(OLInteractionRedrawParcelComponent)
   interactionRedraw: OLInteractionRedrawParcelComponent;
 
-  @Select(MapState) mapState$: Observable<Map>;
-
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
 
   @ViewChild(OLOverlayParcelLabelComponent)
   overlayLabel: OLOverlayParcelLabelComponent;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   constructor(
     protected override actions$: Actions,

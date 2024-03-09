@@ -26,6 +26,7 @@ import { ProfileComponent } from './pages/root/profile';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { SelectOnFocusDirective } from './directives/select-on-focus';
+import { SinkComponent } from './pages/root/sink';
 import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
 import { TopoPage } from './pages/topo/page';
 
@@ -350,6 +351,7 @@ const COMPONENTS = [
   ParcelIDValidator,
   ParcelPropertiesComponent,
   ProfileComponent,
+  SinkComponent,
   SubdivideParcelComponent,
   SubdivisionIDValidator,
   VersionDialogComponent
