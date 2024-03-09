@@ -37,6 +37,12 @@ import urlParse from 'url-parse';
   providers: [DestroyService],
   selector: 'app-root',
   template: `
+    <app-sink
+      #sink
+      [gps]="gps$ | async"
+      [satelliteView]="satelliteView$ | async"
+      [satelliteYear]="satelliteYear$ | async" />
+
     <main class="page">
       <mat-toolbar class="toolbar">
         @if (hasLeftSidebar) {
@@ -56,19 +62,17 @@ import urlParse from 'url-parse';
         <mat-button-toggle
           #satelliteViewToggle
           (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
-          [checked]="satelliteView$ | async">
+          [checked]="sink.satelliteView">
           <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
           @if (canPickSatelliteYear()) {
             &nbsp;
             <select
               (change)="onSatelliteYear($any($event.target).value)"
               (click)="eatMe($event)"
-              [disabled]="!(satelliteView$ | async)">
+              [disabled]="!sink.satelliteView">
               @for (year of satelliteYears; track year) {
                 <option
-                  [attr.selected]="
-                    year === (satelliteYear$ | async) ? 'true' : null
-                  "
+                  [attr.selected]="year === sink.satelliteYear ? 'true' : null"
                   [value]="year"
                   class="year">
                   {{ year || 'Latest' }}
@@ -81,7 +85,7 @@ import urlParse from 'url-parse';
         <mat-button-toggle
           #gpsToggle
           (change)="onGPSToggle(gpsToggle.checked)"
-          [checked]="gps$ | async">
+          [checked]="sink.gps">
           <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
         </mat-button-toggle>
 

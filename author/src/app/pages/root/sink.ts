@@ -8,11 +8,12 @@ import { User } from '@lib/state/auth';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-sink',
-  template: ``
+  template: ``,
+  styles: [':host { display: none }']
 })
 export class SinkComponent {
-  @Input({ required: true }) map: Map;
-  @Input({ required: true }) profile: Profile;
-  @Input({ required: true }) satelliteView: boolean;
-  @Input({ required: true }) user: User;
+  @Input() map: Map;
+  @Input() profile: Profile;
+  @Input() satelliteView: boolean;
+  @Input() user: User;
 }

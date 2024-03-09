@@ -51,12 +51,15 @@ import { useAnimation } from '@angular/animations';
   providers: [DestroyService],
   selector: 'app-root',
   template: `
+    <app-sink
+      #sink
+      [profile]="profile$ | async"
+      [satelliteView]="satelliteView$ | async"
+      [user]="user$ | async" />
+
     <main class="page">
       <mat-toolbar class="toolbar">
-        <button
-          (click)="nav.toggle()"
-          [disabled]="!(user$ | async)"
-          mat-icon-button>
+        <button (click)="nav.toggle()" [disabled]="!sink.user" mat-icon-button>
           <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
         </button>
 
@@ -69,7 +72,7 @@ import { useAnimation } from '@angular/animations';
         <mat-button-toggle
           #satelliteViewToggle
           (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
-          [checked]="satelliteView$ | async">
+          [checked]="sink.satelliteView">
           <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
         </mat-button-toggle>
 
@@ -81,10 +84,10 @@ import { useAnimation } from '@angular/animations';
           <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>
         </button>
 
-        @if (user$ | async; as user) {
+        @if (sink.user) {
           <app-avatar
             (click)="setup.toggle()"
-            [name]="user.displayName"
+            [name]="sink.user.displayName"
             class="avatar"></app-avatar>
         }
       </mat-toolbar>
@@ -101,9 +104,11 @@ import { useAnimation } from '@angular/animations';
         </mat-drawer>
 
         <mat-drawer #setup class="sidebar" mode="over" position="end">
-          @if (user$ | async; as user) {
-            @if (profile$ | async; as profile) {
-              <app-profile [profile]="profile" [user]="user"></app-profile>
+          @if (sink.user) {
+            @if (sink.profile) {
+              <app-profile
+                [profile]="sink.profile"
+                [user]="sink.user"></app-profile>
             }
           }
         </mat-drawer>
