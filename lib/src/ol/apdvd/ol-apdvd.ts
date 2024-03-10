@@ -195,7 +195,7 @@ export function isAPDVDExisting(props: ParcelProperties): boolean {
   return (
     !isAPDVDProposed(props) &&
     !existingExcept.has(props.id) &&
-    existingStreets.some((street) => props.address.includes(street))
+    existingStreets.some((street) => props.address?.includes(street))
   );
 }
 
