@@ -144,6 +144,7 @@ interface SearchTarget {
   ]
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
+  @Input() filterFn: (feature) => boolean;
   @Input() fuzzyMaxResults = 100;
   @Input() fuzzyMinLength = 3;
   @Input() fuzzyThreshold = -10000;
@@ -212,7 +213,6 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     return searchFor;
   }
 
-  // 👇 stolen parcels don't count!
   #filterRemovedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
     const removed = this.parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
@@ -258,7 +258,11 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
         this.#insertAddedFeatures(geojson, parcels);
         this.#filterRemovedFeatures(geojson, parcels);
         this.#overridesByID = this.#makeOverridesByID(parcels);
-        this.#searchTargets = this.#makeSearchTargets(geojson.features);
+        this.#searchTargets = this.#makeSearchTargets(
+          this.filterFn
+            ? geojson.features.filter(this.filterFn)
+            : geojson.features
+        );
         this.searchablesByAddress = this.#groupSearchablesByProperty(
           geojson.features,
           'address'

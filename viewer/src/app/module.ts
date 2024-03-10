@@ -1,3 +1,4 @@
+import { APDVDPage } from './pages/apdvd/page';
 import { DPWLegendComponent } from './pages/dpw/legend';
 import { DPWPage } from './pages/dpw/page';
 import { ParcelsColorCodeComponent } from './pages/parcels/colorcode';
@@ -253,7 +254,19 @@ const COMPONENTS = [
 
 const DIRECTIVES = [];
 
-const PAGES = [DPWPage, ParcelsPage, PropertyPage, RootPage, TopoPage];
+const PAGES = [
+  APDVDPage,
+  DPWPage,
+  ParcelsPage,
+  PropertyPage,
+  RootPage,
+  TopoPage
+];
+
+export interface RouteData {
+  noGPS?: boolean;
+  noSatelliteView?: boolean;
+}
 
 // 🔥 type error introduced in Angular v14 -- cause unknown
 const ROUTES: any = [
@@ -265,8 +278,14 @@ const ROUTES: any = [
     },
     children: [
       {
+        path: 'apdvd',
+        component: APDVDPage,
+        data: { noSatelliteView: true } satisfies RouteData
+      },
+      {
         path: 'dpw',
-        component: DPWPage
+        component: DPWPage,
+        data: { yyy: 1 }
       },
       {
         path: 'dpw-legend',

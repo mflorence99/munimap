@@ -343,7 +343,7 @@ async function main(): Promise<void> {
     await maps.doc(map.id).delete();
 
     // 👉 calculate bbox with 100ft border
-    if (map.type === 'area')
+    if (['apdvd', 'area'].includes(map.type))
       map.bbox = bboxFromDimensions(map, 100 * 0.0003048 /* 👈 km */);
     if (map.type === 'property')
       map.bbox = await bboxFromParcelIDs(map, 100 * 0.0003048 /* 👈 km */);

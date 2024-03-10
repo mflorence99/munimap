@@ -21,6 +21,7 @@ import { environment } from '@lib/environment';
     @if (sink.map) {
       <app-ol-map
         #olMap
+        [bbox]="sink.map.bbox"
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="22"

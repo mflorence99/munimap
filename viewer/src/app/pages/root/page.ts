@@ -1,3 +1,5 @@
+import { RouteData } from '../../module';
+
 import { AnonState } from '@lib/state/anon';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -59,35 +61,41 @@ import urlParse from 'url-parse';
 
         <div class="filler"></div>
 
-        <mat-button-toggle
-          #satelliteViewToggle
-          (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
-          [checked]="sink.satelliteView">
-          <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
-          @if (canPickSatelliteYear()) {
-            &nbsp;
-            <select
-              (change)="onSatelliteYear($any($event.target).value)"
-              (click)="eatMe($event)"
-              [disabled]="!sink.satelliteView">
-              @for (year of satelliteYears; track year) {
-                <option
-                  [attr.selected]="year === sink.satelliteYear ? 'true' : null"
-                  [value]="year"
-                  class="year">
-                  {{ year || 'Latest' }}
-                </option>
-              }
-            </select>
-          }
-        </mat-button-toggle>
+        @if (!routeData.noSatelliteView) {
+          <mat-button-toggle
+            #satelliteViewToggle
+            (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
+            [checked]="sink.satelliteView">
+            <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
+            @if (canPickSatelliteYear()) {
+              &nbsp;
+              <select
+                (change)="onSatelliteYear($any($event.target).value)"
+                (click)="eatMe($event)"
+                [disabled]="!sink.satelliteView">
+                @for (year of satelliteYears; track year) {
+                  <option
+                    [attr.selected]="
+                      year === sink.satelliteYear ? 'true' : null
+                    "
+                    [value]="year"
+                    class="year">
+                    {{ year || 'Latest' }}
+                  </option>
+                }
+              </select>
+            }
+          </mat-button-toggle>
+        }
 
-        <mat-button-toggle
-          #gpsToggle
-          (change)="onGPSToggle(gpsToggle.checked)"
-          [checked]="sink.gps">
-          <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
-        </mat-button-toggle>
+        @if (!routeData.noGPS) {
+          <mat-button-toggle
+            #gpsToggle
+            (change)="onGPSToggle(gpsToggle.checked)"
+            [checked]="sink.gps">
+            <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
+          </mat-button-toggle>
+        }
 
         @if (hasRightSidebar) {
           <mat-button-toggle
@@ -192,6 +200,8 @@ export class RootPage implements OnInit {
 
   hasLeftSidebar: boolean;
   hasRightSidebar: boolean;
+
+  routeData: RouteData = {};
 
   title: string;
 
@@ -304,8 +314,13 @@ export class RootPage implements OnInit {
   #makeURL(map: Map): string {
     const parts = [`/${map.type}`];
     const inner = [];
-    // 👉 is there a left sidebar?
+    // 👉 what data associated with this route?
     let route = this.router.config[0].children.find(
+      (route) => route.path === `${map.type}`
+    );
+    this.routeData = route.data ?? {};
+    // 👉 is there a left sidebar?
+    route = this.router.config[0].children.find(
       (route) =>
         route.path.startsWith(`${map.type}-`) && route.outlet === 'leftSidebar'
     );
