@@ -1,12 +1,7 @@
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
 import { ColorCodeState } from '@lib/state/colorcode';
 import { ColorCodeStateModel } from '@lib/state/colorcode';
 import { Component } from '@angular/core';
-import { DestroyService } from '@lib/services/destroy';
-import { GeoJSONService } from '@lib/services/geojson';
-import { MapState } from '@lib/state/map';
 import { Observable } from 'rxjs';
 import { OLControlAbstractParcelsLegendComponent } from '@lib/ol/ol-control-abstractparcelslegend';
 import { OnInit } from '@angular/core';
@@ -14,6 +9,8 @@ import { Parcel } from '@lib/common';
 import { ParcelsState } from '@lib/state/parcels';
 import { Select } from '@ngxs/store';
 import { VersionService } from '@lib/services/version';
+
+import { inject } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -328,24 +325,13 @@ export class ParcelsLegendComponent
   state: string;
   title: string;
 
-  constructor(
-    cdf: ChangeDetectorRef,
-    destroy$: DestroyService,
-    geoJSON: GeoJSONService,
-    mapState: MapState,
-    parcelsState: ParcelsState,
-    route: ActivatedRoute,
-    private version: VersionService
-  ) {
-    // 🔥 not in map context
-    super(cdf, destroy$, geoJSON, mapState, parcelsState, route);
-  }
+  #version = inject(VersionService);
 
   ngOnInit(): void {
     this.onInit();
   }
 
   reset(): void {
-    this.version.hardReset();
+    this.#version.hardReset();
   }
 }

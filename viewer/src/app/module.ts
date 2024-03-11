@@ -280,7 +280,7 @@ const ROUTES: any = [
       {
         path: 'apdvd',
         component: APDVDPage,
-        data: { noSatelliteView: true } satisfies RouteData
+        data: { noGPS: true, noSatelliteView: true } satisfies RouteData
       },
       {
         path: 'dpw',

@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
 import { environment } from '@lib/environment';
+import { inject } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -336,5 +337,5 @@ import { environment } from '@lib/environment';
 export class TopoPage {
   env = environment;
 
-  constructor(public root: RootPage) {}
+  root = inject(RootPage);
 }

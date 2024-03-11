@@ -20,6 +20,7 @@ import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
@@ -66,7 +67,13 @@ export abstract class OLControlAbstractParcelsLegendComponent
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
 
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
+  #geoJSON = inject(GeoJSONService);
   #geojson$ = new Subject<CountableParcels>();
+  #mapState = inject(MapState);
+  #parcelsState = inject(ParcelsState);
+  #route = inject(ActivatedRoute);
 
   abstract county: string;
   abstract id: string;
@@ -74,15 +81,6 @@ export abstract class OLControlAbstractParcelsLegendComponent
   abstract printing: boolean;
   abstract state: string;
   abstract title: string;
-
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    private geoJSON: GeoJSONService,
-    private mapState: MapState,
-    private parcelsState: ParcelsState,
-    private route: ActivatedRoute
-  ) {}
 
   addToMap(): void {}
 
@@ -154,7 +152,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   // 👇 stolen parcels don't count!
   #filterRemovedFeatures(geojson: CountableParcels, parcels: Parcel[]): void {
-    const removed = this.parcelsState.parcelsRemoved(parcels);
+    const removed = this.#parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
       (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
     );
@@ -166,10 +164,10 @@ export abstract class OLControlAbstractParcelsLegendComponent
   //    just area, usage and use
 
   #handleGeoJSON$(): void {
-    this.geoJSON
+    this.#geoJSON
       .loadByIndex(
-        this.route,
-        this.mapState.currentMap().path,
+        this.#route,
+        this.#mapState.currentMap().path,
         this.countables()
       )
       .subscribe((geojson: CountableParcels) => this.#geojson$.next(geojson));
@@ -178,17 +176,17 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
     combineLatest([this.#geojson$, this.parcels$])
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.#destroy$))
       .subscribe(([original, parcels]) => {
         // 👉 take a copy of the geojson before we change it
         const geojson = copy(original);
         this.#aggregateParcels(geojson, parcels);
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
       });
   }
 
   #insertAddedFeatures(geojson: CountableParcels, parcels: Parcel[]): void {
-    const added = this.parcelsState.parcelsAdded(parcels);
+    const added = this.#parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
     added.forEach((id) => {
       geojson.features.push({
@@ -201,7 +199,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   }
 
   #makeOverridesByID(parcels: Parcel[]): Record<ParcelID, Countable> {
-    const modified = this.parcelsState.parcelsModified(parcels);
+    const modified = this.#parcelsState.parcelsModified(parcels);
     // 👉 merge all the modifications into a single override
     return Object.keys(modified).reduce((acc, id) => {
       const override: Countable = {};

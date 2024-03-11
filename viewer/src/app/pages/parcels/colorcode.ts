@@ -14,6 +14,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { defaultColorCode } from '@lib/state/colorcode';
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
@@ -108,15 +109,13 @@ export class ParcelsColorCodeComponent implements OnInit {
 
   record: ColorCodeStateModel = defaultColorCode();
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    private drawer: MatDrawer,
-    private store: Store
-  ) {}
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
+  #drawer = inject(MatDrawer);
+  #store = inject(Store);
 
   cancel(): void {
-    this.drawer.close();
+    this.#drawer.close();
   }
 
   ngOnInit(): void {
@@ -124,14 +123,14 @@ export class ParcelsColorCodeComponent implements OnInit {
   }
 
   save(record: ColorCodeStateModel): void {
-    this.store.dispatch(new SetColorCode(record));
-    this.drawer.close();
+    this.#store.dispatch(new SetColorCode(record));
+    this.#drawer.close();
   }
 
   #handleColorCode$(): void {
-    this.colorCode$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
+    this.colorCode$.pipe(takeUntil(this.#destroy$)).subscribe((state) => {
       this.record = copy(state);
-      this.cdf.markForCheck();
+      this.#cdf.markForCheck();
     });
   }
 }

@@ -28,6 +28,7 @@ import { ViewStateModel } from '@lib/state/view';
 
 import { combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { satelliteYears } from '@lib/ol/ol-source-satellite';
 import { takeUntil } from 'rxjs/operators';
@@ -50,6 +51,10 @@ import urlParse from 'url-parse';
         @if (hasLeftSidebar) {
           <button (click)="leftSidebar.toggle()" mat-icon-button>
             <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
+          </button>
+        } @else {
+          <button (click)="reset()" mat-icon-button>
+            <fa-icon [icon]="['fas', 'sync']" size="2x"></fa-icon>
           </button>
         }
 
@@ -103,11 +108,6 @@ import urlParse from 'url-parse';
             [checked]="rightSidebar.opened">
             <fa-icon [icon]="['fad', 'palette']" size="lg"></fa-icon>
           </mat-button-toggle>
-        }
-        @if (!hasLeftSidebar) {
-          <button (click)="reset()" mat-icon-button>
-            <fa-icon [icon]="['fas', 'sync']" size="2x"></fa-icon>
-          </button>
         }
       </mat-toolbar>
 
@@ -207,22 +207,20 @@ export class RootPage implements OnInit {
 
   zoom$: Observable<number>;
 
-  #url: any;
+  #destroy$ = inject(DestroyService);
+  #dialog = inject(MatDialog);
+  #location = inject(Location);
+  #router = inject(Router);
+  #store = inject(Store);
+  #title = inject(Title);
+  #url = urlParse(this.#location.path(), true);
+  #version = inject(VersionService);
 
-  constructor(
-    private destroy$: DestroyService,
-    private dialog: MatDialog,
-    private location: Location,
-    private router: Router,
-    private store: Store,
-    private titleService: Title,
-    private version: VersionService
-  ) {
+  constructor() {
     this.zoom$ = combineLatest([this.map$, this.view$]).pipe(
       // 🔥 sometimes triggered by ???
       map(([map, view]) => view.viewByPath[map.path]?.zoom ?? 15)
     );
-    this.#url = urlParse(this.location.path(), true);
   }
 
   get satelliteYears(): string[] {
@@ -243,19 +241,19 @@ export class RootPage implements OnInit {
   }
 
   onGPSToggle(state: boolean): void {
-    this.store.dispatch(new SetGPS(state));
+    this.#store.dispatch(new SetGPS(state));
   }
 
   onSatelliteViewToggle(state: boolean): void {
-    this.store.dispatch(new SetSatelliteView(state));
+    this.#store.dispatch(new SetSatelliteView(state));
   }
 
   onSatelliteYear(year: string): void {
-    this.store.dispatch(new SetSatelliteYear(year));
+    this.#store.dispatch(new SetSatelliteYear(year));
   }
 
   reset(): void {
-    this.version.hardReset();
+    this.#version.hardReset();
   }
 
   // 👉 when we've loaded the map, we can load the profile of the
@@ -263,7 +261,7 @@ export class RootPage implements OnInit {
   #handleMap$(): void {
     this.map$
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(this.#destroy$),
         filter((map) => !!map)
       )
       .subscribe((map) => {
@@ -272,15 +270,15 @@ export class RootPage implements OnInit {
           const data: MessageDialogData = {
             message: 'The requested app is no longer available'
           };
-          this.dialog.open(MessageDialogComponent, { data });
+          this.#dialog.open(MessageDialogComponent, { data });
         } else {
           this.title = map.name;
-          this.titleService.setTitle(map.name);
-          this.store.dispatch(new LoadProfile(map.owner));
+          this.#title.setTitle(map.name);
+          this.#store.dispatch(new LoadProfile(map.owner));
           // 👉 we don't have to wait until the profile is loaded,
           //    because guards prevent
           //    the page from loading until everything is set
-          this.router.navigateByUrl(this.#makeURL(map), {
+          this.#router.navigateByUrl(this.#makeURL(map), {
             skipLocationChange: true
           });
         }
@@ -293,7 +291,7 @@ export class RootPage implements OnInit {
   #handleUser$(): void {
     this.user$
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(this.#destroy$),
         // 🐛 Firebase Missing or insufficient permissions.
         filter((user) => !!user)
       )
@@ -304,7 +302,7 @@ export class RootPage implements OnInit {
         if (parts.length === 3) fromDomain = parts[0];
         // 👇 take the map ID from the params first, so that we can
         //    override it with the domain if necessary
-        this.store.dispatch(new LoadMap(fromParams ?? fromDomain, null));
+        this.#store.dispatch(new LoadMap(fromParams ?? fromDomain, null));
       });
   }
 
@@ -315,12 +313,12 @@ export class RootPage implements OnInit {
     const parts = [`/${map.type}`];
     const inner = [];
     // 👉 what data associated with this route?
-    let route = this.router.config[0].children.find(
+    let route = this.#router.config[0].children.find(
       (route) => route.path === `${map.type}`
     );
     this.routeData = route.data ?? {};
     // 👉 is there a left sidebar?
-    route = this.router.config[0].children.find(
+    route = this.#router.config[0].children.find(
       (route) =>
         route.path.startsWith(`${map.type}-`) && route.outlet === 'leftSidebar'
     );
@@ -329,7 +327,7 @@ export class RootPage implements OnInit {
       this.hasLeftSidebar = true;
     }
     // 👉 is there a right sidebar?
-    route = this.router.config[0].children.find(
+    route = this.#router.config[0].children.find(
       (route) =>
         route.path.startsWith(`${map.type}-`) && route.outlet === 'rightSidebar'
     );

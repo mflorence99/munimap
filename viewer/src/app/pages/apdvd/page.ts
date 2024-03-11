@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
 import { environment } from '@lib/environment';
+import { inject } from '@angular/core';
 import { isAPDVDExisting } from '@lib/ol/apdvd/ol-apdvd';
 import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
 
@@ -331,14 +332,12 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
 })
 export class APDVDPage {
   env = environment;
-  searchFilterFn: (feature) => boolean;
 
-  constructor(public root: RootPage) {
-    this.searchFilterFn = (feature): boolean => {
-      return (
-        isAPDVDExisting(feature.properties) ||
-        isAPDVDProposed(feature.properties)
-      );
-    };
-  }
+  root = inject(RootPage);
+
+  searchFilterFn = (feature): boolean => {
+    return (
+      isAPDVDExisting(feature.properties) || isAPDVDProposed(feature.properties)
+    );
+  };
 }

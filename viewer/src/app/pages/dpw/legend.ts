@@ -14,6 +14,7 @@ import { culvertConditions } from '@lib/common';
 import { culvertFloodHazards } from '@lib/common';
 import { culvertHeadwalls } from '@lib/common';
 import { culvertMaterials } from '@lib/common';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 
@@ -179,18 +180,16 @@ export class DPWLegendComponent implements OnInit {
   // 👇 metric -> value -> condition -> { count, length }
   breakdowns: Record<string, Record<string, Record<string, Statistics>>> = {};
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    private version: VersionService
-  ) {}
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
+  #version = inject(VersionService);
 
   ngOnInit(): void {
     this.#handleStreams$();
   }
 
   reset(): void {
-    this.version.hardReset();
+    this.#version.hardReset();
   }
 
   #calcBreakdowns(culverts: CulvertProperties[]): void {
@@ -214,7 +213,7 @@ export class DPWLegendComponent implements OnInit {
   #handleStreams$(): void {
     this.landmarks$
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(this.#destroy$),
         map((landmarks): CulvertProperties[] =>
           landmarks
             .filter(
@@ -227,7 +226,7 @@ export class DPWLegendComponent implements OnInit {
       )
       .subscribe((culverts: CulvertProperties[]) => {
         this.#calcBreakdowns(culverts);
-        this.cdf.detectChanges();
+        this.#cdf.detectChanges();
       });
   }
 }

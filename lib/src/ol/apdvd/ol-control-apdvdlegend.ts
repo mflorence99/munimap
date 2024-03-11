@@ -1,8 +1,6 @@
 import { DestroyService } from '../../services/destroy';
-import { GeoJSONService } from '../../services/geojson';
 import { Legend } from '../ol-control-abstractparcelslegend';
 import { MapableComponent } from '../ol-mapable';
-import { MapState } from '../../state/map';
 import { OLControlAbstractParcelsLegendComponent } from '../ol-control-abstractparcelslegend';
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../common';
@@ -14,9 +12,7 @@ import { colorOfAPDVDProposed } from './ol-apdvd';
 import { isAPDVDExisting } from './ol-apdvd';
 import { isAPDVDProposed } from './ol-apdvd';
 
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Input } from '@angular/core';
@@ -26,6 +22,7 @@ import { Select } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -116,20 +113,10 @@ export class OLControlAPDVDLegendComponent
   id: string;
   state: string;
 
-  constructor(
-    cdf: ChangeDetectorRef,
-    destroy$: DestroyService,
-    geoJSON: GeoJSONService,
-    private map: OLMapComponent,
-    mapState: MapState,
-    parcelsState: ParcelsState,
-    route: ActivatedRoute
-  ) {
-    super(cdf, destroy$, geoJSON, mapState, parcelsState, route);
-  }
+  #map = inject(OLMapComponent);
 
   override addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.#map.olMap.addControl(this.olControl);
   }
 
   override aggregateParcelImpl(props: ParcelProperties): void {
