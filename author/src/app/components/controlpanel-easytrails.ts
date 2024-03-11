@@ -3,6 +3,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { EasyTrailsService } from '@lib/services/easytrails';
 
+import { inject } from '@angular/core';
+
 // 🔥 this doesn't work, because of CORS and mixed-content issues
 
 @Component({
@@ -102,11 +104,11 @@ export class ControlPanelEasyTrailsComponent {
   rolledup = true;
   validating = false;
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private easytrails: EasyTrailsService
-  ) {
-    this.record.url = this.easytrails.lastUsedURL;
+  #cdf = inject(ChangeDetectorRef);
+  #easytrails = inject(EasyTrailsService);
+
+  constructor() {
+    this.record.url = this.#easytrails.lastUsedURL;
   }
 
   cancel(): void {
@@ -119,18 +121,18 @@ export class ControlPanelEasyTrailsComponent {
 
   validate(url: string): void {
     this.validating = true;
-    this.easytrails.validate(url).subscribe({
+    this.#easytrails.validate(url).subscribe({
       error: () => {
         this.invalidURL = true;
         this.validating = false;
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
       },
       next: () => {
         this.invalidURL = false;
         this.validating = false;
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
         // 🔥 TESTING
-        this.easytrails.listTracks().subscribe(console.log);
+        this.#easytrails.listTracks().subscribe(console.log);
       }
     });
   }

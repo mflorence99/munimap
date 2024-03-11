@@ -4,14 +4,10 @@ import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
 import { CreatePropertyMapComponent } from './create-propertymap';
 import { MergeParcelsComponent } from './merge-parcels';
 import { ParcelPropertiesComponent } from './parcel-properties';
-import { RootPage } from '../root/page';
 import { SidebarComponent } from '../../components/sidebar-component';
 import { SubdivideParcelComponent } from './subdivide-parcel';
 
-import { Actions } from '@ngxs/store';
-import { ActivatedRoute } from '@angular/router';
 import { AddParcels } from '@lib/state/parcels';
-import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
@@ -23,11 +19,8 @@ import { OLOverlayParcelLabelComponent } from '@lib/ol/parcels/ol-overlay-parcel
 import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelPropertiesLabel } from '@lib/common';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
 import { ViewChild } from '@angular/core';
-import { ViewState } from '@lib/state/view';
 
 import { calculateParcel } from '@lib/common';
 import { fromLonLat } from 'ol/proj';
@@ -595,19 +588,6 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
 
   @ViewChild(OLOverlayParcelLabelComponent)
   overlayLabel: OLOverlayParcelLabelComponent;
-
-  constructor(
-    protected override actions$: Actions,
-    protected override authState: AuthState,
-    protected override destroy$: DestroyService,
-    protected override root: RootPage,
-    protected override route: ActivatedRoute,
-    protected override router: Router,
-    protected override store: Store,
-    protected override viewState: ViewState
-  ) {
-    super(actions$, authState, destroy$, root, route, router, store, viewState);
-  }
 
   canAddParcel(event?: MouseEvent): boolean {
     return this.#can(event, this.olMap.selectedIDs.length === 0);

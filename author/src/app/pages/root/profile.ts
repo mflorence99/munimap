@@ -13,6 +13,7 @@ import { UpdateUser } from '@lib/state/auth';
 import { User } from '@lib/state/auth';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { updatePassword } from '@angular/fire/auth';
 
 import copy from 'fast-copy';
@@ -119,15 +120,12 @@ export class ProfileComponent {
 
   errorMessage = '';
 
+  #cdf = inject(ChangeDetectorRef);
+  #drawer = inject(MatDrawer);
+  #fireauth = inject(Auth);
   #profile: Profile;
+  #store = inject(Store);
   #user: User;
-
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private fireauth: Auth,
-    private drawer: MatDrawer,
-    private store: Store
-  ) {}
 
   @Input() get profile(): Profile {
     return this.#profile;
@@ -146,24 +144,23 @@ export class ProfileComponent {
   }
 
   cancel(): void {
-    this.drawer.close();
+    this.#drawer.close();
   }
 
   logout(): void {
-    this.store.dispatch(new Logout());
-    this.drawer.close();
+    this.#store.dispatch(new Logout());
+    this.#drawer.close();
   }
 
   update(user: any, profile: any): void {
     this.errorMessage = null;
-    this.store.dispatch(new UpdateUser(user));
-    this.store.dispatch(new UpdateProfile(profile));
+    this.#store.dispatch([new UpdateUser(user), new UpdateProfile(profile)]);
     // 👇 special code to change password
     if (user.password) {
-      updatePassword(this.fireauth.currentUser, this.user.password).catch(
+      updatePassword(this.#fireauth.currentUser, this.user.password).catch(
         (error) => {
           this.errorMessage = this.#extractFirebaseMessage(error.message);
-          this.cdf.detectChanges();
+          this.#cdf.detectChanges();
         }
       );
     }

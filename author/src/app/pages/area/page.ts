@@ -1,10 +1,6 @@
 import { AbstractMapPage } from '../abstract-map';
 import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
-import { RootPage } from '../root/page';
 
-import { Actions } from '@ngxs/store';
-import { ActivatedRoute } from '@angular/router';
-import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
@@ -12,10 +8,7 @@ import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
-import { ViewState } from '@lib/state/view';
 
 // 🔥 we only expect "area" maps to be printed, never viewed in the viewer
 
@@ -372,19 +365,6 @@ export class AreaPage extends AbstractMapPage implements OnInit {
   @ViewChild('drawer') drawer: MatDrawer;
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  constructor(
-    protected override actions$: Actions,
-    protected override authState: AuthState,
-    protected override destroy$: DestroyService,
-    protected override root: RootPage,
-    protected override route: ActivatedRoute,
-    protected override router: Router,
-    protected override store: Store,
-    protected override viewState: ViewState
-  ) {
-    super(actions$, authState, destroy$, root, route, router, store, viewState);
-  }
 
   getType(): MapType {
     return 'area';

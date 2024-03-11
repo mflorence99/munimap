@@ -16,6 +16,7 @@ import { Store } from '@ngxs/store';
 import { collection } from '@angular/fire/firestore';
 import { firstValueFrom } from 'rxjs';
 import { getDocs } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
 import { makeLandmarkID } from '@lib/common';
 import { query } from '@angular/fire/firestore';
 import { where } from '@angular/fire/firestore';
@@ -52,12 +53,10 @@ export class ImportLandmarksComponent implements SidebarComponent {
   // 👇 checkbox by file name for selection post-native dialog
   record: Record<string, boolean> = {};
 
-  constructor(
-    protected authState: AuthState,
-    protected cdf: ChangeDetectorRef,
-    protected firestore: Firestore,
-    protected store: Store
-  ) {}
+  #authState = inject(AuthState);
+  #cdf = inject(ChangeDetectorRef);
+  #firestore = inject(Firestore);
+  #store = inject(Store);
 
   // 🔥 this is a bit redundant now as makeLandmarkID() ONLY
   //    allows one landmark with the same geometry to be uploaded
@@ -65,14 +64,14 @@ export class ImportLandmarksComponent implements SidebarComponent {
   async alreadyImported(importHash: string): Promise<boolean> {
     console.log(
       `%cFirestore query: landmarks where owner in ${JSON.stringify(
-        workgroup(this.authState.currentProfile())
+        workgroup(this.#authState.currentProfile())
       )} and importHash = ${importHash}`,
       'color: goldenrod'
     );
     const docs = await getDocs(
       query(
-        collection(this.firestore, 'landmarks'),
-        where('owner', 'in', workgroup(this.authState.currentProfile())),
+        collection(this.#firestore, 'landmarks'),
+        where('owner', 'in', workgroup(this.#authState.currentProfile())),
         where('importHash', '==', importHash)
       )
     );
@@ -155,11 +154,11 @@ export class ImportLandmarksComponent implements SidebarComponent {
       (acc, geojson) => acc + geojson.features.length,
       0
     );
-    this.cdf.markForCheck();
+    this.#cdf.markForCheck();
     await this.makeLandmarks(geojsons);
     this.cancelling = false;
     this.importing = false;
-    this.cdf.markForCheck();
+    this.#cdf.markForCheck();
     if (this.errorMessages.length === 0) this.cancel();
   }
 
@@ -171,7 +170,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
       for (const feature of geojson.features) {
         if (this.cancelling) break;
         this.numImported += 1;
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
         // 👇 potentially one landmark per feature
         const importHash = hash.MD5(feature as any);
         const alreadyImported = await this.alreadyImported(importHash);
@@ -181,7 +180,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
           // imported landmarks to look different to drawn ones
           const landmark: Partial<Landmark> = {
             geometry: feature.geometry,
-            owner: this.authState.currentProfile().email,
+            owner: this.#authState.currentProfile().email,
             path: this.map.path,
             type: 'Feature'
           };
@@ -241,7 +240,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
               name: feature.properties?.name ?? 'Imported Landmark'
             };
             await firstValueFrom(
-              this.store.dispatch(new AddLandmark(landmark))
+              this.#store.dispatch(new AddLandmark(landmark))
             );
           }
         }

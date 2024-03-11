@@ -15,6 +15,7 @@ import { VersionService } from '@lib/services/version';
 
 import { collection } from '@angular/fire/firestore';
 import { collectionData } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
 import { limit } from '@angular/fire/firestore';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -144,15 +145,13 @@ export class NavigatorComponent implements OnInit {
 
   topMaps$: Observable<Map[]>;
 
-  constructor(
-    private destroy$: DestroyService,
-    private drawer: MatDrawer,
-    private firestore: Firestore,
-    private version: VersionService
-  ) {}
+  #destroy$ = inject(DestroyService);
+  #drawer = inject(MatDrawer);
+  #firestore = inject(Firestore);
+  #version = inject(VersionService);
 
   close(): void {
-    this.drawer.close();
+    this.#drawer.close();
   }
 
   ngOnInit(): void {
@@ -160,12 +159,12 @@ export class NavigatorComponent implements OnInit {
   }
 
   reset(): void {
-    this.version.hardReset();
+    this.#version.hardReset();
   }
 
   #handleTopMaps$(): Observable<Map[]> {
     return this.profile$.pipe(
-      takeUntil(this.destroy$),
+      takeUntil(this.#destroy$),
       mergeMap((profile) => {
         if (!profile?.email) return of([]);
         else {
@@ -178,7 +177,7 @@ export class NavigatorComponent implements OnInit {
           );
           return collectionData<Map>(
             query(
-              collection(this.firestore, 'maps') as CollectionReference<Map>,
+              collection(this.#firestore, 'maps') as CollectionReference<Map>,
               where('owner', 'in', workgroup(profile)),
               orderBy('timestamp', 'desc'),
               limit(this.maxMapCount)

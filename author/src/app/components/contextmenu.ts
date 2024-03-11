@@ -9,6 +9,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -41,16 +42,15 @@ export class ContextMenuComponent implements OnInit {
   @ContentChild(MatMenu) contextMenu: MatMenu;
   @ViewChild(MatMenuTrigger) contextMenuTrigger: MatMenuTrigger;
 
+  map = inject(OLMapComponent);
+
   menuPosition = {
     x: 0,
     y: 0
   };
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    public map: OLMapComponent
-  ) {}
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
 
   closeMenu(): void {
     this.contextMenuTrigger.closeMenu();
@@ -66,7 +66,7 @@ export class ContextMenuComponent implements OnInit {
 
   #handleContextMenu$(): void {
     this.map.contextMenu$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.#destroy$))
       .subscribe((event: PointerEvent) => {
         if (this.contextMenu) {
           // 👉 need to hack the Y offset by the height of the toolbar
@@ -77,7 +77,7 @@ export class ContextMenuComponent implements OnInit {
           this.menuPosition.x = pixel[0] + 8;
           this.menuPosition.y = pixel[1] + 8;
           // 👉 because event is triggered out of the Angular zone
-          this.cdf.markForCheck();
+          this.#cdf.markForCheck();
           this.contextMenuTrigger.openMenu();
         }
       });

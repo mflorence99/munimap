@@ -19,6 +19,7 @@ import { Type } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 
 import { environment } from '@lib/environment';
+import { inject } from '@angular/core';
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
@@ -26,23 +27,20 @@ import { unByKey } from 'ol/Observable';
 import OLGeoJSON from 'ol/format/GeoJSON';
 
 export abstract class AbstractMapPage {
+  actions$ = inject(Actions);
+  authState = inject(AuthState);
   creating = false;
+  destroy$ = inject(DestroyService);
   env = environment;
+  root = inject(RootPage);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  store = inject(Store);
+  viewState = inject(ViewState);
 
   abstract contextMenuHost: ContextMenuHostDirective;
   abstract drawer: MatDrawer;
   abstract olMap: OLMapComponent;
-
-  constructor(
-    protected actions$: Actions,
-    protected authState: AuthState,
-    protected destroy$: DestroyService,
-    protected root: RootPage,
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected store: Store,
-    protected viewState: ViewState
-  ) {}
 
   getGeoJSONFormatter(): OLGeoJSON {
     return new OLGeoJSON({

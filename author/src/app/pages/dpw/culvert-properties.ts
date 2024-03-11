@@ -17,6 +17,7 @@ import { culvertConditions } from '@lib/common';
 import { culvertFloodHazards } from '@lib/common';
 import { culvertHeadwalls } from '@lib/common';
 import { culvertMaterials } from '@lib/common';
+import { inject } from '@angular/core';
 
 import copy from 'fast-copy';
 import OLFeature from 'ol/Feature';
@@ -256,10 +257,8 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
 
   shape: 'circular' | 'elliptical';
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private store: Store
-  ) {}
+  #cdf = inject(ChangeDetectorRef);
+  #store = inject(Store);
 
   cancel(): void {
     this.drawer.close();
@@ -271,7 +270,7 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
 
   refresh(): void {
     this.#makeRecord();
-    this.cdf.markForCheck();
+    this.#cdf.markForCheck();
   }
 
   save(record: Partial<CulvertProperties>): void {
@@ -284,7 +283,7 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
       },
       type: 'Feature'
     };
-    this.store.dispatch(new UpdateLandmark(landmark));
+    this.#store.dispatch(new UpdateLandmark(landmark));
   }
 
   #makeRecord(): void {

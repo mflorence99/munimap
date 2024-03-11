@@ -3,13 +3,9 @@ import { ContextMenuComponent } from '../../components/contextmenu';
 import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
 import { CulvertPropertiesComponent } from './culvert-properties';
 import { ImportCulvertsComponent } from './import-culverts';
-import { RootPage } from '../root/page';
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { Actions } from '@ngxs/store';
-import { ActivatedRoute } from '@angular/router';
 import { AddLandmark } from '@lib/state/landmarks';
-import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { CulvertProperties } from '@lib/common';
@@ -21,11 +17,8 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
 import { ViewChild } from '@angular/core';
-import { ViewState } from '@lib/state/view';
 
 import { culvertConditions } from '@lib/common';
 import { culvertFloodHazards } from '@lib/common';
@@ -539,19 +532,6 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   moveLandmark: OLOverlayLandmarkLabelComponent;
 
   @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  constructor(
-    protected override actions$: Actions,
-    protected override authState: AuthState,
-    protected override destroy$: DestroyService,
-    protected override root: RootPage,
-    protected override route: ActivatedRoute,
-    protected override router: Router,
-    protected override store: Store,
-    protected override viewState: ViewState
-  ) {
-    super(actions$, authState, destroy$, root, route, router, store, viewState);
-  }
 
   canAddCulvert(event?: MouseEvent): boolean {
     return this.#can(event, true);

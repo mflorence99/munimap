@@ -13,6 +13,7 @@ import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UpdateLandmark } from '@lib/state/landmarks';
 
+import { inject } from '@angular/core';
 import { landmarkProperties } from '@lib/common';
 
 import copy from 'fast-copy';
@@ -90,10 +91,8 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
 
   record: Partial<LandmarkProperties> = {};
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private store: Store
-  ) {}
+  #cdf = inject(ChangeDetectorRef);
+  #store = inject(Store);
 
   cancel(): void {
     this.drawer.close();
@@ -105,7 +104,7 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
 
   refresh(): void {
     this.#makeRecord();
-    this.cdf.markForCheck();
+    this.#cdf.markForCheck();
   }
 
   save(record: Partial<LandmarkProperties>): void {
@@ -114,7 +113,7 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
       properties: record,
       type: 'Feature'
     };
-    this.store.dispatch(new UpdateLandmark(landmark));
+    this.#store.dispatch(new UpdateLandmark(landmark));
   }
 
   #makeRecord(): void {

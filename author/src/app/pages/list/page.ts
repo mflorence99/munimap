@@ -19,6 +19,7 @@ import { ViewChild } from '@angular/core';
 
 import { collection } from '@angular/fire/firestore';
 import { collectionData } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { orderBy } from '@angular/fire/firestore';
@@ -166,26 +167,26 @@ export class ListPage implements OnInit {
 
   dataSource: MatTableDataSource<Map>;
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    private firestore: Firestore,
-    private root: RootPage,
-    private router: Router
-  ) {
-    this.root.setTitle('All Maps');
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
+  #firestore = inject(Firestore);
+  #root = inject(RootPage);
+  #router = inject(Router);
+
+  constructor() {
+    this.#root.setTitle('All Maps');
   }
 
   ngOnInit(): void {
     this.#handleAllMaps$().subscribe((maps: Map[]) => {
       this.dataSource = new MatTableDataSource(maps);
       this.dataSource.sort = this.sort;
-      this.cdf.detectChanges();
+      this.#cdf.detectChanges();
     });
   }
 
   onLoadMap(map: Map): void {
-    this.router.navigate([`/${map.type}/${map.id}`]);
+    this.#router.navigate([`/${map.type}/${map.id}`]);
   }
 
   onSearch(str: string): void {
@@ -194,7 +195,7 @@ export class ListPage implements OnInit {
 
   #handleAllMaps$(): Observable<Map[]> {
     return this.profile$.pipe(
-      takeUntil(this.destroy$),
+      takeUntil(this.#destroy$),
       mergeMap((profile) => {
         if (!profile?.email) return of([]);
         else {
@@ -207,7 +208,7 @@ export class ListPage implements OnInit {
           );
           return collectionData<Map>(
             query(
-              collection(this.firestore, 'maps') as CollectionReference<Map>,
+              collection(this.#firestore, 'maps') as CollectionReference<Map>,
               where('owner', 'in', workgroup(profile)),
               orderBy('name')
             )

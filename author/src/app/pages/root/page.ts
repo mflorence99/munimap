@@ -34,6 +34,7 @@ import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 import { Working } from '@lib/state/working';
 
+import { inject } from '@angular/core';
 import { moveFromLeftFade } from 'ngx-router-animations';
 import { ofActionSuccessful } from '@ngxs/store';
 import { takeUntil } from 'rxjs/operators';
@@ -180,6 +181,8 @@ export class RootPage implements OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @ViewChild(RouterOutlet) outlet;
 
+  _version = inject(VersionService) /* 👈 just to get it loaded */;
+
   canRedo = false;
   canUndo = false;
 
@@ -189,15 +192,12 @@ export class RootPage implements OnInit {
 
   working = 0;
 
-  constructor(
-    private actions$: Actions,
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    private dialog: MatDialog,
-    private router: Router,
-    private store: Store,
-    _version: VersionService /* 👈 just to get it loaded */
-  ) {}
+  #actions$ = inject(Actions);
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
+  #dialog = inject(MatDialog);
+  #router = inject(Router);
+  #store = inject(Store);
 
   getState(): any {
     return this.outlet?.activatedRouteData?.state;
@@ -211,11 +211,11 @@ export class RootPage implements OnInit {
   }
 
   onSatelliteViewToggle(state: boolean): void {
-    this.store.dispatch(new SetSatelliteView(state));
+    this.#store.dispatch(new SetSatelliteView(state));
   }
 
   redo(): void {
-    this.store.dispatch(new Redo());
+    this.#store.dispatch(new Redo());
   }
 
   setTitle(title: string): void {
@@ -223,27 +223,27 @@ export class RootPage implements OnInit {
   }
 
   undo(): void {
-    this.store.dispatch(new Undo());
+    this.#store.dispatch(new Undo());
   }
 
   #handleMapErrorActions$(): void {
-    this.actions$
+    this.#actions$
       .pipe(
         ofActionSuccessful(CreateMapError, UpdateMapError),
-        takeUntil(this.destroy$)
+        takeUntil(this.#destroy$)
       )
       .subscribe((action: CreateMapError | UpdateMapError) => {
         const data: MessageDialogData = {
           message: action.error
         };
-        this.dialog.open(MessageDialogComponent, { data });
+        this.#dialog.open(MessageDialogComponent, { data });
       });
   }
 
   #handleRouterEvents$(): void {
-    this.router.routeReuseStrategy.shouldReuseRoute = (): boolean => false;
-    this.router.events
-      .pipe(takeUntil(this.destroy$))
+    this.#router.routeReuseStrategy.shouldReuseRoute = (): boolean => false;
+    this.#router.events
+      .pipe(takeUntil(this.#destroy$))
       .subscribe((event: Event) => {
         switch (true) {
           case event instanceof NavigationStart: {
@@ -254,10 +254,10 @@ export class RootPage implements OnInit {
           case event instanceof NavigationCancel:
           case event instanceof NavigationError: {
             // 👇 see https://stackoverflow.com/questions/59552387/how-to-reload-a-page-in-angular-8-the-proper-way
-            this.router.navigated = false;
+            this.#router.navigated = false;
             this.loading = false;
             // 👉 clear the "undo" stacks on a page transition
-            this.store.dispatch(new ClearStacks());
+            this.#store.dispatch(new ClearStacks());
             break;
           }
           default: {
@@ -268,22 +268,22 @@ export class RootPage implements OnInit {
   }
 
   #handleUndoActions$(): void {
-    this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionSuccessful(CanDo))
+    this.#actions$
+      .pipe(takeUntil(this.#destroy$), ofActionSuccessful(CanDo))
       .subscribe((action: CanDo) => {
         this.canRedo = action.canRedo;
         this.canUndo = action.canUndo;
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
       });
   }
 
   #handleWorkingActions$(): void {
-    this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionSuccessful(Working))
+    this.#actions$
+      .pipe(takeUntil(this.#destroy$), ofActionSuccessful(Working))
       .subscribe((action: Working) => {
         this.working = Math.max(0, this.working + action.increment);
         console.log({ working: this.working });
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
       });
   }
 }

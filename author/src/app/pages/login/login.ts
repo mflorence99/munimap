@@ -11,6 +11,7 @@ import { UpdateUser } from '@lib/state/auth';
 import { ViewChild } from '@angular/core';
 
 import { createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { inject } from '@angular/core';
 import { sendPasswordResetEmail } from '@angular/fire/auth';
 import { signInWithEmailAndPassword } from '@angular/fire/auth';
 
@@ -284,17 +285,15 @@ export class LoginPage {
 
   state: 'initial' | 'login' | 'signup' = 'initial';
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private dialog: MatDialog,
-    private fireauth: Auth,
-    private store: Store
-  ) {}
+  #cdf = inject(ChangeDetectorRef);
+  #dialog = inject(MatDialog);
+  #fireauth = inject(Auth);
+  #store = inject(Store);
 
   // 👇 trial login with impossible password to see if user exists
   checkUserExists(): void {
     signInWithEmailAndPassword(
-      this.fireauth,
+      this.#fireauth,
       this.login.emailAddress,
       String(Math.random())
     )
@@ -302,14 +301,14 @@ export class LoginPage {
       .catch((error) => {
         if (error.code === 'auth/user-not-found') this.state = 'signup';
         else this.state = 'login';
-        this.cdf.detectChanges();
+        this.#cdf.detectChanges();
       });
   }
 
   logIn(): void {
     this.errorMessage = null;
     signInWithEmailAndPassword(
-      this.fireauth,
+      this.#fireauth,
       this.login.emailAddress,
       this.login.password
     )
@@ -324,23 +323,23 @@ export class LoginPage {
         // 👇 the Firebase error message isn't that helpful
         //    this.errorMessage = this.#extractFirebaseMessage(error.message);
         this.errorMessage = 'Email address and password invalid';
-        this.cdf.detectChanges();
+        this.#cdf.detectChanges();
       });
   }
 
   resetPassword(): void {
-    sendPasswordResetEmail(this.fireauth, this.login.emailAddress).then(() => {
+    sendPasswordResetEmail(this.#fireauth, this.login.emailAddress).then(() => {
       const data: MessageDialogData = {
         message: `An email has been sent to ${this.login.emailAddress} from which your password can be reset`
       };
-      this.dialog.open(MessageDialogComponent, { data });
+      this.#dialog.open(MessageDialogComponent, { data });
     });
   }
 
   signUp(): void {
     this.errorMessage = null;
     createUserWithEmailAndPassword(
-      this.fireauth,
+      this.#fireauth,
       this.login.emailAddress,
       this.login.password
     )
@@ -350,7 +349,7 @@ export class LoginPage {
           `%cFirestore auth: signup ${user.email}`,
           'color: goldenrod'
         );
-        this.store.dispatch(
+        this.#store.dispatch(
           new UpdateUser({
             ...user,
             displayName: this.login.displayName,
@@ -360,7 +359,7 @@ export class LoginPage {
       })
       .catch((error) => {
         this.errorMessage = this.#extractFirebaseMessage(error.message);
-        this.cdf.detectChanges();
+        this.#cdf.detectChanges();
       });
   }
 

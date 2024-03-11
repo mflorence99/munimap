@@ -15,6 +15,8 @@ import { Store } from '@ngxs/store';
 import { UpdateMap } from '@lib/state/map';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 import copy from 'fast-copy';
 
 @Component({
@@ -117,15 +119,12 @@ export class ControlPanelPropertiesComponent {
 
   rolledup: boolean;
 
+  #authState = inject(AuthState);
+  #dialog = inject(MatDialog);
   #map: Map;
-
-  constructor(
-    private authState: AuthState,
-    private dialog: MatDialog,
-    private root: RootPage,
-    private router: Router,
-    private store: Store
-  ) {}
+  #root = inject(RootPage);
+  #router = inject(Router);
+  #store = inject(Store);
 
   @Input() get map(): Map {
     return this.#map;
@@ -133,13 +132,13 @@ export class ControlPanelPropertiesComponent {
   set map(map: Map) {
     this.#map = copy(map);
     // 👉 set the window title every time it changes
-    if (map.name) this.root.setTitle(map.name);
+    if (map.name) this.#root.setTitle(map.name);
     this.rolledup = !!map.id;
   }
 
   canDelete(): boolean {
     return (
-      this.map.id && this.map.owner === this.authState.currentProfile().email
+      this.map.id && this.map.owner === this.#authState.currentProfile().email
     );
   }
 
@@ -153,20 +152,20 @@ export class ControlPanelPropertiesComponent {
         'The map will be permanently deleted, but any changes made to parcels will be kept for use in other maps.',
       title: 'Please confirm map deletion'
     };
-    this.dialog
+    this.#dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.store.dispatch(new DeleteMap(map.id));
-          this.router.navigate(['/create']);
+          this.#store.dispatch(new DeleteMap(map.id));
+          this.#router.navigate(['/create']);
         }
       });
   }
 
   update(map: any): void {
     // 👇 refresh if parcelIDs have changed
-    this.store.dispatch(
+    this.#store.dispatch(
       new UpdateMap(map, this.setupForm.controls['parcelIDs']?.dirty)
     );
     // 👉 this resets the dirty flag, disabling SAVE until

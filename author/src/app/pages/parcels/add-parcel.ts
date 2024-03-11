@@ -14,6 +14,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { convertArea } from '@turf/helpers';
+import { inject } from '@angular/core';
 import { toLonLat } from 'ol/proj';
 
 import bbox from '@turf/bbox';
@@ -135,10 +136,8 @@ export class AddParcelComponent implements SidebarComponent {
 
   addition: Addition = {} as Addition;
 
-  constructor(
-    private authState: AuthState,
-    private store: Store
-  ) {}
+  #authState = inject(AuthState);
+  #store = inject(Store);
 
   cancel(): void {
     this.drawer.close();
@@ -167,7 +166,7 @@ export class AddParcelComponent implements SidebarComponent {
       action: 'added',
       geometry: geojson.geometry,
       id: addition.id,
-      owner: this.authState.currentProfile().email,
+      owner: this.#authState.currentProfile().email,
       path: this.map.path,
       properties: {
         address: 'UNKNOWN',
@@ -184,7 +183,7 @@ export class AddParcelComponent implements SidebarComponent {
       type: 'Feature'
     };
     // that's it!
-    this.store.dispatch(new AddParcels([addedParcel]));
+    this.#store.dispatch(new AddParcels([addedParcel]));
     this.drawer.close();
   }
 }

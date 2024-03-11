@@ -13,6 +13,7 @@ import { TownIndex } from '@lib/common';
 import { ViewChild } from '@angular/core';
 
 import { environment } from '@lib/environment';
+import { inject } from '@angular/core';
 import { theState } from '@lib/common';
 
 import OLFeature from 'ol/Feature';
@@ -90,34 +91,24 @@ import OLFeature from 'ol/Feature';
       }
     </app-ol-map>
   `,
-  styles: [
-    `
-      :host {
-        display: block;
-        height: 100%;
-        position: absolute;
-        width: 100%;
-      }
-    `
-  ]
+  styleUrls: ['../abstract-map.scss']
 })
 export class CreatePage {
   @ViewChild('selectables') selectables: OLLayerVectorComponent;
 
   env = environment;
   index: Index;
-  path: Path;
+  path = theState;
   type = 'parcels';
 
-  constructor(
-    private geoJSON: GeoJSONService,
-    private root: RootPage,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.index = this.geoJSON.findIndex(this.route);
-    this.path = theState;
-    this.root.setTitle(this.path);
+  #geoJSON = inject(GeoJSONService);
+  #root = inject(RootPage);
+  #route = inject(ActivatedRoute);
+  #router = inject(Router);
+
+  constructor() {
+    this.index = this.#geoJSON.findIndex(this.#route);
+    this.#root.setTitle(this.path);
   }
 
   atCountyLevel(path: Path): boolean {
@@ -157,16 +148,16 @@ export class CreatePage {
 
   onFeaturesSelected(features: OLFeature<any>[]): void {
     this.path += `:${features[0].getId()}`;
-    this.root.setTitle(this.path);
+    this.#root.setTitle(this.path);
   }
 
   onPathChanged(path: string): void {
     this.path = path;
-    this.root.setTitle(this.path);
+    this.#root.setTitle(this.path);
   }
 
   onPathSelected(path: string): void {
-    this.router.navigate([`/${this.type}/0`], { queryParams: { path } });
+    this.#router.navigate([`/${this.type}/0`], { queryParams: { path } });
   }
 
   onTypeChanged(type: string): void {

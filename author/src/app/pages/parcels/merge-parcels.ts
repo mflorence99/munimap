@@ -13,6 +13,8 @@ import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import union from '@turf/union';
@@ -98,10 +100,8 @@ export class MergeParcelsComponent implements SidebarComponent {
     mergedID: null
   };
 
-  constructor(
-    private authState: AuthState,
-    private store: Store
-  ) {}
+  #authState = inject(AuthState);
+  #store = inject(Store);
 
   cancel(): void {
     this.drawer.close();
@@ -116,7 +116,7 @@ export class MergeParcelsComponent implements SidebarComponent {
       return {
         action: 'removed',
         id: removedID,
-        owner: this.authState.currentProfile().email,
+        owner: this.#authState.currentProfile().email,
         path: this.map.path,
         type: 'Feature'
       };
@@ -126,7 +126,7 @@ export class MergeParcelsComponent implements SidebarComponent {
     const mergedParcel: Parcel = {
       action: 'modified',
       id: record.mergedID,
-      owner: this.authState.currentProfile().email,
+      owner: this.#authState.currentProfile().email,
       path: this.map.path,
       properties: {},
       type: 'Feature'
@@ -148,7 +148,7 @@ export class MergeParcelsComponent implements SidebarComponent {
       union(acc, geojson)
     ).geometry;
     // 👉 that's it!
-    this.store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
+    this.#store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
     this.drawer.close();
   }
 }

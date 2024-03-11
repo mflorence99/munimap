@@ -14,6 +14,7 @@ import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { randomPoint } from '@turf/random';
 import { transformExtent } from 'ol/proj';
 
@@ -149,12 +150,9 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
 
   subdivisions: Subdivision[];
 
+  #authState = inject(AuthState);
   #format: OLGeoJSON;
-
-  constructor(
-    private authState: AuthState,
-    private store: Store
-  ) {}
+  #store = inject(Store);
 
   cancel(): void {
     this.drawer.close();
@@ -222,7 +220,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
       removedParcels.push({
         action: 'removed',
         id: source.getId(),
-        owner: this.authState.currentProfile().email,
+        owner: this.#authState.currentProfile().email,
         path: this.map.path,
         type: 'Feature'
       });
@@ -235,7 +233,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
         action: subdivision.id !== source.getId() ? 'added' : 'modified',
         geometry: geojson.geometry,
         id: subdivision.id,
-        owner: this.authState.currentProfile().email,
+        owner: this.#authState.currentProfile().email,
         path: this.map.path,
         properties: {
           address: props.address,
@@ -253,7 +251,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
       };
     });
     // that's it!
-    this.store.dispatch(
+    this.#store.dispatch(
       new AddParcels([...removedParcels, ...subdividedParcels])
     );
     this.drawer.close();

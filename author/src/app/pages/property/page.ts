@@ -3,12 +3,8 @@ import { ContextMenuComponent } from '../../components/contextmenu';
 import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
 import { ImportLandmarksComponent } from './import-landmarks';
 import { LandmarkPropertiesComponent } from './landmark-properties';
-import { RootPage } from '../root/page';
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { Actions } from '@ngxs/store';
-import { ActivatedRoute } from '@angular/router';
-import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DeleteLandmark } from '@lib/state/landmarks';
@@ -22,12 +18,9 @@ import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/landmarks/ol-inter
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
 import { UpdateLandmark } from '@lib/state/landmarks';
 import { ViewChild } from '@angular/core';
-import { ViewState } from '@lib/state/view';
 
 import { calculateOrientation } from '@lib/common';
 
@@ -734,19 +727,6 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       label: 'wetland'
     }
   ];
-
-  constructor(
-    protected override actions$: Actions,
-    protected override authState: AuthState,
-    protected override destroy$: DestroyService,
-    protected override root: RootPage,
-    protected override route: ActivatedRoute,
-    protected override router: Router,
-    protected override store: Store,
-    protected override viewState: ViewState
-  ) {
-    super(actions$, authState, destroy$, root, route, router, store, viewState);
-  }
 
   canConvertFor(conversion: LandmarkConversion): boolean {
     const feature = this.olMap.selected[0];

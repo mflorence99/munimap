@@ -14,6 +14,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { bboxByAspectRatio } from '@lib/common';
+import { inject } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
@@ -201,10 +202,8 @@ export class CreatePropertyMapComponent implements SidebarComponent {
     printSize: null
   };
 
-  constructor(
-    private authState: AuthState,
-    private store: Store
-  ) {}
+  #authState = inject(AuthState);
+  #store = inject(Store);
 
   get printSizes(): string[] {
     return Object.keys(PRINT_SIZES);
@@ -241,13 +240,13 @@ export class CreatePropertyMapComponent implements SidebarComponent {
       id: record.id,
       isDflt: record.isDflt,
       name: record.name,
-      owner: this.authState.currentProfile().email,
+      owner: this.#authState.currentProfile().email,
       parcelIDs: this.selectedIDs,
       path: this.map.path,
       printSize: printSize,
       type: 'property'
     };
-    this.store.dispatch(new CreateMap(map));
+    this.#store.dispatch(new CreateMap(map));
     this.drawer.close();
   }
 }

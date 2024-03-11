@@ -16,6 +16,7 @@ import { Store } from '@ngxs/store';
 import { ValuesPipe } from 'ngx-pipes';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { parcelPropertiesUsage } from '@lib/common';
 import { parcelPropertiesUse } from '@lib/common';
 
@@ -167,11 +168,9 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
 
   record: ValueRecord = {};
 
-  constructor(
-    private authState: AuthState,
-    private cdf: ChangeDetectorRef,
-    private store: Store
-  ) {}
+  #authState = inject(AuthState);
+  #cdf = inject(ChangeDetectorRef);
+  #store = inject(Store);
 
   cancel(): void {
     this.drawer.close();
@@ -183,7 +182,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
 
   refresh(): void {
     this.#makeRecord();
-    this.cdf.markForCheck();
+    this.#cdf.markForCheck();
   }
 
   // 👇 why can't we use Math.round() in template!!
@@ -198,7 +197,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
       const parcel: Parcel = {
         action: 'modified',
         id: feature.getId(),
-        owner: this.authState.currentProfile().email,
+        owner: this.#authState.currentProfile().email,
         path: this.map.path,
         properties: {},
         type: 'Feature'
@@ -217,7 +216,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
       // 👉 only save if at least one property override
       if (Object.keys(parcel.properties).length > 0) parcels.push(parcel);
     });
-    this.store.dispatch(new AddParcels(parcels));
+    this.#store.dispatch(new AddParcels(parcels));
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.propertiesForm.form.markAsPristine();

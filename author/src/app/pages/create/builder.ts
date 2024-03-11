@@ -9,6 +9,7 @@ import { Output } from '@angular/core';
 import { Path } from '@lib/state/view';
 import { TownIndex } from '@lib/common';
 
+import { inject } from '@angular/core';
 import { isIndex } from '@lib/common';
 
 @Component({
@@ -91,6 +92,10 @@ import { isIndex } from '@lib/common';
   `,
   styles: [
     `
+      :host {
+        pointer-events: auto;
+      }
+
       .actions {
         display: flex;
         flex-direction: row;
@@ -126,11 +131,11 @@ export class BuilderComponent {
 
   index: Index;
 
-  constructor(
-    private geoJSON: GeoJSONService,
-    private route: ActivatedRoute
-  ) {
-    this.index = this.geoJSON.findIndex(this.route);
+  #geoJSON = inject(GeoJSONService);
+  #route = inject(ActivatedRoute);
+
+  constructor() {
+    this.index = this.#geoJSON.findIndex(this.#route);
   }
 
   allCounties(): string[] {

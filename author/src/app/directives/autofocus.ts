@@ -5,13 +5,15 @@ import { Input } from '@angular/core';
 import { OnChanges } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 @Directive({
   selector: '[appAutoFocus]'
 })
 export class AutoFocusDirective implements AfterViewInit, OnChanges {
   @Input() appAutoFocus: boolean;
 
-  constructor(private host: ElementRef) {}
+  #host = inject(ElementRef);
 
   ngAfterViewInit(): void {
     this.#focus();
@@ -24,6 +26,6 @@ export class AutoFocusDirective implements AfterViewInit, OnChanges {
   }
 
   #focus(): void {
-    if (this.appAutoFocus) this.host.nativeElement.focus();
+    if (this.appAutoFocus) this.#host.nativeElement.focus();
   }
 }

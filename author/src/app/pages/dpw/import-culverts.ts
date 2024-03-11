@@ -6,7 +6,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { CulvertProperties } from '@lib/common';
-import { Firestore } from '@angular/fire/firestore';
 import { Landmark } from '@lib/common';
 import { Store } from '@ngxs/store';
 
@@ -15,6 +14,7 @@ import { culvertFloodHazards } from '@lib/common';
 import { culvertHeadwalls } from '@lib/common';
 import { culvertMaterials } from '@lib/common';
 import { firstValueFrom } from 'rxjs';
+import { inject } from '@angular/core';
 import { makeLandmarkID } from '@lib/common';
 
 import hash from 'object-hash';
@@ -32,14 +32,9 @@ import hash from 'object-hash';
   templateUrl: '../abstract-import.html'
 })
 export class ImportCulvertsComponent extends ImportLandmarksComponent {
-  constructor(
-    protected override authState: AuthState,
-    protected override cdf: ChangeDetectorRef,
-    protected override firestore: Firestore,
-    protected override store: Store
-  ) {
-    super(authState, cdf, firestore, store);
-  }
+  #authState = inject(AuthState);
+  #cdf = inject(ChangeDetectorRef);
+  #store = inject(Store);
 
   override async makeLandmarks(
     geojsons: GeoJSON.FeatureCollection<any>[]
@@ -55,7 +50,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       for (const feature of geojson.features) {
         if (this.cancelling) break;
         this.numImported += 1;
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
         // 👇 potentially one culvert per feature
         const importHash = hash.MD5(feature as any);
         const alreadyImported = await this.alreadyImported(importHash);
@@ -63,7 +58,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
         if (!alreadyImported) {
           const landmark: Partial<Landmark> = {
             geometry: feature.geometry,
-            owner: this.authState.currentProfile().email,
+            owner: this.#authState.currentProfile().email,
             path: this.map.path,
             type: 'Feature'
           };
@@ -87,7 +82,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
             landmark.importHash = importHash;
             landmark.properties = properties;
             await firstValueFrom(
-              this.store.dispatch(new AddLandmark(landmark))
+              this.#store.dispatch(new AddLandmark(landmark))
             );
           }
         }
