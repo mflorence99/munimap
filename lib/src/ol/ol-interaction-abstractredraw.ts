@@ -52,7 +52,7 @@ export abstract class OLInteractionAbstractRedrawComponent {
   }
 
   resetRedraw(): void {
-    this.feature.setGeometry(this.geometry);
+    this.layer.olLayer.getSource().refresh();
   }
 
   // 👉 setFeature is called by the contextmenu code to initiate

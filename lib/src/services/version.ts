@@ -17,6 +17,7 @@ import { VersionDetectedEvent } from '@angular/service-worker';
 import { catchError } from 'rxjs/operators';
 import { filter } from 'rxjs/operators';
 import { first } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -31,23 +32,21 @@ interface Build {
 
 @Injectable({ providedIn: 'root' })
 export class VersionService {
+  #appRef = inject(ApplicationRef);
   #checkVersionLegacy$ = new Subject<void>();
-
+  #dialog = inject(MatDialog);
+  #http = inject(HttpClient);
   #serviceWorkerCanNotify: boolean;
   #serviceWorkerEnabled: boolean;
+  #swPush = inject(SwPush);
+  #swUpdate = inject(SwUpdate);
 
-  constructor(
-    private appRef: ApplicationRef,
-    private dialog: MatDialog,
-    private http: HttpClient,
-    private swPush: SwPush,
-    private swUpdate: SwUpdate
-  ) {
+  constructor() {
     // 👀 https://stackoverflow.com/questions/51435349
     // 👉 service worker update notification fails on iOS
     this.#serviceWorkerCanNotify =
-      this.swUpdate.isEnabled && this.swPush.isEnabled;
-    this.#serviceWorkerEnabled = this.swUpdate.isEnabled;
+      this.#swUpdate.isEnabled && this.#swPush.isEnabled;
+    this.#serviceWorkerEnabled = this.#swUpdate.isEnabled;
     this.#pollVersion();
   }
 
@@ -80,7 +79,7 @@ export class VersionService {
   }
 
   #checkUnrecoverableServiceWorker(): void {
-    this.swUpdate.unrecoverable.subscribe((event: UnrecoverableStateEvent) => {
+    this.#swUpdate.unrecoverable.subscribe((event: UnrecoverableStateEvent) => {
       console.error('🔥 Unrecoverable PWA error', event.reason);
       Sentry.captureException(event);
       this.hardReset();
@@ -88,7 +87,7 @@ export class VersionService {
   }
 
   #checkVersionServiceWorker(): void {
-    this.swUpdate.versionUpdates
+    this.#swUpdate.versionUpdates
       .pipe(filter((event) => event.type === 'VERSION_DETECTED'))
       .subscribe((event) => {
         console.log(
@@ -97,20 +96,20 @@ export class VersionService {
           (event as VersionDetectedEvent).version.hash
         );
         if (environment.version.autoReload)
-          this.swUpdate.activateUpdate().then(() => this.hardReset());
+          this.#swUpdate.activateUpdate().then(() => this.hardReset());
         else this.#newVersionDetected();
       });
   }
 
   #newVersionDetected(): void {
-    this.dialog
+    this.#dialog
       .open(VersionDialogComponent)
       .afterClosed()
       .subscribe((result) => {
         if (result) {
           // 👇 use says ACTIVATE
           if (this.#serviceWorkerCanNotify)
-            this.swUpdate.activateUpdate().then(() => this.hardReset());
+            this.#swUpdate.activateUpdate().then(() => this.hardReset());
           else this.hardReset();
         } else if (!this.#serviceWorkerEnabled) {
           // 👇 once the user says LATER we won't check again in legacy
@@ -143,7 +142,7 @@ export class VersionService {
       .pipe(
         takeUntil(this.#checkVersionLegacy$),
         mergeMap(() =>
-          this.http
+          this.#http
             .get<Build>(`assets/build.json`, {
               params: {
                 x: Math.random()
@@ -168,7 +167,7 @@ export class VersionService {
   }
 
   #pollVersionServiceWorker(): void {
-    this.appRef.isStable
+    this.#appRef.isStable
       .pipe(
         // 🔥 looks like firebase is preventing the app from
         //    becoming stable but not totally sure
@@ -183,7 +182,7 @@ export class VersionService {
       )
       .subscribe((): any => {
         console.log('%cPolling for new PWA version...', 'color: moccasin');
-        this.swUpdate.checkForUpdate().then();
+        this.#swUpdate.checkForUpdate().then();
       });
   }
 }

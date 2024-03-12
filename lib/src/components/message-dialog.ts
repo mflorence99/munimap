@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { inject } from '@angular/core';
 
 export interface MessageDialogData {
   message: string;
@@ -29,5 +30,5 @@ export interface MessageDialogData {
   ]
 })
 export class MessageDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: MessageDialogData) {}
+  data: MessageDialogData = inject(MAT_DIALOG_DATA);
 }

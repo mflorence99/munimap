@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
 import { delay } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -22,16 +23,11 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GeoJSONViewerService extends GeoJSONService {
+  #cache = inject(CacheService);
   #cacheBuster = {
     version: environment.package.version
   };
-
-  constructor(
-    private cache: CacheService,
-    private http: HttpClient
-  ) {
-    super();
-  }
+  #http = inject(HttpClient);
 
   loadByIndex(
     route: ActivatedRoute,
@@ -39,7 +35,7 @@ export class GeoJSONViewerService extends GeoJSONService {
     layerKey: string,
     extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection> {
-    const cached = this.cache.get(layerKey);
+    const cached = this.#cache.get(layerKey);
     return (
       cached
         ? // 👇 preserve "next tick" semantics of HTTP GET
@@ -55,13 +51,13 @@ export class GeoJSONViewerService extends GeoJSONService {
   }
 
   #load(layerKey: string): Observable<GeoJSON.FeatureCollection<any, any>> {
-    return this.http
+    return this.#http
       .get<GeoJSON.FeatureCollection<any, any>>(`assets/${layerKey}.geojson`, {
         params: this.#cacheBuster
       })
       .pipe(
         catchError(() => of(this.empty)),
-        tap((geojson) => this.cache.set(layerKey, geojson))
+        tap((geojson) => this.#cache.set(layerKey, geojson))
       );
   }
 }

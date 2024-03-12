@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { inject } from '@angular/core';
 
 export interface ConfirmDialogData {
   content: string;
@@ -33,5 +34,5 @@ export interface ConfirmDialogData {
   ]
 })
 export class ConfirmDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {}
+  data: ConfirmDialogData = inject(MAT_DIALOG_DATA);
 }

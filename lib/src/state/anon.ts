@@ -18,6 +18,7 @@ import { Store } from '@ngxs/store';
 
 import { doc } from '@angular/fire/firestore';
 import { getDoc } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
 import { signInAnonymously } from '@angular/fire/auth';
 
 export class LoadProfile {
@@ -46,11 +47,9 @@ export type AnonStateModel = AuthStateModel;
 })
 @Injectable()
 export class AnonState implements NgxsOnInit {
-  constructor(
-    private fireauth: Auth,
-    private firestore: Firestore,
-    private store: Store
-  ) {}
+  #fireauth = inject(Auth);
+  #firestore = inject(Firestore);
+  #store = inject(Store);
 
   @Action(LoadProfile) loadProfile(
     ctx: StateContext<AnonStateModel>,
@@ -60,7 +59,7 @@ export class AnonState implements NgxsOnInit {
       `%cFirestore get: profiles ${action.email}`,
       'color: goldenrod'
     );
-    const docRef = doc(this.firestore, 'profiles', action.email);
+    const docRef = doc(this.#firestore, 'profiles', action.email);
     getDoc(docRef).then((doc) => {
       ctx.dispatch(new SetProfile(doc.data() as Profile));
     });
@@ -97,15 +96,15 @@ export class AnonState implements NgxsOnInit {
   }
 
   currentProfile(): Profile {
-    return this.store.snapshot().auth.profile;
+    return this.#store.snapshot().auth.profile;
   }
 
   currentUser(): User {
-    return this.store.snapshot().auth.user;
+    return this.#store.snapshot().auth.user;
   }
 
   ngxsOnInit(ctx: StateContext<AnonStateModel>): void {
-    signInAnonymously(this.fireauth)
+    signInAnonymously(this.#fireauth)
       .then(() => {
         ctx.dispatch(new SetUser({} as User));
       })

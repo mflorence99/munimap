@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
 import { delay } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -25,16 +26,11 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GeoJSONAuthorService extends GeoJSONService {
+  #cache = inject(CacheService);
   #cacheBuster = {
     version: environment.package.version
   };
-
-  constructor(
-    private cache: CacheService,
-    private http: HttpClient
-  ) {
-    super();
-  }
+  #http = inject(HttpClient);
 
   loadByIndex(
     route: ActivatedRoute,
@@ -47,7 +43,7 @@ export class GeoJSONAuthorService extends GeoJSONService {
   }
 
   loadIndex(): Observable<Index> {
-    return this.http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
+    return this.#http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
       params: this.#cacheBuster
     });
   }
@@ -66,11 +62,11 @@ export class GeoJSONAuthorService extends GeoJSONService {
     path: string,
     extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<any, any>> {
-    const cached = this.cache.get(path);
+    const cached = this.#cache.get(path);
     const stream$ = cached
       ? // 👇 preserve "next tick" semantics of HTTP GET
         of(cached).pipe(delay(0))
-      : this.http
+      : this.#http
           .get<GeoJSON.FeatureCollection<any, any>>(
             `${environment.endpoints.proxy}${path}`,
             {
@@ -79,7 +75,7 @@ export class GeoJSONAuthorService extends GeoJSONService {
           )
           .pipe(
             catchError(() => of(this.empty)),
-            tap((geojson) => this.cache.set(path, geojson))
+            tap((geojson) => this.#cache.set(path, geojson))
           );
     return stream$.pipe(map((geojson) => this.filter(geojson, extent)));
   }

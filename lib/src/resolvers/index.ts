@@ -5,11 +5,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Resolve } from '@angular/router';
 
+import { inject } from '@angular/core';
+
 @Injectable({ providedIn: 'root' })
 export class IndexResolver implements Resolve<Index> {
-  constructor(private geoJSON: GeoJSONService) {}
+  #geoJSON = inject(GeoJSONService);
 
   resolve(): Observable<Index> {
-    return this.geoJSON.loadIndex();
+    return this.#geoJSON.loadIndex();
   }
 }

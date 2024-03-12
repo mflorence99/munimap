@@ -37,6 +37,7 @@ import { deleteDoc } from '@angular/fire/firestore';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { doc } from '@angular/fire/firestore';
 import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
@@ -139,11 +140,9 @@ export class LandmarksState implements NgxsOnInit {
   @Select(AnonState.profile) profile1$: Observable<Profile>;
   @Select(AuthState.profile) profile2$: Observable<Profile>;
 
-  constructor(
-    private actions$: Actions,
-    private firestore: Firestore,
-    private store: Store
-  ) {}
+  #actions$ = inject(Actions);
+  #firestore = inject(Firestore);
+  #store = inject(Store);
 
   @Action(AddLandmark) addLandmark(
     ctx: StateContext<LandmarksStateModel>,
@@ -161,7 +160,7 @@ export class LandmarksState implements NgxsOnInit {
       'color: crimson'
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
     return setDoc(docRef, normalized).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
@@ -187,7 +186,7 @@ export class LandmarksState implements NgxsOnInit {
       'color: crimson'
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
     return deleteDoc(docRef).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
@@ -269,7 +268,7 @@ export class LandmarksState implements NgxsOnInit {
       'color: chocolate'
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.firestore, 'landmarks', normalized.id);
+    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
     return setDoc(docRef, normalized, { merge: true }).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
@@ -286,17 +285,17 @@ export class LandmarksState implements NgxsOnInit {
   }
 
   toGeoJSON(): Landmarks {
-    return featureCollection(this.store.snapshot().landmarks);
+    return featureCollection(this.#store.snapshot().landmarks);
   }
 
   #handleActions$(): void {
-    this.actions$
+    this.#actions$
       .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
       .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
         if (action instanceof ClearStacksProxy)
-          this.store.dispatch(new ClearStacks());
-        else if (action instanceof RedoProxy) this.store.dispatch(new Redo());
-        else if (action instanceof UndoProxy) this.store.dispatch(new Undo());
+          this.#store.dispatch(new ClearStacks());
+        else if (action instanceof RedoProxy) this.#store.dispatch(new Redo());
+        else if (action instanceof UndoProxy) this.#store.dispatch(new Undo());
       });
   }
 
@@ -319,7 +318,7 @@ export class LandmarksState implements NgxsOnInit {
             return collectionData<Landmark>(
               query(
                 collection(
-                  this.firestore,
+                  this.#firestore,
                   'landmarks'
                 ) as CollectionReference<Landmark>,
                 where('owner', 'in', workgroup(profile)),
@@ -339,7 +338,7 @@ export class LandmarksState implements NgxsOnInit {
         )
       )
       .subscribe((landmarks: Landmark[]) => {
-        this.store.dispatch(new SetLandmarks(landmarks));
+        this.#store.dispatch(new SetLandmarks(landmarks));
       });
   }
 

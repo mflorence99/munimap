@@ -38,6 +38,7 @@ import { combineLatest } from 'rxjs';
 import { deleteDoc } from '@angular/fire/firestore';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { doc } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
@@ -98,11 +99,9 @@ export class ParcelsState implements NgxsOnInit {
   @Select(AnonState.profile) profile1$: Observable<Profile>;
   @Select(AuthState.profile) profile2$: Observable<Profile>;
 
-  constructor(
-    private actions$: Actions,
-    private firestore: Firestore,
-    private store: Store
-  ) {}
+  #actions$ = inject(Actions);
+  #firestore = inject(Firestore);
+  #store = inject(Store);
 
   @Action(AddParcels) addParcels(
     ctx: StateContext<ParcelsStateModel>,
@@ -114,7 +113,7 @@ export class ParcelsState implements NgxsOnInit {
     redoStack.length = 0;
     while (undoStack.length >= maxStackSize) undoStack.shift();
     // 🔥 batch has 500 limit
-    const batch = writeBatch(this.firestore);
+    const batch = writeBatch(this.#firestore);
     const undos: Parcel[] = [];
     undoStack.push(undos);
     const promises = action.parcels.map((parcel) => {
@@ -123,7 +122,7 @@ export class ParcelsState implements NgxsOnInit {
         `%cFirestore add: parcels ${JSON.stringify(normalized)}`,
         'color: chocolate'
       );
-      const collectionRef = collection(this.firestore, 'parcels');
+      const collectionRef = collection(this.#firestore, 'parcels');
       return addDoc(collectionRef, normalized).then((ref) =>
         undos.push({ ...(normalized as Parcel), $id: ref.id })
       );
@@ -163,9 +162,9 @@ export class ParcelsState implements NgxsOnInit {
     const undos: Parcel[] = [];
     undoStack.push(undos);
     // 🔥 batch has 500 limit
-    const batch = writeBatch(this.firestore);
+    const batch = writeBatch(this.#firestore);
     const promises = redos.map((parcel) => {
-      const collectionRef = collection(this.firestore, 'parcels');
+      const collectionRef = collection(this.#firestore, 'parcels');
       let promise;
       switch (parcel.action) {
         case 'added':
@@ -228,9 +227,9 @@ export class ParcelsState implements NgxsOnInit {
     const redos: Parcel[] = [];
     redoStack.push(redos);
     // 🔥 batch has 500 limit
-    const batch = writeBatch(this.firestore);
+    const batch = writeBatch(this.#firestore);
     const promises = undos.map((parcel) => {
-      const collectionRef = collection(this.firestore, 'parcels');
+      const collectionRef = collection(this.#firestore, 'parcels');
       let docRef, promise;
       switch (parcel.action) {
         case 'added':
@@ -241,7 +240,7 @@ export class ParcelsState implements NgxsOnInit {
           );
           break;
         case 'modified':
-          docRef = doc(this.firestore, 'parcels', parcel.$id);
+          docRef = doc(this.#firestore, 'parcels', parcel.$id);
           promise = deleteDoc(docRef).then(() => redos.push(parcel));
           break;
         case 'removed':
@@ -303,13 +302,13 @@ export class ParcelsState implements NgxsOnInit {
   // 👇 listen for "undo" actions directed at the proxy
 
   #handleActions$(): void {
-    this.actions$
+    this.#actions$
       .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
       .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
         if (action instanceof ClearStacksProxy)
-          this.store.dispatch(new ClearStacks());
-        else if (action instanceof RedoProxy) this.store.dispatch(new Redo());
-        else if (action instanceof UndoProxy) this.store.dispatch(new Undo());
+          this.#store.dispatch(new ClearStacks());
+        else if (action instanceof RedoProxy) this.#store.dispatch(new Redo());
+        else if (action instanceof UndoProxy) this.#store.dispatch(new Undo());
       });
   }
 
@@ -332,7 +331,7 @@ export class ParcelsState implements NgxsOnInit {
             return collectionData<Parcel>(
               query(
                 collection(
-                  this.firestore,
+                  this.#firestore,
                   'parcels'
                 ) as CollectionReference<Parcel>,
                 where('owner', 'in', workgroup(profile)),
@@ -353,7 +352,7 @@ export class ParcelsState implements NgxsOnInit {
         )
       )
       .subscribe((parcels: Parcel[]) => {
-        this.store.dispatch(new SetParcels(parcels));
+        this.#store.dispatch(new SetParcels(parcels));
       });
   }
 

@@ -7,6 +7,7 @@ import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 
+import { inject } from '@angular/core';
 import { patch } from '@ngxs/store/operators';
 
 export class SetGPS {
@@ -61,7 +62,7 @@ export interface ViewStateModel {
 })
 @Injectable()
 export class ViewState {
-  constructor(private store: Store) {}
+  #store = inject(Store);
 
   @Selector() static gps(state: ViewStateModel): boolean {
     return state.gps;
@@ -108,6 +109,6 @@ export class ViewState {
   }
 
   recentPath(): string {
-    return this.store.snapshot().view.recentPath;
+    return this.#store.snapshot().view.recentPath;
   }
 }

@@ -11,6 +11,7 @@ import { Store } from '@ngxs/store';
 import { deleteDoc } from '@angular/fire/firestore';
 import { doc } from '@angular/fire/firestore';
 import { getDoc } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
 import { serverTimestamp } from 'firebase/firestore';
 import { setDoc } from '@angular/fire/firestore';
 
@@ -94,10 +95,8 @@ export type MapStateModel = Map;
 })
 @Injectable()
 export class MapState {
-  constructor(
-    private firestore: Firestore,
-    private store: Store
-  ) {}
+  #firestore = inject(Firestore);
+  #store = inject(Store);
 
   @Action(ClearMap) clearMap(
     ctx: StateContext<MapStateModel>,
@@ -111,7 +110,7 @@ export class MapState {
     action: CreateMap
   ): void {
     console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
-    const docRef = doc(this.firestore, 'maps', action.map.id);
+    const docRef = doc(this.#firestore, 'maps', action.map.id);
     getDoc(docRef).then((doc) => {
       if (doc.exists()) {
         const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
@@ -132,7 +131,7 @@ export class MapState {
   ): void {
     ctx.dispatch(new ClearMap());
     console.log(`%cFirestore delete: maps ${action.id}`, 'color: crimson');
-    const docRef = doc(this.firestore, 'maps', action.id);
+    const docRef = doc(this.#firestore, 'maps', action.id);
     deleteDoc(docRef);
   }
 
@@ -144,7 +143,7 @@ export class MapState {
     //    we can't use the old one!
     ctx.dispatch(new ClearMap());
     console.log(`%cFirestore get: maps ${action.id}`, 'color: goldenrod');
-    const docRef = doc(this.firestore, 'maps', action.id);
+    const docRef = doc(this.#firestore, 'maps', action.id);
     getDoc(docRef).then((doc) => {
       const map = doc.exists()
         ? (doc.data() as Map)
@@ -175,7 +174,7 @@ export class MapState {
     if (action.refresh) ctx.dispatch(new ClearMap());
     if (action.map.isDflt) {
       console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
-      const docRef = doc(this.firestore, 'maps', action.map.id);
+      const docRef = doc(this.#firestore, 'maps', action.map.id);
       getDoc(docRef).then((doc) => {
         if (doc.exists()) {
           const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
@@ -193,7 +192,7 @@ export class MapState {
         `%cFirestore set: maps ${action.map.id} ${JSON.stringify(action.map)}`,
         'color: chocolate'
       );
-      const docRef = doc(this.firestore, 'maps', action.map.id);
+      const docRef = doc(this.#firestore, 'maps', action.map.id);
       setDoc(docRef, action.map, { merge: true }).then(() =>
         ctx.dispatch(new SetMap(action.map))
       );
@@ -201,6 +200,6 @@ export class MapState {
   }
 
   currentMap(): Map {
-    return this.store.snapshot().map;
+    return this.#store.snapshot().map;
   }
 }
