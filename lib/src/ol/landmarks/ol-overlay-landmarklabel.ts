@@ -12,6 +12,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
 
@@ -47,19 +48,18 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
 
   olOverlay: OLOverlay;
 
+  #destroy$ = inject(DestroyService);
   #feature: OLFeature<any>;
+  #map = inject(OLMapComponent);
+  #store = inject(Store);
 
-  constructor(
-    private destroy$: DestroyService,
-    private map: OLMapComponent,
-    private store: Store
-  ) {
+  constructor() {
     this.olOverlay = new OLOverlay({
       position: [0, 0],
       positioning: 'center-center'
     });
     this.olOverlay.setProperties({ component: this }, true);
-    this.map.olMap.addOverlay(this.olOverlay);
+    this.#map.olMap.addOverlay(this.olOverlay);
   }
 
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   onDragEnd(event: CdkDragEnd): void {
     // 👉 what is the new position?
     const position = toLonLat(
-      this.map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
+      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
     );
     // 👉 update point labels
     if (this.#feature.getGeometry().getType() === 'Point') {
@@ -80,7 +80,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
         geometry: { type: 'Point', coordinates: position },
         type: 'Feature'
       };
-      this.store.dispatch(new UpdateLandmark(movedLandmark));
+      this.#store.dispatch(new UpdateLandmark(movedLandmark));
     }
     // 👉 update point labels
     else if (this.#feature.getGeometry().getType() === 'Polygon') {
@@ -90,7 +90,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
         properties: { textLocation: position as [number, number] },
         type: 'Feature'
       };
-      this.store.dispatch(new UpdateLandmark(movedLandmark));
+      this.#store.dispatch(new UpdateLandmark(movedLandmark));
     }
     this.olOverlay.setPosition([0, 0]);
     // 👉 https://stackoverflow.com/questions/61157528
@@ -118,8 +118,8 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   }
 
   #handleClick$(): void {
-    this.map.click$
-      .pipe(takeUntil(this.destroy$))
+    this.#map.click$
+      .pipe(takeUntil(this.#destroy$))
       .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 }

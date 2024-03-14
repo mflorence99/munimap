@@ -12,8 +12,8 @@ import { EventsKey as OLEventsKey } from 'ol/events';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Optional } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { unByKey } from 'ol/Observable';
 
 import Crop from 'ol-ext/filter/Crop';
@@ -41,18 +41,17 @@ export class OLFilterCrop2PropertyParcelsComponent
   #featuresLoadedKey: OLEventsKey;
   #format: OLGeoJSON;
   #layer: any;
+  #layer1 = inject(OLLayerTileComponent, { optional: true });
+  #layer2 = inject(OLLayerVectorComponent, { optional: true });
+  #map = inject(OLMapComponent);
 
-  constructor(
-    @Optional() layer1: OLLayerTileComponent,
-    @Optional() layer2: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2;
+    this.#layer = this.#layer1 ?? this.#layer2;
   }
 
   ngOnDestroy(): void {

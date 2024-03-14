@@ -7,7 +7,6 @@ import { Landmark } from '../../common';
 import { LandmarkPropertiesClass } from '../../common';
 import { OLInteractionAbstractDrawComponent } from '../ol-interaction-abstractdraw';
 import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
-import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
 
 import { makeLandmarkID } from '../../common';
@@ -20,6 +19,7 @@ import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 
+import { inject } from '@angular/core';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -33,16 +33,10 @@ export class OLInteractionDrawLandmarksComponent
   extends OLInteractionAbstractDrawComponent
   implements OnDestroy, OnInit
 {
-  constructor(
-    private authState: AuthState,
-    private dialog: MatDialog,
-    protected override destroy$: DestroyService,
-    protected override layer: OLLayerVectorComponent,
-    protected override map: OLMapComponent,
-    private store: Store
-  ) {
-    super(destroy$, layer, map);
-  }
+  #authState = inject(AuthState);
+  #dialog = inject(MatDialog);
+  #map = inject(OLMapComponent);
+  #store = inject(Store);
 
   ngOnDestroy(): void {
     this.onDestroy();
@@ -57,7 +51,7 @@ export class OLInteractionDrawLandmarksComponent
       content: `Do you want to save these new landmarks?`,
       title: 'Please confirm new landmarks'
     };
-    return this.dialog
+    return this.#dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
@@ -66,8 +60,8 @@ export class OLInteractionDrawLandmarksComponent
             geojsons.forEach((geojson, ix) => {
               const landmark: Partial<Landmark> = {
                 geometry: geojson.geometry,
-                owner: this.authState.currentProfile().email,
-                path: this.map.path,
+                owner: this.#authState.currentProfile().email,
+                path: this.#map.path,
                 type: 'Feature'
               };
               let properties;
@@ -124,11 +118,13 @@ export class OLInteractionDrawLandmarksComponent
                   name: `New landmark #${ix + 1}`
                 };
                 // 👇 select landmark after adding
-                this.store.dispatch(new AddLandmark(landmark)).subscribe(() => {
-                  const selector = this.map
-                    .selector as OLInteractionSelectLandmarksComponent;
-                  selector?.selectLandmarks([landmark.id]);
-                });
+                this.#store
+                  .dispatch(new AddLandmark(landmark))
+                  .subscribe(() => {
+                    const selector = this.#map
+                      .selector as OLInteractionSelectLandmarksComponent;
+                    selector?.selectLandmarks([landmark.id]);
+                  });
               }
             });
           } else this.resetDraw();

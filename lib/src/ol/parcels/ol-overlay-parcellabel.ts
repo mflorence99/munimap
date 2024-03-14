@@ -14,6 +14,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
+import { inject } from '@angular/core';
 import { merge } from 'rxjs';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
@@ -52,22 +53,21 @@ export class OLOverlayParcelLabelComponent implements OnInit {
 
   olOverlay: OLOverlay;
 
+  #authState = inject(AuthState);
   #centers: number[][];
+  #destroy$ = inject(DestroyService);
   #id: ParcelID;
   #ix: number;
+  #map = inject(OLMapComponent);
+  #store = inject(Store);
 
-  constructor(
-    private authState: AuthState,
-    private destroy$: DestroyService,
-    private map: OLMapComponent,
-    private store: Store
-  ) {
+  constructor() {
     this.olOverlay = new OLOverlay({
       position: [0, 0],
       positioning: 'center-center'
     });
     this.olOverlay.setProperties({ component: this }, true);
-    this.map.olMap.addOverlay(this.olOverlay);
+    this.#map.olMap.addOverlay(this.olOverlay);
   }
 
   ngOnInit(): void {
@@ -79,19 +79,19 @@ export class OLOverlayParcelLabelComponent implements OnInit {
     // 👉 construct a parcel to override the label position
     const centers = this.#centers;
     centers[this.#ix] = toLonLat(
-      this.map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
+      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
     );
     const recenteredParcel: Parcel = {
       action: 'modified',
       id: this.#id,
-      owner: this.authState.currentProfile().email,
-      path: this.map.path,
+      owner: this.#authState.currentProfile().email,
+      path: this.#map.path,
       properties: {
         centers: centers
       },
       type: 'Feature'
     };
-    this.store.dispatch(new AddParcels([recenteredParcel]));
+    this.#store.dispatch(new AddParcels([recenteredParcel]));
     this.olOverlay.setPosition([0, 0]);
     // 👉 https://stackoverflow.com/questions/61157528
     event.source._dragRef.reset();
@@ -109,7 +109,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       for (this.#ix = 0; this.#ix < polygons.length; this.#ix++) {
         // 👉 we need to know which of the possible multiple ploygons
         //    that make up the parcel we will be re-centering
-        const pt = point(this.map.contextMenuAt);
+        const pt = point(this.#map.contextMenuAt);
         const poly = polygon([polygons[this.#ix].getCoordinates()[0]]);
         if (booleanPointInPolygon(pt, poly)) break;
       }
@@ -120,8 +120,8 @@ export class OLOverlayParcelLabelComponent implements OnInit {
   // 👇 the idea is that a selection change or ESC cancels the move
 
   #handleStreams$(): void {
-    merge(this.map.click$, this.map.escape$, this.map.featuresSelected)
-      .pipe(takeUntil(this.destroy$))
+    merge(this.#map.click$, this.#map.escape$, this.#map.featuresSelected)
+      .pipe(takeUntil(this.#destroy$))
       .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 }

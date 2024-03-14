@@ -22,6 +22,7 @@ import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { click } from 'ol/events/condition';
 import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 import { never } from 'ol/events/condition';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { shiftKeyOnly } from 'ol/events/condition';
@@ -60,6 +61,15 @@ export class OLInteractionSelectParcelsComponent
   @Input() zoomAnimationDuration = 200;
 
   abutters: Parcel[] = [];
+
+  // 👉 we need public access to go through the selector to its layer
+  //    see abstract-map.ts -- this is how the context menu works
+  //    the layer that contains the selector contains the features
+  //    that can be operated on
+
+  layer = inject(OLLayerVectorComponent);
+  map = inject(OLMapComponent);
+
   olSelect: OLSelect;
 
   #abuttersWorker: any /* 👈 TypeScript no help here */;
@@ -67,14 +77,7 @@ export class OLInteractionSelectParcelsComponent
   #format: OLGeoJSON;
   #selectKey: OLEventsKey;
 
-  constructor(
-    // 👉 we need public access to go through the selector to its layer
-    //    see abstract-map.ts -- this is how the context menu works
-    //    the layer that contains the selector contains the features
-    //    that can be operated on
-    public layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     this.olSelect = new OLSelect({
       addCondition: (event): boolean => click(event) && shiftKeyOnly(event),
       condition: (event): boolean => click(event),

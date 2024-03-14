@@ -143,7 +143,10 @@ interface LandmarkConversion {
                     [color]="'#f8fc03'"
                     [operation]="'color'"
                     [value]="0.1"></app-ol-filter-colorize>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                  <app-ol-filter-crop2propertyparcels
+                    [parcelIDs]="sink.map.parcelIDs"
+                    [source]="parcels"
+                    [type]="'crop'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-layer-tile>
 
                 <!-- 📦 CONTOURS LAYER -->
@@ -315,8 +318,8 @@ interface LandmarkConversion {
                   <app-ol-source-landmarks></app-ol-source-landmarks>
                   <app-ol-interaction-selectlandmarks
                     [multi]="true"></app-ol-interaction-selectlandmarks>
-                  <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
                   <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
+                  <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
                 </app-ol-layer-vector>
               }
 
@@ -436,7 +439,7 @@ interface LandmarkConversion {
 
           <li [class.disabled]="!canDrawLandmarks()" class="item">
             <fa-icon [fixedWidth]="true" [icon]="['fas', 'pen']"></fa-icon>
-            <p>
+            <p (click)="eatMe($event)">
               Draw new
               <select
                 #geometryType
@@ -472,7 +475,7 @@ interface LandmarkConversion {
 
           <li [class.disabled]="!canConvertLandmark()" class="item">
             <fa-icon [fixedWidth]="true" [icon]="['fas', 'recycle']"></fa-icon>
-            <p>
+            <p (click)="eatMe($event)">
               Convert landmark into
               <select
                 #conversionType

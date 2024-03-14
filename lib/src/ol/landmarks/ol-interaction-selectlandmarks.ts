@@ -21,6 +21,7 @@ import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { click } from 'ol/events/condition';
 import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 import { never } from 'ol/events/condition';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { pointerMove } from 'ol/events/condition';
@@ -63,19 +64,19 @@ export class OLInteractionSelectLandmarksComponent
 
   @Input() zoomAnimationDuration = 200;
 
+  // 👉 we need public access to go through the selector to its layer
+  //    see abstract-map.ts -- this is how the context menu works
+  //    the layer that contains the selector contains the features
+  //    that can be operated on
+  layer = inject(OLLayerVectorComponent);
+
   olHover: OLSelect;
   olSelect: OLSelect;
 
+  #map = inject(OLMapComponent);
   #selectKey: OLEventsKey;
 
-  constructor(
-    // 👉 we need public access to go through the selector to its layer
-    //    see abstract-map.ts -- this is how the context menu works
-    //    the layer that contains the selector contains the features
-    //    that can be operated on
-    public layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     const whichLayers = (olLayer: OLLayer): boolean => {
       const layers = this.layers ?? [this.layer];
       return layers.some((layer) => layer.olLayer === olLayer);
@@ -134,25 +135,25 @@ export class OLInteractionSelectLandmarksComponent
     // 👉 that's the union of the extent
     const extent = transformExtent(
       bbox,
-      this.map.featureProjection,
-      this.map.projection
+      this.#map.featureProjection,
+      this.#map.projection
     );
     // 👇 zoom to the extent of all the selected parcels and select them
-    const minZoom = this.map.olView.getMinZoom();
-    this.map.olView.setMinZoom(this.map.minUsefulZoom);
-    this.map.olView.fit(extent, {
+    const minZoom = this.#map.olView.getMinZoom();
+    this.#map.olView.setMinZoom(this.#map.minUsefulZoom);
+    this.#map.olView.fit(extent, {
       callback: () => {
-        this.map.olView.setMinZoom(minZoom);
+        this.#map.olView.setMinZoom(minZoom);
       },
       duration: this.zoomAnimationDuration,
-      maxZoom: this.maxZoom ?? this.map.maxZoom,
-      size: this.map.olMap.getSize()
+      maxZoom: this.maxZoom ?? this.#map.maxZoom,
+      size: this.#map.olMap.getSize()
     });
   }
 
   addToMap(): void {
-    this.map.olMap.addInteraction(this.olHover);
-    this.map.olMap.addInteraction(this.olSelect);
+    this.#map.olMap.addInteraction(this.olHover);
+    this.#map.olMap.addInteraction(this.olSelect);
   }
 
   ngOnDestroy(): void {

@@ -9,6 +9,7 @@ import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import OLFeature from 'ol/Feature';
@@ -69,12 +70,12 @@ export class OLPopupDPWPropertiesComponent {
   // 🔥  this doesn't seem to work
   // #subToSelection: Subscription;
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private popper: OLPopupSelectionComponent,
-    private map: OLMapComponent,
-    private snackBar: MatSnackBar
-  ) {
+  #cdf = inject(ChangeDetectorRef);
+  #map = inject(OLMapComponent);
+  #popper = inject(OLPopupSelectionComponent);
+  #snackBar = inject(MatSnackBar);
+
+  constructor() {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleFeatureSelected$();
   }
@@ -83,38 +84,39 @@ export class OLPopupDPWPropertiesComponent {
   //    and we could be selecting a bridge, stream crossing etc etc
 
   canClipboard(): boolean {
-    return this.popper.canClipboard();
+    return this.#popper.canClipboard();
   }
 
   // 👉 https://developers.google.com/maps/documentation/urls/get-started
   googleLink(): string {
     const marker = this.geometry
       .clone()
-      .transform(this.map.projection, this.map.featureProjection)
+      .transform(this.#map.projection, this.#map.featureProjection)
       .getCoordinates();
     const link = `https://www.google.com/maps/search/?api=1&query=${
       marker[1]
     }%2C${marker[0]}&zoom=${Math.round(
-      this.map.olView.getZoom()
+      this.#map.olView.getZoom()
     )}&basemap=terrain`;
     return link;
   }
 
   onClipboard(): void {
-    this.popper.toClipboard(this.table);
+    this.#popper.toClipboard(this.table);
   }
 
   onClose(): void {
-    this.snackBar.dismiss();
+    this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for landmarks
-    const selector = this.map.selector as OLInteractionSelectLandmarksComponent;
+    const selector = this.#map
+      .selector as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
     // 🔥  this doesn't seem to work
     // this.#subToSelection?.unsubscribe();
   }
 
   #handleFeatureSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
+    /* 🔥 this.#subToSelection = */ this.#map.featuresSelected
       .pipe(
         map((features: OLFeature<any>[]): [any, any] => {
           // 🔥 feature may be landmark with metadata representing
@@ -129,7 +131,7 @@ export class OLPopupDPWPropertiesComponent {
         this.properties = properties;
         this.geometry = geometry;
         if (!this.properties) this.onClose();
-        else this.cdf.markForCheck();
+        else this.#cdf.markForCheck();
       });
   }
 }

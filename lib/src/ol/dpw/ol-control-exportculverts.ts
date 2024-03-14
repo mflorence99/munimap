@@ -1,10 +1,11 @@
+import { CulvertProperties } from '../../common';
 import { LandmarksState } from '../../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { CulvertProperties } from '@lib/common';
 import { Input } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -27,10 +28,10 @@ import { saveAs } from 'file-saver';
 export class OLControlExportCulvertsComponent {
   @Input() fileName: string;
 
-  constructor(private landmarksState: LandmarksState) {}
+  #landmarksState = inject(LandmarksState);
 
   export(): void {
-    const geojson = this.landmarksState.toGeoJSON();
+    const geojson = this.#landmarksState.toGeoJSON();
     // 👇 convert to GeoJSON to GPX waypoints
     const wpts = geojson.features.reduce((acc, feature) => {
       const coords = feature.geometry.coordinates;

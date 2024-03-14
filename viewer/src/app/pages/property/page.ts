@@ -63,7 +63,10 @@ import { inject } from '@angular/core';
                 [color]="'#f8fc03'"
                 [operation]="'color'"
                 [value]="0.1"></app-ol-filter-colorize>
-              <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              <app-ol-filter-crop2propertyparcels
+                [parcelIDs]="sink.map.parcelIDs"
+                [source]="parcels"
+                [type]="'crop'"></app-ol-filter-crop2propertyparcels>
             </app-ol-layer-tile>
 
             <!-- 📦 CONTOURS LAYER -->

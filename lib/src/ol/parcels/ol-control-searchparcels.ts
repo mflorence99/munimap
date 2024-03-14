@@ -23,6 +23,7 @@ import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
@@ -158,17 +159,16 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   searchablesByID: Record<ParcelID, SearchableParcel[]> = {};
   searchablesByOwner: Record<string, SearchableParcel[]> = {};
 
+  #destroy$ = inject(DestroyService);
+  #geoJSON = inject(GeoJSONService);
   #geojson$ = new Subject<SearchableParcels>();
+  #map = inject(OLMapComponent);
   #overridesByID: Record<ParcelID, Override> = {};
+  #parcelsState = inject(ParcelsState);
+  #route = inject(ActivatedRoute);
   #searchTargets = [];
 
-  constructor(
-    private destroy$: DestroyService,
-    private geoJSON: GeoJSONService,
-    private map: OLMapComponent,
-    private parcelsState: ParcelsState,
-    private route: ActivatedRoute
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.#handleGeoJSON$();
@@ -188,7 +188,8 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       const ids = searchables.map((searchable) => searchable.id).join(', ');
       console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
       // 👉 the selector MAY not be present
-      const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+      const selector = this.#map
+        .selector as OLInteractionSelectParcelsComponent;
       selector?.selectParcels(
         searchables.map((searchable): any => {
           const override = this.#overridesByID[searchable.id];
@@ -214,7 +215,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   }
 
   #filterRemovedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
-    const removed = this.parcelsState.parcelsRemoved(parcels);
+    const removed = this.#parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
       (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
     );
@@ -242,15 +243,15 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   //    just bbox, address, owner and id
 
   #handleGeoJSON$(): void {
-    this.geoJSON
-      .loadByIndex(this.route, this.map.path, 'searchables')
+    this.#geoJSON
+      .loadByIndex(this.#route, this.#map.path, 'searchables')
       .subscribe((geojson: SearchableParcels) => this.#geojson$.next(geojson));
   }
 
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
     combineLatest([this.#geojson$, this.parcels$])
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.#destroy$))
       .subscribe(([original, parcels]) => {
         // 👉 take a copy of the geojson before we change it
         const geojson = copy(original);
@@ -279,7 +280,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   }
 
   #insertAddedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
-    const added = this.parcelsState.parcelsAdded(parcels);
+    const added = this.#parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
     added.forEach((id) => {
       geojson.features.push({
@@ -292,7 +293,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   }
 
   #makeOverridesByID(parcels: Parcel[]): Record<ParcelID, Override> {
-    const modified = this.parcelsState.parcelsModified(parcels);
+    const modified = this.#parcelsState.parcelsModified(parcels);
     // 👉 merge all the modifications into a single override
     return Object.keys(modified).reduce((acc, id) => {
       const override: Override = {};

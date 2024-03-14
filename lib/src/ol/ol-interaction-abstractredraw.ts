@@ -6,6 +6,7 @@ import { EventsKey as OLEventsKey } from 'ol/events';
 import { Observable } from 'rxjs';
 
 import { click } from 'ol/events/condition';
+import { inject } from '@angular/core';
 import { merge } from 'rxjs';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
@@ -28,18 +29,17 @@ export abstract class OLInteractionAbstractRedrawComponent {
   olModify: OLModify;
   olSnap: OLSnap;
 
+  #destroy$ = inject(DestroyService);
   #format: OLGeoJSON;
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
   #modifyStartKey: OLEventsKey;
   #touched = false;
 
-  constructor(
-    protected destroy$: DestroyService,
-    protected layer: OLLayerVectorComponent,
-    protected map: OLMapComponent
-  ) {
+  constructor() {
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
   }
 
@@ -52,7 +52,8 @@ export abstract class OLInteractionAbstractRedrawComponent {
   }
 
   resetRedraw(): void {
-    this.layer.olLayer.getSource().refresh();
+    this.feature.setGeometry(this.geometry);
+    this.feature.changed();
   }
 
   // 👉 setFeature is called by the contextmenu code to initiate
@@ -71,23 +72,23 @@ export abstract class OLInteractionAbstractRedrawComponent {
         click(event) && platformModifierKeyOnly(event),
       features
       // 🔥 why does thus no longer work?
-      // hitDetection: this.layer.olLayer
+      // hitDetection: this.#layer.olLayer
     });
     this.#modifyStartKey = this.olModify.on(
       'modifystart',
       () => (this.#touched = true)
     );
-    this.map.olMap.addInteraction(this.olModify);
+    this.#map.olMap.addInteraction(this.olModify);
     // 👇 create a standard OL Snap interaction
-    this.olSnap = new OLSnap({ source: this.layer.olLayer.getSource() });
-    this.map.olMap.addInteraction(this.olSnap);
+    this.olSnap = new OLSnap({ source: this.#layer.olLayer.getSource() });
+    this.#map.olMap.addInteraction(this.olSnap);
   }
 
   // 👇 the idea is that a selection change or ESC accepts the redraw
 
   #handleStreams$(): void {
-    merge(this.map.escape$, this.map.featuresSelected)
-      .pipe(takeUntil(this.destroy$))
+    merge(this.#map.escape$, this.#map.featuresSelected)
+      .pipe(takeUntil(this.#destroy$))
       .subscribe(() => {
         if (this.#touched) {
           const geojson = JSON.parse(this.#format.writeFeature(this.feature));
@@ -100,8 +101,8 @@ export abstract class OLInteractionAbstractRedrawComponent {
 
   #unsetFeature(): void {
     if (this.#modifyStartKey) unByKey(this.#modifyStartKey);
-    if (this.olModify) this.map.olMap.removeInteraction(this.olModify);
-    if (this.olSnap) this.map.olMap.removeInteraction(this.olSnap);
+    if (this.olModify) this.#map.olMap.removeInteraction(this.olModify);
+    if (this.olSnap) this.#map.olMap.removeInteraction(this.olSnap);
     if (this.feature) this.feature.set('ol-interaction-redraw', false);
     this.#modifyStartKey = null;
     this.olModify = null;

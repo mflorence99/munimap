@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 
+import { inject } from '@angular/core';
 import { saveAs } from 'file-saver';
 
 import bbox from '@turf/bbox';
@@ -41,40 +42,39 @@ import OLProjection from 'ol/proj/Projection';
 export class OLControlExportParcelsComponent {
   @Input() fileName: string;
 
+  #destroy$ = inject(DestroyService);
   #format: OLGeoJSON;
+  #geoJSON = inject(GeoJSONService);
   #layer: OLLayerVectorComponent;
+  #map = inject(OLMapComponent);
+  #parcelsState = inject(ParcelsState);
+  #route = inject(ActivatedRoute);
   #source: OLSourceParcelsComponent;
+  #store = inject(Store);
 
-  constructor(
-    private destroy$: DestroyService,
-    private geoJSON: GeoJSONService,
-    private map: OLMapComponent,
-    private parcelsState: ParcelsState,
-    private route: ActivatedRoute,
-    private store: Store
-  ) {
+  constructor() {
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
-    this.#layer = new OLLayerVectorComponent(map);
+    this.#layer = new OLLayerVectorComponent(this.#map);
     this.#source = new OLSourceParcelsComponent(
-      this.destroy$,
-      this.geoJSON,
+      this.#destroy$,
+      this.#geoJSON,
       this.#layer,
-      this.map,
-      this.parcelsState,
-      this.route,
-      this.store
+      this.#map,
+      this.#parcelsState,
+      this.#route,
+      this.#store
     );
     this.#source.ngOnInit();
   }
 
   export(): void {
     this.#source.export(
-      this.map.boundaryExtent,
-      this.map.olView.getResolution(),
-      new OLProjection({ code: this.map.projection }),
+      this.#map.boundaryExtent,
+      this.#map.olView.getResolution(),
+      new OLProjection({ code: this.#map.projection }),
       this.#export.bind(this)
     );
   }

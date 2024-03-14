@@ -16,6 +16,7 @@ import { Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import OLFeature from 'ol/Feature';
@@ -298,19 +299,19 @@ export class OLPopupParcelPropertiesComponent {
   // #subToAbutters: Subscription;
   // #subToSelection: Subscription;
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private map: OLMapComponent,
-    private popper: OLPopupSelectionComponent,
-    private snackBar: MatSnackBar
-  ) {
+  #cdf = inject(ChangeDetectorRef);
+  #map = inject(OLMapComponent);
+  #popper = inject(OLPopupSelectionComponent);
+  #snackBar = inject(MatSnackBar);
+
+  constructor() {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleAbuttersFound$();
     this.#handleFeaturesSelected$();
   }
 
   canClipboard(): boolean {
-    return this.popper.canClipboard();
+    return this.#popper.canClipboard();
   }
 
   // 👉 https://developers.google.com/maps/documentation/urls/get-started
@@ -318,19 +319,19 @@ export class OLPopupParcelPropertiesComponent {
     const link = `https://www.google.com/maps/@?api=1&map_action=map&center=${
       property.centers[0][1]
     }%2C${property.centers[0][0]}&zoom=${Math.round(
-      this.map.olView.getZoom()
+      this.#map.olView.getZoom()
     )}&basemap=satellite`;
     return link;
   }
 
   onClipboard(): void {
-    this.popper.toClipboard(this.tables);
+    this.#popper.toClipboard(this.tables);
   }
 
   onClose(): void {
-    this.snackBar.dismiss();
+    this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for parcels
-    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    const selector = this.#map.selector as OLInteractionSelectParcelsComponent;
     selector?.unselectParcels?.();
     // 🔥  this doesn't seem to work
     // this.#subToAbutters?.unsubscribe();
@@ -339,7 +340,7 @@ export class OLPopupParcelPropertiesComponent {
 
   onSelect(abutterID: ParcelID): void {
     // 👉 the selector MAY not be present and may not be for parcels
-    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    const selector = this.#map.selector as OLInteractionSelectParcelsComponent;
     selector?.reselectParcels?.([abutterID]);
   }
 
@@ -348,7 +349,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleAbuttersFound$(): void {
-    /* 🔥 this.#subToAbutters = */ this.map.abuttersFound
+    /* 🔥 this.#subToAbutters = */ this.#map.abuttersFound
       .pipe(
         map((features: Parcel[]): Abutter[] =>
           features
@@ -367,12 +368,12 @@ export class OLPopupParcelPropertiesComponent {
       )
       .subscribe((abutters: Abutter[]) => {
         this.abutters = abutters;
-        this.cdf.markForCheck();
+        this.#cdf.markForCheck();
       });
   }
 
   #handleFeaturesSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
+    /* 🔥 this.#subToSelection = */ this.#map.featuresSelected
       .pipe(
         map((features: OLFeature<any>[]): ParcelProperties[] =>
           features.map((feature) => feature.getProperties())
@@ -404,7 +405,7 @@ export class OLPopupParcelPropertiesComponent {
           // 👉 split depending on # of parcels
           this.splitHorizontally = this.properties.length > 1;
           this.splitVertically = this.properties.length === 1;
-          this.cdf.markForCheck();
+          this.#cdf.markForCheck();
         }
       });
   }

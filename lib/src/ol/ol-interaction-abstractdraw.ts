@@ -1,10 +1,10 @@
 import { DestroyService } from '../services/destroy';
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { Observable } from 'rxjs';
 
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
@@ -18,20 +18,18 @@ import simplify from '@turf/simplify';
 export abstract class OLInteractionAbstractDrawComponent {
   olDraw: OLDraw;
 
+  #destroy$ = inject(DestroyService);
   #drawStartKey: OLEventsKey;
   #format: OLGeoJSON;
   #layer: OLVectorLayer<any>;
+  #map = inject(OLMapComponent);
   #source: OLVectorSource<any>;
   #touched = false;
 
-  constructor(
-    protected destroy$: DestroyService,
-    protected layer: OLLayerVectorComponent,
-    protected map: OLMapComponent
-  ) {
+  constructor() {
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
   }
 
@@ -54,7 +52,7 @@ export abstract class OLInteractionAbstractDrawComponent {
     // 👇 layer into which new feature is drawn
     this.#source = new OLVectorSource();
     this.#layer = new OLVectorLayer({ source: this.#source });
-    this.map.olMap.addLayer(this.#layer);
+    this.#map.olMap.addLayer(this.#layer);
     // 👇 create a standard OL Draw interaction
     this.olDraw = new OLDraw({
       freehand: true,
@@ -66,13 +64,13 @@ export abstract class OLInteractionAbstractDrawComponent {
       'drawstart',
       () => (this.#touched = true)
     );
-    this.map.olMap.addInteraction(this.olDraw);
+    this.#map.olMap.addInteraction(this.olDraw);
   }
 
   // 👇 the idea is that ESC accepts the draw
 
   #handleStreams$(): void {
-    this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
       if (this.#touched) {
         const geojsons = this.#source.getFeatures().map((feature) => {
           const geojson = JSON.parse(this.#format.writeFeature(feature));
@@ -88,8 +86,8 @@ export abstract class OLInteractionAbstractDrawComponent {
 
   #stopDraw(): void {
     if (this.#drawStartKey) unByKey(this.#drawStartKey);
-    if (this.#layer) this.map.olMap.removeLayer(this.#layer);
-    if (this.olDraw) this.map.olMap.removeInteraction(this.olDraw);
+    if (this.#layer) this.#map.olMap.removeLayer(this.#layer);
+    if (this.olDraw) this.#map.olMap.removeInteraction(this.olDraw);
     this.#drawStartKey = null;
     this.#layer = null;
     this.olDraw = null;

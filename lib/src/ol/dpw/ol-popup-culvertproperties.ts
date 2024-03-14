@@ -4,6 +4,8 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 import copy from 'fast-copy';
 
 @Component({
@@ -13,6 +15,8 @@ import copy from 'fast-copy';
   styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupCulvertPropertiesComponent {
+  container = inject(OLPopupDPWPropertiesComponent);
+
   schema = [
     ['Location', 'location'],
     ['Description', 'description'],
@@ -27,8 +31,6 @@ export class OLPopupCulvertPropertiesComponent {
   ];
 
   #properties: any;
-
-  constructor(public container: OLPopupDPWPropertiesComponent) {}
 
   @Input() get properties(): any {
     return this.#properties;

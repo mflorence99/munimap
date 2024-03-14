@@ -4,6 +4,8 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-floodhazardproperties',
@@ -13,6 +15,8 @@ import { Input } from '@angular/core';
 export class OLPopupFloodHazardPropertiesComponent {
   @Input() properties: any;
 
+  container = inject(OLPopupDPWPropertiesComponent);
+
   schema = [
     ['Location', 'Location'],
     ['Description', 'FloodDesc'],
@@ -21,6 +25,4 @@ export class OLPopupFloodHazardPropertiesComponent {
     ['Previous Actions', 'MitAction'],
     ['Report Source', 'Source']
   ];
-
-  constructor(public container: OLPopupDPWPropertiesComponent) {}
 }

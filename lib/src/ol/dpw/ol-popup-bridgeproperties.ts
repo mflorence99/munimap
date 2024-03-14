@@ -4,6 +4,8 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-bridgeproperties',
@@ -12,6 +14,8 @@ import { Input } from '@angular/core';
 })
 export class OLPopupBridgePropertiesComponent {
   @Input() properties: any;
+
+  container = inject(OLPopupDPWPropertiesComponent);
 
   schema = [
     ['Location', 'FACILITY'],
@@ -23,6 +27,4 @@ export class OLPopupBridgePropertiesComponent {
     ['Year Rebuilt', 'YEARRECON'],
     ['Owner', 'OWNER']
   ];
-
-  constructor(public container: OLPopupDPWPropertiesComponent) {}
 }

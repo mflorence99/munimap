@@ -11,8 +11,8 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Optional } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import Crop from 'ol-ext/filter/Crop';
@@ -31,21 +31,20 @@ export class OLFilterCrop2SelectedParcelsComponent
 {
   olFilter: Crop;
 
+  #destroy$ = inject(DestroyService);
   #format: OLGeoJSON;
   #layer: any;
+  #layer1 = inject(OLLayerTileComponent, { optional: true });
+  #layer2 = inject(OLLayerVectorComponent, { optional: true });
+  #map = inject(OLMapComponent);
 
-  constructor(
-    private destroy$: DestroyService,
-    @Optional() layer1: OLLayerTileComponent,
-    @Optional() layer2: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2;
+    this.#layer = this.#layer1 ?? this.#layer2;
   }
 
   ngAfterContentInit(): void {
@@ -66,7 +65,7 @@ export class OLFilterCrop2SelectedParcelsComponent
     if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
     this.olFilter = null;
     // 👉 the selector MAY not be present
-    const selector = this.map.selector as OLInteractionSelectParcelsComponent;
+    const selector = this.#map.selector as OLInteractionSelectParcelsComponent;
     // 👇 build a new filter as the union of all the selected parcels
     if (selector?.selected?.length > 0) {
       const geojsons = selector.selected.map((feature) =>
@@ -95,8 +94,8 @@ export class OLFilterCrop2SelectedParcelsComponent
   }
 
   #handleFeaturesSelected$(): void {
-    this.map.featuresSelected
-      .pipe(takeUntil(this.destroy$))
+    this.#map.featuresSelected
+      .pipe(takeUntil(this.#destroy$))
       .subscribe(() => this.#addFilter());
   }
 }

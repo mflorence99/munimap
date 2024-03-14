@@ -3,8 +3,6 @@ import { ConfirmDialogData } from '../../components/confirm-dialog';
 import { DestroyService } from '../../services/destroy';
 import { Landmark } from '../../common';
 import { OLInteractionAbstractRedrawComponent } from '../ol-interaction-abstractredraw';
-import { OLLayerVectorComponent } from '../ol-layer-vector';
-import { OLMapComponent } from '../ol-map';
 import { UpdateLandmark } from '../../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -15,6 +13,7 @@ import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 
+import { inject } from '@angular/core';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -28,15 +27,8 @@ export class OLInteractionRedrawLandmarkComponent
   extends OLInteractionAbstractRedrawComponent
   implements OnDestroy, OnInit
 {
-  constructor(
-    private dialog: MatDialog,
-    protected override destroy$: DestroyService,
-    protected override layer: OLLayerVectorComponent,
-    protected override map: OLMapComponent,
-    private store: Store
-  ) {
-    super(destroy$, layer, map);
-  }
+  #dialog = inject(MatDialog);
+  #store = inject(Store);
 
   ngOnDestroy(): void {
     this.onDestroy;
@@ -53,7 +45,7 @@ export class OLInteractionRedrawLandmarkComponent
       )}?`,
       title: 'Please confirm new alignment'
     };
-    return this.dialog
+    return this.#dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
@@ -65,7 +57,7 @@ export class OLInteractionRedrawLandmarkComponent
               geometry: geojson.geometry,
               type: 'Feature'
             };
-            this.store.dispatch(new UpdateLandmark(landmark));
+            this.#store.dispatch(new UpdateLandmark(landmark));
           }
           // 👉 on CANCEL, reset geometry
           else this.resetRedraw();

@@ -12,6 +12,7 @@ import { ViewChild } from '@angular/core';
 
 import { convertArea } from '@turf/helpers';
 import { convertLength } from '@turf/helpers';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import area from '@turf/area';
@@ -103,20 +104,19 @@ export class OLPopupLandmarkPropertiesComponent {
 
   landmark: Landmark;
 
-  #format: OLGeoJSON;
-
   // 🔥  this doesn't seem to work
   // #subToSelection: Subscription;
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private popper: OLPopupSelectionComponent,
-    private map: OLMapComponent,
-    private snackBar: MatSnackBar
-  ) {
+  #cdf = inject(ChangeDetectorRef);
+  #format: OLGeoJSON;
+  #map = inject(OLMapComponent);
+  #popper = inject(OLPopupSelectionComponent);
+  #snackBar = inject(MatSnackBar);
+
+  constructor() {
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleFeatureSelected$();
@@ -127,7 +127,7 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   canClipboard(): boolean {
-    return this.popper.canClipboard();
+    return this.#popper.canClipboard();
   }
 
   length(): number {
@@ -135,13 +135,14 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   onClipboard(): void {
-    this.popper.toClipboard(this.table);
+    this.#popper.toClipboard(this.table);
   }
 
   onClose(): void {
-    this.snackBar.dismiss();
+    this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for landmarks
-    const selector = this.map.selector as OLInteractionSelectLandmarksComponent;
+    const selector = this.#map
+      .selector as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
     // 🔥  this doesn't seem to work
     // this.#subToSelection?.unsubscribe();
@@ -161,7 +162,7 @@ export class OLPopupLandmarkPropertiesComponent {
   //    and we could be selecting a bridge, stream crossing etc etc
 
   #handleFeatureSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.map.featuresSelected
+    /* 🔥 this.#subToSelection = */ this.#map.featuresSelected
       .pipe(
         map(
           (features: OLFeature<any>[]): Landmark =>
@@ -173,7 +174,7 @@ export class OLPopupLandmarkPropertiesComponent {
       .subscribe((landmark: Landmark) => {
         this.landmark = landmark;
         if (!this.landmark) this.onClose();
-        else this.cdf.markForCheck();
+        else this.#cdf.markForCheck();
       });
   }
 }
