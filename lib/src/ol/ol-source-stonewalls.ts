@@ -1,12 +1,8 @@
-import { CacheService } from '../services/cache';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { HttpClient } from '@angular/common/http';
 
 const attribution =
   '<a href="https://www.facebook.com/groups/NHstonewalls/" target="_blank">NH Stone Wall</a>';
@@ -18,15 +14,6 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceStoneWallsComponent extends OLSourceArcGISComponent {
-  constructor(
-    cache: CacheService,
-    map: OLMapComponent,
-    http: HttpClient,
-    layer: OLLayerVectorComponent
-  ) {
-    super(cache, http, layer, map);
-  }
-
   getAttribution(): string {
     return attribution;
   }

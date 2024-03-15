@@ -1,5 +1,4 @@
 import { OLLayerTileComponent } from './ol-layer-tile';
-import { OLMapComponent } from './ol-map';
 
 import { environment } from '../environment';
 
@@ -10,6 +9,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Input } from '@angular/core';
 
 import { catchError } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import OLImageTile from 'ol/ImageTile';
@@ -48,13 +48,11 @@ export class OLSourceContoursComponent {
   urlPreferred =
     'https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer/export?bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&dpi=96&format=png32&transparent=true&layers=show:ZZZZZZ&f=image&version=VVVVVV';
 
+  #http = inject(HttpClient);
+  #layer = inject(OLLayerTileComponent);
   #origOpacity: number;
 
-  constructor(
-    private http: HttpClient,
-    private layer: OLLayerTileComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     this.olTileWMS = new OLTileWMS({
       attributions: [attribution],
       crossOrigin: 'anonymous',
@@ -63,25 +61,25 @@ export class OLSourceContoursComponent {
       url: 'http://dummy.com'
     });
     this.olTileWMS.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olTileWMS);
+    this.#layer.olLayer.setSource(this.olTileWMS);
     // 👇 capture the original opacity so we can restore it
-    this.#origOpacity = this.layer.olLayer.getOpacity();
+    this.#origOpacity = this.#layer.olLayer.getOpacity();
   }
 
   #loader(tile: OLImageTile, src: string): void {
     // 👇 restore the original layer opacity
     //    see catchError below
-    this.layer.olLayer.setOpacity(this.#origOpacity);
+    this.#layer.olLayer.setOpacity(this.#origOpacity);
     const img = tile.getImage() as HTMLImageElement;
     const url = this.#makeURL(src, this.urlPreferred);
-    this.http
+    this.#http
       .get(url, { observe: 'response', responseType: 'blob' })
       .pipe(
         catchError(() => {
           // 👉 the fallback contours are WAAY to heavy
-          this.layer.olLayer.setOpacity(this.fallbackOpacity);
+          this.#layer.olLayer.setOpacity(this.fallbackOpacity);
           const url = this.#makeURL(src, this.urlFallback);
-          return this.http.get(url, {
+          return this.#http.get(url, {
             observe: 'response',
             responseType: 'blob'
           });

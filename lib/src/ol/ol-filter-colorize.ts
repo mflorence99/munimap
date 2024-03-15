@@ -7,7 +7,8 @@ import { ColorLike } from 'ol/colorlike';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
-import { Optional } from '@angular/core';
+
+import { inject } from '@angular/core';
 
 import Colorize from 'ol-ext/filter/Colorize';
 
@@ -35,15 +36,14 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
 
   #color: ColorLike = '#000000';
   #layer: any;
+  #layer1 = inject(OLLayerTileComponent, { optional: true });
+  #layer2 = inject(OLLayerVectorComponent, { optional: true });
   #operation: Operation;
   #value = 1;
 
-  constructor(
-    @Optional() layer1: OLLayerTileComponent,
-    @Optional() layer2: OLLayerVectorComponent
-  ) {
+  constructor() {
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2;
+    this.#layer = this.#layer1 ?? this.#layer2;
     // 👇 build the filter
     this.olFilter = new Colorize();
   }

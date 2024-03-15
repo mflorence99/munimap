@@ -11,6 +11,7 @@ import { OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -77,22 +78,22 @@ export class OLControlTitleComponent implements Mapable, OnInit {
 
   olControl: OLControl;
 
-  constructor(private map: OLMapComponent) {}
+  #map = inject(OLMapComponent);
 
   // 👇 set the font size proportional to the map size
   get fontSize(): number {
-    const element = this.map.olMap.getTargetElement();
+    const element = this.#map.olMap.getTargetElement();
     return element.clientHeight / this.scaleFactor;
   }
 
   // 👇 set the position proportional to the map size
   get top(): number {
-    const element = this.map.olMap.getTargetElement();
+    const element = this.#map.olMap.getTargetElement();
     return element.clientHeight / this.scaleFactor;
   }
 
   addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.#map.olMap.addControl(this.olControl);
   }
 
   ngOnInit(): void {

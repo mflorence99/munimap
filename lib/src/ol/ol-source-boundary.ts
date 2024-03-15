@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
+import { inject } from '@angular/core';
 
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
@@ -24,10 +25,10 @@ const attribution =
 export class OLSourceBoundaryComponent {
   olVector: OLVector<any>;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
+
+  constructor() {
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
@@ -35,7 +36,7 @@ export class OLSourceBoundaryComponent {
       strategy: allStrategy
     });
     this.olVector.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olVector);
+    this.#layer.olLayer.setSource(this.olVector);
   }
 
   // 👇 a simple loader allows refresh to be called
@@ -47,9 +48,11 @@ export class OLSourceBoundaryComponent {
     success: Function
   ): void {
     // 👉 convert features into OL format
-    const features = this.olVector.getFormat().readFeatures(this.map.boundary, {
-      featureProjection: this.map.projection
-    }) as OLFeature<any>[];
+    const features = this.olVector
+      .getFormat()
+      .readFeatures(this.#map.boundary, {
+        featureProjection: this.#map.projection
+      }) as OLFeature<any>[];
     // 👉 add feature to source
     this.olVector.addFeatures(features);
     success(features);

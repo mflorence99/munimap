@@ -10,6 +10,7 @@ import { Input } from '@angular/core';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
@@ -37,15 +38,15 @@ export class OLSourceGeoJSONComponent {
 
   olVector: OLVector<any>;
 
-  constructor(
-    private geoJSON: GeoJSONService,
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent,
-    private route: ActivatedRoute
-  ) {
+  #geoJSON = inject(GeoJSONService);
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
+  #route = inject(ActivatedRoute);
+
+  constructor() {
     let strategy;
-    if (this.map.loadingStrategy === 'all') strategy = allStrategy;
-    else if (this.map.loadingStrategy === 'bbox') strategy = bboxStrategy;
+    if (this.#map.loadingStrategy === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
@@ -53,7 +54,7 @@ export class OLSourceGeoJSONComponent {
       strategy: strategy
     });
     this.olVector.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olVector);
+    this.#layer.olLayer.setSource(this.olVector);
   }
 
   #loader(
@@ -64,12 +65,17 @@ export class OLSourceGeoJSONComponent {
   ): void {
     let bbox;
     // 👉 get everything at once
-    if (this.map.loadingStrategy === 'all') bbox = this.map.bbox;
+    if (this.#map.loadingStrategy === 'all') bbox = this.#map.bbox;
     // 👉 or just get what's visible
-    else if (this.map.loadingStrategy === 'bbox')
-      bbox = transformExtent(extent, projection, this.map.featureProjection);
-    this.geoJSON
-      .loadByIndex(this.route, this.path ?? this.map.path, this.layerKey, bbox)
+    else if (this.#map.loadingStrategy === 'bbox')
+      bbox = transformExtent(extent, projection, this.#map.featureProjection);
+    this.#geoJSON
+      .loadByIndex(
+        this.#route,
+        this.path ?? this.#map.path,
+        this.layerKey,
+        bbox
+      )
       .pipe(
         map((geojson: GeoJSON.FeatureCollection<any, any>) => {
           if (this.exclude) {
@@ -87,7 +93,7 @@ export class OLSourceGeoJSONComponent {
       .subscribe((geojson: GeoJSON.FeatureCollection<any, any>) => {
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
-          featureProjection: this.map.projection
+          featureProjection: this.#map.projection
         }) as OLFeature<any>[];
         // 👉 add each feature not already present
         features.forEach((feature) => {

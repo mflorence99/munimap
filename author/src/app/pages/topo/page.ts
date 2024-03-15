@@ -41,6 +41,7 @@ import { ViewChild } from '@angular/core';
             [printSize]="sink.map.printSize"
             mapControlPrint></app-ol-control-print>
         }
+
         @if (sink.map.name) {
           <app-ol-control-exportlayers
             [fileName]="sink.map.id + '-layers'"

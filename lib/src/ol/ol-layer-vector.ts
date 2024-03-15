@@ -11,6 +11,7 @@ import { QueryList } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLStyle from 'ol/style/Style';
 import OLVector from 'ol/layer/Vector';
@@ -33,7 +34,9 @@ export class OLLayerVectorComponent implements Mapable {
 
   olLayer: OLVector<any>;
 
-  constructor(private map: OLMapComponent) {
+  #map = inject(OLMapComponent);
+
+  constructor() {
     this.olLayer = new OLVector({ style: this.style() });
     this.olLayer.setProperties({ component: this }, true);
   }
@@ -51,7 +54,7 @@ export class OLLayerVectorComponent implements Mapable {
   }
 
   addToMap(): void {
-    this.map.olMap.addLayer(this.olLayer);
+    this.#map.olMap.addLayer(this.olLayer);
   }
 
   style(): OLStyleFunction {

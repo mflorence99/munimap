@@ -11,6 +11,7 @@ import { OnInit } from '@angular/core';
 import { click } from 'ol/events/condition';
 import { featureCollection } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 
@@ -37,17 +38,16 @@ import OLModify from 'ol/interaction/Modify';
 export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
   olModify: OLModify;
 
+  #destroy$ = inject(DestroyService);
   #format: OLGeoJSON;
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
 
-  constructor(
-    private destroy$: DestroyService,
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     // 👉 one to rule them all
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
   }
 
@@ -55,11 +55,11 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
     this.olModify = new OLModify({
       deleteCondition: (event): boolean =>
         click(event) && platformModifierKeyOnly(event),
-      hitDetection: this.layer.olLayer,
-      source: this.layer.olLayer.getSource()
+      hitDetection: this.#layer.olLayer,
+      source: this.#layer.olLayer.getSource()
     });
     this.olModify.setProperties({ component: this }, true);
-    this.map.olMap.addInteraction(this.olModify);
+    this.#map.olMap.addInteraction(this.olModify);
   }
 
   ngOnInit(): void {
@@ -69,11 +69,13 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
   #emitBoundary(): void {
     const geojson = featureCollection([
       JSON.parse(
-        this.#format.writeFeatures(this.layer.olLayer.getSource().getFeatures())
+        this.#format.writeFeatures(
+          this.#layer.olLayer.getSource().getFeatures()
+        )
       )
     ]);
     // 👉 jam original bbox, which was calculated as 4:3
-    geojson.features[0].bbox = this.map.boundary.features[0].bbox;
+    geojson.features[0].bbox = this.#map.boundary.features[0].bbox;
     // 👉 put the adjusted boundary on the clipboard
     navigator.clipboard.writeText(JSON.stringify(geojson, null, ' '));
     // 👉 jst so we know something happened
@@ -83,7 +85,7 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
   // 👇 the idea is that ESC accepts the redraw
 
   #handleStreams$(): void {
-    this.map.escape$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
       this.#emitBoundary();
     });
   }

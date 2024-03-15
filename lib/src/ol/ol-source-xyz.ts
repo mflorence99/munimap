@@ -7,10 +7,11 @@ import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ContentChildren } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { QueryList } from '@angular/core';
+
+import { inject } from '@angular/core';
 
 import OLXYZ from 'ol/source/XYZ';
 
@@ -30,10 +31,9 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
 
   olXYZ: OLXYZ;
 
-  constructor(
-    private http: HttpClient,
-    private layer: OLLayerTileComponent
-  ) {}
+  #layer = inject(OLLayerTileComponent);
+
+  constructor() {}
 
   ngAfterContentInit(): void {
     // 👉 note that we're saying we don't expect
@@ -56,6 +56,6 @@ export class OLSourceXYZComponent implements AfterContentInit, OnInit {
       }?url=${encoded}&x={x}&y={y}&z={z}&s=${this.s.join(',')}`
     });
     this.olXYZ.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olXYZ);
+    this.#layer.olLayer.setSource(this.olXYZ);
   }
 }

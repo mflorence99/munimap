@@ -1,17 +1,12 @@
 import { DestroyService } from '../../services/destroy';
-import { GeoJSONService } from '../../services/geojson';
-import { OLLayerVectorComponent } from '../ol-layer-vector';
 import { OLMapComponent } from '../ol-map';
 import { OLSourceParcelsComponent } from '../ol-source-parcels';
-import { ParcelsState } from '../../state/parcels';
 
 import { simplify } from '../../common';
 
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
-import { Store } from '@ngxs/store';
 
 import { inject } from '@angular/core';
 import { saveAs } from 'file-saver';
@@ -42,31 +37,16 @@ import OLProjection from 'ol/proj/Projection';
 export class OLControlExportParcelsComponent {
   @Input() fileName: string;
 
-  #destroy$ = inject(DestroyService);
   #format: OLGeoJSON;
-  #geoJSON = inject(GeoJSONService);
-  #layer: OLLayerVectorComponent;
   #map = inject(OLMapComponent);
-  #parcelsState = inject(ParcelsState);
-  #route = inject(ActivatedRoute);
   #source: OLSourceParcelsComponent;
-  #store = inject(Store);
 
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
       featureProjection: this.#map.projection
     });
-    this.#layer = new OLLayerVectorComponent(this.#map);
-    this.#source = new OLSourceParcelsComponent(
-      this.#destroy$,
-      this.#geoJSON,
-      this.#layer,
-      this.#map,
-      this.#parcelsState,
-      this.#route,
-      this.#store
-    );
+    this.#source = new OLSourceParcelsComponent();
     this.#source.ngOnInit();
   }
 

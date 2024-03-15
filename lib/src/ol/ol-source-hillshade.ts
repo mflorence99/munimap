@@ -1,11 +1,12 @@
 import { OLLayerTileComponent } from './ol-layer-tile';
-import { OLMapComponent } from './ol-map';
 
 import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+
+import { inject } from '@angular/core';
 
 import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
@@ -31,10 +32,9 @@ export class OLSourceHillshadeComponent {
   url =
     'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256&version=VVVVVV';
 
-  constructor(
-    private layer: OLLayerTileComponent,
-    private map: OLMapComponent
-  ) {
+  #layer = inject(OLLayerTileComponent);
+
+  constructor() {
     this.olTileWMS = new OLTileWMS({
       attributions: [attribution],
       crossOrigin: 'anonymous',
@@ -43,7 +43,7 @@ export class OLSourceHillshadeComponent {
       url: 'http://dummy.com'
     });
     this.olTileWMS.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olTileWMS);
+    this.#layer.olLayer.setSource(this.olTileWMS);
   }
 
   #loader(tile: OLImageTile, src: string): void {

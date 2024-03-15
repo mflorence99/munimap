@@ -17,6 +17,7 @@ import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
 import { click } from 'ol/events/condition';
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 import { pointerMove } from 'ol/events/condition';
 import { unByKey } from 'ol/Observable';
 
@@ -48,19 +49,20 @@ export class OLInteractionSelectGeoJSONComponent
 
   @Input() filter: FilterFunction;
 
+  // 👉 we need public access to go through the selector to its layer
+  //    see abstract-map.ts -- this is how the context menu works
+  //    the layer that contains the selector contains the features
+  //    that can be operated on
+
+  layer = inject(OLLayerVectorComponent);
+  map = inject(OLMapComponent);
+
   olHover: OLSelect;
   olSelect: OLSelect;
 
   #selectKey: OLEventsKey;
 
-  constructor(
-    // 👉 we need public access to go through the selector to its layer
-    //    see abstract-map.ts -- this is how the context menu works
-    //    the layer that contains the selector contains the features
-    //    that can be operated on
-    public layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     // 👉 for hovering
     this.olHover = new OLSelect({
       condition: (event): boolean => pointerMove(event),

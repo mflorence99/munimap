@@ -14,6 +14,7 @@ import { Select } from '@ngxs/store';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
 import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import GeoJSON from 'ol/format/GeoJSON';
@@ -33,20 +34,19 @@ export class OLSourceLandmarksComponent implements OnInit {
 
   olVector: OLVector<any>;
 
+  #destroy$ = inject(DestroyService);
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
   #success: Function;
 
-  constructor(
-    private destroy$: DestroyService,
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     this.olVector = new OLVector({
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
       strategy: allStrategy
     });
     this.olVector.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olVector);
+    this.#layer.olLayer.setSource(this.olVector);
   }
 
   ngOnInit(): void {
@@ -54,7 +54,7 @@ export class OLSourceLandmarksComponent implements OnInit {
   }
 
   #handleStreams$(): void {
-    this.landmarks$.pipe(takeUntil(this.destroy$)).subscribe((landmarks) => {
+    this.landmarks$.pipe(takeUntil(this.#destroy$)).subscribe((landmarks) => {
       // 👉 represent landmarks as geojson
       const geojson = featureCollection(
         // 👇 I did this to create a current use map for the assessors
@@ -62,13 +62,13 @@ export class OLSourceLandmarksComponent implements OnInit {
       );
       // 👉 convert features into OL format
       const features = this.olVector.getFormat().readFeatures(geojson, {
-        featureProjection: this.map.projection
+        featureProjection: this.#map.projection
       }) as OLFeature<any>[];
       // 👉 add feature to source
       this.olVector.clear();
       this.olVector.addFeatures(features);
       // 👉 the selector MAY not be present and may not be for landmarks
-      const selector = this.map
+      const selector = this.#map
         .selector as OLInteractionSelectLandmarksComponent;
       // 👉 reselect selected features b/c we've potentially removed them
       const selectedIDs = selector?.selectedIDs;

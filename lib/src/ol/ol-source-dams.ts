@@ -1,13 +1,9 @@
-import { CacheService } from '../services/cache';
 import { DamProperties } from '../common';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { HttpClient } from '@angular/common/http';
 
 // 👇 places.geojson does contain dams, but only major ones
 //    so we augment it with this data source
@@ -22,15 +18,6 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceDamsComponent extends OLSourceArcGISComponent {
-  constructor(
-    cache: CacheService,
-    map: OLMapComponent,
-    http: HttpClient,
-    layer: OLLayerVectorComponent
-  ) {
-    super(cache, http, layer, map);
-  }
-
   // 👇 see PlaceProperties
 
   override filter(arcgis: any): any {

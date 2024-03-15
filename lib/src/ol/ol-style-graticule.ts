@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
@@ -37,10 +38,9 @@ export class OLStyleGraticuleComponent implements Styler {
 
   @Input() printing: boolean;
 
-  constructor(
-    private graticule: OLControlGraticuleComponent /* 👈 enforce container */,
-    private map: OLMapComponent
-  ) {}
+  // eslint-disable-next-line no-unused-private-class-members
+  #graticule = inject(OLControlGraticuleComponent) /* 👈 enforce container */;
+  #map = inject(OLMapComponent);
 
   style(): OLStyle {
     return new OLStyle({
@@ -53,17 +53,17 @@ export class OLStyleGraticuleComponent implements Styler {
   #border(): OLFill {
     // 👉 this is the part of the border that isn't the same
     //    color as the lines
-    const color = this.map.vars['--map-graticule-border-color'];
+    const color = this.#map.vars['--map-graticule-border-color'];
     return new OLFill({ color: `rgba(${color}, 1)` });
   }
 
   #coords(): OLText {
-    const color = this.map.vars['--map-graticule-text-color'];
-    const outline = this.map.vars['--map-graticule-text-inverse'];
+    const color = this.#map.vars['--map-graticule-text-color'];
+    const outline = this.#map.vars['--map-graticule-text-inverse'];
     let fontSize = this.fontSize;
     // 👇 when we are printing, we want the lat/lon to be visible
     if (this.printing) {
-      const element = this.map.olMap.getTargetElement();
+      const element = this.#map.olMap.getTargetElement();
       fontSize = element.clientHeight / 250;
     }
     return new OLText({
@@ -77,7 +77,7 @@ export class OLStyleGraticuleComponent implements Styler {
   }
 
   #line(): OLStroke {
-    const color = this.map.vars['--map-graticule-line-color'];
+    const color = this.#map.vars['--map-graticule-line-color'];
     return new OLStroke({
       color: `rgba(${color},  1)`,
       lineCap: 'square',

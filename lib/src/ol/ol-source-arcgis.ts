@@ -13,6 +13,7 @@ import { arcgisToGeoJSON } from '@esri/arcgis-to-geojson-utils';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { catchError } from 'rxjs/operators';
 import { delay } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 import { of } from 'rxjs';
@@ -36,16 +37,15 @@ const schemaAlreadyAnalyzed: Record<string, boolean> = {};
 export abstract class OLSourceArcGISComponent {
   maxRequests = 8;
   olVector: OLVector<any>;
+  #cache = inject(CacheService);
+  #http = inject(HttpClient);
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
 
-  constructor(
-    private cache: CacheService,
-    private http: HttpClient,
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     let strategy;
-    if (this.map.loadingStrategy === 'all') strategy = allStrategy;
-    else if (this.map.loadingStrategy === 'bbox') strategy = bboxStrategy;
+    if (this.#map.loadingStrategy === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
@@ -53,7 +53,7 @@ export abstract class OLSourceArcGISComponent {
       strategy: strategy
     });
     this.olVector.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olVector);
+    this.#layer.olLayer.setSource(this.olVector);
   }
 
   filter(arcgis: any): any {
@@ -62,8 +62,8 @@ export abstract class OLSourceArcGISComponent {
 
   #gridsFromBBox(projection: OLProjection): Coordinate[] {
     const visible = transformExtent(
-      this.map.bbox,
-      this.map.featureProjection,
+      this.#map.bbox,
+      this.#map.featureProjection,
       projection
     ) as GeoJSON.BBox;
     return [visible];
@@ -74,14 +74,14 @@ export abstract class OLSourceArcGISComponent {
       transformExtent(
         extent,
         projection,
-        this.map.featureProjection
+        this.#map.featureProjection
       ) as GeoJSON.BBox
     );
-    return this.map.boundaryGrid.features
+    return this.#map.boundaryGrid.features
       .filter((feature) => booleanIntersects(visible, feature))
       .map((feature) => bbox(feature))
       .map((bbox) =>
-        transformExtent(bbox, this.map.featureProjection, projection)
+        transformExtent(bbox, this.#map.featureProjection, projection)
       )
       .map((bbox) => {
         const [minX, minY, maxX, maxY] = bbox;
@@ -102,11 +102,11 @@ export abstract class OLSourceArcGISComponent {
   ): void {
     let grids: Coordinate[];
     // 👇 get everyrhing at once
-    if (this.map.loadingStrategy === 'all')
+    if (this.#map.loadingStrategy === 'all')
       grids = this.#gridsFromBBox(projection);
     // 👇 one URL for each grid square covered by the extent
     //    this way requests are repeatable and cachable
-    else if (this.map.loadingStrategy === 'bbox')
+    else if (this.#map.loadingStrategy === 'bbox')
       grids = this.#gridsFromExtent(extent, projection);
     const urls = grids.map(
       (grid) =>
@@ -118,11 +118,11 @@ export abstract class OLSourceArcGISComponent {
     );
     // 👇 we cache responses by URL
     const requests = urls.map((url) => {
-      const cached = this.cache.get(url);
+      const cached = this.#cache.get(url);
       return cached
         ? // 👇 preserve "next tick" semantics of HTTP GET
           of(cached).pipe(delay(0))
-        : this.http.get(url).pipe(
+        : this.#http.get(url).pipe(
             catchError(() => of({ features: [] })),
             // 👇 arcgis can return just an "error" which we ignore
             map((arcgis: any): any =>
@@ -137,7 +137,7 @@ export abstract class OLSourceArcGISComponent {
               geojson.features.forEach(
                 (feature) => (feature.id = this.getFeatureID(feature))
               );
-              this.cache.set(url, geojson);
+              this.#cache.set(url, geojson);
             })
           );
     });

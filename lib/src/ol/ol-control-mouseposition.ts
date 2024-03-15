@@ -6,6 +6,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLMousePosition from 'ol/control/MousePosition';
 
@@ -24,15 +25,17 @@ import OLMousePosition from 'ol/control/MousePosition';
 export class OLControlMousePositionComponent implements Mapable {
   olControl: OLMousePosition;
 
-  constructor(private map: OLMapComponent) {
+  #map = inject(OLMapComponent);
+
+  constructor() {
     this.olControl = new OLMousePosition({
       className: 'ol-control-mouseposition',
-      projection: this.map.featureProjection
+      projection: this.#map.featureProjection
     });
     this.olControl.setProperties({ component: this }, true);
   }
 
   addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.#map.olMap.addControl(this.olControl);
   }
 }

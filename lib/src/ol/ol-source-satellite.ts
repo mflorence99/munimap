@@ -1,11 +1,12 @@
 import { OLLayerTileComponent } from './ol-layer-tile';
-import { OLMapComponent } from './ol-map';
 
 import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+
+import { inject } from '@angular/core';
 
 import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
@@ -47,12 +48,10 @@ export const satelliteYears = Object.keys(urls);
 export class OLSourceSatelliteComponent {
   olTileWMS: OLTileWMS;
 
+  #layer = inject(OLLayerTileComponent);
   #year: string;
 
-  constructor(
-    private layer: OLLayerTileComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     this.olTileWMS = new OLTileWMS({
       attributions: [attribution],
       crossOrigin: 'anonymous',
@@ -61,7 +60,7 @@ export class OLSourceSatelliteComponent {
       url: 'http://dummy.com'
     });
     this.olTileWMS.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olTileWMS);
+    this.#layer.olLayer.setSource(this.olTileWMS);
   }
 
   @Input() get year(): string {

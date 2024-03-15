@@ -13,6 +13,7 @@ import { ViewChild } from '@angular/core';
 import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { getDistance } from 'ol/sphere';
+import { inject } from '@angular/core';
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -132,17 +133,17 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
 
   olControl: OLControl;
 
-  constructor(private map: OLMapComponent) {}
+  #map = inject(OLMapComponent);
 
   // 👇 set the position proportional to the map size
   get bottom(): number {
-    const element = this.map.olMap.getTargetElement();
+    const element = this.#map.olMap.getTargetElement();
     return (element.clientHeight / this.scaleFactor) * 4;
   }
 
   // 👇 set the font size proportional to the map size
   get fontSize(): number {
-    const element = this.map.olMap.getTargetElement();
+    const element = this.#map.olMap.getTargetElement();
     return element.clientHeight / this.scaleFactor;
   }
 
@@ -157,7 +158,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
   }
 
   addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.#map.olMap.addControl(this.olControl);
   }
 
   ngOnInit(): void {
@@ -167,7 +168,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
   }
 
   #calculateMetrics(): void {
-    const [minX, minY, maxX] = this.map.bbox;
+    const [minX, minY, maxX] = this.#map.bbox;
     const numFeet = convertLength(
       getDistance([minX, minY], [maxX, minY]),
       'meters',
@@ -176,7 +177,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
     this.ftUnit = Math.pow(10, Math.floor(numFeet).toString().length - 2);
     // 🔥 force 10 units for now
     this.numUnits = 10; // Math.min(10, Math.round(numFeet / 4 / this.ftUnit));
-    const numPixels = this.map.olMap.getSize()[0];
+    const numPixels = this.#map.olMap.getSize()[0];
     const cxFoot = numPixels / numFeet;
     this.cxUnit = this.ftUnit * cxFoot;
     this.cxWidth = this.cxUnit * this.numUnits;

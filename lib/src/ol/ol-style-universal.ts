@@ -11,7 +11,6 @@ import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
 import { OnChanges } from '@angular/core';
-import { Optional } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
@@ -20,6 +19,7 @@ import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getCenter } from 'ol/extent';
+import { inject } from '@angular/core';
 
 import area from '@turf/area';
 import combine from '@turf/combine';
@@ -81,41 +81,42 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   /* eslint-enable @typescript-eslint/naming-convention */
 
+  #adaptor = inject(AdaptorComponent, { optional: true });
+  #decimal = inject(DecimalPipe);
   #format: OLGeoJSON;
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
 
-  constructor(
-    @Optional() private adaptor: AdaptorComponent,
-    private decimal: DecimalPipe,
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
-      this.layer.olLayer.getSource().refresh();
+      this.#layer.olLayer.getSource().refresh();
     }
   }
 
   style(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      const propss = (this.adaptor as Adaptor).adapt(feature.getProperties());
+      const propss = (this.#adaptor as Adaptor).adapt(feature.getProperties());
       const styles = this.#styleImpl(feature, resolution, propss);
       // 👉 add any backdoor styles
-      if ((this.adaptor as Adaptor)?.backdoor)
-        styles.push(...(this.adaptor as Adaptor).backdoor(feature, resolution));
+      if ((this.#adaptor as Adaptor)?.backdoor)
+        styles.push(
+          ...(this.#adaptor as Adaptor).backdoor(feature, resolution)
+        );
       return styles;
     };
   }
 
   styleWhenHovering(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      if ((this.adaptor as Adaptor)?.adaptWhenHovering) {
-        const propss = (this.adaptor as Adaptor).adaptWhenHovering(
+      if ((this.#adaptor as Adaptor)?.adaptWhenHovering) {
+        const propss = (this.#adaptor as Adaptor).adaptWhenHovering(
           feature.getProperties()
         );
         const whenHovering = true;
@@ -133,8 +134,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   styleWhenSelected(): OLStyleFunction {
     return (feature: any, resolution: number): OLStyle[] => {
-      if ((this.adaptor as Adaptor)?.adaptWhenSelected) {
-        const propss = (this.adaptor as Adaptor).adaptWhenSelected(
+      if ((this.#adaptor as Adaptor)?.adaptWhenSelected) {
+        const propss = (this.#adaptor as Adaptor).adaptWhenSelected(
           feature.getProperties()
         );
         const whenHovering = false;
@@ -155,7 +156,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     if (props.fontFeet)
       fontPixels = this.#calcPixelsForFeet(props.fontFeet, resolution);
     else if (props.fontPixels)
-      fontPixels = this.map.numPixels(props.fontPixels);
+      fontPixels = this.#map.numPixels(props.fontPixels);
     else if (props.fontSize)
       fontPixels = this[`fontSize_${props.fontSize}`] / Math.sqrt(resolution);
     return Math.min(this.maxFontPixels, fontPixels);
@@ -171,7 +172,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     if (props.strokeFeet)
       strokePixels = this.#calcPixelsForFeet(props.strokeFeet, resolution);
     else if (props.strokePixels)
-      strokePixels = this.map.numPixels(props.strokePixels);
+      strokePixels = this.#map.numPixels(props.strokePixels);
     else if (props.strokeWidth)
       strokePixels = this.#calcPixelsForFeet(
         this[`strokeWidth_${props.strokeWidth}`],
@@ -207,13 +208,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     } else if (this.contrast === 'normal') {
       if (whenRedrawing) colorKey = '--rgb-blue-a200';
     }
-    return this.map.vars[colorKey];
+    return this.#map.vars[colorKey];
   }
 
   #colorOfOpposite(colorKey: string): string {
     if (this.contrast === 'whiteOnBlack') colorKey = '--rgb-gray-900';
     else if (this.contrast === 'blackOnWhite') colorKey = '--rgb-gray-50';
-    return this.map.vars[colorKey];
+    return this.#map.vars[colorKey];
   }
 
   #fillEmptyPolygon(
@@ -301,7 +302,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   }
 
   #measureText(text: string, font: string, resolution: number): number {
-    const metrics = this.map.measureText(text, font);
+    const metrics = this.#map.measureText(text, font);
     return metrics.width * resolution /* 👈 length of text in meters */;
   }
 
@@ -453,7 +454,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     propss
       .filter((props) => !!props)
       .forEach((props) => {
-        if (this.map.olView.getZoom() >= (props.minZoom ?? 0)) {
+        if (this.#map.olView.getZoom() >= (props.minZoom ?? 0)) {
           switch (feature.getGeometry().getType()) {
             case 'Point':
             case 'MultiPoint':
@@ -580,7 +581,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         if (props.showDimension) {
           // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
           const geojson = JSON.parse(this.#format.writeFeature(feature));
-          text += ` (${this.decimal.transform(
+          text += ` (${this.#decimal.transform(
             length(geojson, { units: 'feet' }),
             '1.0-0'
           )} ft)`;
@@ -681,7 +682,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         if (props.showDimension) {
           // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
           const geojson = JSON.parse(this.#format.writeFeature(feature));
-          text += `\n(${this.decimal.transform(
+          text += `\n(${this.#decimal.transform(
             convertArea(area(geojson), 'meters', 'acres'),
             '1.0-2'
           )} ac)`;

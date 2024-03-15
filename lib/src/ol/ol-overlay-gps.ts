@@ -13,6 +13,7 @@ import { Store } from '@ngxs/store';
 import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
+import { inject } from '@angular/core';
 import { linear } from 'ol/easing';
 import { retryBackoff } from 'backoff-rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -86,15 +87,14 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
 
   olOverlay: OLOverlay;
 
+  #destroy$ = inject(DestroyService);
+  #geolocation$ = inject(GeolocationService);
   #lastTimestamp = 0;
+  #map = inject(OLMapComponent);
+  #snackBar = inject(MatSnackBar);
+  #store = inject(Store);
 
-  constructor(
-    private destroy$: DestroyService,
-    private geolocation$: GeolocationService,
-    private map: OLMapComponent,
-    private snackBar: MatSnackBar,
-    private store: Store
-  ) {
+  constructor() {
     this.olOverlay = new OLOverlay({
       autoPan: {
         animation: {
@@ -105,11 +105,11 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
       positioning: 'center-center'
     });
     this.olOverlay.setProperties({ component: this }, true);
-    this.map.olMap.addOverlay(this.olOverlay);
+    this.#map.olMap.addOverlay(this.olOverlay);
   }
 
   ngOnDestroy(): void {
-    this.map.olMap.removeOverlay(this.olOverlay);
+    this.#map.olMap.removeOverlay(this.olOverlay);
   }
 
   ngOnInit(): void {
@@ -118,21 +118,21 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
   }
 
   #currentPositionLost(error: GeolocationPositionError): void {
-    this.snackBar.open(`🔥 GPS tracking ${error.message}`, null, {
+    this.#snackBar.open(`🔥 GPS tracking ${error.message}`, null, {
       duration: 5000
     });
   }
 
   #currentPositionOutsideMap(): void {
-    this.snackBar.open('👉 GPS position is outside of map', null, {
+    this.#snackBar.open('👉 GPS position is outside of map', null, {
       duration: 5000
     });
   }
 
   #handleGeolocation$(): void {
-    this.geolocation$
+    this.#geolocation$
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(this.#destroy$),
         // 👀 https://indepth.dev/posts/1260/power-of-rxjs-when-using-exponential-backoff
         retryBackoff({
           backoffDelay: (iteration, initialInterval) =>
@@ -160,7 +160,7 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
     //    on a PERMISSION_DENIED error
     console.error('🔥 Geolocation handleGeolocationError', error);
     this.#currentPositionLost(error);
-    this.store.dispatch(new SetGPS(false));
+    this.#store.dispatch(new SetGPS(false));
   }
 
   #handleGeolocationPosition(position: GeolocationPosition): void {
@@ -180,14 +180,14 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
       );
     } else {
       this.#currentPositionOutsideMap();
-      this.store.dispatch(new SetGPS(false));
+      this.#store.dispatch(new SetGPS(false));
     }
   }
 
   #isInsideMap(position: GeolocationPosition): boolean {
     const x = position.coords.longitude;
     const y = position.coords.latitude;
-    const [left, bottom, right, top] = this.map.bbox;
+    const [left, bottom, right, top] = this.#map.bbox;
     // 👉 https://gamedev.stackexchange.com/questions/586
     return !(x > right || x < left || y < bottom || y > top);
   }

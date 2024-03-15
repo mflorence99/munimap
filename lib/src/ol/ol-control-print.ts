@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { unByKey } from 'ol/Observable';
 
@@ -50,29 +51,26 @@ export class OLControlPrintComponent {
   @Input() printSize: number[];
 
   #center: OLCoordinate;
+  #dialog = inject(MatDialog);
   #dpi: number;
+  #map = inject(OLMapComponent);
   #progressRef: MatDialogRef<OLControlPrintProgressComponent>;
   #px: number;
   #py: number;
   #renderCompleteKey: OLEventsKey;
   #zoom: number;
 
-  constructor(
-    private dialog: MatDialog,
-    private map: OLMapComponent
-  ) {}
-
   print(): void {
     const data: ConfirmDialogData = {
       content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize[0]}" x ${this.printSize[1]}" paper.`,
       title: 'Please confirm map print'
     };
-    this.dialog
+    this.#dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.#renderCompleteKey = this.map.olMap.once('rendercomplete', () =>
+          this.#renderCompleteKey = this.#map.olMap.once('rendercomplete', () =>
             this.#printImpl()
           );
           this.#setup();
@@ -105,7 +103,7 @@ export class OLControlPrintComponent {
 
   #printArea(cx: number, cy: number): number[] {
     const nominal = [cx * this.dpi, cy * this.dpi];
-    const ar = this.map.orientation === 'portrait' ? cx / cy : cy / cx;
+    const ar = this.#map.orientation === 'portrait' ? cx / cy : cy / cx;
     const actual = [];
     if (ar > 1) {
       actual[0] = Math.min(nominal[0], this.maxPrintSize);
@@ -119,7 +117,7 @@ export class OLControlPrintComponent {
   }
 
   #printImpl(): void {
-    html2canvas(this.map.olMap.getViewport(), {
+    html2canvas(this.#map.olMap.getViewport(), {
       height: this.#py,
       width: this.#px
     }).then((viewport) => {
@@ -145,20 +143,20 @@ export class OLControlPrintComponent {
   }
 
   #setup(): void {
-    this.#center = this.map.olView.getCenter();
-    this.#zoom = this.map.olView.getZoom();
-    this.map.olView.setConstrainResolution(false);
+    this.#center = this.#map.olView.getCenter();
+    this.#zoom = this.#map.olView.getZoom();
+    this.#map.olView.setConstrainResolution(false);
     // 👉 calculate extent of full map
     const printArea = this.#printArea(this.printSize[0], this.printSize[1]);
     this.#px = printArea[0];
     this.#py = printArea[1];
     // 👉 the progress dialog allows the print to be cancelled
     const data: PrintProgressData = {
-      map: this.map,
+      map: this.#map,
       px: this.#px,
       py: this.#py
     };
-    this.#progressRef = this.dialog.open(OLControlPrintProgressComponent, {
+    this.#progressRef = this.#dialog.open(OLControlPrintProgressComponent, {
       data,
       disableClose: true
     });
@@ -170,32 +168,32 @@ export class OLControlPrintComponent {
     //    also -- we want the dialog to show quickly, before the map
     //    updateSize etc which takes a lot of dead time
     setTimeout(() => {
-      const element = this.map.olMap.getTargetElement();
+      const element = this.#map.olMap.getTargetElement();
       element.style.height = `${this.#py}px`;
       element.style.overflow = 'visible';
       element.style.width = `${this.#px}px`;
-      this.#dpi = this.map.dpi;
+      this.#dpi = this.#map.dpi;
       // 👉 the actual dpi has been clamped!
-      this.map.dpi = printArea[0] / this.printSize[0];
-      this.map.olMap.updateSize();
-      this.map.zoomToBounds();
+      this.#map.dpi = printArea[0] / this.printSize[0];
+      this.#map.olMap.updateSize();
+      this.#map.zoomToBounds();
       // 👉 controls map configuration
-      this.map.printing = true;
+      this.#map.printing = true;
     }, 0);
   }
 
   #teardown(): void {
     this.#progressRef.close();
     // 👇 https://openlayers.org/en/latest/examples/print-to-scale.html
-    const element = this.map.olMap.getTargetElement();
+    const element = this.#map.olMap.getTargetElement();
     element.style.height = ``;
     element.style.overflow = 'hidden';
     element.style.width = ``;
-    this.map.dpi = this.#dpi;
-    this.map.olMap.updateSize();
-    this.map.olView.setCenter(this.#center);
-    this.map.olView.setZoom(this.#zoom);
+    this.#map.dpi = this.#dpi;
+    this.#map.olMap.updateSize();
+    this.#map.olView.setCenter(this.#center);
+    this.#map.olView.setZoom(this.#zoom);
     // 👉 controls map configuration
-    this.map.printing = false;
+    this.#map.printing = false;
   }
 }

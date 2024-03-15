@@ -5,7 +5,8 @@ import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { OnDestroy } from '@angular/core';
-import { Optional } from '@angular/core';
+
+import { inject } from '@angular/core';
 
 import PencilSketch from 'ol-ext/filter/PencilSketch';
 
@@ -19,13 +20,12 @@ export class OLFilterPencilComponent implements AfterContentInit, OnDestroy {
   olFilter: PencilSketch;
 
   #layer: any;
+  #layer1 = inject(OLLayerTileComponent, { optional: true });
+  #layer2 = inject(OLLayerVectorComponent, { optional: true });
 
-  constructor(
-    @Optional() layer1: OLLayerTileComponent,
-    @Optional() layer2: OLLayerVectorComponent
-  ) {
+  constructor() {
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2;
+    this.#layer = this.#layer1 ?? this.#layer2;
     // 👇 build the filter
     this.olFilter = new PencilSketch();
   }

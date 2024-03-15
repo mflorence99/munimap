@@ -4,13 +4,13 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Inject } from '@angular/core';
 import { Input } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { TileSourceEvent as OLTileSourceEvent } from 'ol/source/Tile';
 
+import { inject } from '@angular/core';
 import { unByKey } from 'ol/Observable';
 
 import OLUrlTile from 'ol/source/UrlTile';
@@ -66,14 +66,11 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   numLoaded = 0;
   numLoading = 0;
 
+  #cdf = inject(ChangeDetectorRef);
+  #data: PrintProgressData = inject(MAT_DIALOG_DATA);
   #eventKeys: OLEventsKey[];
   #interval: any;
   #timestamp = Date.now();
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) private data: PrintProgressData,
-    private cdf: ChangeDetectorRef
-  ) {}
 
   isComplete(): boolean {
     return this.numLoaded > 0 && this.numLoading === this.numLoaded;
@@ -98,7 +95,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   }
 
   #handleEvents(): void {
-    const sources = this.data.map.olMap
+    const sources = this.#data.map.olMap
       .getLayers()
       .getArray()
       .filter((layer: any) => layer.getSource() instanceof OLUrlTile)
@@ -123,7 +120,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
         this.#timestamp + this.giveUpAfter < Date.now()
       ) {
         clearInterval(this.#interval);
-        this.data.map.olMap.dispatchEvent('rendercomplete');
+        this.#data.map.olMap.dispatchEvent('rendercomplete');
       }
     }, 1000);
   }
@@ -132,6 +129,6 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
     if (event.type === 'tileloadstart') this.numLoading += 1;
     else if (event.type === 'tileloadend') this.numLoaded += 1;
     this.#timestamp = Date.now();
-    this.cdf.markForCheck();
+    this.#cdf.markForCheck();
   }
 }

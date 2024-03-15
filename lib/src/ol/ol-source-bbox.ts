@@ -7,6 +7,7 @@ import { Coordinate } from 'ol/coordinate';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
 import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
 
 import bboxPolygon from '@turf/bbox-polygon';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -23,17 +24,17 @@ import OLVector from 'ol/source/Vector';
 export class OLSourceBBoxComponent {
   olVector: OLVector<any>;
 
-  constructor(
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
+
+  constructor() {
     this.olVector = new OLVector({
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
       strategy: allStrategy
     });
     this.olVector.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olVector);
+    this.#layer.olLayer.setSource(this.olVector);
   }
 
   // 👇 a simple loader allows refresh to be called
@@ -47,8 +48,8 @@ export class OLSourceBBoxComponent {
     // 👉 convert features into OL format
     const features = this.olVector
       .getFormat()
-      .readFeatures(featureCollection([bboxPolygon(this.map.bbox as any)]), {
-        featureProjection: this.map.projection
+      .readFeatures(featureCollection([bboxPolygon(this.#map.bbox as any)]), {
+        featureProjection: this.#map.projection
       }) as OLFeature<any>[];
     // 👉 add feature to source
     this.olVector.addFeatures(features);

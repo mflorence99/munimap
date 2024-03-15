@@ -1,5 +1,4 @@
 import { OLLayerTileComponent } from './ol-layer-tile';
-import { OLMapComponent } from './ol-map';
 
 import { environment } from '../environment';
 
@@ -11,6 +10,7 @@ import { Observable } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
 import { filter } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -62,11 +62,10 @@ export class OLSourceContours2ftComponent {
 
   olXYZ: OLXYZ;
 
-  constructor(
-    private http: HttpClient,
-    private layer: OLLayerTileComponent,
-    private map: OLMapComponent
-  ) {
+  #http = inject(HttpClient);
+  #layer = inject(OLLayerTileComponent);
+
+  constructor() {
     this.olXYZ = new OLXYZ({
       attributions: [attribution],
       crossOrigin: 'anonymous',
@@ -74,7 +73,7 @@ export class OLSourceContours2ftComponent {
       url: 'https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_XXXXXXXX_smooth_cached/MapServer/tile/{z}/{y}/{x}'
     });
     this.olXYZ.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olXYZ);
+    this.#layer.olLayer.setSource(this.olXYZ);
   }
 
   #createImageBitmap(blob: Blob): Observable<ImageBitmap> {
@@ -97,7 +96,7 @@ export class OLSourceContours2ftComponent {
       }/proxy/contours2ft?url=${encodeURIComponent(
         src.replace('XXXXXXXX', huc)
       )}`;
-      return this.http.get(url, { responseType: 'blob' }).pipe(
+      return this.#http.get(url, { responseType: 'blob' }).pipe(
         catchError(() => of(null)),
         filter((blob) => blob !== null),
         mergeMap((blob: Blob) => this.#createImageBitmap(blob)),

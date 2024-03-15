@@ -295,14 +295,14 @@ export class OLPopupParcelPropertiesComponent {
   splitHorizontally = false;
   splitVertically = true;
 
-  // 🔥  this doesn't seem to work
-  // #subToAbutters: Subscription;
-  // #subToSelection: Subscription;
-
   #cdf = inject(ChangeDetectorRef);
   #map = inject(OLMapComponent);
   #popper = inject(OLPopupSelectionComponent);
   #snackBar = inject(MatSnackBar);
+
+  // 🔥  this doesn't seem to work
+  // #subToAbutters: Subscription;
+  // #subToSelection: Subscription;
 
   constructor() {
     // 👉 see above, no ngOnInit where we'd normally do this

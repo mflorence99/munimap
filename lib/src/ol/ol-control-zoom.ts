@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -72,18 +73,16 @@ export class OLControlZoomComponent implements OnInit {
   @Input() zoom: number;
   @Input() zoomAnimationDuration = 250;
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private destroy$: DestroyService,
-    private map: OLMapComponent
-  ) {}
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
+  #map = inject(OLMapComponent);
 
   maxZoom(): number {
-    return this.map.maxZoom;
+    return this.#map.maxZoom;
   }
 
   minZoom(): number {
-    return this.map.minZoom;
+    return this.#map.minZoom;
   }
 
   ngOnInit(): void {
@@ -92,19 +91,19 @@ export class OLControlZoomComponent implements OnInit {
 
   onZoomChange(zoom: number): void {
     this.zoom = zoom;
-    // 🐛 null is not an object (evaluating 'this.map.olView.animate')
-    this.map.olView?.animate({
+    // 🪲 null is not an object (evaluating 'this.map.olView.animate')
+    this.#map.olView?.animate({
       duration: this.zoomAnimationDuration,
       zoom
     });
   }
 
   #handleZoom$(): void {
-    this.map.zoomChange.pipe(takeUntil(this.destroy$)).subscribe((zoom) => {
+    this.#map.zoomChange.pipe(takeUntil(this.#destroy$)).subscribe((zoom) => {
       this.zoom = zoom;
-      this.resolution = this.map.olView.getResolutionForZoom(zoom);
+      this.resolution = this.#map.olView.getResolutionForZoom(zoom);
       // 👉 because event is triggered out of the Angular zone
-      this.cdf.markForCheck();
+      this.#cdf.markForCheck();
     });
   }
 }

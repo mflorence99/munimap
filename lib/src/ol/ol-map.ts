@@ -37,6 +37,7 @@ import { ViewChild } from '@angular/core';
 
 import { delay } from 'rxjs/operators';
 import { fromLonLat } from 'ol/proj';
+import { inject } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
@@ -195,21 +196,20 @@ export class OLMapComponent
   vars: Record<string, string> = {};
 
   #bbox: Coordinate;
+  #cdf = inject(ChangeDetectorRef);
   #changeKey: OLEventsKey;
   #clickKey: OLEventsKey;
   #dpi = 96 /* 👈 nominal pixels per inch of screen */;
+  #geoJSON = inject(GeoJSONService);
+  #host = inject(ElementRef);
   #path: Path;
   #printing = false;
+  #route = inject(ActivatedRoute);
+  #store = inject(Store);
   #subToAbuttersFound: Subscription;
   #subToFeaturesSelected: Subscription;
 
-  constructor(
-    private cdf: ChangeDetectorRef,
-    private geoJSON: GeoJSONService,
-    private host: ElementRef,
-    private route: ActivatedRoute,
-    private store: Store
-  ) {
+  constructor() {
     this.dpi = this.#dpi;
     this.olMap = new OLMap({
       controls: [],
@@ -269,7 +269,7 @@ export class OLMapComponent
 
   set printing(printing: boolean) {
     this.#printing = printing;
-    this.cdf.markForCheck();
+    this.#cdf.markForCheck();
   }
 
   @HostListener('contextmenu', ['$event']) onContextMenu(
@@ -324,7 +324,7 @@ export class OLMapComponent
 
   ngOnInit(): void {
     this.#clickKey = this.olMap.on('click', this.#onClick.bind(this));
-    this.olMap.setTarget(this.host.nativeElement);
+    this.olMap.setTarget(this.#host.nativeElement);
   }
 
   numPixels(nominal: number): number {
@@ -392,7 +392,7 @@ export class OLMapComponent
     this.olMap.setView(this.olView);
     // 👉 if center, zoom available use them else fit to bounds
     const viewState =
-      this.store.selectSnapshot<ViewStateModel>(ViewState).viewByPath[
+      this.#store.selectSnapshot<ViewStateModel>(ViewState).viewByPath[
         this.path
       ];
     if (this.fitToBounds) this.zoomToBounds();
@@ -487,13 +487,13 @@ export class OLMapComponent
       //    we know we use Font Awesome to show map icons and
       //    it must be loaded before we proceed
       document.fonts.load(`normal bold 10px 'Font Awesome'`).then(() => {
-        this.geoJSON
-          .loadByIndex(this.route, path, 'boundary')
+        this.#geoJSON
+          .loadByIndex(this.#route, path, 'boundary')
           .subscribe((boundary: GeoJSON.FeatureCollection<any, any>) => {
             this.#createView(boundary);
             this.initialized = true;
             this.#onChange();
-            this.cdf.markForCheck();
+            this.#cdf.markForCheck();
           });
       });
     }
@@ -505,7 +505,7 @@ export class OLMapComponent
     const zoom = this.olView.getZoom();
     this.zoomChange.emit(zoom);
     if (!this.fitToBounds)
-      this.store.dispatch(new UpdateView(this.path, { center, zoom }));
+      this.#store.dispatch(new UpdateView(this.path, { center, zoom }));
   }
 
   #onClick(event: OLMapBrowserEvent<any>): void {

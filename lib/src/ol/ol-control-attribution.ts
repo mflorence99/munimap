@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 import OLLayer from 'ol/layer/Layer';
 
 @Component({
@@ -81,13 +83,13 @@ export class OLControlAttributionComponent {
 
   env = environment;
 
-  constructor(private map: OLMapComponent) {}
+  #map = inject(OLMapComponent);
 
   toggleAttributions(): void {
     this.collapsed = !this.collapsed;
     if (!this.collapsed) {
       this.attributions = [];
-      this.map.olMap.getLayers().forEach((layer: any) => {
+      this.#map.olMap.getLayers().forEach((layer: any) => {
         (layer as OLLayer<any, any>)
           ?.getSource()
           ?.getAttributions?.()?.()

@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLTile from 'ol/layer/Tile';
 
@@ -25,7 +26,9 @@ import OLTile from 'ol/layer/Tile';
 export class OLLayerTileComponent implements Mapable {
   olLayer: OLTile<any>;
 
-  constructor(private map: OLMapComponent) {
+  #map = inject(OLMapComponent);
+
+  constructor() {
     this.olLayer = new OLTile();
     this.olLayer.setProperties({ component: this }, true);
   }
@@ -43,6 +46,6 @@ export class OLLayerTileComponent implements Mapable {
   }
 
   addToMap(): void {
-    this.map.olMap.addLayer(this.olLayer);
+    this.#map.olMap.addLayer(this.olLayer);
   }
 }

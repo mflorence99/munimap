@@ -3,6 +3,8 @@ import { OLMapComponent } from './ol-map';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-control-zoom2extent',
@@ -21,9 +23,9 @@ import { Component } from '@angular/core';
   ]
 })
 export class OLControlZoomToExtentComponent {
-  constructor(private map: OLMapComponent) {}
+  #map = inject(OLMapComponent);
 
   zoom2extent(): void {
-    this.map.zoomToBounds();
+    this.#map.zoomToBounds();
   }
 }

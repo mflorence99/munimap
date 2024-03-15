@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 import { ContentChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLSwipe from 'ol-ext/control/Swipe';
 
@@ -35,13 +36,15 @@ export class OLControlSplitScreenComponent
 
   olControl: OLSwipe;
 
-  constructor(private map: OLMapComponent) {
+  #map = inject(OLMapComponent);
+
+  constructor() {
     this.olControl = new OLSwipe();
     this.olControl.setProperties({ component: this }, true);
   }
 
   addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.#map.olMap.addControl(this.olControl);
   }
 
   ngAfterContentInit(): void {

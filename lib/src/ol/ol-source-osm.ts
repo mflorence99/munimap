@@ -5,6 +5,8 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 
+import { inject } from '@angular/core';
+
 import OLOSM from 'ol/source/OSM';
 
 @Component({
@@ -18,13 +20,13 @@ export class OLSourceOSMComponent implements OnInit {
 
   olOSM: OLOSM;
 
-  constructor(private layer: OLLayerTileComponent) {}
+  #layer = inject(OLLayerTileComponent);
 
   ngOnInit(): void {
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
     this.olOSM = new OLOSM({ maxZoom: this.maxZoom });
     this.olOSM.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olOSM);
+    this.#layer.olLayer.setSource(this.olOSM);
   }
 }

@@ -6,6 +6,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLScaleLine from 'ol/control/ScaleLine';
 
@@ -24,7 +25,9 @@ import OLScaleLine from 'ol/control/ScaleLine';
 export class OLControlScaleLineComponent implements Mapable {
   olControl: OLScaleLine;
 
-  constructor(private map: OLMapComponent) {
+  #map = inject(OLMapComponent);
+
+  constructor() {
     this.olControl = new OLScaleLine({
       className: 'ol-scaleline-line',
       units: 'us'
@@ -33,6 +36,6 @@ export class OLControlScaleLineComponent implements Mapable {
   }
 
   addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.#map.olMap.addControl(this.olControl);
   }
 }

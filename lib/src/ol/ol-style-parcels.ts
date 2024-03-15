@@ -31,6 +31,7 @@ import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getDistance } from 'ol/sphere';
+import { inject } from '@angular/core';
 import { lineString } from '@turf/helpers';
 import { point } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
@@ -128,17 +129,17 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() showStolen: ShowStatus = 'never';
   @Input() straightLineTolerance = 15;
 
-  constructor(
-    private decimal: DecimalPipe,
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent,
-    private store: Store,
-    private titleCase: TitleCasePipe
-  ) {}
+  #decimal = inject(DecimalPipe);
+  #layer = inject(OLLayerVectorComponent);
+  #map = inject(OLMapComponent);
+  #store = inject(Store);
+  #titleCase = inject(TitleCasePipe);
+
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (Object.values(changes).some((change) => !change.firstChange)) {
-      this.layer.olLayer.getSource().refresh();
+      this.#layer.olLayer.getSource().refresh();
     }
   }
   style(): OLStyleFunction {
@@ -152,7 +153,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         const whenRedrawn = false;
         const whenSelected = false;
         // 👉 the selector MAY not be present
-        const selector = this.map
+        const selector = this.#map
           .selector as OLInteractionSelectParcelsComponent;
         const whenAbutted =
           this.showAbutters === 'whenSelected' &&
@@ -190,7 +191,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   }
 
   #abbreviateAddress(address: string): string {
-    let abbr = this.titleCase.transform(address);
+    let abbr = this.#titleCase.transform(address);
     abbr = abbr.replace(/\bCircle\b/, ' Cir ');
     abbr = abbr.replace(/\bDrive\b/, ' Dr ');
     abbr = abbr.replace(/\bEast\b/, ' E ');
@@ -239,11 +240,11 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   ): OLStyle[] {
     // 👉 we will draw the length of each "straight" line in each polygon
     const color = contrast
-      ? this.map.vars['--map-parcel-dimension-inverse']
-      : this.map.vars['--map-parcel-dimension-color'];
+      ? this.#map.vars['--map-parcel-dimension-inverse']
+      : this.#map.vars['--map-parcel-dimension-color'];
     const outline = !contrast
-      ? this.map.vars['--map-parcel-dimension-inverse']
-      : this.map.vars['--map-parcel-dimension-color'];
+      ? this.#map.vars['--map-parcel-dimension-inverse']
+      : this.#map.vars['--map-parcel-dimension-color'];
     const dimensions = this.#dimensionsAnalyze(props, resolution, polygons);
     // 👉 get the fontSizes up front for each polygon
     const fontSizes = this.#dimensionsFontSizes(props, resolution, polygons);
@@ -355,14 +356,14 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     // 👇 deduce the fill from the color code strategy
     let fill;
     const strategy =
-      this.store.selectSnapshot<ColorCodeStateModel>(ColorCodeState).strategy;
+      this.#store.selectSnapshot<ColorCodeStateModel>(ColorCodeState).strategy;
     // 🔥 HACK FOR APDVD
-    const map = this.store.selectSnapshot<Map>(MapState);
+    const map = this.#store.selectSnapshot<Map>(MapState);
     if (map?.id === 'apdvd') fill = getAPDVDFill(props);
     else if (strategy === 'usage')
-      fill = this.map.vars[`--map-parcel-fill-u${props.usage}`];
+      fill = this.#map.vars[`--map-parcel-fill-u${props.usage}`];
     else if (strategy === 'ownership')
-      fill = this.map.vars[`--map-parcel-fill-o${props.ownership}`];
+      fill = this.#map.vars[`--map-parcel-fill-o${props.ownership}`];
     else if (strategy === 'conformity') {
       // 🔥 this only works for Washington!!
       const conforming = 4; // 👈 acres
@@ -371,14 +372,14 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       else {
         // 👇 convert lack of conformity to a scale 0..9
         fill =
-          this.map.vars[
+          this.#map.vars[
             `--map-parcel-fill-c${Math.trunc(deficit * (10 / conforming))}`
           ];
       }
     }
     // 👇 determine the patterns
     const patterns = [];
-    if (this.map.olView.getZoomForResolution(resolution) >= 15) {
+    if (this.#map.olView.getZoomForResolution(resolution) >= 15) {
       // 👉 current use pattern comes from the use field (CUUH etc)
       if (props.usage === '190') {
         const icon = this.#iconForUse(props.use);
@@ -504,11 +505,11 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       return null;
     else {
       const color = contrast
-        ? this.map.vars['--map-parcel-text-inverse']
-        : this.map.vars['--map-parcel-text-color'];
+        ? this.#map.vars['--map-parcel-text-inverse']
+        : this.#map.vars['--map-parcel-text-color'];
       const outline = !contrast
-        ? this.map.vars['--map-parcel-text-inverse']
-        : this.map.vars['--map-parcel-text-color'];
+        ? this.#map.vars['--map-parcel-text-inverse']
+        : this.#map.vars['--map-parcel-text-color'];
       // 👉 we need to draw a label in each polygon of a multi-polygon
       //    and a separate label for parcel ID and acreage
       const labels = this.#labelsImpl(props, resolution, numPolygons);
@@ -558,17 +559,17 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         // 👉 measure up the parcel id and the subtitle text
         const fAcreage = this.fontSizeAcreageRatio;
         const fAddress = this.fontSizeAddressRatio;
-        const mID = this.map.measureText(
+        const mID = this.#map.measureText(
           `${props.id}`,
           `bold ${fontSize}px '${this.fontFamily}'`
         );
-        const mGap = this.map.measureText(
+        const mGap = this.#map.measureText(
           ' ',
           `normal ${fontSize * fAcreage}px '${this.fontFamily}'`
         );
         // 👉 measure up the subtitles
-        const acres = `${this.decimal.transform(props.area, '1.0-2')} ac`;
-        const mAcres = this.map.measureText(
+        const acres = `${this.#decimal.transform(props.area, '1.0-2')} ac`;
+        const mAcres = this.#map.measureText(
           acres,
           `normal ${fontSize * fAcreage}px '${this.fontFamily}'`
         );
@@ -688,7 +689,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       return null;
     else {
       const borderPixels = this.#borderPixels(resolution);
-      const outline = this.map.vars['--map-parcel-outline'];
+      const outline = this.#map.vars['--map-parcel-outline'];
       // 👉 alternating light, dark outline
       return [
         new OLStyle({
@@ -731,9 +732,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     const borderPixels =
       this.#borderPixels(resolution) * this.borderWidthSelectRatio;
     let outline = null;
-    if (whenAbutted) outline = this.map.vars['--map-parcel-abutter'];
-    if (whenSelected) outline = this.map.vars['--map-parcel-select'];
-    if (whenRedrawn) outline = this.map.vars['--map-parcel-redraw'];
+    if (whenAbutted) outline = this.#map.vars['--map-parcel-abutter'];
+    if (whenSelected) outline = this.#map.vars['--map-parcel-select'];
+    if (whenRedrawn) outline = this.#map.vars['--map-parcel-redraw'];
     // 👉 necessary so we can select
     const fill = new OLFill({ color: [0, 0, 0, 0] });
     const stroke = new OLStroke({

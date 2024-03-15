@@ -1,13 +1,9 @@
-import { CacheService } from '../services/cache';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
 import { WaterbodyProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 
 import copy from 'fast-copy';
@@ -26,15 +22,6 @@ const attribution =
 })
 export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
   @Input() exclude: (number | string)[];
-
-  constructor(
-    cache: CacheService,
-    map: OLMapComponent,
-    http: HttpClient,
-    layer: OLLayerVectorComponent
-  ) {
-    super(cache, http, layer, map);
-  }
 
   override filter(arcgis: any): any {
     if (arcgis && this.exclude) {

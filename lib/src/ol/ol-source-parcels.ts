@@ -24,6 +24,7 @@ import { Subject } from 'rxjs';
 import { all as allStrategy } from 'ol/loadingstrategy';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
+import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
@@ -54,21 +55,23 @@ export class OLSourceParcelsComponent implements OnInit {
 
   parcels$: Observable<Parcel[]>;
 
+  #destroy$ = inject(DestroyService);
+  #geoJSON = inject(GeoJSONService);
   #geojson$ = new Subject<Parcels>();
+  // 👇 may be called without a layer ie from export
+  #layer =
+    inject(OLLayerVectorComponent, { optional: true }) ||
+    new OLLayerVectorComponent();
+  #map = inject(OLMapComponent);
+  #parcelsState = inject(ParcelsState);
+  #route = inject(ActivatedRoute);
+  #store = inject(Store);
   #success: Function;
 
-  constructor(
-    private destroy$: DestroyService,
-    private geoJSON: GeoJSONService,
-    private layer: OLLayerVectorComponent,
-    private map: OLMapComponent,
-    private parcelsState: ParcelsState,
-    private route: ActivatedRoute,
-    private store: Store
-  ) {
+  constructor() {
     let strategy;
-    if (this.map.loadingStrategy === 'all') strategy = allStrategy;
-    else if (this.map.loadingStrategy === 'bbox') strategy = bboxStrategy;
+    if (this.#map.loadingStrategy === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
@@ -76,11 +79,11 @@ export class OLSourceParcelsComponent implements OnInit {
       strategy: strategy
     });
     this.olVector.setProperties({ component: this }, true);
-    this.layer.olLayer.setSource(this.olVector);
+    this.#layer.olLayer.setSource(this.olVector);
     // 🔥 must do it this way so we can dynamically create component
     //    this is new behavior with Angular 14
-    this.colorCode$ = this.store.select((state) => state.colorcode);
-    this.parcels$ = this.store.select((state) => state.parcels);
+    this.colorCode$ = this.#store.select((state) => state.colorcode);
+    this.parcels$ = this.#store.select((state) => state.parcels);
   }
 
   // 👇 special backdoor to support "export parcels" functionality
@@ -99,7 +102,7 @@ export class OLSourceParcelsComponent implements OnInit {
   }
 
   #filterRemovedFeatures(geojson: Parcels, parcels: Parcel[]): Set<ParcelID> {
-    const removed = this.parcelsState.parcelsRemoved(parcels);
+    const removed = this.#parcelsState.parcelsRemoved(parcels);
     // 👉 remove them from the layer in case they're already there
     removed.forEach((id) => {
       const feature = this.olVector.getFeatureById(id);
@@ -118,7 +121,7 @@ export class OLSourceParcelsComponent implements OnInit {
     //    but we only care here if it has changed
     //    we'll look at its value when we come to style the parcels
     combineLatest([this.#geojson$, this.parcels$, this.colorCode$])
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.#destroy$))
       .subscribe(([original, parcels]) => {
         const originalsByID = original.features.reduce((acc, feature) => {
           acc[feature.id] = feature;
@@ -140,7 +143,7 @@ export class OLSourceParcelsComponent implements OnInit {
           });
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
-          featureProjection: this.map.projection
+          featureProjection: this.#map.projection
         }) as OLFeature<any>[];
         // 👉 add each feature not already present
         features.forEach((feature) => {
@@ -148,7 +151,7 @@ export class OLSourceParcelsComponent implements OnInit {
             this.olVector.addFeature(feature);
         });
         // 👉 the selector MAY not be present and may not be for parcels
-        const selector = this.map
+        const selector = this.#map
           .selector as OLInteractionSelectParcelsComponent;
         // 👉 reselect selected features b/c we've potentially removed them
         const selectedIDs = selector?.selectedIDs;
@@ -158,7 +161,7 @@ export class OLSourceParcelsComponent implements OnInit {
   }
 
   #insertAddedFeatures(geojson: Parcels, parcels: Parcel[]): Set<ParcelID> {
-    const added = this.parcelsState.parcelsAdded(parcels);
+    const added = this.#parcelsState.parcelsAdded(parcels);
     // 👉 insert a model into the geojson (will be overwritten)
     added.forEach((id) => {
       geojson.features.push({
@@ -179,12 +182,12 @@ export class OLSourceParcelsComponent implements OnInit {
   ): void {
     let bbox;
     // 👉 get everything at once
-    if (this.map.loadingStrategy === 'all') bbox = this.map.bbox;
+    if (this.#map.loadingStrategy === 'all') bbox = this.#map.bbox;
     // 👉 or just get what's visible
-    else if (this.map.loadingStrategy === 'bbox')
-      bbox = transformExtent(extent, projection, this.map.featureProjection);
-    this.geoJSON
-      .loadByIndex(this.route, this.path ?? this.map.path, 'parcels', bbox)
+    else if (this.#map.loadingStrategy === 'bbox')
+      bbox = transformExtent(extent, projection, this.#map.featureProjection);
+    this.#geoJSON
+      .loadByIndex(this.#route, this.path ?? this.#map.path, 'parcels', bbox)
       .subscribe((geojson: Parcels) => {
         this.#success = success;
         this.#geojson$.next(geojson);
@@ -192,7 +195,7 @@ export class OLSourceParcelsComponent implements OnInit {
   }
 
   #overrideFeaturesWithParcels(geojson: Parcels, parcels: Parcel[]): void {
-    const modified = this.parcelsState.parcelsModified(parcels);
+    const modified = this.#parcelsState.parcelsModified(parcels);
     geojson.features = geojson.features.map((feature) => {
       const parcels = modified[feature.id];
       if (parcels) {

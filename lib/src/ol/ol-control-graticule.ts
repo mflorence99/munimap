@@ -12,6 +12,7 @@ import { OnInit } from '@angular/core';
 import { QueryList } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLGraticule from 'ol-ext/control/Graticule';
 
@@ -42,10 +43,10 @@ export class OLControlGraticuleComponent
 
   olControl: OLGraticule;
 
-  constructor(private map: OLMapComponent) {}
+  #map = inject(OLMapComponent);
 
   addToMap(): void {
-    this.map.olMap.addControl(this.olControl);
+    this.#map.olMap.addControl(this.olControl);
   }
 
   // 👇 ol-ext/control/graticule is special in that it can take only a single
@@ -64,7 +65,7 @@ export class OLControlGraticuleComponent
       formatCoord: (coord: any): string => `${coord.toFixed(dps)}°`,
       margin: this.margin,
       maxResolution: this.maxZoom
-        ? this.map.olView.getResolutionForZoom(this.maxZoom)
+        ? this.#map.olView.getResolutionForZoom(this.maxZoom)
         : undefined,
       spacing: this.spacing,
       step: this.step,

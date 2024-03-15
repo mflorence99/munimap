@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
+import { inject } from '@angular/core';
 import { saveAs } from 'file-saver';
 
 import OLGeoJSON from 'ol/format/GeoJSON';
@@ -15,24 +16,33 @@ import OLGeoJSON from 'ol/format/GeoJSON';
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
-  `
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+    `
+  ]
 })
 export class OLControlExportLayersComponent {
   @Input() fileName: string;
   @Input() layerIDs: string[];
 
   #format: OLGeoJSON;
+  #map = inject(OLMapComponent);
 
-  constructor(private map: OLMapComponent) {
+  constructor() {
     // 👉 one to rule them all
     this.#format = new OLGeoJSON({
-      dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      dataProjection: this.#map.featureProjection,
+      featureProjection: this.#map.projection
     });
   }
 
   export(): void {
-    const layers: any[] = this.map.olMap
+    const layers: any[] = this.#map.olMap
       .getLayers()
       .getArray()
       .filter((layer) => this.layerIDs.includes(layer.get('id')));

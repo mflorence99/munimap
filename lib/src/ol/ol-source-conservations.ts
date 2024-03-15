@@ -1,13 +1,9 @@
-import { CacheService } from '../services/cache';
 import { ConservationProperties } from '../common';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
 import { OLSourceArcGISComponent } from './ol-source-arcgis';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 
 // 🔥 we no longer use this source -- we use parcels instead
@@ -23,15 +19,6 @@ const attribution =
 })
 export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
   @Input() exclude: (number | string)[];
-
-  constructor(
-    cache: CacheService,
-    map: OLMapComponent,
-    http: HttpClient,
-    layer: OLLayerVectorComponent
-  ) {
-    super(cache, http, layer, map);
-  }
 
   // 👇 see ConservationProperties
 

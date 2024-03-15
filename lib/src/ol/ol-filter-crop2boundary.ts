@@ -6,7 +6,8 @@ import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { OnDestroy } from '@angular/core';
-import { Optional } from '@angular/core';
+
+import { inject } from '@angular/core';
 
 import copy from 'fast-copy';
 import Crop from 'ol-ext/filter/Crop';
@@ -24,22 +25,21 @@ export class OLFilterCrop2BoundaryComponent
 {
   olFilter: Crop;
   #layer: any;
+  #layer1 = inject(OLLayerTileComponent, { optional: true });
+  #layer2 = inject(OLLayerVectorComponent, { optional: true });
+  #map = inject(OLMapComponent);
 
-  constructor(
-    @Optional() layer1: OLLayerTileComponent,
-    @Optional() layer2: OLLayerVectorComponent,
-    private map: OLMapComponent
-  ) {
+  constructor() {
     // 👇 choose which layer parent
-    this.#layer = layer1 ?? layer2;
+    this.#layer = this.#layer1 ?? this.#layer2;
     // 👇 build the filter
     const coords: any = copy(
-      this.map.boundary.features[0].geometry.coordinates
+      this.#map.boundary.features[0].geometry.coordinates
     );
     const feature = new Feature(new Polygon(coords));
     feature
       .getGeometry()
-      .transform(this.map.featureProjection, this.map.projection);
+      .transform(this.#map.featureProjection, this.#map.projection);
     this.olFilter = new Crop({
       feature: feature,
       inner: false
