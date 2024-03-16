@@ -4,7 +4,6 @@ import { CollectionReference } from '@angular/fire/firestore';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { Firestore } from '@angular/fire/firestore';
-import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
@@ -16,6 +15,7 @@ import { VersionService } from '@lib/services/version';
 import { collection } from '@angular/fire/firestore';
 import { collectionData } from '@angular/fire/firestore';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { limit } from '@angular/fire/firestore';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -30,16 +30,17 @@ import { workgroup } from '@lib/state/auth';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
   selector: 'app-navigator',
+
   template: `
     <nav class="form navigator">
       <ul>
         <li (click)="close()" routerLink="/create" class="item">
           <fa-icon
-            [class.selected]="title?.startsWith(state)"
+            [class.selected]="title()?.startsWith(state)"
             [icon]="['fad', 'layer-plus']"
             class="icon"
             size="3x"></fa-icon>
-          <div class="title">Create a new map</div>
+          <div class="title()">Create a new map</div>
           <div class="subtitle">Choose the county and town.</div>
         </li>
 
@@ -47,7 +48,7 @@ import { workgroup } from '@lib/state/auth';
 
         <li class="item">
           <div></div>
-          <div class="title">RECENTLY USED MAPS</div>
+          <div class="title()">RECENTLY USED MAPS</div>
         </li>
 
         @for (map of topMaps$ | async; track map.id) {
@@ -56,12 +57,12 @@ import { workgroup } from '@lib/state/auth';
             class="item"
             routerLink="/{{ map.type }}/{{ map.id }}">
             <fa-icon
-              [class.selected]="title === map.name"
+              [class.selected]="title() === map.name"
               [icon]="['fad', 'layer-group']"
               class="icon"
               size="3x"></fa-icon>
 
-            <div class="title">{{ map.name }}</div>
+            <div class="title()">{{ map.name }}</div>
             <div class="subtitle">{{ map.owner }}</div>
           </li>
         }
@@ -70,11 +71,11 @@ import { workgroup } from '@lib/state/auth';
 
         <li (click)="close()" class="item" routerLink="/list">
           <fa-icon
-            [class.selected]="title === 'All Maps'"
+            [class.selected]="title() === 'All Maps'"
             [icon]="['fad', 'list']"
             class="icon"
             size="2x"></fa-icon>
-          <div class="title">All Maps</div>
+          <div class="title()">All Maps</div>
           <div class="subtitle">Sortable and selectable list of all maps.</div>
         </li>
 
@@ -85,7 +86,7 @@ import { workgroup } from '@lib/state/auth';
             [icon]="['fad', 'sync']"
             class="icon selected"
             size="2x"></fa-icon>
-          <div class="title">Reload MuniMap</div>
+          <div class="title()">Reload MuniMap</div>
           <div class="subtitle">App will be updated to the latest version.</div>
         </li>
       </ul>
@@ -135,14 +136,11 @@ import { workgroup } from '@lib/state/auth';
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class NavigatorComponent implements OnInit {
-  @Input() maxMapCount = 5;
-
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
-  @Input() title: string;
-
+  maxMapCount = input(5);
   state = theState;
-
+  title = input<string>();
   topMaps$: Observable<Map[]>;
 
   #destroy$ = inject(DestroyService);
@@ -180,7 +178,7 @@ export class NavigatorComponent implements OnInit {
               collection(this.#firestore, 'maps') as CollectionReference<Map>,
               where('owner', 'in', workgroup(profile)),
               orderBy('timestamp', 'desc'),
-              limit(this.maxMapCount)
+              limit(this.maxMapCount())
             )
           );
         }

@@ -3,7 +3,6 @@ import { SidebarComponent } from '../../components/sidebar-component';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { Landmark } from '@lib/common';
 import { LandmarkID } from '@lib/common';
 import { LandmarkProperties } from '@lib/common';
@@ -79,17 +78,12 @@ import OLFeature from 'ol/Feature';
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
-  @Input() drawer: MatDrawer;
-
-  @Input() features: OLFeature<any>[];
-
-  @Input() map: OLMapComponent;
-
-  @Input() selectedIDs: LandmarkID[];
-
+  drawer: MatDrawer;
+  features: OLFeature<any>[];
   geometryType: string;
-
+  map: OLMapComponent;
   record: Partial<LandmarkProperties> = {};
+  selectedIDs: LandmarkID[];
 
   #cdf = inject(ChangeDetectorRef);
   #store = inject(Store);

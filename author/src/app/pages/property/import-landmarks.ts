@@ -6,7 +6,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { Input } from '@angular/core';
 import { Landmark } from '@lib/common';
 import { LandmarkPropertiesClass } from '@lib/common';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -34,24 +33,18 @@ import toGeoJSON from '@mapbox/togeojson';
   templateUrl: '../abstract-import.html'
 })
 export class ImportLandmarksComponent implements SidebarComponent {
-  @Input() drawer: MatDrawer;
-  @Input() features: Feature<any>[];
-  @Input() map: OLMapComponent;
-  @Input() selectedIDs: (string | number)[];
-
   cancelling = false;
-
+  drawer: MatDrawer;
   errorMessages: string[] = [];
-
+  features: Feature<any>[];
   files: File[] = [];
-
   importing = false;
-
+  map: OLMapComponent;
   numImported = 0;
   numImporting = 0;
-
   // 👇 checkbox by file name for selection post-native dialog
   record: Record<string, boolean> = {};
+  selectedIDs: (string | number)[];
 
   #authState = inject(AuthState);
   #cdf = inject(ChangeDetectorRef);

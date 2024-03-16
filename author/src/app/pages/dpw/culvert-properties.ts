@@ -4,7 +4,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { CulvertProperties } from '@lib/common';
-import { Input } from '@angular/core';
 import { Landmark } from '@lib/common';
 import { LandmarkID } from '@lib/common';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -243,18 +242,15 @@ import OLFeature from 'ol/Feature';
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
-  @Input() drawer: MatDrawer;
-  @Input() features: OLFeature<any>[];
-  @Input() map: OLMapComponent;
-  @Input() selectedIDs: LandmarkID[];
-
   allConditions = culvertConditions;
   allFloodHazards = culvertFloodHazards;
   allHeadwalls = culvertHeadwalls;
   allMaterials = culvertMaterials;
-
+  drawer: MatDrawer;
+  features: OLFeature<any>[];
+  map: OLMapComponent;
   record: Partial<CulvertProperties> = {};
-
+  selectedIDs: LandmarkID[];
   shape: 'circular' | 'elliptical';
 
   #cdf = inject(ChangeDetectorRef);

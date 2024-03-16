@@ -4,7 +4,6 @@ import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -86,19 +85,15 @@ interface MergeRecord {
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class MergeParcelsComponent implements SidebarComponent {
-  @Input() drawer: MatDrawer;
-
-  @Input() features: OLFeature<any>[];
-
-  @Input() map: OLMapComponent;
-
   @ViewChild('mergeForm') mergeForm: NgForm;
 
-  @Input() selectedIDs: ParcelID[];
-
+  drawer: MatDrawer;
+  features: OLFeature<any>[];
+  map: OLMapComponent;
   record: MergeRecord = {
     mergedID: null
   };
+  selectedIDs: ParcelID[];
 
   #authState = inject(AuthState);
   #store = inject(Store);

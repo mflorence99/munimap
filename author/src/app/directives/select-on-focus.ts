@@ -1,16 +1,17 @@
 import { Directive } from '@angular/core';
 import { HostListener } from '@angular/core';
-import { Input } from '@angular/core';
+
+import { input } from '@angular/core';
 
 @Directive({
   selector: '[appSelectOnFocus]'
 })
 export class SelectOnFocusDirective {
-  @Input() appSelectOnFocus: boolean;
+  appSelectOnFocus = input<boolean>();
 
   @HostListener('focus', ['$event']) onFocus(event: any): void {
     setTimeout(() => {
-      if (this.appSelectOnFocus) event.target.select();
+      if (this.appSelectOnFocus()) event.target.select();
     }, 0);
   }
 }

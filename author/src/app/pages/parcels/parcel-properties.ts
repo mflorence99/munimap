@@ -5,7 +5,6 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -142,16 +141,9 @@ type ValueRecord = Record<string, Value>;
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
-  @Input() drawer: MatDrawer;
-
-  @Input() features: OLFeature<any>[];
-
-  @Input() map: OLMapComponent;
-
   @ViewChild('propertiesForm') propertiesForm: NgForm;
 
-  @Input() selectedIDs: ParcelID[];
-
+  drawer: MatDrawer;
   editables = [
     { prop: 'address', label: 'Parcel Address', type: 'text' },
     { prop: 'owner', label: 'Parcel Owner', type: 'text' },
@@ -165,8 +157,10 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     { prop: 'other$', label: 'Other', type: 'number' },
     { prop: 'taxed$', label: 'Total', type: 'number' }
   ];
-
+  features: OLFeature<any>[];
+  map: OLMapComponent;
   record: ValueRecord = {};
+  selectedIDs: ParcelID[];
 
   #authState = inject(AuthState);
   #cdf = inject(ChangeDetectorRef);

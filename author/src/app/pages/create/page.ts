@@ -141,7 +141,10 @@ export class CreatePage {
         const townIndex = this.index[this.currentState()][this.currentCounty()][
           name
         ] as TownIndex;
-        return this.type !== 'parcels' || townIndex?.layers.parcels.available;
+        return (
+          !['dpw', 'parcels'].includes(this.type) ||
+          townIndex?.layers.parcels.available
+        );
       } else return true;
     };
   }

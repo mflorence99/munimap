@@ -4,7 +4,6 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { CreateMap } from '@lib/state/map';
-import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
@@ -15,6 +14,7 @@ import { ViewChild } from '@angular/core';
 
 import { bboxByAspectRatio } from '@lib/common';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
@@ -182,18 +182,12 @@ const PRINT_SIZES = {
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class CreatePropertyMapComponent implements SidebarComponent {
-  @Input() border = 100 /* 👈 feet */;
-
   @ViewChild('createForm') createForm: NgForm;
 
-  @Input() drawer: MatDrawer;
-
-  @Input() features: OLFeature<any>[];
-
-  @Input() map: OLMapComponent;
-
-  @Input() selectedIDs: ParcelID[];
-
+  border = input(100);
+  drawer: MatDrawer;
+  features: OLFeature<any>[];
+  map: OLMapComponent;
   record: PropertyMapRecord = {
     contours2ft: false,
     id: null,
@@ -201,6 +195,7 @@ export class CreatePropertyMapComponent implements SidebarComponent {
     name: null,
     printSize: null
   };
+  selectedIDs: ParcelID[];
 
   #authState = inject(AuthState);
   #store = inject(Store);
@@ -229,8 +224,8 @@ export class CreatePropertyMapComponent implements SidebarComponent {
       properties: {},
       type: 'Feature'
     };
-    // 👉 the bbox has a nominal 500ft border
-    const border = this.border * 0.0003048; /* 👈 feet to kilometers */
+    // 👉 the bbox has a nominal Nft border
+    const border = this.border() * 0.0003048; /* 👈 feet to kilometers */
     const printSize = PRINT_SIZES[record.printSize];
     // 👉 create the new property map
     const map: Map = {

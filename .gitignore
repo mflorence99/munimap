@@ -4,6 +4,7 @@
 /node_modules
 /viewer/assets/*.geojson
 **/logs
+**/logs1
 **/*.Identifier
 **/*.log
 firebase-admin.json

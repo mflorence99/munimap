@@ -6,7 +6,6 @@ import { Component } from '@angular/core';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { ConfirmDialogData } from '@lib/components/confirm-dialog';
 import { DeleteMap } from '@lib/state/map';
-import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
@@ -15,7 +14,10 @@ import { Store } from '@ngxs/store';
 import { UpdateMap } from '@lib/state/map';
 import { ViewChild } from '@angular/core';
 
+import { computed } from '@angular/core';
+import { effect } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -40,7 +42,7 @@ import copy from 'fast-copy';
         <form
           #setupForm="ngForm"
           (keydown.escape)="cancel()"
-          (submit)="update(map)"
+          (submit)="update(mapCopy())"
           class="form"
           id="setupForm"
           novalidate
@@ -49,7 +51,7 @@ import copy from 'fast-copy';
             <mat-label>Give your map a name</mat-label>
             <input
               #name="ngModel"
-              [(ngModel)]="map.name"
+              [(ngModel)]="mapCopy().name"
               [appAutoFocus]="!rolledup"
               [appSelectOnFocus]="true"
               autocomplete="off"
@@ -66,9 +68,9 @@ import copy from 'fast-copy';
             <mat-label>Assign an unique ID to your map</mat-label>
             <input
               #id="ngModel"
-              [(ngModel)]="map.id"
+              [(ngModel)]="mapCopy().id"
               [appSelectOnFocus]="true"
-              [disabled]="!map.isDflt"
+              [disabled]="!mapCopy().isDflt"
               autocomplete="off"
               matInput
               name="id"
@@ -83,8 +85,10 @@ import copy from 'fast-copy';
             @if (!id.errors) {
               <mat-hint>
                 Viewer app URL:
-                <a href="https://{{ map.id }}.munimap.online" target="_blank">
-                  <em>https://{{ map.id }}.munimap.online</em>
+                <a
+                  href="https://{{ mapCopy().id }}.munimap.online"
+                  target="_blank">
+                  <em>https://{{ mapCopy().id }}.munimap.online</em>
                 </a>
               </mat-hint>
             }
@@ -94,7 +98,9 @@ import copy from 'fast-copy';
 
       <mat-card-actions class="actions">
         @if (canDelete()) {
-          <a (click)="delete(map)" mat-flat-button>Delete ths map &hellip;</a>
+          <a (click)="delete(mapCopy())" mat-flat-button>
+            Delete ths map &hellip;
+          </a>
         }
 
         <div class="filler"></div>
@@ -117,28 +123,28 @@ import copy from 'fast-copy';
 export class ControlPanelPropertiesComponent {
   @ViewChild('setupForm') setupForm: NgForm;
 
+  map = input<Map>();
+  mapCopy = computed(() => copy(this.map()));
   rolledup: boolean;
 
   #authState = inject(AuthState);
   #dialog = inject(MatDialog);
-  #map: Map;
   #root = inject(RootPage);
   #router = inject(Router);
   #store = inject(Store);
 
-  @Input() get map(): Map {
-    return this.#map;
-  }
-  set map(map: Map) {
-    this.#map = copy(map);
-    // 👉 set the window title every time it changes
-    if (map.name) this.#root.setTitle(map.name);
-    this.rolledup = !!map.id;
+  constructor() {
+    effect(() => {
+      // 👉 set the window title every time it changes
+      this.#root.setTitle(this.map().name);
+      this.rolledup = !!this.map().id;
+    });
   }
 
   canDelete(): boolean {
     return (
-      this.map.id && this.map.owner === this.#authState.currentProfile().email
+      this.mapCopy().id &&
+      this.mapCopy().owner === this.#authState.currentProfile().email
     );
   }
 
@@ -146,7 +152,7 @@ export class ControlPanelPropertiesComponent {
     this.rolledup = true;
   }
 
-  delete(map: any): void {
+  delete(map: Map): void {
     const data: ConfirmDialogData = {
       content:
         'The map will be permanently deleted, but any changes made to parcels will be kept for use in other maps.',
@@ -163,7 +169,7 @@ export class ControlPanelPropertiesComponent {
       });
   }
 
-  update(map: any): void {
+  update(map: Map): void {
     // 👇 refresh if parcelIDs have changed
     this.#store.dispatch(
       new UpdateMap(map, this.setupForm.controls['parcelIDs']?.dirty)

@@ -4,7 +4,6 @@ import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -126,15 +125,11 @@ interface Addition {
 export class AddParcelComponent implements SidebarComponent {
   @ViewChild('additionForm') additionForm: NgForm;
 
-  @Input() drawer: MatDrawer;
-
-  @Input() features: OLFeature<any>[];
-
-  @Input() map: OLMapComponent;
-
-  @Input() selectedIDs: ParcelID[];
-
   addition: Addition = {} as Addition;
+  drawer: MatDrawer;
+  features: OLFeature<any>[];
+  map: OLMapComponent;
+  selectedIDs: ParcelID[];
 
   #authState = inject(AuthState);
   #store = inject(Store);

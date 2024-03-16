@@ -4,7 +4,6 @@ import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -138,16 +137,12 @@ interface Subdivision {
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
-  @Input() drawer: MatDrawer;
-
-  @Input() features: OLFeature<any>[];
-
-  @Input() map: OLMapComponent;
-
-  @Input() selectedIDs: ParcelID[];
-
   @ViewChild('subdivisionForm') subdivisionForm: NgForm;
 
+  drawer: MatDrawer;
+  features: OLFeature<any>[];
+  map: OLMapComponent;
+  selectedIDs: ParcelID[];
   subdivisions: Subdivision[];
 
   #authState = inject(AuthState);

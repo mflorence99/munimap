@@ -4,13 +4,14 @@ import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { GeoJSONService } from '@lib/services/geojson';
 import { Index } from '@lib/common';
-import { Input } from '@angular/core';
 import { Output } from '@angular/core';
 import { Path } from '@lib/state/view';
 import { TownIndex } from '@lib/common';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { isIndex } from '@lib/common';
+import { model } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -120,16 +121,13 @@ import { isIndex } from '@lib/common';
   ]
 })
 export class BuilderComponent {
-  @Input() path: Path;
-
   @Output() pathChanged = new EventEmitter<Path>();
   @Output() pathSelected = new EventEmitter<Path>();
-
-  @Input() type: string;
-
   @Output() typeChanged = new EventEmitter<string>();
 
   index: Index;
+  path = input<Path>();
+  type = model<string>();
 
   #geoJSON = inject(GeoJSONService);
   #route = inject(ActivatedRoute);
@@ -156,26 +154,28 @@ export class BuilderComponent {
         // 👉 parcels MUST be available for parcels map
         .filter((town) => {
           const townIndex = this.index[state][county][town] as TownIndex;
-          return this.type !== 'parcels' || townIndex.layers.parcels.available;
+          return (
+            this.type() !== 'parcels' || townIndex.layers.parcels.available
+          );
         })
         .sort()
     );
   }
 
   currentCounty(): string {
-    return this.path?.split(':')[1];
+    return this.path()?.split(':')[1];
   }
 
   currentState(): string {
-    return this.path?.split(':')[0];
+    return this.path()?.split(':')[0];
   }
 
   currentTown(): string {
-    return this.path?.split(':')[2];
+    return this.path()?.split(':')[2];
   }
 
   currentType(): string {
-    return this.type;
+    return this.type();
   }
 
   reset(): void {
@@ -183,7 +183,7 @@ export class BuilderComponent {
   }
 
   submit(): void {
-    this.pathSelected.emit(this.path);
+    this.pathSelected.emit(this.path());
   }
 
   switchCounty(county: string): void {
@@ -201,7 +201,7 @@ export class BuilderComponent {
   }
 
   switchType(type: string): void {
-    this.type = type;
+    this.type.set(type);
     this.typeChanged.emit(this.currentType());
   }
 }

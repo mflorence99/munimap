@@ -2,7 +2,6 @@ import { Auth } from '@angular/fire/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { Logout } from '@lib/state/auth';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
@@ -13,7 +12,9 @@ import { UpdateUser } from '@lib/state/auth';
 import { User } from '@lib/state/auth';
 import { ViewChild } from '@angular/core';
 
+import { computed } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { updatePassword } from '@angular/fire/auth';
 
 import copy from 'fast-copy';
@@ -23,16 +24,15 @@ import copy from 'fast-copy';
   selector: 'app-profile',
   template: `
     <header class="header">
-      <app-avatar [name]="user.displayName" class="icon"></app-avatar>
-
-      <p class="title">{{ user.displayName || '&nbsp;' }}</p>
-      <p class="subtitle">{{ user.email }}</p>
+      <app-avatar [name]="userCopy().displayName" class="icon"></app-avatar>
+      <p class="title">{{ userCopy().displayName || '&nbsp;' }}</p>
+      <p class="subtitle">{{ userCopy().email }}</p>
     </header>
 
     <form
       #profileForm="ngForm"
       (keydown.escape)="cancel()"
-      (submit)="update(user, profile)"
+      (submit)="update(userCopy(), profileCopy())"
       class="form"
       id="profileForm"
       novalidate
@@ -41,7 +41,7 @@ import copy from 'fast-copy';
         <mat-label>Display Name</mat-label>
         <input
           #displayName="ngModel"
-          [(ngModel)]="user.displayName"
+          [(ngModel)]="userCopy().displayName"
           [appAutoFocus]="true"
           [appSelectOnFocus]="true"
           autocomplete="off"
@@ -58,7 +58,7 @@ import copy from 'fast-copy';
         <mat-label>Workgroup</mat-label>
         <textarea
           #workgroup="ngModel"
-          [(ngModel)]="profile.workgroup"
+          [(ngModel)]="profileCopy().workgroup"
           appWorkgroup
           autocomplete="off"
           cdkTextareaAutosize
@@ -84,7 +84,7 @@ import copy from 'fast-copy';
         <mat-label>New Password</mat-label>
         <input
           #password="ngModel"
-          [(ngModel)]="user.password"
+          [(ngModel)]="userCopy().password"
           autocomplete="off"
           matInput
           name="password"
@@ -119,29 +119,15 @@ export class ProfileComponent {
   @ViewChild('profileForm') profileForm: NgForm;
 
   errorMessage = '';
+  profile = input<Profile>();
+  profileCopy = computed(() => copy(this.profile()));
+  user = input<User>();
+  userCopy = computed(() => copy(this.user()));
 
   #cdf = inject(ChangeDetectorRef);
   #drawer = inject(MatDrawer);
   #fireauth = inject(Auth);
-  #profile: Profile;
   #store = inject(Store);
-  #user: User;
-
-  @Input() get profile(): Profile {
-    return this.#profile;
-  }
-
-  @Input() get user(): User {
-    return this.#user;
-  }
-
-  set profile(profile: Profile) {
-    this.#profile = copy(profile);
-  }
-
-  set user(user: User) {
-    this.#user = copy(user);
-  }
 
   cancel(): void {
     this.#drawer.close();
@@ -152,12 +138,12 @@ export class ProfileComponent {
     this.#drawer.close();
   }
 
-  update(user: any, profile: any): void {
+  update(user: User, profile: Profile): void {
     this.errorMessage = null;
     this.#store.dispatch([new UpdateUser(user), new UpdateProfile(profile)]);
     // 👇 special code to change password
     if (user.password) {
-      updatePassword(this.#fireauth.currentUser, this.user.password).catch(
+      updatePassword(this.#fireauth.currentUser, user.password).catch(
         (error) => {
           this.errorMessage = this.#extractFirebaseMessage(error.message);
           this.#cdf.detectChanges();
