@@ -9,6 +9,7 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
@@ -32,7 +33,7 @@ import OLStyle from 'ol/style/Style';
 export class OLAdaptorPowerlinesComponent implements Adaptor {
   @Input() iconSize = 15;
 
-  constructor(private map: OLMapComponent) {}
+  #map = inject(OLMapComponent);
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
@@ -55,8 +56,8 @@ export class OLAdaptorPowerlinesComponent implements Adaptor {
     resolution: number
   ): OLStyle[] {
     const icons: OLStyle[] = [];
-    const iconColor = this.map.vars['--map-powerline-icon-color'];
-    const lineColor = this.map.vars['--map-powerline-line-color'];
+    const iconColor = this.#map.vars['--map-powerline-icon-color'];
+    const lineColor = this.#map.vars['--map-powerline-line-color'];
     // genius!! 👉 https://stackoverflow.com/questions/38391780
     powerline
       .getGeometry()
