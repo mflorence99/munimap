@@ -8,7 +8,6 @@ import { TownIndex } from '../common';
 
 import { environment } from '../environment';
 
-import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -33,19 +32,20 @@ export class GeoJSONAuthorService extends GeoJSONService {
   #http = inject(HttpClient);
 
   loadByIndex(
-    route: ActivatedRoute,
     path: string,
     layerKey: string,
     extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<any, any>> {
-    const base = this.findIndex(route);
+    const base = this.findIndex();
     return this.#loadFromIndex(base, path, layerKey, extent);
   }
 
   loadIndex(): Observable<Index> {
-    return this.#http.get<Index>(`${environment.endpoints.proxy}/index.json`, {
-      params: this.#cacheBuster
-    });
+    return this.#http
+      .get<Index>(`${environment.endpoints.proxy}/index.json`, {
+        params: this.#cacheBuster
+      })
+      .pipe(tap((index) => (this.index = index)));
   }
 
   #indexFromPath(

@@ -4,7 +4,6 @@ import { Index } from '../common';
 
 import { environment } from '../environment';
 
-import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -30,7 +29,6 @@ export class GeoJSONViewerService extends GeoJSONService {
   #http = inject(HttpClient);
 
   loadByIndex(
-    route: ActivatedRoute,
     path: string,
     layerKey: string,
     extent: Coordinate = []
@@ -47,7 +45,7 @@ export class GeoJSONViewerService extends GeoJSONService {
   // 👇 we don't need an index for a singular town, so we create a dummy
 
   loadIndex(): Observable<Index> {
-    return of({});
+    return of({}).pipe(tap((index) => (this.index = index)));
   }
 
   #load(layerKey: string): Observable<GeoJSON.FeatureCollection<any, any>> {

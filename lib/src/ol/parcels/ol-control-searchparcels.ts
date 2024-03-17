@@ -12,7 +12,6 @@ import { SearcherComponent } from '../ol-searcher';
 
 import { isParcelStollen } from '../../common';
 
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -164,7 +163,6 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   #map = inject(OLMapComponent);
   #overridesByID: Record<ParcelID, Override> = {};
   #parcelsState = inject(ParcelsState);
-  #route = inject(ActivatedRoute);
   #searchTargets = [];
 
   constructor() {}
@@ -243,7 +241,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
 
   #handleGeoJSON$(): void {
     this.#geoJSON
-      .loadByIndex(this.#route, this.#map.path(), 'searchables')
+      .loadByIndex(this.#map.path(), 'searchables')
       .subscribe((geojson: SearchableParcels) => this.#geojson$.next(geojson));
   }
 

@@ -2,7 +2,6 @@ import { GeoJSONService } from '../services/geojson';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
@@ -38,7 +37,6 @@ export class OLSourceGeoJSONComponent {
   #geoJSON = inject(GeoJSONService);
   #layer = inject(OLLayerVectorComponent);
   #map = inject(OLMapComponent);
-  #route = inject(ActivatedRoute);
 
   constructor() {
     let strategy;
@@ -67,12 +65,7 @@ export class OLSourceGeoJSONComponent {
     else if (this.#map.loadingStrategy() === 'bbox')
       bbox = transformExtent(extent, projection, this.#map.featureProjection);
     this.#geoJSON
-      .loadByIndex(
-        this.#route,
-        this.path() ?? this.#map.path(),
-        this.layerKey(),
-        bbox
-      )
+      .loadByIndex(this.path() ?? this.#map.path(), this.layerKey(), bbox)
       .pipe(
         map((geojson: GeoJSON.FeatureCollection<any, any>) => {
           if (this.exclude()) {

@@ -11,7 +11,6 @@ import { ParcelsState } from '../state/parcels';
 
 import { parcelProperties } from '../common';
 
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
@@ -61,7 +60,6 @@ export class OLSourceParcelsComponent implements OnInit {
     new OLLayerVectorComponent();
   #map = inject(OLMapComponent);
   #parcelsState = inject(ParcelsState);
-  #route = inject(ActivatedRoute);
   #store = inject(Store);
   #success: Function;
 
@@ -184,12 +182,7 @@ export class OLSourceParcelsComponent implements OnInit {
     else if (this.#map.loadingStrategy() === 'bbox')
       bbox = transformExtent(extent, projection, this.#map.featureProjection);
     this.#geoJSON
-      .loadByIndex(
-        this.#route,
-        this.path() ?? this.#map.path(),
-        'parcels',
-        bbox
-      )
+      .loadByIndex(this.path() ?? this.#map.path(), 'parcels', bbox)
       .subscribe((geojson: Parcels) => {
         this.#success = success;
         this.#geojson$.next(geojson);

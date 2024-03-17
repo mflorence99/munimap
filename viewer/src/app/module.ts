@@ -284,8 +284,7 @@ const ROUTES: any = [
       },
       {
         path: 'dpw',
-        component: DPWPage,
-        data: { yyy: 1 }
+        component: DPWPage
       },
       {
         path: 'dpw-legend',

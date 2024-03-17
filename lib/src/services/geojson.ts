@@ -1,6 +1,5 @@
 import { Index } from '../common';
 
-import { ActivatedRoute } from '@angular/router';
 import { Coordinate } from 'ol/coordinate';
 import { Observable } from 'rxjs';
 
@@ -10,6 +9,7 @@ import bbox from '@turf/bbox';
 
 export abstract class GeoJSONService {
   empty = featureCollection([]);
+  index: Index;
 
   filter(
     geojson: GeoJSON.FeatureCollection<any, any>,
@@ -29,17 +29,12 @@ export abstract class GeoJSONService {
     } else return geojson;
   }
 
-  findIndex(route: ActivatedRoute): Index {
-    let index;
-    do {
-      index = route.snapshot.data.index;
-      route = route.parent;
-    } while (!index);
-    return index;
+  findIndex(): Index {
+    // 👇 IndexResolver makes sure this happens before we get started
+    return this.index;
   }
 
   abstract loadByIndex(
-    route: ActivatedRoute,
     path: string,
     layerKey: string,
     extent?: Coordinate

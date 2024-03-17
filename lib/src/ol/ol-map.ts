@@ -12,7 +12,6 @@ import { ViewStateModel } from '../state/view';
 
 import { bboxDistance } from '../common';
 
-import { ActivatedRoute } from '@angular/router';
 import { AfterContentInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -196,7 +195,6 @@ export class OLMapComponent
   #geoJSON = inject(GeoJSONService);
   #host = inject(ElementRef);
   #printing = false;
-  #route = inject(ActivatedRoute);
   #store = inject(Store);
   #subToAbuttersFound: Subscription;
   #subToFeaturesSelected: Subscription;
@@ -450,28 +448,24 @@ export class OLMapComponent
       .subscribe();
   }
 
-  #initializeView(path: Path): Path {
+  #initializeView(path: Path): void {
     // 👉 clean out the old map
     this.initialized = false;
     this.#cleanMap();
-    this.olView = null;
     // 👉 now create the new
-    if (!this.olView) {
-      // 🔥 this seems like a hack
-      //    we know we use Font Awesome to show map icons and
-      //    it must be loaded before we proceed
-      document.fonts.load(`normal bold 10px 'Font Awesome'`).then(() => {
-        this.#geoJSON
-          .loadByIndex(this.#route, path, 'boundary')
-          .subscribe((boundary: GeoJSON.FeatureCollection<any, any>) => {
-            this.#createView(boundary);
-            this.initialized = true;
-            this.#onChange();
-            this.#cdf.markForCheck();
-          });
-      });
-    }
-    return path;
+    // 🔥 this seems like a hack
+    //    we know we use Font Awesome to show map icons and
+    //    it must be loaded before we proceed
+    document.fonts.load(`normal bold 10px 'Font Awesome'`).then(() => {
+      this.#geoJSON
+        .loadByIndex(path, 'boundary')
+        .subscribe((boundary: GeoJSON.FeatureCollection<any, any>) => {
+          this.#createView(boundary);
+          this.initialized = true;
+          this.#onChange();
+          this.#cdf.markForCheck();
+        });
+    });
   }
 
   #onChange(): void {

@@ -13,7 +13,6 @@ import { parcelPropertiesOwnership } from '../common';
 import { parcelPropertiesUsage } from '../common';
 import { parcelPropertiesUse } from '../common';
 
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { Observable } from 'rxjs';
@@ -74,7 +73,6 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #geojson$ = new Subject<CountableParcels>();
   #mapState = inject(MapState);
   #parcelsState = inject(ParcelsState);
-  #route = inject(ActivatedRoute);
 
   abstract county: Signal<string>;
   abstract id: Signal<string>;
@@ -166,11 +164,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   #handleGeoJSON$(): void {
     this.#geoJSON
-      .loadByIndex(
-        this.#route,
-        this.#mapState.currentMap().path,
-        this.countables()
-      )
+      .loadByIndex(this.#mapState.currentMap().path, this.countables())
       .subscribe((geojson: CountableParcels) => this.#geojson$.next(geojson));
   }
 

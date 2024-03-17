@@ -1,4 +1,3 @@
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
@@ -130,10 +129,9 @@ export class BuilderComponent {
   type = model<string>();
 
   #geoJSON = inject(GeoJSONService);
-  #route = inject(ActivatedRoute);
 
   constructor() {
-    this.index = this.#geoJSON.findIndex(this.#route);
+    this.index = this.#geoJSON.findIndex();
   }
 
   allCounties(): string[] {

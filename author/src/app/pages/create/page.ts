@@ -1,6 +1,5 @@
 import { RootPage } from '../root/page';
 
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { FilterFunction } from '@lib/ol/ol-adaptor-geojson';
@@ -103,11 +102,10 @@ export class CreatePage {
 
   #geoJSON = inject(GeoJSONService);
   #root = inject(RootPage);
-  #route = inject(ActivatedRoute);
   #router = inject(Router);
 
   constructor() {
-    this.index = this.#geoJSON.findIndex(this.#route);
+    this.index = this.#geoJSON.findIndex();
     this.#root.setTitle(this.path);
   }
 
