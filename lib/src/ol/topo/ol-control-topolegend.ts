@@ -129,7 +129,11 @@ export class OLControlTopoLegendComponent
   }
 
   ngOnInit(): void {
-    this.areaOfTown = convertArea(area(this.#map.boundary), 'meters', 'acres');
+    this.areaOfTown = convertArea(
+      area(this.#map.boundary()),
+      'meters',
+      'acres'
+    );
     this.olControl = new Legend({ element: this.legend.nativeElement });
     this.olControl.setProperties({ component: this }, true);
     this.onInit();

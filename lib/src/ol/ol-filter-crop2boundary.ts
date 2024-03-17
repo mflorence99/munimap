@@ -34,7 +34,7 @@ export class OLFilterCrop2BoundaryComponent
     this.#layer = this.#layer1 ?? this.#layer2;
     // 👇 build the filter
     const coords: any = copy(
-      this.#map.boundary.features[0].geometry.coordinates
+      this.#map.boundary().features[0].geometry.coordinates
     );
     const feature = new Feature(new Polygon(coords));
     feature

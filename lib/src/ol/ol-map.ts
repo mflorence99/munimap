@@ -40,6 +40,7 @@ import { fromLonLat } from 'ol/proj';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { model } from '@angular/core';
+import { signal } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
@@ -161,9 +162,9 @@ export class OLMapComponent
   // 👉 proxy this from the real selector (if any) to ensure safe access
   abuttersFound = new EventEmitter<Parcel[]>();
   bbox = computed(
-    () => this.bounds() ?? this.boundary.features?.[0]?.bbox ?? [0, 0, 0, 0]
+    () => this.bounds() ?? this.boundary()?.features?.[0]?.bbox ?? [0, 0, 0, 0]
   );
-  boundary: GeoJSON.FeatureCollection<any, any>;
+  boundary = signal<GeoJSON.FeatureCollection<any, any>>(null);
   boundaryExtent: Coordinate;
   boundaryGrid: GeoJSON.FeatureCollection<any, any>;
   bounds = input<Coordinate>();
@@ -332,7 +333,7 @@ export class OLMapComponent
 
   #createView(boundary: GeoJSON.FeatureCollection<any, any>): void {
     // 👉 precompute boundary extent
-    this.boundary = boundary;
+    this.boundary.set(boundary);
     this.boundaryExtent = transformExtent(
       this.bbox(),
       this.featureProjection,
@@ -374,7 +375,7 @@ export class OLMapComponent
       this.olView.setCenter(fromLonLat(viewState.center));
       this.olView.setZoom(viewState.zoom);
     } else {
-      const center = centerOfMass(this.boundary).geometry.coordinates;
+      const center = centerOfMass(this.boundary()).geometry.coordinates;
       this.olView.setCenter(fromLonLat(center));
       this.olView.setZoom(this.minUsefulZoom());
     }

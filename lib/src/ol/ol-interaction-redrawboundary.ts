@@ -75,7 +75,7 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
       )
     ]);
     // 👉 jam original bbox, which was calculated as 4:3
-    geojson.features[0].bbox = this.#map.boundary.features[0].bbox;
+    geojson.features[0].bbox = this.#map.boundary().features[0].bbox;
     // 👉 put the adjusted boundary on the clipboard
     navigator.clipboard.writeText(JSON.stringify(geojson, null, ' '));
     // 👉 jst so we know something happened

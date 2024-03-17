@@ -50,7 +50,7 @@ export class OLSourceBoundaryComponent {
     // 👉 convert features into OL format
     const features = this.olVector
       .getFormat()
-      .readFeatures(this.#map.boundary, {
+      .readFeatures(this.#map.boundary(), {
         featureProjection: this.#map.projection
       }) as OLFeature<any>[];
     // 👉 add feature to source
