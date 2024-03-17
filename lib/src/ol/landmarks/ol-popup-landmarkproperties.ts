@@ -141,8 +141,8 @@ export class OLPopupLandmarkPropertiesComponent {
   onClose(): void {
     this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for landmarks
-    const selector = this.#map
-      .selector as OLInteractionSelectLandmarksComponent;
+    const selector =
+      this.#map.selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
     // 🔥  this doesn't seem to work
     // this.#subToSelection?.unsubscribe();

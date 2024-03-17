@@ -29,7 +29,7 @@ import { inject } from '@angular/core';
         class="content">
         <!-- 📦 CONTROLS -->
 
-        @if (sink.zoom >= olMap.minUsefulZoom) {
+        @if (sink.zoom >= olMap.minUsefulZoom()) {
           <app-ol-control-searchparcels
             mapControlSearch></app-ol-control-searchparcels>
         }
@@ -53,7 +53,7 @@ import { inject } from '@angular/core';
           @if (!sink.satelliteView) {
             <!-- 📦 BG LAYER (outside town)-->
 
-            @if (sink.zoom < olMap.minUsefulZoom) {
+            @if (sink.zoom < olMap.minUsefulZoom()) {
               <app-ol-layer-tile>
                 <app-ol-source-xyz
                   [url]="
@@ -101,7 +101,7 @@ import { inject } from '@angular/core';
 
             <!-- 📦 NH GranIT VECTOR LAYERS -->
 
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-wetlands>
                   <app-ol-style-universal
@@ -111,7 +111,7 @@ import { inject } from '@angular/core';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <!-- 👇 only drawing labels here - waterbodies draws actual river -->
                 <app-ol-adaptor-places>
@@ -134,7 +134,7 @@ import { inject } from '@angular/core';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-stonewalls>
                   <app-ol-style-universal
@@ -154,7 +154,7 @@ import { inject } from '@angular/core';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-buildings>
                   <app-ol-style-universal
@@ -165,7 +165,7 @@ import { inject } from '@angular/core';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-railroads>
                   <app-ol-style-universal
@@ -186,7 +186,7 @@ import { inject } from '@angular/core';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-trails>
                   <app-ol-style-universal
@@ -197,7 +197,7 @@ import { inject } from '@angular/core';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-places>
                   <app-ol-style-universal
@@ -210,7 +210,7 @@ import { inject } from '@angular/core';
                 <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-vector>
             }
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-adaptor-places>
                   <app-ol-style-universal
@@ -231,7 +231,7 @@ import { inject } from '@angular/core';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
 
-            @if (sink.zoom >= olMap.minUsefulZoom) {
+            @if (sink.zoom >= olMap.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-style-parcels
                   [borderOpacity]="0.5"
@@ -413,7 +413,7 @@ import { inject } from '@angular/core';
 
           <!-- 📦 OVERLAY FOR GPS -->
 
-          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>
           }
         }

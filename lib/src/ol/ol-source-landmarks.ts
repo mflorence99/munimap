@@ -68,8 +68,8 @@ export class OLSourceLandmarksComponent implements OnInit {
       this.olVector.clear();
       this.olVector.addFeatures(features);
       // 👉 the selector MAY not be present and may not be for landmarks
-      const selector = this.#map
-        .selector as OLInteractionSelectLandmarksComponent;
+      const selector =
+        this.#map.selector() as OLInteractionSelectLandmarksComponent;
       // 👉 reselect selected features b/c we've potentially removed them
       const selectedIDs = selector?.selectedIDs;
       if (selectedIDs?.length > 0) selector?.reselectLandmarks?.(selectedIDs);

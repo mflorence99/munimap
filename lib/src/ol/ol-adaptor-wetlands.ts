@@ -7,9 +7,9 @@ import { WetlandProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,11 +24,11 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorWetlandsComponent implements Adaptor {
-  @Input() riverbank: OLFillPatternType = 'rocks';
-  @Input() riverbankOpacity = 0.25;
-  @Input() riverbankScale = 2;
-  @Input() swamp: OLFillPatternType = 'swamp';
-  @Input() swampOpacity = 0.5;
+  riverbank = input<OLFillPatternType>('rocks');
+  riverbankOpacity = input(0.25);
+  riverbankScale = input(2);
+  swamp = input<OLFillPatternType>('swamp');
+  swampOpacity = input(0.5);
 
   // 👇 construct LandmarkProperties
   adapt(wetland: WetlandProperties): LandmarkProperties[] {
@@ -37,8 +37,8 @@ export class OLAdaptorWetlandsComponent implements Adaptor {
         return [
           new LandmarkPropertiesClass({
             fillColor: '--map-wetland-swamp',
-            fillOpacity: this.swampOpacity,
-            fillPattern: this.swamp
+            fillOpacity: this.swampOpacity(),
+            fillPattern: this.swamp()
           })
         ];
       case 'water':
@@ -49,9 +49,9 @@ export class OLAdaptorWetlandsComponent implements Adaptor {
           }),
           new LandmarkPropertiesClass({
             strokeColor: '--map-riverbank-rocks',
-            strokeOpacity: this.riverbankOpacity,
-            strokePattern: this.riverbank,
-            strokePatternScale: this.riverbankScale,
+            strokeOpacity: this.riverbankOpacity(),
+            strokePattern: this.riverbank(),
+            strokePatternScale: this.riverbankScale(),
             strokeStyle: 'solid',
             strokeWidth: 'thick'
           })

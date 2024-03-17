@@ -15,14 +15,15 @@ import { isAPDVDProposed } from './ol-apdvd';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
-import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { Signal } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,13 +35,17 @@ import { inject } from '@angular/core';
     DestroyService
   ],
   selector: 'app-ol-control-apdvdlegend',
+
   template: `
     <article
       #legend
-      [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
+      [ngClass]="{
+        'ol-legend-print': printing(),
+        'ol-legend-screen': !printing()
+      }"
       class="legend ol-legend ol-unselectable ol-control">
       <header class="header">
-        <h1 class="title">{{ title }}</h1>
+        <h1 class="title()">{{ title() }}</h1>
         <h2 class="subtitle">December 9, 2023</h2>
       </header>
 
@@ -91,27 +96,21 @@ export class OLControlAPDVDLegendComponent
   implements OnInit
 {
   @ViewChild('legend', { static: true })
-  legend: ElementRef;
-
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
-
-  @Input() printing: boolean;
-
-  @Input() title: string;
+  @Select(ParcelsState)
+  parcels$: Observable<Parcel[]>;
 
   areaOfExisting: number;
   areaOfProposed: number;
-
   colorOfAPDVDExisting = colorOfAPDVDExisting;
   colorOfAPDVDProposed = colorOfAPDVDProposed;
-
   countOfExisting: number;
   countOfProposed: number;
-
-  // 🔥 not used: only to satisfy base control
-  county: string;
-  id: string;
-  state: string;
+  county: Signal<string>;
+  id: Signal<string>;
+  legend: ElementRef;
+  printing = input<boolean>();
+  state: Signal<string>;
+  title = input<string>();
 
   #map = inject(OLMapComponent);
 

@@ -5,10 +5,10 @@ import { StylerComponent } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import OLFill from 'ol/style/Fill';
 import OLStroke from 'ol/style/Stroke';
@@ -30,13 +30,12 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleGraticuleComponent implements Styler {
-  @Input() fontFamily = 'Roboto';
-  @Input() fontSize = 10;
-  @Input() fontWeight: 'bold' | 'normal' = 'normal';
-  @Input() lineDash = [2, 2];
-  @Input() lineWidth = 0.25;
-
-  @Input() printing: boolean;
+  fontFamily = input('Roboto');
+  fontSize = input(10);
+  fontWeight = input<'bold' | 'normal'>('normal');
+  lineDash = input([2, 2]);
+  lineWidth = input(0.25);
+  printing = input<boolean>();
 
   // eslint-disable-next-line no-unused-private-class-members
   #graticule = inject(OLControlGraticuleComponent) /* 👈 enforce container */;
@@ -60,14 +59,14 @@ export class OLStyleGraticuleComponent implements Styler {
   #coords(): OLText {
     const color = this.#map.vars['--map-graticule-text-color'];
     const outline = this.#map.vars['--map-graticule-text-inverse'];
-    let fontSize = this.fontSize;
+    let fontSize = this.fontSize();
     // 👇 when we are printing, we want the lat/lon to be visible
-    if (this.printing) {
+    if (this.printing()) {
       const element = this.#map.olMap.getTargetElement();
       fontSize = element.clientHeight / 250;
     }
     return new OLText({
-      font: `${this.fontWeight} ${fontSize}px '${this.fontFamily}'`,
+      font: `${this.fontWeight()} ${fontSize}px '${this.fontFamily()}'`,
       fill: new OLFill({ color: `rgba(${color}, 1)` }),
       stroke: new OLStroke({
         color: `rgba(${outline}, 3)`,
@@ -81,8 +80,8 @@ export class OLStyleGraticuleComponent implements Styler {
     return new OLStroke({
       color: `rgba(${color},  1)`,
       lineCap: 'square',
-      lineDash: this.lineDash,
-      width: this.lineWidth
+      lineDash: this.lineDash(),
+      width: this.lineWidth()
     });
   }
 }

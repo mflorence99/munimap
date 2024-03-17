@@ -2,12 +2,13 @@ import { OLControlSearchParcelsComponent } from '../ol/parcels/ol-control-search
 
 import { AbstractControl } from '@angular/forms';
 import { Directive } from '@angular/core';
-import { Input } from '@angular/core';
 import { NG_VALIDATORS } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Validator } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
+
+import { input } from '@angular/core';
 
 function parcelIDValidatorFactory(
   searcher: OLControlSearchParcelsComponent,
@@ -41,14 +42,14 @@ function parcelIDValidatorFactory(
   selector: '[appParcelID][ngModel]'
 })
 export class ParcelIDValidator implements OnInit, Validator {
-  @Input() appParcelID: [OLControlSearchParcelsComponent, any];
+  appParcelID = input<[OLControlSearchParcelsComponent, any]>();
 
   validator: ValidatorFn;
 
   ngOnInit(): void {
     this.validator = parcelIDValidatorFactory(
-      this.appParcelID[0],
-      this.appParcelID[1]
+      this.appParcelID()[0],
+      this.appParcelID()[1]
     );
   }
 

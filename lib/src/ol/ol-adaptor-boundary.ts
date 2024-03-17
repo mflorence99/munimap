@@ -6,9 +6,9 @@ import { OLFillPatternType } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,29 +23,29 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorBoundaryComponent implements Adaptor {
-  @Input() borderOpacity = 0.5;
-  @Input() borderPixels = 5;
-  @Input() fillOpacity = 1;
-  @Input() fillPattern: OLFillPatternType = 'gravel';
+  borderOpacity = input(0.5);
+  borderPixels = input(5);
+  fillOpacity = input(1);
+  fillPattern = input<OLFillPatternType>('gravel');
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fillColor: '--map-boundary-fill',
-        fillOpacity: this.fillOpacity,
+        fillOpacity: this.fillOpacity(),
         zIndex: 1
       }),
       new LandmarkPropertiesClass({
         fillColor: '--map-boundary-pattern',
-        fillOpacity: this.fillOpacity,
-        fillPattern: this.fillPattern,
+        fillOpacity: this.fillOpacity(),
+        fillPattern: this.fillPattern(),
         zIndex: 2
       }),
       new LandmarkPropertiesClass({
         strokeColor: '--map-boundary-outline',
-        strokeOpacity: this.borderOpacity,
-        strokePixels: this.borderPixels,
+        strokeOpacity: this.borderOpacity(),
+        strokePixels: this.borderPixels(),
         strokeStyle: 'solid',
         zIndex: 3
       })

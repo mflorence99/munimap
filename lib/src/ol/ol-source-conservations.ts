@@ -4,7 +4,8 @@ import { OLSourceArcGISComponent } from './ol-source-arcgis';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { Input } from '@angular/core';
+
+import { input } from '@angular/core';
 
 // 🔥 we no longer use this source -- we use parcels instead
 
@@ -18,7 +19,7 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
-  @Input() exclude: (number | string)[];
+  exclude = input<(number | string)[]>();
 
   // 👇 see ConservationProperties
 

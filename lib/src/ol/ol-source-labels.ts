@@ -4,7 +4,8 @@ import { OLSourceArcGISComponent } from './ol-source-arcgis';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { Input } from '@angular/core';
+
+import { input } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -35,8 +36,8 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
-  @Input() dedupe: boolean;
-  @Input() labelsFor: LabelLayerType;
+  dedupe = input<boolean>();
+  labelsFor = input<LabelLayerType>();
 
   // 👇 see PlaceProperties
 
@@ -45,7 +46,7 @@ export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
       arcgis.features.forEach((feature) => {
         const properties: LabelProperties = feature.attributes;
         properties.name = properties.NAME;
-        properties.type = LABELS[this.labelsFor].place as any;
+        properties.type = LABELS[this.labelsFor()].place as any;
       });
       // 👇 sometimes adjacent features are duplicated
       const unique = new Set();
@@ -55,7 +56,7 @@ export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
         .filter((feature) => {
           const exists = unique.has(feature.attributes.name);
           unique.add(feature.attributes.name);
-          return !this.dedupe || !exists;
+          return !this.dedupe() || !exists;
         });
       return filtered;
     } else return super.filter(arcgis);
@@ -70,13 +71,13 @@ export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return `${this.labelsFor}-labels`;
+    return `${this.labelsFor()}-labels`;
   }
 
   getURL(extent: Coordinate): string {
     const [minX, minY, maxX, maxY] = extent;
     return `${
-      LABELS[this.labelsFor].url
+      LABELS[this.labelsFor()].url
     }/query?f=json&returnIdsOnly=false&returnCountOnly=false&where=1=1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry={"xmin":${minX},"ymin":${minY},"xmax":${maxX},"ymax":${maxY},"spatialReference":{"wkid":102100}}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
   }
 }

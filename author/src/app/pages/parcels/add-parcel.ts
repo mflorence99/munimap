@@ -68,7 +68,7 @@ interface Addition {
             #parcelID="ngModel"
             [(ngModel)]="addition.id"
             [appAutoFocus]="true"
-            [appParcelID]="[$any(map.searcher), addition.id]"
+            [appParcelID]="[$any(map.searcher()), addition.id]"
             autocomplete="off"
             matInput
             name="id"
@@ -162,15 +162,15 @@ export class AddParcelComponent implements SidebarComponent {
       geometry: geojson.geometry,
       id: addition.id,
       owner: this.#authState.currentProfile().email,
-      path: this.map.path,
+      path: this.map.path(),
       properties: {
         address: 'UNKNOWN',
         area: addition.area,
-        county: this.map.path.split(':')[1],
+        county: this.map.path().split(':')[1],
         id: addition.id,
         neighborhood: '',
         owner: 'UNKNOWN',
-        town: this.map.path.split(':')[2],
+        town: this.map.path().split(':')[2],
         usage: '110',
         use: '',
         zone: ''

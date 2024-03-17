@@ -5,12 +5,12 @@ import { environment } from '../environment';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
 import { filter } from 'rxjs/operators';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { merge } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -58,8 +58,7 @@ const HUCS = [
   styles: [':host { display: none }']
 })
 export class OLSourceContours2ftComponent {
-  @Input() maxRequests = 8;
-
+  maxRequests = input(8);
   olXYZ: OLXYZ;
 
   #http = inject(HttpClient);
@@ -105,7 +104,7 @@ export class OLSourceContours2ftComponent {
       );
     });
     // 👇 run the requests with a maximum concurrency
-    merge(...requests, this.maxRequests)
+    merge(...requests, this.maxRequests())
       .pipe(toArray())
       .subscribe((bitmaps: ImageBitmap[]) => {
         // 👇 composite the bitmaps into a single canvas

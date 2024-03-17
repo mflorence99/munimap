@@ -6,9 +6,9 @@ import { simplify } from '../../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { saveAs } from 'file-saver';
 
 import bbox from '@turf/bbox';
@@ -35,7 +35,7 @@ import OLProjection from 'ol/proj/Projection';
   ]
 })
 export class OLControlExportParcelsComponent {
-  @Input() fileName: string;
+  fileName = input<string>();
 
   #format: OLGeoJSON;
   #map = inject(OLMapComponent);
@@ -68,6 +68,6 @@ export class OLControlExportParcelsComponent {
     const blob = new Blob([JSON.stringify(simplify(geojson))], {
       type: 'text/plain;charset=utf-8'
     });
-    saveAs(blob, `${this.fileName}.geojson`);
+    saveAs(blob, `${this.fileName()}.geojson`);
   }
 }

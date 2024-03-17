@@ -6,10 +6,10 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 import OLFontSymbol from 'ol-ext/style/FontSymbol';
@@ -31,7 +31,7 @@ import OLStyle from 'ol/style/Style';
   styles: [':host { display: none }']
 })
 export class OLAdaptorPowerlinesComponent implements Adaptor {
-  @Input() iconSize = 15;
+  iconSize = input(15);
 
   #map = inject(OLMapComponent);
 
@@ -75,7 +75,7 @@ export class OLAdaptorPowerlinesComponent implements Adaptor {
                 font: `'Font Awesome'`,
                 fontStyle: 'bold',
                 form: 'none',
-                radius: this.iconSize / resolution,
+                radius: this.iconSize() / resolution,
                 rotation: -rotation,
                 stroke: new OLStroke({
                   color: `rgba(${lineColor}, 1)`,

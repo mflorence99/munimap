@@ -53,7 +53,7 @@ interface LandmarkConversion {
         <mat-drawer-content class="content">
           <app-ol-map
             #olMap
-            [bbox]="sink.map.bbox"
+            [bounds]="sink.map.bbox"
             [loadingStrategy]="'all'"
             [minZoom]="13"
             [maxZoom]="22"

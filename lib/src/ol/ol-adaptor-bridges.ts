@@ -6,9 +6,9 @@ import { LandmarkPropertiesClass } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +23,7 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorBridgesComponent implements Adaptor {
-  @Input() bridgeWidth = 48 /* 👈 feet */;
+  bridgeWidth = input(48);
 
   // 👇 construct LandmarkProperties
   adapt(bridge: BridgeProperties): LandmarkProperties[] {
@@ -31,7 +31,7 @@ export class OLAdaptorBridgesComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fontColor: '--map-bridge-line-color',
-        fontFeet: this.bridgeWidth,
+        fontFeet: this.bridgeWidth(),
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',
@@ -43,7 +43,7 @@ export class OLAdaptorBridgesComponent implements Adaptor {
         textAlign: 'center',
         textBaseline: 'bottom',
         // 👉 a bridge is often co-located with a stream crossing
-        textOffsetFeet: [-this.bridgeWidth, this.bridgeWidth]
+        textOffsetFeet: [-this.bridgeWidth(), this.bridgeWidth()]
       })
     ];
   }

@@ -192,7 +192,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
         action: 'modified',
         id: feature.getId(),
         owner: this.#authState.currentProfile().email,
-        path: this.map.path,
+        path: this.map.path(),
         properties: {},
         type: 'Feature'
       };

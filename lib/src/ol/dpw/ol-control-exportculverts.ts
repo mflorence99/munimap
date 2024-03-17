@@ -3,9 +3,9 @@ import { LandmarksState } from '../../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -26,7 +26,7 @@ import { saveAs } from 'file-saver';
   ]
 })
 export class OLControlExportCulvertsComponent {
-  @Input() fileName: string;
+  fileName = input<string>();
 
   #landmarksState = inject(LandmarksState);
 
@@ -70,6 +70,6 @@ export class OLControlExportCulvertsComponent {
     const blob = new Blob([gpx], {
       type: 'text/plain;charset=utf-8'
     });
-    saveAs(blob, `${this.fileName}.gpx`);
+    saveAs(blob, `${this.fileName()}.gpx`);
   }
 }

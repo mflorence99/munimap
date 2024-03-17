@@ -6,11 +6,11 @@ import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { Input } from '@angular/core';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
@@ -30,13 +30,10 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceGeoJSONComponent {
-  @Input() exclude: (number | string)[];
-
-  @Input() layerKey: string;
-
-  @Input() path: string;
-
+  exclude = input<(number | string)[]>();
+  layerKey = input<string>();
   olVector: OLVector<any>;
+  path = input<string>();
 
   #geoJSON = inject(GeoJSONService);
   #layer = inject(OLLayerVectorComponent);
@@ -45,8 +42,8 @@ export class OLSourceGeoJSONComponent {
 
   constructor() {
     let strategy;
-    if (this.#map.loadingStrategy === 'all') strategy = allStrategy;
-    else if (this.#map.loadingStrategy === 'bbox') strategy = bboxStrategy;
+    if (this.#map.loadingStrategy() === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy() === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
@@ -65,26 +62,27 @@ export class OLSourceGeoJSONComponent {
   ): void {
     let bbox;
     // 👉 get everything at once
-    if (this.#map.loadingStrategy === 'all') bbox = this.#map.bbox;
+    if (this.#map.loadingStrategy() === 'all') bbox = this.#map.bbox();
     // 👉 or just get what's visible
-    else if (this.#map.loadingStrategy === 'bbox')
+    else if (this.#map.loadingStrategy() === 'bbox')
       bbox = transformExtent(extent, projection, this.#map.featureProjection);
     this.#geoJSON
       .loadByIndex(
         this.#route,
-        this.path ?? this.#map.path,
-        this.layerKey,
+        this.path() ?? this.#map.path(),
+        this.layerKey(),
         bbox
       )
       .pipe(
         map((geojson: GeoJSON.FeatureCollection<any, any>) => {
-          if (this.exclude) {
+          if (this.exclude()) {
             const filtered = copy(geojson);
             // 🔥 this is a hack implementation but is easily expanded
             //    if necessary to support include and/or filtering
             //    on a field other than "type"
             filtered.features = geojson.features.filter(
-              (feature: any) => !this.exclude.includes(feature.properties.type)
+              (feature: any) =>
+                !this.exclude().includes(feature.properties.type)
             );
             return filtered;
           } else return geojson;

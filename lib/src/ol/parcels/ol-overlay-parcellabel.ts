@@ -85,7 +85,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       action: 'modified',
       id: this.#id,
       owner: this.#authState.currentProfile().email,
-      path: this.#map.path,
+      path: this.#map.path(),
       properties: {
         centers: centers
       },

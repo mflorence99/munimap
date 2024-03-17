@@ -5,8 +5,8 @@ import { OLMapComponent } from './ol-map';
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { ContentChild } from '@angular/core';
 
+import { contentChild } from '@angular/core';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 
@@ -31,10 +31,9 @@ import OLSwipe from 'ol-ext/control/Swipe';
 export class OLControlSplitScreenComponent
   implements AfterContentInit, Mapable
 {
-  @ContentChild('left', { static: true }) onLeft: any;
-  @ContentChild('right', { static: true }) onRight: any;
-
   olControl: OLSwipe;
+  onLeft = contentChild<any>('left');
+  onRight = contentChild<any>('right');
 
   #map = inject(OLMapComponent);
 
@@ -48,7 +47,7 @@ export class OLControlSplitScreenComponent
   }
 
   ngAfterContentInit(): void {
-    this.olControl.addLayer(this.onLeft.olLayer, false);
-    this.olControl.addLayer(this.onRight.olLayer, true);
+    this.olControl.addLayer(this.onLeft().olLayer, false);
+    this.olControl.addLayer(this.onRight().olLayer, true);
   }
 }

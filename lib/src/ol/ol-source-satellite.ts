@@ -4,9 +4,10 @@ import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
+import { effect } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
@@ -47,9 +48,9 @@ export const satelliteYears = Object.keys(urls);
 })
 export class OLSourceSatelliteComponent {
   olTileWMS: OLTileWMS;
+  year = input<string>();
 
   #layer = inject(OLLayerTileComponent);
-  #year: string;
 
   constructor() {
     this.olTileWMS = new OLTileWMS({
@@ -61,15 +62,10 @@ export class OLSourceSatelliteComponent {
     });
     this.olTileWMS.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olTileWMS);
-  }
-
-  @Input() get year(): string {
-    return this.#year;
-  }
-
-  set year(value: string) {
-    if (this.#year && this.#year !== value) this.olTileWMS.refresh();
-    this.#year = value;
+    // 👇 side effect
+    effect(() => {
+      if (this.year()) this.olTileWMS.refresh();
+    });
   }
 
   #loader(tile: OLImageTile, src: string): void {
@@ -79,7 +75,7 @@ export class OLSourceSatelliteComponent {
     const url = `${
       environment.endpoints.proxy
     }/proxy/satellite?url=${encodeURIComponent(
-      urls[this.year].replace('XXXXXX', bbox)
+      urls[this.year()].replace('XXXXXX', bbox)
     )}`;
     img.src = url;
   }

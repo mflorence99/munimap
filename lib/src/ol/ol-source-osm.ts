@@ -2,10 +2,10 @@ import { OLLayerTileComponent } from './ol-layer-tile';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import OLOSM from 'ol/source/OSM';
 
@@ -16,8 +16,7 @@ import OLOSM from 'ol/source/OSM';
   styles: [':host { display: none }']
 })
 export class OLSourceOSMComponent implements OnInit {
-  @Input() maxZoom: number;
-
+  maxZoom = input<number>();
   olOSM: OLOSM;
 
   #layer = inject(OLLayerTileComponent);
@@ -25,7 +24,7 @@ export class OLSourceOSMComponent implements OnInit {
   ngOnInit(): void {
     // 👉 we can't follow the normal convention and put this in the
     //    constructor as there few "set" methods
-    this.olOSM = new OLOSM({ maxZoom: this.maxZoom });
+    this.olOSM = new OLOSM({ maxZoom: this.maxZoom() });
     this.olOSM.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olOSM);
   }

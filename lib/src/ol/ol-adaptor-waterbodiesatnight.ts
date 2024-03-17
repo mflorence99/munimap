@@ -6,9 +6,9 @@ import { OLFillPatternType } from './ol-styler';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 // 🔥 highly experimental -- would like to show some reflection at least!
 
@@ -25,23 +25,23 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorWaterbodiesAtNightComponent implements Adaptor {
-  @Input() fillOpacity = 1;
-  @Input() pattern: OLFillPatternType = 'conglomerate2';
-  @Input() patternOpacity = 1;
-  @Input() patternScale = 0.5;
+  fillOpacity = input(1);
+  pattern = input<OLFillPatternType>('conglomerate2');
+  patternOpacity = input(1);
+  patternScale = input(0.5);
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fillColor: '--map-waterbodyatnight-fill',
-        fillOpacity: this.fillOpacity
+        fillOpacity: this.fillOpacity()
       }),
       new LandmarkPropertiesClass({
         fillColor: '--map-waterbodyatnight-pattern',
-        fillOpacity: this.patternOpacity,
-        fillPattern: this.pattern,
-        fillPatternScale: this.patternScale
+        fillOpacity: this.patternOpacity(),
+        fillPattern: this.pattern(),
+        fillPatternScale: this.patternScale()
       })
     ];
   }

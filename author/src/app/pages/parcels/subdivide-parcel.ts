@@ -70,7 +70,7 @@ interface Subdivision {
               #subdivisionID="ngModel"
               [(ngModel)]="subdivision.id"
               [appAutoFocus]="ix === 0"
-              [appParcelID]="[$any(map.searcher), subdivision.id]"
+              [appParcelID]="[$any(map.searcher()), subdivision.id]"
               [appSelectOnFocus]="true"
               [appSubdivisionID]="[subdivisions, ix]"
               [name]="'id' + ix"
@@ -216,7 +216,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
         action: 'removed',
         id: source.getId(),
         owner: this.#authState.currentProfile().email,
-        path: this.map.path,
+        path: this.map.path(),
         type: 'Feature'
       });
     }
@@ -229,7 +229,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
         geometry: geojson.geometry,
         id: subdivision.id,
         owner: this.#authState.currentProfile().email,
-        path: this.map.path,
+        path: this.map.path(),
         properties: {
           address: props.address,
           area: subdivision.area ?? 1,

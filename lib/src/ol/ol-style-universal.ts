@@ -52,10 +52,11 @@ import OLText from 'ol/style/Text';
   styles: [':host { display: none }']
 })
 export class OLStyleUniversalComponent implements OnChanges, Styler {
-  @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
+  // 👇 @Input/OnChanges works just fine here!
 
   /* eslint-disable @typescript-eslint/naming-convention */
 
+  @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
   @Input() fontFamily = 'Roboto';
   @Input() fontOutlineRatio = 0.1 /* 👈 outline width : fontSize */;
   @Input() fontSize_huge = 32 /* 👈 pixels */;

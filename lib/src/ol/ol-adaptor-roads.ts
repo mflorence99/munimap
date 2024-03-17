@@ -6,9 +6,9 @@ import { RoadProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,11 +23,11 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorRoadsComponent implements Adaptor {
-  @Input() class6Pattern = 'conglomerate';
-  @Input() minRoadFeet = 20 /* 👈 feet */;
-  @Input() rightOfWayRatio = 3;
-  @Input() roadLaneRatio = 0.9;
-  @Input() roadNameRatio = 1.5;
+  class6Pattern = input('conglomerate');
+  minRoadFeet = input(20);
+  rightOfWayRatio = input(3);
+  roadLaneRatio = input(0.9);
+  roadNameRatio = input(1.5);
 
   // 👇 construct LandmarkProperties
   adapt(road: RoadProperties): LandmarkProperties[] {
@@ -52,7 +52,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
       new LandmarkPropertiesClass({
         lineSpline: true,
         strokeColor: `--map-road-lane-${road.class ?? '0'}`,
-        strokeFeet: this.#roadFeet(road) * this.roadLaneRatio,
+        strokeFeet: this.#roadFeet(road) * this.roadLaneRatio(),
         strokeOpacity: 1,
         strokeStyle: 'solid',
         zIndex: 2
@@ -61,9 +61,9 @@ export class OLAdaptorRoadsComponent implements Adaptor {
         ? new LandmarkPropertiesClass({
             lineSpline: true,
             strokeColor: `--map-road-edge-${road.class ?? '0'}`,
-            strokeFeet: this.#roadFeet(road) * this.roadLaneRatio,
+            strokeFeet: this.#roadFeet(road) * this.roadLaneRatio(),
             strokeOpacity: 1,
-            strokePattern: this.class6Pattern,
+            strokePattern: this.class6Pattern(),
             strokePatternScale: 0.66,
             strokeStyle: 'solid',
             zIndex: 3
@@ -74,7 +74,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
         lineSpline: true,
         name: nm,
         fontColor: `--map-road-text-${road.class ?? '0'}`,
-        fontFeet: this.#roadFeet(road) * this.roadNameRatio,
+        fontFeet: this.#roadFeet(road) * this.roadNameRatio(),
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',
@@ -84,6 +84,6 @@ export class OLAdaptorRoadsComponent implements Adaptor {
   }
 
   #roadFeet(road: RoadProperties): number {
-    return Math.max(road.width, this.minRoadFeet) * this.rightOfWayRatio;
+    return Math.max(road.width, this.minRoadFeet()) * this.rightOfWayRatio();
   }
 }

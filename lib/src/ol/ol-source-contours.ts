@@ -6,10 +6,10 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
-import { Input } from '@angular/core';
 
 import { catchError } from 'rxjs/operators';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import OLImageTile from 'ol/ImageTile';
@@ -26,12 +26,12 @@ const attribution =
 })
 export class OLSourceContoursComponent {
   // 👉 the fallback contours are WAAY to heavy
-  @Input() fallbackOpacity = 0.33;
+  fallbackOpacity = input(0.33);
 
   // 👇 https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer
-  @Input() layers = [
+  layers = input([
     1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18, 21, 22, 25, 26
-  ];
+  ]);
 
   olTileWMS: OLTileWMS;
 
@@ -77,7 +77,7 @@ export class OLSourceContoursComponent {
       .pipe(
         catchError(() => {
           // 👉 the fallback contours are WAAY to heavy
-          this.#layer.olLayer.setOpacity(this.fallbackOpacity);
+          this.#layer.olLayer.setOpacity(this.fallbackOpacity());
           const url = this.#makeURL(src, this.urlFallback);
           return this.#http.get(url, {
             observe: 'response',
@@ -107,7 +107,7 @@ export class OLSourceContoursComponent {
         .replace('VVVVVV', environment.package.version)
         .replace('XXXXXX', bbox)
         .replace('YYYYYY', JSON.stringify(renderingRule))
-        .replace('ZZZZZZ', this.layers.join(','))
+        .replace('ZZZZZZ', this.layers().join(','))
     )}`;
   }
 }

@@ -4,9 +4,9 @@ import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import OLImageTile from 'ol/ImageTile';
 import OLTileWMS from 'ol/source/TileWMS';
@@ -22,8 +22,7 @@ const attribution = '<a href="https://www.usgs.gov/" target="_blank">USGS</a>';
   styles: [':host { display: none }']
 })
 export class OLSourceHillshadeComponent {
-  @Input() colorize = false;
-
+  colorize = input(false);
   olTileWMS: OLTileWMS;
 
   // 👇 we have to disambiguate by version because the service can
@@ -50,7 +49,7 @@ export class OLSourceHillshadeComponent {
     const img = tile.getImage() as HTMLImageElement;
     const parsed = new URL(src);
     const bbox = parsed.searchParams.get('BBOX');
-    const renderingRule = this.colorize
+    const renderingRule = this.colorize()
       ? { rasterFunction: 'Hillshade Elevation Tinted' }
       : { rasterFunction: 'Hillshade Gray' };
     const url = `${

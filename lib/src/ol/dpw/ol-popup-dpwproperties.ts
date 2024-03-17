@@ -14,6 +14,10 @@ import { map } from 'rxjs/operators';
 
 import OLFeature from 'ol/Feature';
 
+export type Schema = Array<
+  [string, string, string?, ((properties: any) => string)?]
+>;
+
 // 👇 we can't use the normal DestroyService protocol here
 //    as snackbar popups don't have a standard lifecycle
 //    when created via openFromTemplate
@@ -109,7 +113,7 @@ export class OLPopupDPWPropertiesComponent {
     this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for landmarks
     const selector = this.#map
-      .selector as OLInteractionSelectLandmarksComponent;
+      .selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
     // 🔥  this doesn't seem to work
     // this.#subToSelection?.unsubscribe();

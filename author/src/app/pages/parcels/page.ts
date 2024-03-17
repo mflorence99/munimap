@@ -739,7 +739,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       geometry: doGeometry ? parcel.geometry : null,
       id: feature.getId(),
       owner: this.authState.currentProfile().email,
-      path: this.olMap.path,
+      path: this.olMap.path(),
       properties: doProperties ? parcel.properties : null,
       type: 'Feature'
     };

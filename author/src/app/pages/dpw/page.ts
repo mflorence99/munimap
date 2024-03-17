@@ -608,7 +608,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
         type: 'Point'
       },
       owner: this.authState.currentProfile().email,
-      path: this.olMap.path,
+      path: this.olMap.path(),
       properties: {
         metadata: {
           condition: culvertConditions[0],

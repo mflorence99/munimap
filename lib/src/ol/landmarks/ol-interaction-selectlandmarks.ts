@@ -11,7 +11,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
@@ -22,6 +21,7 @@ import { click } from 'ol/events/condition';
 import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { never } from 'ol/events/condition';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { pointerMove } from 'ol/events/condition';
@@ -56,29 +56,25 @@ export class OLInteractionSelectLandmarksComponent
 {
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
-  @Input() layers: OLLayerVectorComponent[];
-
-  @Input() maxZoom = 19;
-
-  @Input() multi: boolean;
-
-  @Input() zoomAnimationDuration = 200;
-
   // 👉 we need public access to go through the selector to its layer
   //    see abstract-map.ts -- this is how the context menu works
   //    the layer that contains the selector contains the features
   //    that can be operated on
   layer = inject(OLLayerVectorComponent);
 
+  layers = input<OLLayerVectorComponent[]>();
+  maxZoom = input(19);
+  multi = input<boolean>();
   olHover: OLSelect;
   olSelect: OLSelect;
+  zoomAnimationDuration = input(200);
 
   #map = inject(OLMapComponent);
   #selectKey: OLEventsKey;
 
   constructor() {
     const whichLayers = (olLayer: OLLayer): boolean => {
-      const layers = this.layers ?? [this.layer];
+      const layers = this.layers() ?? [this.layer];
       return layers.some((layer) => layer.olLayer === olLayer);
     };
     // 👉 for hovering
@@ -93,12 +89,12 @@ export class OLInteractionSelectLandmarksComponent
     // 👉 for selecting
     this.olSelect = new OLSelect({
       addCondition: (event): boolean =>
-        this.multi ? click(event) && shiftKeyOnly(event) : never(),
+        this.multi() ? click(event) && shiftKeyOnly(event) : never(),
       condition: (event): boolean => click(event),
       layers: whichLayers,
-      multi: this.multi,
+      multi: this.multi(),
       removeCondition: (event): boolean =>
-        this.multi ? click(event) && platformModifierKeyOnly(event) : never(),
+        this.multi() ? click(event) && platformModifierKeyOnly(event) : never(),
       style: this.#styleWhenSelected(),
       toggleCondition: (): boolean => never()
     });
@@ -140,13 +136,13 @@ export class OLInteractionSelectLandmarksComponent
     );
     // 👇 zoom to the extent of all the selected parcels and select them
     const minZoom = this.#map.olView.getMinZoom();
-    this.#map.olView.setMinZoom(this.#map.minUsefulZoom);
+    this.#map.olView.setMinZoom(this.#map.minUsefulZoom());
     this.#map.olView.fit(extent, {
       callback: () => {
         this.#map.olView.setMinZoom(minZoom);
       },
-      duration: this.zoomAnimationDuration,
-      maxZoom: this.maxZoom ?? this.#map.maxZoom,
+      duration: this.zoomAnimationDuration(),
+      maxZoom: this.maxZoom() ?? this.#map.maxZoom(),
       size: this.#map.olMap.getSize()
     });
   }
@@ -171,7 +167,7 @@ export class OLInteractionSelectLandmarksComponent
   selectLandmarks(ids: LandmarkID[]): void {
     const delta = this.#hasSelectionChanged(ids);
     this.olSelect.getFeatures().clear();
-    const layers = this.layers ?? [this.layer];
+    const layers = this.layers() ?? [this.layer];
     layers.forEach((layer) => {
       layer.olLayer.getSource().forEachFeature((feature) => {
         if (ids.includes(feature.getId()))

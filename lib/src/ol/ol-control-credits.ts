@@ -7,12 +7,12 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
-import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -31,13 +31,14 @@ class Credits extends OLControl {
     }
   ],
   selector: 'app-ol-control-credits',
+
   template: `
     <article
       #creditsRef
       [ngStyle]="{ 'bottom.px': bottom, 'right.px': right }"
       class="credits ol-unselectable">
       <footer
-        [ngClass]="{ contrast: showCreditsContrast }"
+        [ngClass]="{ contrast: showCreditsContrast() }"
         [ngStyle]="{ 'fontSize.px': fontSize, 'height.px': height }"
         class="footer">
         {{ now | date: 'longDate' }}&nbsp;|&nbsp;Credits:&nbsp;
@@ -79,7 +80,7 @@ class Credits extends OLControl {
           }
 
           li:not(:last-of-type)::after {
-            content: ' | ';
+            content: ' | ';
           }
         }
       }
@@ -89,14 +90,11 @@ class Credits extends OLControl {
 export class OLControlCreditsComponent implements Mapable, OnInit {
   @ViewChild('creditsRef', { static: true }) creditsRef: ElementRef;
 
-  @Input() scaleFactor = 125;
-
-  @Input() showCreditsContrast: boolean;
   attributions: string[] = [];
-
   now = Date.now();
-
   olControl: OLControl;
+  scaleFactor = input(125);
+  showCreditsContrast = input<boolean>();
 
   #cdf = inject(ChangeDetectorRef);
   #map = inject(OLMapComponent);
@@ -104,13 +102,13 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
   // 👇 set the position proportional to the map size
   get bottom(): number {
     const element = this.#map.olMap.getTargetElement();
-    return element.clientHeight / this.scaleFactor;
+    return element.clientHeight / this.scaleFactor();
   }
 
   // 👇 set the font size proportional to the map size
   get fontSize(): number {
     const element = this.#map.olMap.getTargetElement();
-    return element.clientHeight / this.scaleFactor;
+    return element.clientHeight / this.scaleFactor();
   }
 
   // 👇 set the height proportional to the map size

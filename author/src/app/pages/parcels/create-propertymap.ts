@@ -237,7 +237,7 @@ export class CreatePropertyMapComponent implements SidebarComponent {
       name: record.name,
       owner: this.#authState.currentProfile().email,
       parcelIDs: this.selectedIDs,
-      path: this.map.path,
+      path: this.map.path(),
       printSize: printSize,
       type: 'property'
     };

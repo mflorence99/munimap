@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { Observable } from 'rxjs';
+import { Signal } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
@@ -75,12 +76,12 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #parcelsState = inject(ParcelsState);
   #route = inject(ActivatedRoute);
 
-  abstract county: string;
-  abstract id: string;
+  abstract county: Signal<string>;
+  abstract id: Signal<string>;
   abstract parcels$: Observable<Parcel[]>;
-  abstract printing: boolean;
-  abstract state: string;
-  abstract title: string;
+  abstract printing: Signal<boolean>;
+  abstract state: Signal<string>;
+  abstract title: Signal<string>;
 
   addToMap(): void {}
 

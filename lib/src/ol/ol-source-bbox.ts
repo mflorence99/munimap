@@ -48,7 +48,7 @@ export class OLSourceBBoxComponent {
     // 👉 convert features into OL format
     const features = this.olVector
       .getFormat()
-      .readFeatures(featureCollection([bboxPolygon(this.#map.bbox as any)]), {
+      .readFeatures(featureCollection([bboxPolygon(this.#map.bbox() as any)]), {
         featureProjection: this.#map.projection
       }) as OLFeature<any>[];
     // 👉 add feature to source

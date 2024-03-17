@@ -4,13 +4,13 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Input } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { TileSourceEvent as OLTileSourceEvent } from 'ol/source/Tile';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { unByKey } from 'ol/Observable';
 
 import OLUrlTile from 'ol/source/UrlTile';
@@ -61,7 +61,7 @@ export interface PrintProgressData {
   ]
 })
 export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
-  @Input() giveUpAfter = 30 * 1000 /* 👈 seconds */;
+  giveUpAfter = input(30 * 1000);
 
   numLoaded = 0;
   numLoading = 0;
@@ -117,7 +117,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
       // });
       if (
         this.isComplete() &&
-        this.#timestamp + this.giveUpAfter < Date.now()
+        this.#timestamp + this.giveUpAfter() < Date.now()
       ) {
         clearInterval(this.#interval);
         this.#data.map.olMap.dispatchEvent('rendercomplete');

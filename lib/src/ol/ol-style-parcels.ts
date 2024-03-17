@@ -102,6 +102,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @ViewChildren(OLStylePatternDirective)
   appPatterns: QueryList<OLStylePatternDirective>;
 
+  // 👇 @Input/OnChanges works just fine here!
+
   @Input() borderOpacity = 1;
   @Input() borderWidth = 10 /* 👈 feet */;
   @Input() borderWidthSelectRatio = 2;
@@ -153,8 +155,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         const whenRedrawn = false;
         const whenSelected = false;
         // 👉 the selector MAY not be present
-        const selector = this.#map
-          .selector as OLInteractionSelectParcelsComponent;
+        const selector =
+          this.#map.selector() as OLInteractionSelectParcelsComponent;
         const whenAbutted =
           this.showAbutters === 'whenSelected' &&
           selector?.abutterIDs?.includes(props.id);

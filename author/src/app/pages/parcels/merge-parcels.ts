@@ -112,7 +112,7 @@ export class MergeParcelsComponent implements SidebarComponent {
         action: 'removed',
         id: removedID,
         owner: this.#authState.currentProfile().email,
-        path: this.map.path,
+        path: this.map.path(),
         type: 'Feature'
       };
     });
@@ -122,7 +122,7 @@ export class MergeParcelsComponent implements SidebarComponent {
       action: 'modified',
       id: record.mergedID,
       owner: this.#authState.currentProfile().email,
-      path: this.map.path,
+      path: this.map.path(),
       properties: {},
       type: 'Feature'
     };

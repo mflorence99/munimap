@@ -12,6 +12,8 @@ import { User } from '@lib/state/auth';
   styles: [':host { display: none }']
 })
 export class SinkComponent {
+  // 👇 @Input works just fine here!
+
   @Input() map: Map;
   @Input() profile: Profile;
   @Input() satelliteView: boolean;

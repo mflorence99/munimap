@@ -9,12 +9,12 @@ import { Component } from '@angular/core';
 import { Coordinate as OLCoordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { unByKey } from 'ol/Observable';
 
@@ -42,13 +42,10 @@ import html2canvas from 'html2canvas';
 export class OLControlPrintComponent {
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
-  @Input() dpi = 300;
-
-  @Input() fileName: string;
-
-  @Input() maxPrintSize = 12000;
-
-  @Input() printSize: number[];
+  dpi = input(300);
+  fileName = input<string>();
+  maxPrintSize = input(12000);
+  printSize = input<number[]>();
 
   #center: OLCoordinate;
   #dialog = inject(MatDialog);
@@ -62,7 +59,7 @@ export class OLControlPrintComponent {
 
   print(): void {
     const data: ConfirmDialogData = {
-      content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize[0]}" x ${this.printSize[1]}" paper.`,
+      content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize()[0]}" x ${this.printSize()[1]}" paper.`,
       title: 'Please confirm map print'
     };
     this.#dialog
@@ -86,11 +83,12 @@ export class OLControlPrintComponent {
   #padding(cx: number, cy: number): number[] {
     // 👉 no padding for 8.5 x 11, as the print driver takes care
     //    of the safe area
-    if (this.printSize[0] === 8.5 && this.printSize[1] === 11) return [0, 0];
+    if (this.printSize()[0] === 8.5 && this.printSize()[1] === 11)
+      return [0, 0];
     // 👉 other sizes are designed to be printed off-site, like
     //    posterburner.com, which supports full bleed, which we don't want
     else {
-      const nominal = (cx + cy) / (this.printSize[0] + this.printSize[1]);
+      const nominal = (cx + cy) / (this.printSize()[0] + this.printSize()[1]);
       const ar = cx / cy;
       const actual = ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
       console.log(
@@ -102,14 +100,14 @@ export class OLControlPrintComponent {
   }
 
   #printArea(cx: number, cy: number): number[] {
-    const nominal = [cx * this.dpi, cy * this.dpi];
+    const nominal = [cx * this.dpi(), cy * this.dpi()];
     const ar = this.#map.orientation === 'portrait' ? cx / cy : cy / cx;
     const actual = [];
     if (ar > 1) {
-      actual[0] = Math.min(nominal[0], this.maxPrintSize);
+      actual[0] = Math.min(nominal[0], this.maxPrintSize());
       actual[1] = actual[0] / ar;
     } else {
-      actual[1] = Math.min(nominal[1], this.maxPrintSize);
+      actual[1] = Math.min(nominal[1], this.maxPrintSize());
       actual[0] = actual[1] * ar;
     }
     console.log(`%cPrint area ${actual[0]} x ${actual[1]}`, 'color: lightblue');
@@ -133,7 +131,7 @@ export class OLControlPrintComponent {
       // 👉 now render printer as image
       printout.toBlob(
         (blob) => {
-          saveAs(blob, `${this.fileName}.jpeg`);
+          saveAs(blob, `${this.fileName()}.jpeg`);
           this.#teardown();
         },
         'image/jpeg',
@@ -147,7 +145,7 @@ export class OLControlPrintComponent {
     this.#zoom = this.#map.olView.getZoom();
     this.#map.olView.setConstrainResolution(false);
     // 👉 calculate extent of full map
-    const printArea = this.#printArea(this.printSize[0], this.printSize[1]);
+    const printArea = this.#printArea(this.printSize()[0], this.printSize()[1]);
     this.#px = printArea[0];
     this.#py = printArea[1];
     // 👉 the progress dialog allows the print to be cancelled
@@ -172,9 +170,9 @@ export class OLControlPrintComponent {
       element.style.height = `${this.#py}px`;
       element.style.overflow = 'visible';
       element.style.width = `${this.#px}px`;
-      this.#dpi = this.#map.dpi;
+      this.#dpi = this.#map.dpi();
       // 👉 the actual dpi has been clamped!
-      this.#map.dpi = printArea[0] / this.printSize[0];
+      this.#map.dpi.set(printArea[0] / this.printSize()[0]);
       this.#map.olMap.updateSize();
       this.#map.zoomToBounds();
       // 👉 controls map configuration
@@ -189,7 +187,7 @@ export class OLControlPrintComponent {
     element.style.height = ``;
     element.style.overflow = 'hidden';
     element.style.width = ``;
-    this.#map.dpi = this.#dpi;
+    this.#map.dpi.set(this.#dpi);
     this.#map.olMap.updateSize();
     this.#map.olView.setCenter(this.#center);
     this.#map.olView.setZoom(this.#zoom);

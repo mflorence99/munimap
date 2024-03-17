@@ -2,9 +2,9 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { saveAs } from 'file-saver';
 
 import OLGeoJSON from 'ol/format/GeoJSON';
@@ -27,8 +27,8 @@ import OLGeoJSON from 'ol/format/GeoJSON';
   ]
 })
 export class OLControlExportLayersComponent {
-  @Input() fileName: string;
-  @Input() layerIDs: string[];
+  fileName = input<string>();
+  layerIDs = input<string[]>();
 
   #format: OLGeoJSON;
   #map = inject(OLMapComponent);
@@ -45,12 +45,12 @@ export class OLControlExportLayersComponent {
     const layers: any[] = this.#map.olMap
       .getLayers()
       .getArray()
-      .filter((layer) => this.layerIDs.includes(layer.get('id')));
+      .filter((layer) => this.layerIDs().includes(layer.get('id')));
     const features = layers.flatMap((layer) => layer.getSource().getFeatures());
     const geojson = JSON.parse(this.#format.writeFeatures(features));
     const blob = new Blob([JSON.stringify(geojson)], {
       type: 'text/plain;charset=utf-8'
     });
-    saveAs(blob, `${this.fileName}.geojson`);
+    saveAs(blob, `${this.fileName()}.geojson`);
   }
 }

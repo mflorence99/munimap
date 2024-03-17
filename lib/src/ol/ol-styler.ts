@@ -8,13 +8,13 @@ import OLStyle from 'ol/style/Style';
 // 👇 https://stackoverflow.com/questions/27522973
 
 export interface Styler {
-  style: () => OLStyleFunction | OLStyle | OLStyle[];
+  style?: () => OLStyleFunction | OLStyle | OLStyle[];
   styleWhenHovering?: () => OLStyleFunction | OLStyle | OLStyle[];
   styleWhenSelected?: () => OLStyleFunction | OLStyle | OLStyle[];
 }
 
 @Injectable()
-export class StylerComponent {}
+export class StylerComponent implements Styler {}
 
 export type OLFillPatternType =
   | 'breccia'

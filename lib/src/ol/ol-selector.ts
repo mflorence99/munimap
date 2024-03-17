@@ -9,12 +9,12 @@ import OLFeature from 'ol/Feature';
 
 export interface Selector {
   abuttersFound?: EventEmitter<any[]>;
-  featuresSelected: EventEmitter<OLFeature<any>[]>;
+  featuresSelected?: EventEmitter<OLFeature<any>[]>;
   layer?: OLLayerVectorComponent;
   roSelection?: boolean;
-  selected: OLFeature<any>[];
-  selectedIDs: any[];
+  selected?: OLFeature<any>[];
+  selectedIDs?: any[];
 }
 
 @Injectable()
-export class SelectorComponent {}
+export class SelectorComponent implements Selector {}

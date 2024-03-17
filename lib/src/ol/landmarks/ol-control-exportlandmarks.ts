@@ -2,9 +2,9 @@ import { LandmarksState } from '../../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -25,7 +25,7 @@ import { saveAs } from 'file-saver';
   ]
 })
 export class OLControlExportLandmarksComponent {
-  @Input() fileName: string;
+  fileName = input<string>();
 
   #landmarksState = inject(LandmarksState);
 
@@ -34,6 +34,6 @@ export class OLControlExportLandmarksComponent {
     const blob = new Blob([JSON.stringify(geojson)], {
       type: 'text/plain;charset=utf-8'
     });
-    saveAs(blob, `${this.fileName}.geojson`);
+    saveAs(blob, `${this.fileName()}.geojson`);
   }
 }

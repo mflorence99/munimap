@@ -8,6 +8,7 @@ import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelsState } from '@lib/state/parcels';
 import { Select } from '@ngxs/store';
+import { Signal } from '@angular/core';
 import { VersionService } from '@lib/services/version';
 
 import { inject } from '@angular/core';
@@ -316,14 +317,11 @@ export class ParcelsLegendComponent
   @Select(ColorCodeState) colorCode$: Observable<ColorCodeStateModel>;
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
-  // 🔥 not used: only to satisfy base control
-  county: string;
-  id: string;
-
-  // 🔥 not used: only to satisfy base control
-  printing: boolean;
-  state: string;
-  title: string;
+  county: Signal<string>;
+  id: Signal<string>;
+  printing: Signal<boolean>;
+  state: Signal<string>;
+  title: Signal<string>;
 
   #version = inject(VersionService);
 

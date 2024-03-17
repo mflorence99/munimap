@@ -6,7 +6,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
-import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
@@ -14,6 +13,7 @@ import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { getDistance } from 'ol/sphere';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -32,6 +32,7 @@ class Scalebar extends OLControl {
     }
   ],
   selector: 'app-ol-control-scalebar',
+
   template: `
     <article
       #barRef
@@ -45,7 +46,7 @@ class Scalebar extends OLControl {
           let last = $last
         ) {
           <div
-            [class.contrast]="showScaleContrast"
+            [class.contrast]="showScaleContrast()"
             [class.first]="first"
             [class.last]="last"
             [ngStyle]="{
@@ -120,31 +121,26 @@ class Scalebar extends OLControl {
 export class OLControlScaleBarComponent implements Mapable, OnInit {
   @ViewChild('barRef', { static: true }) barRef: ElementRef;
 
-  @Input() scaleFactor = 150;
-
-  @Input() showScaleContrast: boolean;
-
   cxUnit: number;
   cxWidth: number;
-
   ftUnit: number;
-
   numUnits: number;
-
   olControl: OLControl;
+  scaleFactor = input(150);
+  showScaleContrast = input<boolean>();
 
   #map = inject(OLMapComponent);
 
   // 👇 set the position proportional to the map size
   get bottom(): number {
     const element = this.#map.olMap.getTargetElement();
-    return (element.clientHeight / this.scaleFactor) * 4;
+    return (element.clientHeight / this.scaleFactor()) * 4;
   }
 
   // 👇 set the font size proportional to the map size
   get fontSize(): number {
     const element = this.#map.olMap.getTargetElement();
-    return element.clientHeight / this.scaleFactor;
+    return element.clientHeight / this.scaleFactor();
   }
 
   // 👇 set the height proportional to the map size
@@ -168,7 +164,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
   }
 
   #calculateMetrics(): void {
-    const [minX, minY, maxX] = this.#map.bbox;
+    const [minX, minY, maxX] = this.#map.bbox();
     const numFeet = convertLength(
       getDistance([minX, minY], [maxX, minY]),
       'meters',

@@ -61,7 +61,7 @@ export class OLInteractionDrawLandmarksComponent
               const landmark: Partial<Landmark> = {
                 geometry: geojson.geometry,
                 owner: this.#authState.currentProfile().email,
-                path: this.#map.path,
+                path: this.#map.path(),
                 type: 'Feature'
               };
               let properties;
@@ -121,8 +121,8 @@ export class OLInteractionDrawLandmarksComponent
                 this.#store
                   .dispatch(new AddLandmark(landmark))
                   .subscribe(() => {
-                    const selector = this.#map
-                      .selector as OLInteractionSelectLandmarksComponent;
+                    const selector =
+                      this.#map.selector() as OLInteractionSelectLandmarksComponent;
                     selector?.selectLandmarks([landmark.id]);
                   });
               }

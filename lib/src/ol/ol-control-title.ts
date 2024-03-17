@@ -6,12 +6,12 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
-import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -30,16 +30,17 @@ class Title extends OLControl {
     }
   ],
   selector: 'app-ol-control-title',
+
   template: `
     <article
       #titleRef
       [ngStyle]="{ 'top.px': top }"
-      class="title ol-unselectable">
+      class="title() ol-unselectable">
       <header
-        [ngClass]="{ contrast: showTitleContrast }"
+        [ngClass]="{ contrast: showTitleContrast() }"
         [ngStyle]="{ 'fontSize.px': fontSize }"
         class="header">
-        {{ title }}
+        {{ title() }}
       </header>
     </article>
   `,
@@ -68,28 +69,25 @@ class Title extends OLControl {
   ]
 })
 export class OLControlTitleComponent implements Mapable, OnInit {
-  @Input() scaleFactor = 50;
-
-  @Input() showTitleContrast: boolean;
-
-  @Input() title: string;
-
   @ViewChild('titleRef', { static: true }) titleRef: ElementRef;
 
   olControl: OLControl;
+  scaleFactor = input(50);
+  showTitleContrast = input<boolean>();
+  title = input<string>();
 
   #map = inject(OLMapComponent);
 
   // 👇 set the font size proportional to the map size
   get fontSize(): number {
     const element = this.#map.olMap.getTargetElement();
-    return element.clientHeight / this.scaleFactor;
+    return element.clientHeight / this.scaleFactor();
   }
 
   // 👇 set the position proportional to the map size
   get top(): number {
     const element = this.#map.olMap.getTargetElement();
-    return element.clientHeight / this.scaleFactor;
+    return element.clientHeight / this.scaleFactor();
   }
 
   addToMap(): void {

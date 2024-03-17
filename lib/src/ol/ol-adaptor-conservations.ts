@@ -6,9 +6,9 @@ import { ParcelProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,9 +23,9 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorConservationsComponent implements Adaptor {
-  @Input() borderOpacity = 1;
-  @Input() borderPixels = 1;
-  @Input() fillOpacity = 0.25;
+  borderOpacity = input(1);
+  borderPixels = input(1);
+  fillOpacity = input(0.25);
 
   // 👇 construct LandmarkProperties
   adapt(conservation: ParcelProperties): LandmarkProperties[] {
@@ -36,10 +36,10 @@ export class OLAdaptorConservationsComponent implements Adaptor {
       return [
         new LandmarkPropertiesClass({
           fillColor: `--map-parcel-fill-u${conservation.usage}`,
-          fillOpacity: this.fillOpacity,
+          fillOpacity: this.fillOpacity(),
           strokeColor: '--map-conservation-outline',
-          strokeOpacity: this.borderOpacity,
-          strokePixels: this.borderPixels,
+          strokeOpacity: this.borderOpacity(),
+          strokePixels: this.borderPixels(),
           strokeStyle: 'dashed'
         })
       ];

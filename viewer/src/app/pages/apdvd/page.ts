@@ -22,7 +22,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
     @if (sink.map) {
       <app-ol-map
         #olMap
-        [bbox]="sink.map.bbox"
+        [bounds]="sink.map.bbox"
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="22"
@@ -30,7 +30,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
         class="content">
         <!-- 📦 CONTROLS -->
 
-        @if (sink.zoom >= olMap.minUsefulZoom) {
+        @if (sink.zoom >= olMap.minUsefulZoom()) {
           <app-ol-control-searchparcels
             [filterFn]="searchFilterFn"
             mapControlSearch></app-ol-control-searchparcels>
@@ -52,7 +52,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
 
           <!-- 📦 BG LAYER (outside town)-->
 
-          @if (sink.zoom < olMap.minUsefulZoom) {
+          @if (sink.zoom < olMap.minUsefulZoom()) {
             <app-ol-layer-tile>
               <app-ol-source-xyz
                 [url]="
@@ -108,7 +108,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
             <app-ol-source-parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
 
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-wetlands>
                 <app-ol-style-universal
@@ -118,7 +118,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
           }
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <!-- 👇 only drawing labels here - waterbodies draws actual river -->
               <app-ol-adaptor-places>
@@ -140,7 +140,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-stonewalls>
                 <app-ol-style-universal
@@ -159,7 +159,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-buildings>
                 <app-ol-style-universal
@@ -170,7 +170,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
           }
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-railroads>
                 <app-ol-style-universal
@@ -190,7 +190,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-trails>
                 <app-ol-style-universal
@@ -201,7 +201,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
           }
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-bridges>
                 <app-ol-style-universal
@@ -211,7 +211,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
           }
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-places>
                 <app-ol-style-universal
@@ -224,7 +224,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
           }
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-adaptor-places>
                 <app-ol-style-universal
@@ -274,7 +274,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
 
           <!-- 📦 SELECTION LAYER -->
 
-          @if (sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-layer-vector>
               <app-ol-style-parcels
                 [showAbutters]="'whenSelected'"
@@ -321,7 +321,7 @@ import { isAPDVDProposed } from '@lib/ol/apdvd/ol-apdvd';
 
           <!-- 📦 OVERLAY FOR GPS -->
 
-          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>
           }
         }

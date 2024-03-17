@@ -9,7 +9,6 @@ import { ParcelsState } from '../../state/parcels';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
-import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
@@ -18,6 +17,7 @@ import { ViewChild } from '@angular/core';
 import { convertArea } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import area from '@turf/area';
 
@@ -31,16 +31,20 @@ import area from '@turf/area';
     DestroyService
   ],
   selector: 'app-ol-control-parcelslegend',
+
   template: `
     <article
       #legend
-      [ngClass]="{ 'ol-legend-print': printing, 'ol-legend-screen': !printing }"
+      [ngClass]="{
+        'ol-legend-print': printing(),
+        'ol-legend-screen': !printing()
+      }"
       class="legend ol-legend ol-unselectable ol-control">
       <header class="header">
-        <h1 class="title">{{ title }}</h1>
-        <h2 class="subtitle">{{ county }} Co</h2>
-        <h2 class="subtitle">{{ state }}</h2>
-        <h3 class="link">{{ id }}.munimap.online</h3>
+        <h1 class="title()">{{ title() }}</h1>
+        <h2 class="subtitle">{{ county() }} Co</h2>
+        <h2 class="subtitle">{{ state() }}</h2>
+        <h3 class="link">{{ id() }}.munimap.online</h3>
       </header>
 
       <table class="areaByUsage">
@@ -145,19 +149,16 @@ export class OLControlParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  @Input() county: string;
-
-  @Input() id: string;
-
   @ViewChild('legend', { static: true }) legend: ElementRef;
 
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
-  @Input() printing: boolean;
-  @Input() state: string;
-  @Input() title: string;
-
   areaOfTown: number;
+  county = input<string>();
+  id = input<string>();
+  printing = input<boolean>();
+  state = input<string>();
+  title = input<string>();
 
   #map = inject(OLMapComponent);
 

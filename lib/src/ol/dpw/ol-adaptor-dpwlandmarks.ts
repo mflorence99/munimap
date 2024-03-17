@@ -13,9 +13,9 @@ import { StreamCrossingProperties } from '../../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 // 🔥 this special adaptor handles both standard landmarks
 //    and DPW landmarks which use LandmarkProperties.metadata
@@ -35,7 +35,7 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorDPWLandmarksComponent implements Adaptor {
-  @Input() dpwLandmarkWidth = 36 /* feet */;
+  dpwLandmarkWidth = input(36);
 
   adapt(properties: LandmarkProperties): LandmarkProperties[] {
     return this.#makeAdaptor(properties).adapt?.(

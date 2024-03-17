@@ -3,7 +3,11 @@
     @for (scheme of schema; track scheme) {
     <tr>
       <td>{{ scheme[0]}}</td>
-      <td>{{ properties?.[scheme[1]] || ''}} {{ scheme[2] || ''}}</td>
+      @if (scheme[3]) {
+      <td>{{ scheme[3](properties()) }} {{ scheme[2] || ''}}</td>
+      } @else {
+      <td>{{ properties()?.[scheme[1]] || ''}} {{ scheme[2] || ''}}</td>
+      }
     </tr>
     }
 

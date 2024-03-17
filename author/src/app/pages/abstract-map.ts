@@ -64,7 +64,7 @@ export abstract class AbstractMapPage {
     comp.drawer = this.drawer;
     comp.map = this.olMap;
     let key;
-    const selector = this.olMap.selector;
+    const selector = this.olMap.selector();
     if (selector) {
       // 👉 the layer that contains the selector contains the features
       //    that can be operated on

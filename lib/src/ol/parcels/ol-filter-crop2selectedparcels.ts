@@ -65,7 +65,8 @@ export class OLFilterCrop2SelectedParcelsComponent
     if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
     this.olFilter = null;
     // 👉 the selector MAY not be present
-    const selector = this.#map.selector as OLInteractionSelectParcelsComponent;
+    const selector =
+      this.#map.selector() as OLInteractionSelectParcelsComponent;
     // 👇 build a new filter as the union of all the selected parcels
     if (selector?.selected?.length > 0) {
       const geojsons = selector.selected.map((feature) =>

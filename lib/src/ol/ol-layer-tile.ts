@@ -4,10 +4,11 @@ import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
+import { effect } from '@angular/core';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 import OLTile from 'ol/layer/Tile';
 
@@ -24,25 +25,20 @@ import OLTile from 'ol/layer/Tile';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayerTileComponent implements Mapable {
+  id = input<string>();
+  maxZoom = input(22);
   olLayer: OLTile<any>;
+  opacity = input(1);
 
   #map = inject(OLMapComponent);
 
   constructor() {
     this.olLayer = new OLTile();
     this.olLayer.setProperties({ component: this }, true);
-  }
-
-  @Input() set id(id: string) {
-    this.olLayer.set('id', id);
-  }
-
-  @Input() set maxZoom(maxZoom: number) {
-    this.olLayer.setMaxZoom(maxZoom);
-  }
-
-  @Input() set opacity(opacity: number) {
-    this.olLayer.setOpacity(opacity);
+    // 👇 side effects
+    effect(() => this.olLayer.set('id', this.id()));
+    effect(() => this.olLayer.setMaxZoom(this.maxZoom()));
+    effect(() => this.olLayer.setOpacity(this.opacity()));
   }
 
   addToMap(): void {

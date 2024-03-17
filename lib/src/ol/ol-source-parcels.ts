@@ -15,7 +15,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
@@ -25,6 +24,7 @@ import { all as allStrategy } from 'ol/loadingstrategy';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { combineLatest } from 'rxjs';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { transformExtent } from 'ol/proj';
 
@@ -47,13 +47,10 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceParcelsComponent implements OnInit {
-  @Input() path: string;
-
   colorCode$: Observable<ColorCodeStateModel>;
-
   olVector: OLVector<any>;
-
   parcels$: Observable<Parcel[]>;
+  path = input<string>();
 
   #destroy$ = inject(DestroyService);
   #geoJSON = inject(GeoJSONService);
@@ -70,8 +67,8 @@ export class OLSourceParcelsComponent implements OnInit {
 
   constructor() {
     let strategy;
-    if (this.#map.loadingStrategy === 'all') strategy = allStrategy;
-    else if (this.#map.loadingStrategy === 'bbox') strategy = bboxStrategy;
+    if (this.#map.loadingStrategy() === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy() === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
@@ -151,8 +148,8 @@ export class OLSourceParcelsComponent implements OnInit {
             this.olVector.addFeature(feature);
         });
         // 👉 the selector MAY not be present and may not be for parcels
-        const selector = this.#map
-          .selector as OLInteractionSelectParcelsComponent;
+        const selector =
+          this.#map.selector() as OLInteractionSelectParcelsComponent;
         // 👉 reselect selected features b/c we've potentially removed them
         const selectedIDs = selector?.selectedIDs;
         if (selectedIDs?.length > 0) selector?.reselectParcels?.(selectedIDs);
@@ -182,12 +179,17 @@ export class OLSourceParcelsComponent implements OnInit {
   ): void {
     let bbox;
     // 👉 get everything at once
-    if (this.#map.loadingStrategy === 'all') bbox = this.#map.bbox;
+    if (this.#map.loadingStrategy() === 'all') bbox = this.#map.bbox();
     // 👉 or just get what's visible
-    else if (this.#map.loadingStrategy === 'bbox')
+    else if (this.#map.loadingStrategy() === 'bbox')
       bbox = transformExtent(extent, projection, this.#map.featureProjection);
     this.#geoJSON
-      .loadByIndex(this.#route, this.path ?? this.#map.path, 'parcels', bbox)
+      .loadByIndex(
+        this.#route,
+        this.path() ?? this.#map.path(),
+        'parcels',
+        bbox
+      )
       .subscribe((geojson: Parcels) => {
         this.#success = success;
         this.#geojson$.next(geojson);

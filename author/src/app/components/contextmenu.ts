@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { ContentChild } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { MatMenu } from '@angular/material/menu';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
+import { contentChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +22,7 @@ import { takeUntil } from 'rxjs/operators';
         #trigger
         class="trigger"
         [matMenuTriggerData]="{ selected: map.selected }"
-        [matMenuTriggerFor]="contextMenu"
+        [matMenuTriggerFor]="contextMenu()"
         [style.left.px]="menuPosition.x"
         [style.top.px]="menuPosition.y"></div>
     }
@@ -39,8 +39,8 @@ import { takeUntil } from 'rxjs/operators';
   ]
 })
 export class ContextMenuComponent implements OnInit {
-  @ContentChild(MatMenu) contextMenu: MatMenu;
-  @ViewChild(MatMenuTrigger) contextMenuTrigger: MatMenuTrigger;
+  contextMenu = contentChild(MatMenu);
+  contextMenuTrigger = viewChild(MatMenuTrigger);
 
   map = inject(OLMapComponent);
 
@@ -53,7 +53,7 @@ export class ContextMenuComponent implements OnInit {
   #destroy$ = inject(DestroyService);
 
   closeMenu(): void {
-    this.contextMenuTrigger.closeMenu();
+    this.contextMenuTrigger().closeMenu();
   }
 
   ngOnInit(): void {
@@ -61,14 +61,14 @@ export class ContextMenuComponent implements OnInit {
   }
 
   openMenu(): void {
-    this.contextMenuTrigger.openMenu();
+    this.contextMenuTrigger().openMenu();
   }
 
   #handleContextMenu$(): void {
     this.map.contextMenu$
       .pipe(takeUntil(this.#destroy$))
       .subscribe((event: PointerEvent) => {
-        if (this.contextMenu) {
+        if (this.contextMenu()) {
           // 👉 need to hack the Y offset by the height of the toolbar
           const style = getComputedStyle(document.documentElement);
           const hack = style.getPropertyValue('--map-cy-toolbar');
@@ -78,7 +78,7 @@ export class ContextMenuComponent implements OnInit {
           this.menuPosition.y = pixel[1] + 8;
           // 👉 because event is triggered out of the Angular zone
           this.#cdf.markForCheck();
-          this.contextMenuTrigger.openMenu();
+          this.contextMenuTrigger().openMenu();
         }
       });
   }

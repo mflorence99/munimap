@@ -15,7 +15,6 @@ import { isParcelStollen } from '../../common';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
@@ -24,6 +23,7 @@ import { Subject } from 'rxjs';
 import { combineLatest } from 'rxjs';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import copy from 'fast-copy';
@@ -145,15 +145,14 @@ interface SearchTarget {
   ]
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
-  @Input() filterFn: (feature) => boolean;
-  @Input() fuzzyMaxResults = 100;
-  @Input() fuzzyMinLength = 3;
-  @Input() fuzzyThreshold = -10000;
-  @Input() matchesMaxVisible = 20;
-
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
+  filterFn = input<(feature) => boolean>();
+  fuzzyMaxResults = input(100);
+  fuzzyMinLength = input(3);
+  fuzzyThreshold = input(-10000);
   matches: SearchTarget[] = [];
+  matchesMaxVisible = input(20);
 
   searchablesByAddress: Record<string, SearchableParcel[]> = {};
   searchablesByID: Record<ParcelID, SearchableParcel[]> = {};
@@ -188,8 +187,8 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       const ids = searchables.map((searchable) => searchable.id).join(', ');
       console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
       // 👉 the selector MAY not be present
-      const selector = this.#map
-        .selector as OLInteractionSelectParcelsComponent;
+      const selector =
+        this.#map.selector() as OLInteractionSelectParcelsComponent;
       selector?.selectParcels(
         searchables.map((searchable): any => {
           const override = this.#overridesByID[searchable.id];
@@ -197,13 +196,13 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
           else return searchable;
         })
       );
-    } else if (searchFor.length > this.fuzzyMinLength) {
+    } else if (searchFor.length > this.fuzzyMinLength()) {
       // 👉 no hit, but enough characters to go for a fuzzy match
       this.matches = fuzzysort
         .go(searchFor, this.#searchTargets, {
           key: 'key',
-          limit: this.fuzzyMaxResults,
-          threshold: this.fuzzyThreshold
+          limit: this.fuzzyMaxResults(),
+          threshold: this.fuzzyThreshold()
         })
         .map((fuzzy) => ({ count: fuzzy.obj.count, key: fuzzy.target }))
         .sort((p, q) => p.key.localeCompare(q.key));
@@ -244,7 +243,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
 
   #handleGeoJSON$(): void {
     this.#geoJSON
-      .loadByIndex(this.#route, this.#map.path, 'searchables')
+      .loadByIndex(this.#route, this.#map.path(), 'searchables')
       .subscribe((geojson: SearchableParcels) => this.#geojson$.next(geojson));
   }
 
@@ -260,8 +259,8 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
         this.#filterRemovedFeatures(geojson, parcels);
         this.#overridesByID = this.#makeOverridesByID(parcels);
         this.#searchTargets = this.#makeSearchTargets(
-          this.filterFn
-            ? geojson.features.filter(this.filterFn)
+          this.filterFn()
+            ? geojson.features.filter(this.filterFn())
             : geojson.features
         );
         this.searchablesByAddress = this.#groupSearchablesByProperty(

@@ -44,8 +44,8 @@ export abstract class OLSourceArcGISComponent {
 
   constructor() {
     let strategy;
-    if (this.#map.loadingStrategy === 'all') strategy = allStrategy;
-    else if (this.#map.loadingStrategy === 'bbox') strategy = bboxStrategy;
+    if (this.#map.loadingStrategy() === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy() === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
@@ -62,7 +62,7 @@ export abstract class OLSourceArcGISComponent {
 
   #gridsFromBBox(projection: OLProjection): Coordinate[] {
     const visible = transformExtent(
-      this.#map.bbox,
+      this.#map.bbox(),
       this.#map.featureProjection,
       projection
     ) as GeoJSON.BBox;
@@ -102,11 +102,11 @@ export abstract class OLSourceArcGISComponent {
   ): void {
     let grids: Coordinate[];
     // 👇 get everyrhing at once
-    if (this.#map.loadingStrategy === 'all')
+    if (this.#map.loadingStrategy() === 'all')
       grids = this.#gridsFromBBox(projection);
     // 👇 one URL for each grid square covered by the extent
     //    this way requests are repeatable and cachable
-    else if (this.#map.loadingStrategy === 'bbox')
+    else if (this.#map.loadingStrategy() === 'bbox')
       grids = this.#gridsFromExtent(extent, projection);
     const urls = grids.map(
       (grid) =>

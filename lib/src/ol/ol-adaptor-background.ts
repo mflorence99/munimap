@@ -5,9 +5,9 @@ import { LandmarkPropertiesClass } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,15 +22,15 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorBackgroundComponent implements Adaptor {
-  @Input() fillColor = '--rgb-gray-900';
-  @Input() fillOpacity = 1;
+  fillColor = input('--rgb-gray-900');
+  fillOpacity = input(1);
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: this.fillColor,
-        fillOpacity: this.fillOpacity
+        fillColor: this.fillColor(),
+        fillOpacity: this.fillOpacity()
       })
     ];
   }

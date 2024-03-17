@@ -25,7 +25,7 @@ import { ViewChild } from '@angular/core';
     @if (sink.map) {
       <app-ol-map
         #olMap
-        [bbox]="sink.map.bbox"
+        [bounds]="sink.map.bbox"
         [loadingStrategy]="'bbox'"
         [minZoom]="15"
         [maxZoom]="20"

@@ -6,9 +6,9 @@ import { RailroadProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,8 +23,8 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorRailroadsComponent implements Adaptor {
-  @Input() rightOfWayWidth = 24 /* 👈 feet */;
-  @Input() trackWidth = 16 /* 👈 feet */;
+  rightOfWayWidth = input(24);
+  trackWidth = input(16);
 
   // 👇 convert a Railroad to a Landmark
   adapt(railroad: RailroadProperties): LandmarkProperties[] {
@@ -35,7 +35,7 @@ export class OLAdaptorRailroadsComponent implements Adaptor {
       new LandmarkPropertiesClass({
         lineSpline: true,
         strokeColor: color,
-        strokeFeet: this.rightOfWayWidth,
+        strokeFeet: this.rightOfWayWidth(),
         strokeOpacity: 1,
         strokeStyle: 'solid',
         zIndex: 1
@@ -43,7 +43,7 @@ export class OLAdaptorRailroadsComponent implements Adaptor {
       new LandmarkPropertiesClass({
         lineSpline: true,
         strokeColor: '--rgb-gray-50',
-        strokeFeet: this.trackWidth,
+        strokeFeet: this.trackWidth(),
         strokeOpacity: 1,
         strokeStyle: 'solid',
         zIndex: 2
@@ -52,7 +52,7 @@ export class OLAdaptorRailroadsComponent implements Adaptor {
         lineDash: [4, 4],
         lineSpline: true,
         strokeColor: color,
-        strokeFeet: this.trackWidth,
+        strokeFeet: this.trackWidth(),
         strokeOpacity: 1,
         strokeStyle: 'dashed',
         zIndex: 3

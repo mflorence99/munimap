@@ -12,11 +12,11 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
-import { Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import OLFeature from 'ol/Feature';
@@ -277,21 +277,16 @@ interface Abutter {
   styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
-  @Input() maxNumProperties = 3;
-
   @ViewChild('tables', { static: true }) tables: ElementRef;
 
   abutters: Abutter[] = [];
-
+  maxNumProperties = input(3);
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
-
   properties: ParcelProperties[] = [];
-
   sameAddress: boolean;
   sameOwner: boolean;
   sameUsage: boolean;
-
   splitHorizontally = false;
   splitVertically = true;
 
@@ -331,7 +326,8 @@ export class OLPopupParcelPropertiesComponent {
   onClose(): void {
     this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for parcels
-    const selector = this.#map.selector as OLInteractionSelectParcelsComponent;
+    const selector =
+      this.#map.selector() as OLInteractionSelectParcelsComponent;
     selector?.unselectParcels?.();
     // 🔥  this doesn't seem to work
     // this.#subToAbutters?.unsubscribe();
@@ -340,7 +336,8 @@ export class OLPopupParcelPropertiesComponent {
 
   onSelect(abutterID: ParcelID): void {
     // 👉 the selector MAY not be present and may not be for parcels
-    const selector = this.#map.selector as OLInteractionSelectParcelsComponent;
+    const selector =
+      this.#map.selector() as OLInteractionSelectParcelsComponent;
     selector?.reselectParcels?.([abutterID]);
   }
 
@@ -383,7 +380,7 @@ export class OLPopupParcelPropertiesComponent {
           const numProperties = window.innerWidth / 240;
           return properties.slice(
             0,
-            Math.min(properties.length, numProperties, this.maxNumProperties)
+            Math.min(properties.length, numProperties, this.maxNumProperties())
           );
         })
       )

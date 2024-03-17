@@ -13,7 +13,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
@@ -23,6 +22,7 @@ import { click } from 'ol/events/condition';
 import { extend } from 'ol/extent';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { never } from 'ol/events/condition';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { shiftKeyOnly } from 'ol/events/condition';
@@ -56,11 +56,8 @@ export class OLInteractionSelectParcelsComponent
   @Output() abuttersFound = new EventEmitter<Parcel[]>();
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
-  @Input() findAbutters = false;
-  @Input() maxZoom = 19;
-  @Input() zoomAnimationDuration = 200;
-
   abutters: Parcel[] = [];
+  findAbutters = input(false);
 
   // 👉 we need public access to go through the selector to its layer
   //    see abstract-map.ts -- this is how the context menu works
@@ -70,7 +67,9 @@ export class OLInteractionSelectParcelsComponent
   layer = inject(OLLayerVectorComponent);
   map = inject(OLMapComponent);
 
+  maxZoom = input(19);
   olSelect: OLSelect;
+  zoomAnimationDuration = input(200);
 
   #abuttersWorker: any /* 👈 TypeScript no help here */;
   #featuresLoadEndKey: OLEventsKey;
@@ -129,14 +128,14 @@ export class OLInteractionSelectParcelsComponent
       .once('featuresloadend', () => this.#selectParcels(ids));
     // 👇 zoom to the extent of all the selected parcels and select them
     const minZoom = this.map.olView.getMinZoom();
-    this.map.olView.setMinZoom(this.map.minUsefulZoom);
+    this.map.olView.setMinZoom(this.map.minUsefulZoom());
     this.map.olView.fit(extent, {
       callback: () => {
         this.map.olView.setMinZoom(minZoom);
         this.#selectParcels(ids);
       },
-      duration: this.zoomAnimationDuration,
-      maxZoom: this.maxZoom ?? this.map.maxZoom,
+      duration: this.zoomAnimationDuration(),
+      maxZoom: this.maxZoom() ?? this.map.maxZoom(),
       size: this.map.olMap.getSize()
     });
   }
@@ -151,7 +150,7 @@ export class OLInteractionSelectParcelsComponent
   }
 
   ngOnInit(): void {
-    if (this.findAbutters) this.#createAbuttersWorker();
+    if (this.findAbutters()) this.#createAbuttersWorker();
     this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 
@@ -204,7 +203,7 @@ export class OLInteractionSelectParcelsComponent
     console.log(`%cSelected parcels`, 'color: lightcoral', `[${ids}]`);
     this.featuresSelected.emit(this.selected);
     // 👉 find the abutters
-    if (this.findAbutters) this.#findAbutters();
+    if (this.findAbutters()) this.#findAbutters();
   }
 
   #selectParcels(ids: ParcelID[]): void {

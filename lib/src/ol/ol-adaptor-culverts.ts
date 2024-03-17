@@ -6,9 +6,9 @@ import { LandmarkPropertiesClass } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +23,7 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorCulvertsComponent implements Adaptor {
-  @Input() culvertWidth = 48 /* 👈 feet */;
+  culvertWidth = input(48);
 
   // 👇 construct LandmarkProperties
   adapt(culvert: CulvertProperties): LandmarkProperties[] {
@@ -31,7 +31,7 @@ export class OLAdaptorCulvertsComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fontColor: '--map-culvert-line-color',
-        fontFeet: this.culvertWidth,
+        fontFeet: this.culvertWidth(),
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',

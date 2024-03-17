@@ -1,11 +1,12 @@
 import { AbstractControl } from '@angular/forms';
 import { Directive } from '@angular/core';
-import { Input } from '@angular/core';
 import { NG_VALIDATORS } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Validator } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
+
+import { input } from '@angular/core';
 
 interface Subdivision {
   area: number;
@@ -45,14 +46,14 @@ function subdivisionIDValidatorFactory(
   selector: '[appSubdivisionID][ngModel]'
 })
 export class SubdivisionIDValidator implements OnInit, Validator {
-  @Input() appSubdivisionID: [Subdivision[], number];
+  appSubdivisionID = input<[Subdivision[], number]>();
 
   validator: ValidatorFn;
 
   ngOnInit(): void {
     this.validator = subdivisionIDValidatorFactory(
-      this.appSubdivisionID[0],
-      this.appSubdivisionID[1]
+      this.appSubdivisionID()[0],
+      this.appSubdivisionID()[1]
     );
   }
 

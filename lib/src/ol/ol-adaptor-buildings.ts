@@ -5,9 +5,9 @@ import { LandmarkPropertiesClass } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,24 +22,24 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorBuildingsComponent implements Adaptor {
-  @Input() borderOpacity = 1;
-  @Input() borderWidth = 1 /* 👈 feet */;
-  @Input() fillOpacity = 1;
-  @Input() shadowLength = 6 /* 👈 feet */;
-  @Input() shadowOpacity = 0.75;
+  borderOpacity = input(1);
+  borderWidth = input(1);
+  fillOpacity = input(1);
+  shadowLength = input(6);
+  shadowOpacity = input(0.75);
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fillColor: '--map-building-fill',
-        fillOpacity: this.fillOpacity,
+        fillOpacity: this.fillOpacity(),
         shadowColor: '--map-building-outline',
-        shadowOffsetFeet: [this.shadowLength, -this.shadowLength],
-        shadowOpacity: this.shadowOpacity,
+        shadowOffsetFeet: [this.shadowLength(), -this.shadowLength()],
+        shadowOpacity: this.shadowOpacity(),
         strokeColor: '--map-building-outline',
-        strokeFeet: this.borderWidth,
-        strokeOpacity: this.borderOpacity,
+        strokeFeet: this.borderWidth(),
+        strokeOpacity: this.borderOpacity(),
         strokeStyle: 'solid'
       })
     ];

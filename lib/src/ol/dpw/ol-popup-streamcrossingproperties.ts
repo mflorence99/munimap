@@ -1,10 +1,11 @@
 import { OLPopupDPWPropertiesComponent } from './ol-popup-dpwproperties';
+import { Schema } from './ol-popup-dpwproperties';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,11 +14,10 @@ import { inject } from '@angular/core';
   styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupStreamCrossingPropertiesComponent {
-  @Input() properties: any;
-
   container = inject(OLPopupDPWPropertiesComponent);
+  properties = input<any>();
 
-  schema = [
+  schema: Schema = [
     ['Location', 'RoadNameF'],
     ['Structure Type', 'StructType'],
     ['Structure Material', 'StructMat'],

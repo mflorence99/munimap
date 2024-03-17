@@ -9,11 +9,11 @@ import * as Sentry from '@sentry/angular-ivy';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { unByKey } from 'ol/Observable';
 
 import Crop from 'ol-ext/filter/Crop';
@@ -31,12 +31,11 @@ import union from '@turf/union';
 export class OLFilterCrop2PropertyParcelsComponent
   implements OnDestroy, OnInit
 {
-  @Input() opacity = 0.33;
-  @Input() parcelIDs: ParcelID[];
-  @Input() source: OLSourceParcelsComponent;
-  @Input() type: 'crop' | 'mask';
-
   olFilter: any;
+  opacity = input(0.33);
+  parcelIDs = input<ParcelID[]>();
+  source = input<OLSourceParcelsComponent>();
+  type = input<'crop' | 'mask'>();
 
   #featuresLoadedKey: OLEventsKey;
   #format: OLGeoJSON;
@@ -62,20 +61,23 @@ export class OLFilterCrop2PropertyParcelsComponent
 
   ngOnInit(): void {
     this.#addFilter();
-    this.#featuresLoadedKey = this.source.olVector.on('featuresloadend', () => {
-      this.#addFilter();
-    });
+    this.#featuresLoadedKey = this.source().olVector.on(
+      'featuresloadend',
+      () => {
+        this.#addFilter();
+      }
+    );
   }
 
   #addFilter(): void {
     // 👉 remove prior filter
     if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
     this.olFilter = null;
-    const features = this.source.olVector.getFeatures();
+    const features = this.source().olVector.getFeatures();
     if (features.length > 0) {
       // 👉 union all features to make crop/mask
       const geojsons = features
-        .filter((feature) => this.parcelIDs.includes(feature.getId()))
+        .filter((feature) => this.parcelIDs().includes(feature.getId()))
         .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
       const merged: any = {
         geometry: geojsons.reduce((acc, geojson) => union(acc, geojson))
@@ -85,17 +87,17 @@ export class OLFilterCrop2PropertyParcelsComponent
       };
       // 👇 this may fail!
       try {
-        if (this.type === 'crop') {
+        if (this.type() === 'crop') {
           this.olFilter = new Crop({
             feature: this.#format.readFeature(merged),
             inner: false
           });
         }
         // 👇 crop or mask?
-        else if (this.type === 'mask') {
+        else if (this.type() === 'mask') {
           this.olFilter = new Mask({
             feature: this.#format.readFeature(merged),
-            fill: new OLFill({ color: [128, 128, 128, this.opacity] }),
+            fill: new OLFill({ color: [128, 128, 128, this.opacity()] }),
             inner: false
           });
         }

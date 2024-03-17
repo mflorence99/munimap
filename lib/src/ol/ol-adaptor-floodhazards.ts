@@ -5,9 +5,9 @@ import { LandmarkPropertiesClass } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,14 +22,14 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorFloodHazardsComponent implements Adaptor {
-  @Input() floodHazardWidth = 36 /* 👈 feet */;
+  floodHazardWidth = input(36);
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
         fontColor: '--map-streamcrossing-line-color',
-        fontFeet: this.floodHazardWidth,
+        fontFeet: this.floodHazardWidth(),
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',
@@ -42,7 +42,7 @@ export class OLAdaptorFloodHazardsComponent implements Adaptor {
         textBaseline: 'bottom',
         // 👉 flood hazard can be co-located with a bridge
         //    or a stream crossing
-        textOffsetFeet: [this.floodHazardWidth, -this.floodHazardWidth]
+        textOffsetFeet: [this.floodHazardWidth(), -this.floodHazardWidth()]
       })
     ];
   }

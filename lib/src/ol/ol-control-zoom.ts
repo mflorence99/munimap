@@ -4,18 +4,20 @@ import { OLMapComponent } from './ol-map';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { model } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
   providers: [DestroyService],
   selector: 'app-ol-control-zoom',
+
   template: `
-    <p class="annotation">{{ resolution | number: '1.0-2' }}</p>
+    <p class="annotation">{{ resolution() | number: '1.0-2' }}</p>
 
     <div class="slider-wrapper">
       <input
@@ -23,13 +25,13 @@ import { takeUntil } from 'rxjs/operators';
         [max]="maxZoom()"
         [min]="minZoom()"
         [step]="1"
-        [value]="zoom"
+        [value]="zoom()"
         class="slider"
         orient="horizontal"
         type="range" />
     </div>
 
-    <p class="annotation">{{ zoom | number: '1.0-2' }}</p>
+    <p class="annotation">{{ zoom() | number: '1.0-2' }}</p>
   `,
   styles: [
     `
@@ -69,20 +71,20 @@ import { takeUntil } from 'rxjs/operators';
   ]
 })
 export class OLControlZoomComponent implements OnInit {
-  @Input() resolution: number;
-  @Input() zoom: number;
-  @Input() zoomAnimationDuration = 250;
+  resolution = model<number>();
+  zoom = model<number>();
+  zoomAnimationDuration = input(250);
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
   #map = inject(OLMapComponent);
 
   maxZoom(): number {
-    return this.#map.maxZoom;
+    return this.#map.maxZoom();
   }
 
   minZoom(): number {
-    return this.#map.minZoom;
+    return this.#map.minZoom();
   }
 
   ngOnInit(): void {
@@ -90,18 +92,18 @@ export class OLControlZoomComponent implements OnInit {
   }
 
   onZoomChange(zoom: number): void {
-    this.zoom = zoom;
+    this.zoom.set(zoom);
     // 🪲 null is not an object (evaluating 'this.map.olView.animate')
     this.#map.olView?.animate({
-      duration: this.zoomAnimationDuration,
+      duration: this.zoomAnimationDuration(),
       zoom
     });
   }
 
   #handleZoom$(): void {
     this.#map.zoomChange.pipe(takeUntil(this.#destroy$)).subscribe((zoom) => {
-      this.zoom = zoom;
-      this.resolution = this.#map.olView.getResolutionForZoom(zoom);
+      this.zoom.set(zoom);
+      this.resolution.set(this.#map.olView.getResolutionForZoom(zoom));
       // 👉 because event is triggered out of the Angular zone
       this.#cdf.markForCheck();
     });

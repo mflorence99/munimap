@@ -4,7 +4,8 @@ import { WaterbodyProperties } from '../common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
-import { Input } from '@angular/core';
+
+import { input } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -21,14 +22,14 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
-  @Input() exclude: (number | string)[];
+  exclude = input<(number | string)[]>();
 
   override filter(arcgis: any): any {
-    if (arcgis && this.exclude) {
+    if (arcgis && this.exclude()) {
       const filtered = copy(arcgis);
       filtered.features = arcgis.features.filter((feature) => {
         const properties: WaterbodyProperties = feature.attributes;
-        return !this.exclude.includes(properties.FType);
+        return !this.exclude().includes(properties.FType);
       });
       return filtered;
     } else return super.filter(arcgis);

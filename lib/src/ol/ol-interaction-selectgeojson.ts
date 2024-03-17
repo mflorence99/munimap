@@ -9,7 +9,6 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
-import { Input } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
@@ -18,6 +17,7 @@ import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { click } from 'ol/events/condition';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
 import { pointerMove } from 'ol/events/condition';
 import { unByKey } from 'ol/Observable';
 
@@ -47,7 +47,7 @@ export class OLInteractionSelectGeoJSONComponent
 {
   @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
 
-  @Input() filter: FilterFunction;
+  filter = input<FilterFunction>();
 
   // 👉 we need public access to go through the selector to its layer
   //    see abstract-map.ts -- this is how the context menu works
@@ -103,7 +103,7 @@ export class OLInteractionSelectGeoJSONComponent
   }
 
   #filter(feature: OLFeature<any>): boolean {
-    return this.filter ? this.filter(feature.getId()) : true;
+    return this.filter() ? this.filter()(feature.getId()) : true;
   }
 
   #onSelect(_event?: OLSelectEvent): void {

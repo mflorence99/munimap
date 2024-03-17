@@ -29,7 +29,7 @@ import { input } from '@angular/core';
   ]
 })
 export class AvatarComponent {
-  name = input('', {
+  name = input(null, {
     transform: (value: string) => {
       if (value) {
         const names = value.split(' ');

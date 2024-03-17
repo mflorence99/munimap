@@ -58,7 +58,7 @@ export class OLInteractionRedrawParcelComponent
               geometry: geojson.geometry,
               id: this.feature.getId(),
               owner: this.#authState.currentProfile().email,
-              path: this.#map.path,
+              path: this.#map.path(),
               type: 'Feature'
             };
             this.#store.dispatch(new AddParcels([redrawnParcel]));

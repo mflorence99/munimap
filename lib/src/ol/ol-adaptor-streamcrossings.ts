@@ -6,9 +6,9 @@ import { StreamCrossingProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,15 +23,14 @@ import { forwardRef } from '@angular/core';
   styles: [':host { display: none }']
 })
 export class OLAdaptorStreamCrossingsComponent implements Adaptor {
-  @Input() streamCrossingWidth = 36 /* 👈 feet */;
-
+  streamCrossingWidth = input(36);
   // 👇 construct LandmarkProperties
   adapt(streamCrossing: StreamCrossingProperties): LandmarkProperties[] {
     const condition = streamCrossing.StructCond?.toLowerCase() || 'unknown';
     return [
       new LandmarkPropertiesClass({
         fontColor: '--map-streamcrossing-line-color',
-        fontFeet: this.streamCrossingWidth,
+        fontFeet: this.streamCrossingWidth(),
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: 'bold',

@@ -59,7 +59,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
           const landmark: Partial<Landmark> = {
             geometry: feature.geometry,
             owner: this.#authState.currentProfile().email,
-            path: this.map.path,
+            path: this.map.path(),
             type: 'Feature'
           };
           let properties;

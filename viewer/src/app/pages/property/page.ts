@@ -22,7 +22,7 @@ import { inject } from '@angular/core';
     @if (sink.map) {
       <app-ol-map
         #olMap
-        [bbox]="sink.map.bbox"
+        [bounds]="sink.map.bbox"
         [loadingStrategy]="'all'"
         [minZoom]="13"
         [maxZoom]="22"
@@ -358,7 +358,7 @@ import { inject } from '@angular/core';
 
           <!-- 📦 OVERLAY FOR GPS -->
 
-          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom) {
+          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>
           }
         }
