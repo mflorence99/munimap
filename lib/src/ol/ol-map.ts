@@ -19,15 +19,13 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { HostListener } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Output } from '@angular/core';
+import { OutputRefSubscription } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
-import { Subscription } from 'rxjs';
 
 import { computed } from '@angular/core';
 import { contentChild } from '@angular/core';
@@ -37,6 +35,7 @@ import { fromLonLat } from 'ol/proj';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { model } from '@angular/core';
+import { output } from '@angular/core';
 import { signal } from '@angular/core';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
@@ -147,10 +146,8 @@ const nominalDPI = 96;
   ]
 })
 export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
-  @Output() zoomChange = new EventEmitter<number>();
-
   // 👉 proxy this from the real selector (if any) to ensure safe access
-  abuttersFound = new EventEmitter<Parcel[]>();
+  abuttersFound = output<Parcel[]>();
   bbox = computed(
     () => this.bounds() ?? this.boundary()?.features?.[0]?.bbox ?? [0, 0, 0, 0]
   );
@@ -166,7 +163,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   escape$ = new Subject<KeyboardEvent>();
   featureProjection = 'EPSG:4326';
   // 👉 proxy this from the real selector (if any) to ensure safe access
-  featuresSelected = new EventEmitter<OLFeature<any>[]>();
+  featuresSelected = output<OLFeature<any>[]>();
   fitToBounds = input(false);
   initialized = false;
   loadingStrategy = input<'all' | 'bbox'>();
@@ -181,6 +178,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   searcher = contentChild<Searcher>(SearcherComponent);
   selector = contentChild<Selector>(SelectorComponent);
   vars: Record<string, string> = {};
+  zoomChange = output<number>();
 
   #cdf = inject(ChangeDetectorRef);
   #changeKey: OLEventsKey;
@@ -189,8 +187,8 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   #host = inject(ElementRef);
   #printing = false;
   #store = inject(Store);
-  #subToAbuttersFound: Subscription;
-  #subToFeaturesSelected: Subscription;
+  #subToAbuttersFound: OutputRefSubscription;
+  #subToFeaturesSelected: OutputRefSubscription;
 
   constructor() {
     this.olMap = new OLMap({

@@ -1,4 +1,3 @@
-import { DestroyService } from '../services/destroy';
 import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -9,11 +8,9 @@ import { OnInit } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { model } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
-  providers: [DestroyService],
   selector: 'app-ol-control-zoom',
 
   template: `
@@ -76,7 +73,6 @@ export class OLControlZoomComponent implements OnInit {
   zoomAnimationDuration = input(250);
 
   #cdf = inject(ChangeDetectorRef);
-  #destroy$ = inject(DestroyService);
   #map = inject(OLMapComponent);
 
   maxZoom(): number {
@@ -101,7 +97,7 @@ export class OLControlZoomComponent implements OnInit {
   }
 
   #handleZoom$(): void {
-    this.#map.zoomChange.pipe(takeUntil(this.#destroy$)).subscribe((zoom) => {
+    this.#map.zoomChange.subscribe((zoom) => {
       this.zoom.set(zoom);
       this.resolution.set(this.#map.olView.getResolutionForZoom(zoom));
       // 👉 because event is triggered out of the Angular zone

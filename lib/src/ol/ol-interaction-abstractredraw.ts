@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { click } from 'ol/events/condition';
 import { inject } from '@angular/core';
 import { merge } from 'rxjs';
+import { outputToObservable } from '@angular/core/rxjs-interop';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
@@ -53,7 +54,7 @@ export abstract class OLInteractionAbstractRedrawComponent {
 
   resetRedraw(): void {
     this.feature.setGeometry(this.geometry);
-    this.feature.changed();
+    this.#layer.olLayer.getSource().refresh();
   }
 
   // 👉 setFeature is called by the contextmenu code to initiate
@@ -87,7 +88,7 @@ export abstract class OLInteractionAbstractRedrawComponent {
   // 👇 the idea is that a selection change or ESC accepts the redraw
 
   #handleStreams$(): void {
-    merge(this.#map.escape$, this.#map.featuresSelected)
+    merge(this.#map.escape$, outputToObservable(this.#map.featuresSelected))
       .pipe(takeUntil(this.#destroy$))
       .subscribe(() => {
         if (this.#touched) {

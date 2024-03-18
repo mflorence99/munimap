@@ -11,11 +11,9 @@ import * as Comlink from 'comlink';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
 import { click } from 'ol/events/condition';
@@ -24,6 +22,7 @@ import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { never } from 'ol/events/condition';
+import { output } from '@angular/core';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { shiftKeyOnly } from 'ol/events/condition';
 import { transformExtent } from 'ol/proj';
@@ -53,10 +52,9 @@ import OLSelect from 'ol/interaction/Select';
 export class OLInteractionSelectParcelsComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
-  @Output() abuttersFound = new EventEmitter<Parcel[]>();
-  @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
-
   abutters: Parcel[] = [];
+  abuttersFound = output<Parcel[]>();
+  featuresSelected = output<OLFeature<any>[]>();
   findAbutters = input(false);
 
   // 👉 we need public access to go through the selector to its layer

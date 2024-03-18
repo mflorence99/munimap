@@ -1,6 +1,5 @@
 import { AddParcels } from '../../state/parcels';
 import { AuthState } from '../../state/auth';
-import { DestroyService } from '../../services/destroy';
 import { OLMapComponent } from '../ol-map';
 import { Parcel } from '../../common';
 import { ParcelID } from '../../common';
@@ -11,15 +10,13 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { viewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
 import { inject } from '@angular/core';
-import { merge } from 'rxjs';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
-import { takeUntil } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
+import { viewChild } from '@angular/core';
 
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import OLFeature from 'ol/Feature';
@@ -27,7 +24,6 @@ import OLOverlay from 'ol/Overlay';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
   selector: 'app-ol-overlay-parcellabel',
   template: `
     <div #label (cdkDragEnded)="onDragEnd($event)" cdkDrag>
@@ -54,7 +50,6 @@ export class OLOverlayParcelLabelComponent implements OnInit {
 
   #authState = inject(AuthState);
   #centers: number[][];
-  #destroy$ = inject(DestroyService);
   #id: ParcelID;
   #ix: number;
   #map = inject(OLMapComponent);
@@ -71,7 +66,6 @@ export class OLOverlayParcelLabelComponent implements OnInit {
 
   ngOnInit(): void {
     this.olOverlay.setElement(this.label().nativeElement);
-    this.#handleStreams$();
   }
 
   onDragEnd(event: CdkDragEnd): void {
@@ -114,13 +108,5 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       }
     }
     this.olOverlay.setPosition(fromLonLat(this.#centers[this.#ix]));
-  }
-
-  // 👇 the idea is that a selection change or ESC cancels the move
-
-  #handleStreams$(): void {
-    merge(this.#map.click$, this.#map.escape$, this.#map.featuresSelected)
-      .pipe(takeUntil(this.#destroy$))
-      .subscribe(() => this.olOverlay.setPosition([0, 0]));
   }
 }

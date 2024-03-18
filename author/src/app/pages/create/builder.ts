@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import { GeoJSONService } from '@lib/services/geojson';
 import { Index } from '@lib/common';
-import { Output } from '@angular/core';
 import { Path } from '@lib/state/view';
 import { TownIndex } from '@lib/common';
 
@@ -11,6 +9,7 @@ import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { isIndex } from '@lib/common';
 import { model } from '@angular/core';
+import { output } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -120,13 +119,12 @@ import { model } from '@angular/core';
   ]
 })
 export class BuilderComponent {
-  @Output() pathChanged = new EventEmitter<Path>();
-  @Output() pathSelected = new EventEmitter<Path>();
-  @Output() typeChanged = new EventEmitter<string>();
-
   index: Index;
   path = input<Path>();
+  pathChanged = output<Path>();
+  pathSelected = output<Path>();
   type = model<string>();
+  typeChanged = output<string>();
 
   #geoJSON = inject(GeoJSONService);
 

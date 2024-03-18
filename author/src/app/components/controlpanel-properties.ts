@@ -105,7 +105,7 @@ import copy from 'fast-copy';
 
         <div class="filler"></div>
 
-        <button (click)="cancel()" mat-flat-button>CANCEL</button>
+        <button (click)="cancel()" mat-flat-button>DONE</button>
 
         <button
           [disabled]="setupForm.invalid || !setupForm.dirty"

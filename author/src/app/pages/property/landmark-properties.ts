@@ -7,6 +7,7 @@ import { Landmark } from '@lib/common';
 import { LandmarkID } from '@lib/common';
 import { LandmarkProperties } from '@lib/common';
 import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
@@ -14,6 +15,7 @@ import { UpdateLandmark } from '@lib/state/landmarks';
 
 import { inject } from '@angular/core';
 import { landmarkProperties } from '@lib/common';
+import { viewChild } from '@angular/core';
 
 import copy from 'fast-copy';
 import OLFeature from 'ol/Feature';
@@ -66,7 +68,7 @@ import OLFeature from 'ol/Feature';
       <button (click)="cancel()" mat-flat-button>DONE</button>
 
       <button
-        [disabled]="!propertiesForm.dirty"
+        [disabled]="propertiesForm.invalid || !propertiesForm.dirty"
         color="primary"
         form="propertiesForm"
         mat-flat-button
@@ -82,6 +84,7 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
   features: OLFeature<any>[];
   geometryType: string;
   map: OLMapComponent;
+  ngForm = viewChild<NgForm>('propertiesForm');
   record: Partial<LandmarkProperties> = {};
   selectedIDs: LandmarkID[];
 
@@ -108,6 +111,9 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
       type: 'Feature'
     };
     this.#store.dispatch(new UpdateLandmark(landmark));
+    // 👉 this resets the dirty flag, disabling SAVE until
+    //    additional data entered
+    this.ngForm().form.markAsPristine();
   }
 
   #makeRecord(): void {

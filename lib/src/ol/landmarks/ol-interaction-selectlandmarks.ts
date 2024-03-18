@@ -9,11 +9,9 @@ import { SelectorComponent } from '../ol-selector';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Output } from '@angular/core';
 import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
@@ -23,6 +21,7 @@ import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { never } from 'ol/events/condition';
+import { output } from '@angular/core';
 import { platformModifierKeyOnly } from 'ol/events/condition';
 import { pointerMove } from 'ol/events/condition';
 import { shiftKeyOnly } from 'ol/events/condition';
@@ -54,7 +53,7 @@ import OLStyle from 'ol/style/Style';
 export class OLInteractionSelectLandmarksComponent
   implements Mapable, OnDestroy, OnInit, Selector
 {
-  @Output() featuresSelected = new EventEmitter<OLFeature<any>[]>();
+  featuresSelected = output<OLFeature<any>[]>();
 
   // 👉 we need public access to go through the selector to its layer
   //    see abstract-map.ts -- this is how the context menu works
