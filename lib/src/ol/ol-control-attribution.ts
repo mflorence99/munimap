@@ -4,8 +4,6 @@ import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
 
@@ -76,8 +74,6 @@ import OLLayer from 'ol/layer/Layer';
   ]
 })
 export class OLControlAttributionComponent {
-  @ViewChild('attribution') attribution: ElementRef<HTMLParagraphElement>;
-
   attributions: string[] = [];
   collapsed = true;
 

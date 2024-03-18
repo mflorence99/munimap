@@ -7,13 +7,13 @@ import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
 import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { getDistance } from 'ol/sphere';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
+import { viewChild } from '@angular/core';
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -119,8 +119,7 @@ class Scalebar extends OLControl {
   ]
 })
 export class OLControlScaleBarComponent implements Mapable, OnInit {
-  @ViewChild('barRef', { static: true }) barRef: ElementRef;
-
+  barRef = viewChild<ElementRef>('barRef');
   cxUnit: number;
   cxWidth: number;
   ftUnit: number;
@@ -158,7 +157,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
   }
 
   ngOnInit(): void {
-    this.olControl = new Scalebar({ element: this.barRef.nativeElement });
+    this.olControl = new Scalebar({ element: this.barRef().nativeElement });
     this.olControl.setProperties({ component: this }, true);
     this.#calculateMetrics();
   }

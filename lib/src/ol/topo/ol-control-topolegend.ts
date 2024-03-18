@@ -12,12 +12,12 @@ import { ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { convertArea } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
+import { viewChild } from '@angular/core';
 
 import area from '@turf/area';
 
@@ -111,13 +111,12 @@ export class OLControlTopoLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  @ViewChild('legend', { static: true }) legend: ElementRef;
-
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
   areaOfTown: number;
   county = input<string>();
   id = input<string>();
+  legend = viewChild<ElementRef>('legend');
   printing = input<boolean>();
   state = input<string>();
   title = input<string>();
@@ -134,7 +133,7 @@ export class OLControlTopoLegendComponent
       'meters',
       'acres'
     );
-    this.olControl = new Legend({ element: this.legend.nativeElement });
+    this.olControl = new Legend({ element: this.legend().nativeElement });
     this.olControl.setProperties({ component: this }, true);
     this.onInit();
   }

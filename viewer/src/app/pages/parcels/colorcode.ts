@@ -5,13 +5,11 @@ import { ColorCodeStateModel } from '@lib/state/colorcode';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { MatDrawer } from '@angular/material/sidenav';
-import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { SetColorCode } from '@lib/state/colorcode';
 import { Store } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { defaultColorCode } from '@lib/state/colorcode';
 import { inject } from '@angular/core';
@@ -104,8 +102,6 @@ import copy from 'fast-copy';
 })
 export class ParcelsColorCodeComponent implements OnInit {
   @Select(ColorCodeState) colorCode$: Observable<ColorCodeStateModel>;
-
-  @ViewChild('setupForm', { static: true }) setupForm: NgForm;
 
   record: ColorCodeStateModel = defaultColorCode();
 

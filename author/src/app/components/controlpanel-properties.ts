@@ -12,12 +12,12 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { UpdateMap } from '@lib/state/map';
-import { ViewChild } from '@angular/core';
 
 import { computed } from '@angular/core';
 import { effect } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
+import { viewChild } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -121,10 +121,9 @@ import copy from 'fast-copy';
   styleUrls: ['./abstract-controlpanel.scss']
 })
 export class ControlPanelPropertiesComponent {
-  @ViewChild('setupForm') setupForm: NgForm;
-
   map = input<Map>();
   mapCopy = computed(() => copy(this.map()));
+  ngForm = viewChild<NgForm>('setupForm');
   rolledup: boolean;
 
   #authState = inject(AuthState);
@@ -172,10 +171,10 @@ export class ControlPanelPropertiesComponent {
   update(map: Map): void {
     // 👇 refresh if parcelIDs have changed
     this.#store.dispatch(
-      new UpdateMap(map, this.setupForm.controls['parcelIDs']?.dirty)
+      new UpdateMap(map, this.ngForm().controls['parcelIDs']?.dirty)
     );
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
-    this.setupForm.form.markAsPristine();
+    this.ngForm().form.markAsPristine();
   }
 }

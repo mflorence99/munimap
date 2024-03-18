@@ -11,10 +11,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { OnInit } from '@angular/core';
 import { TemplateRef } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,9 +24,7 @@ import { takeUntil } from 'rxjs/operators';
   styles: [':host { display: none }']
 })
 export class OLPopupSelectionComponent implements OnInit {
-  @ViewChild('popup', { read: TemplateRef, static: true })
-  popup: TemplateRef<any>;
-
+  popup = viewChild<TemplateRef<any>>('popup');
   snackBarRef: MatSnackBarRef<any>;
 
   #destroy$ = inject(DestroyService);
@@ -74,7 +72,7 @@ export class OLPopupSelectionComponent implements OnInit {
         //    jank as new features are selected
         if (features.length === 0) this.#snackBar.dismiss();
         else if (!this.snackBarRef || this.snackBarRef.instance.destroyed) {
-          this.snackBarRef = this.#snackBar.openFromTemplate(this.popup);
+          this.snackBarRef = this.#snackBar.openFromTemplate(this.popup());
         }
       });
   }

@@ -6,11 +6,9 @@ import { Component } from '@angular/core';
 import { CreateMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
-import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { bboxByAspectRatio } from '@lib/common';
 import { inject } from '@angular/core';
@@ -182,8 +180,6 @@ const PRINT_SIZES = {
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class CreatePropertyMapComponent implements SidebarComponent {
-  @ViewChild('createForm') createForm: NgForm;
-
   border = input(100);
   drawer: MatDrawer;
   features: OLFeature<any>[];

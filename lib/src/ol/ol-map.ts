@@ -1,4 +1,5 @@
 import { GeoJSONService } from '../services/geojson';
+import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { Parcel } from '../common';
 import { Path } from '../state/view';
@@ -12,12 +13,10 @@ import { ViewStateModel } from '../state/view';
 
 import { bboxDistance } from '../common';
 
-import { AfterContentInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { ContentChildren } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
@@ -26,25 +25,23 @@ import { HostListener } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Output } from '@angular/core';
-import { QueryList } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { ViewChild } from '@angular/core';
 
 import { computed } from '@angular/core';
 import { contentChild } from '@angular/core';
-import { delay } from 'rxjs/operators';
+import { contentChildren } from '@angular/core';
 import { effect } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { model } from '@angular/core';
 import { signal } from '@angular/core';
-import { tap } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
+import { viewChild } from '@angular/core';
 
 import centerOfMass from '@turf/center-of-mass';
 import OLFeature from 'ol/Feature';
@@ -149,14 +146,7 @@ const nominalDPI = 96;
     `
   ]
 })
-export class OLMapComponent
-  implements AfterContentInit, OnDestroy, OnInit, Searcher, Selector
-{
-  @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
-
-  @ContentChildren(MapableComponent, { descendants: true })
-  mapables$: QueryList<any>;
-
+export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   @Output() zoomChange = new EventEmitter<number>();
 
   // 👉 proxy this from the real selector (if any) to ensure safe access
@@ -168,6 +158,7 @@ export class OLMapComponent
   boundaryExtent: Coordinate;
   boundaryGrid: GeoJSON.FeatureCollection<any, any>;
   bounds = input<Coordinate>();
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   click$ = new Subject<OLMapBrowserEvent<any>>();
   contextMenu$ = new BehaviorSubject<PointerEvent>(null);
   contextMenuAt: number[];
@@ -179,6 +170,7 @@ export class OLMapComponent
   fitToBounds = input(false);
   initialized = false;
   loadingStrategy = input<'all' | 'bbox'>();
+  mapables = contentChildren<Mapable>(MapableComponent, { descendants: true });
   maxZoom = input(22);
   minUsefulZoom = input(15);
   minZoom = input(13);
@@ -215,6 +207,31 @@ export class OLMapComponent
     this.vars = this.#findAllCustomVariables();
     // 👇 side effects
     effect(() => this.#initializeView(this.path()));
+    effect(() => {
+      this.#cleanMap();
+      this.mapables().forEach((mapable) => mapable.addToMap());
+      // 👉 proxy any selector events
+      this.#subToAbuttersFound?.unsubscribe();
+      this.#subToAbuttersFound = this.selector()?.abuttersFound?.subscribe(
+        (abutters) => this.abuttersFound.emit(abutters)
+      );
+      this.#subToFeaturesSelected?.unsubscribe();
+      this.#subToFeaturesSelected = this.selector()?.featuresSelected.subscribe(
+        (features) => {
+          this.featuresSelected.emit(features);
+        }
+      );
+      // 👉 when there's no selector, there are no features selected
+      if (!this.selector) {
+        this.abuttersFound.emit([]);
+        this.featuresSelected.emit([]);
+      }
+      // 👇 redraw on next tick
+      setTimeout(
+        () => this.mapables().forEach((mapable) => mapable.mapUpdated?.()),
+        0
+      );
+    });
   }
 
   get orientation(): 'landscape' | 'portrait' {
@@ -283,13 +300,9 @@ export class OLMapComponent
   }
 
   measureText(text: string, font: string): TextMetrics {
-    const ctx = this.canvas.nativeElement.getContext('2d');
+    const ctx = this.canvas().nativeElement.getContext('2d');
     ctx.font = font;
     return ctx.measureText(text);
-  }
-
-  ngAfterContentInit(): void {
-    this.#handleMapables$();
   }
 
   ngOnDestroy(): void {
@@ -418,35 +431,6 @@ export class OLMapComponent
       acc[name] = style.getPropertyValue(name).trim();
       return acc;
     }, {});
-  }
-
-  #handleMapables$(): void {
-    this.mapables$.changes
-      .pipe(
-        tap((list) => {
-          this.#cleanMap();
-          list.forEach((mapable) => mapable.addToMap());
-          // 👉 proxy any selector events
-          this.#subToAbuttersFound?.unsubscribe();
-          this.#subToAbuttersFound = this.selector()?.abuttersFound?.subscribe(
-            (abutters) => this.abuttersFound.emit(abutters)
-          );
-          this.#subToFeaturesSelected?.unsubscribe();
-          this.#subToFeaturesSelected =
-            this.selector()?.featuresSelected.subscribe((features) => {
-              this.featuresSelected.emit(features);
-            });
-          // 👉 when there's no selector, there are no features selected
-          if (!this.selector) {
-            this.abuttersFound.emit([]);
-            this.featuresSelected.emit([]);
-          }
-        }),
-        // 👇 indicate mapUpdated on next tick
-        delay(0),
-        tap((list) => list.forEach((mapable) => mapable.mapUpdated?.()))
-      )
-      .subscribe();
   }
 
   #initializeView(path: Path): void {

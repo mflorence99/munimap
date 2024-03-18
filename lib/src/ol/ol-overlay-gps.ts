@@ -10,13 +10,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
 import { inject } from '@angular/core';
 import { linear } from 'ol/easing';
 import { retryBackoff } from 'backoff-rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
 import OLOverlay from 'ol/Overlay';
 
@@ -83,9 +83,8 @@ const backoffMaxInterval = 1000;
   ]
 })
 export class OLOverlayGPSComponent implements OnDestroy, OnInit {
-  @ViewChild('tracker', { static: true }) tracker: ElementRef<HTMLDivElement>;
-
   olOverlay: OLOverlay;
+  tracker = viewChild<ElementRef<HTMLDivElement>>('tracker');
 
   #destroy$ = inject(DestroyService);
   #geolocation$ = inject(GeolocationService);
@@ -113,7 +112,7 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.olOverlay.setElement(this.tracker.nativeElement);
+    this.olOverlay.setElement(this.tracker().nativeElement);
     this.#handleGeolocation$();
   }
 
@@ -143,7 +142,7 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
           shouldRetry: (error: GeolocationPositionError) => {
             // 👇 we need to use addClass b/c OL has yanked
             //    the tracker out of the DOM
-            this.tracker.nativeElement.classList.add('disabled');
+            this.tracker().nativeElement.classList.add('disabled');
             // 👇 GeolocationPositionError.PERMISSION_DENIED throws error on iOS
             return error.code !== 1;
           }
@@ -174,7 +173,7 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
       style.setProperty('--ol-overlay-animate-duration', `${interval}`);
       // 👇 we need to use removeClass b/c OL has yanked
       //    the tracker out of the DOM
-      this.tracker.nativeElement.classList.remove('disabled');
+      this.tracker().nativeElement.classList.remove('disabled');
       this.olOverlay.setPosition(
         fromLonLat([position.coords.longitude, position.coords.latitude])
       );

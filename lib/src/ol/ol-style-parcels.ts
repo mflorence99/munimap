@@ -20,12 +20,10 @@ import { Coordinate as OLCoordinate } from 'ol/coordinate';
 import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
 import { OnChanges } from '@angular/core';
-import { QueryList } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 import { TitleCasePipe } from '@angular/common';
-import { ViewChildren } from '@angular/core';
 
 import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
@@ -35,6 +33,7 @@ import { inject } from '@angular/core';
 import { lineString } from '@turf/helpers';
 import { point } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
+import { viewChildren } from '@angular/core';
 
 import bearing from '@turf/bearing';
 import booleanClockwise from '@turf/boolean-clockwise';
@@ -99,9 +98,6 @@ type ShowStatus = 'always' | 'never' | 'onlyParcelIDs' | 'whenSelected';
   styles: [':host { display: none }']
 })
 export class OLStyleParcelsComponent implements OnChanges, Styler {
-  @ViewChildren(OLStylePatternDirective)
-  appPatterns: QueryList<OLStylePatternDirective>;
-
   // 👇 @Input/OnChanges works just fine here!
 
   @Input() borderOpacity = 1;
@@ -130,6 +126,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() showSelection: ShowStatus = 'never';
   @Input() showStolen: ShowStatus = 'never';
   @Input() straightLineTolerance = 15;
+
+  appPatterns = viewChildren(OLStylePatternDirective);
 
   #decimal = inject(DecimalPipe);
   #layer = inject(OLLayerVectorComponent);
@@ -419,7 +417,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   }
 
   #iconForUse(use: string): OLIcon {
-    const appPattern = this.appPatterns.find((image) =>
+    const appPattern = this.appPatterns().find((image) =>
       image.matches(new RegExp(use))
     );
     return appPattern

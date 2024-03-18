@@ -19,11 +19,11 @@ import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Signal } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
+import { viewChild } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -95,7 +95,6 @@ export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  @ViewChild('legend', { static: true })
   @Select(ParcelsState)
   parcels$: Observable<Parcel[]>;
 
@@ -107,7 +106,7 @@ export class OLControlAPDVDLegendComponent
   countOfProposed: number;
   county: Signal<string>;
   id: Signal<string>;
-  legend: ElementRef;
+  legend = viewChild<ElementRef>('legend');
   printing = input<boolean>();
   state: Signal<string>;
   title = input<string>();
@@ -130,13 +129,13 @@ export class OLControlAPDVDLegendComponent
   }
 
   // 🔥 need to do this for APDVD as not enough data in actual
-  //    countables to prodfuce legend
+  //    countables to produce legend
   override countables(): string {
     return 'parcels';
   }
 
   ngOnInit(): void {
-    this.olControl = new Legend({ element: this.legend.nativeElement });
+    this.olControl = new Legend({ element: this.legend().nativeElement });
     this.olControl.setProperties({ component: this }, true);
     this.onInit();
   }

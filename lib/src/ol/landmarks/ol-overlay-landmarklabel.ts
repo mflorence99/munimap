@@ -9,12 +9,12 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { fromLonLat } from 'ol/proj';
 import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { toLonLat } from 'ol/proj';
+import { viewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 import OLOverlay from 'ol/Overlay';
@@ -44,8 +44,7 @@ import OLPoint from 'ol/geom/Point';
   ]
 })
 export class OLOverlayLandmarkLabelComponent implements OnInit {
-  @ViewChild('label', { static: true }) label: ElementRef<HTMLDivElement>;
-
+  label = viewChild<ElementRef>('label');
   olOverlay: OLOverlay;
 
   #destroy$ = inject(DestroyService);
@@ -63,7 +62,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.olOverlay.setElement(this.label.nativeElement);
+    this.olOverlay.setElement(this.label().nativeElement);
     this.#handleClick$();
   }
 

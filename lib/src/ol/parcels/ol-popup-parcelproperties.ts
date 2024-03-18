@@ -13,11 +13,11 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 
@@ -277,8 +277,6 @@ interface Abutter {
   styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
-  @ViewChild('tables', { static: true }) tables: ElementRef;
-
   abutters: Abutter[] = [];
   maxNumProperties = input(3);
   parcelPropertiesUsage = parcelPropertiesUsage;
@@ -289,6 +287,7 @@ export class OLPopupParcelPropertiesComponent {
   sameUsage: boolean;
   splitHorizontally = false;
   splitVertically = true;
+  tables = viewChild<ElementRef>('tables');
 
   #cdf = inject(ChangeDetectorRef);
   #map = inject(OLMapComponent);
@@ -320,7 +319,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   onClipboard(): void {
-    this.#popper.toClipboard(this.tables);
+    this.#popper.toClipboard(this.tables());
   }
 
   onClose(): void {

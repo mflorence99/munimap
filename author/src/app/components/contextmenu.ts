@@ -8,6 +8,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 
 import { contentChild } from '@angular/core';
+import { filter } from 'rxjs/operators';
 import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { viewChild } from '@angular/core';
@@ -66,7 +67,10 @@ export class ContextMenuComponent implements OnInit {
 
   #handleContextMenu$(): void {
     this.map.contextMenu$
-      .pipe(takeUntil(this.#destroy$))
+      .pipe(
+        takeUntil(this.#destroy$),
+        filter((event) => !!event)
+      )
       .subscribe((event: PointerEvent) => {
         if (this.contextMenu()) {
           // 👉 need to hack the Y offset by the height of the toolbar

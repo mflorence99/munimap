@@ -7,6 +7,7 @@ import { CulvertProperties } from '@lib/common';
 import { Landmark } from '@lib/common';
 import { LandmarkID } from '@lib/common';
 import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
@@ -17,6 +18,7 @@ import { culvertFloodHazards } from '@lib/common';
 import { culvertHeadwalls } from '@lib/common';
 import { culvertMaterials } from '@lib/common';
 import { inject } from '@angular/core';
+import { viewChild } from '@angular/core';
 
 import copy from 'fast-copy';
 import OLFeature from 'ol/Feature';
@@ -249,6 +251,7 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;
   features: OLFeature<any>[];
   map: OLMapComponent;
+  ngForm = viewChild<NgForm>('propertiesForm');
   record: Partial<CulvertProperties> = {};
   selectedIDs: LandmarkID[];
   shape: 'circular' | 'elliptical';
@@ -280,6 +283,9 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
       type: 'Feature'
     };
     this.#store.dispatch(new UpdateLandmark(landmark));
+    // 👉 this resets the dirty flag, disabling SAVE until
+    //    additional data entered
+    this.ngForm().form.markAsPristine();
   }
 
   #makeRecord(): void {

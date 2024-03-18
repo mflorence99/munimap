@@ -7,10 +7,10 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 
@@ -66,10 +66,9 @@ export type Schema = Array<
   styleUrls: ['../ol-popup-abstractproperties.scss']
 })
 export class OLPopupDPWPropertiesComponent {
-  @ViewChild('table', { static: true }) table: ElementRef;
-
   geometry: any /* 👈 in practice will be a Point */;
   properties: any /* 👈 could be bridge, stream crossing etc etc */;
+  table = viewChild<ElementRef>('table');
 
   // 🔥  this doesn't seem to work
   // #subToSelection: Subscription;
@@ -106,14 +105,14 @@ export class OLPopupDPWPropertiesComponent {
   }
 
   onClipboard(): void {
-    this.#popper.toClipboard(this.table);
+    this.#popper.toClipboard(this.table());
   }
 
   onClose(): void {
     this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for landmarks
-    const selector = this.#map
-      .selector() as OLInteractionSelectLandmarksComponent;
+    const selector =
+      this.#map.selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
     // 🔥  this doesn't seem to work
     // this.#subToSelection?.unsubscribe();

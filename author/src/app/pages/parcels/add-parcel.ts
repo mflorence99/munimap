@@ -5,12 +5,10 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { convertArea } from '@turf/helpers';
 import { inject } from '@angular/core';
@@ -123,8 +121,6 @@ interface Addition {
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class AddParcelComponent implements SidebarComponent {
-  @ViewChild('additionForm') additionForm: NgForm;
-
   addition: Addition = {} as Addition;
   drawer: MatDrawer;
   features: OLFeature<any>[];

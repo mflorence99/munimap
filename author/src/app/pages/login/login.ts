@@ -5,10 +5,8 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { MessageDialogData } from '@lib/components/message-dialog';
-import { NgForm } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { UpdateUser } from '@lib/state/auth';
-import { ViewChild } from '@angular/core';
 
 import { createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { inject } from '@angular/core';
@@ -273,8 +271,6 @@ import { signInWithEmailAndPassword } from '@angular/fire/auth';
   ]
 })
 export class LoginPage {
-  @ViewChild('loginForm') loginForm: NgForm;
-
   errorMessage = '';
 
   login = {

@@ -5,13 +5,11 @@ import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
 import { randomPoint } from '@turf/random';
@@ -137,8 +135,6 @@ interface Subdivision {
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
-  @ViewChild('subdivisionForm') subdivisionForm: NgForm;
-
   drawer: MatDrawer;
   features: OLFeature<any>[];
   map: OLMapComponent;

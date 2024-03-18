@@ -11,12 +11,12 @@ import { ElementRef } from '@angular/core';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { unByKey } from 'ol/Observable';
+import { viewChild } from '@angular/core';
 
 import html2canvas from 'html2canvas';
 
@@ -40,8 +40,7 @@ import html2canvas from 'html2canvas';
   ]
 })
 export class OLControlPrintComponent {
-  @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
-
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   dpi = input(300);
   fileName = input<string>();
   maxPrintSize = input(12000);
@@ -121,7 +120,7 @@ export class OLControlPrintComponent {
     }).then((viewport) => {
       // 👉 compute padding and draw it around viewport
       const padding = this.#padding(this.#px, this.#py);
-      const printout = this.canvas.nativeElement;
+      const printout = this.canvas().nativeElement;
       printout.width = this.#px + padding[0];
       printout.height = this.#py + padding[1];
       const ctx = printout.getContext('2d');

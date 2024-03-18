@@ -13,11 +13,11 @@ import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 import { ValuesPipe } from 'ngx-pipes';
-import { ViewChild } from '@angular/core';
 
 import { inject } from '@angular/core';
 import { parcelPropertiesUsage } from '@lib/common';
 import { parcelPropertiesUse } from '@lib/common';
+import { viewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 
@@ -141,8 +141,6 @@ type ValueRecord = Record<string, Value>;
   styleUrls: ['../../../../../lib/css/sidebar.scss']
 })
 export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
-  @ViewChild('propertiesForm') propertiesForm: NgForm;
-
   drawer: MatDrawer;
   editables = [
     { prop: 'address', label: 'Parcel Address', type: 'text' },
@@ -159,6 +157,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   ];
   features: OLFeature<any>[];
   map: OLMapComponent;
+  ngForm = viewChild<NgForm>('propertiesForm');
   record: ValueRecord = {};
   selectedIDs: ParcelID[];
 
@@ -200,7 +199,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
       //    in the form, in which case we don't record a value
       this.editables.forEach((editable) => {
         const prop = editable.prop;
-        const control = this.propertiesForm.controls[prop];
+        const control = this.ngForm().controls[prop];
         const value = record[prop].value;
         if (control?.dirty && value) {
           parcel.properties[prop] =
@@ -213,7 +212,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     this.#store.dispatch(new AddParcels(parcels));
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
-    this.propertiesForm.form.markAsPristine();
+    this.ngForm().form.markAsPristine();
   }
 
   #makeRecord(): void {
@@ -243,6 +242,5 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
         }
       });
     });
-    console.log({ record: this.record });
   }
 }

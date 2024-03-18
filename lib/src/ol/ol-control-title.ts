@@ -7,11 +7,11 @@ import { Component } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
+import { viewChild } from '@angular/core';
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -69,12 +69,11 @@ class Title extends OLControl {
   ]
 })
 export class OLControlTitleComponent implements Mapable, OnInit {
-  @ViewChild('titleRef', { static: true }) titleRef: ElementRef;
-
   olControl: OLControl;
   scaleFactor = input(50);
   showTitleContrast = input<boolean>();
   title = input<string>();
+  titleRef = viewChild<ElementRef>('titleRef');
 
   #map = inject(OLMapComponent);
 
@@ -95,7 +94,7 @@ export class OLControlTitleComponent implements Mapable, OnInit {
   }
 
   ngOnInit(): void {
-    this.olControl = new Title({ element: this.titleRef.nativeElement });
+    this.olControl = new Title({ element: this.titleRef().nativeElement });
     this.olControl.setProperties({ component: this }, true);
   }
 }
