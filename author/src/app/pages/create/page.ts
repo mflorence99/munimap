@@ -9,11 +9,11 @@ import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { Path } from '@lib/state/view';
 import { Router } from '@angular/router';
 import { TownIndex } from '@lib/common';
-import { ViewChild } from '@angular/core';
 
 import { environment } from '@lib/environment';
 import { inject } from '@angular/core';
 import { theState } from '@lib/common';
+import { viewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
 
@@ -98,11 +98,10 @@ import OLFeature from 'ol/Feature';
   styleUrls: ['../abstract-map.scss']
 })
 export class CreatePage {
-  @ViewChild('selectables') selectables: OLLayerVectorComponent;
-
   env = environment;
   index: Index;
   path = theState;
+  selectables = viewChild(OLLayerVectorComponent);
   type = 'parcels';
 
   #geoJSON = inject(GeoJSONService);
@@ -168,6 +167,6 @@ export class CreatePage {
 
   onTypeChanged(type: string): void {
     this.type = type;
-    if (this.selectables) this.selectables.olLayer.getSource().refresh();
+    if (this.selectables) this.selectables().olLayer.getSource().refresh();
   }
 }

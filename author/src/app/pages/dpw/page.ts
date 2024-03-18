@@ -18,7 +18,6 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
 import { OnInit } from '@angular/core';
 import { Type } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
 import { culvertConditions } from '@lib/common';
 import { culvertFloodHazards } from '@lib/common';
@@ -26,6 +25,7 @@ import { culvertHeadwalls } from '@lib/common';
 import { culvertMaterials } from '@lib/common';
 import { makeLandmarkID } from '@lib/common';
 import { toLonLat } from 'ol/proj';
+import { viewChild } from '@angular/core';
 
 // 🔥 only culverts are supported for now
 
@@ -521,17 +521,11 @@ import { toLonLat } from 'ol/proj';
   styleUrls: ['../abstract-map.scss']
 })
 export class DPWPage extends AbstractMapPage implements OnInit {
-  @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
-
-  @ViewChild(ContextMenuHostDirective)
-  contextMenuHost: ContextMenuHostDirective;
-
-  @ViewChild('drawer') drawer: MatDrawer;
-
-  @ViewChild(OLOverlayLandmarkLabelComponent)
-  moveLandmark: OLOverlayLandmarkLabelComponent;
-
-  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+  contextMenu = viewChild(ContextMenuComponent);
+  contextMenuHost = viewChild(ContextMenuHostDirective);
+  drawer = viewChild(MatDrawer);
+  moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
+  olMap = viewChild(OLMapComponent);
 
   canAddCulvert(event?: MouseEvent): boolean {
     return this.#can(event, true);
@@ -540,14 +534,14 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   canCulvertProperties(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.olMap.roSelection && this.olMap.selected.length === 1
+      !this.olMap().roSelection && this.olMap().selected.length === 1
     );
   }
 
   canDeleteCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.olMap.roSelection && this.olMap.selected.length === 1
+      !this.olMap().roSelection && this.olMap().selected.length === 1
     );
   }
 
@@ -558,7 +552,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   canMoveCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.olMap.roSelection && this.olMap.selected.length === 1
+      !this.olMap().roSelection && this.olMap().selected.length === 1
     );
   }
 
@@ -578,7 +572,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
         break;
       case 'delete-culvert':
         this.store.dispatch(
-          new DeleteLandmark({ id: this.olMap.selectedIDs[0] })
+          new DeleteLandmark({ id: this.olMap().selectedIDs[0] })
         );
         break;
       case 'import-culverts':
@@ -588,12 +582,12 @@ export class DPWPage extends AbstractMapPage implements OnInit {
         component = CulvertPropertiesComponent;
         break;
       case 'move-culvert':
-        this.moveLandmark.setFeature(this.olMap.selected[0]);
+        this.moveLandmark().setFeature(this.olMap().selected[0]);
         break;
     }
     if (component) this.onContextMenuImpl(component);
     // 👇 in some cases, doesn't close itself
-    this.contextMenu.closeMenu();
+    this.contextMenu().closeMenu();
   }
 
   #can(event: MouseEvent, condition: boolean): boolean {
@@ -604,11 +598,11 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   #createCulvert(): void {
     const landmark: Partial<Landmark> = {
       geometry: {
-        coordinates: toLonLat(this.olMap.contextMenuAt),
+        coordinates: toLonLat(this.olMap().contextMenuAt),
         type: 'Point'
       },
       owner: this.authState.currentProfile().email,
-      path: this.olMap.path(),
+      path: this.olMap().path(),
       properties: {
         metadata: {
           condition: culvertConditions[0],

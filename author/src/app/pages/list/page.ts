@@ -15,7 +15,6 @@ import { OnInit } from '@angular/core';
 import { Profile } from '@lib/state/auth';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
-import { ViewChild } from '@angular/core';
 
 import { collection } from '@angular/fire/firestore';
 import { collectionData } from '@angular/fire/firestore';
@@ -25,6 +24,7 @@ import { of } from 'rxjs';
 import { orderBy } from '@angular/fire/firestore';
 import { query } from '@angular/fire/firestore';
 import { takeUntil } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 import { where } from '@angular/fire/firestore';
 import { workgroup } from '@lib/state/auth';
 
@@ -161,11 +161,9 @@ import { workgroup } from '@lib/state/auth';
 export class ListPage implements OnInit {
   @Select(AuthState.profile) profile$: Observable<Profile>;
 
-  @ViewChild(MatSort) sort: MatSort;
-
   columns = ['name', 'id', 'owner', 'type', 'path'];
-
   dataSource: MatTableDataSource<Map>;
+  sort = viewChild(MatSort);
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
@@ -180,7 +178,7 @@ export class ListPage implements OnInit {
   ngOnInit(): void {
     this.#handleAllMaps$().subscribe((maps: Map[]) => {
       this.dataSource = new MatTableDataSource(maps);
-      this.dataSource.sort = this.sort;
+      this.dataSource.sort = this.sort();
       this.#cdf.detectChanges();
     });
   }

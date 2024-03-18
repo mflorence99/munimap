@@ -8,7 +8,8 @@ import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
+
+import { viewChild } from '@angular/core';
 
 // 🔥 we only expect "area" maps to be printed, never viewed in the viewer
 
@@ -359,12 +360,9 @@ import { ViewChild } from '@angular/core';
   styleUrls: ['../abstract-map.scss']
 })
 export class AreaPage extends AbstractMapPage implements OnInit {
-  @ViewChild(ContextMenuHostDirective)
-  contextMenuHost: ContextMenuHostDirective;
-
-  @ViewChild('drawer') drawer: MatDrawer;
-
-  @ViewChild(OLMapComponent) olMap: OLMapComponent;
+  contextMenuHost = viewChild(ContextMenuHostDirective);
+  drawer = viewChild(MatDrawer);
+  olMap = viewChild(OLMapComponent);
 
   getType(): MapType {
     return 'area';

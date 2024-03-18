@@ -30,7 +30,6 @@ import { Undo } from '@lib/state/undo';
 import { UpdateMapError } from '@lib/state/map';
 import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
-import { ViewChild } from '@angular/core';
 import { ViewState } from '@lib/state/view';
 import { Working } from '@lib/state/working';
 
@@ -41,6 +40,7 @@ import { takeUntil } from 'rxjs/operators';
 import { transition } from '@angular/animations';
 import { trigger } from '@angular/animations';
 import { useAnimation } from '@angular/animations';
+import { viewChild } from '@angular/core';
 
 @Component({
   animations: [
@@ -178,18 +178,13 @@ export class RootPage implements OnInit {
 
   @Select(AuthState.user) user$: Observable<User>;
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  @ViewChild(RouterOutlet) outlet;
-
   _version = inject(VersionService) /* 👈 just to get it loaded */;
 
   canRedo = false;
   canUndo = false;
-
   loading = false;
-
+  outlet = viewChild(RouterOutlet);
   title: string;
-
   working = 0;
 
   #actions$ = inject(Actions);
@@ -200,7 +195,7 @@ export class RootPage implements OnInit {
   #store = inject(Store);
 
   getState(): any {
-    return this.outlet?.activatedRouteData?.state;
+    return this.outlet()?.activatedRouteData?.state;
   }
 
   ngOnInit(): void {

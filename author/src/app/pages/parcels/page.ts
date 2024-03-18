@@ -20,13 +20,13 @@ import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelPropertiesLabel } from '@lib/common';
 import { Type } from '@angular/core';
-import { ViewChild } from '@angular/core';
 
 import { calculateParcel } from '@lib/common';
 import { fromLonLat } from 'ol/proj';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
+import { viewChild } from '@angular/core';
 
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
@@ -432,9 +432,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
     <ng-template #contextmenu>
       <nav class="contextmenu">
-        @if (olMap.selectedIDs.length !== 0) {
+        @if (olMap().selectedIDs.length !== 0) {
           <header class="header">
-            Parcels {{ olMap.selectedIDs.join(', ') }}
+            Parcels {{ olMap().selectedIDs.join(', ') }}
           </header>
         }
 
@@ -576,65 +576,58 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
   styleUrls: ['../abstract-map.scss']
 })
 export class ParcelsPage extends AbstractMapPage implements OnInit {
-  @ViewChild(ContextMenuHostDirective)
-  contextMenuHost: ContextMenuHostDirective;
-
-  @ViewChild('drawer') drawer: MatDrawer;
-
-  @ViewChild(OLInteractionRedrawParcelComponent)
-  interactionRedraw: OLInteractionRedrawParcelComponent;
-
-  @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @ViewChild(OLOverlayParcelLabelComponent)
-  overlayLabel: OLOverlayParcelLabelComponent;
+  contextMenuHost = viewChild(ContextMenuHostDirective);
+  drawer = viewChild(MatDrawer);
+  interactionRedraw = viewChild(OLInteractionRedrawParcelComponent);
+  olMap = viewChild(OLMapComponent);
+  overlayLabel = viewChild(OLOverlayParcelLabelComponent);
 
   canAddParcel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length === 0);
+    return this.#can(event, this.olMap().selectedIDs.length === 0);
   }
 
   canAddPolygon(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length === 1);
+    return this.#can(event, this.olMap().selectedIDs.length === 1);
   }
 
   canCreatePropertyMap(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length >= 1);
+    return this.#can(event, this.olMap().selectedIDs.length >= 1);
   }
 
   canDeletePolygon(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      this.olMap.selectedIDs.length === 1 &&
-        this.olMap.selected[0].getGeometry().getType() === 'MultiPolygon'
+      this.olMap().selectedIDs.length === 1 &&
+        this.olMap().selected[0].getGeometry().getType() === 'MultiPolygon'
     );
   }
 
   canMergeParcels(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length > 1);
+    return this.#can(event, this.olMap().selectedIDs.length > 1);
   }
 
   canParcelProperties(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length > 0);
+    return this.#can(event, this.olMap().selectedIDs.length > 0);
   }
 
   canRecenterLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length === 1);
+    return this.#can(event, this.olMap().selectedIDs.length === 1);
   }
 
   canRedrawBoundary(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length === 1);
+    return this.#can(event, this.olMap().selectedIDs.length === 1);
   }
 
   canRotateLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length === 1);
+    return this.#can(event, this.olMap().selectedIDs.length === 1);
   }
 
   canSplitLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length === 1);
+    return this.#can(event, this.olMap().selectedIDs.length === 1);
   }
 
   canSubdivideParcel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selectedIDs.length === 1);
+    return this.#can(event, this.olMap().selectedIDs.length === 1);
   }
 
   getType(): MapType {
@@ -652,13 +645,13 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         component = AddParcelComponent;
         break;
       case 'add-polygon':
-        this.#addPolygon(this.olMap.selected[0]);
+        this.#addPolygon(this.olMap().selected[0]);
         break;
       case 'create-propertymap':
         component = CreatePropertyMapComponent;
         break;
       case 'delete-polygon':
-        this.#deletePolygon(this.olMap.selected[0]);
+        this.#deletePolygon(this.olMap().selected[0]);
         break;
       case 'parcel-properties':
         component = ParcelPropertiesComponent;
@@ -667,16 +660,16 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         component = MergeParcelsComponent;
         break;
       case 'recenter-label':
-        this.overlayLabel.setFeature(this.olMap.selected[0]);
+        this.overlayLabel().setFeature(this.olMap().selected[0]);
         break;
       case 'redraw-boundary':
-        this.interactionRedraw.setFeature(this.olMap.selected[0]);
+        this.interactionRedraw().setFeature(this.olMap().selected[0]);
         break;
       case 'rotate-label':
-        this.#rotateLabel(this.olMap.selected[0]);
+        this.#rotateLabel(this.olMap().selected[0]);
         break;
       case 'split-label':
-        this.#splitLabel(this.olMap.selected[0]);
+        this.#splitLabel(this.olMap().selected[0]);
         break;
       case 'subdivide-parcel':
         component = SubdivideParcelComponent;
@@ -693,7 +686,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     // 👇 create a square centered on the context menu
     const polygon = bboxPolygon(
       bbox(
-        circle(toLonLat(this.olMap.contextMenuAt), 100, {
+        circle(toLonLat(this.olMap().contextMenuAt), 100, {
           steps: 16,
           units: 'feet'
         })
@@ -726,8 +719,8 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     doProperties = false
   ): void {
     const format = new OLGeoJSON({
-      dataProjection: this.olMap.featureProjection,
-      featureProjection: this.olMap.projection
+      dataProjection: this.olMap().featureProjection,
+      featureProjection: this.olMap().projection
     });
     // 👉 convert to feature to geojson and recalculate centers etc
     const parcel = JSON.parse(format.writeFeature(feature));
@@ -739,7 +732,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       geometry: doGeometry ? parcel.geometry : null,
       id: feature.getId(),
       owner: this.authState.currentProfile().email,
-      path: this.olMap.path(),
+      path: this.olMap().path(),
       properties: doProperties ? parcel.properties : null,
       type: 'Feature'
     };
@@ -779,7 +772,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     if (feature.getGeometry().getType() === 'MultiPolygon') {
       const polygons = feature.getGeometry().getPolygons();
       for (ix = 0; ix < polygons.length; ix++) {
-        const pt = point(this.olMap.contextMenuAt);
+        const pt = point(this.olMap().contextMenuAt);
         const poly = polygon([polygons[ix].getCoordinates()[0]]);
         if (booleanPointInPolygon(pt, poly)) break;
       }

@@ -14,6 +14,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { Router } from '@angular/router';
 import { SetMap } from '@lib/state/map';
+import { Signal } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
 import { ViewState } from '@lib/state/view';
@@ -38,14 +39,14 @@ export abstract class AbstractMapPage {
   store = inject(Store);
   viewState = inject(ViewState);
 
-  abstract contextMenuHost: ContextMenuHostDirective;
-  abstract drawer: MatDrawer;
-  abstract olMap: OLMapComponent;
+  abstract contextMenuHost: Signal<ContextMenuHostDirective>;
+  abstract drawer: Signal<MatDrawer>;
+  abstract olMap: Signal<OLMapComponent>;
 
   getGeoJSONFormatter(): OLGeoJSON {
     return new OLGeoJSON({
-      dataProjection: this.olMap.featureProjection,
-      featureProjection: this.olMap.projection
+      dataProjection: this.olMap().featureProjection,
+      featureProjection: this.olMap().projection
     });
   }
 
@@ -55,16 +56,16 @@ export abstract class AbstractMapPage {
   }
 
   onContextMenuImpl(component: Type<SidebarComponent>): void {
-    this.drawer.open();
-    this.contextMenuHost.vcRef.clear();
+    this.drawer().open();
+    this.contextMenuHost().vcRef.clear();
     const cRef: ComponentRef<SidebarComponent> =
-      this.contextMenuHost.vcRef.createComponent(component);
+      this.contextMenuHost().vcRef.createComponent(component);
     // 👉 populate @Input() fields
     const comp = cRef.instance;
-    comp.drawer = this.drawer;
-    comp.map = this.olMap;
+    comp.drawer = this.drawer();
+    comp.map = this.olMap();
     let key;
-    const selector = this.olMap.selector();
+    const selector = this.olMap().selector();
     if (selector) {
       // 👉 the layer that contains the selector contains the features
       //    that can be operated on
@@ -81,7 +82,7 @@ export abstract class AbstractMapPage {
       comp.features = [];
     }
     // 👉 when the sidebar closes, stop listening
-    this.drawer.closedStart.subscribe(() => {
+    this.drawer().closedStart.subscribe(() => {
       unByKey(key);
     });
   }

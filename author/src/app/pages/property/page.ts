@@ -20,9 +20,9 @@ import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-la
 import { OnInit } from '@angular/core';
 import { Type } from '@angular/core';
 import { UpdateLandmark } from '@lib/state/landmarks';
-import { ViewChild } from '@angular/core';
 
 import { calculateOrientation } from '@lib/common';
+import { viewChild } from '@angular/core';
 
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
@@ -413,11 +413,11 @@ interface LandmarkConversion {
 
     <ng-template #contextmenu>
       <nav class="contextmenu">
-        @if (olMap.selectedIDs.length !== 0) {
+        @if (olMap().selectedIDs.length !== 0) {
           <header class="header">
-            <p [ngPlural]="olMap.selected.length">
+            <p [ngPlural]="olMap().selected.length">
               <ng-template ngPluralCase="one">
-                {{ olMap.selected[0].get('name') }}
+                {{ olMap().selected[0].get('name') }}
               </ng-template>
               <ng-template ngPluralCase="other">Multiple landmarks</ng-template>
             </p>
@@ -506,7 +506,7 @@ interface LandmarkConversion {
                 #newName
                 (click)="eatMe($event)"
                 [disabled]="!canRenameLandmark()"
-                [value]="olMap.selected[0]?.get('name')"
+                [value]="olMap().selected[0]?.get('name')"
                 type="text" />
 
               <button
@@ -581,7 +581,7 @@ interface LandmarkConversion {
             [class.disabled]="!canDeleteLandmarks()"
             class="item">
             <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
-            <p [ngPlural]="olMap.selected.length">
+            <p [ngPlural]="olMap().selected.length">
               <ng-template ngPluralCase="one">Delete landmark</ng-template>
               <ng-template ngPluralCase="other">Delete landmarks</ng-template>
             </p>
@@ -620,24 +620,15 @@ interface LandmarkConversion {
   styleUrls: ['../abstract-map.scss']
 })
 export class PropertyPage extends AbstractMapPage implements OnInit {
-  @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
+  contextMenu = viewChild(ContextMenuComponent);
+  contextMenuHost = viewChild(ContextMenuHostDirective);
+  drawLandmarks = viewChild(OLInteractionDrawLandmarksComponent);
+  drawer = viewChild(MatDrawer);
+  moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
+  olMap = viewChild(OLMapComponent);
+  redrawLandmark = viewChild(OLInteractionRedrawLandmarkComponent);
 
-  @ViewChild(ContextMenuHostDirective)
-  contextMenuHost: ContextMenuHostDirective;
-
-  @ViewChild(OLInteractionDrawLandmarksComponent)
-  drawLandmarks: OLInteractionDrawLandmarksComponent;
-
-  @ViewChild('drawer') drawer: MatDrawer;
-
-  @ViewChild(OLOverlayLandmarkLabelComponent)
-  moveLandmark: OLOverlayLandmarkLabelComponent;
-
-  @ViewChild(OLMapComponent) olMap: OLMapComponent;
-
-  @ViewChild(OLInteractionRedrawLandmarkComponent)
-  redrawLandmark: OLInteractionRedrawLandmarkComponent;
-
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   conversions: LandmarkConversion[] = [
     {
       converter: this.#convertToArea.bind(this),
@@ -732,19 +723,19 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   ];
 
   canConvertFor(conversion: LandmarkConversion): boolean {
-    const feature = this.olMap.selected[0];
+    const feature = this.olMap().selected[0];
     return (
-      this.olMap.selected.length === 1 &&
+      this.olMap().selected.length === 1 &&
       conversion.geometryType === feature.getGeometry().getType()
     );
   }
 
   canConvertLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 1);
+    return this.#can(event, this.olMap().selected.length === 1);
   }
 
   canDeleteLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length > 0);
+    return this.#can(event, this.olMap().selected.length > 0);
   }
 
   canDrawLandmarks(event?: MouseEvent): boolean {
@@ -756,30 +747,30 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   }
 
   canLandmarkProperties(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 1);
+    return this.#can(event, this.olMap().selected.length === 1);
   }
 
   canMoveLandmark(event?: MouseEvent): boolean {
-    const feature = this.olMap.selected[0];
+    const feature = this.olMap().selected[0];
     return this.#can(
       event,
-      this.olMap.selected.length === 1 &&
+      this.olMap().selected.length === 1 &&
         feature.get('name') &&
         ['Point', 'Polygon'].includes(feature.getGeometry().getType())
     );
   }
 
   canRedrawLandmark(event?: MouseEvent): boolean {
-    const feature = this.olMap.selected[0];
+    const feature = this.olMap().selected[0];
     return this.#can(
       event,
-      this.olMap.selected.length === 1 &&
+      this.olMap().selected.length === 1 &&
         ['LineString', 'Polygon'].includes(feature.getGeometry().getType())
     );
   }
 
   canRenameLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap.selected.length === 1);
+    return this.#can(event, this.olMap().selected.length === 1);
   }
 
   eatMe(event: MouseEvent): void {
@@ -802,11 +793,11 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         break;
       case 'delete-landmarks':
         this.store.dispatch(
-          this.olMap.selectedIDs.map((id) => new DeleteLandmark({ id }))
+          this.olMap().selectedIDs.map((id) => new DeleteLandmark({ id }))
         );
         break;
       case 'draw-landmarks':
-        if (opaque) this.drawLandmarks.startDraw(opaque);
+        if (opaque) this.drawLandmarks().startDraw(opaque);
         break;
       case 'import-landmarks':
         component = ImportLandmarksComponent;
@@ -815,10 +806,10 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         component = LandmarkPropertiesComponent;
         break;
       case 'move-landmark':
-        this.moveLandmark.setFeature(this.olMap.selected[0]);
+        this.moveLandmark().setFeature(this.olMap().selected[0]);
         break;
       case 'redraw-landmark':
-        this.redrawLandmark.setFeature(this.olMap.selected[0]);
+        this.redrawLandmark().setFeature(this.olMap().selected[0]);
         break;
       case 'rename-landmark':
         this.#renameTo(opaque);
@@ -826,7 +817,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     }
     if (component) this.onContextMenuImpl(component);
     // 👇 in some cases, doesn't close itself
-    this.contextMenu.closeMenu();
+    this.contextMenu().closeMenu();
   }
 
   #can(event: MouseEvent, condition: boolean): boolean {
@@ -840,7 +831,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         (conversion) => conversion.label === label
       );
       if (conversion) {
-        const feature = this.olMap.selected[0];
+        const feature = this.olMap().selected[0];
         const landmark = conversion.converter(feature);
         this.store.dispatch(new UpdateLandmark(landmark));
       }
@@ -1264,7 +1255,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   }
 
   #renameTo(name: string): void {
-    const feature = this.olMap.selected[0];
+    const feature = this.olMap().selected[0];
     const landmark: Partial<Landmark> = {
       id: feature.getId() as string,
       properties: {
