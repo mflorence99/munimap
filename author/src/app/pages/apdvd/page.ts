@@ -18,28 +18,28 @@ import { viewChild } from '@angular/core';
   template: `
     <app-sink
       #sink
-      [map]="root.mapState$ | async"
+      [mapState]="root.mapState$ | async"
       [profile]="root.profile$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [user]="root.user$ | async" />
 
-    @if (sink.map) {
+    @if (sink.mapState) {
       <app-ol-map
-        #olMap
-        [bounds]="sink.map.bbox"
+        #map
+        [bounds]="sink.mapState.bbox"
         [loadingStrategy]="'bbox'"
         [minZoom]="15"
         [maxZoom]="20"
-        [path]="sink.map.path">
+        [path]="sink.mapState.path">
         <app-controlpanel-properties
-          [map]="sink.map"
+          [mapState]="sink.mapState"
           mapControlPanel1></app-controlpanel-properties>
 
         <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
         <app-ol-control-print
-          [fileName]="sink.map.name"
-          [printSize]="sink.map.printSize"
+          [fileName]="sink.mapState.name"
+          [printSize]="sink.mapState.printSize"
           mapControlPrint></app-ol-control-print>
 
         <app-ol-control-zoom2extent
@@ -48,32 +48,32 @@ import { viewChild } from '@angular/core';
         <app-ol-control-attribution
           mapControlAttribution></app-ol-control-attribution>
 
-        @if (olMap.initialized) {
+        @if (map.initialized) {
           <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-control-graticule>
               <app-ol-style-graticule
                 [printing]="true"></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
-          @if (!olMap.printing) {
+          @if (!map.printing) {
             <app-ol-control-graticule>
               <app-ol-style-graticule></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
-          @if (sink.map.name && olMap.printing) {
+          @if (sink.mapState.name && map.printing) {
             <app-ol-control-apdvdlegend
-              [printing]="olMap.printing"
-              [title]="sink.map.name"></app-ol-control-apdvdlegend>
+              [printing]="map.printing"
+              [title]="sink.mapState.name"></app-ol-control-apdvdlegend>
           }
 
-          <!-- 🔥 TOO OBTRUSIVE ?? <app-ol-control-scalebar *ngIf="olMap.printing"></app-ol-control-scalebar> -->
+          <!-- 🔥 TOO OBTRUSIVE ?? <app-ol-control-scalebar *ngIf="map.printing"></app-ol-control-scalebar> -->
 
-          @if (!olMap.printing) {
+          @if (!map.printing) {
             <app-ol-control-scaleline></app-ol-control-scaleline>
           }
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-control-credits></app-ol-control-credits>
           }
 
@@ -82,7 +82,7 @@ import { viewChild } from '@angular/core';
           @if (!sink.satelliteView) {
             <!-- 📦 BG LAYER (outside town)-->
 
-            @if (olMap.printing) {
+            @if (map.printing) {
               <app-ol-layer-tile>
                 <app-ol-source-xyz
                   [url]="
@@ -295,7 +295,7 @@ import { viewChild } from '@angular/core';
 
           <!-- 📦 LOT LINE LAYER (printed) -->
 
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-layer-vector>
               <app-ol-style-parcels
                 [showBorder]="'always'"
@@ -306,7 +306,7 @@ import { viewChild } from '@angular/core';
 
           <!-- 📦 SELECTION LAYER (not printed) -->
 
-          @if (!olMap.printing) {
+          @if (!map.printing) {
             <app-ol-layer-vector>
               <app-ol-style-parcels
                 [showBorder]="'always'"
@@ -348,7 +348,7 @@ import { viewChild } from '@angular/core';
 
           <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
 
-          @if (!olMap.printing) {
+          @if (!map.printing) {
             <app-ol-overlay-parcellabel></app-ol-overlay-parcellabel>
           }
         }
@@ -360,7 +360,7 @@ import { viewChild } from '@angular/core';
 export class APDVDPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);
   drawer = viewChild(MatDrawer);
-  olMap = viewChild(OLMapComponent);
+  map = viewChild(OLMapComponent);
 
   getType(): MapType {
     return 'apdvd';

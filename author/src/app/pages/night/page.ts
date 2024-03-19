@@ -18,28 +18,28 @@ import { viewChild } from '@angular/core';
   template: `
     <app-sink
       #sink
-      [map]="root.mapState$ | async"
+      [mapState]="root.mapState$ | async"
       [profile]="root.profile$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [user]="root.user$ | async" />
 
-    @if (sink.map) {
+    @if (sink.mapState) {
       <app-ol-map
-        #olMap
+        #map
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="20"
-        [path]="sink.map.path">
+        [path]="sink.mapState.path">
         <app-controlpanel-properties
-          [map]="sink.map"
+          [mapState]="sink.mapState"
           mapControlPanel1></app-controlpanel-properties>
 
         <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-        @if (sink.map.name) {
+        @if (sink.mapState.name) {
           <app-ol-control-print
-            [fileName]="sink.map.name"
-            [printSize]="sink.map.printSize"
+            [fileName]="sink.mapState.name"
+            [printSize]="sink.mapState.printSize"
             mapControlPrint></app-ol-control-print>
         }
 
@@ -49,21 +49,21 @@ import { viewChild } from '@angular/core';
         <app-ol-control-attribution
           mapControlAttribution></app-ol-control-attribution>
 
-        @if (olMap.initialized) {
+        @if (map.initialized) {
           <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-control-title
               [showTitleContrast]="sink.satelliteView"
-              [title]="sink.map.name"></app-ol-control-title>
+              [title]="sink.mapState.name"></app-ol-control-title>
           }
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-control-graticule>
               <app-ol-style-graticule
                 [printing]="true"></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
-          @if (!olMap.printing) {
+          @if (!map.printing) {
             <app-ol-control-graticule>
               <app-ol-style-graticule></app-ol-style-graticule>
             </app-ol-control-graticule>
@@ -156,7 +156,7 @@ import { viewChild } from '@angular/core';
 export class NightPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);
   drawer = viewChild(MatDrawer);
-  olMap = viewChild(OLMapComponent);
+  map = viewChild(OLMapComponent);
 
   getType(): MapType {
     return 'night';

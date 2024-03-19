@@ -13,20 +13,20 @@ import { inject } from '@angular/core';
     <app-sink
       #sink
       [gps]="root.gps$ | async"
-      [map]="root.map$ | async"
+      [mapState]="root.map$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [satelliteYear]="root.satelliteYear$ | async"
       [user]="root.user$ | async"
       [zoom]="root.zoom$ | async" />
 
-    @if (sink.map) {
+    @if (sink.mapState) {
       <app-ol-map
-        #olMap
-        [bounds]="sink.map.bbox"
+        #map
+        [bounds]="sink.mapState.bbox"
         [loadingStrategy]="'all'"
         [minZoom]="13"
         [maxZoom]="22"
-        [path]="sink.map.path"
+        [path]="sink.mapState.path"
         class="content">
         <!-- 📦 CONTROLS -->
 
@@ -35,7 +35,7 @@ import { inject } from '@angular/core';
         <app-ol-control-attribution
           mapControlAttribution></app-ol-control-attribution>
 
-        @if (olMap.initialized) {
+        @if (map.initialized) {
           <!-- 📦 OL CONTROLS -->
 
           <app-ol-control-graticule [step]="0.0025">
@@ -64,19 +64,19 @@ import { inject } from '@angular/core';
                 [operation]="'color'"
                 [value]="0.1"></app-ol-filter-colorize>
               <app-ol-filter-crop2propertyparcels
-                [parcelIDs]="sink.map.parcelIDs"
+                [parcelIDs]="sink.mapState.parcelIDs"
                 [source]="parcels"
                 [type]="'crop'"></app-ol-filter-crop2propertyparcels>
             </app-ol-layer-tile>
 
             <!-- 📦 CONTOURS LAYER -->
 
-            @if (sink.map.contours2ft) {
+            @if (sink.mapState.contours2ft) {
               <app-ol-layer-tile>
                 <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
               </app-ol-layer-tile>
             }
-            @if (!sink.map.contours2ft) {
+            @if (!sink.mapState.contours2ft) {
               <app-ol-layer-tile>
                 <app-ol-source-contours></app-ol-source-contours>
               </app-ol-layer-tile>
@@ -203,15 +203,15 @@ import { inject } from '@angular/core';
 
             <app-ol-layer-vector>
               <app-ol-style-parcels
-                [forceSelected]="sink.map.contours2ft"
-                [parcelIDs]="sink.map.parcelIDs"
+                [forceSelected]="sink.mapState.contours2ft"
+                [parcelIDs]="sink.mapState.parcelIDs"
                 [showBorder]="'always'"
                 [showDimensionContrast]="'never'"
                 [showDimensions]="'onlyParcelIDs'"
                 [showLabels]="'always'"
                 [showLabelContrast]="'never'"
                 [showSelection]="
-                  sink.map.contours2ft ? 'onlyParcelIDs' : 'never'
+                  sink.mapState.contours2ft ? 'onlyParcelIDs' : 'never'
                 "
                 [showStolen]="'always'"></app-ol-style-parcels>
               <app-ol-source-parcels #parcels></app-ol-source-parcels>
@@ -264,7 +264,7 @@ import { inject } from '@angular/core';
                     </app-ol-source-xyz>
                     <app-ol-filter-crop2propertyparcels
                       [opacity]="0.33"
-                      [parcelIDs]="sink.map.parcelIDs"
+                      [parcelIDs]="sink.mapState.parcelIDs"
                       [source]="parcels"
                       [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                   </app-ol-layer-tile>
@@ -275,7 +275,7 @@ import { inject } from '@angular/core';
                   </app-ol-layer-tile>
                   <app-ol-filter-crop2propertyparcels
                     [opacity]="0.33"
-                    [parcelIDs]="sink.map.parcelIDs"
+                    [parcelIDs]="sink.mapState.parcelIDs"
                     [source]="parcels"
                     [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-control-splitscreen>
@@ -298,7 +298,7 @@ import { inject } from '@angular/core';
                   </app-ol-source-xyz>
                   <app-ol-filter-crop2propertyparcels
                     [opacity]="0.33"
-                    [parcelIDs]="sink.map.parcelIDs"
+                    [parcelIDs]="sink.mapState.parcelIDs"
                     [source]="parcels"
                     [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-layer-tile>
@@ -306,7 +306,7 @@ import { inject } from '@angular/core';
 
               <app-ol-layer-vector>
                 <app-ol-style-parcels
-                  [parcelIDs]="sink.map.parcelIDs"
+                  [parcelIDs]="sink.mapState.parcelIDs"
                   [showBorder]="'always'"
                   [showDimensions]="'onlyParcelIDs'"
                   [showDimensionContrast]="'always'"
@@ -316,12 +316,12 @@ import { inject } from '@angular/core';
                 <app-ol-source-parcels #parcels></app-ol-source-parcels>
               </app-ol-layer-vector>
 
-              @if (sink.map.contours2ft) {
+              @if (sink.mapState.contours2ft) {
                 <app-ol-layer-tile>
                   <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
                 </app-ol-layer-tile>
               }
-              @if (!sink.map.contours2ft) {
+              @if (!sink.mapState.contours2ft) {
                 <app-ol-layer-tile>
                   <app-ol-source-contours></app-ol-source-contours>
                 </app-ol-layer-tile>
@@ -358,7 +358,7 @@ import { inject } from '@angular/core';
 
           <!-- 📦 OVERLAY FOR GPS -->
 
-          @if (sink.gps && sink.zoom >= olMap.minUsefulZoom()) {
+          @if (sink.gps && sink.zoom >= map.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>
           }
         }

@@ -121,8 +121,8 @@ import copy from 'fast-copy';
   styleUrls: ['./abstract-controlpanel.scss']
 })
 export class ControlPanelPropertiesComponent {
-  map = input<Map>();
-  mapCopy = computed(() => copy(this.map()));
+  mapCopy = computed(() => copy(this.mapState()));
+  mapState = input<Map>();
   ngForm = viewChild<NgForm>('setupForm');
   rolledup: boolean;
 
@@ -135,8 +135,8 @@ export class ControlPanelPropertiesComponent {
   constructor() {
     effect(() => {
       // 👉 set the window title every time it changes
-      this.#root.setTitle(this.map().name);
-      this.rolledup = !!this.map().id;
+      this.#root.setTitle(this.mapState().name);
+      this.rolledup = !!this.mapState().id;
     });
   }
 

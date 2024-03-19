@@ -1,4 +1,3 @@
-import { DestroyService } from '../../services/destroy';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLLayerTileComponent } from '../ol-layer-tile';
 import { OLLayerVectorComponent } from '../ol-layer-vector';
@@ -13,7 +12,6 @@ import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { inject } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
 
 import Crop from 'ol-ext/filter/Crop';
 import OLGeoJSON from 'ol/format/GeoJSON';
@@ -21,7 +19,6 @@ import union from '@turf/union';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
   selector: 'app-ol-filter-crop2selectedparcels',
   template: '<ng-content></ng-content>',
   styles: [':host { display: none }']
@@ -31,7 +28,6 @@ export class OLFilterCrop2SelectedParcelsComponent
 {
   olFilter: Crop;
 
-  #destroy$ = inject(DestroyService);
   #format: OLGeoJSON;
   #layer: any;
   #layer1 = inject(OLLayerTileComponent, { optional: true });
@@ -95,8 +91,6 @@ export class OLFilterCrop2SelectedParcelsComponent
   }
 
   #handleFeaturesSelected$(): void {
-    this.#map.featuresSelected
-      .pipe(takeUntil(this.#destroy$))
-      .subscribe(() => this.#addFilter());
+    this.#map.featuresSelected.subscribe(() => this.#addFilter());
   }
 }

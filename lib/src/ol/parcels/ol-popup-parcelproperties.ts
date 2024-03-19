@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { outputToObservable } from '@angular/core/rxjs-interop';
 import { viewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
@@ -294,10 +295,6 @@ export class OLPopupParcelPropertiesComponent {
   #popper = inject(OLPopupSelectionComponent);
   #snackBar = inject(MatSnackBar);
 
-  // 🔥  this doesn't seem to work
-  // #subToAbutters: Subscription;
-  // #subToSelection: Subscription;
-
   constructor() {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleAbuttersFound$();
@@ -328,9 +325,6 @@ export class OLPopupParcelPropertiesComponent {
     const selector =
       this.#map.selector() as OLInteractionSelectParcelsComponent;
     selector?.unselectParcels?.();
-    // 🔥  this doesn't seem to work
-    // this.#subToAbutters?.unsubscribe();
-    // this.#subToSelection?.unsubscribe();
   }
 
   onSelect(abutterID: ParcelID): void {
@@ -345,7 +339,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleAbuttersFound$(): void {
-    /* 🔥 this.#subToAbutters = */ this.#map.abuttersFound
+    outputToObservable(this.#map.abuttersFound)
       .pipe(
         map((features: Parcel[]): Abutter[] =>
           features
@@ -369,7 +363,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   #handleFeaturesSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.#map.featuresSelected
+    outputToObservable(this.#map.featuresSelected)
       .pipe(
         map((features: OLFeature<any>[]): ParcelProperties[] =>
           features.map((feature) => feature.getProperties())

@@ -18,34 +18,34 @@ import { viewChild } from '@angular/core';
   template: `
     <app-sink
       #sink
-      [map]="root.mapState$ | async"
+      [mapState]="root.mapState$ | async"
       [profile]="root.profile$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [user]="root.user$ | async" />
 
-    @if (sink.map) {
+    @if (sink.mapState) {
       <app-ol-map
-        #olMap
+        #map
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="20"
-        [path]="sink.map.path">
+        [path]="sink.mapState.path">
         <app-controlpanel-properties
-          [map]="sink.map"
+          [mapState]="sink.mapState"
           mapControlPanel1></app-controlpanel-properties>
 
         <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-        @if (sink.map.name) {
+        @if (sink.mapState.name) {
           <app-ol-control-print
-            [fileName]="sink.map.name"
-            [printSize]="sink.map.printSize"
+            [fileName]="sink.mapState.name"
+            [printSize]="sink.mapState.printSize"
             mapControlPrint></app-ol-control-print>
         }
 
-        @if (sink.map.name) {
+        @if (sink.mapState.name) {
           <app-ol-control-exportlayers
-            [fileName]="sink.map.id + '-layers'"
+            [fileName]="sink.mapState.id + '-layers'"
             [layerIDs]="['waterbodies']"
             mapControlExport></app-ol-control-exportlayers>
         }
@@ -56,35 +56,35 @@ import { viewChild } from '@angular/core';
         <app-ol-control-attribution
           mapControlAttribution></app-ol-control-attribution>
 
-        @if (olMap.initialized) {
+        @if (map.initialized) {
           <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-control-graticule>
               <app-ol-style-graticule
                 [printing]="true"></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
-          @if (!olMap.printing) {
+          @if (!map.printing) {
             <app-ol-control-graticule>
               <app-ol-style-graticule></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
-          @if (sink.map.name && olMap.printing) {
+          @if (sink.mapState.name && map.printing) {
             <app-ol-control-topolegend
-              [county]="sink.map.path.split(':')[1]"
-              [id]="sink.map.id"
-              [printing]="olMap.printing"
-              [state]="sink.map.path.split(':')[0]"
-              [title]="sink.map.name"></app-ol-control-topolegend>
+              [county]="sink.mapState.path.split(':')[1]"
+              [id]="sink.mapState.id"
+              [printing]="map.printing"
+              [state]="sink.mapState.path.split(':')[0]"
+              [title]="sink.mapState.name"></app-ol-control-topolegend>
           }
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-control-scalebar></app-ol-control-scalebar>
           }
-          @if (!olMap.printing) {
+          @if (!map.printing) {
             <app-ol-control-scaleline></app-ol-control-scaleline>
           }
-          @if (olMap.printing) {
+          @if (map.printing) {
             <app-ol-control-credits></app-ol-control-credits>
           }
 
@@ -93,7 +93,7 @@ import { viewChild } from '@angular/core';
           @if (!sink.satelliteView) {
             <!-- 📦 BG LAYER (outside town)-->
 
-            @if (olMap.printing) {
+            @if (map.printing) {
               <app-ol-layer-tile>
                 <app-ol-source-xyz
                   [url]="
@@ -334,7 +334,7 @@ import { viewChild } from '@angular/core';
 export class TopoPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);
   drawer = viewChild(MatDrawer);
-  olMap = viewChild(OLMapComponent);
+  map = viewChild(OLMapComponent);
 
   getType(): MapType {
     return 'topo';

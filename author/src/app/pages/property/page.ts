@@ -43,21 +43,21 @@ interface LandmarkConversion {
   template: `
     <app-sink
       #sink
-      [map]="root.mapState$ | async"
+      [mapState]="root.mapState$ | async"
       [profile]="root.profile$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [user]="root.user$ | async" />
 
-    @if (sink.map) {
+    @if (sink.mapState) {
       <mat-drawer-container class="container">
         <mat-drawer-content class="content">
           <app-ol-map
-            #olMap
-            [bounds]="sink.map.bbox"
+            #map
+            [bounds]="sink.mapState.bbox"
             [loadingStrategy]="'all'"
             [minZoom]="13"
             [maxZoom]="22"
-            [path]="sink.map.path">
+            [path]="sink.mapState.path">
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -67,19 +67,19 @@ interface LandmarkConversion {
             </app-contextmenu>
 
             <app-controlpanel-properties
-              [map]="sink.map"
+              [mapState]="sink.mapState"
               mapControlPanel1></app-controlpanel-properties>
 
             <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
             <app-ol-control-print
-              [fileName]="sink.map.name"
-              [printSize]="sink.map.printSize"
+              [fileName]="sink.mapState.name"
+              [printSize]="sink.mapState.printSize"
               mapControlPrint></app-ol-control-print>
 
-            @if (sink.map.name) {
+            @if (sink.mapState.name) {
               <app-ol-control-exportlandmarks
-                [fileName]="sink.map.id + '-landmarks'"
+                [fileName]="sink.mapState.id + '-landmarks'"
                 mapControlExport></app-ol-control-exportlandmarks>
             }
 
@@ -89,35 +89,35 @@ interface LandmarkConversion {
             <app-ol-control-attribution
               mapControlAttribution></app-ol-control-attribution>
 
-            @if (olMap.initialized) {
+            @if (map.initialized) {
               <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-title
                   [showTitleContrast]="sink.satelliteView"
-                  [title]="sink.map.name"></app-ol-control-title>
+                  [title]="sink.mapState.name"></app-ol-control-title>
               }
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-graticule [step]="0.0025">
                   <app-ol-style-graticule
                     [printing]="true"></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-control-graticule [step]="0.0025">
                   <app-ol-style-graticule></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-scalebar
                   [showScaleContrast]="
                     sink.satelliteView
                   "></app-ol-control-scalebar>
               }
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-control-scaleline></app-ol-control-scaleline>
               }
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-credits
                   [showCreditsContrast]="
                     sink.satelliteView
@@ -144,19 +144,19 @@ interface LandmarkConversion {
                     [operation]="'color'"
                     [value]="0.1"></app-ol-filter-colorize>
                   <app-ol-filter-crop2propertyparcels
-                    [parcelIDs]="sink.map.parcelIDs"
+                    [parcelIDs]="sink.mapState.parcelIDs"
                     [source]="parcels"
                     [type]="'crop'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-layer-tile>
 
                 <!-- 📦 CONTOURS LAYER -->
 
-                @if (sink.map.contours2ft) {
+                @if (sink.mapState.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
                   </app-ol-layer-tile>
                 }
-                @if (!sink.map.contours2ft) {
+                @if (!sink.mapState.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours></app-ol-source-contours>
                   </app-ol-layer-tile>
@@ -283,15 +283,15 @@ interface LandmarkConversion {
 
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
-                    [forceSelected]="sink.map.contours2ft"
-                    [parcelIDs]="sink.map.parcelIDs"
+                    [forceSelected]="sink.mapState.contours2ft"
+                    [parcelIDs]="sink.mapState.parcelIDs"
                     [showBorder]="'always'"
                     [showDimensions]="'onlyParcelIDs'"
                     [showDimensionContrast]="'never'"
                     [showLabels]="'always'"
                     [showLabelContrast]="'never'"
                     [showSelection]="
-                      sink.map.contours2ft ? 'onlyParcelIDs' : 'never'
+                      sink.mapState.contours2ft ? 'onlyParcelIDs' : 'never'
                     "
                     [showStolen]="'always'"></app-ol-style-parcels>
                   <app-ol-source-parcels #parcels></app-ol-source-parcels>
@@ -340,14 +340,14 @@ interface LandmarkConversion {
                   </app-ol-source-xyz>
                   <app-ol-filter-crop2propertyparcels
                     [opacity]="0.33"
-                    [parcelIDs]="sink.map.parcelIDs"
+                    [parcelIDs]="sink.mapState.parcelIDs"
                     [source]="parcels"
                     [type]="'mask'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-layer-tile>
 
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
-                    [parcelIDs]="sink.map.parcelIDs"
+                    [parcelIDs]="sink.mapState.parcelIDs"
                     [showBorder]="'always'"
                     [showDimensions]="'onlyParcelIDs'"
                     [showDimensionContrast]="'always'"
@@ -357,12 +357,12 @@ interface LandmarkConversion {
                   <app-ol-source-parcels #parcels></app-ol-source-parcels>
                 </app-ol-layer-vector>
 
-                @if (sink.map.contours2ft) {
+                @if (sink.mapState.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
                   </app-ol-layer-tile>
                 }
-                @if (!sink.map.contours2ft) {
+                @if (!sink.mapState.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours></app-ol-source-contours>
                   </app-ol-layer-tile>
@@ -394,7 +394,7 @@ interface LandmarkConversion {
 
               <!-- 📦 OVERLAY TO MOVE LANDMARK -->
 
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-overlay-landmarklabel></app-ol-overlay-landmarklabel>
               }
             }
@@ -413,11 +413,11 @@ interface LandmarkConversion {
 
     <ng-template #contextmenu>
       <nav class="contextmenu">
-        @if (olMap().selectedIDs.length !== 0) {
+        @if (map().selectedIDs.length !== 0) {
           <header class="header">
-            <p [ngPlural]="olMap().selected.length">
+            <p [ngPlural]="map().selected.length">
               <ng-template ngPluralCase="one">
-                {{ olMap().selected[0].get('name') }}
+                {{ map().selected[0].get('name') }}
               </ng-template>
               <ng-template ngPluralCase="other">Multiple landmarks</ng-template>
             </p>
@@ -506,7 +506,7 @@ interface LandmarkConversion {
                 #newName
                 (click)="eatMe($event)"
                 [disabled]="!canRenameLandmark()"
-                [value]="olMap().selected[0]?.get('name')"
+                [value]="map().selected[0]?.get('name')"
                 type="text" />
 
               <button
@@ -581,7 +581,7 @@ interface LandmarkConversion {
             [class.disabled]="!canDeleteLandmarks()"
             class="item">
             <fa-icon [fixedWidth]="true" [icon]="['fas', 'trash']"></fa-icon>
-            <p [ngPlural]="olMap().selected.length">
+            <p [ngPlural]="map().selected.length">
               <ng-template ngPluralCase="one">Delete landmark</ng-template>
               <ng-template ngPluralCase="other">Delete landmarks</ng-template>
             </p>
@@ -625,7 +625,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   drawLandmarks = viewChild(OLInteractionDrawLandmarksComponent);
   drawer = viewChild(MatDrawer);
   moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
-  olMap = viewChild(OLMapComponent);
+  map = viewChild(OLMapComponent);
   redrawLandmark = viewChild(OLInteractionRedrawLandmarkComponent);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -723,19 +723,19 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   ];
 
   canConvertFor(conversion: LandmarkConversion): boolean {
-    const feature = this.olMap().selected[0];
+    const feature = this.map().selected[0];
     return (
-      this.olMap().selected.length === 1 &&
+      this.map().selected.length === 1 &&
       conversion.geometryType === feature.getGeometry().getType()
     );
   }
 
   canConvertLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selected.length === 1);
+    return this.#can(event, this.map().selected.length === 1);
   }
 
   canDeleteLandmarks(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selected.length > 0);
+    return this.#can(event, this.map().selected.length > 0);
   }
 
   canDrawLandmarks(event?: MouseEvent): boolean {
@@ -747,30 +747,30 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   }
 
   canLandmarkProperties(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selected.length === 1);
+    return this.#can(event, this.map().selected.length === 1);
   }
 
   canMoveLandmark(event?: MouseEvent): boolean {
-    const feature = this.olMap().selected[0];
+    const feature = this.map().selected[0];
     return this.#can(
       event,
-      this.olMap().selected.length === 1 &&
+      this.map().selected.length === 1 &&
         feature.get('name') &&
         ['Point', 'Polygon'].includes(feature.getGeometry().getType())
     );
   }
 
   canRedrawLandmark(event?: MouseEvent): boolean {
-    const feature = this.olMap().selected[0];
+    const feature = this.map().selected[0];
     return this.#can(
       event,
-      this.olMap().selected.length === 1 &&
+      this.map().selected.length === 1 &&
         ['LineString', 'Polygon'].includes(feature.getGeometry().getType())
     );
   }
 
   canRenameLandmark(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selected.length === 1);
+    return this.#can(event, this.map().selected.length === 1);
   }
 
   eatMe(event: MouseEvent): void {
@@ -793,7 +793,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         break;
       case 'delete-landmarks':
         this.store.dispatch(
-          this.olMap().selectedIDs.map((id) => new DeleteLandmark({ id }))
+          this.map().selectedIDs.map((id) => new DeleteLandmark({ id }))
         );
         break;
       case 'draw-landmarks':
@@ -806,10 +806,10 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         component = LandmarkPropertiesComponent;
         break;
       case 'move-landmark':
-        this.moveLandmark().setFeature(this.olMap().selected[0]);
+        this.moveLandmark().setFeature(this.map().selected[0]);
         break;
       case 'redraw-landmark':
-        this.redrawLandmark().setFeature(this.olMap().selected[0]);
+        this.redrawLandmark().setFeature(this.map().selected[0]);
         break;
       case 'rename-landmark':
         this.#renameTo(opaque);
@@ -831,7 +831,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         (conversion) => conversion.label === label
       );
       if (conversion) {
-        const feature = this.olMap().selected[0];
+        const feature = this.map().selected[0];
         const landmark = conversion.converter(feature);
         this.store.dispatch(new UpdateLandmark(landmark));
       }
@@ -1255,7 +1255,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   }
 
   #renameTo(name: string): void {
-    const feature = this.olMap().selected[0];
+    const feature = this.map().selected[0];
     const landmark: Partial<Landmark> = {
       id: feature.getId() as string,
       properties: {

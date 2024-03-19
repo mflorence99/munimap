@@ -21,7 +21,7 @@ import OLFeature from 'ol/Feature';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-create',
   template: `
-    <app-ol-map #olMap [fitToBounds]="true" [path]="path" [minZoom]="0">
+    <app-ol-map #map [fitToBounds]="true" [path]="path" [minZoom]="0">
       <app-builder
         (pathChanged)="onPathChanged($event)"
         (pathSelected)="onPathSelected($event)"
@@ -38,7 +38,7 @@ import OLFeature from 'ol/Feature';
       <app-ol-control-attribution
         mapControlAttribution></app-ol-control-attribution>
 
-      @if (olMap.initialized) {
+      @if (map.initialized) {
         <!-- 📦 OL CONTROLS -->
 
         <app-ol-control-graticule>

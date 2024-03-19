@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { outputToObservable } from '@angular/core/rxjs-interop';
 import { viewChild } from '@angular/core';
 
 import OLFeature from 'ol/Feature';
@@ -70,9 +71,6 @@ export class OLPopupDPWPropertiesComponent {
   properties: any /* 👈 could be bridge, stream crossing etc etc */;
   table = viewChild<ElementRef>('table');
 
-  // 🔥  this doesn't seem to work
-  // #subToSelection: Subscription;
-
   #cdf = inject(ChangeDetectorRef);
   #map = inject(OLMapComponent);
   #popper = inject(OLPopupSelectionComponent);
@@ -114,12 +112,10 @@ export class OLPopupDPWPropertiesComponent {
     const selector =
       this.#map.selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
-    // 🔥  this doesn't seem to work
-    // this.#subToSelection?.unsubscribe();
   }
 
   #handleFeatureSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.#map.featuresSelected
+    outputToObservable(this.#map.featuresSelected)
       .pipe(
         map((features: OLFeature<any>[]): [any, any] => {
           // 🔥 feature may be landmark with metadata representing

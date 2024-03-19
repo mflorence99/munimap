@@ -13,6 +13,7 @@ import { convertArea } from '@turf/helpers';
 import { convertLength } from '@turf/helpers';
 import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { outputToObservable } from '@angular/core/rxjs-interop';
 import { viewChild } from '@angular/core';
 
 import area from '@turf/area';
@@ -103,9 +104,6 @@ export class OLPopupLandmarkPropertiesComponent {
   landmark: Landmark;
   table = viewChild<ElementRef>('table');
 
-  // 🔥  this doesn't seem to work
-  // #subToSelection: Subscription;
-
   #cdf = inject(ChangeDetectorRef);
   #format: OLGeoJSON;
   #map = inject(OLMapComponent);
@@ -143,8 +141,6 @@ export class OLPopupLandmarkPropertiesComponent {
     const selector =
       this.#map.selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
-    // 🔥  this doesn't seem to work
-    // this.#subToSelection?.unsubscribe();
   }
 
   toCoordinate(raw: any[]): Coordinate {
@@ -161,7 +157,7 @@ export class OLPopupLandmarkPropertiesComponent {
   //    and we could be selecting a bridge, stream crossing etc etc
 
   #handleFeatureSelected$(): void {
-    /* 🔥 this.#subToSelection = */ this.#map.featuresSelected
+    outputToObservable(this.#map.featuresSelected)
       .pipe(
         map(
           (features: OLFeature<any>[]): Landmark =>

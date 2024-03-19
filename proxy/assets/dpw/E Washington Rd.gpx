@@ -1,0 +1,258 @@
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="EasyTrails GPS ( http://www.easytrailsgps.com )" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" >
+	<wpt lat="43.190563" lon="-72.038315" >
+		<ele >320.6496</ele>
+		<time >2024-03-18T19:08:19Z</time>
+		<name ><![CDATA[15" 50' good steel handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.18908" lon="-72.03771" >
+		<ele >346.8624</ele>
+		<time >2024-03-18T18:58:48Z</time>
+		<name ><![CDATA[15" 35' good steel handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="0.0" lon="0.0" >
+		<ele >329.7936</ele>
+		<time >2024-03-18T18:51:44Z</time>
+		<name ><![CDATA[15" 35' fair  steel handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.187065" lon="-72.037636" >
+		<ele >332.8416</ele>
+		<time >2024-03-18T18:48:15Z</time>
+		<name ><![CDATA[18" 40' good concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.184246" lon="-72.03741" >
+		<ele >315.7728</ele>
+		<time >2024-03-18T18:40:40Z</time>
+		<name ><![CDATA[15" 36' good concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.182518" lon="-72.037544" >
+		<ele >320.3448</ele>
+		<time >2024-03-18T18:36:16Z</time>
+		<name ><![CDATA[15" 35' poor concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.180965" lon="-72.03791" >
+		<ele >317.6016</ele>
+		<time >2024-03-18T18:34:27Z</time>
+		<name ><![CDATA[48" 32' good concrete handmade]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.18002" lon="-72.03849" >
+		<ele >321.564</ele>
+		<time >2024-03-18T18:25:12Z</time>
+		<name ><![CDATA[15" 50'  fair steel/concrete  handmade ]]></name>
+		<desc ><![CDATA[Steel inlet concrete outlet.&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.178032" lon="-72.04085" >
+		<ele >330.4032</ele>
+		<time >2024-03-18T18:20:51Z</time>
+		<name ><![CDATA[15" 40' good concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.177258" lon="-72.04173" >
+		<ele >335.8896</ele>
+		<time >2024-03-18T18:11:17Z</time>
+		<name ><![CDATA[24" 36' fair conc/steel handmade ]]></name>
+		<desc ><![CDATA[10' steel outlet end is rotted.&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.176384" lon="-72.04299" >
+		<ele >340.4616</ele>
+		<time >2024-03-18T18:02:31Z</time>
+		<name ><![CDATA[12" 40' good steel homemade]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.17593" lon="-72.043785" >
+		<ele >359.3592</ele>
+		<time >2024-03-18T17:55:28Z</time>
+		<name ><![CDATA[12" 40' good steel handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.1755" lon="-72.04468" >
+		<ele >346.5576</ele>
+		<time >2024-03-18T17:46:18Z</time>
+		<name ><![CDATA[12" 100' good steel handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.17501" lon="-72.04525" >
+		<ele >349.6056</ele>
+		<time >2024-03-18T17:40:49Z</time>
+		<name ><![CDATA[24" 32' good concrete  handmade]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.17374" lon="-72.04634" >
+		<ele >356.616</ele>
+		<time >2024-03-18T17:31:45Z</time>
+		<name ><![CDATA[15" 40' good plastic  handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.172424" lon="-72.04741" >
+		<ele >348.996</ele>
+		<time >2024-03-18T17:29:06Z</time>
+		<name ><![CDATA[dam bridge]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.171745" lon="-72.04817" >
+		<ele >381.0</ele>
+		<time >2024-03-18T17:26:29Z</time>
+		<name ><![CDATA[15" 60' good concrete  handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.171288" lon="-72.050186" >
+		<ele >372.4656</ele>
+		<time >2024-03-18T17:21:06Z</time>
+		<name ><![CDATA[36" 45' good concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.1709" lon="-72.05064" >
+		<ele >373.6848</ele>
+		<time >2024-03-18T17:16:55Z</time>
+		<name ><![CDATA[Waypoint 15" 40' good plastic handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.169952" lon="-72.0513" >
+		<ele >387.096</ele>
+		<time >2024-03-18T17:12:00Z</time>
+		<name ><![CDATA[12" 40' good steel handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.168976" lon="-72.0515" >
+		<ele >362.4072</ele>
+		<time >2024-03-18T17:05:13Z</time>
+		<name ><![CDATA[15" 36'  good concrete/plastic handmade ]]></name>
+		<desc ><![CDATA[Plastic outlet under water.&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.167076" lon="-72.05206" >
+		<ele >390.4488</ele>
+		<time >2024-03-18T16:57:17Z</time>
+		<name ><![CDATA[24" 45' good concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.166435" lon="-72.05211" >
+		<ele >399.8976</ele>
+		<time >2024-03-18T16:54:50Z</time>
+		<name ><![CDATA[15" 55' good concrete handmade ]]></name>
+		<desc ><![CDATA[Outlet dips down]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16455" lon="-72.05505" >
+		<ele >408.432</ele>
+		<time >2024-03-18T16:48:03Z</time>
+		<name ><![CDATA[15" 50' fair  concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16402" lon="-72.05607" >
+		<ele >414.2232</ele>
+		<time >2024-03-18T16:42:41Z</time>
+		<name ><![CDATA[15" 36' good concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="0.0" lon="0.0" >
+		<ele >385.8768</ele>
+		<time >2024-03-18T16:37:44Z</time>
+		<name ><![CDATA[15" 40' good concrete handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.163357" lon="-72.05875" >
+		<ele >425.196</ele>
+		<time >2024-03-18T16:08:29Z</time>
+		<name ><![CDATA[15" 32' good concrete handmade]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.164215" lon="-72.06098" >
+		<ele >442.8744</ele>
+		<time >2024-03-18T15:58:16Z</time>
+		<name ><![CDATA[12" 40'  good plastic handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.165047" lon="-72.06194" >
+		<ele >459.6384</ele>
+		<time >2024-03-18T15:55:14Z</time>
+		<name ><![CDATA[12" 40' good  plastic handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.165833" lon="-72.06389" >
+		<ele >460.8576</ele>
+		<time >2024-03-18T15:48:37Z</time>
+		<name ><![CDATA[12" 40' good plastic handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16616" lon="-72.064804" >
+		<ele >443.484</ele>
+		<time >2024-03-18T15:45:17Z</time>
+		<name ><![CDATA[12" 40' good plastic handmade. ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16735" lon="-72.06703" >
+		<ele >447.4464</ele>
+		<time >2024-03-18T15:39:51Z</time>
+		<name ><![CDATA[15" 40' good plastic handmade ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.167423" lon="-72.06885" >
+		<ele >448.9704</ele>
+		<time >2024-03-18T15:36:57Z</time>
+		<name ><![CDATA[15" 40' good plastic handmade ]]></name>
+		<desc ><![CDATA[Outlet under water.&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.167637" lon="-72.07204" >
+		<ele >454.4568</ele>
+		<time >2024-03-18T15:31:26Z</time>
+		<name ><![CDATA[15" 50' good plastic handmade ]]></name>
+		<desc ><![CDATA[Outlet under water.&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16801" lon="-72.07636" >
+		<ele >443.1792</ele>
+		<time >2024-03-18T15:23:09Z</time>
+		<name ><![CDATA[3'×5' 50' good concrete precast ]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.167866" lon="-72.07799" >
+		<ele >443.7888</ele>
+		<time >2024-03-18T15:17:36Z</time>
+		<name ><![CDATA[15" 30' fair steel handmade ]]></name>
+		<desc ><![CDATA[Upper end is burried in coach rd. Could use a catch basin.&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16752" lon="-72.078804" >
+		<ele >439.5216</ele>
+		<time >2024-03-18T15:08:17Z</time>
+		<name ><![CDATA[15" 35' fair steel handmade]]></name>
+		<desc ><![CDATA[5' of concrete at inlet.&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16727" lon="-72.079475" >
+		<ele >444.7032</ele>
+		<time >2024-03-18T15:01:57Z</time>
+		<name ><![CDATA[12" 35' fair  steel handmade]]></name>
+		<desc ><![CDATA[Has 5' of concrete pipe at inlet&nbsp;]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.16701" lon="-72.08099" >
+		<ele >429.4632</ele>
+		<time >2024-03-18T14:59:38Z</time>
+		<name ><![CDATA[18" 45' fair steel handmade]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.1665" lon="-72.08168" >
+		<ele >431.5968</ele>
+		<time >2024-03-18T14:49:27Z</time>
+		<name ><![CDATA[15" 35' fair steel handmade]]></name>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+	<wpt lat="43.166" lon="-72.08356" >
+		<ele >420.3192</ele>
+		<time >2024-03-18T14:38:36Z</time>
+		<name ><![CDATA[24" 45' fair steel handmade ]]></name>
+		<desc ><![CDATA[]]></desc>
+		<type ><![CDATA[Not specified]]></type>
+	</wpt>
+</gpx>

@@ -43,20 +43,20 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
   template: `
     <app-sink
       #sink
-      [map]="root.mapState$ | async"
+      [mapState]="root.mapState$ | async"
       [profile]="root.profile$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [user]="root.user$ | async" />
 
-    @if (sink.map) {
+    @if (sink.mapState) {
       <mat-drawer-container class="container">
         <mat-drawer-content class="content">
           <app-ol-map
-            #olMap
+            #map
             [loadingStrategy]="'bbox'"
             [minZoom]="15"
             [maxZoom]="22"
-            [path]="sink.map.path">
+            [path]="sink.mapState.path">
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -66,7 +66,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
             </app-contextmenu>
 
             <app-controlpanel-properties
-              [map]="sink.map"
+              [mapState]="sink.mapState"
               class="setup"
               mapControlPanel1></app-controlpanel-properties>
 
@@ -77,15 +77,15 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
             <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-            @if (sink.map.name) {
+            @if (sink.mapState.name) {
               <app-ol-control-print
-                [fileName]="sink.map.name"
-                [printSize]="sink.map.printSize"
+                [fileName]="sink.mapState.name"
+                [printSize]="sink.mapState.printSize"
                 mapControlPrint></app-ol-control-print>
             }
-            @if (sink.map.name) {
+            @if (sink.mapState.name) {
               <app-ol-control-exportparcels
-                [fileName]="sink.map.id + '-parcels'"
+                [fileName]="sink.mapState.id + '-parcels'"
                 mapControlExport></app-ol-control-exportparcels>
             }
 
@@ -95,35 +95,35 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
             <app-ol-control-attribution
               mapControlAttribution></app-ol-control-attribution>
 
-            @if (olMap.initialized) {
+            @if (map.initialized) {
               <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-graticule>
                   <app-ol-style-graticule
                     [printing]="true"></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-control-graticule>
                   <app-ol-style-graticule></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (sink.map.name && olMap.printing) {
+              @if (sink.mapState.name && map.printing) {
                 <app-ol-control-parcelslegend
-                  [county]="sink.map.path.split(':')[1]"
-                  [id]="sink.map.id"
-                  [printing]="olMap.printing"
-                  [state]="sink.map.path.split(':')[0]"
-                  [title]="sink.map.name"></app-ol-control-parcelslegend>
+                  [county]="sink.mapState.path.split(':')[1]"
+                  [id]="sink.mapState.id"
+                  [printing]="map.printing"
+                  [state]="sink.mapState.path.split(':')[0]"
+                  [title]="sink.mapState.name"></app-ol-control-parcelslegend>
               }
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-scalebar></app-ol-control-scalebar>
               }
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-control-scaleline></app-ol-control-scaleline>
               }
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-credits></app-ol-control-credits>
               }
 
@@ -132,7 +132,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
               @if (!sink.satelliteView) {
                 <!-- 📦 BG LAYER (outside town)-->
 
-                @if (olMap.printing) {
+                @if (map.printing) {
                   <app-ol-layer-tile>
                     <app-ol-source-xyz
                       [url]="
@@ -186,7 +186,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   <app-ol-style-parcels
                     [showBackground]="'always'"
                     [showStolen]="
-                      isPrivileged() && !olMap.printing ? 'always' : 'never'
+                      isPrivileged() && !map.printing ? 'always' : 'never'
                     "></app-ol-style-parcels>
                   <app-ol-source-parcels></app-ol-source-parcels>
                 </app-ol-layer-vector>
@@ -348,13 +348,13 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
               <!-- 📦 LOT LINE LAYER (printed) -->
 
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
                     [showBorder]="'always'"
                     [showLabels]="'always'"
                     [showStolen]="
-                      isPrivileged() && !olMap.printing ? 'always' : 'never'
+                      isPrivileged() && !map.printing ? 'always' : 'never'
                     "></app-ol-style-parcels>
                   <app-ol-source-parcels></app-ol-source-parcels>
                 </app-ol-layer-vector>
@@ -362,7 +362,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
               <!-- 📦 SELECTION LAYER (not printed) -->
 
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
                     [showBorder]="'always'"
@@ -376,7 +376,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                     "
                     [showSelection]="'always'"
                     [showStolen]="
-                      isPrivileged() && !olMap.printing ? 'always' : 'never'
+                      isPrivileged() && !map.printing ? 'always' : 'never'
                     "></app-ol-style-parcels>
                   <app-ol-source-parcels></app-ol-source-parcels>
                   <app-ol-interaction-selectparcels></app-ol-interaction-selectparcels>
@@ -413,7 +413,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
               <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
 
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-overlay-parcellabel></app-ol-overlay-parcellabel>
               }
             }
@@ -432,9 +432,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
     <ng-template #contextmenu>
       <nav class="contextmenu">
-        @if (olMap().selectedIDs.length !== 0) {
+        @if (map().selectedIDs.length !== 0) {
           <header class="header">
-            Parcels {{ olMap().selectedIDs.join(', ') }}
+            Parcels {{ map().selectedIDs.join(', ') }}
           </header>
         }
 
@@ -579,55 +579,55 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);
   drawer = viewChild(MatDrawer);
   interactionRedraw = viewChild(OLInteractionRedrawParcelComponent);
-  olMap = viewChild(OLMapComponent);
+  map = viewChild(OLMapComponent);
   overlayLabel = viewChild(OLOverlayParcelLabelComponent);
 
   canAddParcel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length === 0);
+    return this.#can(event, this.map().selectedIDs.length === 0);
   }
 
   canAddPolygon(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length === 1);
+    return this.#can(event, this.map().selectedIDs.length === 1);
   }
 
   canCreatePropertyMap(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length >= 1);
+    return this.#can(event, this.map().selectedIDs.length >= 1);
   }
 
   canDeletePolygon(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      this.olMap().selectedIDs.length === 1 &&
-        this.olMap().selected[0].getGeometry().getType() === 'MultiPolygon'
+      this.map().selectedIDs.length === 1 &&
+        this.map().selected[0].getGeometry().getType() === 'MultiPolygon'
     );
   }
 
   canMergeParcels(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length > 1);
+    return this.#can(event, this.map().selectedIDs.length > 1);
   }
 
   canParcelProperties(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length > 0);
+    return this.#can(event, this.map().selectedIDs.length > 0);
   }
 
   canRecenterLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length === 1);
+    return this.#can(event, this.map().selectedIDs.length === 1);
   }
 
   canRedrawBoundary(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length === 1);
+    return this.#can(event, this.map().selectedIDs.length === 1);
   }
 
   canRotateLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length === 1);
+    return this.#can(event, this.map().selectedIDs.length === 1);
   }
 
   canSplitLabel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length === 1);
+    return this.#can(event, this.map().selectedIDs.length === 1);
   }
 
   canSubdivideParcel(event?: MouseEvent): boolean {
-    return this.#can(event, this.olMap().selectedIDs.length === 1);
+    return this.#can(event, this.map().selectedIDs.length === 1);
   }
 
   getType(): MapType {
@@ -645,13 +645,13 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         component = AddParcelComponent;
         break;
       case 'add-polygon':
-        this.#addPolygon(this.olMap().selected[0]);
+        this.#addPolygon(this.map().selected[0]);
         break;
       case 'create-propertymap':
         component = CreatePropertyMapComponent;
         break;
       case 'delete-polygon':
-        this.#deletePolygon(this.olMap().selected[0]);
+        this.#deletePolygon(this.map().selected[0]);
         break;
       case 'parcel-properties':
         component = ParcelPropertiesComponent;
@@ -660,16 +660,16 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
         component = MergeParcelsComponent;
         break;
       case 'recenter-label':
-        this.overlayLabel().setFeature(this.olMap().selected[0]);
+        this.overlayLabel().setFeature(this.map().selected[0]);
         break;
       case 'redraw-boundary':
-        this.interactionRedraw().setFeature(this.olMap().selected[0]);
+        this.interactionRedraw().setFeature(this.map().selected[0]);
         break;
       case 'rotate-label':
-        this.#rotateLabel(this.olMap().selected[0]);
+        this.#rotateLabel(this.map().selected[0]);
         break;
       case 'split-label':
-        this.#splitLabel(this.olMap().selected[0]);
+        this.#splitLabel(this.map().selected[0]);
         break;
       case 'subdivide-parcel':
         component = SubdivideParcelComponent;
@@ -686,7 +686,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     // 👇 create a square centered on the context menu
     const polygon = bboxPolygon(
       bbox(
-        circle(toLonLat(this.olMap().contextMenuAt), 100, {
+        circle(toLonLat(this.map().contextMenuAt), 100, {
           steps: 16,
           units: 'feet'
         })
@@ -719,8 +719,8 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     doProperties = false
   ): void {
     const format = new OLGeoJSON({
-      dataProjection: this.olMap().featureProjection,
-      featureProjection: this.olMap().projection
+      dataProjection: this.map().featureProjection,
+      featureProjection: this.map().projection
     });
     // 👉 convert to feature to geojson and recalculate centers etc
     const parcel = JSON.parse(format.writeFeature(feature));
@@ -732,7 +732,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       geometry: doGeometry ? parcel.geometry : null,
       id: feature.getId(),
       owner: this.authState.currentProfile().email,
-      path: this.olMap().path(),
+      path: this.map().path(),
       properties: doProperties ? parcel.properties : null,
       type: 'Feature'
     };
@@ -772,7 +772,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     if (feature.getGeometry().getType() === 'MultiPolygon') {
       const polygons = feature.getGeometry().getPolygons();
       for (ix = 0; ix < polygons.length; ix++) {
-        const pt = point(this.olMap().contextMenuAt);
+        const pt = point(this.map().contextMenuAt);
         const poly = polygon([polygons[ix].getCoordinates()[0]]);
         if (booleanPointInPolygon(pt, poly)) break;
       }

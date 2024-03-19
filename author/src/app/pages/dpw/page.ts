@@ -36,20 +36,20 @@ import { viewChild } from '@angular/core';
   template: `
     <app-sink
       #sink
-      [map]="root.mapState$ | async"
+      [mapState]="root.mapState$ | async"
       [profile]="root.profile$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [user]="root.user$ | async" />
 
-    @if (sink.map) {
+    @if (sink.mapState) {
       <mat-drawer-container class="container">
         <mat-drawer-content class="content">
           <app-ol-map
-            #olMap
+            #map
             [loadingStrategy]="'bbox'"
             [minZoom]="13"
             [maxZoom]="20"
-            [path]="sink.map.path">
+            [path]="sink.mapState.path">
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -59,7 +59,7 @@ import { viewChild } from '@angular/core';
             </app-contextmenu>
 
             <app-controlpanel-properties
-              [map]="sink.map"
+              [mapState]="sink.mapState"
               mapControlPanel1></app-controlpanel-properties>
 
             <!-- 📦 CONTROLS -->
@@ -69,15 +69,15 @@ import { viewChild } from '@angular/core';
 
             <app-ol-control-zoom mapControlZoom></app-ol-control-zoom>
 
-            @if (sink.map.name) {
+            @if (sink.mapState.name) {
               <app-ol-control-print
-                [fileName]="sink.map.name"
-                [printSize]="sink.map.printSize"
+                [fileName]="sink.mapState.name"
+                [printSize]="sink.mapState.printSize"
                 mapControlPrint></app-ol-control-print>
             }
-            @if (sink.map.name) {
+            @if (sink.mapState.name) {
               <app-ol-control-exportculverts
-                [fileName]="sink.map.id + '-culverts'"
+                [fileName]="sink.mapState.id + '-culverts'"
                 mapControlExport></app-ol-control-exportculverts>
             }
 
@@ -87,27 +87,27 @@ import { viewChild } from '@angular/core';
             <app-ol-control-attribution
               mapControlAttribution></app-ol-control-attribution>
 
-            @if (olMap.initialized) {
+            @if (map.initialized) {
               <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
 
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-graticule>
                   <app-ol-style-graticule
                     [printing]="true"></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-control-graticule>
                   <app-ol-style-graticule></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-scalebar></app-ol-control-scalebar>
               }
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-control-scaleline></app-ol-control-scaleline>
               }
-              @if (olMap.printing) {
+              @if (map.printing) {
                 <app-ol-control-credits></app-ol-control-credits>
               }
 
@@ -116,7 +116,7 @@ import { viewChild } from '@angular/core';
               @if (!sink.satelliteView) {
                 <!-- 📦 BG LAYER (outside town)-->
 
-                @if (olMap.printing) {
+                @if (map.printing) {
                   <app-ol-layer-tile>
                     <app-ol-source-xyz
                       [url]="
@@ -435,7 +435,7 @@ import { viewChild } from '@angular/core';
 
               <!-- 📦 OVERLAY TO MOVE LANDMARK -->
 
-              @if (!olMap.printing) {
+              @if (!map.printing) {
                 <app-ol-overlay-landmarklabel></app-ol-overlay-landmarklabel>
               }
             }
@@ -525,7 +525,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);
   drawer = viewChild(MatDrawer);
   moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
-  olMap = viewChild(OLMapComponent);
+  map = viewChild(OLMapComponent);
 
   canAddCulvert(event?: MouseEvent): boolean {
     return this.#can(event, true);
@@ -534,14 +534,14 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   canCulvertProperties(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.olMap().roSelection && this.olMap().selected.length === 1
+      !this.map().roSelection && this.map().selected.length === 1
     );
   }
 
   canDeleteCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.olMap().roSelection && this.olMap().selected.length === 1
+      !this.map().roSelection && this.map().selected.length === 1
     );
   }
 
@@ -552,7 +552,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   canMoveCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.olMap().roSelection && this.olMap().selected.length === 1
+      !this.map().roSelection && this.map().selected.length === 1
     );
   }
 
@@ -572,7 +572,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
         break;
       case 'delete-culvert':
         this.store.dispatch(
-          new DeleteLandmark({ id: this.olMap().selectedIDs[0] })
+          new DeleteLandmark({ id: this.map().selectedIDs[0] })
         );
         break;
       case 'import-culverts':
@@ -582,7 +582,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
         component = CulvertPropertiesComponent;
         break;
       case 'move-culvert':
-        this.moveLandmark().setFeature(this.olMap().selected[0]);
+        this.moveLandmark().setFeature(this.map().selected[0]);
         break;
     }
     if (component) this.onContextMenuImpl(component);
@@ -598,11 +598,11 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   #createCulvert(): void {
     const landmark: Partial<Landmark> = {
       geometry: {
-        coordinates: toLonLat(this.olMap().contextMenuAt),
+        coordinates: toLonLat(this.map().contextMenuAt),
         type: 'Point'
       },
       owner: this.authState.currentProfile().email,
-      path: this.olMap().path(),
+      path: this.map().path(),
       properties: {
         metadata: {
           condition: culvertConditions[0],

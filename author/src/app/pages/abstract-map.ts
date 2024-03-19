@@ -41,12 +41,12 @@ export abstract class AbstractMapPage {
 
   abstract contextMenuHost: Signal<ContextMenuHostDirective>;
   abstract drawer: Signal<MatDrawer>;
-  abstract olMap: Signal<OLMapComponent>;
+  abstract map: Signal<OLMapComponent>;
 
   getGeoJSONFormatter(): OLGeoJSON {
     return new OLGeoJSON({
-      dataProjection: this.olMap().featureProjection,
-      featureProjection: this.olMap().projection
+      dataProjection: this.map().featureProjection,
+      featureProjection: this.map().projection
     });
   }
 
@@ -63,9 +63,9 @@ export abstract class AbstractMapPage {
     // 👉 populate @Input() fields
     const comp = cRef.instance;
     comp.drawer = this.drawer();
-    comp.map = this.olMap();
+    comp.map = this.map();
     let key;
-    const selector = this.olMap().selector();
+    const selector = this.map().selector();
     if (selector) {
       // 👉 the layer that contains the selector contains the features
       //    that can be operated on
