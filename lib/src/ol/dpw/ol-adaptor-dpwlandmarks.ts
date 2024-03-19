@@ -13,8 +13,10 @@ import { StreamCrossingProperties } from '../../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { ViewContainerRef } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 import { input } from '@angular/core';
 
 // 🔥 this special adaptor handles both standard landmarks
@@ -36,6 +38,7 @@ import { input } from '@angular/core';
 })
 export class OLAdaptorDPWLandmarksComponent implements Adaptor {
   dpwLandmarkWidth = input(36);
+  vcRef = inject(ViewContainerRef);
 
   adapt(properties: LandmarkProperties): LandmarkProperties[] {
     return this.#makeAdaptor(properties).adapt?.(
@@ -59,19 +62,27 @@ export class OLAdaptorDPWLandmarksComponent implements Adaptor {
     let adaptor;
     switch (properties.metadata?.type) {
       case 'bridge':
-        adaptor = new OLAdaptorBridgesComponent();
+        adaptor = this.vcRef.createComponent(
+          OLAdaptorBridgesComponent
+        ).instance;
         adaptor.bridgeWidth = this.dpwLandmarkWidth;
         break;
       case 'culvert':
-        adaptor = new OLAdaptorCulvertsComponent();
+        adaptor = this.vcRef.createComponent(
+          OLAdaptorCulvertsComponent
+        ).instance;
         adaptor.culvertWidth = this.dpwLandmarkWidth;
         break;
       case 'flood hazard':
-        adaptor = new OLAdaptorFloodHazardsComponent();
+        adaptor = this.vcRef.createComponent(
+          OLAdaptorFloodHazardsComponent
+        ).instance;
         adaptor.floodHazardWidth = this.dpwLandmarkWidth;
         break;
       case 'stream crossing':
-        adaptor = new OLAdaptorStreamCrossingsComponent();
+        adaptor = this.vcRef.createComponent(
+          OLAdaptorStreamCrossingsComponent
+        ).instance;
         adaptor.streamCrossingWidth = this.dpwLandmarkWidth;
         break;
       default:

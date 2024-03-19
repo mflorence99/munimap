@@ -139,9 +139,9 @@ export class DPWLegendComponent implements OnInit {
   allMetrics: Metric[] = [
     {
       enum: (): string[] => {
-        return [undefined];
+        return ['-'];
       },
-      key: () => '$fake$' /* 👈 fakeroo field in every row */,
+      key: () => '-' /* 👈 fakeroo field in every row */,
       tag: 'All'
     },
     {
