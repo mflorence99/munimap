@@ -1,0 +1,113 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <wpt lat="43.20798" lon="-72.03699">
+    <ele>422.4528</ele>
+    <time>2024-03-19T18:51:06Z</time>
+    <name><![CDATA[15" 40' poor steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.2071" lon="-72.03608">
+    <ele>426.1104</ele>
+    <time>2024-03-19T18:47:56Z</time>
+    <name><![CDATA[12" 20' poor steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.206856" lon="-72.03575">
+    <ele>421.8432</ele>
+    <time>2024-03-19T18:45:00Z</time>
+    <name><![CDATA[12" 20" poor steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.20654" lon="-72.03514">
+    <ele>409.6512</ele>
+    <time>2024-03-19T18:35:38Z</time>
+    <name><![CDATA[18" 20' poor steel handmade ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.206184" lon="-72.03457">
+    <ele>404.4696</ele>
+    <time>2024-03-19T18:32:00Z</time>
+    <name><![CDATA[18" 20' poor steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.205776" lon="-72.03397">
+    <ele>400.812</ele>
+    <time>2024-03-19T18:28:38Z</time>
+    <name><![CDATA[12" 17' fair steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.205612" lon="-72.033676">
+    <ele>392.2776</ele>
+    <time>2024-03-19T18:26:31Z</time>
+    <name><![CDATA[12" 15' fair steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.204845" lon="-72.03248">
+    <ele>378.56158</ele>
+    <time>2024-03-19T18:23:26Z</time>
+    <name><![CDATA[12" 20' 2023 good steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.204655" lon="-72.03214">
+    <ele>359.3592</ele>
+    <time>2024-03-19T18:20:35Z</time>
+    <name><![CDATA[12" 20' 2022 good plastic handmade ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+
+  <wpt lat="43.2044400624340" lon="-72.03154077714527">
+    <ele>0.0</ele>
+    <time>2024-03-19T18:14:49Z</time>
+    <name><![CDATA[15" 28' good steel handmade]]></name>
+    <dresc><![CDATA[Exact location extrapolated]]></dresc>
+  </wpt>
+
+  <wpt lat="43.2028786830698" lon="-72.03017939777375">
+    <ele>0.0</ele>
+    <time>2024-03-19T18:12:19Z</time>
+    <name><![CDATA[12" 28' 2023 good steel handmade ]]></name>
+    <dresc><![CDATA[Exact location extrapolated]]></dresc>
+  </wpt>
+
+  <wpt lat="43.199585" lon="-72.03083">
+    <ele>345.0336</ele>
+    <time>2024-03-19T18:09:11Z</time>
+    <name><![CDATA[18" 30' 2023 good plastic handmade ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.1975" lon="-72.03078">
+    <ele>369.7224</ele>
+    <time>2024-03-19T18:03:40Z</time>
+    <name><![CDATA[12" 20' good plastic handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.195827" lon="-72.030914">
+    <ele>338.6328</ele>
+    <time>2024-03-19T17:56:29Z</time>
+    <name><![CDATA[12" 20' good plastic handmade ]]></name>
+    <desc><![CDATA[Ulrich rd&nbsp;]]></desc>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.194798" lon="-72.03089">
+    <ele>342.2904</ele>
+    <time>2024-03-19T17:53:31Z</time>
+    <name><![CDATA[12" 20' poor steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.193848" lon="-72.0308">
+    <ele>320.3448</ele>
+    <time>2024-03-19T17:48:31Z</time>
+    <name><![CDATA[8" 20' good steele handmade ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.192604" lon="-72.0304">
+    <ele>330.4032</ele>
+    <time>2024-03-19T17:44:21Z</time>
+    <name><![CDATA[24" 28' 2X good plastic handmade ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+</gpx>

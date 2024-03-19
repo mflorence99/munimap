@@ -1,0 +1,25 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <wpt lat="43.189274" lon="-72.02455">
+    <ele>313.6392</ele>
+    <time>2024-03-19T17:22:47Z</time>
+    <name><![CDATA[8'x12' 30' good Steel handmade ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.189327" lon="-72.02433">
+    <ele>309.0672</ele>
+    <time>2024-03-19T17:19:53Z</time>
+    <name><![CDATA[24" 40' good steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.189503" lon="-72.022354">
+    <ele>278.2824</ele>
+    <time>2024-03-19T17:17:27Z</time>
+    <name><![CDATA[12" 20' poor steel handmade ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+</gpx>

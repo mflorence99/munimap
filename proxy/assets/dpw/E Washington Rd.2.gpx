@@ -1,0 +1,65 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <wpt lat="43.190735" lon="-72.0186">
+    <ele>0.0</ele>
+    <time>2024-03-19T17:06:51Z</time>
+    <name><![CDATA[18" 32' poor steel handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.19193911808486" lon="-72.02126967487632">
+    <ele>294.7416</ele>
+    <time>2024-03-19T16:55:47Z</time>
+    <name><![CDATA[12" 55' good plastic precast ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.19199353392841" lon="-72.0216008805123">
+    <ele>295.3512</ele>
+    <time>2024-03-19T16:44:19Z</time>
+    <name><![CDATA[12" 34' poor concrete precast ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.192383" lon="-72.02523">
+    <ele>285.9024</ele>
+    <time>2024-03-19T16:40:29Z</time>
+    <name><![CDATA[30" 50' good plastic precast ]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+
+  <wpt lat="43.19184555646325" lon="-72.03026440366712">
+    <ele>0.0</ele>
+    <time>2024-03-19T16:34:57Z</time>
+    <name><![CDATA[18" 55' good plastic precast ]]></name>
+    <desc><![CDATA[Exact location extrapolated]]></desc>
+  </wpt>
+
+  <wpt lat="43.190895" lon="-72.033775">
+    <ele>334.6704</ele>
+    <time>2024-03-19T16:24:21Z</time>
+    <name><![CDATA[15" 32' fair concrete handmade]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+  <wpt lat="43.190674" lon="-72.036285">
+    <ele>329.184</ele>
+    <time>2024-03-19T16:17:52Z</time>
+    <name><![CDATA[12" 100' good plastic precast]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+
+  <wpt lat="43.190674" lon="-72.037">
+    <ele>322.7832</ele>
+    <time>2024-03-19T16:05:47Z</time>
+    <name><![CDATA[12" 100' good plastic precast]]></name>
+    <desc><![CDATA[Exact location extrapolated]]></desc>
+  </wpt>
+
+  <wpt lat="43.190647" lon="-72.03747">
+    <ele>315.468</ele>
+    <time>2024-03-19T16:01:47Z</time>
+    <name><![CDATA[5'x8' 22' fair concrete precast]]></name>
+    <type><![CDATA[Not specified]]></type>
+  </wpt>
+</gpx>
