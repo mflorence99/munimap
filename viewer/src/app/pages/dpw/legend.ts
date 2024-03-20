@@ -194,19 +194,15 @@ export class DPWLegendComponent implements OnInit {
       this.breakdowns[metric.tag] = {};
       culverts.forEach((culvert) => {
         const key = metric.key(culvert);
-        // 🔥 HACK -- zero sized opening appears to be
-        //    common data collection bug
-        if (!['0x0', '0'].includes(key)) {
-          const breakdown =
-            this.breakdowns[metric.tag][key] ??
-            culvertConditions.reduce((acc, condition) => {
-              acc[condition] = { count: 0, length: 0 };
-              return acc;
-            }, {});
-          breakdown[culvert.condition].count += culvert.count;
-          breakdown[culvert.condition].length += culvert.length;
-          this.breakdowns[metric.tag][key] = breakdown;
-        }
+        const breakdown =
+          this.breakdowns[metric.tag][key] ??
+          culvertConditions.reduce((acc, condition) => {
+            acc[condition] = { count: 0, length: 0 };
+            return acc;
+          }, {});
+        breakdown[culvert.condition].count += culvert.count;
+        breakdown[culvert.condition].length += culvert.length;
+        this.breakdowns[metric.tag][key] = breakdown;
       });
     });
   }
