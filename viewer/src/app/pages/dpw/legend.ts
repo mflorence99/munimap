@@ -143,12 +143,12 @@ export class DPWLegendComponent implements OnInit {
     },
     {
       enum: (): string[] => {
-        return Object.keys(this.breakdowns['Opening'] ?? {}).sort(
-          (p, q) => Number(p) - Number(q)
-        );
+        return Object.keys(this.breakdowns['Opening'] ?? {}).sort();
       },
       key: (culvert) =>
-        culvert.diameter || `${culvert.width}x${culvert.height}`,
+        culvert.diameter
+          ? String(culvert.diameter).padStart(2, '0')
+          : `${culvert.width}x${culvert.height}`,
       tag: 'Opening'
     },
     {

@@ -216,7 +216,9 @@ async function main(): Promise<void> {
     numDeleted += 1;
   }
 
-  console.log(`${numDeleted} previously curated landmarks deleted`);
+  console.log(
+    chalk.red(`... ${numDeleted} previously curated landmarks deleted`)
+  );
 
   // 👇 for each curation ...
   for (const curation of CURATIONS) {
@@ -262,10 +264,10 @@ async function main(): Promise<void> {
       promises.push(landmarks.doc(landmark.id).set(landmark));
     }
 
-    await Promise.all(promises);
     console.log(
       chalk.blue(`...... waiting for ${promises.length} promises to resolve`)
     );
+    await Promise.all(promises);
   }
 }
 

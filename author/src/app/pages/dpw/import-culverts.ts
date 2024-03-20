@@ -124,7 +124,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       width: 0,
       year: null
     };
-    // 👇 the data in each part in unambiguous with respect to culvert property
+    // 👇 the data in each part is unambiguous with respect to culvert property
     parts.forEach((part: any) => {
       part = part.trim();
       part = `${part.substring(0, 1).toUpperCase()}${part
@@ -139,7 +139,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
         const dims = part.replaceAll(/["']/g, '').split('x');
         properties.height = Number(dims[1]);
         properties.width = Number(dims[0]);
-        // 👇 convert toinches if in feet
+        // 👇 convert to inches if in feet
         if (properties.height < 12) properties.height *= 12;
         if (properties.width < 12) properties.width *= 12;
       }
