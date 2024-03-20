@@ -28,7 +28,7 @@
     "firebase:emulators:backup": "ts-node --dir bin backup.ts --useEmulator",
     "firebase:emulators:clean": "ts-node --dir bin clean.ts  --useEmulator && ts-node --dir bin parcel-stealer.ts  --useEmulator",
     "firebase:emulators:culverts:curated": "ts-node --dir bin culverts-curated.ts --useEmulator",
-    "firebase:emulators:init": "npm run firebase:emulators:users:curated && npm run firebase:emulators:parcels:curated && npm run firebase:emulators:maps:curated && npm run firebase:emulators:landmarks:curated",
+    "firebase:emulators:init": "npm run firebase:emulators:users:curated && npm run firebase:emulators:parcels:curated && npm run firebase:emulators:maps:curated && npm run firebase:emulators:landmarks:curated && npm run firebase:emulators:culverts:curated",
     "firebase:emulators:landmarks:curated": "ts-node --dir bin landmarks-curated.ts --useEmulator",
     "firebase:emulators:maps:curated": "ts-node --dir bin maps-curated.ts --useEmulator",
     "firebase:emulators:parcels:curated": "ts-node --dir bin parcel-stealer.ts --useEmulator",
