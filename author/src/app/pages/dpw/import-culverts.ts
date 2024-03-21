@@ -101,6 +101,8 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       .replace(/<\/div>/g, '')
       .replace(/<\./g, '')
       .replace(/<br>/g, '')
+      .replace(/&apos;/g, "'")
+      .replace(/&quot;/g, '"')
       .replace(/[\u2018\u2019]/g, "'")
       .replace(/[\u201C\u201D]/g, '"')
       .trim()

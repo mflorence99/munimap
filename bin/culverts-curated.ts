@@ -97,7 +97,11 @@ async function main(): Promise<void> {
     const promises = [];
     gpx.gpx.wpt.forEach((culvert) => {
       // 👇 split props and eliminate decoration and smart quotes
-      const parts = culvert.name.trim().split(/[\n ]+/);
+      const parts = culvert.name
+        .replace(/&apos;/g, "'")
+        .replace(/&quot;/g, '"')
+        .trim()
+        .split(/[\n ]+/);
 
       // 👇 model culvert
       const properties: CulvertProperties = {
