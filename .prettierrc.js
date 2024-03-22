@@ -8,6 +8,14 @@ module.exports = {
   printWidth: 80,
   plugins: ['prettier-plugin-css-order', 'prettier-plugin-package'],
   proseWrap: 'never',
+  overrides: [
+    {
+      files: '*.html',
+      options: {
+        parser: 'angular'
+      }
+    }
+  ],
   quoteProps: 'consistent',
   semi: true,
   singleQuote: true,
