@@ -1,12 +1,12 @@
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
-import { OLMapComponent } from '../ol-map';
-import { OLPopupSelectionComponent } from '../ol-popup-selection';
-import { Parcel } from '../../common';
-import { ParcelID } from '../../common';
-import { ParcelProperties } from '../../common';
+import { OLMapComponent } from './ol-map';
+import { OLPopupSelectionComponent } from './ol-popup-selection';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { ParcelProperties } from '../common';
 
-import { parcelPropertiesUsage } from '../../common';
-import { parcelPropertiesUse } from '../../common';
+import { parcelPropertiesUsage } from '../common';
+import { parcelPropertiesUse } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -275,7 +275,7 @@ interface Abutter {
       }
     `
   ],
-  styleUrls: ['../ol-popup-abstractproperties.scss']
+  styleUrls: ['./ol-popup-abstractproperties.scss']
 })
 export class OLPopupParcelPropertiesComponent {
   abutters: Abutter[] = [];

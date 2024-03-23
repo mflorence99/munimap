@@ -1,15 +1,15 @@
-import { AddLandmark } from '../../state/landmarks';
-import { AuthState } from '../../state/auth';
-import { ConfirmDialogComponent } from '../../components/confirm-dialog';
-import { ConfirmDialogData } from '../../components/confirm-dialog';
-import { DestroyService } from '../../services/destroy';
-import { Landmark } from '../../common';
-import { LandmarkPropertiesClass } from '../../common';
-import { OLInteractionAbstractDrawComponent } from '../ol-interaction-abstractdraw';
+import { AddLandmark } from '../state/landmarks';
+import { AuthState } from '../state/auth';
+import { ConfirmDialogComponent } from '../components/confirm-dialog';
+import { ConfirmDialogData } from '../components/confirm-dialog';
+import { DestroyService } from '../services/destroy';
+import { Landmark } from '../common';
+import { LandmarkPropertiesClass } from '../common';
+import { OLInteractionAbstractDrawComponent } from './ol-interaction-abstractdraw';
 import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
-import { OLMapComponent } from '../ol-map';
+import { OLMapComponent } from './ol-map';
 
-import { makeLandmarkID } from '../../common';
+import { makeLandmarkID } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

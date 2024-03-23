@@ -1,15 +1,15 @@
-import { Adaptor } from '../ol-adaptor';
-import { AdaptorComponent } from '../ol-adaptor';
-import { BridgeProperties } from '../../common';
-import { CulvertProperties } from '../../common';
-import { FloodHazardProperties } from '../../common';
-import { LandmarkProperties } from '../../common';
-import { OLAdaptorBridgesComponent } from '../ol-adaptor-bridges';
-import { OLAdaptorCulvertsComponent } from '../ol-adaptor-culverts';
-import { OLAdaptorFloodHazardsComponent } from '../ol-adaptor-floodhazards';
-import { OLAdaptorLandmarksComponent } from '../ol-adaptor-landmarks';
-import { OLAdaptorStreamCrossingsComponent } from '../ol-adaptor-streamcrossings';
-import { StreamCrossingProperties } from '../../common';
+import { Adaptor } from './ol-adaptor';
+import { AdaptorComponent } from './ol-adaptor';
+import { BridgeProperties } from '../common';
+import { CulvertProperties } from '../common';
+import { FloodHazardProperties } from '../common';
+import { LandmarkProperties } from '../common';
+import { OLAdaptorBridgesComponent } from './ol-adaptor-bridges';
+import { OLAdaptorCulvertsComponent } from './ol-adaptor-culverts';
+import { OLAdaptorFloodHazardsComponent } from './ol-adaptor-floodhazards';
+import { OLAdaptorLandmarksComponent } from './ol-adaptor-landmarks';
+import { OLAdaptorStreamCrossingsComponent } from './ol-adaptor-streamcrossings';
+import { StreamCrossingProperties } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

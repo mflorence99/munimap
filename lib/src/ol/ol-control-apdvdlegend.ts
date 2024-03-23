@@ -1,11 +1,11 @@
-import { DestroyService } from '../../services/destroy';
-import { Legend } from '../ol-control-abstractparcelslegend';
-import { MapableComponent } from '../ol-mapable';
-import { OLControlAbstractParcelsLegendComponent } from '../ol-control-abstractparcelslegend';
-import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
-import { ParcelProperties } from '../../common';
-import { ParcelsState } from '../../state/parcels';
+import { DestroyService } from '../services/destroy';
+import { Legend } from './ol-control-abstractparcelslegend';
+import { MapableComponent } from './ol-mapable';
+import { OLControlAbstractParcelsLegendComponent } from './ol-control-abstractparcelslegend';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelProperties } from '../common';
+import { ParcelsState } from '../state/parcels';
 
 import { colorOfAPDVDExisting } from './ol-apdvd';
 import { colorOfAPDVDProposed } from './ol-apdvd';
@@ -89,7 +89,7 @@ import { viewChild } from '@angular/core';
       </table>
     </article>
   `,
-  styleUrls: ['../ol-control-abstractparcelslegend.scss']
+  styleUrls: ['./ol-control-abstractparcelslegend.scss']
 })
 export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent

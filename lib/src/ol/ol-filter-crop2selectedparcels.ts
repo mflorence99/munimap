@@ -1,7 +1,7 @@
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
-import { OLLayerTileComponent } from '../ol-layer-tile';
-import { OLLayerVectorComponent } from '../ol-layer-vector';
-import { OLMapComponent } from '../ol-map';
+import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 
 import * as Sentry from '@sentry/angular-ivy';
 

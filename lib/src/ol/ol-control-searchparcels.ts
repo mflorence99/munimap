@@ -1,16 +1,16 @@
-import { DestroyService } from '../../services/destroy';
-import { GeoJSONService } from '../../services/geojson';
+import { DestroyService } from '../services/destroy';
+import { GeoJSONService } from '../services/geojson';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
-import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
-import { ParcelID } from '../../common';
-import { ParcelsState } from '../../state/parcels';
-import { SearchableParcel } from '../../common';
-import { SearchableParcels } from '../../common';
-import { Searcher } from '../ol-searcher';
-import { SearcherComponent } from '../ol-searcher';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { ParcelsState } from '../state/parcels';
+import { SearchableParcel } from '../common';
+import { SearchableParcels } from '../common';
+import { Searcher } from './ol-searcher';
+import { SearcherComponent } from './ol-searcher';
 
-import { isParcelStollen } from '../../common';
+import { isParcelStollen } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

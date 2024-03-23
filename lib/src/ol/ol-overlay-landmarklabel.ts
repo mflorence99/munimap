@@ -1,7 +1,7 @@
-import { DestroyService } from '../../services/destroy';
-import { Landmark } from '../../common';
-import { OLMapComponent } from '../ol-map';
-import { UpdateLandmark } from '../../state/landmarks';
+import { DestroyService } from '../services/destroy';
+import { Landmark } from '../common';
+import { OLMapComponent } from './ol-map';
+import { UpdateLandmark } from '../state/landmarks';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';

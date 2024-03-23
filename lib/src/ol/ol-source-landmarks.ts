@@ -1,7 +1,7 @@
 import { DestroyService } from '../services/destroy';
 import { Landmark } from '../common';
 import { LandmarksState } from '../state/landmarks';
-import { OLInteractionSelectLandmarksComponent } from './landmarks/ol-interaction-selectlandmarks';
+import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 

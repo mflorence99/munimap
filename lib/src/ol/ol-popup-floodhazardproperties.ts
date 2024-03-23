@@ -9,22 +9,20 @@ import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-popup-bridgeproperties',
+  selector: 'app-ol-popup-floodhazardproperties',
   templateUrl: './ol-popup-dpwproperties-impl.html',
-  styleUrls: ['../ol-popup-abstractproperties.scss']
+  styleUrls: ['./ol-popup-abstractproperties.scss']
 })
-export class OLPopupBridgePropertiesComponent {
+export class OLPopupFloodHazardPropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);
   properties = input<any>();
 
   schema: Schema = [
-    ['Location', 'FACILITY'],
-    ['', 'LOCATION'],
-    ['Bridge Condition', 'RYGB'],
-    ['Bridge Type', 'BRIDGE_TYPE_DESCR'],
-    ['Bridge Span', 'MAXSPAN_FEET'],
-    ['Year Built', 'YEARBUILT'],
-    ['Year Rebuilt', 'YEARRECON'],
-    ['Owner', 'OWNER']
+    ['Location', 'Location'],
+    ['Description', 'FloodDesc'],
+    ['Flood Type', 'FloodType'],
+    ['Issue', 'CrossIssue'],
+    ['Previous Actions', 'MitAction'],
+    ['Report Source', 'Source']
   ];
 }

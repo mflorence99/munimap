@@ -1,10 +1,10 @@
-import { DestroyService } from '../../services/destroy';
-import { Legend } from '../ol-control-abstractparcelslegend';
-import { MapableComponent } from '../ol-mapable';
-import { OLControlAbstractParcelsLegendComponent } from '../ol-control-abstractparcelslegend';
-import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
-import { ParcelsState } from '../../state/parcels';
+import { DestroyService } from '../services/destroy';
+import { Legend } from './ol-control-abstractparcelslegend';
+import { MapableComponent } from './ol-mapable';
+import { OLControlAbstractParcelsLegendComponent } from './ol-control-abstractparcelslegend';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelsState } from '../state/parcels';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -105,7 +105,7 @@ import area from '@turf/area';
       </table>
     </article>
   `,
-  styleUrls: ['../ol-control-abstractparcelslegend.scss']
+  styleUrls: ['./ol-control-abstractparcelslegend.scss']
 })
 export class OLControlTopoLegendComponent
   extends OLControlAbstractParcelsLegendComponent

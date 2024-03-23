@@ -2,7 +2,7 @@ import { ColorCodeState } from '../state/colorcode';
 import { ColorCodeStateModel } from '../state/colorcode';
 import { Map } from '../state/map';
 import { MapState } from '../state/map';
-import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
@@ -11,7 +11,7 @@ import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
 
-import { getAPDVDFill } from './apdvd/ol-apdvd';
+import { getAPDVDFill } from './ol-apdvd';
 import { isParcelStollen } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';

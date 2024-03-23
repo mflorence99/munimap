@@ -1,4 +1,4 @@
-import { OLControlSearchParcelsComponent } from '../ol/parcels/ol-control-searchparcels';
+import { OLControlSearchParcelsComponent } from '../ol/ol-control-searchparcels';
 
 import { AbstractControl } from '@angular/forms';
 import { Directive } from '@angular/core';

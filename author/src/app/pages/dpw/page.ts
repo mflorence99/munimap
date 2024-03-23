@@ -15,7 +15,7 @@ import { Landmark } from '@lib/common';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
-import { OLOverlayLandmarkLabelComponent } from '@lib/ol/landmarks/ol-overlay-landmarklabel';
+import { OLOverlayLandmarkLabelComponent } from '@lib/ol/ol-overlay-landmarklabel';
 import { OnInit } from '@angular/core';
 import { Type } from '@angular/core';
 

@@ -1,11 +1,11 @@
-import { LandmarkID } from '../../common';
-import { Mapable } from '../ol-mapable';
-import { MapableComponent } from '../ol-mapable';
-import { OLLayerVectorComponent } from '../ol-layer-vector';
-import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
-import { Selector } from '../ol-selector';
-import { SelectorComponent } from '../ol-selector';
+import { LandmarkID } from '../common';
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { Selector } from './ol-selector';
+import { SelectorComponent } from './ol-selector';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

@@ -1,5 +1,5 @@
-import { CulvertProperties } from '../../common';
-import { LandmarksState } from '../../state/landmarks';
+import { CulvertProperties } from '../common';
+import { LandmarksState } from '../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

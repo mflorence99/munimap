@@ -1,8 +1,8 @@
-import { DestroyService } from '../../services/destroy';
-import { OLMapComponent } from '../ol-map';
-import { OLSourceParcelsComponent } from '../ol-source-parcels';
+import { DestroyService } from '../services/destroy';
+import { OLMapComponent } from './ol-map';
+import { OLSourceParcelsComponent } from './ol-source-parcels';
 
-import { simplify } from '../../common';
+import { simplify } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

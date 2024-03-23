@@ -1,7 +1,7 @@
 // 🔥 HACK FOR APDVD
 
-import { ParcelID } from '../../common';
-import { ParcelProperties } from '../../common';
+import { ParcelID } from '../common';
+import { ParcelProperties } from '../common';
 
 const existingExcept = new Set<ParcelID>([
   '10-3',

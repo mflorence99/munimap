@@ -1,8 +1,8 @@
-import { OLLayerTileComponent } from '../ol-layer-tile';
-import { OLLayerVectorComponent } from '../ol-layer-vector';
-import { OLMapComponent } from '../ol-map';
-import { OLSourceParcelsComponent } from '../ol-source-parcels';
-import { ParcelID } from '../../common';
+import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
+import { OLSourceParcelsComponent } from './ol-source-parcels';
+import { ParcelID } from '../common';
 
 import * as Sentry from '@sentry/angular-ivy';
 

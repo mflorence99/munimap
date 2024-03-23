@@ -1,8 +1,8 @@
-import { AddParcels } from '../../state/parcels';
-import { AuthState } from '../../state/auth';
-import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
-import { ParcelID } from '../../common';
+import { AddParcels } from '../state/parcels';
+import { AuthState } from '../state/auth';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';

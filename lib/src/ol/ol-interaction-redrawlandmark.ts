@@ -1,9 +1,9 @@
-import { ConfirmDialogComponent } from '../../components/confirm-dialog';
-import { ConfirmDialogData } from '../../components/confirm-dialog';
-import { DestroyService } from '../../services/destroy';
-import { Landmark } from '../../common';
-import { OLInteractionAbstractRedrawComponent } from '../ol-interaction-abstractredraw';
-import { UpdateLandmark } from '../../state/landmarks';
+import { ConfirmDialogComponent } from '../components/confirm-dialog';
+import { ConfirmDialogData } from '../components/confirm-dialog';
+import { DestroyService } from '../services/destroy';
+import { Landmark } from '../common';
+import { OLInteractionAbstractRedrawComponent } from './ol-interaction-abstractredraw';
+import { UpdateLandmark } from '../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

@@ -1,7 +1,7 @@
 import { ColorCodeStateModel } from '../state/colorcode';
 import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
-import { OLInteractionSelectParcelsComponent } from './parcels/ol-interaction-selectparcels';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';

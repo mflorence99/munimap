@@ -1,6 +1,6 @@
-import { OLInteractionSelectLandmarksComponent } from '../landmarks/ol-interaction-selectlandmarks';
-import { OLMapComponent } from '../ol-map';
-import { OLPopupSelectionComponent } from '../ol-popup-selection';
+import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
+import { OLMapComponent } from './ol-map';
+import { OLPopupSelectionComponent } from './ol-popup-selection';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -64,7 +64,7 @@ export type Schema = Array<
       }
     </section>
   `,
-  styleUrls: ['../ol-popup-abstractproperties.scss']
+  styleUrls: ['./ol-popup-abstractproperties.scss']
 })
 export class OLPopupDPWPropertiesComponent {
   geometry: any /* 👈 in practice will be a Point */;

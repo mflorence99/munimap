@@ -1,11 +1,11 @@
-import { Mapable } from '../ol-mapable';
-import { MapableComponent } from '../ol-mapable';
-import { OLLayerVectorComponent } from '../ol-layer-vector';
-import { OLMapComponent } from '../ol-map';
-import { Parcel } from '../../common';
-import { ParcelID } from '../../common';
-import { Selector } from '../ol-selector';
-import { SelectorComponent } from '../ol-selector';
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { Selector } from './ol-selector';
+import { SelectorComponent } from './ol-selector';
 
 import * as Comlink from 'comlink';
 
@@ -162,7 +162,7 @@ export class OLInteractionSelectParcelsComponent
 
   #createAbuttersWorker(): void {
     const proxy: any = Comlink.wrap(
-      new Worker(new URL('../../../../worker/src/abutters', import.meta.url))
+      new Worker(new URL('../../../worker/src/abutters', import.meta.url))
     );
     new proxy().then((instance) => (this.#abuttersWorker = instance));
   }

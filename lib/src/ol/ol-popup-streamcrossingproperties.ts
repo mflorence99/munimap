@@ -11,7 +11,7 @@ import { input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-streamcrossingproperties',
   templateUrl: './ol-popup-dpwproperties-impl.html',
-  styleUrls: ['../ol-popup-abstractproperties.scss']
+  styleUrls: ['./ol-popup-abstractproperties.scss']
 })
 export class OLPopupStreamCrossingPropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);
