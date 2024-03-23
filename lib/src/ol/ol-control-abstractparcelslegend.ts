@@ -87,7 +87,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   aggregateParcelImpl(_props: ParcelProperties): void {}
 
   // 🔥 may be overridden by subclasses
-  //    we onky had to "invent" this for APDVD
+  //    we only had to "invent" this for APDVD
   countables(): string {
     return 'countables';
   }

@@ -1,7 +1,9 @@
 import { RootPage } from '../root/page';
 
+import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { FilterFn } from '@lib/ol/ol-source-landmarks';
 
 import { environment } from '@lib/environment';
 import { inject } from '@angular/core';
@@ -283,7 +285,8 @@ import { inject } from '@angular/core';
                 <app-ol-style-universal
                   [showAll]="true"></app-ol-style-universal>
               </app-ol-adaptor-dpwlandmarks>
-              <app-ol-source-landmarks></app-ol-source-landmarks>
+              <app-ol-source-landmarks
+                [filterFn$]="filterFn$"></app-ol-source-landmarks>
               <app-ol-interaction-selectlandmarks
                 [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
                 [multi]="false"></app-ol-interaction-selectlandmarks>
@@ -387,7 +390,8 @@ import { inject } from '@angular/core';
                     [contrast]="'whiteOnBlack'"
                     [showAll]="true"></app-ol-style-universal>
                 </app-ol-adaptor-dpwlandmarks>
-                <app-ol-source-landmarks></app-ol-source-landmarks>
+                <app-ol-source-landmarks
+                  [filterFn$]="filterFn$"></app-ol-source-landmarks>
                 <app-ol-interaction-selectlandmarks
                   [layers]="[bridges, streamcrossings, floodhazards, landmarks]"
                   [multi]="false"></app-ol-interaction-selectlandmarks>
@@ -424,6 +428,7 @@ import { inject } from '@angular/core';
 })
 export class DPWPage {
   env = environment;
+  filterFn$ = new BehaviorSubject<FilterFn>(() => true);
 
   root = inject(RootPage);
 }

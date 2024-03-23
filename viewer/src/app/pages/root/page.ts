@@ -66,6 +66,8 @@ import urlParse from 'url-parse';
 
         <div class="filler"></div>
 
+        <router-outlet name="toolbar"></router-outlet>
+
         @if (!routeData.noSatelliteView) {
           <mat-button-toggle
             #satelliteViewToggle
@@ -121,7 +123,7 @@ import urlParse from 'url-parse';
         </mat-drawer>
 
         <mat-drawer-content class="content">
-          <router-outlet></router-outlet>
+          <router-outlet (activate)="onActivateRoute($event)"></router-outlet>
         </mat-drawer-content>
       </mat-drawer-container>
     </main>
@@ -200,11 +202,10 @@ export class RootPage implements OnInit {
 
   hasLeftSidebar: boolean;
   hasRightSidebar: boolean;
-
+  hasToolbar: boolean;
   routeData: RouteData = {};
-
+  routedPageComponent: any;
   title: string;
-
   zoom$: Observable<number>;
 
   #destroy$ = inject(DestroyService);
@@ -238,6 +239,10 @@ export class RootPage implements OnInit {
   ngOnInit(): void {
     this.#handleMap$();
     this.#handleUser$();
+  }
+
+  onActivateRoute(cRef): void {
+    this.routedPageComponent = cRef;
   }
 
   onGPSToggle(state: boolean): void {
@@ -334,6 +339,15 @@ export class RootPage implements OnInit {
     if (route) {
       inner.push(`rightSidebar:${route.path}`);
       this.hasRightSidebar = true;
+    }
+    // 👉 is there a toolbar?
+    route = this.#router.config[0].children.find(
+      (route) =>
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'toolbar'
+    );
+    if (route) {
+      inner.push(`toolbar:${route.path}`);
+      this.hasToolbar = true;
     }
     // 👉 maybe no sidebars at all?
     if (inner.length > 0) parts.push(`(${inner.join('//')})`);

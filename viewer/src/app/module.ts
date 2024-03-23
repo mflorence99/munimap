@@ -1,6 +1,7 @@
 import { APDVDPage } from './pages/apdvd/page';
 import { DPWLegendComponent } from './pages/dpw/legend';
 import { DPWPage } from './pages/dpw/page';
+import { DPWToolbarComponent } from './pages/dpw/toolbar';
 import { ParcelsColorCodeComponent } from './pages/parcels/colorcode';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsPage } from './pages/parcels/page';
@@ -151,6 +152,7 @@ import { faMinus } from '@fortawesome/pro-light-svg-icons';
 import { faPalette } from '@fortawesome/pro-duotone-svg-icons';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faRoad } from '@fortawesome/pro-duotone-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -173,6 +175,7 @@ export const persistenceEnabled = new Promise<boolean>((resolve) => {
 const COMPONENTS = [
   ConfirmDialogComponent,
   DPWLegendComponent,
+  DPWToolbarComponent,
   MessageDialogComponent,
   OLAdaptorBoundaryComponent,
   OLAdaptorBridgesComponent,
@@ -290,6 +293,11 @@ const ROUTES: any = [
         path: 'dpw-legend',
         component: DPWLegendComponent,
         outlet: 'leftSidebar'
+      },
+      {
+        path: 'dpw-toolbar',
+        component: DPWToolbarComponent,
+        outlet: 'toolbar'
       },
       {
         path: 'parcels',
@@ -435,6 +443,7 @@ export class RootModule {
       faPalette,
       faPlus,
       faQuestionCircle,
+      faRoad,
       faSearch,
       faSync,
       faTimes

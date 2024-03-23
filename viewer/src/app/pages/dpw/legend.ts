@@ -1,3 +1,6 @@
+import { DPWPage } from './page';
+import { RootPage } from '../root/page';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
@@ -10,6 +13,7 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { VersionService } from '@lib/services/version';
 
+import { combineLatest } from 'rxjs';
 import { culvertConditions } from '@lib/common';
 import { culvertFloodHazards } from '@lib/common';
 import { culvertHeadwalls } from '@lib/common';
@@ -179,6 +183,7 @@ export class DPWLegendComponent implements OnInit {
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
+  #root = inject(RootPage);
   #version = inject(VersionService);
 
   ngOnInit(): void {
@@ -208,14 +213,18 @@ export class DPWLegendComponent implements OnInit {
   }
 
   #handleStreams$(): void {
-    this.landmarks$
+    combineLatest([
+      this.landmarks$,
+      (this.#root.routedPageComponent as DPWPage).filterFn$
+    ])
       .pipe(
         takeUntil(this.#destroy$),
-        map((landmarks): CulvertProperties[] =>
+        map(([landmarks, filterFn]): CulvertProperties[] =>
           landmarks
             .filter(
               (landmark) => landmark.properties.metadata?.type === 'culvert'
             )
+            .filter(filterFn)
             .map(
               (landmark) => landmark.properties.metadata as CulvertProperties
             )

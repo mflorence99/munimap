@@ -13,14 +13,19 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
+import { combineLatest } from 'rxjs';
 import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
+
+export type FilterFn = (landmark: Landmark) => boolean;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,6 +37,7 @@ import OLVector from 'ol/source/Vector';
 export class OLSourceLandmarksComponent implements OnInit {
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
 
+  filterFn$ = input<Observable<FilterFn>>();
   olVector: OLVector<any>;
 
   #destroy$ = inject(DestroyService);
@@ -54,27 +60,26 @@ export class OLSourceLandmarksComponent implements OnInit {
   }
 
   #handleStreams$(): void {
-    this.landmarks$.pipe(takeUntil(this.#destroy$)).subscribe((landmarks) => {
-      // 👉 represent landmarks as geojson
-      const geojson = featureCollection(
-        // 👇 I did this to create a current use map for the assessors
-        landmarks /* .filter((l) => l.properties.name === 'Fine Mowing') */
-      );
-      // 👉 convert features into OL format
-      const features = this.olVector.getFormat().readFeatures(geojson, {
-        featureProjection: this.#map.projection
-      }) as OLFeature<any>[];
-      // 👉 add feature to source
-      this.olVector.clear();
-      this.olVector.addFeatures(features);
-      // 👉 the selector MAY not be present and may not be for landmarks
-      const selector =
-        this.#map.selector() as OLInteractionSelectLandmarksComponent;
-      // 👉 reselect selected features b/c we've potentially removed them
-      const selectedIDs = selector?.selectedIDs;
-      if (selectedIDs?.length > 0) selector?.reselectLandmarks?.(selectedIDs);
-      this.#success?.(features);
-    });
+    combineLatest([this.landmarks$, this.filterFn$() ?? of(() => true)])
+      .pipe(takeUntil(this.#destroy$))
+      .subscribe(([landmarks, filterFn]) => {
+        // 👉 represent landmarks as geojson
+        const geojson = featureCollection(landmarks.filter(filterFn));
+        // 👉 convert features into OL format
+        const features = this.olVector.getFormat().readFeatures(geojson, {
+          featureProjection: this.#map.projection
+        }) as OLFeature<any>[];
+        // 👉 add feature to source
+        this.olVector.clear();
+        this.olVector.addFeatures(features);
+        // 👉 the selector MAY not be present and may not be for landmarks
+        const selector =
+          this.#map.selector() as OLInteractionSelectLandmarksComponent;
+        // 👉 reselect selected features b/c we've potentially removed them
+        const selectedIDs = selector?.selectedIDs;
+        if (selectedIDs?.length > 0) selector?.reselectLandmarks?.(selectedIDs);
+        this.#success?.(features);
+      });
   }
 
   #loader(
