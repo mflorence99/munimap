@@ -65,9 +65,10 @@ async function main(): Promise<void> {
   }
 
   // 👇 what direction are we following?
+  // 🔥 a very rough algorithm!
   const coords = withCoordinates.map((culvert) => lonlat(culvert));
   const londir = coords.at(0).lon > coords.at(-1).lon ? -1 : +1;
-  const latdir = coords.at(0).lat > coords.at(-1).lat ? +1 : -1;
+  const latdir = coords.at(0).lat > coords.at(-1).lat ? -1 : +1;
 
   // 👇 what's the average gap between coordinates?
   const averageGap = withCoordinates

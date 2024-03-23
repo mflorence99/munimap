@@ -95,6 +95,7 @@
     "@angular/fire": "^17",
     "@angular/forms": "^17",
     "@angular/material": "^17",
+    "@angular/material-experimental": "^17.3.1",
     "@angular/platform-browser": "^17",
     "@angular/platform-browser-dynamic": "^17",
     "@angular/router": "^17",

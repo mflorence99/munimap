@@ -374,7 +374,8 @@ select {
 // ///////////////////////////////////////////////////////////////////////////
 
 // 👉 Angular Material styles
-// 🔥 this is an ad hoc MESS! they say it will all change in v17
+// 🔥 this is an ad hoc MESS! they say it will all change with M3
+//    but we tried it 3/22/2024 and no dice
 
 a[mat-flat-button] {
   background-color: var(--background-color) !important;
