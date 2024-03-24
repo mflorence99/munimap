@@ -19,7 +19,9 @@ import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { transformExtent } from 'ol/proj';
 
+import bbox from '@turf/bbox';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
@@ -38,7 +40,9 @@ export class OLSourceLandmarksComponent implements OnInit {
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
 
   filterFn$ = input<Observable<FilterFn>>();
+  maxZoom = input(18);
   olVector: OLVector<any>;
+  zoomAnimationDuration = input(200);
 
   #destroy$ = inject(DestroyService);
   #layer = inject(OLLayerVectorComponent);
@@ -64,7 +68,9 @@ export class OLSourceLandmarksComponent implements OnInit {
       .pipe(takeUntil(this.#destroy$))
       .subscribe(([landmarks, filterFn]) => {
         // 👉 represent landmarks as geojson
-        const geojson = featureCollection(landmarks.filter(filterFn));
+        const filteredLandmarks = landmarks.filter(filterFn);
+        const isFiltered = landmarks.length !== filteredLandmarks.length;
+        const geojson = featureCollection(filteredLandmarks);
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
           featureProjection: this.#map.projection
@@ -78,6 +84,24 @@ export class OLSourceLandmarksComponent implements OnInit {
         // 👉 reselect selected features b/c we've potentially removed them
         const selectedIDs = selector?.selectedIDs;
         if (selectedIDs?.length > 0) selector?.reselectLandmarks?.(selectedIDs);
+        // 👇 zoom to the extent of all the filtered landmarks
+        if (isFiltered) {
+          const extent = transformExtent(
+            bbox(geojson),
+            this.#map.featureProjection,
+            this.#map.projection
+          );
+          const minZoom = this.#map.olView.getMinZoom();
+          this.#map.olView.setMinZoom(this.#map.minUsefulZoom());
+          this.#map.olView.fit(extent, {
+            callback: () => {
+              this.#map.olView.setMinZoom(minZoom);
+            },
+            duration: this.zoomAnimationDuration(),
+            maxZoom: this.maxZoom() ?? this.#map.maxZoom(),
+            size: this.#map.olMap.getSize()
+          });
+        }
         this.#success?.(features);
       });
   }

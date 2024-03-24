@@ -11,7 +11,7 @@ import { input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-bridgeproperties',
   templateUrl: './ol-popup-dpwproperties-impl.html',
-  styleUrls: ['./-popup-abstractproperties.scss']
+  styleUrls: ['./ol-popup-abstractproperties.scss']
 })
 export class OLPopupBridgePropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);

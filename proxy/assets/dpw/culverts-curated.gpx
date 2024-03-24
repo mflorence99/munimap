@@ -1,1120 +1,1125 @@
-<gpx
-  xmlns="http://www.topografix.com/GPX/1/1"
-  version="1.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
-  <wpt lat="43.16752" lon="-72.078804">
-    <name><![CDATA[15" 35' Fair 1x None Handmade Steel ]]></name>
-    <ele>439.5216</ele>
-    <desc><![CDATA[5' of concrete at inlet]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
 
-  <wpt lat="43.17517" lon="-72.11557">
-    <name><![CDATA[3" 5' Fair 1x None Handmade Steel ]]></name>
-    <ele>503.2248</ele>
-    <desc><![CDATA[Above beach entrance]]></desc>
-    <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
-  </wpt>
-
-  <wpt lat="43.191708" lon="-72.12211">
-    <name><![CDATA[15" 40' Good 1x None None Steel ]]></name>
-    <ele>534.6192</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.192604" lon="-72.0304">
-    <name><![CDATA[24" 28' Good 2x None Handmade Plastic ]]></name>
-    <ele>330.4032</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.15364" lon="-72.126686">
-    <name><![CDATA[12" 30' Poor 1x None Handmade Steel ]]></name>
-    <ele>467.5632</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[KING ST]]></keywords>
-  </wpt>
-
-  <wpt lat="43.178032" lon="-72.04085">
-    <name><![CDATA[15" 40' Good 1x None Handmade Concrete ]]></name>
-    <ele>330.4032</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17551" lon="-72.11285">
-    <name><![CDATA[18" 45' Good 1x None Handmade Plastic ]]></name>
-    <ele>491.3376</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.172806" lon="-72.1181">
-    <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>488.2896</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.190563" lon="-72.038315">
-    <name><![CDATA[15" 50' Good 1x None Handmade Steel ]]></name>
-    <ele>320.6496</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17603" lon="-72.11441">
-    <name><![CDATA[12" 50' Good 1x None Handmade Plastic ]]></name>
-    <ele>491.9472</ele>
-    <desc><![CDATA[Wolf Way entrance]]></desc>
-    <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17641" lon="-72.11253">
-    <name><![CDATA[15" 60' Poor 1x None Handmade Steel ]]></name>
-    <ele>518.7696</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16727" lon="-72.079475">
-    <name><![CDATA[12" 35' Fair 1x None Handmade Steel ]]></name>
-    <ele>444.7032</ele>
-    <desc><![CDATA[Has 5' of concrete pipe at inlet]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17274" lon="-72.1188">
-    <name><![CDATA[30" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>491.0328</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.19193911808486" lon="-72.02126967487632">
-    <name><![CDATA[12" 55' Good 1x None Precast Plastic ]]></name>
-    <ele>294.7416</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.167423" lon="-72.06885">
-    <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>448.9704</ele>
-    <desc><![CDATA[Outlet under water]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.157974" lon="-72.12706">
-    <name><![CDATA[25" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>500.4816</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.176613" lon="-72.10991">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>487.0704</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16455" lon="-72.05505">
-    <name><![CDATA[15" 50' Fair 1x None Handmade Concrete ]]></name>
-    <ele>408.432</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.175755" lon="-72.10795">
-    <name><![CDATA[15" 30' Good 1x None Handmade Steel ]]></name>
-    <ele>479.1456</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.18002" lon="-72.03849">
-    <name><![CDATA[15" 50' Fair 1x None Handmade Steel ]]></name>
-    <ele>321.564</ele>
-    <desc><![CDATA[Steel inlet concrete outlet]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.169952" lon="-72.0513">
-    <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>387.096</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.168026" lon="-72.12466">
-    <name><![CDATA[12" 30' Good 1x None Handmade Steel 2023]]></name>
-    <ele>490.728</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.206856" lon="-72.03575">
-    <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>421.8432</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.189274" lon="-72.02455">
-    <name><![CDATA[96x12" 30' Good 1x None Handmade Steel ]]></name>
-    <ele>313.6392</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[PURLING BECK RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17374" lon="-72.04634">
-    <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>356.616</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17900879306109" lon="-72.10139581749604">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.205776" lon="-72.03397">
-    <name><![CDATA[12" 17' Fair 1x None Handmade Steel ]]></name>
-    <ele>400.812</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.174805" lon="-72.10271">
-    <name><![CDATA[48x96" 36' Good 1x None Precast Concrete ]]></name>
-    <ele>452.628</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.180965" lon="-72.03791">
-    <name><![CDATA[48" 32' Good 1x None Handmade Concrete ]]></name>
-    <ele>317.6016</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.180714" lon="-72.103485">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>489.5088</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16935" lon="-72.123314">
-    <name><![CDATA[10" 30' Good 1x None Handmade Plastic ]]></name>
-    <ele>495.6048</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.194798" lon="-72.03089">
-    <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>342.2904</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.206184" lon="-72.03457">
-    <name><![CDATA[18" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>404.4696</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.204440062434" lon="-72.03154077714527">
-    <name><![CDATA[15" 28' Good 1x None Handmade Steel ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.18817" lon="-72.11147">
-    <name><![CDATA[18" 36' Good 1x None Handmade Concrete ]]></name>
-    <ele>551.9928</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.163357" lon="-72.05875">
-    <name><![CDATA[15" 32' Good 1x None Handmade Concrete ]]></name>
-    <ele>425.196</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17607" lon="-72.0985">
-    <name><![CDATA[24" 50' Good 1x None Handmade Plastic ]]></name>
-    <ele>462.3816</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16705" lon="-72.126144">
-    <name><![CDATA[15" 30' Good 1x None Handmade Plastic ]]></name>
-    <ele>492.5568</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.165833" lon="-72.06389">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>460.8576</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17649" lon="-72.11096">
-    <name><![CDATA[16" 40' Poor 1x None Handmade Steel ]]></name>
-    <ele>481.58398</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17593" lon="-72.043785">
-    <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>359.3592</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.190735" lon="-72.0186">
-    <name><![CDATA[18" 32' Poor 1x None Handmade Steel ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16454" lon="-72.12833">
-    <name><![CDATA[15" 25' Good 1x Moderate Handmade Steel ]]></name>
-    <ele>512.6736</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FARNSWORTH HILL]]></keywords>
-  </wpt>
-
-  <wpt lat="43.193825" lon="-72.125565">
-    <name><![CDATA[18" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>532.4856</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.159878" lon="-72.122284">
-    <name><![CDATA[18" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>496.824</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.174774" lon="-72.11558">
-    <name><![CDATA[32x48" 40' Fair 1x None Handmade Steel ]]></name>
-    <ele>497.7384</ele>
-    <desc><![CDATA[Beach entrance]]></desc>
-    <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16735" lon="-72.06703">
-    <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>447.4464</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.179966" lon="-72.10271">
-    <name><![CDATA[12" 44' Good 1x None Handmade Concrete ]]></name>
-    <ele>491.3376</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.15919" lon="-72.12304">
-    <name><![CDATA[18" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>491.3376</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.190674" lon="-72.037">
-    <name><![CDATA[12" 100' Good 1x None Precast Plastic ]]></name>
-    <ele>322.7832</ele>
-    <desc><![CDATA[Exact location extrapolated]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.159447" lon="-72.127846">
-    <name><![CDATA[15" 40' Good 1x None Precast Plastic ]]></name>
-    <ele>498.0432</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.149935012808356" lon="-72.1264958854958">
-    <name><![CDATA[36x72" 30' Good 1x None Handmade Steel ]]></name>
-    <ele>453.2376</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[KING ST]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16967" lon="-72.10784">
-    <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>529.4376</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17147" lon="-72.12104">
-    <name><![CDATA[12" 30' Poor 1x None Handmade Steel ]]></name>
-    <ele>493.776</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.15745" lon="-72.125946">
-    <name><![CDATA[15" 50' Good 1x None Handmade Plastic ]]></name>
-    <ele>491.6424</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.163766113028316" lon="-72.05653260356966">
-    <name><![CDATA[15" 40' Good 1x None Handmade Concrete ]]></name>
-    <ele>385.8768</ele>
-    <desc><![CDATA[Exact location extrapolated]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.183784" lon="-72.107254">
-    <name><![CDATA[18" 44' Good 1x None Handmade Concrete ]]></name>
-    <ele>501.0912</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.169662" lon="-72.12281">
-    <name><![CDATA[18" 35' Good 1x None Handmade Plastic ]]></name>
-    <ele>493.776</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.166" lon="-72.1268">
-    <name><![CDATA[12" 30' Good 1x None Handmade Plastic ]]></name>
-    <ele>490.1184</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.189327" lon="-72.02433">
-    <name><![CDATA[24" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>309.0672</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[PURLING BECK RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.190674" lon="-72.036285">
-    <name><![CDATA[12" 100' Good 1x None Precast Plastic ]]></name>
-    <ele>329.184</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16402" lon="-72.05607">
-    <name><![CDATA[15" 36' Good 1x None Handmade Concrete ]]></name>
-    <ele>414.2232</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.188416" lon="-72.11241">
-    <name><![CDATA[18" 36' Good 1x None Handmade Concrete ]]></name>
-    <ele>561.4416</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.18548" lon="-72.10904">
-    <name><![CDATA[24" 36' Good 1x None Handmade Concrete ]]></name>
-    <ele>523.9512</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.20798" lon="-72.03699">
-    <name><![CDATA[15" 40' Poor 1x None Handmade Steel ]]></name>
-    <ele>422.4528</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1879969962988" lon="-72.03752495286186">
-    <name><![CDATA[15" 35' Fair 1x None Handmade Steel ]]></name>
-    <ele>329.7936</ele>
-    <desc><![CDATA[Exact location extrapolated]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.176384" lon="-72.04299">
-    <name><![CDATA[12" 40' Good 1x None None Steel ]]></name>
-    <ele>340.4616</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1665" lon="-72.08168">
-    <name><![CDATA[15" 35' Fair 1x None Handmade Steel ]]></name>
-    <ele>431.5968</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.173874" lon="-72.11501">
-    <name><![CDATA[15" 20' Good 1x None Handmade Steel ]]></name>
-    <ele>497.12878</ele>
-    <desc><![CDATA[Beach access]]></desc>
-    <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
-  </wpt>
-
-  <wpt lat="43.165253" lon="-72.111534">
-    <name><![CDATA[18" 50' Good 1x None Handmade Steel ]]></name>
-    <ele>536.1432</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16553" lon="-72.12713">
-    <name><![CDATA[24" 30' Good 1x None Handmade Plastic ]]></name>
-    <ele>487.0704</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17309920589872" lon="-72.11753713351247">
-    <name><![CDATA[25" 30' Good 1x None Handmade Plastic ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.166435" lon="-72.05211">
-    <name><![CDATA[15" 55' Good 1x None Handmade Concrete ]]></name>
-    <ele>399.8976</ele>
-    <desc><![CDATA[Outlet dips down]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.178700084542015" lon="-72.1009717521147">
-    <name><![CDATA[12" 36' Good 1x None None Concrete ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.168564" lon="-72.12391">
-    <name><![CDATA[36x48" 30' Good 1x None Handmade Steel ]]></name>
-    <ele>494.0808</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.158607" lon="-72.12371">
-    <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>474.2688</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.195827" lon="-72.030914">
-    <name><![CDATA[12" 20' Good 1x None Handmade Plastic ]]></name>
-    <ele>338.6328</ele>
-    <desc><![CDATA[Ulrich rd ]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16581" lon="-72.12864">
-    <name><![CDATA[15" 20' Poor 1x None Handmade Plastic ]]></name>
-    <ele>528.5232</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FARNSWORTH HILL]]></keywords>
-  </wpt>
-
-  <wpt lat="43.190647" lon="-72.03747">
-    <name><![CDATA[60x96" 22' Fair 1x None Precast Concrete ]]></name>
-    <ele>315.468</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17331477561797" lon="-72.11706826817267">
-    <name><![CDATA[36x48" 40' Fair 1x None None Steel ]]></name>
-    <ele>489.8136</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17591155856198" lon="-72.10136628980761">
-    <name><![CDATA[32x72" 40' Good 1x None Precast Concrete ]]></name>
-    <ele>456.8952</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17011" lon="-72.12243">
-    <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>493.4712</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.171745" lon="-72.04817">
-    <name><![CDATA[15" 60' Good 1x None Handmade Concrete ]]></name>
-    <ele>381</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.192383" lon="-72.02523">
-    <name><![CDATA[30" 50' Good 1x None Precast Plastic ]]></name>
-    <ele>285.9024</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.167866" lon="-72.07799">
-    <name><![CDATA[15" 30' Fair 1x None Handmade Steel ]]></name>
-    <ele>443.7888</ele>
-    <desc>
-      <![CDATA[ Upper end is burried in coach rd. Could use a catch basin ]]>
-    </desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1639" lon="-72.127174">
-    <name><![CDATA[12" 25' Good 1x None Handmade Plastic ]]></name>
-    <ele>491.6424</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1709" lon="-72.05064">
-    <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>373.6848</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.189503" lon="-72.022354">
-    <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>278.2824</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[PURLING BECK RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16801" lon="-72.07636">
-    <name><![CDATA[36x60" 50' Good 1x None Precast Concrete ]]></name>
-    <ele>443.1792</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.145206" lon="-72.12847">
-    <name><![CDATA[12" 32' Good 1x None Handmade Plastic ]]></name>
-    <ele>503.8344</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[KING ST]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17947" lon="-72.1019">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>481.2792</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16459" lon="-72.127205">
-    <name><![CDATA[12" 30' Good 1x None Handmade Plastic ]]></name>
-    <ele>494.0808</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1755" lon="-72.04468">
-    <name><![CDATA[12" 100' Good 1x None Handmade Steel ]]></name>
-    <ele>346.5576</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.175564" lon="-72.10655">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>477.9264</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.15165" lon="-72.12697">
-    <name><![CDATA[36x48" 30' Fair 1x None Handmade Steel ]]></name>
-    <ele>460.8576</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[KING ST]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16427" lon="-72.11422">
-    <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>569.3664</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.182507" lon="-72.10556">
-    <name><![CDATA[36" 40' Poor 1x None Handmade Steel ]]></name>
-    <ele>499.5672</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.176476" lon="-72.11331">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>490.728</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.18908" lon="-72.03771">
-    <name><![CDATA[15" 35' Good 1x None Handmade Steel ]]></name>
-    <ele>346.8624</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.190956" lon="-72.11685">
-    <name><![CDATA[18" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>556.26</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17524" lon="-72.11407">
-    <name><![CDATA[12" 240' Good 1x None Handmade Plastic ]]></name>
-    <ele>496.5192</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17134" lon="-72.10562">
-    <name><![CDATA[24" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>505.0536</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1975" lon="-72.03078">
-    <name><![CDATA[12" 20' Good 1x None Handmade Plastic ]]></name>
-    <ele>369.7224</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.182518" lon="-72.037544">
-    <name><![CDATA[15" 35' Poor 1x None Handmade Concrete ]]></name>
-    <ele>320.3448</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.175575" lon="-72.107285">
-    <name><![CDATA[12" 30' Poor 1x None Handmade Steel ]]></name>
-    <ele>471.2208</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.20654" lon="-72.03514">
-    <name><![CDATA[18" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>409.6512</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.193848" lon="-72.0308">
-    <name><![CDATA[8" 20' Good 1x None Handmade Unknown ]]></name>
-    <ele>320.3448</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.167076" lon="-72.05206">
-    <name><![CDATA[24" 45' Good 1x None Handmade Concrete ]]></name>
-    <ele>390.4488</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.184464" lon="-72.107895">
-    <name><![CDATA[18" 36' Good 1x None Handmade Concrete ]]></name>
-    <ele>514.8072</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17844" lon="-72.10073">
-    <name><![CDATA[12" 44' Good 1x None Handmade Concrete ]]></name>
-    <ele>480.9744</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.191063" lon="-72.117386">
-    <name><![CDATA[18" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>551.9928</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.163322" lon="-72.127174">
-    <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>491.3376</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.177414" lon="-72.099075">
-    <name><![CDATA[12" 60' Good 1x None Handmade Steel ]]></name>
-    <ele>480.06</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.164215" lon="-72.06098">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>442.8744</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.19199353392841" lon="-72.0216008805123">
-    <name><![CDATA[12" 34' Poor 1x None Precast Concrete ]]></name>
-    <ele>295.3512</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.190895" lon="-72.033775">
-    <name><![CDATA[15" 32' Fair 1x None Handmade Concrete ]]></name>
-    <ele>334.6704</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.204655" lon="-72.03214">
-    <name><![CDATA[12" 20' Good 1x None Handmade Plastic 2022]]></name>
-    <ele>359.3592</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.175095" lon="-72.10525">
-    <name><![CDATA[24" 40' Fair 1x None None Steel ]]></name>
-    <ele>441.3504</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1887" lon="-72.11355">
-    <name><![CDATA[12" 40' Poor 1x None Handmade Unknown ]]></name>
-    <ele>569.3664</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.175953" lon="-72.113014">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>497.12878</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1595" lon="-72.127846">
-    <name><![CDATA[15" 40' Good 1x None Precast Plastic ]]></name>
-    <ele>508.4064</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.168976" lon="-72.0515">
-    <name><![CDATA[15" 36' Good 1x None Handmade Concrete ]]></name>
-    <ele>362.4072</ele>
-    <desc><![CDATA[Plastic outlet under water]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17124" lon="-72.12146">
-    <name><![CDATA[12" 30' Fair 1x None Handmade Steel ]]></name>
-    <ele>495.6048</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.158337" lon="-72.127884">
-    <name><![CDATA[8" 50' Good 1x None Precast Plastic ]]></name>
-    <ele>489.204</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.161" lon="-72.127">
-    <name><![CDATA[12" 40' Fair 1x None None Steel ]]></name>
-    <ele>492.252</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.165047" lon="-72.06194">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>459.6384</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.160904" lon="-72.12782">
-    <name><![CDATA[12" 75' Good 1x None Handmade Plastic ]]></name>
-    <ele>497.12878</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.178547622000735" lon="-72.10120173467453">
-    <name><![CDATA[6" 150' Fair 1x None None Steel ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[Continued from 12" concrete to Old Marlow Rd]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.170277" lon="-72.12228">
-    <name><![CDATA[15" 55' Good 1x None Handmade Plastic ]]></name>
-    <ele>496.2144</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16701" lon="-72.08099">
-    <name><![CDATA[18" 45' Fair 1x None Handmade Steel ]]></name>
-    <ele>429.4632</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.187008" lon="-71.82285">
-    <name><![CDATA[36x60" 30' Fair 1x None Handmade Steel ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.204845" lon="-72.03248">
-    <name><![CDATA[12" 20' Good 1x None Handmade Steel 2023]]></name>
-    <ele>378.56158</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.167408" lon="-72.10961">
-    <name><![CDATA[24" 60' Good 1x None Handmade Steel ]]></name>
-    <ele>521.8176</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.2034" lon="-72.27246">
-    <name><![CDATA[12" 20' Good 1x None Handmade Plastic ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[KING ST]]></keywords>
-  </wpt>
-
-  <wpt lat="43.160957" lon="-72.12767">
-    <name><![CDATA[12" 40' Fair 1x None Handmade Steel ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.19184555646325" lon="-72.03026440366712">
-    <name><![CDATA[18" 55' Good 1x None Precast Plastic ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[Exact location extrapolated]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16229" lon="-72.12782">
-    <name><![CDATA[24" 40' Good 1x None Precast Plastic ]]></name>
-    <ele>494.3856</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.199585" lon="-72.03083">
-    <name><![CDATA[18" 30' Good 1x None Handmade Plastic 2023]]></name>
-    <ele>345.0336</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.1760279156463" lon="-72.10846560845967">
-    <name><![CDATA[36x60" 30' Fair 1x None Handmade Steel ]]></name>
-    <ele>469.0872</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.167652" lon="-72.125404">
-    <name><![CDATA[12" 30' Good 1x None Handmade Steel 2022]]></name>
-    <ele>487.68</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[MILLEN POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.187447" lon="-72.1108">
-    <name><![CDATA[18" 44' Good 1x None Handmade Concrete ]]></name>
-    <ele>539.8008</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.2028786830698" lon="-72.03017939777375">
-    <name><![CDATA[12" 28' Good 1x None Handmade Steel 2023]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.159992" lon="-72.127426">
-    <name><![CDATA[15" 60' Fair 1x None Handmade Steel ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17293" lon="-72.10406">
-    <name><![CDATA[28" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>481.2792</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[FAXON HILL RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.186344" lon="-72.10951">
-    <name><![CDATA[18" 50' Good 1x None Handmade Plastic ]]></name>
-    <ele>480.6696</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.189836735558345" lon="-72.11557998966488">
-    <name><![CDATA[18" 36' Fair 1x None Handmade Concrete ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.167637" lon="-72.07204">
-    <name><![CDATA[15" 50' Good 1x None Handmade Plastic ]]></name>
-    <ele>454.4568</ele>
-    <desc><![CDATA[Outlet under water]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.184246" lon="-72.03741">
-    <name><![CDATA[15" 36' Good 1x None Handmade Concrete ]]></name>
-    <ele>315.7728</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.177258" lon="-72.04173">
-    <name><![CDATA[24" 36' Fair 1x None Handmade Concrete ]]></name>
-    <ele>335.8896</ele>
-    <desc><![CDATA[10' steel outlet end is rotted]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.187065" lon="-72.037636">
-    <name><![CDATA[18" 40' Good 1x None Handmade Concrete ]]></name>
-    <ele>332.8416</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.205612" lon="-72.033676">
-    <name><![CDATA[12" 15' Fair 1x None Handmade Steel ]]></name>
-    <ele>392.2776</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.171288" lon="-72.050186">
-    <name><![CDATA[36" 45' Good 1x None Handmade Concrete ]]></name>
-    <ele>372.4656</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.17501" lon="-72.04525">
-    <name><![CDATA[24" 32' Good 1x None Handmade Concrete ]]></name>
-    <ele>349.6056</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.2071" lon="-72.03608">
-    <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
-    <ele>426.1104</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[AYERS POND RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.16616" lon="-72.064804">
-    <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
-    <ele>443.484</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.166" lon="-72.08356">
-    <name><![CDATA[24" 45' Fair 1x None Handmade Steel ]]></name>
-    <ele>420.3192</ele>
-    <desc><![CDATA[]]></desc>
-    <keywords><![CDATA[E WASHINGTON RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.191113" lon="-72.11768">
-    <name><![CDATA[18" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>551.9928</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-
-  <wpt lat="43.136917" lon="-72.127625">
-    <name><![CDATA[18" 30' Fair 1x None Handmade Steel ]]></name>
-    <ele>0</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[KING ST]]></keywords>
-  </wpt>
-
-  <wpt lat="43.191162" lon="-72.1184">
-    <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
-    <ele>554.4312</ele>
-    <desc><![CDATA[undefined]]></desc>
-    <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
-  </wpt>
-</gpx>
+    <gpx
+      xmlns="http://www.topografix.com/GPX/1/1"
+      version="1.1"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+    >
+    
+        <wpt lat="43.16752" lon="-72.078804">
+          <name><![CDATA[15" 35' Fair 1x None Handmade Steel ]]></name>
+          <ele>439.5216</ele>
+          <desc><![CDATA[5' of concrete at inlet]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17517" lon="-72.11557">
+          <name><![CDATA[3" 5' Fair 1x None Handmade Steel ]]></name>
+          <ele>503.2248</ele>
+          <desc><![CDATA[Above beach entrance]]></desc>
+          <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.191708" lon="-72.12211">
+          <name><![CDATA[15" 40' Good 1x None None Steel ]]></name>
+          <ele>534.6192</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.192604" lon="-72.0304">
+          <name><![CDATA[24" 28' Good 2x None Handmade Plastic ]]></name>
+          <ele>330.4032</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.15364" lon="-72.126686">
+          <name><![CDATA[12" 30' Poor 1x None Handmade Steel ]]></name>
+          <ele>467.5632</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[KING ST]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.178032" lon="-72.04085">
+          <name><![CDATA[15" 40' Good 1x None Handmade Concrete ]]></name>
+          <ele>330.4032</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17551" lon="-72.11285">
+          <name><![CDATA[18" 45' Good 1x None Handmade Plastic ]]></name>
+          <ele>491.3376</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.172806" lon="-72.1181">
+          <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>488.2896</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.190563" lon="-72.038315">
+          <name><![CDATA[15" 50' Good 1x None Handmade Steel ]]></name>
+          <ele>320.6496</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17603" lon="-72.11441">
+          <name><![CDATA[12" 50' Good 1x None Handmade Plastic ]]></name>
+          <ele>491.9472</ele>
+          <desc><![CDATA[Wolf Way entrance]]></desc>
+          <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17641" lon="-72.11253">
+          <name><![CDATA[15" 60' Poor 1x None Handmade Steel ]]></name>
+          <ele>518.7696</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16727" lon="-72.079475">
+          <name><![CDATA[12" 35' Fair 1x None Handmade Steel ]]></name>
+          <ele>444.7032</ele>
+          <desc><![CDATA[Has 5' of concrete pipe at inlet]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17274" lon="-72.1188">
+          <name><![CDATA[30" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>491.0328</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.19193911808486" lon="-72.02126967487632">
+          <name><![CDATA[12" 55' Good 1x None Precast Plastic ]]></name>
+          <ele>294.7416</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.167423" lon="-72.06885">
+          <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>448.9704</ele>
+          <desc><![CDATA[Outlet under water]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.157974" lon="-72.12706">
+          <name><![CDATA[25" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>500.4816</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.176613" lon="-72.10991">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>487.0704</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16455" lon="-72.05505">
+          <name><![CDATA[15" 50' Fair 1x None Handmade Concrete ]]></name>
+          <ele>408.432</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.175755" lon="-72.10795">
+          <name><![CDATA[15" 30' Good 1x None Handmade Steel ]]></name>
+          <ele>479.1456</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18002" lon="-72.03849">
+          <name><![CDATA[15" 50' Fair 1x None Handmade Steel ]]></name>
+          <ele>321.564</ele>
+          <desc><![CDATA[Steel inlet concrete outlet]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.169952" lon="-72.0513">
+          <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>387.096</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.168026" lon="-72.12466">
+          <name><![CDATA[12" 30' Good 1x None Handmade Steel 2023]]></name>
+          <ele>490.728</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.206856" lon="-72.03575">
+          <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>421.8432</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.189274" lon="-72.02455">
+          <name><![CDATA[96x12" 30' Good 1x None Handmade Steel ]]></name>
+          <ele>313.6392</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[PURLING BECK RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17374" lon="-72.04634">
+          <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>356.616</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17900879306109" lon="-72.10139581749604">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.205776" lon="-72.03397">
+          <name><![CDATA[12" 17' Fair 1x None Handmade Steel ]]></name>
+          <ele>400.812</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.174805" lon="-72.10271">
+          <name><![CDATA[48x96" 36' Good 1x None Precast Concrete ]]></name>
+          <ele>452.628</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.180965" lon="-72.03791">
+          <name><![CDATA[48" 32' Good 1x None Handmade Concrete ]]></name>
+          <ele>317.6016</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.180714" lon="-72.103485">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>489.5088</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16935" lon="-72.123314">
+          <name><![CDATA[10" 30' Good 1x None Handmade Plastic ]]></name>
+          <ele>495.6048</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.194798" lon="-72.03089">
+          <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>342.2904</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.206184" lon="-72.03457">
+          <name><![CDATA[18" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>404.4696</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.204440062434" lon="-72.03154077714527">
+          <name><![CDATA[15" 28' Good 1x None Handmade Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18817" lon="-72.11147">
+          <name><![CDATA[18" 36' Good 1x None Handmade Concrete ]]></name>
+          <ele>551.9928</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.163357" lon="-72.05875">
+          <name><![CDATA[15" 32' Good 1x None Handmade Concrete ]]></name>
+          <ele>425.196</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17607" lon="-72.0985">
+          <name><![CDATA[24" 50' Good 1x None Handmade Plastic ]]></name>
+          <ele>462.3816</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16705" lon="-72.126144">
+          <name><![CDATA[15" 30' Good 1x None Handmade Plastic ]]></name>
+          <ele>492.5568</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.165833" lon="-72.06389">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>460.8576</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17649" lon="-72.11096">
+          <name><![CDATA[16" 40' Poor 1x None Handmade Steel ]]></name>
+          <ele>481.58398</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17593" lon="-72.043785">
+          <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>359.3592</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.190735" lon="-72.0186">
+          <name><![CDATA[18" 32' Poor 1x None Handmade Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16454" lon="-72.12833">
+          <name><![CDATA[15" 25' Good 1x Moderate Handmade Steel ]]></name>
+          <ele>512.6736</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FARNSWORTH HILL]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.193825" lon="-72.125565">
+          <name><![CDATA[18" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>532.4856</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.159878" lon="-72.122284">
+          <name><![CDATA[18" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>496.824</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.174774" lon="-72.11558">
+          <name><![CDATA[32x48" 40' Fair 1x None Handmade Steel ]]></name>
+          <ele>497.7384</ele>
+          <desc><![CDATA[Beach entrance]]></desc>
+          <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16735" lon="-72.06703">
+          <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>447.4464</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.179966" lon="-72.10271">
+          <name><![CDATA[12" 44' Good 1x None Handmade Concrete ]]></name>
+          <ele>491.3376</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.15919" lon="-72.12304">
+          <name><![CDATA[18" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>491.3376</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.190674" lon="-72.037">
+          <name><![CDATA[12" 100' Good 1x None Precast Plastic ]]></name>
+          <ele>322.7832</ele>
+          <desc><![CDATA[Exact location extrapolated]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.159447" lon="-72.127846">
+          <name><![CDATA[15" 40' Good 1x None Precast Plastic ]]></name>
+          <ele>498.0432</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.149935012808356" lon="-72.1264958854958">
+          <name><![CDATA[36x72" 30' Good 1x None Handmade Steel ]]></name>
+          <ele>453.2376</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[KING ST]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16967" lon="-72.10784">
+          <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>529.4376</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17147" lon="-72.12104">
+          <name><![CDATA[12" 30' Poor 1x None Handmade Steel ]]></name>
+          <ele>493.776</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.15745" lon="-72.125946">
+          <name><![CDATA[15" 50' Good 1x None Handmade Plastic ]]></name>
+          <ele>491.6424</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.163766113028316" lon="-72.05653260356966">
+          <name><![CDATA[15" 40' Good 1x None Handmade Concrete ]]></name>
+          <ele>385.8768</ele>
+          <desc><![CDATA[Exact location extrapolated]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.183784" lon="-72.107254">
+          <name><![CDATA[18" 44' Good 1x None Handmade Concrete ]]></name>
+          <ele>501.0912</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.169662" lon="-72.12281">
+          <name><![CDATA[18" 35' Good 1x None Handmade Plastic ]]></name>
+          <ele>493.776</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.166" lon="-72.1268">
+          <name><![CDATA[12" 30' Good 1x None Handmade Plastic ]]></name>
+          <ele>490.1184</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.189327" lon="-72.02433">
+          <name><![CDATA[24" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>309.0672</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[PURLING BECK RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.190674" lon="-72.036285">
+          <name><![CDATA[12" 100' Good 1x None Precast Plastic ]]></name>
+          <ele>329.184</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16402" lon="-72.05607">
+          <name><![CDATA[15" 36' Good 1x None Handmade Concrete ]]></name>
+          <ele>414.2232</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.188416" lon="-72.11241">
+          <name><![CDATA[18" 36' Good 1x None Handmade Concrete ]]></name>
+          <ele>561.4416</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18548" lon="-72.10904">
+          <name><![CDATA[24" 36' Good 1x None Handmade Concrete ]]></name>
+          <ele>523.9512</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.20798" lon="-72.03699">
+          <name><![CDATA[15" 40' Poor 1x None Handmade Steel ]]></name>
+          <ele>422.4528</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1879969962988" lon="-72.03752495286186">
+          <name><![CDATA[15" 35' Fair 1x None Handmade Steel ]]></name>
+          <ele>329.7936</ele>
+          <desc><![CDATA[Exact location extrapolated]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.176384" lon="-72.04299">
+          <name><![CDATA[12" 40' Good 1x None None Steel ]]></name>
+          <ele>340.4616</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1665" lon="-72.08168">
+          <name><![CDATA[15" 35' Fair 1x None Handmade Steel ]]></name>
+          <ele>431.5968</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.173874" lon="-72.11501">
+          <name><![CDATA[15" 20' Good 1x None Handmade Steel ]]></name>
+          <ele>497.12878</ele>
+          <desc><![CDATA[Beach access]]></desc>
+          <keywords><![CDATA[CAMP MORGAN PARKING AREA]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.165253" lon="-72.111534">
+          <name><![CDATA[18" 50' Good 1x None Handmade Steel ]]></name>
+          <ele>536.1432</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16553" lon="-72.12713">
+          <name><![CDATA[24" 30' Good 1x None Handmade Plastic ]]></name>
+          <ele>487.0704</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17309920589872" lon="-72.11753713351247">
+          <name><![CDATA[25" 30' Good 1x None Handmade Plastic ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.166435" lon="-72.05211">
+          <name><![CDATA[15" 55' Good 1x None Handmade Concrete ]]></name>
+          <ele>399.8976</ele>
+          <desc><![CDATA[Outlet dips down]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.178700084542015" lon="-72.1009717521147">
+          <name><![CDATA[12" 36' Good 1x None None Concrete ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.168564" lon="-72.12391">
+          <name><![CDATA[36x48" 30' Good 1x None Handmade Steel ]]></name>
+          <ele>494.0808</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.158607" lon="-72.12371">
+          <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>474.2688</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.195827" lon="-72.030914">
+          <name><![CDATA[12" 20' Good 1x None Handmade Plastic ]]></name>
+          <ele>338.6328</ele>
+          <desc><![CDATA[Ulrich rd ]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16581" lon="-72.12864">
+          <name><![CDATA[15" 20' Poor 1x None Handmade Plastic ]]></name>
+          <ele>528.5232</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FARNSWORTH HILL]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.190647" lon="-72.03747">
+          <name><![CDATA[60x96" 22' Fair 1x None Precast Concrete ]]></name>
+          <ele>315.468</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17331477561797" lon="-72.11706826817267">
+          <name><![CDATA[36x48" 40' Fair 1x None None Steel ]]></name>
+          <ele>489.8136</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17591155856198" lon="-72.10136628980761">
+          <name><![CDATA[32x72" 40' Good 1x None Precast Concrete ]]></name>
+          <ele>456.8952</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17011" lon="-72.12243">
+          <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>493.4712</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.171745" lon="-72.04817">
+          <name><![CDATA[15" 60' Good 1x None Handmade Concrete ]]></name>
+          <ele>381</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.192383" lon="-72.02523">
+          <name><![CDATA[30" 50' Good 1x None Precast Plastic ]]></name>
+          <ele>285.9024</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.167866" lon="-72.07799">
+          <name><![CDATA[15" 30' Fair 1x None Handmade Steel ]]></name>
+          <ele>443.7888</ele>
+          <desc><![CDATA[
+      Upper end is burried in coach rd. Could use a catch basin
+    ]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1639" lon="-72.127174">
+          <name><![CDATA[12" 25' Good 1x None Handmade Plastic ]]></name>
+          <ele>491.6424</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1709" lon="-72.05064">
+          <name><![CDATA[15" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>373.6848</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.189503" lon="-72.022354">
+          <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>278.2824</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[PURLING BECK RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16801" lon="-72.07636">
+          <name><![CDATA[36x60" 50' Good 1x None Precast Concrete ]]></name>
+          <ele>443.1792</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.145206" lon="-72.12847">
+          <name><![CDATA[12" 32' Good 1x None Handmade Plastic ]]></name>
+          <ele>503.8344</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[KING ST]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17947" lon="-72.1019">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>481.2792</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16459" lon="-72.127205">
+          <name><![CDATA[12" 30' Good 1x None Handmade Plastic ]]></name>
+          <ele>494.0808</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1755" lon="-72.04468">
+          <name><![CDATA[12" 100' Good 1x None Handmade Steel ]]></name>
+          <ele>346.5576</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.175564" lon="-72.10655">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>477.9264</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.15165" lon="-72.12697">
+          <name><![CDATA[36x48" 30' Fair 1x None Handmade Steel ]]></name>
+          <ele>460.8576</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[KING ST]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16427" lon="-72.11422">
+          <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>569.3664</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.182507" lon="-72.10556">
+          <name><![CDATA[36" 40' Poor 1x None Handmade Steel ]]></name>
+          <ele>499.5672</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.176476" lon="-72.11331">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>490.728</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18908" lon="-72.03771">
+          <name><![CDATA[15" 35' Good 1x None Handmade Steel ]]></name>
+          <ele>346.8624</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.190956" lon="-72.11685">
+          <name><![CDATA[18" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>556.26</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17524" lon="-72.11407">
+          <name><![CDATA[12" 240' Good 1x None Handmade Plastic ]]></name>
+          <ele>496.5192</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17134" lon="-72.10562">
+          <name><![CDATA[24" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>505.0536</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1975" lon="-72.03078">
+          <name><![CDATA[12" 20' Good 1x None Handmade Plastic ]]></name>
+          <ele>369.7224</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.182518" lon="-72.037544">
+          <name><![CDATA[15" 35' Poor 1x None Handmade Concrete ]]></name>
+          <ele>320.3448</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.175575" lon="-72.107285">
+          <name><![CDATA[12" 30' Poor 1x None Handmade Steel ]]></name>
+          <ele>471.2208</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.20654" lon="-72.03514">
+          <name><![CDATA[18" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>409.6512</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.193848" lon="-72.0308">
+          <name><![CDATA[8" 20' Good 1x None Handmade Unknown ]]></name>
+          <ele>320.3448</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.167076" lon="-72.05206">
+          <name><![CDATA[24" 45' Good 1x None Handmade Concrete ]]></name>
+          <ele>390.4488</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.184464" lon="-72.107895">
+          <name><![CDATA[18" 36' Good 1x None Handmade Concrete ]]></name>
+          <ele>514.8072</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17844" lon="-72.10073">
+          <name><![CDATA[12" 44' Good 1x None Handmade Concrete ]]></name>
+          <ele>480.9744</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.191063" lon="-72.117386">
+          <name><![CDATA[18" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>551.9928</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.163322" lon="-72.127174">
+          <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>491.3376</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.177414" lon="-72.099075">
+          <name><![CDATA[12" 60' Good 1x None Handmade Steel ]]></name>
+          <ele>480.06</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.164215" lon="-72.06098">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>442.8744</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.19199353392841" lon="-72.0216008805123">
+          <name><![CDATA[12" 34' Poor 1x None Precast Concrete ]]></name>
+          <ele>295.3512</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.190895" lon="-72.033775">
+          <name><![CDATA[15" 32' Fair 1x None Handmade Concrete ]]></name>
+          <ele>334.6704</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.204655" lon="-72.03214">
+          <name><![CDATA[12" 20' Good 1x None Handmade Plastic 2022]]></name>
+          <ele>359.3592</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.175095" lon="-72.10525">
+          <name><![CDATA[24" 40' Fair 1x None None Steel ]]></name>
+          <ele>441.3504</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1887" lon="-72.11355">
+          <name><![CDATA[12" 40' Poor 1x None Handmade Unknown ]]></name>
+          <ele>569.3664</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.175953" lon="-72.113014">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>497.12878</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1595" lon="-72.127846">
+          <name><![CDATA[15" 40' Good 1x None Precast Plastic ]]></name>
+          <ele>508.4064</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.168976" lon="-72.0515">
+          <name><![CDATA[15" 36' Good 1x None Handmade Concrete ]]></name>
+          <ele>362.4072</ele>
+          <desc><![CDATA[Plastic outlet under water]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17124" lon="-72.12146">
+          <name><![CDATA[12" 30' Fair 1x None Handmade Steel ]]></name>
+          <ele>495.6048</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.158337" lon="-72.127884">
+          <name><![CDATA[8" 50' Good 1x None Precast Plastic ]]></name>
+          <ele>489.204</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.161" lon="-72.127">
+          <name><![CDATA[12" 40' Fair 1x None None Steel ]]></name>
+          <ele>492.252</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.165047" lon="-72.06194">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>459.6384</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.160904" lon="-72.12782">
+          <name><![CDATA[12" 75' Good 1x None Handmade Plastic ]]></name>
+          <ele>497.12878</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.178547622000735" lon="-72.10120173467453">
+          <name><![CDATA[6" 150' Fair 1x None None Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[Continued from 12" concrete to Old Marlow Rd]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.170277" lon="-72.12228">
+          <name><![CDATA[15" 55' Good 1x None Handmade Plastic ]]></name>
+          <ele>496.2144</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16701" lon="-72.08099">
+          <name><![CDATA[18" 45' Fair 1x None Handmade Steel ]]></name>
+          <ele>429.4632</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.174" lon="-72.116">
+          <name><![CDATA[36x60" 30' Fair 1x None Handmade Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.204845" lon="-72.03248">
+          <name><![CDATA[12" 20' Good 1x None Handmade Steel 2023]]></name>
+          <ele>378.56158</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.167408" lon="-72.10961">
+          <name><![CDATA[24" 60' Good 1x None Handmade Steel ]]></name>
+          <ele>521.8176</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.140036341487274" lon="-72.12808734569496">
+          <name><![CDATA[12" 20' Good 1x None Handmade Plastic ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[KING ST]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.160957" lon="-72.12767">
+          <name><![CDATA[12" 40' Fair 1x None Handmade Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.19184555646325" lon="-72.03026440366712">
+          <name><![CDATA[18" 55' Good 1x None Precast Plastic ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[Exact location extrapolated]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16229" lon="-72.12782">
+          <name><![CDATA[24" 40' Good 1x None Precast Plastic ]]></name>
+          <ele>494.3856</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.199585" lon="-72.03083">
+          <name><![CDATA[18" 30' Good 1x None Handmade Plastic 2023]]></name>
+          <ele>345.0336</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.1760279156463" lon="-72.10846560845967">
+          <name><![CDATA[36x60" 30' Fair 1x None Handmade Steel ]]></name>
+          <ele>469.0872</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.167652" lon="-72.125404">
+          <name><![CDATA[12" 30' Good 1x None Handmade Steel 2022]]></name>
+          <ele>487.68</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.187447" lon="-72.1108">
+          <name><![CDATA[18" 44' Good 1x None Handmade Concrete ]]></name>
+          <ele>539.8008</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.2028786830698" lon="-72.03017939777375">
+          <name><![CDATA[12" 28' Good 1x None Handmade Steel 2023]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.159992" lon="-72.127426">
+          <name><![CDATA[15" 60' Fair 1x None Handmade Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17293" lon="-72.10406">
+          <name><![CDATA[28" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>481.2792</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[FAXON HILL RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.186344" lon="-72.10951">
+          <name><![CDATA[18" 50' Good 1x None Handmade Plastic ]]></name>
+          <ele>480.6696</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.189836735558345" lon="-72.11557998966488">
+          <name><![CDATA[18" 36' Fair 1x None Handmade Concrete ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.167637" lon="-72.07204">
+          <name><![CDATA[15" 50' Good 1x None Handmade Plastic ]]></name>
+          <ele>454.4568</ele>
+          <desc><![CDATA[Outlet under water]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.184246" lon="-72.03741">
+          <name><![CDATA[15" 36' Good 1x None Handmade Concrete ]]></name>
+          <ele>315.7728</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.177258" lon="-72.04173">
+          <name><![CDATA[24" 36' Fair 1x None Handmade Concrete ]]></name>
+          <ele>335.8896</ele>
+          <desc><![CDATA[10' steel outlet end is rotted]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.187065" lon="-72.037636">
+          <name><![CDATA[18" 40' Good 1x None Handmade Concrete ]]></name>
+          <ele>332.8416</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.205612" lon="-72.033676">
+          <name><![CDATA[12" 15' Fair 1x None Handmade Steel ]]></name>
+          <ele>392.2776</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.171288" lon="-72.050186">
+          <name><![CDATA[36" 45' Good 1x None Handmade Concrete ]]></name>
+          <ele>372.4656</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17501" lon="-72.04525">
+          <name><![CDATA[24" 32' Good 1x None Handmade Concrete ]]></name>
+          <ele>349.6056</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.2071" lon="-72.03608">
+          <name><![CDATA[12" 20' Poor 1x None Handmade Steel ]]></name>
+          <ele>426.1104</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.16616" lon="-72.064804">
+          <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
+          <ele>443.484</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.166" lon="-72.08356">
+          <name><![CDATA[24" 45' Fair 1x None Handmade Steel ]]></name>
+          <ele>420.3192</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.191113" lon="-72.11768">
+          <name><![CDATA[18" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>551.9928</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.136917" lon="-72.127625">
+          <name><![CDATA[18" 30' Fair 1x None Handmade Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[KING ST]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.191162" lon="-72.1184">
+          <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>554.4312</ele>
+          <desc><![CDATA[undefined]]></desc>
+          <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
+        </wpt>
+      
+    </gpx>
+    

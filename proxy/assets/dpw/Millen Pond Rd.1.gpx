@@ -3,8 +3,7 @@
   creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
   version="1.1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
->
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <wpt lat="43.169662" lon="-72.12281">
     <ele>493.776</ele>
     <time>2023-12-28T19:46:39Z</time>
@@ -61,12 +60,13 @@
     <type><![CDATA[Not specified]]></type>
   </wpt>
 
-  <wpt lat="43.187008" lon="-71.82285">
+  <wpt lat="43.174" lon="-72.116">
     <ele>0.0</ele>
     <time>2023-12-28T18:14:47Z</time>
     <name><![CDATA[3x5 30' fair steel handmade Waypoint 13]]></name>
     <type><![CDATA[Not specified]]></type>
   </wpt>
+
   <wpt lat="43.17524" lon="-72.11407">
     <ele>496.5192</ele>
     <time>2023-12-28T17:56:07Z</time>
