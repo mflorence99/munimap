@@ -143,6 +143,7 @@ import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import { faCircleNotch } from '@fortawesome/pro-duotone-svg-icons';
 import { faClipboard } from '@fortawesome/pro-regular-svg-icons';
 import { faCog } from '@fortawesome/pro-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrows } from '@fortawesome/pro-solid-svg-icons';
 import { faGlobeAmericas } from '@fortawesome/pro-duotone-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -434,6 +435,7 @@ export class RootModule {
       faCircleNotch,
       faClipboard,
       faCog,
+      faDownload,
       faExpandArrows,
       faGlobeAmericas,
       faInfoCircle,

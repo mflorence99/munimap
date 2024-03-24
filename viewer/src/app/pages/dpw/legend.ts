@@ -11,7 +11,6 @@ import { LandmarksState } from '@lib/state/landmarks';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
-import { VersionService } from '@lib/services/version';
 
 import { combineLatest } from 'rxjs';
 import { culvertConditions } from '@lib/common';
@@ -20,7 +19,10 @@ import { culvertHeadwalls } from '@lib/common';
 import { culvertMaterials } from '@lib/common';
 import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { saveAs } from 'file-saver';
 import { takeUntil } from 'rxjs/operators';
+
+import copy from 'fast-copy';
 
 interface Metric {
   enum: () => string[];
@@ -38,8 +40,8 @@ interface Statistics {
   providers: [DestroyService],
   selector: 'app-dpw-legend',
   template: `
-    <button (click)="reset()" class="reloader" mat-icon-button>
-      <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
+    <button (click)="export()" class="exporter" mat-icon-button>
+      <fa-icon [icon]="['fas', 'download']" size="lg"></fa-icon>
     </button>
 
     <header class="header">
@@ -47,7 +49,13 @@ interface Statistics {
         <fa-icon [icon]="['fad', 'circle-notch']" size="2x"></fa-icon>
       </figure>
       <p class="title">Culverts</p>
-      <p class="subtitle">Distribution and usage</p>
+      <p class="subtitle">
+        @if (filteredBy) {
+          {{ filteredBy }}
+        } @else {
+          Distribution and usage
+        }
+      </p>
     </header>
 
     <article class="form">
@@ -87,6 +95,8 @@ interface Statistics {
                           </span>
                         }
                       </td>
+                    } @else {
+                      <td></td>
                     }
                   }
                 </tr>
@@ -99,11 +109,24 @@ interface Statistics {
   `,
   styles: [
     `
+      .exporter {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        z-index: 2;
+      }
+
       .legend {
         border-collapse: collapse;
         width: 100%;
 
+        td {
+          padding: 2px;
+          white-space: nowrap;
+        }
+
         td:not(:first-child) {
+          border-left: 1px solid var(--mat-gray-800);
           font-size: smaller;
           text-align: right;
         }
@@ -118,15 +141,13 @@ interface Statistics {
         }
 
         th:not(:first-child) {
+          padding: 8px;
           text-align: right;
         }
-      }
 
-      .reloader {
-        position: absolute;
-        right: 1rem;
-        top: 1rem;
-        z-index: 2;
+        tr {
+          border-bottom: 1px solid var(--mat-gray-800);
+        }
       }
     `
   ],
@@ -151,7 +172,7 @@ export class DPWLegendComponent implements OnInit {
       },
       key: (culvert) =>
         culvert.diameter
-          ? String(culvert.diameter).padStart(2, '0')
+          ? String(culvert.diameter).padStart(2, ' ')
           : `${culvert.width}x${culvert.height}`,
       tag: 'Opening'
     },
@@ -180,18 +201,35 @@ export class DPWLegendComponent implements OnInit {
 
   // 👇 metric -> value -> condition -> { count, length }
   breakdowns: Record<string, Record<string, Record<string, Statistics>>> = {};
+  filteredBy: string;
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
   #root = inject(RootPage);
-  #version = inject(VersionService);
+  #snapshot: CulvertProperties[] = [];
+
+  export(): void {
+    // 👇 build the data
+    const lines = [];
+    lines.push(
+      `Location\tCondition\tCount\tDiameter\tWidth\tHeight\tLength\tHeadWall\tMaterial\tFlood Hazard\tYear\tDescription`
+    );
+    this.#snapshot.forEach((culvert) => {
+      const c = copy(culvert);
+      Object.keys(c).forEach((k) => (c[k] = c[k] || ''));
+      lines.push(
+        `${c.location}\t${c.condition}\t${c.count}\t${c.diameter}\t${c.width}\t${c.height}\t${c.length}\t${c.headwall}\t${c.material}\t${c.floodHazard}\t${c.year}\t${c.description}\t`
+      );
+    });
+    // 👇 emit the data
+    const blob = new Blob([lines.join('\n')], {
+      type: 'text/tab-separated-values; charset=UTF-8'
+    });
+    saveAs(blob, `${this.filteredBy ?? 'ALL STREETS'} culverts.tsv`);
+  }
 
   ngOnInit(): void {
     this.#handleStreams$();
-  }
-
-  reset(): void {
-    this.#version.hardReset();
   }
 
   #calcBreakdowns(culverts: CulvertProperties[]): void {
@@ -219,18 +257,24 @@ export class DPWLegendComponent implements OnInit {
     ])
       .pipe(
         takeUntil(this.#destroy$),
-        map(([landmarks, filterFn]): CulvertProperties[] =>
-          landmarks
-            .filter(
-              (landmark) => landmark.properties.metadata?.type === 'culvert'
-            )
-            .filter(filterFn)
-            .map(
-              (landmark) => landmark.properties.metadata as CulvertProperties
-            )
-        )
+        map(([landmarks, filterFn]): [CulvertProperties[], string] => {
+          const culverts = landmarks.filter(
+            (landmark) => landmark.properties.metadata?.type === 'culvert'
+          );
+          const filteredCulverts = culverts.filter(filterFn);
+          const filteredBy =
+            culverts.length !== filteredCulverts.length
+              ? filteredCulverts[0].properties.metadata.location
+              : null;
+          const properties = filteredCulverts.map(
+            (culvert) => culvert.properties.metadata as CulvertProperties
+          );
+          return [properties, filteredBy];
+        })
       )
-      .subscribe((culverts: CulvertProperties[]) => {
+      .subscribe(([culverts, filteredBy]) => {
+        this.filteredBy = filteredBy;
+        this.#snapshot = culverts;
         this.#calcBreakdowns(culverts);
         this.#cdf.detectChanges();
       });

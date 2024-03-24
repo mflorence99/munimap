@@ -62,7 +62,6 @@ export class DPWToolbarComponent {
   }
 
   onFilterStreet(street: string): void {
-    console.log({ street });
     (this.#root.routedPageComponent as DPWPage).filterFn$.next(
       (landmark: Landmark): boolean =>
         !street || landmark.properties.metadata?.location === street

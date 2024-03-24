@@ -9,18 +9,11 @@ import { Parcel } from '@lib/common';
 import { ParcelsState } from '@lib/state/parcels';
 import { Select } from '@ngxs/store';
 import { Signal } from '@angular/core';
-import { VersionService } from '@lib/services/version';
-
-import { inject } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-parcels-legend',
   template: `
-    <button (click)="reset()" class="reloader" mat-icon-button>
-      <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
-    </button>
-
     @if (colorCode$ | async; as colorCode) {
       <header class="header">
         <figure class="icon">
@@ -299,13 +292,6 @@ import { inject } from '@angular/core';
           }
         }
       }
-
-      .reloader {
-        position: absolute;
-        right: 1rem;
-        top: 1rem;
-        z-index: 2;
-      }
     `
   ],
   styleUrls: ['../../../../../lib/css/sidebar.scss']
@@ -323,13 +309,7 @@ export class ParcelsLegendComponent
   state: Signal<string>;
   title: Signal<string>;
 
-  #version = inject(VersionService);
-
   ngOnInit(): void {
     this.onInit();
-  }
-
-  reset(): void {
-    this.#version.hardReset();
   }
 }

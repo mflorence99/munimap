@@ -52,10 +52,6 @@ import urlParse from 'url-parse';
           <button (click)="leftSidebar.toggle()" mat-icon-button>
             <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
           </button>
-        } @else {
-          <button (click)="reset()" mat-icon-button>
-            <fa-icon [icon]="['fas', 'sync']" size="2x"></fa-icon>
-          </button>
         }
 
         <h1 class="title">
@@ -111,6 +107,10 @@ import urlParse from 'url-parse';
             <fa-icon [icon]="['fad', 'palette']" size="lg"></fa-icon>
           </mat-button-toggle>
         }
+
+        <mat-button-toggle (change)="reset()" [checked]="false">
+          <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
+        </mat-button-toggle>
       </mat-toolbar>
 
       <mat-drawer-container class="container">
