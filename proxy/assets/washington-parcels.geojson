@@ -364,14 +364,14 @@
         "address": "1037 ASHUELOT DRIVE",
         "area": 1.86,
         "areas": [1.7607949431854382],
-        "building$": 243000,
+        "building$": 201700,
         "callouts": [],
         "centers": [[-72.14777228945536, 43.17612427378028]],
         "county": "SULLIVAN",
         "elevations": [1470.36],
         "id": "10-11",
         "labels": [],
-        "land$": 145300,
+        "land$": 133400,
         "lengths": [[110, 1, 639, 12, 82, 73, 56, 33, 450]],
         "minWidths": [169],
         "neighborhood": "N-P",
@@ -380,7 +380,7 @@
         "owner": "KELLERMAN, CHARLINE, TRUSTEE",
         "perimeters": [1482.4964426265537],
         "sqarcities": [0.45465761108587516],
-        "taxed$": 388300,
+        "taxed$": 335100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -752,7 +752,7 @@
         "address": "959 ASHUELOT DRIVE",
         "area": 6,
         "areas": [5.80757386254302],
-        "building$": 304400,
+        "building$": 277300,
         "callouts": [],
         "centers": [[-72.15218892478266, 43.175101300888315]],
         "county": "SULLIVAN",
@@ -769,11 +769,11 @@
         "minWidths": [373],
         "neighborhood": "N-P",
         "orientations": [46.006966377811665],
-        "other$": 37400,
+        "other$": 43600,
         "owner": "RIVOSA, DEBORAH",
         "perimeters": [2494.8592618166945],
         "sqarcities": [0.5983445172948818],
-        "taxed$": 637300,
+        "taxed$": 616400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -11794,73 +11794,6 @@
         "type": "Polygon",
         "coordinates": [
           [
-            [-72.058834, 43.1715185],
-            [-72.0588098, 43.1714901],
-            [-72.05881, 43.17149],
-            [-72.05735, 43.17015],
-            [-72.05721, 43.17025],
-            [-72.05711, 43.17037],
-            [-72.05702, 43.17045],
-            [-72.05684, 43.17048],
-            [-72.05664, 43.17052],
-            [-72.05651, 43.17058],
-            [-72.05642, 43.17066],
-            [-72.057241, 43.1711885],
-            [-72.05818, 43.17177],
-            [-72.0581698, 43.1717756],
-            [-72.0581718, 43.1717747],
-            [-72.0581979, 43.1718055],
-            [-72.058834, 43.1715185]
-          ]
-        ]
-      },
-      "properties": {
-        "abutters": [
-          "12-109",
-          "12-110",
-          "12-122",
-          "12-124",
-          "12-128",
-          "12-203"
-        ],
-        "address": "330 WASHINGTON DRIVE",
-        "area": 7.22,
-        "areas": [3.5664379398834916],
-        "building$": 0,
-        "callouts": [],
-        "centers": [[-72.05763603557959, 43.17098323881848]],
-        "county": "SULLIVAN",
-        "elevations": [1396.36],
-        "id": "12-123",
-        "labels": [],
-        "land$": 62000,
-        "lengths": [
-          [12, 0, 624, 52, 51, 38, 49, 55, 41, 38, 291, 328, 3, 1, 13, 199]
-        ],
-        "minWidths": [309],
-        "neighborhood": "N-V",
-        "orientations": [51.52782299338571],
-        "other$": 53000,
-        "owner": "GEBO LIVING TRUST",
-        "perimeters": [1775.5295335738358],
-        "sqarcities": [0.605904528928829],
-        "taxed$": 115000,
-        "town": "WASHINGTON",
-        "usage": "110",
-        "use": "R1A",
-        "zone": "02",
-        "addressOfOwner": "339 WASHIINGTON DR WASHINGTON NH 03280",
-        "ownership": "R"
-      },
-      "id": "12-123",
-      "bbox": [-72.058834, 43.17015000000001, -72.05642, 43.17180549999998]
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
             [-72.05735, 43.17015],
             [-72.0562371, 43.169171],
             [-72.0561345, 43.1691463],
@@ -12116,15 +12049,9 @@
         "type": "Polygon",
         "coordinates": [
           [
-            [-72.0581979, 43.1718055],
-            [-72.05818, 43.17177],
-            [-72.05642, 43.17068],
-            [-72.05629, 43.17079],
-            [-72.05606, 43.17085],
-            [-72.05588, 43.17099],
-            [-72.05573, 43.17115],
-            [-72.05559, 43.1713],
-            [-72.05505, 43.17198],
+            [-72.05572, 43.17112],
+            [-72.0553942, 43.1715263],
+            [-72.0550742, 43.1719254],
             [-72.05483, 43.17223],
             [-72.0573084, 43.1726281],
             [-72.0573205, 43.1725884],
@@ -12134,7 +12061,7 @@
             [-72.0575485, 43.1721465],
             [-72.0575546, 43.1721422],
             [-72.0576736, 43.172055],
-            [-72.0581979, 43.1718055]
+            [-72.05572, 43.17112]
           ]
         ]
       },
@@ -12150,28 +12077,23 @@
         ],
         "address": "WASHINGTON DRIVE",
         "area": 4.59,
-        "areas": [7.900221931157829],
+        "areas": [5.029016816386056],
         "building$": 0,
         "callouts": [],
-        "centers": [[-72.05651395, 43.17165405]],
+        "centers": [[-72.05623349851105, 43.171965981508336]],
         "county": "SULLIVAN",
         "elevations": [1413.05],
         "id": "12-128",
         "labels": [],
         "land$": 43200,
-        "lengths": [
-          [
-            14, 614, 53, 65, 70, 71, 66, 287, 108, 675, 15, 61, 68, 5, 41, 2,
-            45, 167
-          ]
-        ],
-        "minWidths": [643],
+        "lengths": [[172, 169, 129, 675, 15, 61, 68, 5, 41, 2, 45, 622]],
+        "minWidths": [446],
         "neighborhood": "N-V",
         "orientations": [12.420228950658498],
         "other$": 0,
         "owner": "GEBO LIVING TRUST",
         "perimeters": [2423.4110767133625],
-        "sqarcities": [0.7341726000618847],
+        "sqarcities": [0.685466266276478],
         "taxed$": 43200,
         "town": "WASHINGTON",
         "usage": "110",
@@ -12181,7 +12103,7 @@
         "ownership": "R"
       },
       "id": "12-128",
-      "bbox": [-72.0581979, 43.170680000000004, -72.05483, 43.1726281]
+      "bbox": [-72.0576736, 43.17112000000003, -72.05483, 43.1726281]
     },
     {
       "type": "Feature",
@@ -27738,7 +27660,7 @@
         "neighborhood": "N-E",
         "orientations": [84.00253627586878],
         "other$": 0,
-        "owner": "MORRIS, FRANK IV",
+        "owner": "LOVANGO REALTY TRUST",
         "perimeters": [693.8326535591649],
         "sqarcities": [0.7813300447546612],
         "taxed$": 342600,
@@ -28160,7 +28082,7 @@
         "neighborhood": "N-U",
         "orientations": [-56.611788558770705],
         "other$": 0,
-        "owner": "WPB HOLDINGS, LLC",
+        "owner": "WPB PARTERNS, LLC",
         "perimeters": [801.1607739952701],
         "sqarcities": [0.7607176203336591],
         "taxed$": 19500,
@@ -41671,7 +41593,7 @@
         "neighborhood": "N-U",
         "orientations": [-22.859141874859205],
         "other$": 0,
-        "owner": "SANFORD, CHRISTOPHER J",
+        "owner": "PRINCE, MONIQUE M C REV TRUST",
         "perimeters": [1766.2187579297085],
         "sqarcities": [0.8071282127625651],
         "taxed$": 25800,
@@ -41679,7 +41601,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "255 PEQUOT AVE NEW LONDON CT 06320",
+        "addressOfOwner": "P O BOX 5, CHESTER, NH 03036",
         "ownership": "N"
       },
       "id": "14-387",
@@ -58137,7 +58059,7 @@
         "ownership": "N"
       },
       "id": "15-48-01",
-      "bbox": [-72.122008, 43.15807000000001, -72.11738, 43.16031734049838]
+      "bbox": [-72.122008, 43.15807000000001, -72.11738, 43.16031730000003]
     },
     {
       "type": "Feature",
@@ -85333,7 +85255,7 @@
         "neighborhood": "N-R",
         "orientations": [34.41654055431542],
         "other$": 6300,
-        "owner": "MCINTYRE, PATRICIA",
+        "owner": "MCINTYRE, PATRICIA M TRUST",
         "perimeters": [788.0670322377684],
         "sqarcities": [0.5335586517281103],
         "taxed$": 396900,
@@ -85392,7 +85314,7 @@
         "neighborhood": "N-R",
         "orientations": [-53.87901990057655],
         "other$": 4600,
-        "owner": "MCINTYRE, PATRICIA M.  TRUSTEE",
+        "owner": "MCINTYRE, PATRICIA M TRUST",
         "perimeters": [597.1901943674568],
         "sqarcities": [0.6583267356354967],
         "taxed$": 397700,
@@ -86871,7 +86793,7 @@
         "neighborhood": "N-G",
         "orientations": [12.070194758949157],
         "other$": 0,
-        "owner": "NGUYEN, NAM X",
+        "owner": "NGUYEN, REV TRUST",
         "perimeters": [3537.8098101199876],
         "sqarcities": [0.309346003252853],
         "taxed$": 49200,
@@ -102674,7 +102596,7 @@
         "address": "48 BRADFORD SPRINGS ROAD",
         "area": 3,
         "areas": [2.1058362236699226],
-        "building$": 300200,
+        "building$": 249600,
         "callouts": [],
         "centers": [[-72.0188586703444, 43.192987491346656]],
         "county": "SULLIVAN",
@@ -102690,7 +102612,7 @@
         "owner": "PACKARD, CHARLES ASHER",
         "perimeters": [1257.6468324383027],
         "sqarcities": [0.7389212369162305],
-        "taxed$": 395900,
+        "taxed$": 345300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -111146,7 +111068,7 @@
         "neighborhood": "N-R",
         "orientations": [5.590374045196384],
         "other$": 1700,
-        "owner": "DELAHANTY, CARA",
+        "owner": "RICHARD, BRIAN G",
         "perimeters": [575.3435886155576],
         "sqarcities": [0.6388706024180733],
         "taxed$": 388700,
@@ -111154,8 +111076,8 @@
         "usage": "110",
         "use": "R1W",
         "zone": "02",
-        "addressOfOwner": "224 NORMAND RD GOFFSTOWN NH 03045",
-        "ownership": "N"
+        "addressOfOwner": "2 PRESTON ST, HILLSBOROUGH, NH 03244",
+        "ownership": "R"
       },
       "id": "25-107",
       "bbox": [-72.0863464, 43.13686000000001, -72.08579, 43.13728929999999]
@@ -115642,7 +115564,7 @@
         "neighborhood": "N-E",
         "orientations": [-51.670014941654614],
         "other$": 4800,
-        "owner": "CLOUTIER, PAUL R.",
+        "owner": "ROBBLEE, ANDREW J & TOWERS, MARIE E",
         "perimeters": [365.60454825756915],
         "sqarcities": [0.6923557331130418],
         "taxed$": 144300,
@@ -115650,7 +115572,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "118 CUMBERLAND ST. MANCHESTER NH 03102",
+        "addressOfOwner": "24 MEETINGHOUSE HILL RD, ANTRIM, NH 03440",
         "ownership": "N"
       },
       "id": "25-70",
@@ -124206,7 +124128,7 @@
         "address": "427 OLD BURBANK ROAD",
         "area": 54,
         "areas": [58.35527432686981],
-        "building$": 524200,
+        "building$": 476600,
         "callouts": [],
         "centers": [[-72.12590222309917, 43.18994648660628]],
         "county": "SULLIVAN",
@@ -124228,7 +124150,7 @@
         "owner": "GUERIN, ROBERT L",
         "perimeters": [7881.474058259037],
         "sqarcities": [0.5211538641303664],
-        "taxed$": 589388,
+        "taxed$": 541788,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -133459,9 +133381,7 @@
         "zone": ""
       },
       "id": "9-29-02",
-      "bbox": [
-        -72.0390852556857, 43.20739456061929, -72.0369, 43.208899005425536
-      ]
+      "bbox": [-72.0390853, 43.207394599999986, -72.0369, 43.208899]
     },
     {
       "type": "Feature",
@@ -133504,7 +133424,7 @@
         "zone": ""
       },
       "id": "15-48-02",
-      "bbox": [-72.12131190251623, 43.158500000000004, -72.11738, 43.1606711]
+      "bbox": [-72.1213119, 43.158500000000004, -72.11738, 43.1606711]
     },
     {
       "type": "Feature",
@@ -133536,6 +133456,101 @@
         "orientations": [-0.11110808283504525],
         "owner": "UNKNOWN",
         "ownership": "X",
+        "sqarcities": [0.5801042306783983],
+        "town": "WASHINGTON",
+        "usage": "190",
+        "use": "",
+        "zone": ""
+      },
+      "id": "(12-4)",
+      "bbox": [
+        -72.02844266120816, 43.204158371546924, -72.02144540842676,
+        43.209150876779745
+      ]
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-72.05735, 43.17015],
+            [-72.05721, 43.17025],
+            [-72.05711, 43.17037],
+            [-72.05702, 43.17045],
+            [-72.0567984, 43.1704883],
+            [-72.05664, 43.17052],
+            [-72.05651, 43.17058],
+            [-72.0564088, 43.1706674],
+            [-72.05629, 43.17077],
+            [-72.05606, 43.17085],
+            [-72.0559, 43.17095],
+            [-72.05572, 43.17112],
+            [-72.0576736, 43.172055],
+            [-72.0581979, 43.1718055],
+            [-72.0588372, 43.1715171],
+            [-72.05735, 43.17015]
+          ]
+        ]
+      },
+      "properties": {
+        "address": "330 WASHINGTON DRIVE",
+        "addressOfOwner": "339 WASHINGTON DR WASHINGTON NH 03280",
+        "area": 7.22,
+        "areas": [6.519893554168742],
+        "building$": 0,
+        "centers": [[-72.05727859999999, 43.1711025]],
+        "county": "SULLIVAN",
+        "id": "12-123",
+        "land$": 62000,
+        "lengths": [
+          [52, 51, 38, 61, 44, 41, 42, 49, 68, 56, 78, 622, 167, 200, 637]
+        ],
+        "minWidths": [560],
+        "neighborhood": "N-V",
+        "orientations": [51.571441596626215],
+        "other$": 53000,
+        "owner": "GEBO LIVING TRUST",
+        "ownership": "R",
+        "sqarcities": [0.7333780755076462],
+        "taxed$": 115000,
+        "town": "WASHINGTON",
+        "usage": "110",
+        "use": "",
+        "zone": ""
+      },
+      "id": "12-123",
+      "bbox": [-72.0588372, 43.17015000000001, -72.05572, 43.172055]
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-72.0214454, 43.2091509],
+            [-72.0221357, 43.208085],
+            [-72.0234437, 43.2054897],
+            [-72.0240403, 43.2041584],
+            [-72.0271876, 43.2077497],
+            [-72.0278563, 43.208513],
+            [-72.0284427, 43.2091412],
+            [-72.0214454, 43.2091509]
+          ]
+        ]
+      },
+      "properties": {
+        "address": "WASHINGTON TOWN LINE",
+        "area": 36.48,
+        "areas": [37.808776952507806],
+        "centers": [[-72.02468348134367, 43.20750052445481]],
+        "county": "SULLIVAN",
+        "id": "(12-4)",
+        "lengths": [[430, 1009, 511, 1555, 330, 277, 1861]],
+        "minWidths": [1820],
+        "neighborhood": "",
+        "orientations": [-0.11110808283504525],
+        "owner": "UNKNOWN",
         "sqarcities": [0.5801042306783983],
         "town": "WASHINGTON",
         "usage": "190",

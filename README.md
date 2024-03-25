@@ -4,7 +4,7 @@ For a live demo, please see [washington.munimap.online](https://washington.munim
 
 ## How to setup AWS Transfer
 
-1. Create SFTYP server:
+1. Create SFTP server:
    1. Service managed
    2. Publicly accessible
    3. Amazon EFS
@@ -20,7 +20,7 @@ For a live demo, please see [washington.munimap.online](https://washington.munim
    6. Optional folder: MuniMap/proxy
    7. SSH public key: `~/.ssh/aws-transfer.pub`
 3. Wait ~10 minutes
-4. Launch `filezilla` with new seerver endpoint
+4. Launch `filezilla` from WSL command line with new seerver endpoint
 
 ## How to deploy a new version
 

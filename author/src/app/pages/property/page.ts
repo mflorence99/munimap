@@ -624,8 +624,8 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);
   drawLandmarks = viewChild(OLInteractionDrawLandmarksComponent);
   drawer = viewChild(MatDrawer);
-  moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
   map = viewChild(OLMapComponent);
+  moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
   redrawLandmark = viewChild(OLInteractionRedrawLandmarkComponent);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering

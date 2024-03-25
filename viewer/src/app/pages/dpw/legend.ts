@@ -82,13 +82,13 @@ interface Statistics {
             <tbody>
               @for (key of keys; track key) {
                 <tr>
-                  <td [style.width.%]="25">
-                    {{ key }}
+                  <td [style.width.%]="20">
+                    {{ key + (metric.tag === 'Opening' ? '"' : '') }}
                   </td>
 
                   @for (condition of allConditions; track condition) {
                     @if (breakdowns[metric.tag]?.[key]?.[condition]; as stats) {
-                      <td [style.width.%]="75 / allConditions.length">
+                      <td [style.width.%]="80 / allConditions.length">
                         @if (stats.count && stats.length) {
                           <span>
                             {{ stats.count }}&ndash;{{ stats.length }}'
@@ -118,16 +118,16 @@ interface Statistics {
 
       .legend {
         border-collapse: collapse;
+        font-size: smaller;
         width: 100%;
 
         td {
-          padding: 2px;
+          padding: 1px 2px 2px 1px;
           white-space: nowrap;
         }
 
         td:not(:first-child) {
           border-left: 1px solid var(--mat-gray-800);
-          font-size: smaller;
           text-align: right;
         }
 

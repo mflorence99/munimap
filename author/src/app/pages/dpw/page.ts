@@ -524,8 +524,8 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   contextMenu = viewChild(ContextMenuComponent);
   contextMenuHost = viewChild(ContextMenuHostDirective);
   drawer = viewChild(MatDrawer);
-  moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
   map = viewChild(OLMapComponent);
+  moveLandmark = viewChild(OLOverlayLandmarkLabelComponent);
 
   canAddCulvert(event?: MouseEvent): boolean {
     return this.#can(event, true);

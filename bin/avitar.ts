@@ -45,12 +45,12 @@ const featureByID = JSON.parse(
 
 function main(): void {
   try {
-    // eliminateStolenParcels();
-    // searchForAnomalies();
-    // updateFromAvitar();
-    // jsome(avitarByID['15-70-01']);
-    // jsome(featureByID['9-7']);
-    // saveGeoJSON();
+    eliminateStolenParcels();
+    searchForAnomalies();
+    updateFromAvitar();
+    jsome(avitarByID['15-70-01']);
+    jsome(featureByID['9-7']);
+    saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
   }
