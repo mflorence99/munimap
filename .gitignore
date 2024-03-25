@@ -1,11 +1,10 @@
 /.angular
+/.eslintcache
+/.postcss-angular/
 /data
 /dist
 /node_modules
 /viewer/assets/*.geojson
-**/logs
-**/logs1
 **/*.Identifier
 **/*.log
 firebase-admin.json
-.eslintcache

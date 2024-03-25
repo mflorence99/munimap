@@ -141,7 +141,8 @@ interface Statistics {
         }
 
         th:not(:first-child) {
-          padding: 8px;
+          border-left: 1px solid var(--mat-gray-800);
+          padding-right: 8px;
           text-align: right;
         }
 
