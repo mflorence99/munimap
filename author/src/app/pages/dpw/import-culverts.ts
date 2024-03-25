@@ -28,7 +28,6 @@ import hash from 'object-hash';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-import-culverts',
-  styleUrls: ['../abstract-import.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: '../abstract-import.html'
 })
 export class ImportCulvertsComponent extends ImportLandmarksComponent {

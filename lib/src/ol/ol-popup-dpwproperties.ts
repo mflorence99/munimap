@@ -63,8 +63,7 @@ export type Schema = Array<
         }
       }
     </section>
-  `,
-  styleUrls: ['./ol-popup-abstractproperties.scss']
+  `
 })
 export class OLPopupDPWPropertiesComponent {
   geometry: any /* 👈 in practice will be a Point */;

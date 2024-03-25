@@ -132,8 +132,7 @@ import { workgroup } from '@lib/state/auth';
         }
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class NavigatorComponent implements OnInit {
   @Select(AuthState.profile) profile$: Observable<Profile>;

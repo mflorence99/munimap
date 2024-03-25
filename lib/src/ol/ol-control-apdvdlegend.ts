@@ -88,8 +88,7 @@ import { viewChild } from '@angular/core';
         </tbody>
       </table>
     </article>
-  `,
-  styleUrls: ['./ol-control-abstractparcelslegend.scss']
+  `
 })
 export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent

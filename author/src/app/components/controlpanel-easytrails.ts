@@ -91,8 +91,7 @@ import { inject } from '@angular/core';
         </button>
       </mat-card-actions>
     </mat-card>
-  `,
-  styleUrls: ['./abstract-controlpanel.scss']
+  `
 })
 export class ControlPanelEasyTrailsComponent {
   invalidURL = false;

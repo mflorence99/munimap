@@ -233,15 +233,7 @@ import OLFeature from 'ol/Feature';
         SAVE
       </button>
     </article>
-  `,
-  styles: [
-    `
-      :host {
-        width: 50rem !important;
-      }
-    `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  `
 })
 export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
   allConditions = culvertConditions;

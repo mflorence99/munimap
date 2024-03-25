@@ -104,8 +104,7 @@ import area from '@turf/area';
         </tbody>
       </table>
     </article>
-  `,
-  styleUrls: ['./ol-control-abstractparcelslegend.scss']
+  `
 })
 export class OLControlTopoLegendComponent
   extends OLControlAbstractParcelsLegendComponent

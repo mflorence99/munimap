@@ -97,8 +97,7 @@ import copy from 'fast-copy';
         grid-template-rows: 1fr;
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class ParcelsColorCodeComponent implements OnInit {
   @Select(ColorCodeState) colorCode$: Observable<ColorCodeStateModel>;

@@ -76,8 +76,7 @@ import OLFeature from 'ol/Feature';
         SAVE
       </button>
     </article>
-  `,
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  `
 })
 export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;

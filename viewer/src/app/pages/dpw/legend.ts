@@ -151,8 +151,7 @@ interface Statistics {
         }
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class DPWLegendComponent implements OnInit {
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;

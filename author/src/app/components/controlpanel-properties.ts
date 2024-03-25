@@ -117,8 +117,7 @@ import copy from 'fast-copy';
         </button>
       </mat-card-actions>
     </mat-card>
-  `,
-  styleUrls: ['./abstract-controlpanel.scss']
+  `
 })
 export class ControlPanelPropertiesComponent {
   mapCopy = computed(() => copy(this.mapState()));

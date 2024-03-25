@@ -97,8 +97,7 @@ interface Coordinate {
         }
       </table>
     }
-  `,
-  styleUrls: ['./ol-popup-abstractproperties.scss']
+  `
 })
 export class OLPopupLandmarkPropertiesComponent {
   landmark: Landmark;

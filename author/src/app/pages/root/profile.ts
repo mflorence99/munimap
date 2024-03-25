@@ -110,8 +110,7 @@ import copy from 'fast-copy';
         UPDATE
       </button>
     </article>
-  `,
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  `
 })
 export class ProfileComponent {
   errorMessage = '';

@@ -117,8 +117,7 @@ interface Addition {
         }
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class AddParcelComponent implements SidebarComponent {
   addition: Addition = {} as Addition;

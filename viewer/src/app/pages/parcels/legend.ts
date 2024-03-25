@@ -293,8 +293,7 @@ import { Signal } from '@angular/core';
         }
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class ParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent

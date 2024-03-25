@@ -176,8 +176,7 @@ const PRINT_SIZES = {
         margin-bottom: 1rem;
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class CreatePropertyMapComponent implements SidebarComponent {
   border = input(100);

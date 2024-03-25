@@ -77,6 +77,10 @@
             "sourceMap": true,
             "styles": [
               "lib/css/globals.scss",
+              "lib/css/common.scss",
+              "lib/css/material.scss",
+              "lib/css/firebase.scss",
+              "lib/css/ol.scss",
               "node_modules/ol/ol.css",
               "node_modules/ol-ext/dist/ol-ext.css"
             ],
@@ -180,6 +184,10 @@
             "sourceMap": true,
             "styles": [
               "lib/css/globals.scss",
+              "lib/css/common.scss",
+              "lib/css/material.scss",
+              "lib/css/firebase.scss",
+              "lib/css/ol.scss",
               "node_modules/ol/ol.css",
               "node_modules/ol-ext/dist/ol-ext.css"
             ],

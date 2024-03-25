@@ -131,8 +131,7 @@ interface Subdivision {
         }
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;

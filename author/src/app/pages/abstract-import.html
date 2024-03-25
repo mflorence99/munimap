@@ -33,7 +33,7 @@
   </p>
 
   @if (files.length > 0) {
-    <fieldset class="imported-files">
+    <fieldset class="list">
       @for (file of files; track file) {
         <mat-checkbox [(ngModel)]="record[file.name]" [name]="file.name">
           {{ file.name }}

@@ -1,0 +1,519 @@
+// 👇 styles shared by components
+
+:root {
+  // 👉 this just is -- need a better way
+  --map-cy-toolbar: 64;
+
+  // 👉 make sure all colors are RGB,
+  //    style components will figure opacity
+
+  --map-boundary-fill: var(--rgb-gray-50);
+  --map-boundary-outline: var(--rgb-blue-gray-700);
+  --map-boundary-pattern: var(--rgb-gray-300);
+
+  --map-bridge-red-icon-color: var(--rgb-deep-orange-200);
+  --map-bridge-yellow-icon-color: var(--rgb-yellow-200);
+  --map-bridge-green-icon-color: var(--rgb-green-200);
+  --map-bridge-blue-icon-color: var(--rgb-blue-200);
+  --map-bridge-line-color: var(--rgb-gray-700);
+
+  --map-building-fill: var(--rgb-gray-400);
+  --map-building-outline: var(--rgb-gray-700);
+
+  --map-buildingatnight-fill: var(--rgb-yellow-700);
+
+  --map-conservation-fill: var(--rgb-green-700);
+  --map-conservation-outline: var(--rgb-green-700);
+
+  --map-culvert-poor-icon-color: var(--rgb-deep-orange-200);
+  --map-culvert-fair-icon-color: var(--rgb-yellow-200);
+  --map-culvert-good-icon-color: var(--rgb-green-200);
+  --map-culvert-unknown-icon-color: var(--rgb-gray-500);
+  --map-culvert-line-color: var(--rgb-gray-700);
+
+  --map-feature-disabled: var(--rgb-gray-900);
+  --map-feature-fill: var(--rgb-green-700);
+  --map-feature-outline: var(--rgb-gray-700);
+  --map-feature-text-color: var(--rgb-gray-700);
+
+  --map-floodhazard-icon-color: var(--rgb-deep-orange-200);
+  --map-floodhazard-line-color: var(--rgb-gray-700);
+
+  --map-floodplain-fill: var(--rgb-light-blue-500);
+  --map-floodplain-flooded: var(--rgb-blue-500);
+
+  --map-graticule-border-color: var(--rgb-gray-50);
+  --map-graticule-line-color: var(--rgb-gray-900);
+  --map-graticule-text-color: var(--rgb-gray-900);
+  --map-graticule-text-inverse: var(--rgb-gray-50);
+
+  --map-landmark-hover: var(--rgb-indigo-a700);
+  --map-landmark-redraw: var(--rgb-blue-a200);
+  --map-landmark-select: var(--rgb-red-a700);
+
+  --map-parcel-abutter: var(--rgb-blue-a200);
+  --map-parcel-dimension-color: var(--rgb-blue-gray-900);
+  --map-parcel-dimension-inverse: 255, 255, 255;
+  --map-parcel-outline: var(--rgb-blue-gray-800);
+  --map-parcel-redraw: var(--rgb-blue-a200);
+  --map-parcel-select: var(--rgb-red-a700);
+  --map-parcel-text-color: 0, 0, 0;
+  --map-parcel-text-inverse: 255, 255, 255;
+
+  // conformity color coding
+  --map-parcel-fill-c0: var(--rgb-red-50);
+  --map-parcel-fill-c1: var(--rgb-red-100);
+  --map-parcel-fill-c2: var(--rgb-red-200);
+  --map-parcel-fill-c3: var(--rgb-red-300);
+  --map-parcel-fill-c4: var(--rgb-red-400);
+  --map-parcel-fill-c5: var(--rgb-red-500);
+  --map-parcel-fill-c6: var(--rgb-red-600);
+  --map-parcel-fill-c7: var(--rgb-red-700);
+  --map-parcel-fill-c8: var(--rgb-red-800);
+  --map-parcel-fill-c9: var(--rgb-red-900);
+
+  // ownership color coding
+  --map-parcel-fill-oI: var(--rgb-green-700);
+  --map-parcel-fill-oN: var(--rgb-blue-700);
+  --map-parcel-fill-oR: var(--rgb-yellow-700);
+  --map-parcel-fill-oX: 255, 255, 255;
+
+  // usage color shading
+  // 👀  https://www.gismanual.com/style/ColorConventions.pdf
+  --map-parcel-fill-u110: var(--rgb-brown-700);
+  --map-parcel-fill-u120: var(--rgb-orange-700);
+  --map-parcel-fill-u130: var(--rgb-deep-orange-700);
+  --map-parcel-fill-u190: var(--rgb-yellow-700);
+  --map-parcel-fill-u260: var(--rgb-red-700);
+  --map-parcel-fill-u261: var(--rgb-purple-700);
+  --map-parcel-fill-u300: var(--rgb-cyan-700);
+  --map-parcel-fill-u400: var(--rgb-indigo-700);
+  --map-parcel-fill-u500: var(--rgb-green-700);
+  --map-parcel-fill-u501: var(--rgb-light-green-700);
+  --map-parcel-fill-u502: var(--rgb-lime-800);
+  --map-parcel-fill-u999: var(--rgb-gray-700);
+
+  --map-place-icon-color: var(--rgb-brown-900);
+  --map-place-text-color: var(--rgb-brown-900);
+  --map-place-water-color: var(--rgb-blue-700);
+
+  --map-powerline-icon-color: var(--rgb-yellow-500);
+  --map-powerline-line-color: var(--rgb-gray-900);
+
+  --map-railroad-active-color: var(--rgb-gray-900);
+  --map-railroad-inactive-color: var(--rgb-gray-600);
+
+  --map-river-line-color: var(--rgb-blue-200);
+
+  --map-riverbank-rocks: var(--rgb-brown-600);
+
+  --map-road-text-color-I: var(--rgb-blue-gray-850);
+  --map-road-text-color-II: var(--rgb-blue-gray-850);
+  --map-road-text-color-III: var(--rgb-blue-gray-850);
+  --map-road-text-color-IV: var(--rgb-blue-gray-850);
+  --map-road-text-color-V: var(--rgb-blue-gray-850);
+  --map-road-text-color-VI: var(--rgb-blue-gray-850);
+  --map-road-text-color-0: var(--rgb-blue-gray-850);
+
+  --map-road-edge-I: var(--rgb-gray-600);
+  --map-road-edge-II: var(--rgb-gray-600);
+  --map-road-edge-III: var(--rgb-gray-600);
+  --map-road-edge-IV: var(--rgb-gray-600);
+  --map-road-edge-V: var(--rgb-gray-600);
+  --map-road-edge-VI: var(--rgb-gray-600);
+  --map-road-edge-0: var(--rgb-gray-600);
+
+  --map-road-lane-I: var(--rgb-red-300);
+  --map-road-lane-II: var(--rgb-red-300);
+  --map-road-lane-III: var(--rgb-red-300);
+  --map-road-lane-IV: var(--rgb-red-300);
+  --map-road-lane-V: var(--rgb-gray-50);
+  --map-road-lane-VI: var(--rgb-gray-50);
+  --map-road-lane-0: var(--rgb-gray-50);
+
+  --map-stonewall-fill: var(--rgb-gray-100);
+  --map-stonewall-rocks: var(--rgb-gray-700);
+
+  --map-streamcrossing-poor-icon-color: var(--rgb-deep-orange-200);
+  --map-streamcrossing-fair-icon-color: var(--rgb-yellow-200);
+  --map-streamcrossing-good-icon-color: var(--rgb-green-200);
+  --map-streamcrossing-unknown-icon-color: var(--rgb-gray-500);
+  --map-streamcrossing-line-color: var(--rgb-gray-700);
+
+  --map-trail-line-color: var(--rgb-brown-600);
+  --map-trail-text-color: var(--rgb-brown-600);
+
+  --map-waterbody-fill: var(--rgb-blue-200);
+
+  --map-waterbodyatnight-fill: var(--rgb-blue-gray-800);
+  --map-waterbodyatnight-pattern: var(--rgb-blue-gray-600);
+
+  --map-wetland-swamp: var(--rgb-blue-900);
+}
+
+// 👇 all these are sidebars
+
+app-add-parcel,
+app-culvert-properties,
+app-create-propertymap,
+app-dpw-legend,
+app-import-culverts,
+app-import-landmarks,
+app-landmark-properties,
+app-merge-parcels,
+app-navigator,
+app-parcel-properties,
+app-parcels-colorcode,
+app-parcels-legend,
+app-profile,
+app-subdivide-parcel {
+  display: block;
+  height: 100%;
+  padding: 0.5rem;
+  width: 25rem;
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .filler {
+    flex-grow: 1;
+  }
+
+  .form {
+    display: grid;
+    gap: 1rem;
+    grid-template-rows: auto auto;
+    padding: 0.5rem 1rem;
+
+    &.two-column {
+      grid-auto-columns: 50% 50%;
+      grid-auto-flow: column;
+      // grid-template-rows: repeat(6, auto);
+    }
+
+    .field {
+      width: 100%;
+
+      &.two-column {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 0.5fr 0.5fr;
+      }
+    }
+  }
+
+  .header {
+    align-items: center;
+    background-color: var(--mat-gray-900);
+    display: grid;
+    grid-column-gap: 1rem;
+    grid-template-areas: 'icon title' 'icon subtitle';
+    grid-template-columns: auto 1fr;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    .icon {
+      align-items: center;
+      background-color: var(--mat-gray-800);
+      border-radius: 50%;
+      display: flex;
+      grid-area: icon;
+      height: 3.5rem;
+      justify-content: center;
+      width: 3.5rem;
+    }
+
+    .title {
+      align-self: end;
+      font-size: larger;
+      font-weight: bold;
+      grid-area: title;
+    }
+
+    .subtitle {
+      align-self: start;
+      grid-area: subtitle;
+    }
+  }
+
+  .instructions {
+    margin-bottom: 1rem;
+  }
+
+  .progress {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+app-parcel-properties,
+app-culvert-properties {
+  width: 50rem;
+}
+
+// 👇 all these are popups
+
+app-ol-popup-bridgeproperties,
+app-ol-popup-culvertproperties,
+app-ol-popup-dpwproperties,
+app-ol-popup-floodhazardproperties,
+app-ol-popup-landmarkproperties,
+app-ol-popup-parcelproperties,
+app-ol-popup-streamcrossingproperties {
+  display: block;
+  width: 100%;
+
+  .clipboard {
+    position: absolute;
+    right: 2rem;
+    top: 0;
+    z-index: 2;
+  }
+
+  .closer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 2;
+  }
+
+  .properties {
+    border-collapse: collapse;
+    font-size: smaller;
+    width: 100%;
+
+    td {
+      margin: 0;
+      padding: 0;
+    }
+
+    td:first-child {
+      font-weight: bold;
+      padding: 0 0.25rem 0 0;
+      white-space: nowrap;
+      width: 40%;
+    }
+
+    td:not(:first-child) {
+      border-left: 1px solid var(--mat-gray-500);
+      padding: 0 0.25rem;
+    }
+
+    tr {
+      vertical-align: top;
+    }
+  }
+
+  .wrapper {
+    max-height: 280px;
+    max-width: 320px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+// 👇 all these are legends on printed maps
+
+app-ol-control-apdvdlegend,
+app-ol-control-parcelslegend,
+app-ol-control-topolegend {
+  display: block;
+
+  // 👇 watch out -- these styles are a little different because
+  //    OL yanks .legend out of the dom and into its viewport
+
+  .areaByUsage {
+    border-collapse: collapse;
+    font-family: 'Bentham Regular', sans-serif;
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    width: 100%;
+
+    td,
+    th {
+      padding: 0.25rem;
+    }
+
+    th {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .des {
+      .keys {
+        display: grid;
+        font-size: smaller;
+        gap: 1rem;
+        grid-template-columns: auto auto;
+        padding: 0.5rem 0;
+
+        .key {
+          align-items: center;
+          display: grid;
+          gap: 0.5rem;
+          grid-template-columns: auto 1fr;
+          white-space: nowrap;
+
+          .icon {
+            height: 1rem;
+            width: 1.5rem;
+          }
+        }
+      }
+    }
+
+    .desc {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+
+      &::after {
+        content: '........................................................'
+          '........................................................'
+          '........................................................'
+          '........................................................';
+        position: absolute;
+      }
+    }
+
+    .numeric {
+      text-align: right;
+    }
+
+    .total {
+      td {
+        font-weight: bold;
+        padding-top: 0.75rem;
+        text-transform: uppercase;
+      }
+    }
+
+    .usage {
+      .key {
+        border: 3px dashed var(--mat-blue-gray-300);
+        height: 2rem;
+        width: 3rem;
+      }
+    }
+
+    .use {
+      .keys {
+        display: grid;
+        font-size: smaller;
+        gap: 0.5rem;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        padding: 0.5rem 1rem;
+
+        .key {
+          display: grid;
+          gap: 0.5rem;
+          grid-template-columns: auto 1fr;
+          white-space: nowrap;
+
+          .icon {
+            height: 1.5rem;
+            width: 1.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  .header {
+    font-family: 'Carnevalee Freakshow', sans-serif;
+    line-height: 3.5rem;
+    text-align: center;
+
+    .link {
+      color: var(--primary-color);
+      font-family: monospace;
+      font-size: 2rem;
+    }
+
+    .title {
+      font-size: 4rem;
+    }
+
+    .subtitle {
+      font-size: 3rem;
+    }
+  }
+
+  .legend {
+    background-color: rgba(var(--rgb-gray-100), 0.75);
+    color: var(--background-color);
+    padding: 2rem;
+    width: 44rem;
+  }
+}
+
+// 👇 cvontrol panels for authoring
+
+app-controlpanel-easytrails,
+app-controlpanel-properties {
+  display: block;
+  pointer-events: auto;
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding: 16px;
+
+    button {
+      min-width: 6rem;
+    }
+  }
+
+  .card {
+    overflow: hidden;
+    position: relative;
+    transition:
+      width 0.25s,
+      height 0.25s;
+    width: 30rem;
+
+    &.rolledup {
+      height: 5rem;
+      width: 5rem;
+    }
+  }
+
+  .filler {
+    flex-grow: 1;
+  }
+
+  .form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .instructions {
+    margin-bottom: 1rem;
+  }
+
+  .list {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 100%;
+  }
+
+  .rolledup {
+    background-color: var(--mat-gray-800);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    padding: 1.15rem;
+
+    .mat-mdc-card-header {
+      padding: 0;
+    }
+  }
+}

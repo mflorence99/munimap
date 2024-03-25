@@ -10,8 +10,7 @@ import { input } from '@angular/core';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ol-popup-bridgeproperties',
-  templateUrl: './ol-popup-dpwproperties-impl.html',
-  styleUrls: ['./ol-popup-abstractproperties.scss']
+  templateUrl: './ol-popup-dpwproperties-impl.html'
 })
 export class OLPopupBridgePropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);

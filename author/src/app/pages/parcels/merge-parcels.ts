@@ -79,8 +79,7 @@ interface MergeRecord {
         grid-template-columns: 33.3% 33.3% 33.3%;
       }
     `
-  ],
-  styleUrls: ['../../../../../lib/css/sidebar.scss']
+  ]
 })
 export class MergeParcelsComponent implements SidebarComponent {
   drawer: MatDrawer;

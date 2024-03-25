@@ -1,0 +1,55 @@
+// 👉 OpenLayer styles
+
+// 👉 going through some hoops here because although the legend
+//    is only ever printed, we want to see it on the screen
+//    for degugging
+
+// 🔥 all this crap to negate the ol-ext ol-legend style
+
+.ol-legend {
+  bottom: unset !important;
+  left: 20rem !important;
+  max-height: unset !important;
+  max-width: unset !important;
+  overflow-x: unset !important;
+  overflow-y: unset !important;
+  position: absolute !important;
+  top: 20rem !important;
+}
+
+.ol-legend-print {
+  transform: scale(3.5);
+  transform-origin: left top;
+}
+
+.ol-overlay-container.ol-selectable {
+  transition-duration: calc(var(--ol-overlay-animate-duration, 500) * 1ms);
+  transition-property: transform;
+  transition-timing-function: linear;
+}
+
+.ol-scaleline-line {
+  background-color: rgb(var(--rgb-gray-100), 0.75);
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0.5rem;
+  position: absolute;
+
+  .ol-scaleline-line-inner {
+    color: var(--background-color);
+    position: relative;
+    text-align: center;
+  }
+
+  .ol-scaleline-line-inner::after {
+    border-color: var(--background-color);
+    border-style: solid;
+    border-width: 0 1px 1px;
+    content: '';
+    height: 50%;
+    left: 0;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+  }
+}

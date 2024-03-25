@@ -274,8 +274,7 @@ interface Abutter {
         max-width: unset;
       }
     `
-  ],
-  styleUrls: ['./ol-popup-abstractproperties.scss']
+  ]
 })
 export class OLPopupParcelPropertiesComponent {
   abutters: Abutter[] = [];

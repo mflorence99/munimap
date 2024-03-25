@@ -29,7 +29,6 @@ import toGeoJSON from '@mapbox/togeojson';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-import-landmarks',
-  styleUrls: ['../abstract-import.scss', '../../../../../lib/css/sidebar.scss'],
   templateUrl: '../abstract-import.html'
 })
 export class ImportLandmarksComponent implements SidebarComponent {
