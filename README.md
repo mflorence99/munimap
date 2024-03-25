@@ -35,7 +35,7 @@ For a live demo, please see [washington.munimap.online](https://washington.munim
 7. Commit all changes
 8. `npm run deploy:aws:author`
 9. `npm run deploy:aws:viewer:washington`
-10. Sanity test on live author and viedwer
-11. `npm run live:firebase:backup`
-12. `npm run live:firebase:clean` to remove parcel deltas
+10. Sanity test on live author and viewer
+11. `npm run firebase:live:backup`
+12. `npm run firebase:live:clean` to remove parcel deltas
 13. Use AWS Lambda page to remove old versions
