@@ -32,7 +32,7 @@ const CURATIONS: Curation[] = [
   {
     owner: 'ljg@gsinet.net',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    source: './proxy/assets/dpw/culverts-curated.gpx'
+    source: './bin/assets/dpw/culverts-curated.gpx'
   }
 ];
 

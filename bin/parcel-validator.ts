@@ -17,7 +17,7 @@ const loadem = (fn: string): FeatureCollection => {
 // 👇 validate the parcels
 // ////////////////////////////////////////////////////////////////////
 
-const allParcels = loadem('./proxy/assets/washington-parcels.geojson');
+const allParcels = loadem('./bin/assets/washington-parcels.geojson');
 
 allParcels.features
   .filter((parcel) => parcel.geometry.type === 'MultiPolygon')

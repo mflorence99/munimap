@@ -41,6 +41,6 @@ powerlines.features
   );
 
 writeFileSync(
-  `./proxy/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson`,
+  `./bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson`,
   JSON.stringify(simplify(geojson))
 );

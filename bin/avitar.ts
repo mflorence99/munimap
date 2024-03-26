@@ -12,7 +12,7 @@ import jsome from 'jsome';
 
 const avitarByID: Record<string, any> = {};
 
-const parser = new DBFParser('./proxy/assets/washington-avitar.dbf');
+const parser = new DBFParser('./bin/assets/washington-avitar.dbf');
 
 parser.on('record', (record) => {
   let id = `${parseInt(record.MAP, 10)}-${parseInt(record.LOT, 10)}`;
@@ -35,7 +35,7 @@ parser.parse();
 // 👇 load base geojson
 
 const featureByID = JSON.parse(
-  readFileSync('./proxy/assets/washington-parcels.geojson').toString()
+  readFileSync('./bin/assets/washington-parcels.geojson').toString()
 ).features.reduce((acc, feature) => {
   acc[feature.id] = feature;
   return acc;
@@ -68,7 +68,7 @@ function saveGeoJSON(): void {
     features: Object.values(featureByID)
   };
   writeFileSync(
-    './proxy/assets/washington-parcels.geojson',
+    './bin/assets/washington-parcels.geojson',
     JSON.stringify(geojson)
   );
 }

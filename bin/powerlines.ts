@@ -17,7 +17,7 @@ const dist = './data';
 
 const powerlines = JSON.parse(
   readFileSync(
-    './proxy/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson'
+    './bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson'
   ).toString()
 );
 

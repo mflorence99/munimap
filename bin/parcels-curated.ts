@@ -16,10 +16,10 @@ const loadem = (fn): Parcels => JSON.parse(readFileSync(fn).toString());
 
 const curated = {
   MERRIMACK: {
-    HENNIKER: loadem('./proxy/assets/henniker-parcels.geojson')
+    HENNIKER: loadem('./bin/assets/henniker-parcels.geojson')
   },
   SULLIVAN: {
-    WASHINGTON: loadem('./proxy/assets/washington-parcels.geojson')
+    WASHINGTON: loadem('./bin/assets/washington-parcels.geojson')
   }
 };
 

@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import jsome from 'jsome';
 
 const geojson = JSON.parse(
-  readFileSync('./proxy/assets/washington-parcels.geojson').toString()
+  readFileSync('./bin/assets/washington-parcels.geojson').toString()
 );
 
 const keyOf = (addressOfOwner: string): string => {

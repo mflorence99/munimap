@@ -25,7 +25,7 @@ const loadem = (fn): Buildings => JSON.parse(readFileSync(fn).toString());
 
 const curated = {
   SULLIVAN: {
-    WASHINGTON: loadem('./proxy/assets/washington-buildings.geojson')
+    WASHINGTON: loadem('./bin/assets/washington-buildings.geojson')
   }
 };
 

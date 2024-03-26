@@ -14,7 +14,7 @@ const dist = './data';
 
 const counties = JSON.parse(
   readFileSync(
-    './proxy/assets/New_Hampshire_County_Boundaries.geojson'
+    './bin/assets/New_Hampshire_County_Boundaries.geojson'
   ).toString()
 );
 

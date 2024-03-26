@@ -27,6 +27,11 @@ import { inject } from '@angular/core';
         class="content">
         <!-- 📦 CONTROLS -->
 
+        @if (sink.zoom >= map.minUsefulZoom()) {
+          <app-ol-control-searchparcels
+            mapControlSearch></app-ol-control-searchparcels>
+        }
+
         <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
         <app-ol-control-attribution
@@ -250,6 +255,24 @@ import { inject } from '@angular/core';
             </app-ol-adaptor-landmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
           </app-ol-layer-vector>
+
+          <!-- 📦 SELECTION LAYER -->
+
+          @if (sink.zoom >= map.minUsefulZoom()) {
+            <app-ol-layer-vector>
+              <app-ol-style-parcels
+                [borderOpacity]="0.33"
+                [labelOpacity]="0.33"
+                [showAbutters]="'never'"
+                [showBorder]="'always'"
+                [showDimensions]="'never'"
+                [showLabels]="'always'"
+                [showSelection]="'always'"></app-ol-style-parcels>
+              <app-ol-source-parcels></app-ol-source-parcels>
+              <app-ol-interaction-selectparcels
+                [findAbutters]="true"></app-ol-interaction-selectparcels>
+            </app-ol-layer-vector>
+          }
 
           <!-- 📦 BOUNDARY LAYER -->
 

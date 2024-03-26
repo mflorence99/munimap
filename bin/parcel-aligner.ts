@@ -96,7 +96,7 @@ const writem = (fn: string, geojson: FeatureCollection, space = 2): void => {
 // 👇 load the parcels
 // ////////////////////////////////////////////////////////////////////
 
-const allParcels = loadem('./proxy/assets/washington-parcels.geojson');
+const allParcels = loadem('./bin/assets/washington-parcels.geojson');
 
 const allParcelsByID = allParcels.features.reduce((acc, parcel) => {
   acc[parcel.id] = parcel;
@@ -123,7 +123,7 @@ interface Lakeside {
 }
 
 // 👉 a bit clumsy but meant to mirror how we do raodways
-const lakesides: Lakeside[] = loadem('./proxy/assets/washington-lakes.geojson')
+const lakesides: Lakeside[] = loadem('./bin/assets/washington-lakes.geojson')
   .features.filter(
     (lake) =>
       turf.convertArea(lake.properties.Shape_Area, 'feet', 'acres') >= 10
@@ -159,7 +159,7 @@ interface Roadway {
 }
 
 const roadSegments = loadem(
-  './proxy/assets/washington-roads.geojson'
+  './bin/assets/washington-roads.geojson'
 ).features.filter(
   (feature) =>
     (!theRoads.length || theRoads.includes(feature.properties.name)) &&

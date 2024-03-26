@@ -29,7 +29,7 @@ const CURATIONS: Curation[] = [
   {
     owner: 'mflo999+flo@gmail.com',
     path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    source: './proxy/assets/mflo-landmarks.geojson'
+    source: './bin/assets/mflo-landmarks.geojson'
   },
   // ///////////////////////////////////////////////////////////////////
   // 👇 Correct Wolf Way alignment

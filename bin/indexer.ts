@@ -11,7 +11,7 @@ import chalk from 'chalk';
 
 const towns = JSON.parse(
   readFileSync(
-    './proxy/assets/New_Hampshire_Political_Boundaries.geojson'
+    './bin/assets/New_Hampshire_Political_Boundaries.geojson'
   ).toString()
 );
 

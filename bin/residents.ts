@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
 const geojson = JSON.parse(
-  readFileSync('./proxy/assets/washington-parcels.geojson').toString()
+  readFileSync('./bin/assets/washington-parcels.geojson').toString()
 );
 
 const lines = geojson.features

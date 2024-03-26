@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-cp ~/Downloads/washington-parcels.geojson ~/mflorence99/munimap/proxy/assets/washington-parcels.geojson
+cp ~/Downloads/washington-parcels.geojson ~/mflorence99/munimap/bin/assets/washington-parcels.geojson
 
 npm run proxy:parcels:curated
 

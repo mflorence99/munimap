@@ -13,7 +13,7 @@ import chalk from 'chalk';
 //    so we grabbed a file that works and we assume it won't change
 // url: 'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-railroads/rr'
 const railroads = JSON.parse(
-  readFileSync('./proxy/assets/New_Hampshire_Railroads.geojson').toString()
+  readFileSync('./bin/assets/New_Hampshire_Railroads.geojson').toString()
 );
 
 const dist = './data';
