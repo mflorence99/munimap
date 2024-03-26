@@ -44,7 +44,8 @@ import urlParse from 'url-parse';
       #sink
       [gps]="gps$ | async"
       [satelliteView]="satelliteView$ | async"
-      [satelliteYear]="satelliteYear$ | async" />
+      [satelliteYear]="satelliteYear$ | async"
+      [streetFilter]="streetFilter$ | async" />
 
     <main class="page">
       <mat-toolbar class="toolbar">
@@ -195,6 +196,8 @@ export class RootPage implements OnInit {
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
+
+  @Select(ViewState.streetFilter) streetFilter$: Observable<string>;
 
   @Select(AnonState.user) user$: Observable<User>;
 

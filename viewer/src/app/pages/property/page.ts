@@ -364,8 +364,7 @@ import { inject } from '@angular/core';
         }
       </app-ol-map>
     }
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class PropertyPage {
   env = environment;

@@ -6,7 +6,6 @@ import { AvatarComponent } from './components/avatar';
 import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuComponent } from './components/contextmenu';
 import { ContextMenuHostDirective } from './directives/contextmenu-host';
-import { ControlPanelEasyTrailsComponent } from './components/controlpanel-easytrails';
 import { ControlPanelPropertiesComponent } from './components/controlpanel-properties';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
@@ -252,7 +251,6 @@ const COMPONENTS = [
   BuilderComponent,
   ConfirmDialogComponent,
   ContextMenuComponent,
-  ControlPanelEasyTrailsComponent,
   ControlPanelPropertiesComponent,
   CreatePropertyMapComponent,
   CulvertPropertiesComponent,

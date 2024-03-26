@@ -1,6 +1,3 @@
-import { DPWPage } from './page';
-import { RootPage } from '../root/page';
-
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
@@ -11,6 +8,7 @@ import { LandmarksState } from '@lib/state/landmarks';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { ViewState } from '@lib/state/view';
 
 import { combineLatest } from 'rxjs';
 import { culvertConditions } from '@lib/common';
@@ -156,6 +154,8 @@ interface Statistics {
 export class DPWLegendComponent implements OnInit {
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
 
+  @Select(ViewState.streetFilter) streetFilter$: Observable<string>;
+
   allConditions = culvertConditions;
 
   allMetrics: Metric[] = [
@@ -205,7 +205,6 @@ export class DPWLegendComponent implements OnInit {
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
-  #root = inject(RootPage);
   #snapshot: CulvertProperties[] = [];
 
   export(): void {
@@ -251,17 +250,17 @@ export class DPWLegendComponent implements OnInit {
   }
 
   #handleStreams$(): void {
-    combineLatest([
-      this.landmarks$,
-      (this.#root.routedPageComponent as DPWPage).filterFn$
-    ])
+    combineLatest([this.landmarks$, this.streetFilter$])
       .pipe(
         takeUntil(this.#destroy$),
-        map(([landmarks, filterFn]): [CulvertProperties[], string] => {
+        map(([landmarks, street]): [CulvertProperties[], string] => {
           const culverts = landmarks.filter(
             (landmark) => landmark.properties.metadata?.type === 'culvert'
           );
-          const filteredCulverts = culverts.filter(filterFn);
+          const filteredCulverts = culverts.filter(
+            (culvert) =>
+              !street || culvert.properties.metadata?.location === street
+          );
           const filteredBy =
             culverts.length !== filteredCulverts.length
               ? filteredCulverts[0].properties.metadata.location

@@ -1,4 +1,3 @@
-import { DPWPage } from './page';
 import { RootPage } from '../root/page';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -7,6 +6,8 @@ import { Landmark } from '@lib/common';
 import { LandmarksState } from '@lib/state/landmarks';
 import { Observable } from 'rxjs';
 import { Select } from '@ngxs/store';
+import { SetStreetFilter } from '@lib/state/view';
+import { Store } from '@ngxs/store';
 
 import { inject } from '@angular/core';
 import { map } from 'rxjs';
@@ -15,18 +16,32 @@ import { map } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-dpw-toolbar',
   template: `
-    <mat-button-toggle [checked]="true">
-      <fa-icon [icon]="['fad', 'road']" size="lg"></fa-icon>
-      &nbsp;
-      <select (change)="onFilterStreet($any($event.target).value)">
-        <option value="" class="location">All Streets</option>
-        @for (location of locations$ | async; track location) {
-          <option class="location">
-            {{ location }}
+    @if (canPickStreetFilter()) {
+      <app-sink #sink [streetFilter]="root.streetFilter$ | async" />
+
+      <mat-button-toggle [checked]="true">
+        <fa-icon [icon]="['fad', 'road']" size="lg"></fa-icon>
+        &nbsp;
+        <select
+          (change)="onFilterStreet($any($event.target).value)"
+          (click)="eatMe($event)">
+          <option
+            [attr.selected]="'' === sink.streetFilter ? 'true' : null"
+            value=""
+            class="location">
+            All Streets
           </option>
-        }
-      </select>
-    </mat-button-toggle>
+          @for (street of streets$ | async; track street) {
+            <option
+              [attr.selected]="street === sink.streetFilter ? 'true' : null"
+              [value]="street"
+              class="street">
+              {{ street }}
+            </option>
+          }
+        </select>
+      </mat-button-toggle>
+    }
   `,
   styles: [
     `
@@ -34,7 +49,7 @@ import { map } from 'rxjs';
         display: inline-block;
       }
 
-      .location {
+      .street {
         background-color: var(--mat-gray-800);
         color: var(--text-color);
         margin: 4px;
@@ -45,26 +60,32 @@ import { map } from 'rxjs';
 export class DPWToolbarComponent {
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
 
-  locations$: Observable<string[]>;
+  root = inject(RootPage);
+  streets$: Observable<string[]>;
 
-  #root = inject(RootPage);
+  #store = inject(Store);
 
   constructor() {
-    this.locations$ = this.landmarks$.pipe(
+    this.streets$ = this.landmarks$.pipe(
       map((landmarks) =>
         landmarks.map(
           (landmark): string => landmark.properties.metadata.location
         )
       ),
-      map((locations) => locations.sort()),
-      map((locations) => [...new Set(locations)])
+      map((streets) => streets.sort()),
+      map((streets) => [...new Set(streets)])
     );
   }
 
+  canPickStreetFilter(): boolean {
+    return window.innerWidth >= 480;
+  }
+
+  eatMe(event: Event): void {
+    event.stopPropagation();
+  }
+
   onFilterStreet(street: string): void {
-    (this.#root.routedPageComponent as DPWPage).filterFn$.next(
-      (landmark: Landmark): boolean =>
-        !street || landmark.properties.metadata?.location === street
-    );
+    this.#store.dispatch(new SetStreetFilter(street));
   }
 }

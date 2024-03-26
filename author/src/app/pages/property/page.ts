@@ -616,8 +616,7 @@ interface LandmarkConversion {
         }
       }
     `
-  ],
-  styleUrls: ['../abstract-map.scss']
+  ]
 })
 export class PropertyPage extends AbstractMapPage implements OnInit {
   contextMenu = viewChild(ContextMenuComponent);

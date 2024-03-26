@@ -89,8 +89,7 @@ import OLFeature from 'ol/Feature';
         }
       }
     </app-ol-map>
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class CreatePage {
   env = environment;

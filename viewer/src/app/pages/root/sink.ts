@@ -17,6 +17,7 @@ export class SinkComponent {
   @Input() mapState: Map;
   @Input() satelliteView: boolean;
   @Input() satelliteYear: string;
+  @Input() streetFilter: string;
   @Input() user: User;
   @Input() zoom: number;
 }

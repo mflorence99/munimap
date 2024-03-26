@@ -517,8 +517,7 @@ import { viewChild } from '@angular/core';
         </ul>
       </nav>
     </ng-template>
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class DPWPage extends AbstractMapPage implements OnInit {
   contextMenu = viewChild(ContextMenuComponent);

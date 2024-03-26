@@ -25,6 +25,11 @@ export class SetSatelliteYear {
   constructor(public satelliteYear: string) {}
 }
 
+export class SetStreetFilter {
+  static readonly type = '[View] SetStreetFilter';
+  constructor(public streetFilter: string) {}
+}
+
 export class UpdateView {
   static readonly type = '[View] UpdateView';
   constructor(
@@ -45,6 +50,7 @@ export interface ViewStateModel {
   recentPath: string;
   satelliteView: boolean;
   satelliteYear: string;
+  streetFilter: string;
   viewByPath: Record<Path, View>;
 }
 
@@ -55,6 +61,7 @@ export interface ViewStateModel {
     recentPath: null,
     satelliteView: false,
     satelliteYear: '',
+    streetFilter: '',
     viewByPath: {
       [theState]: { center: null, zoom: null }
     }
@@ -76,6 +83,11 @@ export class ViewState {
     return state.satelliteYear || '' /* 👈 b/c satelliteYear was added later */;
   }
 
+  @Selector() static streetFilter(state: ViewStateModel): string {
+    return state.streetFilter || '' /* 👈 b/c streetFilter was added later */;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @Action(SetGPS) setGPS(
     ctx: StateContext<ViewStateModel>,
     action: SetGPS
@@ -95,6 +107,13 @@ export class ViewState {
     action: SetSatelliteYear
   ): void {
     ctx.setState(patch({ satelliteYear: action.satelliteYear }));
+  }
+
+  @Action(SetStreetFilter) setStreetFilter(
+    ctx: StateContext<ViewStateModel>,
+    action: SetStreetFilter
+  ): void {
+    ctx.setState(patch({ streetFilter: action.streetFilter }));
   }
 
   @Action(UpdateView) updateView(

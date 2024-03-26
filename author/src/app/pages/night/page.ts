@@ -150,8 +150,7 @@ import { viewChild } from '@angular/core';
         <!-- 📦 CONTROLS -->
       </app-ol-map>
     }
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class NightPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);

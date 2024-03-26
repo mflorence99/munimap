@@ -386,8 +386,7 @@ import { inject } from '@angular/core';
         }
       </app-ol-map>
     }
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class ParcelsPage {
   env = environment;

@@ -7,7 +7,7 @@
     "author": {
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "configurations": {
             "production": {
               "budgets": [
@@ -114,7 +114,7 @@
     "viewer": {
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "configurations": {
             "production": {
               "budgets": [

@@ -17,8 +17,8 @@ import { combineLatest } from 'rxjs';
 import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
-import { of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { transformExtent } from 'ol/proj';
 
 import bbox from '@turf/bbox';
@@ -26,8 +26,6 @@ import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';
 import OLVector from 'ol/source/Vector';
-
-export type FilterFn = (landmark: Landmark) => boolean;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +37,9 @@ export type FilterFn = (landmark: Landmark) => boolean;
 export class OLSourceLandmarksComponent implements OnInit {
   @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
 
-  filterFn$ = input<Observable<FilterFn>>();
+  filterFn = input<(value) => (landmark) => boolean>();
+  filterValue = input<any>();
+  filterValue$: Observable<string> = toObservable(this.filterValue);
   maxZoom = input(18);
   olVector: OLVector<any>;
   zoomAnimationDuration = input(200);
@@ -64,11 +64,13 @@ export class OLSourceLandmarksComponent implements OnInit {
   }
 
   #handleStreams$(): void {
-    combineLatest([this.landmarks$, this.filterFn$() ?? of(() => true)])
+    combineLatest([this.landmarks$, this.filterValue$])
       .pipe(takeUntil(this.#destroy$))
-      .subscribe(([landmarks, filterFn]) => {
+      .subscribe(([landmarks, filterValue]) => {
         // 👉 represent landmarks as geojson
-        const filteredLandmarks = landmarks.filter(filterFn);
+        const filteredLandmarks = this.filterFn()
+          ? landmarks.filter(this.filterFn()(filterValue))
+          : landmarks;
         const isFiltered = landmarks.length !== filteredLandmarks.length;
         const geojson = featureCollection(filteredLandmarks);
         // 👉 convert features into OL format

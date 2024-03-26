@@ -572,8 +572,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
         </ul>
       </nav>
     </ng-template>
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class ParcelsPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);

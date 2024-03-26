@@ -356,8 +356,7 @@ import { viewChild } from '@angular/core';
         }
       </app-ol-map>
     }
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class AreaPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);

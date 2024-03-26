@@ -327,8 +327,7 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
         }
       </app-ol-map>
     }
-  `,
-  styleUrls: ['../abstract-map.scss']
+  `
 })
 export class APDVDPage {
   env = environment;

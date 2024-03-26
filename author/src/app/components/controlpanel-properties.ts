@@ -117,7 +117,64 @@ import copy from 'fast-copy';
         </button>
       </mat-card-actions>
     </mat-card>
-  `
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+
+      .actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        padding: 16px;
+
+        button {
+          min-width: 6rem;
+        }
+      }
+
+      .card {
+        overflow: hidden;
+        position: relative;
+        transition:
+          width 0.25s,
+          height 0.25s;
+        width: 30rem;
+
+        &.rolledup {
+          height: 5rem;
+          width: 5rem;
+        }
+      }
+
+      .filler {
+        flex-grow: 1;
+      }
+
+      .form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .instructions {
+        margin-bottom: 1rem;
+      }
+
+      .rolledup {
+        background-color: var(--mat-gray-800);
+        border-radius: 0.25rem;
+        cursor: pointer;
+        padding: 1.15rem;
+
+        .mat-mdc-card-header {
+          padding: 0;
+        }
+      }
+    `
+  ]
 })
 export class ControlPanelPropertiesComponent {
   mapCopy = computed(() => copy(this.mapState()));
