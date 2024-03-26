@@ -5,6 +5,7 @@ import { DPWToolbarComponent } from './pages/dpw/toolbar';
 import { ParcelsColorCodeComponent } from './pages/parcels/colorcode';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsPage } from './pages/parcels/page';
+import { ParcelsToolbarComponent } from './pages/parcels/toolbar';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { SinkComponent } from './pages/root/sink';
@@ -252,6 +253,7 @@ const COMPONENTS = [
   OLStyleUniversalComponent,
   ParcelsColorCodeComponent,
   ParcelsLegendComponent,
+  ParcelsToolbarComponent,
   SinkComponent,
   VersionDialogComponent
 ];
@@ -267,11 +269,6 @@ const PAGES = [
   TopoPage
 ];
 
-export interface RouteData {
-  noGPS?: boolean;
-  noSatelliteView?: boolean;
-}
-
 // 🔥 type error introduced in Angular v14 -- cause unknown
 const ROUTES: any = [
   {
@@ -283,8 +280,7 @@ const ROUTES: any = [
     children: [
       {
         path: 'apdvd',
-        component: APDVDPage,
-        data: { noGPS: true, noSatelliteView: true } satisfies RouteData
+        component: APDVDPage
       },
       {
         path: 'dpw',
@@ -313,6 +309,11 @@ const ROUTES: any = [
         path: 'parcels-colorcode',
         component: ParcelsColorCodeComponent,
         outlet: 'rightSidebar'
+      },
+      {
+        path: 'parcels-toolbar',
+        component: ParcelsToolbarComponent,
+        outlet: 'toolbar'
       },
       {
         path: 'property',

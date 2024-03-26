@@ -253,25 +253,6 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
             </app-ol-layer-vector>
           </app-ol-layer-vector>
 
-          <!-- 📦 SATELLITE OVERLAY FOR SELECTION  -->
-
-          @if (map.selected.length) {
-            <app-ol-layer-tile>
-              <app-ol-source-xyz
-                [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                [url]="
-                  'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                  env.google.apiKey
-                ">
-                <app-ol-attribution>
-                  ©
-                  <a href="https://google.com" target="_blank">Google</a>
-                </app-ol-attribution>
-              </app-ol-source-xyz>
-              <app-ol-filter-crop2selectedparcels></app-ol-filter-crop2selectedparcels>
-            </app-ol-layer-tile>
-          }
-
           <!-- 📦 SELECTION LAYER -->
 
           @if (sink.zoom >= map.minUsefulZoom()) {
@@ -282,9 +263,6 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
                 [showDimensions]="'whenSelected'"
                 [showDimensionContrast]="'always'"
                 [showLabels]="'always'"
-                [showLabelContrast]="
-                  sink.satelliteView ? 'always' : 'whenSelected'
-                "
                 [showSelection]="'always'"></app-ol-style-parcels>
               <app-ol-source-parcels></app-ol-source-parcels>
               <app-ol-interaction-selectparcels

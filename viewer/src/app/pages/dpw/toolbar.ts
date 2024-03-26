@@ -52,7 +52,6 @@ import { map } from 'rxjs';
       .street {
         background-color: var(--mat-gray-800);
         color: var(--text-color);
-        margin: 4px;
       }
     `
   ]

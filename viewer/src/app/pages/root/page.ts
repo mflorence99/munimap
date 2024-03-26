@@ -1,5 +1,3 @@
-import { RouteData } from '../../module';
-
 import { AnonState } from '@lib/state/anon';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -17,8 +15,6 @@ import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SetGPS } from '@lib/state/view';
-import { SetSatelliteView } from '@lib/state/view';
-import { SetSatelliteYear } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
@@ -30,7 +26,6 @@ import { combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { inject } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { satelliteYears } from '@lib/ol/ol-source-satellite';
 import { takeUntil } from 'rxjs/operators';
 
 import urlParse from 'url-parse';
@@ -40,12 +35,7 @@ import urlParse from 'url-parse';
   providers: [DestroyService],
   selector: 'app-root',
   template: `
-    <app-sink
-      #sink
-      [gps]="gps$ | async"
-      [satelliteView]="satelliteView$ | async"
-      [satelliteYear]="satelliteYear$ | async"
-      [streetFilter]="streetFilter$ | async" />
+    <app-sink #sink [gps]="gps$ | async" />
 
     <main class="page">
       <mat-toolbar class="toolbar">
@@ -65,41 +55,12 @@ import urlParse from 'url-parse';
 
         <router-outlet name="toolbar"></router-outlet>
 
-        @if (!routeData.noSatelliteView) {
-          <mat-button-toggle
-            #satelliteViewToggle
-            (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
-            [checked]="sink.satelliteView">
-            <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
-            @if (canPickSatelliteYear()) {
-              &nbsp;
-              <select
-                (change)="onSatelliteYear($any($event.target).value)"
-                (click)="eatMe($event)"
-                [disabled]="!sink.satelliteView">
-                @for (year of satelliteYears; track year) {
-                  <option
-                    [attr.selected]="
-                      year === sink.satelliteYear ? 'true' : null
-                    "
-                    [value]="year"
-                    class="year">
-                    {{ year || 'Latest' }}
-                  </option>
-                }
-              </select>
-            }
-          </mat-button-toggle>
-        }
-
-        @if (!routeData.noGPS) {
-          <mat-button-toggle
-            #gpsToggle
-            (change)="onGPSToggle(gpsToggle.checked)"
-            [checked]="sink.gps">
-            <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
-          </mat-button-toggle>
-        }
+        <mat-button-toggle
+          #gpsToggle
+          (change)="onGPSToggle(gpsToggle.checked)"
+          [checked]="sink.gps">
+          <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
+        </mat-button-toggle>
 
         @if (hasRightSidebar) {
           <mat-button-toggle
@@ -180,11 +141,6 @@ import urlParse from 'url-parse';
         position: absolute;
         width: 100%;
       }
-
-      .year {
-        background-color: var(--mat-gray-800);
-        color: var(--text-color);
-      }
     `
   ]
 })
@@ -206,7 +162,6 @@ export class RootPage implements OnInit {
   hasLeftSidebar: boolean;
   hasRightSidebar: boolean;
   hasToolbar: boolean;
-  routeData: RouteData = {};
   routedPageComponent: any;
   title: string;
   zoom$: Observable<number>;
@@ -227,18 +182,6 @@ export class RootPage implements OnInit {
     );
   }
 
-  get satelliteYears(): string[] {
-    return ['', ...satelliteYears.slice().reverse()];
-  }
-
-  canPickSatelliteYear(): boolean {
-    return window.innerWidth >= 480;
-  }
-
-  eatMe(event: Event): void {
-    event.stopPropagation();
-  }
-
   ngOnInit(): void {
     this.#handleMap$();
     this.#handleUser$();
@@ -250,14 +193,6 @@ export class RootPage implements OnInit {
 
   onGPSToggle(state: boolean): void {
     this.#store.dispatch(new SetGPS(state));
-  }
-
-  onSatelliteViewToggle(state: boolean): void {
-    this.#store.dispatch(new SetSatelliteView(state));
-  }
-
-  onSatelliteYear(year: string): void {
-    this.#store.dispatch(new SetSatelliteYear(year));
   }
 
   reset(): void {
@@ -324,7 +259,6 @@ export class RootPage implements OnInit {
     let route = this.#router.config[0].children.find(
       (route) => route.path === `${map.type}`
     );
-    this.routeData = route.data ?? {};
     // 👉 is there a left sidebar?
     route = this.#router.config[0].children.find(
       (route) =>
