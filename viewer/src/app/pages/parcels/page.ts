@@ -287,24 +287,30 @@ import { inject } from '@angular/core';
 
               @if (ctx.satelliteYear) {
                 <app-ol-control-splitscreen>
-                  <app-ol-layer-tile #left>
-                    <app-ol-source-xyz
-                      [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                      [url]="
-                        'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                        env.google.apiKey
-                      ">
-                      <app-ol-attribution>
-                        ©
-                        <a href="https://google.com" target="_blank">Google</a>
-                      </app-ol-attribution>
-                    </app-ol-source-xyz>
-                  </app-ol-layer-tile>
+                  <app-ol-layers #left>
+                    <app-ol-layer-tile>
+                      <app-ol-source-xyz
+                        [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+                        [url]="
+                          'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
+                          env.google.apiKey
+                        ">
+                        <app-ol-attribution>
+                          ©
+                          <a href="https://google.com" target="_blank">
+                            Google
+                          </a>
+                        </app-ol-attribution>
+                      </app-ol-source-xyz>
+                    </app-ol-layer-tile>
+                  </app-ol-layers>
 
-                  <app-ol-layer-tile #right>
-                    <app-ol-source-satellite
-                      [year]="ctx.satelliteYear"></app-ol-source-satellite>
-                  </app-ol-layer-tile>
+                  <app-ol-layers #right>
+                    <app-ol-layer-tile>
+                      <app-ol-source-satellite
+                        [year]="ctx.satelliteYear"></app-ol-source-satellite>
+                    </app-ol-layer-tile>
+                  </app-ol-layers>
                 </app-ol-control-splitscreen>
               }
 

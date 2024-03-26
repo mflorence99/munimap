@@ -83,8 +83,10 @@ import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
 import { OLFilterCrop2BoundaryComponent } from '@lib/ol/ol-filter-crop2boundary';
 import { OLFilterCrop2PropertyParcelsComponent } from '@lib/ol/ol-filter-crop2propertyparcels';
 import { OLFilterCrop2SelectedParcelsComponent } from '@lib/ol/ol-filter-crop2selectedparcels';
+import { OLFilterMask2BoundaryComponent } from '@lib/ol/ol-filter-mask2boundary';
 import { OLInteractionSelectLandmarksComponent } from '@lib/ol/ol-interaction-selectlandmarks';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/ol-interaction-selectparcels';
+import { OLLayersComponent } from '@lib/ol/ol-layers';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -108,6 +110,7 @@ import { OLSourceFloodHazardsComponent } from '@lib/ol/ol-source-floodhazards';
 import { OLSourceFloodplainsComponent } from '@lib/ol/ol-source-floodplains';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
+import { OLSourceHistoricalComponent } from '@lib/ol/ol-source-historical';
 import { OLSourceLabelsComponent } from '@lib/ol/ol-source-labels';
 import { OLSourceLandmarksComponent } from '@lib/ol/ol-source-landmarks';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -210,8 +213,10 @@ const COMPONENTS = [
   OLFilterCrop2BoundaryComponent,
   OLFilterCrop2PropertyParcelsComponent,
   OLFilterCrop2SelectedParcelsComponent,
+  OLFilterMask2BoundaryComponent,
   OLInteractionSelectLandmarksComponent,
   OLInteractionSelectParcelsComponent,
+  OLLayersComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLMapComponent,
@@ -235,6 +240,7 @@ const COMPONENTS = [
   OLSourceFloodplainsComponent,
   OLSourceGeoJSONComponent,
   OLSourceHillshadeComponent,
+  OLSourceHistoricalComponent,
   OLSourceLabelsComponent,
   OLSourceLandmarksComponent,
   OLSourceOSMComponent,

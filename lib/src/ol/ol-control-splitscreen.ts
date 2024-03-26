@@ -1,5 +1,8 @@
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
+import { OLLayersComponent } from './ol-layers';
+import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
 import { AfterContentInit } from '@angular/core';
@@ -32,8 +35,8 @@ export class OLControlSplitScreenComponent
   implements AfterContentInit, Mapable
 {
   olControl: OLSwipe;
-  onLeft = contentChild<any>('left');
-  onRight = contentChild<any>('right');
+  onLeft = contentChild<OLLayersComponent>('left');
+  onRight = contentChild<OLLayersComponent>('right');
 
   #map = inject(OLMapComponent);
 
@@ -47,7 +50,23 @@ export class OLControlSplitScreenComponent
   }
 
   ngAfterContentInit(): void {
-    this.olControl.addLayer(this.onLeft().olLayer, false);
-    this.olControl.addLayer(this.onRight().olLayer, true);
+    this.olControl.addLayer(
+      this.onLeft()
+        .layers()
+        .map(
+          (layer: OLLayerTileComponent | OLLayerVectorComponent) =>
+            layer.olLayer
+        ),
+      false
+    );
+    this.olControl.addLayer(
+      this.onRight()
+        .layers()
+        .map(
+          (layer: OLLayerTileComponent | OLLayerVectorComponent) =>
+            layer.olLayer
+        ),
+      true
+    );
   }
 }

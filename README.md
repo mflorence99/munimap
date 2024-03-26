@@ -24,8 +24,8 @@ For a live demo, please see [washington.munimap.online](https://washington.munim
 
 ## How to deploy a new version
 
-1. Download parcels from live site and copy to `\home\markf\mflorence99\munimap\proxy\assets`
-2. `npm run proxy:parcels:curated`
+1. Download parcels from live site and copy to `\home\markf\mflorence99\munimap\bin\assets`
+2. `npm run bin:parcels:curated`
 3. Update version in `package.json`
 4. Rebuild author and viewer for a sanity check
    1. Check that parcels in live Firestore database now appear in test
