@@ -50,16 +50,19 @@ import { inject } from '@angular/core';
 
           <app-ol-layer-tile>
             <app-ol-source-xyz
-              [s]="['mt0', 'mt1', 'mt2', 'mt3']"
               [url]="
-                'https://{s}.google.com/vt/lyrs=p&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                env.google.apiKey
+                'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' +
+                env.mapbox.apiKey
               ">
               <app-ol-attribution>
                 ©
-                <a href="https://google.com" target="_blank">Google</a>
+                <a href="https://mapbox.com" target="_blank">Mapbox</a>
               </app-ol-attribution>
             </app-ol-source-xyz>
+            <app-ol-filter-colorize
+              [color]="'#FFFFFF'"
+              [operation]="'hue'"
+              [value]="0.9"></app-ol-filter-colorize>
           </app-ol-layer-tile>
 
           <app-ol-control-splitscreen>
@@ -282,14 +285,15 @@ import { inject } from '@angular/core';
             <app-ol-layers #right>
               <app-ol-layer-tile>
                 <app-ol-source-historical></app-ol-source-historical>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
               </app-ol-layer-tile>
             </app-ol-layers>
 
             @if (sink.zoom >= map.minUsefulZoom()) {
               <app-ol-layer-vector>
                 <app-ol-style-parcels
-                  [borderOpacity]="0.33"
-                  [labelOpacity]="0.33"
+                  [borderOpacity]="0.66"
+                  [labelOpacity]="0.66"
                   [showAbutters]="'never'"
                   [showBorder]="'always'"
                   [showDimensions]="'never'"

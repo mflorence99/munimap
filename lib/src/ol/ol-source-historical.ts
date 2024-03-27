@@ -1,6 +1,8 @@
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLMapComponent } from './ol-map';
 
+import { environment } from '../environment';
+
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
@@ -32,12 +34,12 @@ export class OLSourceHistoricalComponent {
         '<a href="https://www.maptiler.com/engine/">MapTiler Engine</a>',
       maxZoom: this.maxZoom(),
       minZoom: this.minZoom(),
-      url: 'assets/historical/1942/{z}/{x}/{y}.jpg'
+      url: `${environment.endpoints.proxy}/historical/1930/{z}/{x}/{y}.jpg`
     });
     this.olXYZ.setProperties({ component: this }, true);
     this.#layer.olLayer.setExtent(
       transformExtent(
-        [-72.28893477, 42.96954074, -71.95694729, 43.26855602],
+        [-72.19862661, 43.12490044, -71.99994973, 43.25065641],
         this.#map.featureProjection,
         this.#map.projection
       )
