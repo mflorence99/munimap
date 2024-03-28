@@ -1,4 +1,5 @@
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
+import { OLLayerImageComponent } from './ol-layer-image';
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -32,6 +33,7 @@ export class OLFilterCrop2SelectedParcelsComponent
   #layer: any;
   #layer1 = inject(OLLayerTileComponent, { optional: true });
   #layer2 = inject(OLLayerVectorComponent, { optional: true });
+  #layer3 = inject(OLLayerImageComponent, { optional: true });
   #map = inject(OLMapComponent);
 
   constructor() {
@@ -40,7 +42,7 @@ export class OLFilterCrop2SelectedParcelsComponent
       featureProjection: this.#map.projection
     });
     // 👇 choose which layer parent
-    this.#layer = this.#layer1 ?? this.#layer2;
+    this.#layer = this.#layer1 ?? this.#layer2 ?? this.#layer3;
   }
 
   ngAfterContentInit(): void {

@@ -280,13 +280,12 @@ import { inject } from '@angular/core';
               }
             </app-ol-layers>
 
-            <!-- 📦 HISTORICAL -->
+            <!-- 🔥 EXPERIMENTAL -->
 
             <app-ol-layers #right>
-              <app-ol-layer-tile>
-                <app-ol-source-historical></app-ol-source-historical>
-                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-              </app-ol-layer-tile>
+              <app-ol-layer-image>
+                <app-ol-source-image></app-ol-source-image>
+              </app-ol-layer-image>
             </app-ol-layers>
 
             @if (sink.zoom >= map.minUsefulZoom()) {

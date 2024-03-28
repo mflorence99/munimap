@@ -1,8 +1,6 @@
 import { Mapable } from './ol-mapable';
 import { MapableComponent } from './ol-mapable';
 import { OLLayersComponent } from './ol-layers';
-import { OLLayerTileComponent } from './ol-layer-tile';
-import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 
 import { AfterContentInit } from '@angular/core';
@@ -53,19 +51,13 @@ export class OLControlSplitScreenComponent
     this.olControl.addLayer(
       this.onLeft()
         .layers()
-        .map(
-          (layer: OLLayerTileComponent | OLLayerVectorComponent) =>
-            layer.olLayer
-        ),
+        .map((layer: any) => layer.olLayer),
       false
     );
     this.olControl.addLayer(
       this.onRight()
         .layers()
-        .map(
-          (layer: OLLayerTileComponent | OLLayerVectorComponent) =>
-            layer.olLayer
-        ),
+        .map((layer: any) => layer.olLayer),
       true
     );
   }

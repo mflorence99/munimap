@@ -86,6 +86,7 @@ import { OLFilterCrop2SelectedParcelsComponent } from '@lib/ol/ol-filter-crop2se
 import { OLFilterMask2BoundaryComponent } from '@lib/ol/ol-filter-mask2boundary';
 import { OLInteractionSelectLandmarksComponent } from '@lib/ol/ol-interaction-selectlandmarks';
 import { OLInteractionSelectParcelsComponent } from '@lib/ol/ol-interaction-selectparcels';
+import { OLLayerImageComponent } from '@lib/ol/ol-layer-image';
 import { OLLayersComponent } from '@lib/ol/ol-layers';
 import { OLLayerTileComponent } from '@lib/ol/ol-layer-tile';
 import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
@@ -111,6 +112,7 @@ import { OLSourceFloodplainsComponent } from '@lib/ol/ol-source-floodplains';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
 import { OLSourceHistoricalComponent } from '@lib/ol/ol-source-historical';
+import { OLSourceImageComponent } from '@lib/ol/ol-source-image';
 import { OLSourceLabelsComponent } from '@lib/ol/ol-source-labels';
 import { OLSourceLandmarksComponent } from '@lib/ol/ol-source-landmarks';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -217,6 +219,7 @@ const COMPONENTS = [
   OLInteractionSelectLandmarksComponent,
   OLInteractionSelectParcelsComponent,
   OLLayersComponent,
+  OLLayerImageComponent,
   OLLayerTileComponent,
   OLLayerVectorComponent,
   OLMapComponent,
@@ -241,6 +244,7 @@ const COMPONENTS = [
   OLSourceGeoJSONComponent,
   OLSourceHillshadeComponent,
   OLSourceHistoricalComponent,
+  OLSourceImageComponent,
   OLSourceLabelsComponent,
   OLSourceLandmarksComponent,
   OLSourceOSMComponent,

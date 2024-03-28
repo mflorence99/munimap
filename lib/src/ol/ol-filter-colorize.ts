@@ -1,3 +1,4 @@
+import { OLLayerImageComponent } from './ol-layer-image';
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 
@@ -41,10 +42,11 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
   #layer: any;
   #layer1 = inject(OLLayerTileComponent, { optional: true });
   #layer2 = inject(OLLayerVectorComponent, { optional: true });
+  #layer3 = inject(OLLayerImageComponent, { optional: true });
 
   constructor() {
     // 👇 choose which layer parent
-    this.#layer = this.#layer1 ?? this.#layer2;
+    this.#layer = this.#layer1 ?? this.#layer2 ?? this.#layer3;
     // 👇 build the filter
     this.olFilter = new Colorize();
     // 👇 side effects

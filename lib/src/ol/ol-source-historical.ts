@@ -12,7 +12,7 @@ import { transformExtent } from 'ol/proj';
 
 import OLXYZ from 'ol/source/XYZ';
 
-// 🔥 TEMPORARY
+// 🔥 EXPERIMENTAL
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

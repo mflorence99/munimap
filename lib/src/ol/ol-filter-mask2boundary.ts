@@ -1,3 +1,4 @@
+import { OLLayerImageComponent } from './ol-layer-image';
 import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
@@ -28,21 +29,22 @@ export class OLFilterMask2BoundaryComponent
   #layer: any;
   #layer1 = inject(OLLayerTileComponent, { optional: true });
   #layer2 = inject(OLLayerVectorComponent, { optional: true });
+  #layer3 = inject(OLLayerImageComponent, { optional: true });
   #map = inject(OLMapComponent);
 
   constructor() {
     // 👇 choose which layer parent
-    this.#layer = this.#layer1 ?? this.#layer2;
+    this.#layer = this.#layer1 ?? this.#layer2 ?? this.#layer3;
     // 👇 build the filter
     const coords: any = copy(
       this.#map.boundary().features[0].geometry.coordinates
     );
-    const feature = new Feature(new Polygon(coords));
-    feature
+    const boundary = new Feature(new Polygon(coords));
+    boundary
       .getGeometry()
       .transform(this.#map.featureProjection, this.#map.projection);
     this.olFilter = new Mask({
-      feature: feature,
+      feature: boundary,
       fill: new OLFill({ color: [255, 255, 255, 0.1] }),
       inner: false
     });
