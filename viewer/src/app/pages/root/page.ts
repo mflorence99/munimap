@@ -56,24 +56,22 @@ import urlParse from 'url-parse';
 
         <router-outlet name="toolbar"></router-outlet>
 
-        <mat-button-toggle
-          #gpsToggle
-          (change)="onGPSToggle(gpsToggle.checked)"
-          [checked]="sink.gps">
+        <button
+          mat-icon-button
+          (click)="onGPSToggle(!sink.gps)"
+          [ngClass]="{ 'mat-icon-button-checked': sink.gps }">
           <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
-        </mat-button-toggle>
+        </button>
 
         @if (hasRightSidebar) {
-          <mat-button-toggle
-            (change)="rightSidebar.toggle()"
-            [checked]="rightSidebar.opened">
-            <fa-icon [icon]="['fad', 'palette']" size="lg"></fa-icon>
-          </mat-button-toggle>
+          <button (click)="rightSidebar.toggle()" mat-icon-button>
+            <fa-icon [icon]="['fas', 'cog']" size="lg"></fa-icon>
+          </button>
         }
 
-        <mat-button-toggle (change)="reset()" [checked]="false">
+        <button (click)="reset()" mat-icon-button>
           <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
-        </mat-button-toggle>
+        </button>
       </mat-toolbar>
 
       <mat-drawer-container class="container">
@@ -155,6 +153,8 @@ export class RootPage implements OnInit {
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 
   @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
+
+  @Select(ViewState.sideBySideView) sideBySideView$: Observable<boolean>;
 
   @Select(ViewState.streetFilter) streetFilter$: Observable<string>;
 

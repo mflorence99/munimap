@@ -34,6 +34,11 @@ export class SetSatelliteYear {
   constructor(public satelliteYear: string) {}
 }
 
+export class SetSideBySideView {
+  static readonly type = '[View] SetSideBySideView';
+  constructor(public sideBySideView: boolean) {}
+}
+
 export class SetStreetFilter {
   static readonly type = '[View] SetStreetFilter';
   constructor(public streetFilter: string) {}
@@ -58,6 +63,7 @@ export interface ViewStateModel {
   recentPath: string;
   satelliteView: boolean;
   satelliteYear: string;
+  sideBySideView: boolean;
   streetFilter: string;
   viewByPath: Record<Path, View>;
 }
@@ -70,6 +76,7 @@ export interface ViewStateModel {
     recentPath: null,
     satelliteView: false,
     satelliteYear: '',
+    sideBySideView: false,
     streetFilter: '',
     viewByPath: {
       [theState]: { center: null, zoom: null }
@@ -96,6 +103,10 @@ export class ViewState {
 
   @Selector() static satelliteYear(state: ViewStateModel): string {
     return state.satelliteYear || '' /* 👈 b/c satelliteYear was added later */;
+  }
+
+  @Selector() static sideBySideView(state: ViewStateModel): boolean {
+    return state.sideBySideView;
   }
 
   @Selector() static streetFilter(state: ViewStateModel): string {
@@ -129,6 +140,13 @@ export class ViewState {
     action: SetSatelliteYear
   ): void {
     ctx.setState(patch({ satelliteYear: action.satelliteYear }));
+  }
+
+  @Action(SetSideBySideView) setSideBySideView(
+    ctx: StateContext<ViewStateModel>,
+    action: SetSideBySideView
+  ): void {
+    ctx.setState(patch({ sideBySideView: action.sideBySideView }));
   }
 
   @Action(SetStreetFilter) setStreetFilter(

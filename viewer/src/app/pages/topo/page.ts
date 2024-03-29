@@ -286,23 +286,23 @@ import { inject } from '@angular/core';
               <app-ol-layer-image>
                 <app-ol-source-image></app-ol-source-image>
               </app-ol-layer-image>
-            </app-ol-layers>
 
-            @if (sink.zoom >= map.minUsefulZoom()) {
-              <app-ol-layer-vector>
-                <app-ol-style-parcels
-                  [borderOpacity]="0.66"
-                  [labelOpacity]="0.66"
-                  [showAbutters]="'never'"
-                  [showBorder]="'always'"
-                  [showDimensions]="'never'"
-                  [showLabels]="'always'"
-                  [showSelection]="'always'"></app-ol-style-parcels>
-                <app-ol-source-parcels></app-ol-source-parcels>
-                <app-ol-interaction-selectparcels
-                  [findAbutters]="true"></app-ol-interaction-selectparcels>
-              </app-ol-layer-vector>
-            }
+              @if (sink.zoom >= map.minUsefulZoom()) {
+                <app-ol-layer-vector>
+                  <app-ol-style-parcels
+                    [borderOpacity]="0.66"
+                    [labelOpacity]="0.66"
+                    [showAbutters]="'never'"
+                    [showBorder]="'always'"
+                    [showDimensions]="'never'"
+                    [showLabels]="'always'"
+                    [showSelection]="'always'"></app-ol-style-parcels>
+                  <app-ol-source-parcels></app-ol-source-parcels>
+                  <app-ol-interaction-selectparcels
+                    [findAbutters]="true"></app-ol-interaction-selectparcels>
+                </app-ol-layer-vector>
+              }
+            </app-ol-layers>
           </app-ol-control-splitscreen>
 
           <!-- 📦 BOUNDARY LAYER -->

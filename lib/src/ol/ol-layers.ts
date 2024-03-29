@@ -12,5 +12,5 @@ import { contentChildren } from '@angular/core';
   styles: [':host { display: block; visibility: hidden }']
 })
 export class OLLayersComponent {
-  layers = contentChildren(MapableComponent);
+  layers = contentChildren(MapableComponent, { descendants: true });
 }

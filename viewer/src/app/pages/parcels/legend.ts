@@ -16,7 +16,7 @@ import { inject } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-parcels-legend',
   template: `
-    <app-sink #sink [satelliteYear]="root.parcelCoding$ | async" />
+    <app-sink #sink [parcelCoding]="root.parcelCoding$ | async" />
 
     <header class="header">
       <figure class="icon">
@@ -92,6 +92,38 @@ import { inject } from '@angular/core';
                   </td>
                   <td class="count">
                     {{ areaByOwnership[ownership.key] | number: '1.0-0' }}
+                  </td>
+                  <td></td>
+                </tr>
+              }
+            }
+          }
+
+          <!-- 📦 TOPOGRAPHY -->
+
+          @case ('topography') {
+            @for (
+              usage of parcelPropertiesUsage | keyvalue;
+              track usage.value
+            ) {
+              @if (
+                ['500', '501', '502'].includes(usage.key) &&
+                countByUsage[usage.key] > 0
+              ) {
+                <tr>
+                  <td class="usage">
+                    <figure
+                      [style.backgroundColor]="
+                        'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'
+                      "
+                      class="key"></figure>
+                  </td>
+                  <td class="desc">{{ usage.value }}</td>
+                  <td class="count">
+                    {{ countByUsage[usage.key] | number: '1.0-0' }}
+                  </td>
+                  <td class="count">
+                    {{ areaByUsage[usage.key] | number: '1.0-0' }}
                   </td>
                   <td></td>
                 </tr>

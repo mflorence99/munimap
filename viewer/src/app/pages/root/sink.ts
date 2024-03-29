@@ -19,6 +19,7 @@ export class SinkComponent {
   @Input() parcelCoding: ParcelCoding;
   @Input() satelliteView: boolean;
   @Input() satelliteYear: string;
+  @Input() sideBySideView: boolean;
   @Input() streetFilter: string;
   @Input() user: User;
   @Input() zoom: number;
