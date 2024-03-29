@@ -1,5 +1,5 @@
-import { ColorCodeState } from '../state/colorcode';
-import { ColorCodeStateModel } from '../state/colorcode';
+import { ViewState } from '../state/view';
+import { ViewStateModel } from '../state/view';
 import { Map } from '../state/map';
 import { MapState } from '../state/map';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
@@ -355,16 +355,16 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #fill(props: ParcelProperties, resolution: number): OLStyle[] {
     // 👇 deduce the fill from the color code strategy
     let fill;
-    const strategy =
-      this.#store.selectSnapshot<ColorCodeStateModel>(ColorCodeState).strategy;
+    const parcelCoding =
+      this.#store.selectSnapshot<ViewStateModel>(ViewState).parcelCoding;
     // 🔥 HACK FOR APDVD
     const map = this.#store.selectSnapshot<Map>(MapState);
     if (map?.id === 'apdvd') fill = getAPDVDFill(props);
-    else if (strategy === 'usage')
+    else if (parcelCoding === 'usage')
       fill = this.#map.vars[`--map-parcel-fill-u${props.usage}`];
-    else if (strategy === 'ownership')
+    else if (parcelCoding === 'ownership')
       fill = this.#map.vars[`--map-parcel-fill-o${props.ownership}`];
-    else if (strategy === 'conformity') {
+    else if (parcelCoding === 'conformity') {
       // 🔥 this only works for Washington!!
       const conforming = 4; // 👈 acres
       const deficit = conforming - props.area;

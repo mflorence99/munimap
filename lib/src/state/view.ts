@@ -10,6 +10,10 @@ import { Store } from '@ngxs/store';
 import { inject } from '@angular/core';
 import { patch } from '@ngxs/store/operators';
 
+export type ParcelCoding = 'usage' | 'ownership' | 'conformity' | 'topography';
+
+export type Path = string;
+
 export class SetGPS {
   static readonly type = '[View] SetGPS';
   constructor(public gps: boolean) {}
@@ -18,6 +22,11 @@ export class SetGPS {
 export class SetSatelliteView {
   static readonly type = '[View] SetSatelliteView';
   constructor(public satelliteView: boolean) {}
+}
+
+export class SetParcelCoding {
+  static readonly type = '[View] SetParcelCoding';
+  constructor(public parcelCoding: ParcelCoding) {}
 }
 
 export class SetSatelliteYear {
@@ -38,8 +47,6 @@ export class UpdateView {
   ) {}
 }
 
-export type Path = string;
-
 export interface View {
   center: number[];
   zoom: number;
@@ -47,6 +54,7 @@ export interface View {
 
 export interface ViewStateModel {
   gps: boolean;
+  parcelCoding: ParcelCoding;
   recentPath: string;
   satelliteView: boolean;
   satelliteYear: string;
@@ -58,6 +66,7 @@ export interface ViewStateModel {
   name: 'view',
   defaults: {
     gps: false,
+    parcelCoding: 'usage',
     recentPath: null,
     satelliteView: false,
     satelliteYear: '',
@@ -73,6 +82,12 @@ export class ViewState {
 
   @Selector() static gps(state: ViewStateModel): boolean {
     return state.gps;
+  }
+
+  @Selector() static parcelCoding(state: ViewStateModel): ParcelCoding {
+    return (
+      state.parcelCoding || 'usage' /* 👈 b/c parcelCoding was added later */
+    );
   }
 
   @Selector() static satelliteView(state: ViewStateModel): boolean {
@@ -93,6 +108,13 @@ export class ViewState {
     action: SetGPS
   ): void {
     ctx.setState(patch({ gps: action.gps }));
+  }
+
+  @Action(SetParcelCoding) setParcelCoding(
+    ctx: StateContext<ViewStateModel>,
+    action: SetParcelCoding
+  ): void {
+    ctx.setState(patch({ parcelCoding: action.parcelCoding }));
   }
 
   @Action(SetSatelliteView) setSatelliteView(

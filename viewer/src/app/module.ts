@@ -2,9 +2,9 @@ import { APDVDPage } from './pages/apdvd/page';
 import { DPWLegendComponent } from './pages/dpw/legend';
 import { DPWPage } from './pages/dpw/page';
 import { DPWToolbarComponent } from './pages/dpw/toolbar';
-import { ParcelsColorCodeComponent } from './pages/parcels/colorcode';
 import { ParcelsLegendComponent } from './pages/parcels/legend';
 import { ParcelsPage } from './pages/parcels/page';
+import { ParcelsSetupComponent } from './pages/parcels/setup';
 import { ParcelsToolbarComponent } from './pages/parcels/toolbar';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
@@ -17,7 +17,6 @@ import { AnonState } from '@lib/state/anon';
 import { APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { ColorCodeState } from '@lib/state/colorcode';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { CurrencyPipe } from '@angular/common';
@@ -261,8 +260,8 @@ const COMPONENTS = [
   OLStyleParcelsComponent,
   OLStylePatternDirective,
   OLStyleUniversalComponent,
-  ParcelsColorCodeComponent,
   ParcelsLegendComponent,
+  ParcelsSetupComponent,
   ParcelsToolbarComponent,
   SinkComponent,
   VersionDialogComponent
@@ -317,7 +316,7 @@ const ROUTES: any = [
       },
       {
         path: 'parcels-colorcode',
-        component: ParcelsColorCodeComponent,
+        component: ParcelsSetupComponent,
         outlet: 'rightSidebar'
       },
       {
@@ -339,7 +338,6 @@ const ROUTES: any = [
 
 const STATES = [
   AnonState,
-  ColorCodeState,
   LandmarksState,
   MapState,
   ParcelsState,
@@ -347,7 +345,7 @@ const STATES = [
   ViewState,
   WorkingState
 ];
-const STATES_SAVED = [ColorCodeState, ViewState];
+const STATES_SAVED = [ViewState];
 
 @NgModule({
   bootstrap: [RootPage],

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { Map } from '@lib/state/map';
+import { ParcelCoding } from '@lib/state/view';
 import { User } from '@lib/state/auth';
 
 @Component({
@@ -15,6 +16,7 @@ export class SinkComponent {
 
   @Input() gps: boolean;
   @Input() mapState: Map;
+  @Input() parcelCoding: ParcelCoding;
   @Input() satelliteView: boolean;
   @Input() satelliteYear: string;
   @Input() streetFilter: string;

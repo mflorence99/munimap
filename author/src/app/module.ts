@@ -37,7 +37,6 @@ import { AuthPipe } from '@angular/fire/auth-guard';
 import { AuthState } from '@lib/state/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { ColorCodeState } from '@lib/state/colorcode';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { DecimalPipe } from '@angular/common';
@@ -452,7 +451,6 @@ const ROUTES: any = [
 
 const STATES = [
   AuthState,
-  ColorCodeState,
   LandmarksState,
   MapState,
   ParcelsState,
@@ -460,7 +458,7 @@ const STATES = [
   ViewState,
   WorkingState
 ];
-const STATES_SAVED = [ColorCodeState, RouterState, ViewState];
+const STATES_SAVED = [RouterState, ViewState];
 
 @NgModule({
   bootstrap: [RootPage],

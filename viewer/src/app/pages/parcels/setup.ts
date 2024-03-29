@@ -1,25 +1,23 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
-import { ColorCodeState } from '@lib/state/colorcode';
-import { ColorCodeStateModel } from '@lib/state/colorcode';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
+import { ParcelCoding } from '@lib/state/view';
 import { Select } from '@ngxs/store';
-import { SetColorCode } from '@lib/state/colorcode';
+import { SetParcelCoding } from '@lib/state/view';
 import { Store } from '@ngxs/store';
+import { ViewState } from '@lib/state/view';
+import { ViewStateModel } from '@lib/state/view';
 
-import { defaultColorCode } from '@lib/state/colorcode';
 import { inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
-import copy from 'fast-copy';
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-parcels-colorcode',
+  selector: 'app-parcels-setup',
   template: `
     <header class="header">
       <figure class="icon palette">
@@ -46,7 +44,7 @@ import copy from 'fast-copy';
       </p>
 
       <mat-radio-group
-        [(ngModel)]="record.strategy"
+        [(ngModel)]="record.parcelCoding"
         class="strategies"
         name="strategy"
         required>
@@ -99,10 +97,12 @@ import copy from 'fast-copy';
     `
   ]
 })
-export class ParcelsColorCodeComponent implements OnInit {
-  @Select(ColorCodeState) colorCode$: Observable<ColorCodeStateModel>;
+export class ParcelsSetupComponent implements OnInit {
+  @Select(ViewState.parcelCoding) parcelCoding$: Observable<ParcelCoding>;
 
-  record: ColorCodeStateModel = defaultColorCode();
+  record: Partial<ViewStateModel> = {
+    parcelCoding: 'usage'
+  };
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
@@ -114,18 +114,20 @@ export class ParcelsColorCodeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.#handleColorCode$();
+    this.#handleSetup$();
   }
 
-  save(record: ColorCodeStateModel): void {
-    this.#store.dispatch(new SetColorCode(record));
+  save(record: Partial<ViewStateModel>): void {
+    this.#store.dispatch(new SetParcelCoding(record.parcelCoding));
     this.#drawer.close();
   }
 
-  #handleColorCode$(): void {
-    this.colorCode$.pipe(takeUntil(this.#destroy$)).subscribe((state) => {
-      this.record = copy(state);
-      this.#cdf.markForCheck();
-    });
+  #handleSetup$(): void {
+    this.parcelCoding$
+      .pipe(takeUntil(this.#destroy$))
+      .subscribe((parcelCoding) => {
+        this.record = { parcelCoding };
+        this.#cdf.markForCheck();
+      });
   }
 }

@@ -12,6 +12,7 @@ import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { MessageDialogData } from '@lib/components/message-dialog';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
+import { ParcelCoding } from '@lib/state/view';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { SetGPS } from '@lib/state/view';
@@ -148,6 +149,8 @@ export class RootPage implements OnInit {
   @Select(ViewState.gps) gps$: Observable<boolean>;
 
   @Select(MapState) map$: Observable<Map>;
+
+  @Select(ViewState.parcelCoding) parcelCoding$: Observable<ParcelCoding>;
 
   @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
 

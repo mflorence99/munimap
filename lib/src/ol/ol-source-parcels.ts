@@ -1,13 +1,14 @@
-import { ColorCodeStateModel } from '../state/colorcode';
 import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
+import { ParcelCoding } from '../state/view';
 import { ParcelID } from '../common';
 import { Parcels } from '../common';
 import { ParcelsState } from '../state/parcels';
+import { ViewState } from '../state/view';
 
 import { parcelProperties } from '../common';
 
@@ -46,8 +47,8 @@ const attribution =
   styles: [':host { display: none }']
 })
 export class OLSourceParcelsComponent implements OnInit {
-  colorCode$: Observable<ColorCodeStateModel>;
   olVector: OLVector<any>;
+  parcelCoding$: Observable<ParcelCoding>;
   parcels$: Observable<Parcel[]>;
   path = input<string>();
 
@@ -77,7 +78,7 @@ export class OLSourceParcelsComponent implements OnInit {
     this.#layer.olLayer.setSource(this.olVector);
     // 🔥 must do it this way so we can dynamically create component
     //    this is new behavior with Angular 14
-    this.colorCode$ = this.#store.select((state) => state.colorcode);
+    this.parcelCoding$ = this.#store.select(ViewState.parcelCoding);
     this.parcels$ = this.#store.select((state) => state.parcels);
   }
 
@@ -112,10 +113,10 @@ export class OLSourceParcelsComponent implements OnInit {
 
   #handleStreams$(): void {
     // 👇 we need to merge the incoming geojson with the latest parcels
-    //    also with the overlay plus color code,
+    //    also with the overlay plus parcel coding,
     //    but we only care here if it has changed
     //    we'll look at its value when we come to style the parcels
-    combineLatest([this.#geojson$, this.parcels$, this.colorCode$])
+    combineLatest([this.#geojson$, this.parcels$, this.parcelCoding$])
       .pipe(takeUntil(this.#destroy$))
       .subscribe(([original, parcels]) => {
         const originalsByID = original.features.reduce((acc, feature) => {
