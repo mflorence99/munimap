@@ -4,6 +4,7 @@ import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparc
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
+import { ParcelCoding } from '../state/view';
 import { ParcelID } from '../common';
 import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
@@ -115,6 +116,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   @Input() maxFontSize = 40;
   @Input() minFontSize = 9;
   @Input() opacity = 0.25;
+  @Input() parcelCoding: ParcelCoding = null;
   @Input() parcelIDs: ParcelID[];
   @Input() showAbutters: ShowStatus = 'never';
   @Input() showBackground: ShowStatus = 'never';
@@ -356,6 +358,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     // 👇 deduce the fill from the color code strategy
     let fill;
     const parcelCoding =
+      this.parcelCoding ??
       this.#store.selectSnapshot<ViewStateModel>(ViewState).parcelCoding;
     // 🔥 HACK FOR APDVD
     const map = this.#store.selectSnapshot<Map>(MapState);

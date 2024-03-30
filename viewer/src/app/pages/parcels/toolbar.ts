@@ -35,8 +35,9 @@ import { inject } from '@angular/core';
   styles: [
     `
       :host {
-        align-items: center;
+        align-items: baseline;
         display: inline-flex;
+        gap: 0.5rem;
       }
 
       .year {

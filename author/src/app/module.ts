@@ -18,7 +18,6 @@ import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
-import { NightPage } from './pages/night/page';
 import { ParcelPropertiesComponent } from './pages/parcels/parcel-properties';
 import { ParcelsPage } from './pages/parcels/page';
 import { ProfileComponent } from './pages/root/profile';
@@ -27,7 +26,6 @@ import { RootPage } from './pages/root/page';
 import { SelectOnFocusDirective } from './directives/select-on-focus';
 import { SinkComponent } from './pages/root/sink';
 import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
-import { TopoPage } from './pages/topo/page';
 
 import * as Sentry from '@sentry/angular-ivy';
 
@@ -368,11 +366,9 @@ const PAGES = [
   CreatePage,
   DPWPage,
   ListPage,
-  NightPage,
   ParcelsPage,
   PropertyPage,
-  RootPage,
-  TopoPage
+  RootPage
 ];
 
 const PIPES = [TimesPipe];
@@ -424,11 +420,6 @@ const ROUTES: any = [
         data: { state: 'list' }
       },
       {
-        path: 'night/:id',
-        component: NightPage,
-        data: { state: 'night' }
-      },
-      {
         path: 'parcels/:id',
         component: ParcelsPage,
         data: { state: 'parcels' }
@@ -437,11 +428,6 @@ const ROUTES: any = [
         path: 'property/:id',
         component: PropertyPage,
         data: { state: 'property' }
-      },
-      {
-        path: 'topo/:id',
-        component: TopoPage,
-        data: { state: 'topo' }
       },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
     ]

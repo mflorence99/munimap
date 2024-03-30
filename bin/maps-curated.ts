@@ -114,17 +114,6 @@ const MAPS = [
   },
   {
     bbox: null,
-    id: 'washington-topo',
-    isDflt: false,
-    name: 'Topographical Map of Washington',
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    printSize: [45, 60],
-    timestamp: null,
-    type: 'topo'
-  },
-  {
-    bbox: null,
     id: 'washington-dpw',
     isDflt: false,
     name: 'Washington DPW',

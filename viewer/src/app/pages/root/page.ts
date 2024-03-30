@@ -134,7 +134,6 @@ import urlParse from 'url-parse';
 
       .toolbar {
         display: flex;
-        gap: 0.5rem;
         height: calc(var(--map-cy-toolbar) * 1px);
         padding: 0 0.5rem !important;
         position: absolute;

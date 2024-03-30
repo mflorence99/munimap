@@ -104,11 +104,13 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                     [printing]="true"></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
+
               @if (!map.printing) {
                 <app-ol-control-graticule>
                   <app-ol-style-graticule></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
+
               @if (sink.mapState.name && map.printing) {
                 <app-ol-control-parcelslegend
                   [county]="sink.mapState.path.split(':')[1]"
@@ -117,14 +119,35 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   [state]="sink.mapState.path.split(':')[0]"
                   [title]="sink.mapState.name"></app-ol-control-parcelslegend>
               }
+
               @if (map.printing) {
                 <app-ol-control-scalebar></app-ol-control-scalebar>
               }
+
               @if (!map.printing) {
                 <app-ol-control-scaleline></app-ol-control-scaleline>
               }
+
               @if (map.printing) {
                 <app-ol-control-credits></app-ol-control-credits>
+              }
+
+              <!-- 📦 SATELLITE LAYERS  -->
+
+              @if (sink.satelliteView) {
+                <app-ol-layer-tile>
+                  <app-ol-source-xyz
+                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+                    [url]="
+                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
+                      env.google.apiKey
+                    ">
+                    <app-ol-attribution>
+                      ©
+                      <a href="https://google.com" target="_blank">Google</a>
+                    </app-ol-attribution>
+                  </app-ol-source-xyz>
+                </app-ol-layer-tile>
               }
 
               <!-- 📦 NORMAL (not satellite) LAYERS -->
@@ -184,6 +207,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
 
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
+                    [parcelCoding]="'usage'"
                     [showBackground]="'always'"
                     [showStolen]="
                       isPrivileged() && !map.printing ? 'always' : 'never'
@@ -326,24 +350,6 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   </app-ol-adaptor-landmarks>
                   <app-ol-source-landmarks></app-ol-source-landmarks>
                 </app-ol-layer-vector>
-              }
-
-              <!-- 📦 SATELLITE LAYERS  -->
-
-              @if (sink.satelliteView) {
-                <app-ol-layer-tile>
-                  <app-ol-source-xyz
-                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                    [url]="
-                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                      env.google.apiKey
-                    ">
-                    <app-ol-attribution>
-                      ©
-                      <a href="https://google.com" target="_blank">Google</a>
-                    </app-ol-attribution>
-                  </app-ol-source-xyz>
-                </app-ol-layer-tile>
               }
 
               <!-- 📦 LOT LINE LAYER (printed) -->

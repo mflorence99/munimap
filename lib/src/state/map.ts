@@ -64,14 +64,7 @@ export class UpdateMapError {
   constructor(public error: string) {}
 }
 
-export type MapType =
-  | 'apdvd'
-  | 'area'
-  | 'dpw'
-  | 'night'
-  | 'parcels'
-  | 'topo'
-  | 'property';
+export type MapType = 'apdvd' | 'area' | 'dpw' | 'parcels' | 'property';
 
 export interface Map {
   bbox?: Coordinate;

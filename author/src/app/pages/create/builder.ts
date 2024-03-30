@@ -41,9 +41,7 @@ import { output } from '@angular/core';
               [disabled]="currentTown()"
               [value]="currentType()">
               <mat-option value="parcels">Parcels</mat-option>
-              <mat-option value="topo">Topographic</mat-option>
               <mat-option value="dpw">DPW</mat-option>
-              <mat-option value="night">Nighttime</mat-option>
             </mat-select>
           </mat-form-field>
 

@@ -258,6 +258,7 @@ import { inject } from '@angular/core';
                     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-vector>
                 }
+
                 @if (
                   sink.zoom >= map.minUsefulZoom() &&
                   sink.parcelCoding !== 'topography'
@@ -271,6 +272,7 @@ import { inject } from '@angular/core';
                     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-vector>
                 }
+
                 @if (sink.zoom >= map.minUsefulZoom()) {
                   <app-ol-layer-vector>
                     <app-ol-adaptor-places>
@@ -284,6 +286,7 @@ import { inject } from '@angular/core';
                     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-vector>
                 }
+
                 @if (sink.zoom >= map.minUsefulZoom()) {
                   <app-ol-layer-vector>
                     <app-ol-adaptor-places>
@@ -319,15 +322,15 @@ import { inject } from '@angular/core';
                   <app-ol-source-geojson
                     [layerKey]="'powerlines'"></app-ol-source-geojson>
                   <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                </app-ol-layer-vector>
 
-                  <app-ol-layer-vector>
-                    <!-- 👇 user landmarks here are really map amendments -->
-                    <app-ol-adaptor-landmarks>
-                      <app-ol-style-universal
-                        [showAll]="true"></app-ol-style-universal>
-                    </app-ol-adaptor-landmarks>
-                    <app-ol-source-landmarks></app-ol-source-landmarks>
-                  </app-ol-layer-vector>
+                <app-ol-layer-vector>
+                  <!-- 👇 user landmarks here are really map amendments -->
+                  <app-ol-adaptor-landmarks>
+                    <app-ol-style-universal
+                      [showAll]="true"></app-ol-style-universal>
+                  </app-ol-adaptor-landmarks>
+                  <app-ol-source-landmarks></app-ol-source-landmarks>
                 </app-ol-layer-vector>
               }
             </app-ol-layers>

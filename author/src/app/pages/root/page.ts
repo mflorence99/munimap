@@ -70,12 +70,12 @@ import { viewChild } from '@angular/core';
           }
         </h1>
 
-        <mat-button-toggle
-          #satelliteViewToggle
-          (change)="onSatelliteViewToggle(satelliteViewToggle.checked)"
-          [checked]="sink.satelliteView">
+        <button
+          mat-icon-button
+          (click)="onSatelliteViewToggle(!sink.satelliteView)"
+          [ngClass]="{ 'mat-icon-button-checked': sink.satelliteView }">
           <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
-        </mat-button-toggle>
+        </button>
 
         <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
           <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
@@ -159,7 +159,6 @@ import { viewChild } from '@angular/core';
 
       .toolbar {
         display: grid;
-        gap: 0.5rem;
         grid-template-columns: auto 1fr auto auto auto auto;
         height: calc(var(--map-cy-toolbar) * 1px);
         padding: 0 0.5rem !important;

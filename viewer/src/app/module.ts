@@ -9,7 +9,6 @@ import { ParcelsToolbarComponent } from './pages/parcels/toolbar';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { SinkComponent } from './pages/root/sink';
-import { TopoPage } from './pages/topo/page';
 
 import * as Sentry from '@sentry/angular-ivy';
 
@@ -271,14 +270,7 @@ const COMPONENTS = [
 
 const DIRECTIVES = [];
 
-const PAGES = [
-  APDVDPage,
-  DPWPage,
-  ParcelsPage,
-  PropertyPage,
-  RootPage,
-  TopoPage
-];
+const PAGES = [APDVDPage, DPWPage, ParcelsPage, PropertyPage, RootPage];
 
 // 🔥 type error introduced in Angular v14 -- cause unknown
 const ROUTES: any = [
@@ -329,10 +321,6 @@ const ROUTES: any = [
       {
         path: 'property',
         component: PropertyPage
-      },
-      {
-        path: 'topo',
-        component: TopoPage
       }
     ]
   }
