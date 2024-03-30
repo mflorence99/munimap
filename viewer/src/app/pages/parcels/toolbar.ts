@@ -11,7 +11,19 @@ import { inject } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-parcels-toolbar',
   template: `
-    <app-sink #sink [satelliteView]="root.satelliteView$ | async" />
+    <app-sink
+      #sink
+      [historicalMap]="root.historicalMap$ | async"
+      [satelliteView]="root.satelliteView$ | async"
+      [satelliteYear]="root.satelliteYear$ | async" />
+
+    <article>
+      @if (sink.satelliteView && sink.satelliteYear) {
+        {{ sink.satelliteYear }}
+      } @else if (!sink.satelliteView && sink.historicalMap) {
+        {{ sink.historicalMap }}
+      }
+    </article>
 
     <button
       mat-icon-button
@@ -23,7 +35,8 @@ import { inject } from '@angular/core';
   styles: [
     `
       :host {
-        display: inline-block;
+        align-items: center;
+        display: inline-flex;
       }
 
       .year {

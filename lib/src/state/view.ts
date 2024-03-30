@@ -19,14 +19,19 @@ export class SetGPS {
   constructor(public gps: boolean) {}
 }
 
-export class SetSatelliteView {
-  static readonly type = '[View] SetSatelliteView';
-  constructor(public satelliteView: boolean) {}
+export class SetHistoricalMap {
+  static readonly type = '[View] SetHistoricalMap';
+  constructor(public historicalMap: string) {}
 }
 
 export class SetParcelCoding {
   static readonly type = '[View] SetParcelCoding';
   constructor(public parcelCoding: ParcelCoding) {}
+}
+
+export class SetSatelliteView {
+  static readonly type = '[View] SetSatelliteView';
+  constructor(public satelliteView: boolean) {}
 }
 
 export class SetSatelliteYear {
@@ -59,6 +64,7 @@ export interface View {
 
 export interface ViewStateModel {
   gps: boolean;
+  historicalMap: string;
   parcelCoding: ParcelCoding;
   recentPath: string;
   satelliteView: boolean;
@@ -72,6 +78,7 @@ export interface ViewStateModel {
   name: 'view',
   defaults: {
     gps: false,
+    historicalMap: '',
     parcelCoding: 'usage',
     recentPath: null,
     satelliteView: false,
@@ -89,6 +96,10 @@ export class ViewState {
 
   @Selector() static gps(state: ViewStateModel): boolean {
     return state.gps;
+  }
+
+  @Selector() static historicalMap(state: ViewStateModel): string {
+    return state.historicalMap || '' /* 👈 b/c historicalMap was added later */;
   }
 
   @Selector() static parcelCoding(state: ViewStateModel): ParcelCoding {
@@ -119,6 +130,13 @@ export class ViewState {
     action: SetGPS
   ): void {
     ctx.setState(patch({ gps: action.gps }));
+  }
+
+  @Action(SetHistoricalMap) setHistoricalMap(
+    ctx: StateContext<ViewStateModel>,
+    action: SetHistoricalMap
+  ): void {
+    ctx.setState(patch({ historicalMap: action.historicalMap }));
   }
 
   @Action(SetParcelCoding) setParcelCoding(

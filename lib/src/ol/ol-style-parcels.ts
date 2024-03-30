@@ -1,5 +1,3 @@
-import { ViewState } from '../state/view';
-import { ViewStateModel } from '../state/view';
 import { Map } from '../state/map';
 import { MapState } from '../state/map';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
@@ -10,6 +8,8 @@ import { ParcelID } from '../common';
 import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
+import { ViewState } from '../state/view';
+import { ViewStateModel } from '../state/view';
 
 import { getAPDVDFill } from './ol-apdvd';
 import { isParcelStollen } from '../common';

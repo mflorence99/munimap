@@ -146,6 +146,8 @@ import urlParse from 'url-parse';
 export class RootPage implements OnInit {
   @Select(ViewState.gps) gps$: Observable<boolean>;
 
+  @Select(ViewState.historicalMap) historicalMap$: Observable<string>;
+
   @Select(MapState) map$: Observable<Map>;
 
   @Select(ViewState.parcelCoding) parcelCoding$: Observable<ParcelCoding>;

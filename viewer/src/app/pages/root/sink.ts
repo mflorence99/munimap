@@ -15,6 +15,7 @@ export class SinkComponent {
   // 👇 @Input works just fine here!
 
   @Input() gps: boolean;
+  @Input() historicalMap: string;
   @Input() mapState: Map;
   @Input() parcelCoding: ParcelCoding;
   @Input() satelliteView: boolean;

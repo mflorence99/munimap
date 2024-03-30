@@ -6,6 +6,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { SetHistoricalMap } from '@lib/state/view';
 import { SetParcelCoding } from '@lib/state/view';
 import { SetSatelliteYear } from '@lib/state/view';
 import { SetSideBySideView } from '@lib/state/view';
@@ -47,47 +48,61 @@ import copy from 'fast-copy';
         in the left sidebar for the key to the color-coding.
       </p>
 
-      <mat-radio-group
-        [(ngModel)]="record.parcelCoding"
-        class="list"
-        name="parcelCoding"
-        required>
-        <mat-radio-button value="usage">Show land use</mat-radio-button>
-        <mat-radio-button value="ownership">
-          Show ownership
-          <sup>[1]</sup>
-        </mat-radio-button>
-        <mat-radio-button value="conformity">
-          Show conformity
-          <sup>[1]</sup>
-        </mat-radio-button>
-        <mat-radio-button value="topography">Show topography</mat-radio-button>
-      </mat-radio-group>
+      @if (record.satelliteView) {
+        <mat-form-field>
+          <mat-label>Select Side-by-side Source</mat-label>
+          <mat-select [(ngModel)]="record.satelliteYear" name="satelliteYear">
+            @for (year of satelliteYears; track year) {
+              <mat-option [value]="year">
+                @if (year) {
+                  {{ year }} satellite data
+                } @else {
+                  No side-by-side comparison
+                }
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
-      <p class="instructions">
-        <sup>[1]</sup>
-        These color-codings are experimental. Contact
-        <a href="mailto:munimap.helpdesk@gmail.com" target="_blank">
-          munimap.helpdesk&#64;gmail.com
-        </a>
-        with questions or suggestions.
-      </p>
+      @if (!record.satelliteView) {
+        <mat-radio-group
+          [(ngModel)]="record.parcelCoding"
+          class="list"
+          name="parcelCoding"
+          required>
+          <mat-radio-button value="usage">Show land use</mat-radio-button>
+          <mat-radio-button value="ownership">
+            Show ownership
+            <sup>[1]</sup>
+          </mat-radio-button>
+          <mat-radio-button value="conformity">
+            Show conformity
+            <sup>[1]</sup>
+          </mat-radio-button>
+          <mat-radio-button value="topography">
+            Show topography
+          </mat-radio-button>
+        </mat-radio-group>
 
-      <mat-form-field>
-        <mat-label>Select Side-by-side Source</mat-label>
-        <mat-select [(ngModel)]="record.satelliteYear" name="satelliteYear">
-          <mat-option [value]="null">No side-by-side comparison</mat-option>
-          @for (year of satelliteYears; track year) {
-            <mat-option [value]="year">
-              @if (year) {
-                {{ year }} satellite data
-              } @else {
-                Latest satellite data
-              }
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+        <p class="instructions">
+          <sup>[1]</sup>
+          These color-codings are experimental. Contact
+          <a href="mailto:munimap.helpdesk@gmail.com" target="_blank">
+            munimap.helpdesk&#64;gmail.com
+          </a>
+          with questions or suggestions.
+        </p>
+
+        <mat-form-field>
+          <mat-label>Select Side-by-side Source</mat-label>
+          <mat-select [(ngModel)]="record.historicalMap" name="historicalMap">
+            <!-- 🔥TEMPORARY -->
+            <mat-option value="">No side-by-side comparison</mat-option>
+            <mat-option value="1930">1930 USGS topo</mat-option>
+          </mat-select>
+        </mat-form-field>
+      }
     </form>
 
     <article class="actions">
@@ -108,6 +123,7 @@ export class ParcelsSetupComponent implements OnInit {
   @Select(ViewState) view$: Observable<ViewStateModel>;
 
   record: Partial<ViewStateModel> = {
+    historicalMap: '',
     parcelCoding: 'usage',
     satelliteYear: ''
   };
@@ -130,13 +146,20 @@ export class ParcelsSetupComponent implements OnInit {
   }
 
   save(record: Partial<ViewStateModel>): void {
-    this.#store.dispatch(new SetParcelCoding(record.parcelCoding));
-    if (record.satelliteYear !== null)
+    if (record.satelliteView)
+      this.#store.dispatch(new SetSatelliteYear(record.satelliteYear));
+    else
       this.#store.dispatch([
-        new SetSatelliteYear(record.satelliteYear),
-        new SetSideBySideView(true)
+        new SetParcelCoding(record.parcelCoding),
+        new SetHistoricalMap(record.historicalMap)
       ]);
-    else this.#store.dispatch(new SetSideBySideView(true));
+
+    this.#store.dispatch(
+      new SetSideBySideView(
+        (record.satelliteView && !!record.satelliteYear) ||
+          (!record.satelliteView && !!record.historicalMap)
+      )
+    );
     this.#drawer.close();
   }
 

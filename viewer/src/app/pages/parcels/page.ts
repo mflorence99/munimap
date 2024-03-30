@@ -13,6 +13,7 @@ import { inject } from '@angular/core';
     <app-sink
       #sink
       [gps]="root.gps$ | async"
+      [historicalMap]="root.historicalMap$ | async"
       [mapState]="root.map$ | async"
       [parcelCoding]="root.parcelCoding$ | async"
       [satelliteView]="root.satelliteView$ | async"
@@ -125,7 +126,7 @@ import { inject } from '@angular/core';
                     <app-ol-filter-colorize
                       [color]="'#f8fc03'"
                       [operation]="'color'"
-                      [value]="0.1"></app-ol-filter-colorize>
+                      [value]="0.25"></app-ol-filter-colorize>
                   } @else {
                     <app-ol-filter-colorize
                       [operation]="'enhance'"
@@ -328,53 +329,20 @@ import { inject } from '@angular/core';
                     <app-ol-source-landmarks></app-ol-source-landmarks>
                   </app-ol-layer-vector>
                 </app-ol-layer-vector>
-
-                <!-- 📦 SATELLITE OVERLAY FOR SELECTION  -->
-
-                @if (
-                  map.selected.length && sink.parcelCoding !== 'topography'
-                ) {
-                  <app-ol-layer-tile>
-                    <app-ol-source-xyz
-                      [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                      [url]="
-                        'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                        env.google.apiKey
-                      ">
-                      <app-ol-attribution>
-                        ©
-                        <a href="https://google.com" target="_blank">Google</a>
-                      </app-ol-attribution>
-                    </app-ol-source-xyz>
-                    <app-ol-filter-crop2selectedparcels></app-ol-filter-crop2selectedparcels>
-                  </app-ol-layer-tile>
-                }
               }
             </app-ol-layers>
 
             <app-ol-layers #right>
               @if (sink.sideBySideView) {
-                @if (sink.satelliteYear) {
-                  <!-- 📦 HISTORICAL SATELLITE VIEW -->
+                @if (sink.satelliteView && sink.satelliteYear) {
                   <app-ol-layer-tile>
                     <app-ol-source-satellite
                       [year]="sink.satelliteYear"></app-ol-source-satellite>
                   </app-ol-layer-tile>
-                } @else {
-                  <!-- 📦 LATEST SATELLITE VIEW -->
-                  <app-ol-layer-tile>
-                    <app-ol-source-xyz
-                      [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                      [url]="
-                        'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                        env.google.apiKey
-                      ">
-                      <app-ol-attribution>
-                        ©
-                        <a href="https://google.com" target="_blank">Google</a>
-                      </app-ol-attribution>
-                    </app-ol-source-xyz>
-                  </app-ol-layer-tile>
+                } @else if (!sink.satelliteView && sink.historicalMap) {
+                  <app-ol-layer-image>
+                    <app-ol-source-image></app-ol-source-image>
+                  </app-ol-layer-image>
                 }
               }
             </app-ol-layers>
@@ -405,9 +373,7 @@ import { inject } from '@angular/core';
                   [showDimensions]="'whenSelected'"
                   [showDimensionContrast]="'always'"
                   [showLabels]="'always'"
-                  [showLabelContrast]="
-                    sink.satelliteView ? 'always' : 'whenSelected'
-                  "
+                  [showLabelContrast]="sink.satelliteView ? 'always' : 'never'"
                   [showSelection]="'always'"></app-ol-style-parcels>
                 <app-ol-source-parcels></app-ol-source-parcels>
                 <app-ol-interaction-selectparcels
