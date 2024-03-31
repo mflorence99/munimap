@@ -50,6 +50,10 @@ import { viewChild } from '@angular/core';
             [minZoom]="13"
             [maxZoom]="20"
             [path]="sink.mapState.path">
+            <!-- ---------------------------------------------------------- -->
+            <!-- 🗺️ Context menu                                            -->
+            <!-- ---------------------------------------------------------- -->
+
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -58,11 +62,13 @@ import { viewChild } from '@angular/core';
               </mat-menu>
             </app-contextmenu>
 
+            <!-- ---------------------------------------------------------- -->
+            <!-- 🗺️ External control panels                                 -->
+            <!-- ---------------------------------------------------------- -->
+
             <app-controlpanel-properties
               [mapState]="sink.mapState"
               mapControlPanel1></app-controlpanel-properties>
-
-            <!-- 📦 CONTROLS -->
 
             <app-ol-control-searchparcels
               mapControlSearch></app-ol-control-searchparcels>
@@ -75,6 +81,7 @@ import { viewChild } from '@angular/core';
                 [printSize]="sink.mapState.printSize"
                 mapControlPrint></app-ol-control-print>
             }
+
             @if (sink.mapState.name) {
               <app-ol-control-exportculverts
                 [fileName]="sink.mapState.id + '-culverts'"
@@ -88,34 +95,53 @@ import { viewChild } from '@angular/core';
               mapControlAttribution></app-ol-control-attribution>
 
             @if (map.initialized) {
-              <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+              <!-- ------------------------------------------------------- -->
+              <!-- 🗺️ Internal control panels                               -->
+              <!-- ------------------------------------------------------- -->
 
               @if (map.printing) {
                 <app-ol-control-graticule>
                   <app-ol-style-graticule
                     [printing]="true"></app-ol-style-graticule>
                 </app-ol-control-graticule>
-              }
-              @if (!map.printing) {
+              } @else {
                 <app-ol-control-graticule>
                   <app-ol-style-graticule></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
-              @if (map.printing) {
-                <app-ol-control-scalebar></app-ol-control-scalebar>
-              }
+
               @if (!map.printing) {
                 <app-ol-control-scaleline></app-ol-control-scaleline>
-              }
-              @if (map.printing) {
+              } @else {
+                <app-ol-control-scalebar></app-ol-control-scalebar>
                 <app-ol-control-credits></app-ol-control-credits>
               }
 
-              <!-- 📦 NORMAL (not satellite) LAYERS -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Satellite view                                        -->
+              <!-- -------------------------------------------------------- -->
+
+              @if (sink.satelliteView) {
+                <app-ol-layer-tile>
+                  <app-ol-source-xyz
+                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+                    [url]="
+                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
+                      env.google.apiKey
+                    ">
+                    <app-ol-attribution>
+                      ©
+                      <a href="https://google.com" target="_blank">Google</a>
+                    </app-ol-attribution>
+                  </app-ol-source-xyz>
+                </app-ol-layer-tile>
+              }
+
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Normal view                                           -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!sink.satelliteView) {
-                <!-- 📦 BG LAYER (outside town)-->
-
                 @if (map.printing) {
                   <app-ol-layer-tile>
                     <app-ol-source-xyz
@@ -135,16 +161,6 @@ import { viewChild } from '@angular/core';
                   </app-ol-layer-tile>
                 }
 
-                <!-- 📦 HILLSHADE LAYER 🔥 appears to throw 502 12/13/2023 -->
-
-                <!-- <app-ol-layer-tile [opacity]="0.5">
-              <app-ol-source-hillshade
-                [colorize]="true"></app-ol-source-hillshade>
-              <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-            </app-ol-layer-tile> -->
-
-                <!-- 📦 HILLSHADE LAYER 🔥 replaces above -->
-
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
                     [maxZoom]="16"
@@ -161,8 +177,6 @@ import { viewChild } from '@angular/core';
                     [value]="0.1"></app-ol-filter-colorize>
                   <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                 </app-ol-layer-tile>
-
-                <!-- 📦 NH GranIT VECTOR LAYERS -->
 
                 <app-ol-layer-vector>
                   <app-ol-adaptor-wetlands>
@@ -296,8 +310,6 @@ import { viewChild } from '@angular/core';
                   <app-ol-source-parcels></app-ol-source-parcels>
                 </app-ol-layer-vector>
 
-                <!-- 📦 STATE'S LANDMARKS -->
-
                 <app-ol-layer-vector #bridges>
                   <app-ol-adaptor-bridges [bridgeWidth]="64">
                     <app-ol-style-universal
@@ -325,8 +337,6 @@ import { viewChild } from '@angular/core';
                   <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                 </app-ol-layer-vector>
 
-                <!-- 📦 DPW'S LANDMARKS -->
-
                 <app-ol-layer-vector #landmarks>
                   <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="64">
                     <app-ol-style-universal
@@ -344,86 +354,9 @@ import { viewChild } from '@angular/core';
                 </app-ol-layer-vector>
               }
 
-              <!-- 📦 SATELLITE LAYER  -->
-
-              @if (sink.satelliteView) {
-                <app-ol-layer-tile>
-                  <app-ol-source-xyz
-                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                    [url]="
-                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                      env.google.apiKey
-                    ">
-                    <app-ol-attribution>
-                      ©
-                      <a href="https://google.com" target="_blank">Google</a>
-                    </app-ol-attribution>
-                  </app-ol-source-xyz>
-                </app-ol-layer-tile>
-
-                <app-ol-layer-vector>
-                  <app-ol-style-parcels
-                    [borderOpacity]="0.5"
-                    [labelOpacity]="0.5"
-                    [showBorder]="'always'"
-                    [showDimensionContrast]="'never'"
-                    [showDimensions]="'never'"
-                    [showLabels]="'always'"
-                    [showLabelContrast]="'always'"
-                    [showSelection]="'never'"
-                    [showStolen]="'never'"></app-ol-style-parcels>
-                  <app-ol-source-parcels></app-ol-source-parcels>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector #bridges>
-                  <app-ol-adaptor-bridges [bridgeWidth]="64">
-                    <app-ol-style-universal
-                      [contrast]="'whiteOnBlack'"
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-bridges>
-                  <app-ol-source-bridges></app-ol-source-bridges>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector #streamcrossings>
-                  <app-ol-adaptor-streamcrossings [streamCrossingWidth]="64">
-                    <app-ol-style-universal
-                      [contrast]="'whiteOnBlack'"
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-streamcrossings>
-                  <app-ol-source-streamcrossings></app-ol-source-streamcrossings>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector #floodhazards>
-                  <app-ol-adaptor-floodhazards [floodHazardWidth]="64">
-                    <app-ol-style-universal
-                      [contrast]="'whiteOnBlack'"
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-floodhazards>
-                  <app-ol-source-floodhazards></app-ol-source-floodhazards>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector #landmarks>
-                  <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="64">
-                    <app-ol-style-universal
-                      [contrast]="'whiteOnBlack'"
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-dpwlandmarks>
-                  <app-ol-source-landmarks></app-ol-source-landmarks>
-                  <app-ol-interaction-selectlandmarks
-                    [layers]="[
-                      bridges,
-                      streamcrossings,
-                      floodhazards,
-                      landmarks
-                    ]"
-                    [multi]="false"></app-ol-interaction-selectlandmarks>
-                </app-ol-layer-vector>
-              }
-
-              <!-- 📦 BOUNDARY LAYER -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Map boundary clips everything                         -->
+              <!-- -------------------------------------------------------- -->
 
               <app-ol-layer-vector>
                 <app-ol-adaptor-boundary>
@@ -433,7 +366,9 @@ import { viewChild } from '@angular/core';
                 <app-ol-source-boundary></app-ol-source-boundary>
               </app-ol-layer-vector>
 
-              <!-- 📦 OVERLAY TO MOVE LANDMARK -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Overlay to move landmark                              -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!map.printing) {
                 <app-ol-overlay-landmarklabel></app-ol-overlay-landmarklabel>
@@ -442,7 +377,9 @@ import { viewChild } from '@angular/core';
           </app-ol-map>
         </mat-drawer-content>
 
-        <!-- 📦 DYNAMIC SIDEBAR-->
+        <!-- -------------------------------------------------------- -->
+        <!-- 🗺️ Dynamic sidebar                                       -->
+        <!-- -------------------------------------------------------- -->
 
         <mat-drawer #drawer class="sidebar" mode="over" position="end">
           <ng-container appContextMenuHost></ng-container>
@@ -450,7 +387,9 @@ import { viewChild } from '@angular/core';
       </mat-drawer-container>
     }
 
-    <!-- 📦 CONTEXT MENU -->
+    <!-- -------------------------------------------------------- -->
+    <!-- 🗺️ Context menu                                          -->
+    <!-- -------------------------------------------------------- -->
 
     <ng-template #contextmenu>
       <nav class="contextmenu">

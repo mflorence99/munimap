@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
+import { HistoricalsService } from '@lib/services/historicals';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
@@ -97,9 +98,15 @@ import copy from 'fast-copy';
         <mat-form-field>
           <mat-label>Select Side-by-side Source</mat-label>
           <mat-select [(ngModel)]="record.historicalMap" name="historicalMap">
-            <!-- 🔥TEMPORARY -->
-            <mat-option value="">No side-by-side comparison</mat-option>
-            <mat-option value="1930">1930 USGS topo</mat-option>
+            @for (map of historicalMaps; track map) {
+              <mat-option [value]="map">
+                @if (map) {
+                  {{ map }}
+                } @else {
+                  No side-by-side comparison
+                }
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
       }
@@ -125,13 +132,26 @@ export class ParcelsSetupComponent implements OnInit {
   record: Partial<ViewStateModel> = {
     historicalMap: '',
     parcelCoding: 'usage',
+    recentPath: '',
     satelliteYear: ''
   };
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
   #drawer = inject(MatDrawer);
+  #historicals = inject(HistoricalsService);
   #store = inject(Store);
+
+  get historicalMaps(): string[] {
+    return [
+      '',
+      ...this.#historicals
+        .historicalsFor(this.record.recentPath)
+        .map((historical) => historical.description)
+        .sort()
+        .reverse()
+    ];
+  }
 
   get satelliteYears(): string[] {
     return ['', ...satelliteYears.slice().reverse()];

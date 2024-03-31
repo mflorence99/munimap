@@ -1,18 +1,20 @@
-import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLLayerImageComponent } from './ol-layer-image';
 import { OLMapComponent } from './ol-map';
 
 import { environment } from '../environment';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { HistoricalsService } from '@lib/services/historicals';
 
+import { effect } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
-import { transformExtent } from 'ol/proj';
 
-import OLXYZ from 'ol/source/XYZ';
-
-// 🔥 EXPERIMENTAL
+import copy from 'fast-copy';
+import Feature from 'ol/Feature';
+import OLImage from 'ol-ext/source/GeoImage';
+import Polygon from 'ol/geom/Polygon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,29 +23,44 @@ import OLXYZ from 'ol/source/XYZ';
   styles: [':host { display: none }']
 })
 export class OLSourceHistoricalComponent {
+  map = input.required<string>();
   maxZoom = input(13);
   minZoom = input(9);
-  olXYZ: OLXYZ;
+  olImage: OLImage;
 
-  #layer = inject(OLLayerTileComponent);
+  #historicals = inject(HistoricalsService);
+  #layer = inject(OLLayerImageComponent);
   #map = inject(OLMapComponent);
 
   constructor() {
-    this.olXYZ = new OLXYZ({
-      attributions:
-        '<a href="https://www.maptiler.com/engine/">MapTiler Engine</a>',
-      maxZoom: this.maxZoom(),
-      minZoom: this.minZoom(),
-      url: `${environment.endpoints.proxy}/historical/1930/{z}/{x}/{y}.jpg`
+    effect(() => {
+      // 👇 build the mask
+      const coords: any = copy(
+        this.#map.boundary().features[0].geometry.coordinates
+      );
+      const boundary = new Feature(new Polygon(coords));
+      boundary
+        .getGeometry()
+        .transform(this.#map.featureProjection, this.#map.projection);
+      // 👇 find the metadata
+      const historicalMap = this.#historicals
+        .historicalsFor(this.#map.path())
+        .find((historical) => historical.description === this.map());
+      // 👇 create the image source
+      if (historicalMap) {
+        this.olImage = new OLImage({
+          imageCenter: historicalMap.imageCenter,
+          imageMask: boundary.getGeometry().getCoordinates()[0],
+          imageRotate: historicalMap.imageRotate,
+          imageScale: historicalMap.imageScale,
+          maxZoom: this.maxZoom(),
+          minZoom: this.minZoom(),
+          projection: 'EPSG:3857',
+          url: `${environment.endpoints.proxy}/${historicalMap.url}`
+        });
+        this.olImage.setProperties({ component: this }, true);
+        this.#layer.olLayer.setSource(this.olImage);
+      }
     });
-    this.olXYZ.setProperties({ component: this }, true);
-    this.#layer.olLayer.setExtent(
-      transformExtent(
-        [-72.19862661, 43.12490044, -71.99994973, 43.25065641],
-        this.#map.featureProjection,
-        this.#map.projection
-      )
-    );
-    this.#layer.olLayer.setSource(this.olXYZ);
   }
 }

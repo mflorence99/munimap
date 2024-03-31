@@ -1,0 +1,60 @@
+{
+  "param": {
+    "lon": -72.05415139491375,
+    "lat": 43.14736190891236,
+    "rot": null,
+    "zoom": 14.189952098349297,
+    "titre": "Sans titre",
+    "description": "",
+    "status": "brouillon",
+    "controlParams": {
+      "limitGeo": "1",
+      "zoomBtn": "1",
+      "selectLayer": "1",
+      "contextMap": "0",
+      "legend": "0",
+      "scaleLine": "1",
+      "pSearchBar": "0",
+      "coords": "1",
+      "attribution": "1"
+    },
+    "proj": { "valeur": "EPSG:4326", "unite": "ds" }
+  },
+  "layers": [
+    {
+      "type": "Geoportail",
+      "name": "Plan IGN",
+      "titre": "sans-titre",
+      "visibility": true,
+      "layer": "GEOGRAPHICALGRIDSYSTEMS.PLANIGN"
+    },
+    {
+      "name": "1930",
+      "visibility": true,
+      "type": "GeoImage",
+      "imageCenter": [-8026029.224733404, 5340630.659465399],
+      "imageRotate": -0.008877497693809668,
+      "imageScale": [5.5598097077027235, 5.559809707702725]
+    },
+    {
+      "dessin": true,
+      "type": "Vector",
+      "name": "Dessin",
+      "titre": "sans-titre",
+      "visibility": true,
+      "opacity": 1,
+      "popupContent": {},
+      "style": {},
+      "features": []
+    }
+  ],
+  "symbolLib": {},
+  "legende": {
+    "legend": "",
+    "legendPos": "bottom-left",
+    "legendWidth": 295,
+    "legendVisible": false,
+    "legendtitle": "Ma légende",
+    "legendParam": { "lineHeight": 55, "width": 295 }
+  }
+}

@@ -1,11 +1,9 @@
 import { AbstractMapPage } from '../abstract-map';
-import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
 import { MapType } from '@lib/state/map';
-import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 
@@ -31,6 +29,10 @@ import { viewChild } from '@angular/core';
         [minZoom]="15"
         [maxZoom]="20"
         [path]="sink.mapState.path">
+        <!-- ---------------------------------------------------------- -->
+        <!-- 🗺️ External control panels                                 -->
+        <!-- ---------------------------------------------------------- -->
+
         <app-controlpanel-properties
           [mapState]="sink.mapState"
           mapControlPanel1></app-controlpanel-properties>
@@ -49,39 +51,58 @@ import { viewChild } from '@angular/core';
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
-          <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Internal control panels                                 -->
+          <!-- ---------------------------------------------------------- -->
 
           @if (map.printing) {
             <app-ol-control-graticule>
               <app-ol-style-graticule
                 [printing]="true"></app-ol-style-graticule>
             </app-ol-control-graticule>
-          }
-          @if (!map.printing) {
+          } @else {
             <app-ol-control-graticule>
               <app-ol-style-graticule></app-ol-style-graticule>
             </app-ol-control-graticule>
           }
+
           @if (sink.mapState.name && map.printing) {
             <app-ol-control-apdvdlegend
-              [printing]="map.printing"
+              [printing]="true"
               [title]="sink.mapState.name"></app-ol-control-apdvdlegend>
           }
 
-          <!-- 🔥 TOO OBTRUSIVE ?? <app-ol-control-scalebar *ngIf="map.printing"></app-ol-control-scalebar> -->
-
           @if (!map.printing) {
             <app-ol-control-scaleline></app-ol-control-scaleline>
-          }
-          @if (map.printing) {
+          } @else {
             <app-ol-control-credits></app-ol-control-credits>
           }
 
-          <!-- 📦 NORMAL (not satellite) LAYERS -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Satellite view                                          -->
+          <!-- ---------------------------------------------------------- -->
+
+          @if (sink.satelliteView) {
+            <app-ol-layer-tile>
+              <app-ol-source-xyz
+                [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+                [url]="
+                  'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
+                  env.google.apiKey
+                ">
+                <app-ol-attribution>
+                  ©
+                  <a href="https://google.com" target="_blank">Google</a>
+                </app-ol-attribution>
+              </app-ol-source-xyz>
+            </app-ol-layer-tile>
+          }
+
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Normal view                                             -->
+          <!-- ---------------------------------------------------------- -->
 
           @if (!sink.satelliteView) {
-            <!-- 📦 BG LAYER (outside town)-->
-
             @if (map.printing) {
               <app-ol-layer-tile>
                 <app-ol-source-xyz
@@ -101,8 +122,6 @@ import { viewChild } from '@angular/core';
               </app-ol-layer-tile>
             }
 
-            <!-- 📦 BG LAYER (lays down a texture inside town)-->
-
             <app-ol-layer-vector>
               <app-ol-adaptor-boundary>
                 <app-ol-style-universal
@@ -111,8 +130,6 @@ import { viewChild } from '@angular/core';
               <app-ol-source-boundary></app-ol-source-boundary>
               <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
             </app-ol-layer-vector>
-
-            <!-- 📦 HILLSHADE LAYER - limit is 17 but is sometimes n/a -->
 
             <app-ol-layer-tile>
               <app-ol-source-xyz
@@ -129,8 +146,6 @@ import { viewChild } from '@angular/core';
                 [operation]="'enhance'"
                 [value]="0.33"></app-ol-filter-colorize>
             </app-ol-layer-tile>
-
-            <!-- 📦 NH GranIT VECTOR LAYERS -->
 
             <app-ol-layer-vector>
               <app-ol-style-parcels
@@ -275,54 +290,23 @@ import { viewChild } from '@angular/core';
             </app-ol-layer-vector>
           }
 
-          <!-- 📦 SATELLITE LAYERS  -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Lot lines                                               -->
+          <!-- ---------------------------------------------------------- -->
 
-          @if (sink.satelliteView) {
-            <app-ol-layer-tile>
-              <app-ol-source-xyz
-                [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                [url]="
-                  'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                  env.google.apiKey
-                ">
-                <app-ol-attribution>
-                  ©
-                  <a href="https://google.com" target="_blank">Google</a>
-                </app-ol-attribution>
-              </app-ol-source-xyz>
-            </app-ol-layer-tile>
-          }
+          <app-ol-layer-vector>
+            <app-ol-style-parcels
+              [showBorder]="'always'"
+              [showLabels]="'always'"
+              [showLabelContrast]="
+                sink.satelliteView ? 'always' : 'never'
+              "></app-ol-style-parcels>
+            <app-ol-source-parcels></app-ol-source-parcels>
+          </app-ol-layer-vector>
 
-          <!-- 📦 LOT LINE LAYER (printed) -->
-
-          @if (map.printing) {
-            <app-ol-layer-vector>
-              <app-ol-style-parcels
-                [showBorder]="'always'"
-                [showLabels]="'always'"></app-ol-style-parcels>
-              <app-ol-source-parcels></app-ol-source-parcels>
-            </app-ol-layer-vector>
-          }
-
-          <!-- 📦 SELECTION LAYER (not printed) -->
-
-          @if (!map.printing) {
-            <app-ol-layer-vector>
-              <app-ol-style-parcels
-                [showBorder]="'always'"
-                [showDimensions]="'whenSelected'"
-                [showDimensionContrast]="
-                  sink.satelliteView ? 'always' : 'never'
-                "
-                [showLabels]="'always'"
-                [showLabelContrast]="sink.satelliteView ? 'always' : 'never'"
-                [showSelection]="'always'"></app-ol-style-parcels>
-              <app-ol-source-parcels></app-ol-source-parcels>
-              <app-ol-interaction-redrawparcel></app-ol-interaction-redrawparcel>
-            </app-ol-layer-vector>
-          }
-
-          <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Road names (b/c) lots overlay roads                     -->
+          <!-- ---------------------------------------------------------- -->
 
           @if (!sink.satelliteView) {
             <app-ol-layer-vector>
@@ -336,7 +320,9 @@ import { viewChild } from '@angular/core';
             </app-ol-layer-vector>
           }
 
-          <!-- 📦 BOUNDARY LAYER (above selection so we can interact with it) -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Map boundary clips everything                           -->
+          <!-- ---------------------------------------------------------- -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-boundary>
@@ -345,20 +331,14 @@ import { viewChild } from '@angular/core';
             </app-ol-adaptor-boundary>
             <app-ol-source-boundary></app-ol-source-boundary>
           </app-ol-layer-vector>
-
-          <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
-
-          @if (!map.printing) {
-            <app-ol-overlay-parcellabel></app-ol-overlay-parcellabel>
-          }
         }
       </app-ol-map>
     }
   `
 })
 export class APDVDPage extends AbstractMapPage implements OnInit {
-  contextMenuHost = viewChild(ContextMenuHostDirective);
-  drawer = viewChild(MatDrawer);
+  contextMenuHost = null;
+  drawer = null;
   map = viewChild(OLMapComponent);
 
   getType(): MapType {

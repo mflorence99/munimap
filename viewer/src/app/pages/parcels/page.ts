@@ -344,7 +344,8 @@ import { inject } from '@angular/core';
                   </app-ol-layer-tile>
                 } @else if (!sink.satelliteView && sink.historicalMap) {
                   <app-ol-layer-image>
-                    <app-ol-source-image></app-ol-source-image>
+                    <app-ol-source-historical
+                      [map]="sink.historicalMap"></app-ol-source-historical>
                   </app-ol-layer-image>
                 }
               }

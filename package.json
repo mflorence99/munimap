@@ -1,6 +1,6 @@
 {
   "name": "munimap",
-  "version": "4.0.3",
+  "version": "4.0.6",
   "description": "MuniMap",
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "bin:curated": "npm run bin:buildings:curated && npm run bin:parcels:curated",
     "bin:explorer": "ts-node --dir bin explorer.ts",
     "bin:fix:culverts": "ts-node --dir bin fix-culverts.ts --useEmulator",
+    "bin:historical:curated": "ts-node --dir bin historical-curated.ts",
     "bin:indexer": "ts-node --dir bin indexer.ts",
     "bin:lakes": "ts-node --dir bin lakes.ts",
     "bin:owner:analysis": "ts-node --dir bin owner-analysis.ts",

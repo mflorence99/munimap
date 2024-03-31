@@ -58,6 +58,10 @@ interface LandmarkConversion {
             [minZoom]="13"
             [maxZoom]="22"
             [path]="sink.mapState.path">
+            <!-- ---------------------------------------------------------- -->
+            <!-- 🗺️ Context menu                                            -->
+            <!-- ---------------------------------------------------------- -->
+
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -65,6 +69,10 @@ interface LandmarkConversion {
                 </ng-template>
               </mat-menu>
             </app-contextmenu>
+
+            <!-- ---------------------------------------------------------- -->
+            <!-- 🗺️ External control panels                                 -->
+            <!-- ---------------------------------------------------------- -->
 
             <app-controlpanel-properties
               [mapState]="sink.mapState"
@@ -90,45 +98,70 @@ interface LandmarkConversion {
               mapControlAttribution></app-ol-control-attribution>
 
             @if (map.initialized) {
-              <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+              <!-- ------------------------------------------------------- -->
+              <!-- 🗺️ Internal control panels                               -->
+              <!-- ------------------------------------------------------- -->
 
               @if (map.printing) {
                 <app-ol-control-title
                   [showTitleContrast]="sink.satelliteView"
                   [title]="sink.mapState.name"></app-ol-control-title>
               }
+
               @if (map.printing) {
                 <app-ol-control-graticule [step]="0.0025">
                   <app-ol-style-graticule
                     [printing]="true"></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
+
               @if (!map.printing) {
                 <app-ol-control-graticule [step]="0.0025">
                   <app-ol-style-graticule></app-ol-style-graticule>
                 </app-ol-control-graticule>
               }
+
               @if (map.printing) {
                 <app-ol-control-scalebar
                   [showScaleContrast]="
                     sink.satelliteView
                   "></app-ol-control-scalebar>
               }
+
               @if (!map.printing) {
                 <app-ol-control-scaleline></app-ol-control-scaleline>
-              }
-              @if (map.printing) {
+              } @else {
                 <app-ol-control-credits
                   [showCreditsContrast]="
                     sink.satelliteView
                   "></app-ol-control-credits>
               }
 
-              <!-- 📦 TERRAIN LAYERS -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Satellite view                                        -->
+              <!-- -------------------------------------------------------- -->
+
+              @if (sink.satelliteView) {
+                <app-ol-layer-tile>
+                  <app-ol-source-xyz
+                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
+                    [url]="
+                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
+                      env.google.apiKey
+                    ">
+                    <app-ol-attribution>
+                      ©
+                      <a href="https://google.com" target="_blank">Google</a>
+                    </app-ol-attribution>
+                  </app-ol-source-xyz>
+                </app-ol-layer-tile>
+              }
+
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Normal view                                           -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!sink.satelliteView) {
-                <!-- 📦 HILLSHADE LAYER -->
-
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
                     [maxZoom]="16"
@@ -149,20 +182,15 @@ interface LandmarkConversion {
                     [type]="'crop'"></app-ol-filter-crop2propertyparcels>
                 </app-ol-layer-tile>
 
-                <!-- 📦 CONTOURS LAYER -->
-
                 @if (sink.mapState.contours2ft) {
                   <app-ol-layer-tile>
                     <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
                   </app-ol-layer-tile>
-                }
-                @if (!sink.mapState.contours2ft) {
+                } @else {
                   <app-ol-layer-tile>
                     <app-ol-source-contours></app-ol-source-contours>
                   </app-ol-layer-tile>
                 }
-
-                <!-- 📦 USER'S LANDMARKS (shapes only) -->
 
                 <app-ol-layer-vector>
                   <app-ol-adaptor-landmarks>
@@ -172,8 +200,6 @@ interface LandmarkConversion {
                   </app-ol-adaptor-landmarks>
                   <app-ol-source-landmarks></app-ol-source-landmarks>
                 </app-ol-layer-vector>
-
-                <!-- 📦 NH GranIT VECTOR LAYERS -->
 
                 <app-ol-layer-vector>
                   <app-ol-adaptor-wetlands>
@@ -297,7 +323,6 @@ interface LandmarkConversion {
                   <app-ol-source-parcels #parcels></app-ol-source-parcels>
                 </app-ol-layer-vector>
 
-                <!-- 👇 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
                 <app-ol-layer-vector>
                   <app-ol-adaptor-roads>
                     <app-ol-style-universal
@@ -306,8 +331,6 @@ interface LandmarkConversion {
                   <app-ol-source-geojson
                     [layerKey]="'roads'"></app-ol-source-geojson>
                 </app-ol-layer-vector>
-
-                <!-- 📦 USER'S LANDMARKS (text, on top of everything else) -->
 
                 <app-ol-layer-vector>
                   <app-ol-adaptor-landmarks>
@@ -323,66 +346,9 @@ interface LandmarkConversion {
                 </app-ol-layer-vector>
               }
 
-              <!-- 📦 SATELLITE LAYER  -->
-
-              @if (sink.satelliteView) {
-                <app-ol-layer-tile>
-                  <app-ol-source-xyz
-                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                    [url]="
-                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                      env.google.apiKey
-                    ">
-                    <app-ol-attribution>
-                      ©
-                      <a href="https://google.com" target="_blank">Google</a>
-                    </app-ol-attribution>
-                  </app-ol-source-xyz>
-                  <app-ol-filter-crop2propertyparcels
-                    [opacity]="0.33"
-                    [parcelIDs]="sink.mapState.parcelIDs"
-                    [source]="parcels"
-                    [type]="'mask'"></app-ol-filter-crop2propertyparcels>
-                </app-ol-layer-tile>
-
-                <app-ol-layer-vector>
-                  <app-ol-style-parcels
-                    [parcelIDs]="sink.mapState.parcelIDs"
-                    [showBorder]="'always'"
-                    [showDimensions]="'onlyParcelIDs'"
-                    [showDimensionContrast]="'always'"
-                    [showLabels]="'always'"
-                    [showLabelContrast]="'always'"
-                    [showStolen]="'always'"></app-ol-style-parcels>
-                  <app-ol-source-parcels #parcels></app-ol-source-parcels>
-                </app-ol-layer-vector>
-
-                @if (sink.mapState.contours2ft) {
-                  <app-ol-layer-tile>
-                    <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
-                  </app-ol-layer-tile>
-                }
-                @if (!sink.mapState.contours2ft) {
-                  <app-ol-layer-tile>
-                    <app-ol-source-contours></app-ol-source-contours>
-                  </app-ol-layer-tile>
-                }
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-landmarks>
-                    <app-ol-style-universal
-                      [contrast]="'normal'"
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-landmarks>
-                  <app-ol-source-landmarks></app-ol-source-landmarks>
-                  <app-ol-interaction-selectlandmarks
-                    [multi]="true"></app-ol-interaction-selectlandmarks>
-                  <app-ol-interaction-drawlandmarks></app-ol-interaction-drawlandmarks>
-                  <app-ol-interaction-redrawlandmark></app-ol-interaction-redrawlandmark>
-                </app-ol-layer-vector>
-              }
-
-              <!-- 📦 BOUNDARY LAYER -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Map boundary clips everything                         -->
+              <!-- -------------------------------------------------------- -->
 
               <app-ol-layer-vector>
                 <app-ol-adaptor-boundary>
@@ -392,7 +358,9 @@ interface LandmarkConversion {
                 <app-ol-source-boundary></app-ol-source-boundary>
               </app-ol-layer-vector>
 
-              <!-- 📦 OVERLAY TO MOVE LANDMARK -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Overlay to move landmark                              -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!map.printing) {
                 <app-ol-overlay-landmarklabel></app-ol-overlay-landmarklabel>
@@ -401,7 +369,9 @@ interface LandmarkConversion {
           </app-ol-map>
         </mat-drawer-content>
 
-        <!-- 📦 DYNAMIC SIDEBAR-->
+        <!-- -------------------------------------------------------- -->
+        <!-- 🗺️ Dynamic sidebar                                       -->
+        <!-- -------------------------------------------------------- -->
 
         <mat-drawer #drawer class="sidebar" mode="over" position="end">
           <ng-container appContextMenuHost></ng-container>
@@ -409,7 +379,9 @@ interface LandmarkConversion {
       </mat-drawer-container>
     }
 
-    <!-- 📦 CONTEXT MENU -->
+    <!-- -------------------------------------------------------- -->
+    <!-- 🗺️ Context menu                                          -->
+    <!-- -------------------------------------------------------- -->
 
     <ng-template #contextmenu>
       <nav class="contextmenu">

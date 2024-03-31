@@ -57,6 +57,10 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
             [minZoom]="15"
             [maxZoom]="22"
             [path]="sink.mapState.path">
+            <!-- ---------------------------------------------------------- -->
+            <!-- 🗺️ Context menu                                            -->
+            <!-- ---------------------------------------------------------- -->
+
             <app-contextmenu>
               <mat-menu mapContextMenu>
                 <ng-template matMenuContent>
@@ -65,12 +69,14 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
               </mat-menu>
             </app-contextmenu>
 
+            <!-- ---------------------------------------------------------- -->
+            <!-- 🗺️ External control panels                                 -->
+            <!-- ---------------------------------------------------------- -->
+
             <app-controlpanel-properties
               [mapState]="sink.mapState"
               class="setup"
               mapControlPanel1></app-controlpanel-properties>
-
-            <!-- 📦 CONTROLS -->
 
             <app-ol-control-searchparcels
               mapControlSearch></app-ol-control-searchparcels>
@@ -83,6 +89,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                 [printSize]="sink.mapState.printSize"
                 mapControlPrint></app-ol-control-print>
             }
+
             @if (sink.mapState.name) {
               <app-ol-control-exportparcels
                 [fileName]="sink.mapState.id + '-parcels'"
@@ -96,7 +103,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
               mapControlAttribution></app-ol-control-attribution>
 
             @if (map.initialized) {
-              <!-- 📦 OL CONTROLS -- WILL BE PRINTED -->
+              <!-- ------------------------------------------------------- -->
+              <!-- 🗺️ Internal control panels                               -->
+              <!-- ------------------------------------------------------- -->
 
               @if (map.printing) {
                 <app-ol-control-graticule>
@@ -120,19 +129,16 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   [title]="sink.mapState.name"></app-ol-control-parcelslegend>
               }
 
-              @if (map.printing) {
-                <app-ol-control-scalebar></app-ol-control-scalebar>
-              }
-
               @if (!map.printing) {
                 <app-ol-control-scaleline></app-ol-control-scaleline>
-              }
-
-              @if (map.printing) {
+              } @else {
+                <app-ol-control-scalebar></app-ol-control-scalebar>
                 <app-ol-control-credits></app-ol-control-credits>
               }
 
-              <!-- 📦 SATELLITE LAYERS  -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Satellite view                                        -->
+              <!-- -------------------------------------------------------- -->
 
               @if (sink.satelliteView) {
                 <app-ol-layer-tile>
@@ -150,11 +156,11 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                 </app-ol-layer-tile>
               }
 
-              <!-- 📦 NORMAL (not satellite) LAYERS -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Normal view                                           -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!sink.satelliteView) {
-                <!-- 📦 BG LAYER (outside town)-->
-
                 @if (map.printing) {
                   <app-ol-layer-tile>
                     <app-ol-source-xyz
@@ -174,8 +180,6 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   </app-ol-layer-tile>
                 }
 
-                <!-- 📦 BG LAYER (lays down a texture inside town)-->
-
                 <app-ol-layer-vector>
                   <app-ol-adaptor-boundary>
                     <app-ol-style-universal
@@ -184,8 +188,6 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   <app-ol-source-boundary></app-ol-source-boundary>
                   <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                 </app-ol-layer-vector>
-
-                <!-- 📦 HILLSHADE LAYER - limit is 17 but is sometimes n/a -->
 
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
@@ -202,8 +204,6 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                     [operation]="'enhance'"
                     [value]="0.33"></app-ol-filter-colorize>
                 </app-ol-layer-tile>
-
-                <!-- 📦 NH GranIT VECTOR LAYERS -->
 
                 <app-ol-layer-vector>
                   <app-ol-style-parcels
@@ -352,7 +352,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                 </app-ol-layer-vector>
               }
 
-              <!-- 📦 LOT LINE LAYER (printed) -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Lot lines (printed)                                   -->
+              <!-- -------------------------------------------------------- -->
 
               @if (map.printing) {
                 <app-ol-layer-vector>
@@ -366,7 +368,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                 </app-ol-layer-vector>
               }
 
-              <!-- 📦 SELECTION LAYER (not printed) -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Lot lines + selection (screen)                        -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!map.printing) {
                 <app-ol-layer-vector>
@@ -390,7 +394,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                 </app-ol-layer-vector>
               }
 
-              <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Road names (b/c lot lines overlay road)               -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!sink.satelliteView) {
                 <app-ol-layer-vector>
@@ -404,7 +410,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                 </app-ol-layer-vector>
               }
 
-              <!-- 📦 BOUNDARY LAYER (above selection so we can interact with it) -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Map boundary clips everything                         -->
+              <!-- -------------------------------------------------------- -->
 
               <app-ol-layer-vector>
                 <app-ol-adaptor-boundary>
@@ -417,7 +425,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                 }
               </app-ol-layer-vector>
 
-              <!-- 📦 OVERLAY FOR LABEL REPOSITIONING -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Overlay to move parcel label                          -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!map.printing) {
                 <app-ol-overlay-parcellabel></app-ol-overlay-parcellabel>
@@ -426,7 +436,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
           </app-ol-map>
         </mat-drawer-content>
 
-        <!-- 📦 DYNAMIC SIDEBAR-->
+        <!-- -------------------------------------------------------- -->
+        <!-- 🗺️ Dynamic sidebar                                       -->
+        <!-- -------------------------------------------------------- -->
 
         <mat-drawer #drawer class="sidebar" mode="over" position="end">
           <ng-container appContextMenuHost></ng-container>
@@ -434,7 +446,9 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
       </mat-drawer-container>
     }
 
-    <!-- 📦 CONTEXT MENU -->
+    <!-- -------------------------------------------------------- -->
+    <!-- 🗺️ Context menu                                          -->
+    <!-- -------------------------------------------------------- -->
 
     <ng-template #contextmenu>
       <nav class="contextmenu">

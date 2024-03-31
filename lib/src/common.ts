@@ -833,9 +833,15 @@ export interface StateIndex {
   };
 }
 
-export function isIndex(name: string): boolean {
-  return /^[A-Z ]*$/.test(name);
+export interface HistoricalMap {
+  description: string;
+  imageCenter: [number, number];
+  imageRotate: number;
+  imageScale: [number, number];
+  url: string;
 }
+
+export type HistoricalMapIndex = Record<string, HistoricalMap[]>;
 
 // 👉 calculate bbox based on desired aspect ratio
 //    we'll pick the best (inverting if necessary)
@@ -1115,6 +1121,10 @@ export function deserializeParcel(parcel: Partial<Parcel>): void {
         parcel.properties[prop] = JSON.parse(parcel.properties[prop]);
     });
   }
+}
+
+export function isIndex(name: string): boolean {
+  return /^[A-Z ]*$/.test(name);
 }
 
 // 🔥 the whole notion of "stolen" parcels to support multi-town

@@ -28,6 +28,7 @@ import { GeoJSONService } from '@lib/services/geojson';
 import { GeoJSONViewerService } from '@lib/services/geojson-viewer';
 import { GeolocationService } from '@lib/services/geolocation';
 import { GeosimulatorService } from '@lib/services/geosimulator';
+import { HistoricalsResolver } from '@lib/resolvers/historicals';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
@@ -277,6 +278,7 @@ const ROUTES: any = [
   {
     path: '',
     resolve: {
+      historicals: HistoricalsResolver,
       index: IndexResolver,
       ready: ReadyResolver
     },
