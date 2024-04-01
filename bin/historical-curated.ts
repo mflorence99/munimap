@@ -14,6 +14,8 @@ const curated = {
   SULLIVAN: {
     WASHINGTON: [
       { dir: './bin/assets/washington-1860', name: '1860 HF Walling' },
+      { dir: './bin/assets/washington-1892', name: '1892 DH Hurd' },
+      { dir: './bin/assets/washington-hwy-1930', name: '1930 Hwy Dept' },
       { dir: './bin/assets/washington-usgs-1930', name: '1930 USGS' },
       { dir: './bin/assets/washington-usgs-1942', name: '1942 USGS' },
       { dir: './bin/assets/washington-usgs-1957', name: '1957 USGS' },
