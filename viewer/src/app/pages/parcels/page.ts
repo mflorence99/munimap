@@ -31,7 +31,9 @@ import { inject } from '@angular/core';
         [maxZoom]="22"
         [path]="sink.mapState.path"
         class="content">
-        <!-- 📦 CONTROLS -->
+        <!-- ---------------------------------------------------------- -->
+        <!-- 🗺️ External control panels                                 -->
+        <!-- ---------------------------------------------------------- -->
 
         @if (sink.zoom >= map.minUsefulZoom()) {
           <app-ol-control-searchparcels
@@ -44,7 +46,9 @@ import { inject } from '@angular/core';
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
-          <!-- 📦 OL CONTROLS -->
+          <!-- ------------------------------------------------------- -->
+          <!-- 🗺️ Internal control panels                              -->
+          <!-- ------------------------------------------------------- -->
 
           <app-ol-control-graticule>
             <app-ol-style-graticule></app-ol-style-graticule>
@@ -52,11 +56,38 @@ import { inject } from '@angular/core';
 
           <app-ol-control-scaleline></app-ol-control-scaleline>
 
-          <!-- 📦 SPLIT SCREEN -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Outside town                                          -->
+          <!-- -------------------------------------------------------- -->
+
+          @if (sink.zoom < map.minUsefulZoom()) {
+            <app-ol-layer-tile>
+              <app-ol-source-xyz
+                [url]="
+                  'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' +
+                  env.mapbox.apiKey
+                ">
+                <app-ol-attribution>
+                  ©
+                  <a href="https://mapbox.com" target="_blank">Mapbox</a>
+                </app-ol-attribution>
+              </app-ol-source-xyz>
+              <app-ol-filter-colorize
+                [color]="'#FFFFFF'"
+                [operation]="'hue'"
+                [value]="0.9"></app-ol-filter-colorize>
+            </app-ol-layer-tile>
+          }
+
+          <!-- ------------------------------------------------------- -->
+          <!-- 🗺️ Split screen                                         -->
+          <!-- ------------------------------------------------------- -->
 
           <app-ol-control-splitscreen>
             <app-ol-layers #left>
-              <!-- 📦 SATELLITE VIEW -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Satellite view                                        -->
+              <!-- -------------------------------------------------------- -->
 
               @if (sink.satelliteView) {
                 <app-ol-layer-tile>
@@ -71,35 +102,15 @@ import { inject } from '@angular/core';
                       <a href="https://google.com" target="_blank">Google</a>
                     </app-ol-attribution>
                   </app-ol-source-xyz>
+                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                 </app-ol-layer-tile>
               }
 
-              <!-- 📦 NORMAL (not satellite) LAYERS -->
+              <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Normal view                                           -->
+              <!-- -------------------------------------------------------- -->
 
               @if (!sink.satelliteView) {
-                <!-- 📦 BG LAYER (outside town)-->
-
-                @if (sink.zoom < map.minUsefulZoom()) {
-                  <app-ol-layer-tile>
-                    <app-ol-source-xyz
-                      [url]="
-                        'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' +
-                        env.mapbox.apiKey
-                      ">
-                      <app-ol-attribution>
-                        ©
-                        <a href="https://mapbox.com" target="_blank">Mapbox</a>
-                      </app-ol-attribution>
-                    </app-ol-source-xyz>
-                    <app-ol-filter-colorize
-                      [color]="'#FFFFFF'"
-                      [operation]="'hue'"
-                      [value]="0.9"></app-ol-filter-colorize>
-                  </app-ol-layer-tile>
-                }
-
-                <!-- 📦 BG LAYER (lays down a texture inside town)-->
-
                 <app-ol-layer-vector>
                   <app-ol-adaptor-boundary>
                     <app-ol-style-universal
@@ -108,8 +119,6 @@ import { inject } from '@angular/core';
                   <app-ol-source-boundary></app-ol-source-boundary>
                   <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                 </app-ol-layer-vector>
-
-                <!-- 📦 HILLSHADE LAYER - limit is 17 but is sometimes n/a -->
 
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
@@ -134,16 +143,12 @@ import { inject } from '@angular/core';
                   }
                 </app-ol-layer-tile>
 
-                <!-- 📦 CONTOURS LAYER -->
-
                 @if (sink.parcelCoding === 'topography') {
                   <app-ol-layer-tile>
                     <app-ol-source-contours></app-ol-source-contours>
                     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-tile>
                 }
-
-                <!-- 📦 NH GranIT VECTOR LAYERS -->
 
                 @if (sink.parcelCoding === 'topography') {
                   <app-ol-layer-vector>
@@ -341,6 +346,7 @@ import { inject } from '@angular/core';
                   <app-ol-layer-tile>
                     <app-ol-source-satellite
                       [year]="sink.satelliteYear"></app-ol-source-satellite>
+                    <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-tile>
                 } @else if (!sink.satelliteView && sink.historicalMap) {
                   <app-ol-layer-image>
@@ -352,7 +358,9 @@ import { inject } from '@angular/core';
             </app-ol-layers>
           </app-ol-control-splitscreen>
 
-          <!-- 📦 SELECTION LAYER -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Lot lines + selection                                 -->
+          <!-- -------------------------------------------------------- -->
 
           @if (sink.zoom >= map.minUsefulZoom()) {
             @if (sink.parcelCoding === 'topography' && !sink.satelliteView) {
@@ -386,7 +394,9 @@ import { inject } from '@angular/core';
             }
           }
 
-          <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Road names (b/c lot lines overlay road)               -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-roads>
@@ -397,7 +407,9 @@ import { inject } from '@angular/core';
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          <!-- 📦 BOUNDARY LAYER  -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Map boundary clips everything                         -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-boundary>
@@ -407,13 +419,17 @@ import { inject } from '@angular/core';
             <app-ol-source-boundary></app-ol-source-boundary>
           </app-ol-layer-vector>
 
-          <!-- 📦 POPUP FOR PROPERTIES -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Properties popup                                      -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-popup-selection>
             <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>
           </app-ol-popup-selection>
 
-          <!-- 📦 OVERLAY FOR GPS -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ GPS overlay                                           -->
+          <!-- -------------------------------------------------------- -->
 
           @if (sink.gps && sink.zoom >= map.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>

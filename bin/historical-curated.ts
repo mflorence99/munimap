@@ -13,9 +13,11 @@ import hash from 'object-hash';
 const curated = {
   SULLIVAN: {
     WASHINGTON: [
+      { dir: './bin/assets/washington-1860', name: '1860 HF Walling' },
       { dir: './bin/assets/washington-usgs-1930', name: '1930 USGS' },
       { dir: './bin/assets/washington-usgs-1942', name: '1942 USGS' },
-      { dir: './bin/assets/washington-usgs-1957', name: '1957 USGS' }
+      { dir: './bin/assets/washington-usgs-1957', name: '1957 USGS' },
+      { dir: './bin/assets/washington-usgs-1984', name: '1984 USGS' }
     ]
   }
 };

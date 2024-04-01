@@ -16,6 +16,5 @@ export class SinkComponent {
 
   @Input() mapState: Map;
   @Input() profile: Profile;
-  @Input() satelliteView: boolean;
   @Input() user: User;
 }

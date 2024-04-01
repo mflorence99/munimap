@@ -45,7 +45,6 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
       #sink
       [mapState]="root.mapState$ | async"
       [profile]="root.profile$ | async"
-      [satelliteView]="root.satelliteView$ | async"
       [user]="root.user$ | async" />
 
     @if (sink.mapState) {
@@ -137,220 +136,198 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
               }
 
               <!-- -------------------------------------------------------- -->
-              <!-- 🗺️ Satellite view                                        -->
-              <!-- -------------------------------------------------------- -->
-
-              @if (sink.satelliteView) {
-                <app-ol-layer-tile>
-                  <app-ol-source-xyz
-                    [s]="['mt0', 'mt1', 'mt2', 'mt3']"
-                    [url]="
-                      'https://{s}.google.com/vt/lyrs=s,h&hl=en&gl=en&x={x}&y={y}&z={z}&s=png&key=' +
-                      env.google.apiKey
-                    ">
-                    <app-ol-attribution>
-                      ©
-                      <a href="https://google.com" target="_blank">Google</a>
-                    </app-ol-attribution>
-                  </app-ol-source-xyz>
-                </app-ol-layer-tile>
-              }
-
-              <!-- -------------------------------------------------------- -->
               <!-- 🗺️ Normal view                                           -->
               <!-- -------------------------------------------------------- -->
 
-              @if (!sink.satelliteView) {
-                @if (map.printing) {
-                  <app-ol-layer-tile>
-                    <app-ol-source-xyz
-                      [url]="
-                        'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' +
-                        env.mapbox.apiKey
-                      ">
-                      <app-ol-attribution>
-                        ©
-                        <a href="https://mapbox.com" target="_blank">Mapbox</a>
-                      </app-ol-attribution>
-                    </app-ol-source-xyz>
-                    <app-ol-filter-colorize
-                      [color]="'#FFFFFF'"
-                      [operation]="'hue'"
-                      [value]="0.9"></app-ol-filter-colorize>
-                  </app-ol-layer-tile>
-                }
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-boundary>
-                    <app-ol-style-universal
-                      [showFill]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-boundary>
-                  <app-ol-source-boundary></app-ol-source-boundary>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
+              @if (map.printing) {
                 <app-ol-layer-tile>
                   <app-ol-source-xyz
-                    [maxZoom]="16"
                     [url]="
-                      'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'
+                      'https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=' +
+                      env.mapbox.apiKey
                     ">
                     <app-ol-attribution>
-                      <a href="https://www.esri.com" target="_blank">Esri</a>
+                      ©
+                      <a href="https://mapbox.com" target="_blank">Mapbox</a>
                     </app-ol-attribution>
                   </app-ol-source-xyz>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   <app-ol-filter-colorize
-                    [operation]="'enhance'"
-                    [value]="0.33"></app-ol-filter-colorize>
+                    [color]="'#FFFFFF'"
+                    [operation]="'hue'"
+                    [value]="0.9"></app-ol-filter-colorize>
                 </app-ol-layer-tile>
-
-                <app-ol-layer-vector>
-                  <app-ol-style-parcels
-                    [parcelCoding]="'usage'"
-                    [showBackground]="'always'"
-                    [showStolen]="
-                      isPrivileged() && !map.printing ? 'always' : 'never'
-                    "></app-ol-style-parcels>
-                  <app-ol-source-parcels></app-ol-source-parcels>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-wetlands>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-wetlands>
-                  <app-ol-source-wetlands></app-ol-source-wetlands>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <!-- 👇 only drawing labels here - waterbodies draws actual river -->
-                  <app-ol-adaptor-places>
-                    <app-ol-style-universal
-                      [showText]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-places>
-                  <app-ol-source-rivers></app-ol-source-rivers>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-waterbodies>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-waterbodies>
-                  <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
-                  <app-ol-source-waterbodies
-                    [exclude]="[466]"></app-ol-source-waterbodies>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-stonewalls>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-stonewalls>
-                  <app-ol-source-stonewalls></app-ol-source-stonewalls>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-floodplains>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-floodplains>
-                  <app-ol-source-floodplains></app-ol-source-floodplains>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-buildings>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-buildings>
-                  <app-ol-source-geojson
-                    [layerKey]="'buildings'"></app-ol-source-geojson>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-railroads>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-railroads>
-                  <app-ol-source-railroads></app-ol-source-railroads>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-roads>
-                    <app-ol-style-universal
-                      [showStroke]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-roads>
-                  <app-ol-source-geojson
-                    [layerKey]="'roads'"></app-ol-source-geojson>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-trails>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-trails>
-                  <app-ol-source-geojson
-                    [layerKey]="'trails'"></app-ol-source-geojson>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-bridges>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-bridges>
-                  <app-ol-source-bridges></app-ol-source-bridges>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-places>
-                    <app-ol-style-universal
-                      [showText]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-places>
-                  <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
-                  <app-ol-source-geojson
-                    [exclude]="['dam', 'park']"
-                    [layerKey]="'places'"></app-ol-source-geojson>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-places>
-                    <app-ol-style-universal
-                      [showText]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-places>
-                  <app-ol-source-dams></app-ol-source-dams>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-powerlines>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-powerlines>
-                  <app-ol-source-geojson
-                    [layerKey]="'powerlines'"></app-ol-source-geojson>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-
-                <app-ol-layer-vector>
-                  <!-- 👇 user landmarks here are really map amendments -->
-                  <app-ol-adaptor-landmarks>
-                    <app-ol-style-universal
-                      [showAll]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-landmarks>
-                  <app-ol-source-landmarks></app-ol-source-landmarks>
-                </app-ol-layer-vector>
               }
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-boundary>
+                  <app-ol-style-universal
+                    [showFill]="true"></app-ol-style-universal>
+                </app-ol-adaptor-boundary>
+                <app-ol-source-boundary></app-ol-source-boundary>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-tile>
+                <app-ol-source-xyz
+                  [maxZoom]="16"
+                  [url]="
+                    'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'
+                  ">
+                  <app-ol-attribution>
+                    <a href="https://www.esri.com" target="_blank">Esri</a>
+                  </app-ol-attribution>
+                </app-ol-source-xyz>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                <app-ol-filter-colorize
+                  [operation]="'enhance'"
+                  [value]="0.33"></app-ol-filter-colorize>
+              </app-ol-layer-tile>
+
+              <app-ol-layer-vector>
+                <app-ol-style-parcels
+                  [parcelCoding]="'usage'"
+                  [showBackground]="'always'"
+                  [showStolen]="
+                    isPrivileged() && !map.printing ? 'always' : 'never'
+                  "></app-ol-style-parcels>
+                <app-ol-source-parcels></app-ol-source-parcels>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-wetlands>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-wetlands>
+                <app-ol-source-wetlands></app-ol-source-wetlands>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <!-- 👇 only drawing labels here - waterbodies draws actual river -->
+                <app-ol-adaptor-places>
+                  <app-ol-style-universal
+                    [showText]="true"></app-ol-style-universal>
+                </app-ol-adaptor-places>
+                <app-ol-source-rivers></app-ol-source-rivers>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-waterbodies>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-waterbodies>
+                <!-- 👇 exclude swamp/marsh b/c floodplain source below does it better -->
+                <app-ol-source-waterbodies
+                  [exclude]="[466]"></app-ol-source-waterbodies>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-stonewalls>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-stonewalls>
+                <app-ol-source-stonewalls></app-ol-source-stonewalls>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-floodplains>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-floodplains>
+                <app-ol-source-floodplains></app-ol-source-floodplains>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-buildings>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-buildings>
+                <app-ol-source-geojson
+                  [layerKey]="'buildings'"></app-ol-source-geojson>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-railroads>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-railroads>
+                <app-ol-source-railroads></app-ol-source-railroads>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-roads>
+                  <app-ol-style-universal
+                    [showStroke]="true"></app-ol-style-universal>
+                </app-ol-adaptor-roads>
+                <app-ol-source-geojson
+                  [layerKey]="'roads'"></app-ol-source-geojson>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-trails>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-trails>
+                <app-ol-source-geojson
+                  [layerKey]="'trails'"></app-ol-source-geojson>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-bridges>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-bridges>
+                <app-ol-source-bridges></app-ol-source-bridges>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-places>
+                  <app-ol-style-universal
+                    [showText]="true"></app-ol-style-universal>
+                </app-ol-adaptor-places>
+                <!-- 👇 dams excluded from "places" b/c "dams" below does it better -->
+                <app-ol-source-geojson
+                  [exclude]="['dam', 'park']"
+                  [layerKey]="'places'"></app-ol-source-geojson>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-places>
+                  <app-ol-style-universal
+                    [showText]="true"></app-ol-style-universal>
+                </app-ol-adaptor-places>
+                <app-ol-source-dams></app-ol-source-dams>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <app-ol-adaptor-powerlines>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-powerlines>
+                <app-ol-source-geojson
+                  [layerKey]="'powerlines'"></app-ol-source-geojson>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
+
+              <app-ol-layer-vector>
+                <!-- 👇 user landmarks here are really map amendments -->
+                <app-ol-adaptor-landmarks>
+                  <app-ol-style-universal
+                    [showAll]="true"></app-ol-style-universal>
+                </app-ol-adaptor-landmarks>
+                <app-ol-source-landmarks></app-ol-source-landmarks>
+              </app-ol-layer-vector>
 
               <!-- -------------------------------------------------------- -->
               <!-- 🗺️ Lot lines (printed)                                   -->
@@ -377,13 +354,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
                   <app-ol-style-parcels
                     [showBorder]="'always'"
                     [showDimensions]="'whenSelected'"
-                    [showDimensionContrast]="
-                      sink.satelliteView ? 'always' : 'never'
-                    "
                     [showLabels]="'always'"
-                    [showLabelContrast]="
-                      sink.satelliteView ? 'always' : 'never'
-                    "
                     [showSelection]="'always'"
                     [showStolen]="
                       isPrivileged() && !map.printing ? 'always' : 'never'
@@ -398,17 +369,15 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
               <!-- 🗺️ Road names (b/c lot lines overlay road)               -->
               <!-- -------------------------------------------------------- -->
 
-              @if (!sink.satelliteView) {
-                <app-ol-layer-vector>
-                  <app-ol-adaptor-roads>
-                    <app-ol-style-universal
-                      [showText]="true"></app-ol-style-universal>
-                  </app-ol-adaptor-roads>
-                  <app-ol-source-geojson
-                    [layerKey]="'roads'"></app-ol-source-geojson>
-                  <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                </app-ol-layer-vector>
-              }
+              <app-ol-layer-vector>
+                <app-ol-adaptor-roads>
+                  <app-ol-style-universal
+                    [showText]="true"></app-ol-style-universal>
+                </app-ol-adaptor-roads>
+                <app-ol-source-geojson
+                  [layerKey]="'roads'"></app-ol-source-geojson>
+                <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+              </app-ol-layer-vector>
 
               <!-- -------------------------------------------------------- -->
               <!-- 🗺️ Map boundary clips everything                         -->

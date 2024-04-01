@@ -24,7 +24,6 @@ import { Redo } from '@lib/state/undo';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { Select } from '@ngxs/store';
-import { SetSatelliteView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Undo } from '@lib/state/undo';
 import { UpdateMapError } from '@lib/state/map';
@@ -52,11 +51,7 @@ import { viewChild } from '@angular/core';
   providers: [DestroyService],
   selector: 'app-root',
   template: `
-    <app-sink
-      #sink
-      [profile]="profile$ | async"
-      [satelliteView]="satelliteView$ | async"
-      [user]="user$ | async" />
+    <app-sink #sink [profile]="profile$ | async" [user]="user$ | async" />
 
     <main class="page">
       <mat-toolbar class="toolbar">
@@ -69,13 +64,6 @@ import { viewChild } from '@angular/core';
             {{ title }}
           }
         </h1>
-
-        <button
-          mat-icon-button
-          (click)="onSatelliteViewToggle(!sink.satelliteView)"
-          [ngClass]="{ 'mat-icon-button-checked': sink.satelliteView }">
-          <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
-        </button>
 
         <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
           <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
@@ -202,10 +190,6 @@ export class RootPage implements OnInit {
     this.#handleRouterEvents$();
     this.#handleUndoActions$();
     this.#handleWorkingActions$();
-  }
-
-  onSatelliteViewToggle(state: boolean): void {
-    this.#store.dispatch(new SetSatelliteView(state));
   }
 
   redo(): void {
