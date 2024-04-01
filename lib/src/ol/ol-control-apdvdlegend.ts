@@ -7,10 +7,10 @@ import { Parcel } from '../common';
 import { ParcelProperties } from '../common';
 import { ParcelsState } from '../state/parcels';
 
-import { colorOfAPDVDExisting } from './ol-apdvd';
-import { colorOfAPDVDProposed } from './ol-apdvd';
-import { isAPDVDExisting } from './ol-apdvd';
-import { isAPDVDProposed } from './ol-apdvd';
+import { colorOfAPDVDExcluded } from './ol-apdvd2';
+import { colorOfAPDVDIncluded } from './ol-apdvd2';
+import { isAPDVDExcluded } from './ol-apdvd2';
+import { isAPDVDIncluded } from './ol-apdvd2';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -64,26 +64,26 @@ import { viewChild } from '@angular/core';
             <td class="usage">
               <figure
                 [style.backgroundColor]="
-                  'rgba(' + colorOfAPDVDExisting + ', 0.25)'
+                  'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
                 "
                 class="key"></figure>
             </td>
-            <td class="desc">Existing District</td>
-            <td class="numeric">{{ countOfExisting | number: '1.0-0' }}</td>
-            <td class="numeric">{{ areaOfExisting | number: '1.0-0' }}</td>
+            <td class="desc">Lots added to district</td>
+            <td class="numeric">{{ countOfIncluded | number: '1.0-0' }}</td>
+            <td class="numeric">{{ areaOfIncluded | number: '1.0-0' }}</td>
           </tr>
 
           <tr>
             <td class="usage">
               <figure
                 [style.backgroundColor]="
-                  'rgba(' + colorOfAPDVDProposed + ', 0.25)'
+                  'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
                 "
                 class="key"></figure>
             </td>
-            <td class="desc">Proposed Expansion</td>
-            <td class="numeric">{{ countOfProposed | number: '1.0-0' }}</td>
-            <td class="numeric">{{ areaOfProposed | number: '1.0-0' }}</td>
+            <td class="desc">Lots excluded from district</td>
+            <td class="numeric">{{ countOfExcluded | number: '1.0-0' }}</td>
+            <td class="numeric">{{ areaOfExcluded | number: '1.0-0' }}</td>
           </tr>
         </tbody>
       </table>
@@ -94,15 +94,14 @@ export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  @Select(ParcelsState)
-  parcels$: Observable<Parcel[]>;
+  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
-  areaOfExisting: number;
-  areaOfProposed: number;
-  colorOfAPDVDExisting = colorOfAPDVDExisting;
-  colorOfAPDVDProposed = colorOfAPDVDProposed;
-  countOfExisting: number;
-  countOfProposed: number;
+  areaOfExcluded: number;
+  areaOfIncluded: number;
+  colorOfAPDVDExcluded = colorOfAPDVDExcluded;
+  colorOfAPDVDIncluded = colorOfAPDVDIncluded;
+  countOfExcluded: number;
+  countOfIncluded: number;
   county: Signal<string>;
   id: Signal<string>;
   legend = viewChild<ElementRef>('legend');
@@ -117,20 +116,14 @@ export class OLControlAPDVDLegendComponent
   }
 
   override aggregateParcelImpl(props: ParcelProperties): void {
-    if (isAPDVDExisting(props)) {
-      this.areaOfExisting += props.area;
-      this.countOfExisting += 1;
+    if (isAPDVDExcluded(props)) {
+      this.areaOfExcluded += props.area;
+      this.countOfExcluded += 1;
     }
-    if (isAPDVDProposed(props)) {
-      this.areaOfProposed += props.area;
-      this.countOfProposed += 1;
+    if (isAPDVDIncluded(props)) {
+      this.areaOfIncluded += props.area;
+      this.countOfIncluded += 1;
     }
-  }
-
-  // 🔥 need to do this for APDVD as not enough data in actual
-  //    countables to produce legend
-  override countables(): string {
-    return 'parcels';
   }
 
   ngOnInit(): void {
@@ -140,9 +133,9 @@ export class OLControlAPDVDLegendComponent
   }
 
   override resetCountersImpl(): void {
-    this.areaOfExisting = 0;
-    this.areaOfProposed = 0;
-    this.countOfExisting = 0;
-    this.countOfProposed = 0;
+    this.areaOfExcluded = 0;
+    this.areaOfIncluded = 0;
+    this.countOfExcluded = 0;
+    this.countOfIncluded = 0;
   }
 }

@@ -1,6 +1,7 @@
 import { CountableParcels } from '../common';
 import { DestroyService } from '../services/destroy';
 import { GeoJSONService } from '../services/geojson';
+import { Map } from '../state/map';
 import { Mapable } from './ol-mapable';
 import { MapState } from '../state/map';
 import { Parcel } from '../common';
@@ -17,6 +18,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Control as OLControl } from 'ol/control';
 import { Observable } from 'rxjs';
 import { Signal } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
@@ -73,6 +75,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #geojson$ = new Subject<CountableParcels>();
   #mapState = inject(MapState);
   #parcelsState = inject(ParcelsState);
+  #store = inject(Store);
 
   abstract county: Signal<string>;
   abstract id: Signal<string>;
@@ -85,12 +88,6 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   // 👉 may be implemented by subclass
   aggregateParcelImpl(_props: ParcelProperties): void {}
-
-  // 🔥 may be overridden by subclasses
-  //    we only had to "invent" this for APDVD
-  countables(): string {
-    return 'countables';
-  }
 
   onInit(): void {
     this.#resetCounters();
@@ -163,8 +160,14 @@ export abstract class OLControlAbstractParcelsLegendComponent
   //    just area, usage and use
 
   #handleGeoJSON$(): void {
+    // 🔥 HACK FOR APDVD
+    //    countables does not have enough data for APDVD legend
+    const map = this.#store.selectSnapshot<Map>(MapState);
     this.#geoJSON
-      .loadByIndex(this.#mapState.currentMap().path, this.countables())
+      .loadByIndex(
+        this.#mapState.currentMap().path,
+        map?.id === 'apdvd' ? 'parcels' : 'countables'
+      )
       .subscribe((geojson: CountableParcels) => this.#geojson$.next(geojson));
   }
 

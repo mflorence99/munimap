@@ -6,24 +6,41 @@ import { Observable } from 'rxjs';
 import { OLControlAbstractParcelsLegendComponent } from '@lib/ol/ol-control-abstractparcelslegend';
 import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
+import { ParcelProperties } from '@lib/common';
 import { ParcelsState } from '@lib/state/parcels';
 import { Select } from '@ngxs/store';
 import { Signal } from '@angular/core';
 
+import { colorOfAPDVDExcluded } from '@lib/ol/ol-apdvd2';
+import { colorOfAPDVDIncluded } from '@lib/ol/ol-apdvd2';
 import { inject } from '@angular/core';
+import { isAPDVDExcluded } from '@lib/ol/ol-apdvd2';
+import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-parcels-legend',
   template: `
-    <app-sink #sink [parcelCoding]="root.parcelCoding$ | async" />
+    <app-sink
+      #sink
+      [mapState]="root.map$ | async"
+      [parcelCoding]="root.parcelCoding$ | async" />
 
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fad', 'map']" size="2x"></fa-icon>
       </figure>
       <p class="title">Legend</p>
-      <p class="subtitle">Color-coded parcel {{ sink.parcelCoding }}</p>
+
+      <!-- 🔥 all this for APDVD hack! -->
+
+      <p class="subtitle">
+        @if (sink.mapState.id === 'apdvd') {
+          APDVD District
+        } @else {
+          Color-coded parcel {{ sink.parcelCoding }}
+        }
+      </p>
     </header>
 
     <table class="form legend">
@@ -39,155 +56,197 @@ import { inject } from '@angular/core';
           <th>Acres</th>
         </tr>
 
-        @switch (sink.parcelCoding) {
-          <!-- 📦 CONFORMITY -->
+        <!-- 🔥 all this for APDVD hack! -->
 
-          @case ('conformity') {
-            @for (conformity of conformities; track conformity) {
-              @if (countByConformity[conformity[0]] > 0) {
-                <tr>
-                  <td class="conformity">
-                    <figure
-                      [style.backgroundColor]="
-                        'rgba(var(--map-parcel-fill-c' +
-                        quantizeConformingArea(conformity[1]) +
-                        '), 0.5)'
-                      "
-                      class="key"></figure>
-                  </td>
-                  <td class="desc">{{ conformity[0] }}</td>
-                  <td class="count">
-                    {{ countByConformity[conformity[0]] | number: '1.0-0' }}
-                  </td>
-                  <td class="count">
-                    {{ areaByConformity[conformity[0]] | number: '1.0-0' }}
-                  </td>
-                  <td></td>
-                </tr>
+        @if (sink.mapState.id === 'apdvd') {
+          <tr>
+            <td class="apdvd">
+              <figure
+                [style.backgroundColor]="
+                  'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
+                "
+                class="key"></figure>
+            </td>
+            <td class="desc">Added to district</td>
+            <td class="count">
+              {{ countOfIncluded | number: '1.0-0' }}
+            </td>
+            <td class="count">
+              {{ areaOfIncluded | number: '1.0-0' }}
+            </td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="apdvd">
+              <figure
+                [style.backgroundColor]="
+                  'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
+                "
+                class="key"></figure>
+            </td>
+            <td class="desc">Excluded from district</td>
+            <td class="count">
+              {{ countOfExcluded | number: '1.0-0' }}
+            </td>
+            <td class="count">
+              {{ areaOfExcluded | number: '1.0-0' }}
+            </td>
+            <td></td>
+          </tr>
+        } @else {
+          <!-- 🔥 return to regular programming! -->
+
+          @switch (sink.parcelCoding) {
+            <!-- 📦 CONFORMITY -->
+
+            @case ('conformity') {
+              @for (conformity of conformities; track conformity) {
+                @if (countByConformity[conformity[0]] > 0) {
+                  <tr>
+                    <td class="conformity">
+                      <figure
+                        [style.backgroundColor]="
+                          'rgba(var(--map-parcel-fill-c' +
+                          quantizeConformingArea(conformity[1]) +
+                          '), 0.5)'
+                        "
+                        class="key"></figure>
+                    </td>
+                    <td class="desc">{{ conformity[0] }}</td>
+                    <td class="count">
+                      {{ countByConformity[conformity[0]] | number: '1.0-0' }}
+                    </td>
+                    <td class="count">
+                      {{ areaByConformity[conformity[0]] | number: '1.0-0' }}
+                    </td>
+                    <td></td>
+                  </tr>
+                }
               }
             }
-          }
 
-          <!-- 📦 OWNERSHIP -->
+            <!-- 📦 OWNERSHIP -->
 
-          @case ('ownership') {
-            @for (
-              ownership of parcelPropertiesOwnership | keyvalue;
-              track ownership.value
-            ) {
-              @if (countByOwnership[ownership.key] > 0) {
-                <tr>
-                  <td class="ownership">
-                    <figure
-                      [style.backgroundColor]="
-                        'rgba(var(--map-parcel-fill-o' +
-                        ownership.key +
-                        '), 0.5)'
-                      "
-                      class="key"></figure>
-                  </td>
-                  <td class="desc">{{ ownership.value }}</td>
-                  <td class="count">
-                    {{ countByOwnership[ownership.key] | number: '1.0-0' }}
-                  </td>
-                  <td class="count">
-                    {{ areaByOwnership[ownership.key] | number: '1.0-0' }}
-                  </td>
-                  <td></td>
-                </tr>
-              }
-            }
-          }
-
-          <!-- 📦 TOPOGRAPHY -->
-
-          @case ('topography') {
-            @for (
-              usage of parcelPropertiesUsage | keyvalue;
-              track usage.value
-            ) {
-              @if (
-                ['500', '501', '502'].includes(usage.key) &&
-                countByUsage[usage.key] > 0
+            @case ('ownership') {
+              @for (
+                ownership of parcelPropertiesOwnership | keyvalue;
+                track ownership.value
               ) {
-                <tr>
-                  <td class="usage">
-                    <figure
-                      [style.backgroundColor]="
-                        'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'
-                      "
-                      class="key"></figure>
-                  </td>
-                  <td class="desc">{{ usage.value }}</td>
-                  <td class="count">
-                    {{ countByUsage[usage.key] | number: '1.0-0' }}
-                  </td>
-                  <td class="count">
-                    {{ areaByUsage[usage.key] | number: '1.0-0' }}
-                  </td>
-                  <td></td>
-                </tr>
+                @if (countByOwnership[ownership.key] > 0) {
+                  <tr>
+                    <td class="ownership">
+                      <figure
+                        [style.backgroundColor]="
+                          'rgba(var(--map-parcel-fill-o' +
+                          ownership.key +
+                          '), 0.5)'
+                        "
+                        class="key"></figure>
+                    </td>
+                    <td class="desc">{{ ownership.value }}</td>
+                    <td class="count">
+                      {{ countByOwnership[ownership.key] | number: '1.0-0' }}
+                    </td>
+                    <td class="count">
+                      {{ areaByOwnership[ownership.key] | number: '1.0-0' }}
+                    </td>
+                    <td></td>
+                  </tr>
+                }
               }
             }
-          }
 
-          <!-- 📦 USAGE -->
+            <!-- 📦 TOPOGRAPHY -->
 
-          @case ('usage') {
-            @for (
-              usage of parcelPropertiesUsage | keyvalue;
-              track usage.value
-            ) {
-              @if (countByUsage[usage.key] > 0) {
-                <tr>
-                  <td class="usage">
-                    <figure
-                      [style.backgroundColor]="
-                        'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'
-                      "
-                      class="key"></figure>
-                  </td>
-                  <td class="desc">{{ usage.value }}</td>
-                  <td class="count">
-                    {{ countByUsage[usage.key] | number: '1.0-0' }}
-                  </td>
-                  <td class="count">
-                    {{ areaByUsage[usage.key] | number: '1.0-0' }}
-                  </td>
-                  <td></td>
-                </tr>
+            @case ('topography') {
+              @for (
+                usage of parcelPropertiesUsage | keyvalue;
+                track usage.value
+              ) {
+                @if (
+                  ['500', '501', '502'].includes(usage.key) &&
+                  countByUsage[usage.key] > 0
+                ) {
+                  <tr>
+                    <td class="usage">
+                      <figure
+                        [style.backgroundColor]="
+                          'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'
+                        "
+                        class="key"></figure>
+                    </td>
+                    <td class="desc">{{ usage.value }}</td>
+                    <td class="count">
+                      {{ countByUsage[usage.key] | number: '1.0-0' }}
+                    </td>
+                    <td class="count">
+                      {{ areaByUsage[usage.key] | number: '1.0-0' }}
+                    </td>
+                    <td></td>
+                  </tr>
+                }
               }
-              @if (usage.key === '190') {
-                <tr>
-                  <td class="use" colspan="4">
-                    <article class="keys">
-                      @for (
-                        use of parcelPropertiesUse | keyvalue;
-                        track use.value
-                      ) {
-                        <!-- 🔥 TEMPORARY - WASHINGTON ONLY -->
-                        @if (
-                          [
-                            'CUFL',
-                            'CUMH',
-                            'CUMW',
-                            'CUUH',
-                            'CUUW',
-                            'CUWL'
-                          ].includes(use.key)
+            }
+
+            <!-- 📦 USAGE -->
+
+            @case ('usage') {
+              @for (
+                usage of parcelPropertiesUsage | keyvalue;
+                track usage.value
+              ) {
+                @if (countByUsage[usage.key] > 0) {
+                  <tr>
+                    <td class="usage">
+                      <figure
+                        [style.backgroundColor]="
+                          'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'
+                        "
+                        class="key"></figure>
+                    </td>
+                    <td class="desc">{{ usage.value }}</td>
+                    <td class="count">
+                      {{ countByUsage[usage.key] | number: '1.0-0' }}
+                    </td>
+                    <td class="count">
+                      {{ areaByUsage[usage.key] | number: '1.0-0' }}
+                    </td>
+                    <td></td>
+                  </tr>
+                }
+                @if (usage.key === '190') {
+                  <tr>
+                    <td class="use" colspan="4">
+                      <article class="keys">
+                        @for (
+                          use of parcelPropertiesUse | keyvalue;
+                          track use.value
                         ) {
-                          <figure class="key">
-                            <img
-                              [src]="'assets/legend/' + use.key + '.png'"
-                              class="icon" />
-                            <figcaption>{{ use.value }}</figcaption>
-                          </figure>
+                          <!-- 🔥 TEMPORARY - WASHINGTON ONLY -->
+                          @if (
+                            [
+                              'CUFL',
+                              'CUMH',
+                              'CUMW',
+                              'CUUH',
+                              'CUUW',
+                              'CUWL'
+                            ].includes(use.key)
+                          ) {
+                            <figure class="key">
+                              <img
+                                [src]="'assets/legend/' + use.key + '.png'"
+                                class="icon" />
+                              <figcaption>{{ use.value }}</figcaption>
+                            </figure>
+                          }
                         }
-                      }
-                    </article>
-                  </td>
-                  <td></td>
-                </tr>
+                      </article>
+                    </td>
+                    <td></td>
+                  </tr>
+                }
               }
             }
           }
@@ -283,6 +342,7 @@ import { inject } from '@angular/core';
           width: 100%;
         }
 
+        .apdvd,
         .conformity,
         .ownership,
         .usage {
@@ -335,6 +395,12 @@ export class ParcelsLegendComponent
 {
   @Select(ParcelsState) parcels$: Observable<Parcel[]>;
 
+  areaOfExcluded: number;
+  areaOfIncluded: number;
+  colorOfAPDVDExcluded = colorOfAPDVDExcluded;
+  colorOfAPDVDIncluded = colorOfAPDVDIncluded;
+  countOfExcluded: number;
+  countOfIncluded: number;
   county: Signal<string>;
   id: Signal<string>;
   printing: Signal<boolean>;
@@ -342,7 +408,25 @@ export class ParcelsLegendComponent
   state: Signal<string>;
   title: Signal<string>;
 
+  override aggregateParcelImpl(props: ParcelProperties): void {
+    if (isAPDVDExcluded(props)) {
+      this.areaOfExcluded += props.area;
+      this.countOfExcluded += 1;
+    }
+    if (isAPDVDIncluded(props)) {
+      this.areaOfIncluded += props.area;
+      this.countOfIncluded += 1;
+    }
+  }
+
   ngOnInit(): void {
     this.onInit();
+  }
+
+  override resetCountersImpl(): void {
+    this.areaOfExcluded = 0;
+    this.areaOfIncluded = 0;
+    this.countOfExcluded = 0;
+    this.countOfIncluded = 0;
   }
 }

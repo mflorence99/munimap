@@ -9,12 +9,23 @@ const existingExcept = new Set<ParcelID>([
   '10-6',
   '10-26',
   '14-187',
+  '14-419',
   '14-462',
+  '14-466',
+  '14-467',
+  '14-468',
+  '14-468-01',
+  '14-469',
+  '14-475',
+  '14-476',
   '14-487',
+  '14-507',
+  '14-512',
   '15-06',
   '15-119',
   '15-97',
-  '15-98'
+  '15-98',
+  '18-10'
 ]);
 
 const existingStreets = [
@@ -71,7 +82,6 @@ const proposed = new Set<ParcelID>([
   '14-415',
   '14-417',
   '14-418',
-  '14-419',
   '14-420',
   '14-421',
   '14-422',
@@ -109,17 +119,10 @@ const proposed = new Set<ParcelID>([
   '14-454-01',
   '14-454-04',
   '14-454-08',
-  '14-466',
-  '14-467',
-  '14-468',
-  '14-468-01',
-  '14-469',
   '14-471',
   '14-472',
   '14-473',
   '14-474',
-  '14-475',
-  '14-476',
   '14-477',
   '14-478',
   '14-479',
@@ -138,12 +141,9 @@ const proposed = new Set<ParcelID>([
   '14-503',
   '14-504',
   '14-506',
-  '14-507',
   '14-510',
-  '14-512',
   '15-54',
   '15-55',
-  '18-10',
   '18-11',
   '18-11-02',
   '18-11-05',
@@ -178,7 +178,7 @@ const proposed = new Set<ParcelID>([
 
 export const colorOfAPDVDExcluded = '255, 255, 255';
 export const colorOfAPDVDExisting = '255, 0, 0';
-export const colorOfAPDVDProposed = '0, 0, 255';
+export const colorOfAPDVDProposed = '80, 80, 255';
 
 export function getAPDVDFill(props: ParcelProperties): string {
   if (isAPDVDExcluded(props)) return colorOfAPDVDExcluded;

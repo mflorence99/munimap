@@ -288,6 +288,12 @@ const ROUTES: any = [
         component: APDVDPage
       },
       {
+        // 🔥 share parcels legend
+        path: 'apdvd-legend',
+        component: ParcelsLegendComponent,
+        outlet: 'leftSidebar'
+      },
+      {
         path: 'dpw',
         component: DPWPage
       },

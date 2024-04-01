@@ -26,7 +26,9 @@ import { inject } from '@angular/core';
         [maxZoom]="22"
         [path]="sink.mapState.path"
         class="content">
-        <!-- 📦 CONTROLS -->
+        <!-- ---------------------------------------------------------- -->
+        <!-- 🗺️ External control panels                                 -->
+        <!-- ---------------------------------------------------------- -->
 
         <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
@@ -34,7 +36,9 @@ import { inject } from '@angular/core';
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
-          <!-- 📦 OL CONTROLS -->
+          <!-- ------------------------------------------------------- -->
+          <!-- 🗺️ Internal control panels                               -->
+          <!-- ------------------------------------------------------- -->
 
           <app-ol-control-graticule [step]="0.0025">
             <app-ol-style-graticule></app-ol-style-graticule>
@@ -42,7 +46,9 @@ import { inject } from '@angular/core';
 
           <app-ol-control-scaleline></app-ol-control-scaleline>
 
-          <!-- 📦 HILLSHADE LAYER -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Normal view                                           -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-layer-tile>
             <app-ol-source-xyz
@@ -64,20 +70,15 @@ import { inject } from '@angular/core';
               [type]="'crop'"></app-ol-filter-crop2propertyparcels>
           </app-ol-layer-tile>
 
-          <!-- 📦 CONTOURS LAYER -->
-
           @if (sink.mapState.contours2ft) {
             <app-ol-layer-tile>
               <app-ol-source-contours-2ft></app-ol-source-contours-2ft>
             </app-ol-layer-tile>
-          }
-          @if (!sink.mapState.contours2ft) {
+          } @else {
             <app-ol-layer-tile>
               <app-ol-source-contours></app-ol-source-contours>
             </app-ol-layer-tile>
           }
-
-          <!-- 📦 USER'S LANDMARKS -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-landmarks>
@@ -87,8 +88,6 @@ import { inject } from '@angular/core';
             </app-ol-adaptor-landmarks>
             <app-ol-source-landmarks></app-ol-source-landmarks>
           </app-ol-layer-vector>
-
-          <!-- 📦 NH GranIT VECTOR LAYERS -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-wetlands>
@@ -203,7 +202,6 @@ import { inject } from '@angular/core';
             <app-ol-source-parcels #parcels></app-ol-source-parcels>
           </app-ol-layer-vector>
 
-          <!-- 👇 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
           <app-ol-layer-vector>
             <app-ol-adaptor-roads>
               <app-ol-style-universal
@@ -212,8 +210,6 @@ import { inject } from '@angular/core';
             <app-ol-source-geojson [layerKey]="'roads'"></app-ol-source-geojson>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
-
-          <!-- 📦 USER'S LANDMARKS (text, on top of everything else) -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-landmarks>
@@ -226,7 +222,9 @@ import { inject } from '@angular/core';
               [multi]="true"></app-ol-interaction-selectlandmarks>
           </app-ol-layer-vector>
 
-          <!-- 📦 BOUNDARY LAYER -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Map boundary clips everything                         -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-boundary>
@@ -236,13 +234,17 @@ import { inject } from '@angular/core';
             <app-ol-source-boundary></app-ol-source-boundary>
           </app-ol-layer-vector>
 
-          <!-- 📦 POPUP FOR PROPERTIES -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Properties popup                                      -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-popup-selection>
             <app-ol-popup-landmarkproperties></app-ol-popup-landmarkproperties>
           </app-ol-popup-selection>
 
-          <!-- 📦 OVERLAY FOR GPS -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ GPS popup                                             -->
+          <!-- -------------------------------------------------------- -->
 
           @if (sink.gps && sink.zoom >= map.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>

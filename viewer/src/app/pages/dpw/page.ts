@@ -26,7 +26,9 @@ import { inject } from '@angular/core';
         [maxZoom]="20"
         [path]="sink.mapState.path"
         class="content">
-        <!-- 📦 CONTROLS -->
+        <!-- ---------------------------------------------------------- -->
+        <!-- 🗺️ External control panels                                 -->
+        <!-- ---------------------------------------------------------- -->
 
         @if (sink.zoom >= map.minUsefulZoom()) {
           <app-ol-control-searchparcels
@@ -39,7 +41,9 @@ import { inject } from '@angular/core';
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
-          <!-- 📦 OL CONTROLS -->
+          <!-- ------------------------------------------------------- -->
+          <!-- 🗺️ Internal control panels                               -->
+          <!-- ------------------------------------------------------- -->
 
           <app-ol-control-graticule>
             <app-ol-style-graticule></app-ol-style-graticule>
@@ -47,7 +51,9 @@ import { inject } from '@angular/core';
 
           <app-ol-control-scaleline></app-ol-control-scaleline>
 
-          <!-- 📦 BG LAYER (outside town)-->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Normal view                                           -->
+          <!-- -------------------------------------------------------- -->
 
           @if (sink.zoom < map.minUsefulZoom()) {
             <app-ol-layer-tile>
@@ -68,16 +74,6 @@ import { inject } from '@angular/core';
             </app-ol-layer-tile>
           }
 
-          <!-- 📦 HILLSHADE LAYER 🔥 appears to throw 502 12/13/2023 -->
-
-          <!-- <app-ol-layer-tile [opacity]="0.5">
-              <app-ol-source-hillshade
-                [colorize]="true"></app-ol-source-hillshade>
-              <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-            </app-ol-layer-tile> -->
-
-          <!-- 📦 HILLSHADE LAYER 🔥 replaces above -->
-
           <app-ol-layer-tile>
             <app-ol-source-xyz
               [maxZoom]="16"
@@ -94,8 +90,6 @@ import { inject } from '@angular/core';
               [value]="0.1"></app-ol-filter-colorize>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-tile>
-
-          <!-- 📦 NH GranIT VECTOR LAYERS -->
 
           @if (sink.zoom >= map.minUsefulZoom()) {
             <app-ol-layer-vector>
@@ -238,8 +232,6 @@ import { inject } from '@angular/core';
             </app-ol-layer-vector>
           }
 
-          <!-- 📦 STATE'S LANDMARKS -->
-
           <app-ol-layer-vector #bridges>
             <app-ol-adaptor-bridges [bridgeWidth]="64">
               <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
@@ -264,8 +256,6 @@ import { inject } from '@angular/core';
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          <!-- 📦 DPW'S LANDMARKS -->
-
           <app-ol-layer-vector #landmarks>
             <app-ol-adaptor-dpwlandmarks [dpwLandmarkWidth]="64">
               <app-ol-style-universal [showAll]="true"></app-ol-style-universal>
@@ -278,7 +268,9 @@ import { inject } from '@angular/core';
               [multi]="false"></app-ol-interaction-selectlandmarks>
           </app-ol-layer-vector>
 
-          <!-- 📦 BOUNDARY LAYER -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Map boundary clips everything                         -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-boundary>
@@ -288,13 +280,17 @@ import { inject } from '@angular/core';
             <app-ol-source-boundary></app-ol-source-boundary>
           </app-ol-layer-vector>
 
-          <!-- 📦 POPUP FOR PROPERTIES -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ Properties popup                                      -->
+          <!-- -------------------------------------------------------- -->
 
           <app-ol-popup-selection>
             <app-ol-popup-dpwproperties></app-ol-popup-dpwproperties>
           </app-ol-popup-selection>
 
-          <!-- 📦 OVERLAY FOR GPS -->
+          <!-- -------------------------------------------------------- -->
+          <!-- 🗺️ GPS overlay                                           -->
+          <!-- -------------------------------------------------------- -->
 
           @if (sink.gps && sink.zoom >= map.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>

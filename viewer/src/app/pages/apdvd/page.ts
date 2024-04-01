@@ -28,7 +28,9 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
         [maxZoom]="22"
         [path]="sink.mapState.path"
         class="content">
-        <!-- 📦 CONTROLS -->
+        <!-- ---------------------------------------------------------- -->
+        <!-- 🗺️ External control panels                                 -->
+        <!-- ---------------------------------------------------------- -->
 
         @if (sink.zoom >= map.minUsefulZoom()) {
           <app-ol-control-searchparcels
@@ -42,7 +44,9 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
-          <!-- 📦 OL CONTROLS -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Internal control panels                                 -->
+          <!-- ---------------------------------------------------------- -->
 
           <app-ol-control-graticule>
             <app-ol-style-graticule></app-ol-style-graticule>
@@ -50,7 +54,9 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
 
           <app-ol-control-scaleline></app-ol-control-scaleline>
 
-          <!-- 📦 BG LAYER (outside town)-->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Normal view                                             -->
+          <!-- ---------------------------------------------------------- -->
 
           @if (sink.zoom < map.minUsefulZoom()) {
             <app-ol-layer-tile>
@@ -71,8 +77,6 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
             </app-ol-layer-tile>
           }
 
-          <!-- 📦 BG LAYER (lays down a texture inside town)-->
-
           <app-ol-layer-vector>
             <app-ol-adaptor-boundary>
               <app-ol-style-universal
@@ -81,8 +85,6 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
             <app-ol-source-boundary></app-ol-source-boundary>
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
-
-          <!-- 📦 HILLSHADE LAYER - limit is 17 but is sometimes n/a -->
 
           <app-ol-layer-tile>
             <app-ol-source-xyz
@@ -99,8 +101,6 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
               [operation]="'enhance'"
               [value]="0.33"></app-ol-filter-colorize>
           </app-ol-layer-tile>
-
-          <!-- 📦 NH GranIT VECTOR LAYERS -->
 
           <app-ol-layer-vector>
             <app-ol-style-parcels
@@ -253,7 +253,9 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
             </app-ol-layer-vector>
           </app-ol-layer-vector>
 
-          <!-- 📦 SELECTION LAYER -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Selection                                               -->
+          <!-- ---------------------------------------------------------- -->
 
           @if (sink.zoom >= map.minUsefulZoom()) {
             <app-ol-layer-vector>
@@ -270,7 +272,9 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
             </app-ol-layer-vector>
           }
 
-          <!-- 📦 SEPERATE ROAD NAME LAYER (b/c lot lines overlay road) -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Road names (b/c) lots overlay roads                     -->
+          <!-- ---------------------------------------------------------- -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-roads>
@@ -281,7 +285,9 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
             <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
           </app-ol-layer-vector>
 
-          <!-- 📦 BOUNDARY LAYER  -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Map boundary clips everything                           -->
+          <!-- ---------------------------------------------------------- -->
 
           <app-ol-layer-vector>
             <app-ol-adaptor-boundary>
@@ -291,13 +297,17 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
             <app-ol-source-boundary></app-ol-source-boundary>
           </app-ol-layer-vector>
 
-          <!-- 📦 POPUP FOR PROPERTIES -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ Properties popup                                        -->
+          <!-- ---------------------------------------------------------- -->
 
           <app-ol-popup-selection>
             <app-ol-popup-parcelproperties></app-ol-popup-parcelproperties>
           </app-ol-popup-selection>
 
-          <!-- 📦 OVERLAY FOR GPS -->
+          <!-- ---------------------------------------------------------- -->
+          <!-- 🗺️ GPS overlay                                             -->
+          <!-- ---------------------------------------------------------- -->
 
           @if (sink.gps && sink.zoom >= map.minUsefulZoom()) {
             <app-ol-overlay-gps></app-ol-overlay-gps>
