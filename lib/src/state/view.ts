@@ -104,7 +104,7 @@ export class ViewState {
 
   @Selector() static parcelCoding(state: ViewStateModel): ParcelCoding {
     return (
-      state.parcelCoding ?? 'usage' /* 👈 b/c parcelCoding was added later */
+      state.parcelCoding || 'usage' /* 👈 b/c parcelCoding was added later */
     );
   }
 

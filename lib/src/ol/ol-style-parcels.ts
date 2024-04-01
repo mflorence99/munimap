@@ -380,6 +380,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           ];
       }
     }
+    // 🔥 just in case it isn't set!!
+    else fill = this.#map.vars[`--map-parcel-fill-u${props.usage}`];
     // 👇 determine the patterns
     const patterns = [];
     if (this.#map.olView.getZoomForResolution(resolution) >= 15) {
