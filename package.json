@@ -172,6 +172,7 @@
     "@angular/cli": "^17",
     "@angular/compiler": "^17",
     "@angular/compiler-cli": "^17",
+    "@aws-sdk/client-s3": "^3.540.0",
     "@types/file-saver": "^2",
     "@types/fontfaceobserver": "^2",
     "@types/node-fetch": "2.6.1",

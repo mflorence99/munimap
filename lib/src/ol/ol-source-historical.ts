@@ -1,11 +1,9 @@
+import { HistoricalsService } from '../services/historicals';
 import { OLLayerImageComponent } from './ol-layer-image';
 import { OLMapComponent } from './ol-map';
 
-import { environment } from '../environment';
-
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { HistoricalsService } from '@lib/services/historicals';
 
 import { effect } from '@angular/core';
 import { inject } from '@angular/core';
@@ -56,7 +54,7 @@ export class OLSourceHistoricalComponent {
           maxZoom: this.maxZoom(),
           minZoom: this.minZoom(),
           projection: 'EPSG:3857',
-          url: `${environment.endpoints.proxy}/${historicalMap.url}`
+          url: historicalMap.url
         });
         this.olImage.setProperties({ component: this }, true);
         this.#layer.olLayer.setSource(this.olImage);

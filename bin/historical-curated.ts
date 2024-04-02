@@ -2,13 +2,15 @@ import { HistoricalMapIndex } from '../lib/src/common';
 
 import { theState } from '../lib/src/common';
 
-import { copyFileSync } from 'fs';
-import { mkdirSync } from 'fs';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client } from '@aws-sdk/client-s3';
+
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
-import hash from 'object-hash';
+
+const bucket = 'munimap-historical-images';
 
 const curated = {
   SULLIVAN: {
@@ -24,49 +26,63 @@ const curated = {
   }
 };
 
+const client = new S3Client({});
+
 const dist = './data';
 
 const historicals: HistoricalMapIndex = {};
 
-// 👇 for each curated county, town
+async function main(): Promise<void> {
+  // 👇 for each curated county, town
 
-Object.keys(curated).forEach((county) => {
-  Object.keys(curated[county]).forEach((town) => {
-    // 👇 for each historical map ...
-    curated[county][town].forEach((historical) => {
-      // 👇 this allows us to use a flat directory structure
-      const path = `${theState}:${county}:${town}`;
-      const hashed = hash.MD5(path);
+  for (const county of Object.keys(curated)) {
+    for (const town of Object.keys(curated[county])) {
+      // 👇 for each historical map ...
+      curated[county][town].forEach(async (historical) => {
+        // 👇 this allows us to use a flat naming scheme
+        const path = `${theState}:${county}:${town}`;
+        const target = `${path.replaceAll(':', '-')}-${historical.name}.jpeg`;
 
-      // 👇 start the copy process
-      console.log(chalk.green(`... writing ${historical.name} to ${path}`));
-      mkdirSync(`${dist}/${hashed}`, { recursive: true });
+        // 👇 start the copy process
+        console.log(chalk.green(`... writing ${historical.name} to ${target}`));
 
-      // 👇 add this historical to the manifest of all historicals
-      const metadata = JSON.parse(
-        readFileSync(`${historical.dir}/metadata.json`).toString()
-      );
-      historicals[path] ??= [];
-      const layer = metadata.layers.find((layer) => layer.type === 'GeoImage');
-      historicals[path].push({
-        description: historical.name,
-        imageCenter: layer.imageCenter,
-        imageRotate: layer.imageRotate,
-        imageScale: layer.imageScale,
-        url: `${hashed}/${historical.name}.jpeg`
+        // 👇 add this historical to the manifest of all historicals
+        const metadata = JSON.parse(
+          readFileSync(`${historical.dir}/metadata.json`).toString()
+        );
+        historicals[path] ??= [];
+        const layer = metadata.layers.find(
+          (layer) => layer.type === 'GeoImage'
+        );
+        historicals[path].push({
+          description: historical.name,
+          imageCenter: layer.imageCenter,
+          imageRotate: layer.imageRotate,
+          imageScale: layer.imageScale,
+          url: `https://munimap-historical-images.s3.us-east-1.amazonaws.com/${target}`
+        });
+
+        // 👇 upload the map to S3
+        const buffer = readFileSync(`${historical.dir}/map.jpeg`);
+        await client.send(
+          new PutObjectCommand({
+            Bucket: bucket,
+            Key: target,
+            Body: buffer,
+            ContentType: 'image/jpeg'
+          })
+        );
       });
+    }
+  }
 
-      // 👇 copy the map into a flat directory structure under an unique
-      //    but repeatable name
-      copyFileSync(
-        `${historical.dir}/map.jpeg`,
-        `${dist}/${hashed}/${historical.name}.jpeg`
-      );
-    });
-  });
-});
+  // 👇 finally write out the manifest
 
-// 👇 finally write out the manifest
+  console.log(chalk.green(`... writing ${dist}/historicals.json`));
+  writeFileSync(
+    `${dist}/historicals.json`,
+    JSON.stringify(historicals, null, 2)
+  );
+}
 
-console.log(chalk.green(`... writing ${dist}/historicals.json`));
-writeFileSync(`${dist}/historicals.json`, JSON.stringify(historicals));
+main();
