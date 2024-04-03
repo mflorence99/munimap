@@ -1,5 +1,6 @@
 {
   "extends": ["eslint-config-mflorence99", "eslint-config-prettier"],
+  "files": ["*.ts", "*.js"],
   "parserOptions": {
     "project": [
       "./bin/tsconfig.json",

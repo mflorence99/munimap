@@ -59,41 +59,45 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
         <!-- 🔥 all this for APDVD hack! -->
 
         @if (sink.mapState.id === 'apdvd') {
-          <tr>
-            <td class="apdvd">
-              <figure
-                [style.backgroundColor]="
-                  'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
-                "
-                class="key"></figure>
-            </td>
-            <td class="desc">Added to district</td>
-            <td class="count">
-              {{ countOfIncluded | number: '1.0-0' }}
-            </td>
-            <td class="count">
-              {{ areaOfIncluded | number: '1.0-0' }}
-            </td>
-            <td></td>
-          </tr>
+          @if (countOfIncluded) {
+            <tr>
+              <td class="apdvd">
+                <figure
+                  [style.backgroundColor]="
+                    'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
+                  "
+                  class="key"></figure>
+              </td>
+              <td class="desc">Lots added to district</td>
+              <td class="count">
+                {{ countOfIncluded | number: '1.0-0' }}
+              </td>
+              <td class="count">
+                {{ areaOfIncluded | number: '1.0-0' }}
+              </td>
+              <td></td>
+            </tr>
+          }
 
-          <tr>
-            <td class="apdvd">
-              <figure
-                [style.backgroundColor]="
-                  'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
-                "
-                class="key"></figure>
-            </td>
-            <td class="desc">Excluded from district</td>
-            <td class="count">
-              {{ countOfExcluded | number: '1.0-0' }}
-            </td>
-            <td class="count">
-              {{ areaOfExcluded | number: '1.0-0' }}
-            </td>
-            <td></td>
-          </tr>
+          @if (countOfExcluded) {
+            <tr>
+              <td class="apdvd">
+                <figure
+                  [style.backgroundColor]="
+                    'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
+                  "
+                  class="key"></figure>
+              </td>
+              <td class="desc">Lots excluded from district</td>
+              <td class="count">
+                {{ countOfExcluded | number: '1.0-0' }}
+              </td>
+              <td class="count">
+                {{ areaOfExcluded | number: '1.0-0' }}
+              </td>
+              <td></td>
+            </tr>
+          }
         } @else {
           <!-- 🔥 return to regular programming! -->
 

@@ -60,31 +60,35 @@ import { viewChild } from '@angular/core';
         </thead>
 
         <tbody>
-          <tr>
-            <td class="usage">
-              <figure
-                [style.backgroundColor]="
-                  'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
-                "
-                class="key"></figure>
-            </td>
-            <td class="desc">Lots added to district</td>
-            <td class="numeric">{{ countOfIncluded | number: '1.0-0' }}</td>
-            <td class="numeric">{{ areaOfIncluded | number: '1.0-0' }}</td>
-          </tr>
+          @if (countOfIncluded) {
+            <tr>
+              <td class="usage">
+                <figure
+                  [style.backgroundColor]="
+                    'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
+                  "
+                  class="key"></figure>
+              </td>
+              <td class="desc">Lots added to district</td>
+              <td class="numeric">{{ countOfIncluded | number: '1.0-0' }}</td>
+              <td class="numeric">{{ areaOfIncluded | number: '1.0-0' }}</td>
+            </tr>
+          }
 
-          <tr>
-            <td class="usage">
-              <figure
-                [style.backgroundColor]="
-                  'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
-                "
-                class="key"></figure>
-            </td>
-            <td class="desc">Lots excluded from district</td>
-            <td class="numeric">{{ countOfExcluded | number: '1.0-0' }}</td>
-            <td class="numeric">{{ areaOfExcluded | number: '1.0-0' }}</td>
-          </tr>
+          @if (countOfExcluded) {
+            <tr>
+              <td class="usage">
+                <figure
+                  [style.backgroundColor]="
+                    'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
+                  "
+                  class="key"></figure>
+              </td>
+              <td class="desc">Lots excluded from district</td>
+              <td class="numeric">{{ countOfExcluded | number: '1.0-0' }}</td>
+              <td class="numeric">{{ areaOfExcluded | number: '1.0-0' }}</td>
+            </tr>
+          }
         </tbody>
       </table>
     </article>
