@@ -43,13 +43,12 @@ import copy from 'fast-copy';
       id="setupForm"
       novalidate
       spellcheck="false">
-      <p class="instructions">
-        Consult the
-        <em>legend</em>
-        in the left sidebar for the key to the color-coding.
-      </p>
-
       @if (record.satelliteView) {
+        <p>
+          A selection of historical views may be displayed side-by-side with
+          current satellite data.
+        </p>
+
         <mat-form-field>
           <mat-label>Select Side-by-side Source</mat-label>
           <mat-select [(ngModel)]="record.satelliteYear" name="satelliteYear">
@@ -67,6 +66,18 @@ import copy from 'fast-copy';
       }
 
       @if (!record.satelliteView) {
+        <p class="instructions">
+          Consult the
+          <em>legend</em>
+          in the left sidebar for the key to the color-coding. Codings marked
+          <sup>[1]</sup>
+          are experimental. Contact
+          <a href="mailto:munimap.helpdesk@gmail.com" target="_blank">
+            munimap&#8203;.helpdesk&#8203;&#64;gmail.com
+          </a>
+          with questions or suggestions.
+        </p>
+
         <mat-radio-group
           [(ngModel)]="record.parcelCoding"
           class="list"
@@ -87,12 +98,8 @@ import copy from 'fast-copy';
         </mat-radio-group>
 
         <p class="instructions">
-          <sup>[1]</sup>
-          These color-codings are experimental. Contact
-          <a href="mailto:munimap.helpdesk@gmail.com" target="_blank">
-            munimap.helpdesk&#64;gmail.com
-          </a>
-          with questions or suggestions.
+          A selection of historical maps may be displayed side-by-side with
+          current MuniMap data.
         </p>
 
         <mat-form-field>
