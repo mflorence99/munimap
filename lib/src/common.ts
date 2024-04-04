@@ -834,10 +834,15 @@ export interface StateIndex {
 }
 
 export interface HistoricalMap {
-  description: string;
-  imageCenter: [number, number];
-  imageRotate: number;
-  imageScale: [number, number];
+  center: [number, number];
+  feathered?: boolean;
+  featherFilter?: string;
+  featherWidth?: [number, 'feet' | 'miles'];
+  filter?: string;
+  masked: boolean;
+  name: string;
+  rotate: number;
+  scale: [number, number];
   url: string;
 }
 

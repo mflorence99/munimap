@@ -35,39 +35,47 @@ export class OLSourceHistoricalComponent {
 
   constructor() {
     effect(() => {
-      // 👇 build the mask and a buffer around it for feathering
-      const buffered: any = buffer(
-        copy(this.#map.boundary().features[0]),
-        1200,
-        {
-          units: 'feet'
-        }
-      ).geometry.coordinates;
+      // 👇 find the metadata
+      const historicalMap = this.#historicals
+        .historicalsFor(this.#map.path())
+        .find((historical) => historical.name === this.map());
+      // 👇 this is the boundary we will clip to
       const coords: any = copy(
         this.#map.boundary().features[0].geometry.coordinates
       );
-      // 👇 this is the boundary we will clip to
       const boundary = new Feature(new Polygon(coords));
       boundary
         .getGeometry()
         .transform(this.#map.featureProjection, this.#map.projection);
       // 👇 this is the edge that will be feathered
-      const feathered = new Feature(new Polygon(buffered));
-      feathered
-        .getGeometry()
-        .transform(this.#map.featureProjection, this.#map.projection);
-      // 👇 find the metadata
-      const historicalMap = this.#historicals
-        .historicalsFor(this.#map.path())
-        .find((historical) => historical.description === this.map());
+      let feathered;
+      if (historicalMap.feathered) {
+        const buffered: any = buffer(
+          copy(this.#map.boundary().features[0]),
+          historicalMap.featherWidth[0],
+          {
+            units: historicalMap.featherWidth[1]
+          }
+        ).geometry.coordinates;
+        feathered = new Feature(new Polygon(buffered));
+        feathered
+          .getGeometry()
+          .transform(this.#map.featureProjection, this.#map.projection);
+      }
       // 👇 create the image source
       if (historicalMap) {
         this.olImage = new OLImage(<any>{
-          imageCenter: historicalMap.imageCenter,
-          imageFeather: feathered.getGeometry().getCoordinates()[0],
-          imageMask: boundary.getGeometry().getCoordinates()[0],
-          imageRotate: historicalMap.imageRotate,
-          imageScale: historicalMap.imageScale,
+          imageCenter: historicalMap.center,
+          imageFeather: historicalMap.feathered
+            ? feathered.getGeometry().getCoordinates()[0]
+            : null,
+          imageFeatherFilter: historicalMap.featherFilter,
+          imageMask: historicalMap.masked
+            ? boundary.getGeometry().getCoordinates()[0]
+            : null,
+          imageFilter: historicalMap.filter,
+          imageRotate: historicalMap.rotate,
+          imageScale: historicalMap.scale,
           maxZoom: this.maxZoom(),
           minZoom: this.minZoom(),
           projection: 'EPSG:3857',

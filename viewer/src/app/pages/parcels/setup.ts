@@ -46,7 +46,7 @@ import copy from 'fast-copy';
       @if (record.satelliteView) {
         <p>
           A selection of historical views may be displayed side-by-side with
-          current satellite data.
+          present-day satellite data.
         </p>
 
         <mat-form-field>
@@ -99,7 +99,7 @@ import copy from 'fast-copy';
 
         <p class="instructions">
           A selection of historical maps may be displayed side-by-side with
-          current MuniMap data.
+          present-day MuniMap data.
         </p>
 
         <mat-form-field>
@@ -154,7 +154,7 @@ export class ParcelsSetupComponent implements OnInit {
       '',
       ...this.#historicals
         .historicalsFor(this.record.recentPath)
-        .map((historical) => historical.description)
+        .map((historical) => historical.name)
         .sort()
         .reverse()
     ];
