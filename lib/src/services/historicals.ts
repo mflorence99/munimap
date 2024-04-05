@@ -27,12 +27,9 @@ export class HistoricalsService {
   // 🔥 HistoricalsResolver makes sure this is called before we start
   loadHistoricals(): Observable<HistoricalMapIndex> {
     return this.#http
-      .get<HistoricalMapIndex>(
-        `${environment.endpoints.proxy}/historicals.json`,
-        {
-          params: this.#cacheBuster
-        }
-      )
+      .get<HistoricalMapIndex>(`assets/historicals.json`, {
+        params: this.#cacheBuster
+      })
       .pipe(tap((historicals) => (this.historicals = historicals)));
   }
 }

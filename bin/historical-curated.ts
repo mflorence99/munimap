@@ -73,7 +73,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
 
 const client = new S3Client({});
 
-const dist = './data';
+const dist = './lib/assets';
 
 const historicalMaps: HistoricalMapIndex = {};
 
