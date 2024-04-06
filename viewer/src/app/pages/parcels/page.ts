@@ -2,6 +2,8 @@ import { RootPage } from '../root/page';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
+import { HistoricalMap } from '@lib/common';
+import { HistoricalsService } from '@lib/services/historicals';
 
 import { environment } from '@lib/environment';
 import { inject } from '@angular/core';
@@ -349,17 +351,29 @@ import { inject } from '@angular/core';
                     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-tile>
                 } @else if (!sink.satelliteView && sink.historicalMap) {
-                  <!-- <app-ol-layer-image>
-                    <app-ol-source-historicalimage
-                      [map]="
-                        sink.historicalMap
-                      "></app-ol-source-historicalimage>
-                  </app-ol-layer-image> -->
-                  <app-ol-layer-tile>
-                    <app-ol-source-historicalxyz
-                      [map]="sink.historicalMap"></app-ol-source-historicalxyz>
-                    <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
-                  </app-ol-layer-tile>
+                  @if (
+                    findHistoricalMap(sink.mapState.path, sink.historicalMap);
+                    as historicalMap
+                  ) {
+                    @if (historicalMap.type === 'image') {
+                      <app-ol-layer-image>
+                        <app-ol-source-historicalimage
+                          [historicalMap]="
+                            historicalMap
+                          "></app-ol-source-historicalimage>
+                      </app-ol-layer-image>
+                    }
+
+                    @if (historicalMap.type === 'tile') {
+                      <app-ol-layer-tile>
+                        <app-ol-source-historicalxyz
+                          [historicalMap]="
+                            historicalMap
+                          "></app-ol-source-historicalxyz>
+                        <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                      </app-ol-layer-tile>
+                    }
+                  }
                 }
               }
             </app-ol-layers>
@@ -450,4 +464,12 @@ export class ParcelsPage {
   env = environment;
 
   root = inject(RootPage);
+
+  #historicals = inject(HistoricalsService);
+
+  findHistoricalMap(path: string, name: string): HistoricalMap {
+    return this.#historicals
+      .historicalsFor(path)
+      .find((historical) => historical.name === name);
+  }
 }

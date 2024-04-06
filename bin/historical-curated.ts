@@ -1,3 +1,4 @@
+import { HistoricalMap } from '../lib/src/common';
 import { HistoricalMapIndex } from '../lib/src/common';
 
 import { theState } from '../lib/src/common';
@@ -24,15 +25,23 @@ import JSZip from 'jszip';
 type HistoricalSource = {
   attribution: string;
   dir: string;
+  name: string;
+  type: 'image' | 'tile';
+} & (HistoricalSourceImage | HistoricalSourceTile);
+
+type HistoricalSourceImage = {
   featherFilter?: string;
   featherWidth?: [number, 'feet' | 'miles'];
   feathered?: boolean;
   filter?: string;
   masked: boolean;
-  maxZoom?: number;
-  minZoom?: number;
-  name: string;
-  tiled?: boolean;
+  type: 'image';
+};
+
+type HistoricalSourceTile = {
+  maxZoom: number;
+  minZoom: number;
+  type: 'tile';
 };
 
 const bucket = 'munimap-historical-images';
@@ -48,49 +57,52 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         featherWidth: [1200, 'feet'],
         filter: 'sepia(20%)',
         masked: true,
-        name: '1860 HF Walling'
+        name: '1860 HF Walling',
+        type: 'image'
       },
       {
         attribution: 'DH Hurd',
         dir: './bin/assets/washington-1892',
-        feathered: true,
-        featherFilter: 'opacity(50%) grayscale()',
-        featherWidth: [1000, 'feet'],
-        masked: true,
         maxZoom: 15,
         minZoom: 13,
         name: '1892 DH Hurd',
-        tiled: true
+        type: 'tile'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-hwy-1930',
-        masked: true,
-        name: '1930 Hwy Dept'
+        maxZoom: 15,
+        minZoom: 13,
+        name: '1930 Hwy Dept',
+        type: 'tile'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1930',
         masked: true,
-        name: '1930 USGS'
+        name: '1930 USGS',
+        type: 'image'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1942',
         masked: true,
-        name: '1942 USGS'
+        name: '1942 USGS',
+        type: 'image'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1957',
         masked: true,
-        name: '1957 USGS'
+        name: '1957 USGS',
+        type: 'image'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1984',
         masked: true,
-        name: '1984 USGS'
+        name: '1984 USGS',
+        type: 'image'
       }
     ]
   }
@@ -109,47 +121,78 @@ function main(): void {
 
   Object.keys(curated).forEach((county) => {
     Object.keys(curated[county]).forEach((town) => {
-      // 👇 for each historical map ...
-      curated[county][town].forEach(async (source) => {
-        // 👇 this allows us to use a flat naming scheme
-        const path = `${theState}:${county}:${town}`;
+      const path = `${theState}:${county}:${town}`;
+      historicalMaps[path] = [];
 
+      // 👇 for each historical map ...
+      curated[county][town].forEach(async (source: HistoricalSource) => {
         // 👇 start the copy process
         console.log(chalk.green(`... writing ${source.name} to ${path}`));
 
-        // 👇 add this historical to the manifest of all historicals
-        const metadata = JSON.parse(
-          readFileSync(`${source.dir}/metadata.json`).toString()
-        );
-        historicalMaps[path] ??= [];
-        const layer = metadata.layers.find(
-          (layer) => layer.type === 'GeoImage'
-        );
-        historicalMaps[path].push({
-          attribution: source.attribution,
-          center: layer.imageCenter,
-          feathered: source.feathered,
-          featherFilter: source.featherFilter,
-          featherWidth: source.featherWidth,
-          filter: source.filter,
-          masked: source.masked,
-          maxZoom: source.maxZoom,
-          minZoom: source.minZoom,
-          name: source.name,
-          rotate: layer.imageRotate,
-          scale: layer.imageScale,
-          tiled: source.tiled,
-          url: source.tiled
-            ? `https://${bucket}.${s3Domain}/${path}/${source.name}/tiles/{z}/{x}/{y}.jpg`
-            : `https://${bucket}.${s3Domain}/${path}/${source.name}.jpeg`
-        });
+        // 👇 type IMAGE
+        if (source.type === 'image') {
+          // 👇 load the metadata describing the image
+          const metadata = JSON.parse(
+            readFileSync(`${source.dir}/metadata.json`).toString()
+          );
+          const layer = metadata.layers.find(
+            (layer) => layer.type === 'GeoImage'
+          );
+
+          // 👇 populate the historical map descriptor
+          historicalMaps[path].push({
+            attribution: source.attribution,
+            center: layer.imageCenter,
+            feathered: source.feathered,
+            featherFilter: source.featherFilter,
+            featherWidth: source.featherWidth,
+            filter: source.filter,
+            masked: source.masked,
+            name: source.name,
+            rotate: layer.imageRotate,
+            scale: layer.imageScale,
+            type: 'image',
+            url: `https://${bucket}.${s3Domain}/${path}/${source.name}.jpeg`
+          } satisfies HistoricalMap);
+
+          // 👇 upload the untiled map image to S3
+          const buffer = readFileSync(`${source.dir}/map.jpeg`);
+          await client.send(
+            new PutObjectCommand({
+              Bucket: bucket,
+              Key: `${path}/${source.name}.jpeg`,
+              Body: buffer,
+              ContentType: 'image/jpeg'
+            })
+          );
+
+          // 👇 log progress
+          console.log(
+            chalk.yellow(
+              `...... S3 object ${path}/${source.name}.jpeg uploaded`
+            )
+          );
+        }
 
         // 👇 upload the map tiles to S3
-        if (source.tiled) {
+        if (source.type === 'tile') {
+          // 👇 populate the historical map descriptor
+          historicalMaps[path].push({
+            attribution: source.attribution,
+            maxZoom: source.maxZoom,
+            minZoom: source.minZoom,
+            name: source.name,
+            type: 'tile',
+            url: `https://${bucket}.${s3Domain}/${path}/${source.name}/tiles/{z}/{x}/{y}.jpg`
+          } satisfies HistoricalMap);
+
+          // 👇 load and parse the zip of tiles
           const zip = await JSZip.loadAsync(
             readFileSync(`${source.dir}/tiles.zip`)
           );
           const entries = zip.filter((path, file) => !file.dir);
+
+          // 👇 upload the map tiles to S3
           for (const entry of entries) {
             const buffer = await entry.async('nodebuffer');
             await client.send(
@@ -162,27 +205,11 @@ function main(): void {
             );
             stdout.write('.');
           }
+
+          // 👇 log progress
           console.log(
             chalk.yellow(
               `...... ${entries.length} S3 objects for ${path}/${source.name} tiles uploaded`
-            )
-          );
-        }
-
-        // 👇 upload the untiled map image to S3
-        else {
-          const buffer = readFileSync(`${source.dir}/map.jpeg`);
-          await client.send(
-            new PutObjectCommand({
-              Bucket: bucket,
-              Key: `${path}/${source.name}.jpeg`,
-              Body: buffer,
-              ContentType: 'image/jpeg'
-            })
-          );
-          console.log(
-            chalk.yellow(
-              `...... S3 object ${path}/${source.name}.jpeg uploaded`
             )
           );
         }

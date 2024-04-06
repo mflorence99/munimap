@@ -833,22 +833,30 @@ export interface StateIndex {
   };
 }
 
-export interface HistoricalMap {
+export type HistoricalMap = {
   attribution: string;
+  name: string;
+  type: 'image' | 'tile';
+  url: string;
+} & (HistoricalMapImage | HistoricalMapTile);
+
+export type HistoricalMapImage = {
   center: [number, number];
   featherFilter?: string;
   featherWidth?: [number, 'feet' | 'miles'];
   feathered?: boolean;
   filter?: string;
   masked: boolean;
-  maxZoom?: number;
-  minZoom?: number;
-  name: string;
   rotate: number;
   scale: [number, number];
-  tiled: boolean;
-  url: string;
-}
+  type: 'image';
+};
+
+export type HistoricalMapTile = {
+  maxZoom: number;
+  minZoom: number;
+  type: 'tile';
+};
 
 export type HistoricalMapIndex = Record<string, HistoricalMap[]>;
 
