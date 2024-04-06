@@ -117,11 +117,22 @@ async function main(): Promise<void> {
         });
 
         if (source.tiled) {
-          const buffer = readFileSync(`${source.dir}/tiles.zip`);
-          const zip = await JSZip.loadAsync(buffer);
+          const zip = await JSZip.loadAsync(
+            readFileSync(`${source.dir}/tiles.zip`)
+          );
           const entries = zip.filter((path, file) => !file.dir);
-          for (const entry of entries) {
+          for (let i = 0; i < 5; i++) {
+            const entry = entries[i];
             console.log(chalk.red(`... unzipping ${entry.name}`));
+            const buffer = await entry.async('nodebuffer');
+            await client.send(
+              new PutObjectCommand({
+                Bucket: bucket,
+                Key: `${path}/${source.name}/${entry.name}`,
+                Body: buffer,
+                ContentType: 'image/jpeg'
+              })
+            );
           }
         }
 
