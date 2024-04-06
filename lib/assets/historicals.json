@@ -1,6 +1,7 @@
 {
   "NEW HAMPSHIRE:SULLIVAN:WASHINGTON": [
     {
+      "attribution": "HF Walling",
       "center": [
         -8024229.497992353,
         5341562.665136835
@@ -19,9 +20,10 @@
         3.8254660791482675,
         3.82546607914662
       ],
-      "url": "https://munimap-historical-images.s3.undefined.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1860 HF Walling.jpeg"
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1860 HF Walling.jpeg"
     },
     {
+      "attribution": "DH Hurd",
       "center": [
         -8024736.2333840635,
         5343231.065579573
@@ -40,9 +42,10 @@
         2.7148642090576187
       ],
       "tiled": true,
-      "url": "https://munimap-historical-images.s3.undefined.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1892 DH Hurd/tiles/{z}/{x}/{y}.jpg"
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1892 DH Hurd/tiles/{z}/{x}/{y}.jpg"
     },
     {
+      "attribution": "USGS",
       "center": [
         -8026560.712366984,
         5340593.210134724
@@ -54,9 +57,10 @@
         5.88775625849304,
         5.8877562584890955
       ],
-      "url": "https://munimap-historical-images.s3.undefined.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1930 Hwy Dept.jpeg"
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1930 Hwy Dept.jpeg"
     },
     {
+      "attribution": "USGS",
       "center": [
         -8026029.224733404,
         5340630.659465399
@@ -68,9 +72,10 @@
         5.5598097077027235,
         5.559809707702725
       ],
-      "url": "https://munimap-historical-images.s3.undefined.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1930 USGS.jpeg"
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1930 USGS.jpeg"
     },
     {
+      "attribution": "USGS",
       "center": [
         -8026034.208362793,
         5340616.87806358
@@ -82,9 +87,10 @@
         5.493030795080274,
         5.493030795079725
       ],
-      "url": "https://munimap-historical-images.s3.undefined.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1942 USGS.jpeg"
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1942 USGS.jpeg"
     },
     {
+      "attribution": "USGS",
       "center": [
         -8025672.990727279,
         5340622.330264636
@@ -96,9 +102,10 @@
         5.344665864230308,
         5.344665864232497
       ],
-      "url": "https://munimap-historical-images.s3.undefined.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1957 USGS.jpeg"
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1957 USGS.jpeg"
     },
     {
+      "attribution": "USGS",
       "center": [
         -8027405.326887065,
         5340505.489865279
@@ -110,7 +117,7 @@
         5.800737754216479,
         5.8007377542166845
       ],
-      "url": "https://munimap-historical-images.s3.undefined.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1984 USGS.jpeg"
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1984 USGS.jpeg"
     }
   ]
 }

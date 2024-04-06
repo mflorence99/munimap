@@ -834,6 +834,7 @@ export interface StateIndex {
 }
 
 export interface HistoricalMap {
+  attribution: string;
   center: [number, number];
   featherFilter?: string;
   featherWidth?: [number, 'feet' | 'miles'];

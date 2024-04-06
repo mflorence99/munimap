@@ -112,8 +112,8 @@ import { OLSourceFloodHazardsComponent } from '@lib/ol/ol-source-floodhazards';
 import { OLSourceFloodplainsComponent } from '@lib/ol/ol-source-floodplains';
 import { OLSourceGeoJSONComponent } from '@lib/ol/ol-source-geojson';
 import { OLSourceHillshadeComponent } from '@lib/ol/ol-source-hillshade';
-import { OLSourceHistoricalComponent } from '@lib/ol/ol-source-historical';
-import { OLSourceImageComponent } from '@lib/ol/ol-source-image';
+import { OLSourceHistoricalImageComponent } from '@lib/ol/ol-source-historicalimage';
+import { OLSourceHistoricalXYZComponent } from '@lib/ol/ol-source-historicalxyz';
 import { OLSourceLabelsComponent } from '@lib/ol/ol-source-labels';
 import { OLSourceLandmarksComponent } from '@lib/ol/ol-source-landmarks';
 import { OLSourceOSMComponent } from '@lib/ol/ol-source-osm';
@@ -244,8 +244,8 @@ const COMPONENTS = [
   OLSourceFloodplainsComponent,
   OLSourceGeoJSONComponent,
   OLSourceHillshadeComponent,
-  OLSourceHistoricalComponent,
-  OLSourceImageComponent,
+  OLSourceHistoricalImageComponent,
+  OLSourceHistoricalXYZComponent,
   OLSourceLabelsComponent,
   OLSourceLandmarksComponent,
   OLSourceOSMComponent,

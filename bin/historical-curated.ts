@@ -22,6 +22,7 @@ import JSZip from 'jszip';
 //     5. output format is jpg
 
 type HistoricalSource = {
+  attribution: string;
   dir: string;
   featherFilter?: string;
   featherWidth?: [number, 'feet' | 'miles'];
@@ -40,6 +41,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
   SULLIVAN: {
     WASHINGTON: [
       {
+        attribution: 'HF Walling',
         dir: './bin/assets/washington-1860',
         feathered: true,
         featherFilter: 'opacity(25%) grayscale()',
@@ -49,6 +51,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         name: '1860 HF Walling'
       },
       {
+        attribution: 'DH Hurd',
         dir: './bin/assets/washington-1892',
         feathered: true,
         featherFilter: 'opacity(50%) grayscale()',
@@ -58,26 +61,31 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         tiled: true
       },
       {
+        attribution: 'USGS',
         dir: './bin/assets/washington-hwy-1930',
         masked: true,
         name: '1930 Hwy Dept'
       },
       {
+        attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1930',
         masked: true,
         name: '1930 USGS'
       },
       {
+        attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1942',
         masked: true,
         name: '1942 USGS'
       },
       {
+        attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1957',
         masked: true,
         name: '1957 USGS'
       },
       {
+        attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1984',
         masked: true,
         name: '1984 USGS'
@@ -92,7 +100,7 @@ const dist = './lib/assets';
 
 const historicalMaps: HistoricalMapIndex = {};
 
-const s3Domain = `s3.${env.AWS_BUCKET}.amazonaws.com`;
+const s3Domain = `s3.${env.AWS_BUCKET ?? 'us-east-1'}.amazonaws.com`;
 
 function main(): void {
   // 👇 for each curated county, town
@@ -116,6 +124,7 @@ function main(): void {
           (layer) => layer.type === 'GeoImage'
         );
         historicalMaps[path].push({
+          attribution: source.attribution,
           center: layer.imageCenter,
           feathered: source.feathered,
           featherFilter: source.featherFilter,
