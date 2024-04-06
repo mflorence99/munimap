@@ -5,9 +5,10 @@ import { theState } from '../lib/src/common';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { S3Client } from '@aws-sdk/client-s3';
 
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
 import { env } from 'process';
+import { readFileSync } from 'fs';
+import { stdout } from 'process';
+import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
 import JSZip from 'jszip';
@@ -22,9 +23,9 @@ import JSZip from 'jszip';
 
 type HistoricalSource = {
   dir: string;
-  feathered?: boolean;
   featherFilter?: string;
   featherWidth?: [number, 'feet' | 'miles'];
+  feathered?: boolean;
   filter?: string;
   masked: boolean;
   maxZoom?: number;
@@ -93,11 +94,11 @@ const historicalMaps: HistoricalMapIndex = {};
 
 const s3Domain = `s3.${env.AWS_BUCKET}.amazonaws.com`;
 
-async function main(): Promise<void> {
+function main(): void {
   // 👇 for each curated county, town
 
-  for (const county of Object.keys(curated)) {
-    for (const town of Object.keys(curated[county])) {
+  Object.keys(curated).forEach((county) => {
+    Object.keys(curated[county]).forEach((town) => {
       // 👇 for each historical map ...
       curated[county][town].forEach(async (source) => {
         // 👇 this allows us to use a flat naming scheme
@@ -138,9 +139,7 @@ async function main(): Promise<void> {
             readFileSync(`${source.dir}/tiles.zip`)
           );
           const entries = zip.filter((path, file) => !file.dir);
-          for (let i = 0; i < 5; i++) {
-            const entry = entries[i];
-            console.log(chalk.red(`... unzipping ${entry.name}`));
+          for (const entry of entries) {
             const buffer = await entry.async('nodebuffer');
             await client.send(
               new PutObjectCommand({
@@ -150,7 +149,13 @@ async function main(): Promise<void> {
                 ContentType: 'image/jpeg'
               })
             );
+            stdout.write('.');
           }
+          console.log(
+            chalk.yellow(
+              `...... ${entries.length} S3 objects for ${path}/${source.name} tiles uploaded`
+            )
+          );
         }
 
         // 👇 upload the untiled map image to S3
@@ -164,10 +169,15 @@ async function main(): Promise<void> {
               ContentType: 'image/jpeg'
             })
           );
+          console.log(
+            chalk.yellow(
+              `...... S3 object ${path}/${source.name}.jpeg uploaded`
+            )
+          );
         }
       });
-    }
-  }
+    });
+  });
 
   // 👇 finally write out the manifest
 

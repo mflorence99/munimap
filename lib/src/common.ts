@@ -835,9 +835,9 @@ export interface StateIndex {
 
 export interface HistoricalMap {
   center: [number, number];
-  feathered?: boolean;
   featherFilter?: string;
   featherWidth?: [number, 'feet' | 'miles'];
+  feathered?: boolean;
   filter?: string;
   masked: boolean;
   maxZoom?: number;
