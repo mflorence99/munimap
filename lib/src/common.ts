@@ -840,6 +840,8 @@ export interface HistoricalMap {
   featherWidth?: [number, 'feet' | 'miles'];
   filter?: string;
   masked: boolean;
+  maxZoom?: number;
+  minZoom?: number;
   name: string;
   rotate: number;
   scale: [number, number];

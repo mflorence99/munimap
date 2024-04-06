@@ -7,9 +7,18 @@ import { S3Client } from '@aws-sdk/client-s3';
 
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
+import { env } from 'process';
 
 import chalk from 'chalk';
 import JSZip from 'jszip';
+
+// 🔥 lots of assumptions here:
+//     1. map image in directory is named map.jpeg
+//     2. metadata for image is produced by Map-georeferencer
+//        and is named metadata.json
+//     3. tiles named tiles.zip and producerd by QGis / QTiles
+//     4. tileset name is tiles
+//     5. output format is jpg
 
 type HistoricalSource = {
   dir: string;
@@ -18,6 +27,8 @@ type HistoricalSource = {
   featherWidth?: [number, 'feet' | 'miles'];
   filter?: string;
   masked: boolean;
+  maxZoom?: number;
+  minZoom?: number;
   name: string;
   tiled?: boolean;
 };
@@ -80,6 +91,8 @@ const dist = './lib/assets';
 
 const historicalMaps: HistoricalMapIndex = {};
 
+const s3Domain = `s3.${env.AWS_BUCKET}.amazonaws.com`;
+
 async function main(): Promise<void> {
   // 👇 for each curated county, town
 
@@ -89,10 +102,9 @@ async function main(): Promise<void> {
       curated[county][town].forEach(async (source) => {
         // 👇 this allows us to use a flat naming scheme
         const path = `${theState}:${county}:${town}`;
-        const target = `${path.replaceAll(':', '-')}-${source.name}.jpeg`;
 
         // 👇 start the copy process
-        console.log(chalk.green(`... writing ${source.name} to ${target}`));
+        console.log(chalk.green(`... writing ${source.name} to ${path}`));
 
         // 👇 add this historical to the manifest of all historicals
         const metadata = JSON.parse(
@@ -109,13 +121,18 @@ async function main(): Promise<void> {
           featherWidth: source.featherWidth,
           filter: source.filter,
           masked: source.masked,
+          maxZoom: source.maxZoom,
+          minZoom: source.minZoom,
           name: source.name,
           rotate: layer.imageRotate,
           scale: layer.imageScale,
           tiled: source.tiled,
-          url: `https://munimap-historical-images.s3.us-east-1.amazonaws.com/${target}`
+          url: source.tiled
+            ? `https://${bucket}.${s3Domain}/${path}/${source.name}/tiles/{z}/{x}/{y}.jpg`
+            : `https://${bucket}.${s3Domain}/${path}/${source.name}.jpeg`
         });
 
+        // 👇 upload the map tiles to S3
         if (source.tiled) {
           const zip = await JSZip.loadAsync(
             readFileSync(`${source.dir}/tiles.zip`)
@@ -136,16 +153,18 @@ async function main(): Promise<void> {
           }
         }
 
-        // 👇 upload the map to S3
-        // const buffer = readFileSync(`${source.dir}/map.jpeg`);
-        // await client.send(
-        //   new PutObjectCommand({
-        //     Bucket: bucket,
-        //     Key: target,
-        //     Body: buffer,
-        //     ContentType: 'image/jpeg'
-        //   })
-        // );
+        // 👇 upload the untiled map image to S3
+        else {
+          const buffer = readFileSync(`${source.dir}/map.jpeg`);
+          await client.send(
+            new PutObjectCommand({
+              Bucket: bucket,
+              Key: `${path}/${source.name}.jpeg`,
+              Body: buffer,
+              ContentType: 'image/jpeg'
+            })
+          );
+        }
       });
     }
   }
@@ -153,10 +172,10 @@ async function main(): Promise<void> {
   // 👇 finally write out the manifest
 
   console.log(chalk.green(`... writing ${dist}/historicals.json`));
-  // writeFileSync(
-  //   `${dist}/historicals.json`,
-  //   JSON.stringify(historicalMaps, null, 2)
-  // );
+  writeFileSync(
+    `${dist}/historicals.json`,
+    JSON.stringify(historicalMaps, null, 2)
+  );
 }
 
 main();
