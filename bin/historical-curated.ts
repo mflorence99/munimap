@@ -9,6 +9,7 @@ import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
 import chalk from 'chalk';
+import JSZip from 'jszip';
 
 type HistoricalSource = {
   dir: string;
@@ -18,6 +19,7 @@ type HistoricalSource = {
   filter?: string;
   masked: boolean;
   name: string;
+  tiled?: boolean;
 };
 
 const bucket = 'munimap-historical-images';
@@ -40,7 +42,8 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         featherFilter: 'opacity(50%) grayscale()',
         featherWidth: [1000, 'feet'],
         masked: true,
-        name: '1892 DH Hurd'
+        name: '1892 DH Hurd',
+        tiled: true
       },
       {
         dir: './bin/assets/washington-hwy-1930',
@@ -109,19 +112,29 @@ async function main(): Promise<void> {
           name: source.name,
           rotate: layer.imageRotate,
           scale: layer.imageScale,
+          tiled: source.tiled,
           url: `https://munimap-historical-images.s3.us-east-1.amazonaws.com/${target}`
         });
 
+        if (source.tiled) {
+          const buffer = readFileSync(`${source.dir}/tiles.zip`);
+          const zip = await JSZip.loadAsync(buffer);
+          const entries = zip.filter((path, file) => !file.dir);
+          for (const entry of entries) {
+            console.log(chalk.red(`... unzipping ${entry.name}`));
+          }
+        }
+
         // 👇 upload the map to S3
-        const buffer = readFileSync(`${source.dir}/map.jpeg`);
-        await client.send(
-          new PutObjectCommand({
-            Bucket: bucket,
-            Key: target,
-            Body: buffer,
-            ContentType: 'image/jpeg'
-          })
-        );
+        // const buffer = readFileSync(`${source.dir}/map.jpeg`);
+        // await client.send(
+        //   new PutObjectCommand({
+        //     Bucket: bucket,
+        //     Key: target,
+        //     Body: buffer,
+        //     ContentType: 'image/jpeg'
+        //   })
+        // );
       });
     }
   }
@@ -129,10 +142,10 @@ async function main(): Promise<void> {
   // 👇 finally write out the manifest
 
   console.log(chalk.green(`... writing ${dist}/historicals.json`));
-  writeFileSync(
-    `${dist}/historicals.json`,
-    JSON.stringify(historicalMaps, null, 2)
-  );
+  // writeFileSync(
+  //   `${dist}/historicals.json`,
+  //   JSON.stringify(historicalMaps, null, 2)
+  // );
 }
 
 main();

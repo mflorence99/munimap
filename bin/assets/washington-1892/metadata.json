@@ -1,1 +1,60 @@
-{"param":{"lon":-72.11630743713808,"lat":43.23590944350087,"rot":null,"zoom":15.005935893538378,"titre":"Sans titre","description":"","status":"brouillon","controlParams":{"limitGeo":"1","zoomBtn":"1","selectLayer":"1","contextMap":"0","legend":"0","scaleLine":"1","pSearchBar":"0","coords":"1","attribution":"1"},"proj":{"valeur":"EPSG:4326","unite":"ds"}},"layers":[{"type":"Geoportail","name":"Plan IGN","titre":"sans-titre","visibility":true,"layer":"GEOGRAPHICALGRIDSYSTEMS.PLANIGN"},{"name":"1892","visibility":true,"type":"GeoImage","imageCenter":[-8024736.2333840635,5343231.065579573],"imageRotate":0.061826014764154835,"imageScale":[2.7148642090574913,2.7148642090576187]},{"dessin":true,"type":"Vector","name":"Dessin","titre":"sans-titre","visibility":true,"opacity":1,"popupContent":{},"style":{},"features":[]}],"symbolLib":{},"legende":{"legend":"","legendPos":"bottom-left","legendWidth":295,"legendVisible":false,"legendtitle":"Ma légende","legendParam":{"lineHeight":55,"width":295}}}
+{
+  "param": {
+    "lon": -72.11630743713808,
+    "lat": 43.23590944350087,
+    "rot": null,
+    "zoom": 15.005935893538378,
+    "titre": "Sans titre",
+    "description": "",
+    "status": "brouillon",
+    "controlParams": {
+      "limitGeo": "1",
+      "zoomBtn": "1",
+      "selectLayer": "1",
+      "contextMap": "0",
+      "legend": "0",
+      "scaleLine": "1",
+      "pSearchBar": "0",
+      "coords": "1",
+      "attribution": "1"
+    },
+    "proj": { "valeur": "EPSG:4326", "unite": "ds" }
+  },
+  "layers": [
+    {
+      "type": "Geoportail",
+      "name": "Plan IGN",
+      "titre": "sans-titre",
+      "visibility": true,
+      "layer": "GEOGRAPHICALGRIDSYSTEMS.PLANIGN"
+    },
+    {
+      "name": "1892",
+      "visibility": true,
+      "type": "GeoImage",
+      "imageCenter": [-8024736.2333840635, 5343231.065579573],
+      "imageRotate": 0.061826014764154835,
+      "imageScale": [2.7148642090574913, 2.7148642090576187]
+    },
+    {
+      "dessin": true,
+      "type": "Vector",
+      "name": "Dessin",
+      "titre": "sans-titre",
+      "visibility": true,
+      "opacity": 1,
+      "popupContent": {},
+      "style": {},
+      "features": []
+    }
+  ],
+  "symbolLib": {},
+  "legende": {
+    "legend": "",
+    "legendPos": "bottom-left",
+    "legendWidth": 295,
+    "legendVisible": false,
+    "legendtitle": "Ma légende",
+    "legendParam": { "lineHeight": 55, "width": 295 }
+  }
+}

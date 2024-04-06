@@ -843,6 +843,7 @@ export interface HistoricalMap {
   name: string;
   rotate: number;
   scale: [number, number];
+  tiled: boolean;
   url: string;
 }
 

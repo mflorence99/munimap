@@ -8,3 +8,4 @@
 **/*.Identifier
 **/*.log
 firebase-admin.json
+*.tif
