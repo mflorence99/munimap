@@ -79,9 +79,10 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1930',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1930 USGS',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'USGS',
