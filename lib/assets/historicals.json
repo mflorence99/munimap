@@ -35,6 +35,8 @@
         "feet"
       ],
       "masked": true,
+      "maxZoom": 15,
+      "minZoom": 13,
       "name": "1892 DH Hurd",
       "rotate": 0.061826014764154835,
       "scale": [

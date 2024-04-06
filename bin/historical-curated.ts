@@ -57,6 +57,8 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         featherFilter: 'opacity(50%) grayscale()',
         featherWidth: [1000, 'feet'],
         masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1892 DH Hurd',
         tiled: true
       },

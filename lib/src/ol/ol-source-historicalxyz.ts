@@ -1,5 +1,5 @@
 import { HistoricalsService } from '../services/historicals';
-import { OLLayerImageComponent } from './ol-layer-image';
+import { OLLayerTileComponent } from './ol-layer-tile';
 import { OLMapComponent } from './ol-map';
 
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -27,7 +27,7 @@ export class OLSourceHistoricalXYZComponent {
   olXYZ: OLXYZ;
 
   #historicals = inject(HistoricalsService);
-  #layer = inject(OLLayerImageComponent);
+  #layer = inject(OLLayerTileComponent);
   #map = inject(OLMapComponent);
 
   constructor() {

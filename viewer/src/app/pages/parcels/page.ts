@@ -349,14 +349,17 @@ import { inject } from '@angular/core';
                     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-tile>
                 } @else if (!sink.satelliteView && sink.historicalMap) {
-                  <app-ol-layer-image>
+                  <!-- <app-ol-layer-image>
                     <app-ol-source-historicalimage
                       [map]="
                         sink.historicalMap
                       "></app-ol-source-historicalimage>
+                  </app-ol-layer-image> -->
+                  <app-ol-layer-tile>
                     <app-ol-source-historicalxyz
                       [map]="sink.historicalMap"></app-ol-source-historicalxyz>
-                  </app-ol-layer-image>
+                    <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                  </app-ol-layer-tile>
                 }
               }
             </app-ol-layers>
