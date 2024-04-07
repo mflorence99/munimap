@@ -52,13 +52,10 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
       {
         attribution: 'HF Walling',
         dir: './bin/assets/washington-1860',
-        feathered: true,
-        featherFilter: 'opacity(25%) grayscale()',
-        featherWidth: [1200, 'feet'],
-        filter: 'sepia(20%)',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1860 HF Walling',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'DH Hurd',

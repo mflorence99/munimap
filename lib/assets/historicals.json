@@ -2,26 +2,11 @@
   "NEW HAMPSHIRE:SULLIVAN:WASHINGTON": [
     {
       "attribution": "HF Walling",
-      "center": [
-        -8024229.497992353,
-        5341562.665136835
-      ],
-      "feathered": true,
-      "featherFilter": "opacity(25%) grayscale()",
-      "featherWidth": [
-        1200,
-        "feet"
-      ],
-      "filter": "sepia(20%)",
-      "masked": true,
+      "maxZoom": 15,
+      "minZoom": 13,
       "name": "1860 HF Walling",
-      "rotate": -0.00230486064722177,
-      "scale": [
-        3.8254660791482675,
-        3.82546607914662
-      ],
-      "type": "image",
-      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1860 HF Walling.jpeg"
+      "type": "tile",
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1860 HF Walling/tiles/{z}/{x}/{y}.jpg"
     },
     {
       "attribution": "DH Hurd",
