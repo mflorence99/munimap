@@ -52,58 +52,58 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
       {
         attribution: 'HF Walling',
         dir: './bin/assets/washington-1860',
-        feathered: true,
-        featherFilter: 'opacity(25%) grayscale()',
-        featherWidth: [1200, 'feet'],
-        filter: 'sepia(20%)',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1860 HF Walling',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'DH Hurd',
         dir: './bin/assets/washington-1892',
-        feathered: true,
-        featherFilter: 'opacity(50%) grayscale()',
-        featherWidth: [1000, 'feet'],
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1892 DH Hurd',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-hwy-1930',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1930 Hwy Dept',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1930',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1930 USGS',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1942',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1942 USGS',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1957',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1957 USGS',
-        type: 'image'
+        type: 'tile'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1984',
-        masked: true,
+        maxZoom: 15,
+        minZoom: 13,
         name: '1984 USGS',
-        type: 'image'
+        type: 'tile'
       }
     ]
   }
@@ -213,6 +213,7 @@ async function main(): Promise<void> {
             );
             stdout.write('.');
           }
+          stdout.write('\n');
 
           // 👇 log progress
           console.log(

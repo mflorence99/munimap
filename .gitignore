@@ -8,4 +8,4 @@
 **/*.Identifier
 **/*.log
 firebase-admin.json
-*.tif
+**/*/map_modified.tif
