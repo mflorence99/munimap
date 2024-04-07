@@ -1,5 +1,7 @@
 #!/bin/bash 
 
+echo $GITHUB_PAT
+
 now=$(date)
 echo "{ \"date\": \"$now\", \"id\": $RANDOM }" > lib/assets/build.json
 
