@@ -52,34 +52,37 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
       {
         attribution: 'HF Walling',
         dir: './bin/assets/washington-1860',
-        maxZoom: 15,
-        minZoom: 13,
+        feathered: true,
+        featherFilter: 'opacity(25%) grayscale()',
+        featherWidth: [1200, 'feet'],
+        filter: 'sepia(20%)',
+        masked: true,
         name: '1860 HF Walling',
-        type: 'tile'
+        type: 'image'
       },
       {
         attribution: 'DH Hurd',
         dir: './bin/assets/washington-1892',
-        maxZoom: 15,
-        minZoom: 13,
+        feathered: true,
+        featherFilter: 'opacity(50%) grayscale()',
+        featherWidth: [1000, 'feet'],
+        masked: true,
         name: '1892 DH Hurd',
-        type: 'tile'
+        type: 'image'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-hwy-1930',
-        maxZoom: 15,
-        minZoom: 13,
+        masked: true,
         name: '1930 Hwy Dept',
-        type: 'tile'
+        type: 'image'
       },
       {
         attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1930',
-        maxZoom: 15,
-        minZoom: 13,
+        masked: true,
         name: '1930 USGS',
-        type: 'tile'
+        type: 'image'
       },
       {
         attribution: 'USGS',
@@ -114,21 +117,23 @@ const historicalMaps: HistoricalMapIndex = {};
 
 const s3Domain = `s3.${env.AWS_BUCKET ?? 'us-east-1'}.amazonaws.com`;
 
-function main(): void {
+async function main(): Promise<void> {
   // 👇 for each curated county, town
 
-  Object.keys(curated).forEach((county) => {
-    Object.keys(curated[county]).forEach((town) => {
+  for (const county of Object.keys(curated)) {
+    for (const town of Object.keys(curated[county])) {
       const path = `${theState}:${county}:${town}`;
       historicalMaps[path] = [];
 
       // 👇 for each historical map ...
-      curated[county][town].forEach(async (source: HistoricalSource) => {
-        // 👇 start the copy process
-        console.log(chalk.green(`... writing ${source.name} to ${path}`));
-
+      for (const source of curated[county][town]) {
         // 👇 type IMAGE
         if (source.type === 'image') {
+          // 👇 start the copy process
+          console.log(
+            chalk.green(`... writing ${source.name} image to ${path}`)
+          );
+
           // 👇 load the metadata describing the image
           const metadata = JSON.parse(
             readFileSync(`${source.dir}/metadata.json`).toString()
@@ -174,6 +179,11 @@ function main(): void {
 
         // 👇 upload the map tiles to S3
         if (source.type === 'tile') {
+          // 👇 start the copy process
+          console.log(
+            chalk.blue(`... writing ${source.name} tiles to ${path}`)
+          );
+
           // 👇 populate the historical map descriptor
           historicalMaps[path].push({
             attribution: source.attribution,
@@ -211,9 +221,9 @@ function main(): void {
             )
           );
         }
-      });
-    });
-  });
+      }
+    }
+  }
 
   // 👇 finally write out the manifest
 
