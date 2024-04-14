@@ -686,7 +686,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       polygon.geometry.coordinates[0].map((coord: any) => fromLonLat(coord))
     ]);
     feature.getGeometry().setCoordinates(coords);
-    this.#modifyFeature(feature, true, false);
+    this.#modifyFeature(feature, { doGeometry: true });
   }
 
   #can(event: MouseEvent, condition: boolean): boolean {
@@ -698,13 +698,12 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     const coords = feature.getGeometry().getCoordinates();
     coords.splice(this.#whichPolygon(feature), 1);
     feature.getGeometry().setCoordinates(coords);
-    this.#modifyFeature(feature, true, false);
+    this.#modifyFeature(feature, { doGeometry: true });
   }
 
   #modifyFeature(
     feature: OLFeature<any>,
-    doGeometry = false,
-    doProperties = false
+    opts: { doGeometry?: boolean; doProperties?: boolean } = {}
   ): void {
     const format = new OLGeoJSON({
       dataProjection: this.map().featureProjection,
@@ -717,11 +716,11 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     // 👉 record the modification
     const redrawnParcel: Parcel = {
       action: 'modified',
-      geometry: doGeometry ? parcel.geometry : null,
+      geometry: opts.doGeometry ? parcel.geometry : null,
       id: feature.getId(),
       owner: this.authState.currentProfile().email,
       path: this.map().path(),
-      properties: doProperties ? parcel.properties : null,
+      properties: opts.doProperties ? parcel.properties : null,
       type: 'Feature'
     };
     this.store.dispatch(new AddParcels([redrawnParcel]));
@@ -738,7 +737,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     label.rotate = label.rotate ? false : true;
     labels[ix] = label;
     feature.setProperties({ labels });
-    this.#modifyFeature(feature, false, true);
+    this.#modifyFeature(feature, { doProperties: true });
   }
 
   #splitLabel(feature: OLFeature<any>): void {
@@ -752,7 +751,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     label.split = label.split ? null : true;
     labels[ix] = label;
     feature.setProperties({ labels });
-    this.#modifyFeature(feature, false, true);
+    this.#modifyFeature(feature, { doProperties: true });
   }
 
   #whichPolygon(feature: OLFeature<any>): number {

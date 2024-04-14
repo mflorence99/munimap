@@ -15,7 +15,8 @@ import { inject } from '@angular/core';
     <app-sink
       #sink
       [gps]="root.gps$ | async"
-      [historicalMap]="root.historicalMap$ | async"
+      [historicalMapLeft]="root.historicalMapLeft$ | async"
+      [historicalMapRight]="root.historicalMapRight$ | async"
       [mapState]="root.map$ | async"
       [parcelCoding]="root.parcelCoding$ | async"
       [satelliteView]="root.satelliteView$ | async"
@@ -109,10 +110,40 @@ import { inject } from '@angular/core';
               }
 
               <!-- -------------------------------------------------------- -->
+              <!-- 🗺️ Historical view                                       -->
+              <!-- -------------------------------------------------------- -->
+
+              @if (!sink.satelliteView && sink.parcelCoding === 'history') {
+                @if (
+                  findHistoricalMap(sink.mapState.path, sink.historicalMapLeft);
+                  as historicalMap
+                ) {
+                  @if (historicalMap.type === 'image') {
+                    <app-ol-layer-image>
+                      <app-ol-source-historicalimage
+                        [historicalMap]="
+                          historicalMap
+                        "></app-ol-source-historicalimage>
+                    </app-ol-layer-image>
+                  }
+
+                  @if (historicalMap.type === 'xyz') {
+                    <app-ol-layer-tile>
+                      <app-ol-source-historicalxyz
+                        [historicalMap]="
+                          historicalMap
+                        "></app-ol-source-historicalxyz>
+                      <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
+                    </app-ol-layer-tile>
+                  }
+                }
+              }
+
+              <!-- -------------------------------------------------------- -->
               <!-- 🗺️ Normal view                                           -->
               <!-- -------------------------------------------------------- -->
 
-              @if (!sink.satelliteView) {
+              @if (!sink.satelliteView && sink.parcelCoding !== 'history') {
                 <app-ol-layer-vector>
                   <app-ol-adaptor-boundary>
                     <app-ol-style-universal
@@ -350,9 +381,12 @@ import { inject } from '@angular/core';
                       [year]="sink.satelliteYear"></app-ol-source-satellite>
                     <app-ol-filter-crop2boundary></app-ol-filter-crop2boundary>
                   </app-ol-layer-tile>
-                } @else if (!sink.satelliteView && sink.historicalMap) {
+                } @else if (!sink.satelliteView && sink.historicalMapRight) {
                   @if (
-                    findHistoricalMap(sink.mapState.path, sink.historicalMap);
+                    findHistoricalMap(
+                      sink.mapState.path,
+                      sink.historicalMapRight
+                    );
                     as historicalMap
                   ) {
                     @if (historicalMap.type === 'image') {
@@ -364,7 +398,7 @@ import { inject } from '@angular/core';
                       </app-ol-layer-image>
                     }
 
-                    @if (historicalMap.type === 'tile') {
+                    @if (historicalMap.type === 'xyz') {
                       <app-ol-layer-tile>
                         <app-ol-source-historicalxyz
                           [historicalMap]="

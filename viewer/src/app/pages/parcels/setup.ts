@@ -7,7 +7,8 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
-import { SetHistoricalMap } from '@lib/state/view';
+import { SetHistoricalMapLeft } from '@lib/state/view';
+import { SetHistoricalMapRight } from '@lib/state/view';
 import { SetParcelCoding } from '@lib/state/view';
 import { SetSatelliteYear } from '@lib/state/view';
 import { SetSideBySideView } from '@lib/state/view';
@@ -95,16 +96,37 @@ import copy from 'fast-copy';
           <mat-radio-button value="topography">
             Show topography
           </mat-radio-button>
+          <mat-radio-button value="history">
+            Show historical map
+          </mat-radio-button>
         </mat-radio-group>
 
+        @if (record.parcelCoding === 'history') {
+          <mat-form-field>
+            <mat-label>Select Historical Map</mat-label>
+            <mat-select
+              [(ngModel)]="record.historicalMapLeft"
+              name="historicalMapLeft">
+              @for (map of historicalMaps; track map) {
+                @if (map) {
+                  <mat-option [value]="map">
+                    {{ map }}
+                  </mat-option>
+                }
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
         <p class="instructions">
-          A selection of historical maps may be displayed side-by-side with
-          present-day MuniMap data.
+          Historical maps may be displayed side-by-side for comparison.
         </p>
 
         <mat-form-field>
           <mat-label>Select Side-by-side Source</mat-label>
-          <mat-select [(ngModel)]="record.historicalMap" name="historicalMap">
+          <mat-select
+            [(ngModel)]="record.historicalMapRight"
+            name="historicalMapRight">
             @for (map of historicalMaps; track map) {
               <mat-option [value]="map">
                 @if (map) {
@@ -137,7 +159,8 @@ export class ParcelsSetupComponent implements OnInit {
   @Select(ViewState) view$: Observable<ViewStateModel>;
 
   record: Partial<ViewStateModel> = {
-    historicalMap: '',
+    historicalMapLeft: '',
+    historicalMapRight: '',
     parcelCoding: 'usage',
     recentPath: '',
     satelliteYear: ''
@@ -178,13 +201,14 @@ export class ParcelsSetupComponent implements OnInit {
     else
       this.#store.dispatch([
         new SetParcelCoding(record.parcelCoding),
-        new SetHistoricalMap(record.historicalMap)
+        new SetHistoricalMapLeft(record.historicalMapLeft),
+        new SetHistoricalMapRight(record.historicalMapRight)
       ]);
 
     this.#store.dispatch(
       new SetSideBySideView(
         (record.satelliteView && !!record.satelliteYear) ||
-          (!record.satelliteView && !!record.historicalMap)
+          (!record.satelliteView && !!record.historicalMapRight)
       )
     );
     this.#drawer.close();
@@ -193,6 +217,8 @@ export class ParcelsSetupComponent implements OnInit {
   #handleSetup$(): void {
     this.view$.pipe(takeUntil(this.#destroy$)).subscribe((view) => {
       this.record = copy(view);
+      // 👇 use the last historical map if none set
+      this.record.historicalMapLeft ??= this.historicalMaps.at(-1);
       this.#cdf.markForCheck();
     });
   }

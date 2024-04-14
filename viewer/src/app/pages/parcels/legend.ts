@@ -193,9 +193,9 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
               }
             }
 
-            <!-- 📦 USAGE -->
+            <!-- 🔥 USAGE and HISTORY (a hack!) -->
 
-            @case ('usage') {
+            @default {
               @for (
                 usage of parcelPropertiesUsage | keyvalue;
                 track usage.value

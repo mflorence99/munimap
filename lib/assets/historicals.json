@@ -5,7 +5,7 @@
       "maxZoom": 15,
       "minZoom": 13,
       "name": "1860 HF Walling",
-      "type": "tile",
+      "type": "xyz",
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1860 HF Walling/tiles/{z}/{x}/{y}.jpg"
     },
     {
@@ -13,7 +13,7 @@
       "maxZoom": 15,
       "minZoom": 13,
       "name": "1892 DH Hurd",
-      "type": "tile",
+      "type": "xyz",
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1892 DH Hurd/tiles/{z}/{x}/{y}.jpg"
     },
     {
@@ -21,7 +21,7 @@
       "maxZoom": 15,
       "minZoom": 13,
       "name": "1930 Hwy Dept",
-      "type": "tile",
+      "type": "xyz",
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1930 Hwy Dept/tiles/{z}/{x}/{y}.jpg"
     },
     {
@@ -29,7 +29,7 @@
       "maxZoom": 15,
       "minZoom": 13,
       "name": "1930 USGS",
-      "type": "tile",
+      "type": "xyz",
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1930 USGS/tiles/{z}/{x}/{y}.jpg"
     },
     {
@@ -37,7 +37,7 @@
       "maxZoom": 15,
       "minZoom": 13,
       "name": "1942 USGS",
-      "type": "tile",
+      "type": "xyz",
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1942 USGS/tiles/{z}/{x}/{y}.jpg"
     },
     {
@@ -45,7 +45,7 @@
       "maxZoom": 15,
       "minZoom": 13,
       "name": "1957 USGS",
-      "type": "tile",
+      "type": "xyz",
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1957 USGS/tiles/{z}/{x}/{y}.jpg"
     },
     {
@@ -53,7 +53,7 @@
       "maxZoom": 15,
       "minZoom": 13,
       "name": "1984 USGS",
-      "type": "tile",
+      "type": "xyz",
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1984 USGS/tiles/{z}/{x}/{y}.jpg"
     }
   ]

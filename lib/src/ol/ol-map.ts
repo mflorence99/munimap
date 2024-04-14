@@ -11,7 +11,7 @@ import { UpdateView } from '../state/view';
 import { ViewState } from '../state/view';
 import { ViewStateModel } from '../state/view';
 
-import { bboxDistance } from '../common';
+import { bboxSize } from '../common';
 
 import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -234,7 +234,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
 
   get orientation(): 'landscape' | 'portrait' {
     const [minX, minY, maxX, maxY] = this.bbox();
-    const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+    const [cx, cy] = bboxSize(minX, minY, maxX, maxY);
     return cx > cy ? 'landscape' : 'portrait';
   }
 

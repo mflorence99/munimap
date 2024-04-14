@@ -13,15 +13,23 @@ import { inject } from '@angular/core';
   template: `
     <app-sink
       #sink
-      [historicalMap]="root.historicalMap$ | async"
+      [historicalMapLeft]="root.historicalMapLeft$ | async"
+      [historicalMapRight]="root.historicalMapRight$ | async"
+      [parcelCoding]="root.parcelCoding$ | async"
       [satelliteView]="root.satelliteView$ | async"
       [satelliteYear]="root.satelliteYear$ | async" />
 
     <article>
       @if (sink.satelliteView && sink.satelliteYear) {
         {{ sink.satelliteYear }}
-      } @else if (!sink.satelliteView && sink.historicalMap) {
-        {{ sink.historicalMap }}
+      } @else if (!sink.satelliteView) {
+        @if (sink.parcelCoding === 'history') {
+          {{ sink.historicalMapLeft }}
+          @if (sink.historicalMapRight) {
+            &ratio;
+          }
+        }
+        {{ sink.historicalMapRight }}
       }
     </article>
 

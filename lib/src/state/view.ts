@@ -10,7 +10,12 @@ import { Store } from '@ngxs/store';
 import { inject } from '@angular/core';
 import { patch } from '@ngxs/store/operators';
 
-export type ParcelCoding = 'usage' | 'ownership' | 'conformity' | 'topography';
+export type ParcelCoding =
+  | 'conformity'
+  | 'history'
+  | 'ownership'
+  | 'topography'
+  | 'usage';
 
 export type Path = string;
 
@@ -19,9 +24,14 @@ export class SetGPS {
   constructor(public gps: boolean) {}
 }
 
-export class SetHistoricalMap {
-  static readonly type = '[View] SetHistoricalMap';
-  constructor(public historicalMap: string) {}
+export class SetHistoricalMapLeft {
+  static readonly type = '[View] SetHistoricalMapLeft';
+  constructor(public historicalMapLeft: string) {}
+}
+
+export class SetHistoricalMapRight {
+  static readonly type = '[View] SetHistoricalMapRight';
+  constructor(public historicalMapRight: string) {}
 }
 
 export class SetParcelCoding {
@@ -64,7 +74,8 @@ export interface View {
 
 export interface ViewStateModel {
   gps: boolean;
-  historicalMap: string;
+  historicalMapLeft: string;
+  historicalMapRight: string;
   parcelCoding: ParcelCoding;
   recentPath: string;
   satelliteView: boolean;
@@ -78,7 +89,8 @@ export interface ViewStateModel {
   name: 'view',
   defaults: {
     gps: false,
-    historicalMap: '',
+    historicalMapLeft: '',
+    historicalMapRight: '',
     parcelCoding: 'usage',
     recentPath: null,
     satelliteView: false,
@@ -98,8 +110,18 @@ export class ViewState {
     return state.gps;
   }
 
-  @Selector() static historicalMap(state: ViewStateModel): string {
-    return state.historicalMap || '' /* 👈 b/c historicalMap was added later */;
+  @Selector() static historicalMapLeft(state: ViewStateModel): string {
+    return (
+      state.historicalMapLeft ||
+      '' /* 👈 b/c historicalMapLeft was added later */
+    );
+  }
+
+  @Selector() static historicalMapRight(state: ViewStateModel): string {
+    return (
+      state.historicalMapRight ||
+      '' /* 👈 b/c historicalMapRight was added later */
+    );
   }
 
   @Selector() static parcelCoding(state: ViewStateModel): ParcelCoding {
@@ -132,11 +154,18 @@ export class ViewState {
     ctx.setState(patch({ gps: action.gps }));
   }
 
-  @Action(SetHistoricalMap) setHistoricalMap(
+  @Action(SetHistoricalMapLeft) setHistoricalMapLeft(
     ctx: StateContext<ViewStateModel>,
-    action: SetHistoricalMap
+    action: SetHistoricalMapLeft
   ): void {
-    ctx.setState(patch({ historicalMap: action.historicalMap }));
+    ctx.setState(patch({ historicalMapLeft: action.historicalMapLeft }));
+  }
+
+  @Action(SetHistoricalMapRight) setHistoricalMapRight(
+    ctx: StateContext<ViewStateModel>,
+    action: SetHistoricalMapRight
+  ): void {
+    ctx.setState(patch({ historicalMapRight: action.historicalMapRight }));
   }
 
   @Action(SetParcelCoding) setParcelCoding(

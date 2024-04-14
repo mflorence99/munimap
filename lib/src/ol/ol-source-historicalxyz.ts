@@ -25,7 +25,7 @@ export class OLSourceHistoricalXYZComponent {
   constructor() {
     effect(() => {
       const historicalMap = this.historicalMap();
-      if (historicalMap.type === 'tile') {
+      if (historicalMap.type === 'xyz') {
         // 👇 create the image source
         this.olXYZ = new OLXYZ({
           attributions: [historicalMap.attribution],

@@ -1,3 +1,5 @@
+import { Units } from '@turf/helpers';
+
 import { convertArea } from '@turf/helpers';
 import { convertLength } from '@turf/helpers';
 import { featureCollection } from '@turf/helpers';
@@ -836,14 +838,14 @@ export interface StateIndex {
 export type HistoricalMap = {
   attribution: string;
   name: string;
-  type: 'image' | 'tile';
+  type: 'image' | 'xyz';
   url: string;
-} & (HistoricalMapImage | HistoricalMapTile);
+} & (HistoricalMapImage | HistoricalMapXYZ);
 
 export type HistoricalMapImage = {
   center: [number, number];
   featherFilter?: string;
-  featherWidth?: [number, 'feet' | 'miles'];
+  featherWidth?: [number, Units];
   feathered?: boolean;
   filter?: string;
   masked: boolean;
@@ -852,10 +854,10 @@ export type HistoricalMapImage = {
   type: 'image';
 };
 
-export type HistoricalMapTile = {
+export type HistoricalMapXYZ = {
   maxZoom: number;
   minZoom: number;
-  type: 'tile';
+  type: 'xyz';
 };
 
 export type HistoricalMapIndex = Record<string, HistoricalMap[]>;
@@ -887,7 +889,7 @@ function bboxByAspectRatioImpl(
   const [minX, minY, maxX, maxY] = Array.isArray(geojson)
     ? geojson
     : bbox(geojson);
-  const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+  const [cx, cy] = bboxSize(minX, minY, maxX, maxY);
   // 👉 compare aspect ratios and pick best one
   const ar = cx / cy;
   // 👉 aspect ratio less than 1 means portrait
@@ -927,13 +929,13 @@ export function bboxByDimensions(
   const [minX, minY, maxX, maxY] = Array.isArray(geojson)
     ? geojson
     : bbox(geojson);
-  const [cx, cy] = bboxDistance(minX, minY, maxX, maxY);
+  const [cx, cy] = bboxSize(minX, minY, maxX, maxY);
   // 👉 calculate amount of expansion needed
   const cxDelta = (cxDesired - cx) / 2;
   if (cxDelta < 0) console.error(`🔥 cx -ve ${cxDelta}`);
   const cyDelta = (cyDesired - cy) / 2;
   if (cyDelta < 0) console.error(`🔥 cy -ve ${cyDelta}`);
-  // 👉 calculate new extermities
+  // 👉 calculate new extremities
   const newMinX = rhumbDestination([minX, minY], cxDelta, -90);
   const newMaxX = rhumbDestination([maxX, minY], cxDelta, 90);
   const newMinY = rhumbDestination([minX, minY], cyDelta, 180);
@@ -947,18 +949,15 @@ export function bboxByDimensions(
   ];
 }
 
-export function bboxDistance(
+export function bboxSize(
   minX: number,
   minY: number,
   maxX: number,
-  maxY: number
+  maxY: number,
+  units: Units = 'kilometers'
 ): [number, number] {
-  const cx = rhumbDistance([minX, minY], [maxX, minY], {
-    units: 'kilometers'
-  });
-  const cy = rhumbDistance([minX, minY], [minX, maxY], {
-    units: 'kilometers'
-  });
+  const cx = rhumbDistance([minX, minY], [maxX, minY], { units });
+  const cy = rhumbDistance([minX, minY], [minX, maxY], { units });
   return [cx, cy];
 }
 

@@ -1,10 +1,10 @@
-import { HistoricalMap } from '../lib/src/common';
 import { HistoricalMapIndex } from '../lib/src/common';
 
 import { theState } from '../lib/src/common';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { S3Client } from '@aws-sdk/client-s3';
+import { Units } from '@turf/helpers';
 
 import { env } from 'process';
 import { readFileSync } from 'fs';
@@ -26,27 +26,30 @@ type HistoricalSource = {
   attribution: string;
   dir: string;
   name: string;
-  type: 'image' | 'tile';
-} & (HistoricalSourceImage | HistoricalSourceTile);
+  type: 'image' | 'xyz';
+} & (HistoricalSourceImage | HistoricalSourceXYZ);
 
 type HistoricalSourceImage = {
   featherFilter?: string;
-  featherWidth?: [number, 'feet' | 'miles'];
+  featherWidth?: [number, Units];
   feathered?: boolean;
   filter?: string;
   masked: boolean;
   type: 'image';
 };
 
-type HistoricalSourceTile = {
+type HistoricalSourceXYZ = {
   maxZoom: number;
   minZoom: number;
-  type: 'tile';
+  type: 'xyz';
 };
 
 const bucket = 'munimap-historical-images';
 
-const curated: Record<string, Record<string, HistoricalSource[]>> = {
+type County = string;
+type Town = string;
+
+const curated: Record<County, Record<Town, HistoricalSource[]>> = {
   SULLIVAN: {
     WASHINGTON: [
       {
@@ -55,7 +58,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1860 HF Walling',
-        type: 'tile'
+        type: 'xyz'
       },
       {
         attribution: 'DH Hurd',
@@ -63,7 +66,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1892 DH Hurd',
-        type: 'tile'
+        type: 'xyz'
       },
       {
         attribution: 'USGS',
@@ -71,7 +74,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1930 Hwy Dept',
-        type: 'tile'
+        type: 'xyz'
       },
       {
         attribution: 'USGS',
@@ -79,7 +82,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1930 USGS',
-        type: 'tile'
+        type: 'xyz'
       },
       {
         attribution: 'USGS',
@@ -87,7 +90,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1942 USGS',
-        type: 'tile'
+        type: 'xyz'
       },
       {
         attribution: 'USGS',
@@ -95,7 +98,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1957 USGS',
-        type: 'tile'
+        type: 'xyz'
       },
       {
         attribution: 'USGS',
@@ -103,7 +106,7 @@ const curated: Record<string, Record<string, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1984 USGS',
-        type: 'tile'
+        type: 'xyz'
       }
     ]
   }
@@ -156,7 +159,7 @@ async function main(): Promise<void> {
             scale: layer.imageScale,
             type: 'image',
             url: `https://${bucket}.${s3Domain}/${path}/${source.name}.jpeg`
-          } satisfies HistoricalMap);
+          });
 
           // 👇 upload the untiled map image to S3
           const buffer = readFileSync(`${source.dir}/map.jpeg`);
@@ -178,7 +181,7 @@ async function main(): Promise<void> {
         }
 
         // 👇 upload the map tiles to S3
-        if (source.type === 'tile') {
+        if (source.type === 'xyz') {
           // 👇 start the copy process
           console.log(
             chalk.blue(`... writing ${source.name} tiles to ${path}`)
@@ -190,9 +193,9 @@ async function main(): Promise<void> {
             maxZoom: source.maxZoom,
             minZoom: source.minZoom,
             name: source.name,
-            type: 'tile',
+            type: 'xyz',
             url: `https://${bucket}.${s3Domain}/${path}/${source.name}/tiles/{z}/{x}/{y}.jpg`
-          } satisfies HistoricalMap);
+          });
 
           // 👇 load and parse the zip of tiles
           const zip = await JSZip.loadAsync(

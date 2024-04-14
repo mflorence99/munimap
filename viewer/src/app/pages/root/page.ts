@@ -145,7 +145,8 @@ import urlParse from 'url-parse';
 export class RootPage implements OnInit {
   @Select(ViewState.gps) gps$: Observable<boolean>;
 
-  @Select(ViewState.historicalMap) historicalMap$: Observable<string>;
+  @Select(ViewState.historicalMapLeft) historicalMapLeft$: Observable<string>;
+  @Select(ViewState.historicalMapRight) historicalMapRight$: Observable<string>;
 
   @Select(MapState) map$: Observable<Map>;
 
