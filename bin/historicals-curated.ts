@@ -107,6 +107,14 @@ const curated: Record<County, Record<Town, HistoricalSource[]>> = {
         minZoom: 13,
         name: '1984 USGS',
         type: 'xyz'
+      },
+      {
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1998',
+        maxZoom: 15,
+        minZoom: 13,
+        name: '1998 USGS',
+        type: 'xyz'
       }
     ]
   }
