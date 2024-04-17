@@ -231,6 +231,7 @@ async function main(): Promise<void> {
             // 👇 if zip entry is newer than s3 object, write a new one
             if (
               !s3Object ||
+              source.name === '1930 USGS' ||
               entry.date.getTime() >
                 new Date(s3Object['LastModified']).getTime()
             ) {
