@@ -53,3 +53,7 @@
     width: 100%;
   }
 }
+
+.ol-swipe::before {
+  border: 1px solid var(--mat-gray-500);
+}

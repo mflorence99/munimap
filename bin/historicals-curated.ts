@@ -71,14 +71,6 @@ const curated: Record<County, Record<Town, HistoricalSource[]>> = {
       },
       {
         attribution: 'USGS',
-        dir: './bin/assets/washington-hwy-1930',
-        maxZoom: 15,
-        minZoom: 13,
-        name: '1930 Hwy Dept',
-        type: 'xyz'
-      },
-      {
-        attribution: 'USGS',
         dir: './bin/assets/washington-usgs-1930',
         maxZoom: 15,
         minZoom: 13,
@@ -99,6 +91,14 @@ const curated: Record<County, Record<Town, HistoricalSource[]>> = {
         maxZoom: 15,
         minZoom: 13,
         name: '1957 USGS',
+        type: 'xyz'
+      },
+      {
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1964',
+        maxZoom: 15,
+        minZoom: 13,
+        name: '1964 USGS',
         type: 'xyz'
       },
       {
@@ -215,19 +215,24 @@ async function main(): Promise<void> {
           // 👇 upload the map tiles to S3
           let count = 0;
           for (const entry of entries) {
+            let s3Object;
+
             // 👇 first read it to see if changed
-            const s3Object = await client.send(
-              new GetObjectAttributesCommand({
-                Bucket: bucket,
-                Key: `${path}/${source.name}/${entry.name}`,
-                ObjectAttributes: ['ETag']
-              })
-            );
+            try {
+              s3Object = await client.send(
+                new GetObjectAttributesCommand({
+                  Bucket: bucket,
+                  Key: `${path}/${source.name}/${entry.name}`,
+                  ObjectAttributes: ['ETag']
+                })
+              );
+            } catch (e) {}
 
             // 👇 if zip entry is newer than s3 object, write a new one
             if (
+              !s3Object ||
               entry.date.getTime() >
-              new Date(s3Object['LastModified']).getTime()
+                new Date(s3Object['LastModified']).getTime()
             ) {
               const buffer = await entry.async('nodebuffer');
               await client.send(
