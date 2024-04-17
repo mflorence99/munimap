@@ -2,6 +2,7 @@ import { HistoricalMapIndex } from '../lib/src/common';
 
 import { theState } from '../lib/src/common';
 
+import { GetObjectAttributesCommand } from '@aws-sdk/client-s3';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { S3Client } from '@aws-sdk/client-s3';
 import { Units } from '@turf/helpers';
@@ -192,7 +193,7 @@ async function main(): Promise<void> {
         if (source.type === 'xyz') {
           // 👇 start the copy process
           console.log(
-            chalk.blue(`... writing ${source.name} tiles to ${path}`)
+            chalk.blue(`... processing ${source.name} tiles to ${path}`)
           );
 
           // 👇 populate the historical map descriptor
@@ -212,26 +213,45 @@ async function main(): Promise<void> {
           const entries = zip.filter((path, file) => !file.dir);
 
           // 👇 upload the map tiles to S3
+          let count = 0;
           for (const entry of entries) {
-            const buffer = await entry.async('nodebuffer');
-            await client.send(
-              new PutObjectCommand({
+            // 👇 first read it to see if changed
+            const s3Object = await client.send(
+              new GetObjectAttributesCommand({
                 Bucket: bucket,
                 Key: `${path}/${source.name}/${entry.name}`,
-                Body: buffer,
-                ContentType: 'image/jpeg'
+                ObjectAttributes: ['ETag']
               })
             );
-            stdout.write('.');
+
+            // 👇 if zip entry is newer than s3 object, write a new one
+            if (
+              entry.date.getTime() >
+              new Date(s3Object['LastModified']).getTime()
+            ) {
+              const buffer = await entry.async('nodebuffer');
+              await client.send(
+                new PutObjectCommand({
+                  Bucket: bucket,
+                  Key: `${path}/${source.name}/${entry.name}`,
+                  Body: buffer,
+                  ContentType: 'image/jpeg'
+                })
+              );
+              stdout.write('+');
+              count += 1;
+            } else stdout.write('.');
           }
           stdout.write('\n');
 
           // 👇 log progress
-          console.log(
-            chalk.yellow(
-              `...... ${entries.length} S3 objects for ${path}/${source.name} tiles uploaded`
-            )
-          );
+          if (count > 0) {
+            console.log(
+              chalk.yellow(
+                `...... ${count} S3 objects for ${path}/${source.name} tiles uploaded`
+              )
+            );
+          }
         }
       }
     }
