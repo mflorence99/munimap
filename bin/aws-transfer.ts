@@ -50,7 +50,7 @@ async function main(): Promise<void> {
     const user = await client.send(
       new CreateUserCommand({
         HomeDirectoryMappings: [
-          { Entry: '/', Target: '/fs-0b4ac33814e61435a' }
+          { Entry: '/', Target: '/fs-0b4ac33814e61435a/MuniMap/proxy' }
         ],
         HomeDirectoryType: 'LOGICAL',
         PosixProfile: {
