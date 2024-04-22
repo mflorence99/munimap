@@ -2,7 +2,7 @@
 
 For a live demo, please see [washington.munimap.online](https://washington.munimap.online).
 
-## How to setup AWS Transfer
+## How to setup AWS Transfer manually
 
 1. Create SFTP server:
    1. Service managed

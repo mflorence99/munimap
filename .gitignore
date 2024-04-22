@@ -1,5 +1,6 @@
 /.angular
 /.eslintcache
+/.nx
 /.postcss-angular/
 /data
 /dist
