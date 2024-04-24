@@ -62,6 +62,14 @@ const curated: Record<County, Record<Town, HistoricalSource[]>> = {
         type: 'xyz'
       },
       {
+        attribution: 'R&G Jager',
+        dir: './bin/assets/washington-1860-schools',
+        maxZoom: 15,
+        minZoom: 13,
+        name: '1860 Schools',
+        type: 'xyz'
+      },
+      {
         attribution: 'DH Hurd',
         dir: './bin/assets/washington-1892',
         maxZoom: 15,

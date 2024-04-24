@@ -9,6 +9,14 @@
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1860 HF Walling/tiles/{z}/{x}/{y}.jpg"
     },
     {
+      "attribution": "R&G Jager",
+      "maxZoom": 15,
+      "minZoom": 13,
+      "name": "1860 Schools",
+      "type": "xyz",
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1860 Schools/tiles/{z}/{x}/{y}.jpg"
+    },
+    {
       "attribution": "DH Hurd",
       "maxZoom": 15,
       "minZoom": 13,

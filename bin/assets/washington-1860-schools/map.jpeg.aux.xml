@@ -1,0 +1,91 @@
+<PAMDataset>
+  <Metadata domain="IMAGE_STRUCTURE">
+    <MDI key="COMPRESSION">JPEG</MDI>
+    <MDI key="INTERLEAVE">PIXEL</MDI>
+    <MDI key="SOURCE_COLOR_SPACE">YCbCr</MDI>
+  </Metadata>
+  <Metadata>
+    <MDI key="EXIF_ApertureValue">(1.69599)</MDI>
+    <MDI key="EXIF_BrightnessValue">(3.82237)</MDI>
+    <MDI key="EXIF_ColorSpace">1</MDI>
+    <MDI key="EXIF_ComponentsConfiguration">0x01 0x02 0x03 0x00</MDI>
+    <MDI key="EXIF_DateTime">2024:04:24 07:58:13</MDI>
+    <MDI key="EXIF_DateTimeDigitized">2024:04:22 14:54:34</MDI>
+    <MDI key="EXIF_DateTimeOriginal">2024:04:22 14:54:34</MDI>
+    <MDI key="EXIF_ExifVersion">0232</MDI>
+    <MDI key="EXIF_ExposureBiasValue">(0)</MDI>
+    <MDI key="EXIF_ExposureMode">0</MDI>
+    <MDI key="EXIF_ExposureProgram">2</MDI>
+    <MDI key="EXIF_ExposureTime">(0.0166667)</MDI>
+    <MDI key="EXIF_Flash">16</MDI>
+    <MDI key="EXIF_FlashpixVersion">0100</MDI>
+    <MDI key="EXIF_FNumber">(1.8)</MDI>
+    <MDI key="EXIF_FocalLength">(3.99)</MDI>
+    <MDI key="EXIF_FocalLengthIn35mmFilm">28</MDI>
+    <MDI key="EXIF_ISOSpeedRatings">64</MDI>
+    <MDI key="EXIF_LensMake">Apple</MDI>
+    <MDI key="EXIF_LensModel">iPhone SE (2nd generation) back camera 3.99mm f/1.8</MDI>
+    <MDI key="EXIF_LensSpecification">(3.99) (3.99) (1.8) (1.8)</MDI>
+    <MDI key="EXIF_Make">Apple</MDI>
+    <MDI key="EXIF_MeteringMode">5</MDI>
+    <MDI key="EXIF_Model">iPhone SE (2nd generation)</MDI>
+    <MDI key="EXIF_OffsetTime">-04:00</MDI>
+    <MDI key="EXIF_OffsetTimeDigitized">-04:00</MDI>
+    <MDI key="EXIF_OffsetTimeOriginal">-04:00</MDI>
+    <MDI key="EXIF_Orientation">1</MDI>
+    <MDI key="EXIF_PixelXDimension">4032</MDI>
+    <MDI key="EXIF_PixelYDimension">3024</MDI>
+    <MDI key="EXIF_ResolutionUnit">2</MDI>
+    <MDI key="EXIF_SceneCaptureType">0</MDI>
+    <MDI key="EXIF_SceneType">0x01</MDI>
+    <MDI key="EXIF_SensingMethod">2</MDI>
+    <MDI key="EXIF_ShutterSpeedValue">(5.90712)</MDI>
+    <MDI key="EXIF_Software">GIMP 2.10.30</MDI>
+    <MDI key="EXIF_SubjectArea">2013 1511 2217 1330</MDI>
+    <MDI key="EXIF_SubSecTime_Digitized">610</MDI>
+    <MDI key="EXIF_SubSecTime_Original">610</MDI>
+    <MDI key="EXIF_WhiteBalance">0</MDI>
+    <MDI key="EXIF_XResolution">(72)</MDI>
+    <MDI key="EXIF_YCbCrPositioning">1</MDI>
+    <MDI key="EXIF_YResolution">(72)</MDI>
+  </Metadata>
+  <PAMRasterBand band="1">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MAXIMUM">235</MDI>
+      <MDI key="STATISTICS_MEAN">181.00850423177</MDI>
+      <MDI key="STATISTICS_MINIMUM">34</MDI>
+      <MDI key="STATISTICS_STDDEV">23.47272199124</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="2">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MAXIMUM">234</MDI>
+      <MDI key="STATISTICS_MEAN">177.49086507161</MDI>
+      <MDI key="STATISTICS_MINIMUM">29</MDI>
+      <MDI key="STATISTICS_STDDEV">23.523428374784</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="3">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MAXIMUM">229</MDI>
+      <MDI key="STATISTICS_MEAN">170.37194824219</MDI>
+      <MDI key="STATISTICS_MINIMUM">23</MDI>
+      <MDI key="STATISTICS_STDDEV">22.715770434771</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>
