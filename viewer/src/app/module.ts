@@ -29,7 +29,6 @@ import { GeoJSONViewerService } from '@lib/services/geojson-viewer';
 import { GeolocationService } from '@lib/services/geolocation';
 import { GeosimulatorService } from '@lib/services/geosimulator';
 import { HistoricalsResolver } from '@lib/resolvers/historicals';
-import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
 import { LandmarksState } from '@lib/state/landmarks';
@@ -173,6 +172,7 @@ import { provideAnalytics } from '@angular/fire/analytics';
 import { provideAuth } from '@angular/fire/auth';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore } from '@angular/fire/firestore';
+import { provideHttpClient } from '@angular/common/http';
 
 let resolvePersistenceEnabled: (enabled: boolean) => void;
 
@@ -356,7 +356,6 @@ const STATES_SAVED = [ViewState];
     CommonModule,
     FontAwesomeModule,
     FormsModule,
-    HttpClientModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
@@ -381,7 +380,35 @@ const STATES_SAVED = [ViewState];
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'
-    }),
+    })
+  ],
+
+  providers: [
+    CurrencyPipe,
+    DecimalPipe,
+    TitleCasePipe,
+    provideHttpClient(),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAppProvider,
+      deps: [InitializerService],
+      multi: true
+    },
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        logErrors: true,
+        showDialog: false
+      })
+    },
+    { provide: GeoJSONService, useClass: GeoJSONViewerService },
+    {
+      provide: GeolocationService,
+      useClass: environment.production
+        ? GeolocationService
+        : GeosimulatorService
+    },
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     // 👇 Firebase modules
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => {
@@ -406,33 +433,6 @@ const STATES_SAVED = [ViewState];
       }
       return firestore;
     })
-  ],
-
-  providers: [
-    CurrencyPipe,
-    DecimalPipe,
-    TitleCasePipe,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeAppProvider,
-      deps: [InitializerService],
-      multi: true
-    },
-    {
-      provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler({
-        logErrors: true,
-        showDialog: false
-      })
-    },
-    { provide: GeoJSONService, useClass: GeoJSONViewerService },
-    {
-      provide: GeolocationService,
-      useClass: environment.production
-        ? GeolocationService
-        : GeosimulatorService
-    },
-    { provide: LocationStrategy, useClass: PathLocationStrategy }
   ]
 })
 export class RootModule {

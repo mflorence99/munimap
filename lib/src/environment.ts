@@ -16,6 +16,7 @@ export const environment = {
   },
 
   firebase: {
+    // 👇 don't panic! domain protected
     apiKey: 'AIzaSyAKCbc2W6oaaSuRqMgHneFAy3eoRmmwHZI',
     authDomain: 'washington-app-319514.firebaseapp.com',
     projectId: 'washington-app-319514',

@@ -46,7 +46,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { GeoJSONAuthorService } from '@lib/services/geojson-author';
 import { GeoJSONService } from '@lib/services/geojson';
-import { HttpClientModule } from '@angular/common/http';
 import { IndexResolver } from '@lib/resolvers/index';
 import { InitializerService } from '@lib/services/initializer';
 import { LandmarksState } from '@lib/state/landmarks';
@@ -233,6 +232,7 @@ import { provideAnalytics } from '@angular/fire/analytics';
 import { provideAuth } from '@angular/fire/auth';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore } from '@angular/fire/firestore';
+import { provideHttpClient } from '@angular/common/http';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
@@ -458,7 +458,6 @@ const STATES_SAVED = [RouterState, ViewState];
     DragDropModule,
     FontAwesomeModule,
     FormsModule,
-    HttpClientModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -498,7 +497,28 @@ const STATES_SAVED = [RouterState, ViewState];
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'
-    }),
+    })
+  ],
+
+  providers: [
+    DecimalPipe,
+    TitleCasePipe,
+    provideHttpClient(),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAppProvider,
+      deps: [InitializerService],
+      multi: true
+    },
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        logErrors: true,
+        showDialog: false
+      })
+    },
+    { provide: GeoJSONService, useClass: GeoJSONAuthorService },
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     // 👇 Firebase modules
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
@@ -523,26 +543,6 @@ const STATES_SAVED = [RouterState, ViewState];
       }
       return firestore;
     })
-  ],
-
-  providers: [
-    DecimalPipe,
-    TitleCasePipe,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeAppProvider,
-      deps: [InitializerService],
-      multi: true
-    },
-    {
-      provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler({
-        logErrors: true,
-        showDialog: false
-      })
-    },
-    { provide: GeoJSONService, useClass: GeoJSONAuthorService },
-    { provide: LocationStrategy, useClass: PathLocationStrategy }
   ]
 })
 export class RootModule {

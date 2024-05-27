@@ -279,13 +279,17 @@ export class LandmarksState implements NgxsOnInit {
     // 👉 side-effect of handleStreams$ will update state
   }
 
+  currentLandmarks(): Landmark[] {
+    return this.#store.snapshot().landmarks;
+  }
+
   ngxsOnInit(): void {
     this.#handleActions$();
     this.#handleStreams$();
   }
 
   toGeoJSON(): Landmarks {
-    return featureCollection(this.#store.snapshot().landmarks);
+    return featureCollection(this.currentLandmarks());
   }
 
   #handleActions$(): void {

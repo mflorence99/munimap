@@ -28,7 +28,7 @@ import { map } from 'rxjs';
           <option
             [attr.selected]="'' === sink.streetFilter ? 'true' : null"
             value=""
-            class="location">
+            class="street">
             All Streets
           </option>
           @for (street of streets$ | async; track street) {

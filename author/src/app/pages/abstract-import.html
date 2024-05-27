@@ -74,7 +74,7 @@
     mat-flat-button
     type="submit">
     @if (importing) {
-      <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+      <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
     }
     @if (!importing) {
       <span>IMPORT</span>
