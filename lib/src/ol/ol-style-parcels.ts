@@ -1,50 +1,50 @@
+import { ParcelID } from '../common';
+import { ParcelProperties } from '../common';
 import { Map } from '../state/map';
 import { MapState } from '../state/map';
+import { ParcelCoding } from '../state/view';
+import { ViewState } from '../state/view';
+import { ViewStateModel } from '../state/view';
 import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
 import { OLLayerVectorComponent } from './ol-layer-vector';
 import { OLMapComponent } from './ol-map';
 import { OLStylePatternDirective } from './ol-style-pattern';
-import { ParcelCoding } from '../state/view';
-import { ParcelID } from '../common';
-import { ParcelProperties } from '../common';
 import { Styler } from './ol-styler';
 import { StylerComponent } from './ol-styler';
-import { ViewState } from '../state/view';
-import { ViewStateModel } from '../state/view';
 
-import { getAPDVDFill } from './ol-apdvd2';
 import { isParcelStollen } from '../common';
+import { getAPDVDFill } from './ol-apdvd2';
 
+import { DecimalPipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Coordinate as OLCoordinate } from 'ol/coordinate';
-import { DecimalPipe } from '@angular/common';
 import { Input } from '@angular/core';
 import { OnChanges } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { Coordinate as OLCoordinate } from 'ol/coordinate';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
-import { TitleCasePipe } from '@angular/common';
 
-import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
-import { fromLonLat } from 'ol/proj';
-import { getDistance } from 'ol/sphere';
 import { inject } from '@angular/core';
+import { viewChildren } from '@angular/core';
+import { convertLength } from '@turf/helpers';
 import { lineString } from '@turf/helpers';
 import { point } from '@turf/helpers';
+import { fromLonLat } from 'ol/proj';
 import { toLonLat } from 'ol/proj';
-import { viewChildren } from '@angular/core';
+import { getDistance } from 'ol/sphere';
 
 import bearing from '@turf/bearing';
 import booleanClockwise from '@turf/boolean-clockwise';
-import OLFeature from 'ol/Feature';
-import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
-import OLIcon from 'ol/style/Icon';
+import OLFeature from 'ol/Feature';
 import OLLineString from 'ol/geom/LineString';
 import OLPoint from 'ol/geom/Point';
 import OLPolygon from 'ol/geom/Polygon';
+import OLFill from 'ol/style/Fill';
+import OLIcon from 'ol/style/Icon';
 import OLStroke from 'ol/style/Stroke';
 import OLStyle from 'ol/style/Style';
 import OLText from 'ol/style/Text';
@@ -209,7 +209,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     abbr = abbr.replace(/\bTerrace\b/, ' Ter ');
     abbr = abbr.replace(/\bWay\b/, ' Wy ');
     abbr = abbr.replace(/\bWest\b/, ' W ');
-    return abbr.replace(/  +/g, ' ').trim();
+    return abbr.replace(/ {2,}/g, ' ').trim();
   }
 
   #borderPixels(resolution: number): number {

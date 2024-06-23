@@ -10,13 +10,13 @@ import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bearing from '@turf/bearing';
 import distance from '@turf/distance';
-import hash from 'object-hash';
 import length from '@turf/length';
-import polylabel from 'polylabel';
 import rhumbDestination from '@turf/rhumb-destination';
 import rhumbDistance from '@turf/rhumb-distance';
 import transformRotate from '@turf/transform-rotate';
 import truncate from '@turf/truncate';
+import hash from 'object-hash';
+import polylabel from 'polylabel';
 
 // 🔥 we need to share this code with the "bin" programs
 //    that's why it isn't an Angular service, for example
@@ -458,17 +458,17 @@ export type ParcelPropertiesUsage = keyof typeof parcelPropertiesUsage;
 
 export const parcelPropertiesUse: Record<string, string> = {
   '': null,
-  'CUWL': 'Wetland',
-  'CUFL': 'Farmland',
-  'CUMH': 'Managed Hardwood',
-  'CUUH': 'Unmanaged Hardwood',
-  'CUMW': 'Managed Pine',
-  'CUUW': 'Unmanaged Pine',
-  'CUMO': 'Managed (Other)',
-  'CUUO': 'Unmanaged (Other)',
-  'CUDE': 'Discretionary',
-  'CUNS': 'Christmas Tree',
-  'CUUL': 'Unproductive'
+  CUWL: 'Wetland',
+  CUFL: 'Farmland',
+  CUMH: 'Managed Hardwood',
+  CUUH: 'Unmanaged Hardwood',
+  CUMW: 'Managed Pine',
+  CUUW: 'Unmanaged Pine',
+  CUMO: 'Managed (Other)',
+  CUUO: 'Unmanaged (Other)',
+  CUDE: 'Discretionary',
+  CUNS: 'Christmas Tree',
+  CUUL: 'Unproductive'
 };
 
 export type ParcelPropertiesUse = keyof typeof parcelPropertiesUse;
@@ -1188,7 +1188,7 @@ export function normalizeAddress(parcel: Partial<Parcel>): void {
     normalized = normalized.replace(/\bTER\b/, ' TERRACE ');
     normalized = normalized.replace(/\bTERR\b/, ' TERRACE ');
     normalized = normalized.replace(/\bW\b/, ' WEST ');
-    parcel.properties.address = normalized.replace(/  +/g, ' ').trim();
+    parcel.properties.address = normalized.replace(/ {2,}/g, ' ').trim();
   }
 }
 

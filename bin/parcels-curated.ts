@@ -4,6 +4,8 @@ import { normalizeParcel } from '../lib/src/common';
 import { simplify } from '../lib/src/common';
 import { theState } from '../lib/src/common';
 
+import { GeoJSON } from 'geojson';
+
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
