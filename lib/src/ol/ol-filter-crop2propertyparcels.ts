@@ -13,15 +13,16 @@ import { EventsKey as OLEventsKey } from 'ol/events';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
+import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { unByKey } from 'ol/Observable';
+import { union } from '@turf/union';
 
 import Crop from 'ol-ext/filter/Crop';
 import Mask from 'ol-ext/filter/Mask';
 import OLFill from 'ol/style/Fill';
 import OLGeoJSON from 'ol/format/GeoJSON';
-import union from '@turf/union';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,8 +83,9 @@ export class OLFilterCrop2PropertyParcelsComponent
         .filter((feature) => this.parcelIDs().includes(feature.getId()))
         .map((feature) => JSON.parse(this.#format.writeFeature(feature)));
       const merged: any = {
-        geometry: geojsons.reduce((acc, geojson) => union(acc, geojson))
-          .geometry,
+        geometry: geojsons.reduce((acc, geojson) =>
+          union(featureCollection([acc, geojson]))
+        ).geometry,
         properties: {},
         type: 'Feature'
       };

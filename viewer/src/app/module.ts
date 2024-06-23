@@ -375,7 +375,7 @@ const STATES_SAVED = [ViewState];
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production
     }),
-    NgxsStoragePluginModule.forRoot({ key: STATES_SAVED }),
+    NgxsStoragePluginModule.forRoot({ keys: STATES_SAVED }),
     RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

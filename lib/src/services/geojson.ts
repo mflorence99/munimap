@@ -3,9 +3,8 @@ import { Index } from '../common';
 import { Coordinate } from 'ol/coordinate';
 import { Observable } from 'rxjs';
 
+import { bbox } from '@turf/bbox';
 import { featureCollection } from '@turf/helpers';
-
-import bbox from '@turf/bbox';
 
 export abstract class GeoJSONService {
   empty = featureCollection([]);

@@ -11,14 +11,15 @@ import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 
+import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
+import { intersect } from '@turf/intersect';
 import { randomPoint } from '@turf/random';
 import { transformExtent } from 'ol/proj';
+import { voronoi } from '@turf/voronoi';
 
-import intersect from '@turf/intersect';
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
-import voronoi from '@turf/voronoi';
 
 interface Subdivision {
   area: number;
@@ -196,7 +197,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
     for (let ix = 0; targetGeoJSONs.length < subdivisions.length; ix++) {
       const randomPoints = randomPoint(subdivisions.length + ix, { bbox });
       targetGeoJSONs = voronoi(randomPoints, { bbox }).features.map((polygon) =>
-        intersect(polygon, sourceGeoJSON)
+        intersect(featureCollection([polygon, sourceGeoJSON]))
       );
     }
     // 👉 trim any excess

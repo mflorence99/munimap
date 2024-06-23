@@ -5,6 +5,7 @@ import { OLMapComponent } from './ol-map';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { Observable } from 'rxjs';
 
+import { cleanCoords } from '@turf/clean-coords';
 import { click } from 'ol/events/condition';
 import { inject } from '@angular/core';
 import { merge } from 'rxjs';
@@ -13,7 +14,6 @@ import { platformModifierKeyOnly } from 'ol/events/condition';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
-import cleanCoords from '@turf/clean-coords';
 import copy from 'fast-copy';
 import OLCollection from 'ol/Collection';
 import OLFeature from 'ol/Feature';

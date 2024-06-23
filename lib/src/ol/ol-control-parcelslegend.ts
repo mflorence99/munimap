@@ -13,13 +13,12 @@ import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 
+import { area } from '@turf/area';
 import { convertArea } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { viewChild } from '@angular/core';
-
-import area from '@turf/area';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,16 +4,16 @@ import { Buildings } from '../lib/src/common';
 import { calculateOrientation } from '../lib/src/common';
 import { theState } from '../lib/src/common';
 
+import { angle } from '@turf/angle';
+import { bbox } from '@turf/bbox';
+import { bboxPolygon } from '@turf/bbox-polygon';
 import { getCoords } from '@turf/invariant';
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
+import { transformRotate } from '@turf/transform-rotate';
 import { writeFileSync } from 'fs';
 
-import angle from '@turf/angle';
-import bbox from '@turf/bbox';
-import bboxPolygon from '@turf/bbox-polygon';
 import chalk from 'chalk';
-import transformRotate from '@turf/transform-rotate';
 
 const loadem = (fn): Buildings => JSON.parse(readFileSync(fn).toString());
 

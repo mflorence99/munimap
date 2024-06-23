@@ -12,11 +12,12 @@ import { Component } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 
+import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
+import { union } from '@turf/union';
 
 import Crop from 'ol-ext/filter/Crop';
 import OLGeoJSON from 'ol/format/GeoJSON';
-import union from '@turf/union';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,8 +72,9 @@ export class OLFilterCrop2SelectedParcelsComponent
         JSON.parse(this.#format.writeFeature(feature))
       );
       const merged: any = {
-        geometry: geojsons.reduce((acc, geojson) => union(acc, geojson))
-          .geometry,
+        geometry: geojsons.reduce((acc, geojson) =>
+          union(featureCollection([acc, geojson]))
+        ).geometry,
         properties: {},
         type: 'Feature'
       };

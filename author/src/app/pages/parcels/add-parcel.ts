@@ -10,13 +10,13 @@ import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 
+import { bbox } from '@turf/bbox';
+import { bboxPolygon } from '@turf/bbox-polygon';
+import { circle } from '@turf/circle';
 import { convertArea } from '@turf/helpers';
 import { inject } from '@angular/core';
 import { toLonLat } from 'ol/proj';
 
-import bbox from '@turf/bbox';
-import bboxPolygon from '@turf/bbox-polygon';
-import circle from '@turf/circle';
 import OLFeature from 'ol/Feature';
 
 interface Addition {

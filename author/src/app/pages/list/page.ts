@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Profile } from '@lib/state/auth';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
 import { collection } from '@angular/fire/firestore';
 import { collectionData } from '@angular/fire/firestore';
@@ -159,10 +159,9 @@ import { workgroup } from '@lib/state/auth';
   ]
 })
 export class ListPage implements OnInit {
-  @Select(AuthState.profile) profile$: Observable<Profile>;
-
   columns = ['name', 'id', 'owner', 'type', 'path'];
   dataSource: MatTableDataSource<Map>;
+  profile$: Observable<Profile>;
   sort = viewChild(MatSort);
 
   #cdf = inject(ChangeDetectorRef);
@@ -170,8 +169,10 @@ export class ListPage implements OnInit {
   #firestore = inject(Firestore);
   #root = inject(RootPage);
   #router = inject(Router);
+  #store = inject(Store);
 
   constructor() {
+    this.profile$ = this.#store.select(AuthState.profile);
     this.#root.setTitle('All Maps');
   }
 

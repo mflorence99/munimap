@@ -11,11 +11,12 @@ import * as firestore from 'firebase-admin/firestore';
 import * as inquirer from 'inquirer';
 import * as yargs from 'yargs';
 
+import { bboxPolygon } from '@turf/bbox-polygon';
+import { featureCollection } from '@turf/helpers';
 import { readFileSync } from 'fs';
+import { union } from '@turf/union';
 
-import bboxPolygon from '@turf/bbox-polygon';
 import chalk from 'chalk';
-import union from '@turf/union';
 
 const dist = './data';
 
@@ -283,7 +284,9 @@ async function bboxFromParcelIDs(map, border: number): Promise<number[]> {
     else return parcelsByID[parcelID];
   });
   const bounds: GeoJSON.Feature = {
-    geometry: parcels.reduce((acc, parcel) => union(acc, parcel)).geometry,
+    geometry: parcels.reduce((acc, parcel) =>
+      union(featureCollection([acc, parcel]))
+    ).geometry,
     properties: {},
     type: 'Feature'
   };

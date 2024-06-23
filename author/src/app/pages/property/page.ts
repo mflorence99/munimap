@@ -21,14 +21,14 @@ import { OnInit } from '@angular/core';
 import { Type } from '@angular/core';
 import { UpdateLandmark } from '@lib/state/landmarks';
 
+import { bbox } from '@turf/bbox';
+import { bboxPolygon } from '@turf/bbox-polygon';
 import { calculateOrientation } from '@lib/common';
+import { lineToPolygon } from '@turf/line-to-polygon';
+import { transformRotate } from '@turf/transform-rotate';
 import { viewChild } from '@angular/core';
 
-import bbox from '@turf/bbox';
-import bboxPolygon from '@turf/bbox-polygon';
-import lineToPolygon from '@turf/line-to-polygon';
 import OLFeature from 'ol/Feature';
-import transformRotate from '@turf/transform-rotate';
 
 interface LandmarkConversion {
   converter: (feature: OLFeature<any>) => Partial<Landmark>;

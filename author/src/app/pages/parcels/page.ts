@@ -21,17 +21,17 @@ import { Parcel } from '@lib/common';
 import { ParcelPropertiesLabel } from '@lib/common';
 import { Type } from '@angular/core';
 
+import { bbox } from '@turf/bbox';
+import { bboxPolygon } from '@turf/bbox-polygon';
+import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon';
 import { calculateParcel } from '@lib/common';
+import { circle } from '@turf/circle';
 import { fromLonLat } from 'ol/proj';
 import { point } from '@turf/helpers';
 import { polygon } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
 import { viewChild } from '@angular/core';
 
-import bbox from '@turf/bbox';
-import bboxPolygon from '@turf/bbox-polygon';
-import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import circle from '@turf/circle';
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLMultiPolygon from 'ol/geom/MultiPolygon';

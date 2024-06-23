@@ -11,12 +11,13 @@ import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 
 import { bboxByAspectRatio } from '@lib/common';
+import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
+import { union } from '@turf/union';
 
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
-import union from '@turf/union';
 
 interface PropertyMapRecord {
   contours2ft: boolean;
@@ -215,7 +216,9 @@ export class CreatePropertyMapComponent implements SidebarComponent {
       JSON.parse(format.writeFeature(feature))
     );
     const bbox: any = {
-      geometry: geojsons.reduce((acc, geojson) => union(acc, geojson)).geometry,
+      geometry: geojsons.reduce((acc, geojson) =>
+        union(featureCollection([acc, geojson]))
+      ).geometry,
       properties: {},
       type: 'Feature'
     };

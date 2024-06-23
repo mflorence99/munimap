@@ -1,4 +1,5 @@
 import { calculateParcel } from '../lib/src/common';
+import { featureCollection } from '@turf/helpers';
 import { simplify } from '../lib/src/common';
 
 import * as turf from '@turf/turf';
@@ -132,7 +133,8 @@ const lakesides: Lakeside[] = loadem('./bin/assets/washington-lakes.geojson')
     console.log(chalk.yellow(`- analyzing lake ${lake.id}`));
     const parcelsOverLake = [];
     parcels.forEach((parcel) => {
-      if (turf.intersect(parcel, lake)) parcelsOverLake.push(parcel);
+      if (turf.intersect(featureCollection([parcel, lake])))
+        parcelsOverLake.push(parcel);
     });
     const lakeside = { lake, parcelsOverLake };
     return lakeside;
@@ -310,7 +312,8 @@ const roadways = Object.values(segmentsByRoadName).map(
     const parcelsOverRoad: Feature[] = [];
     console.log(chalk.cyan('-- analyzing parcel intersections'));
     parcels.forEach((parcel) => {
-      if (turf.intersect(parcel, road)) parcelsOverRoad.push(parcel);
+      if (turf.intersect(featureCollection([parcel, road])))
+        parcelsOverRoad.push(parcel);
     });
     // 👉 composite roadway
     return {
@@ -352,7 +355,9 @@ roadways.forEach((roadway: Roadway) => {
         //    sort to find the largest Polygon because the
         //    original parcel might straddle the road
         //    then use that as the clipped extent
-        const delta = turf.flatten(turf.difference(polygon, roadway.road));
+        const delta = turf.flatten(
+          turf.difference(featureCollection([polygon, roadway.road]))
+        );
         delta.features.sort((p, q) => turf.area(p) - turf.area(q));
         acc.features.push(delta.features.at(-1));
         return acc;
@@ -385,7 +390,7 @@ roadways.forEach((roadway: Roadway) => {
   );
   // 🔥 to avoid false positives from clips at road intersections
   const intersect = (p: Feature, q: Feature): boolean => {
-    const intersection = turf.intersect(p, q);
+    const intersection = turf.intersect(featureCollection([p, q]));
     // 🔥 125 m2 is just a guess for a clip to ignore
     //    approx 75ft x 75ft
     return intersection != null && turf.area(intersection) >= 125;
@@ -432,7 +437,7 @@ class Gap {
         const gap = this.linesToPolygon(edges);
         // 👉 expand the parcel with the gap between it and the road
         if (gap) {
-          const expanded = turf.union(this.parcel, gap);
+          const expanded = turf.union(featureCollection([this.parcel, gap]));
           console.log(chalk.cyan(`-- expanding ${this.parcel.id}`));
           this.parcel.geometry = expanded.geometry;
         }
@@ -599,7 +604,9 @@ lakesides.forEach((lakeside: Lakeside) => {
   lakeside.parcelsOverLake.forEach((parcel) => {
     console.log(chalk.cyan(`-- clipping ${parcel.id}`));
     // 👉 use the difference
-    parcel.geometry = turf.difference(parcel, lakeside.lake).geometry;
+    parcel.geometry = turf.difference(
+      featureCollection([parcel, lakeside.lake])
+    ).geometry;
   });
 });
 
@@ -612,11 +619,13 @@ parcels.forEach((parcel) => {
     if (
       neighbor.id !== parcel.id &&
       // 🔥 NOTE booleanIntersects returns true if polygons just touch
-      turf.intersect(parcel, neighbor)
+      turf.intersect(featureCollection([parcel, neighbor]))
     ) {
       console.log(chalk.magenta(`- clipping ${parcel.id} with ${neighbor.id}`));
       // 👉 use the difference
-      parcel.geometry = turf.difference(parcel, neighbor).geometry;
+      parcel.geometry = turf.difference(
+        featureCollection([parcel, neighbor])
+      ).geometry;
     }
   });
 });

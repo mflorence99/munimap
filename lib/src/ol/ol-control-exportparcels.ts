@@ -7,11 +7,11 @@ import { simplify } from '../common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
+import { bbox } from '@turf/bbox';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { saveAs } from 'file-saver';
 
-import bbox from '@turf/bbox';
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLProjection from 'ol/proj/Projection';

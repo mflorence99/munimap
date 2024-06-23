@@ -3,10 +3,9 @@ import { theState } from '../lib/src/common';
 
 import * as turf from '@turf/turf';
 
+import { booleanIntersects } from '@turf/boolean-intersects';
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
-
-import booleanIntersects from '@turf/boolean-intersects';
 
 // 🔥 this is NOT the code to create the powerlines.geojson files
 //    it simply extracts the NH data from the national dataset

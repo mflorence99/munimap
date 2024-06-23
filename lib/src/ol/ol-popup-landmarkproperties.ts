@@ -9,15 +9,15 @@ import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { area } from '@turf/area';
 import { convertArea } from '@turf/helpers';
 import { convertLength } from '@turf/helpers';
 import { inject } from '@angular/core';
+import { length } from '@turf/length';
 import { map } from 'rxjs/operators';
 import { outputToObservable } from '@angular/core/rxjs-interop';
 import { viewChild } from '@angular/core';
 
-import area from '@turf/area';
-import length from '@turf/length';
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
 

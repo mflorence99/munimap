@@ -26,6 +26,8 @@ import { Store } from '@ngxs/store';
 import { Coordinate as OLCoordinate } from 'ol/coordinate';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import { bearing } from '@turf/bearing';
+import { booleanClockwise } from '@turf/boolean-clockwise';
 import { forwardRef } from '@angular/core';
 import { inject } from '@angular/core';
 import { viewChildren } from '@angular/core';
@@ -36,8 +38,6 @@ import { fromLonLat } from 'ol/proj';
 import { toLonLat } from 'ol/proj';
 import { getDistance } from 'ol/sphere';
 
-import bearing from '@turf/bearing';
-import booleanClockwise from '@turf/boolean-clockwise';
 import OLFillPattern from 'ol-ext/style/FillPattern';
 import OLFeature from 'ol/Feature';
 import OLLineString from 'ol/geom/LineString';
@@ -359,9 +359,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     let fill;
     const parcelCoding =
       this.parcelCoding ??
-      this.#store.selectSnapshot<ViewStateModel>(ViewState).parcelCoding;
+      this.#store.selectSnapshot<ViewStateModel>(ViewState.view).parcelCoding;
     // 🔥 HACK FOR APDVD
-    const map = this.#store.selectSnapshot<Map>(MapState);
+    const map = this.#store.selectSnapshot<Map>(MapState.map);
     if (map?.id === 'apdvd') fill = getAPDVDFill(props);
     else if (parcelCoding === 'usage')
       fill = this.#map.vars[`--map-parcel-fill-u${props.usage}`];

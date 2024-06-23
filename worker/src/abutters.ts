@@ -5,8 +5,9 @@
 import * as Comlink from 'comlink';
 import * as Sentry from '@sentry/angular-ivy';
 
-import buffer from '@turf/buffer';
-import intersect from '@turf/intersect';
+import { buffer } from '@turf/buffer';
+import { featureCollection } from '@turf/helpers';
+import { intersect } from '@turf/intersect';
 
 type Feature = GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>;
 
@@ -45,7 +46,7 @@ export class Abutters {
               try {
                 return (
                   !selectedIDs.includes(feature.id) &&
-                  intersect(feature, buffered)
+                  intersect(featureCollection([feature, buffered]))
                 );
               } catch (e) {
                 Sentry.captureMessage(

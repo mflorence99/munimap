@@ -27,6 +27,7 @@ import { OutputRefSubscription } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
+import { centerOfMass } from '@turf/center-of-mass';
 import { computed } from '@angular/core';
 import { contentChild } from '@angular/core';
 import { contentChildren } from '@angular/core';
@@ -37,17 +38,16 @@ import { input } from '@angular/core';
 import { model } from '@angular/core';
 import { output } from '@angular/core';
 import { signal } from '@angular/core';
+import { squareGrid } from '@turf/square-grid';
 import { toLonLat } from 'ol/proj';
 import { transformExtent } from 'ol/proj';
 import { unByKey } from 'ol/Observable';
 import { viewChild } from '@angular/core';
 
-import centerOfMass from '@turf/center-of-mass';
 import OLFeature from 'ol/Feature';
 import OLMap from 'ol/Map';
 import OLMapBrowserEvent from 'ol/MapBrowserEvent';
 import OLView from 'ol/View';
-import squareGrid from '@turf/square-grid';
 
 const nominalDPI = 96;
 
@@ -377,10 +377,8 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     this.olView.setProperties({ component: this }, true);
     this.olMap.setView(this.olView);
     // 👉 if center, zoom available use them else fit to bounds
-    const viewState =
-      this.#store.selectSnapshot<ViewStateModel>(ViewState).viewByPath[
-        this.path()
-      ];
+    const viewState = this.#store.selectSnapshot<ViewStateModel>(ViewState.view)
+      .viewByPath[this.path()];
     if (this.fitToBounds()) this.zoomToBounds();
     else if (viewState?.center && viewState?.zoom) {
       this.olView.setCenter(fromLonLat(viewState.center));

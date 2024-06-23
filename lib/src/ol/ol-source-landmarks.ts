@@ -13,6 +13,7 @@ import { OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
+import { bbox } from '@turf/bbox';
 import { combineLatest } from 'rxjs';
 import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
@@ -21,7 +22,6 @@ import { takeUntil } from 'rxjs/operators';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { transformExtent } from 'ol/proj';
 
-import bbox from '@turf/bbox';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';

@@ -4,14 +4,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subscriber } from 'rxjs';
 
+import { bearing } from '@turf/bearing';
 import { combineLatest } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { point } from '@turf/helpers';
 import { shareReplay } from 'rxjs/operators';
 import { timer } from 'rxjs';
-
-import bearing from '@turf/bearing';
 
 const maxIntervalBetweenPositions = 100;
 

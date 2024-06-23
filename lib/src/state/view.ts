@@ -146,6 +146,10 @@ export class ViewState {
     return state.streetFilter || '' /* 👈 b/c streetFilter was added later */;
   }
 
+  @Selector() static view(state: ViewStateModel): ViewStateModel {
+    return state;
+  }
+
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @Action(SetGPS) setGPS(
     ctx: StateContext<ViewStateModel>,

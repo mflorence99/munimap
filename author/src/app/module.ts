@@ -490,7 +490,7 @@ const STATES_SAVED = [RouterState, ViewState];
         if (key === 'router') obj = { state: { url: obj.state.url } };
         return obj;
       },
-      key: STATES_SAVED
+      keys: STATES_SAVED
     }),
     OverlayModule,
     RouterModule.forRoot(ROUTES, { onSameUrlNavigation: 'reload' }),

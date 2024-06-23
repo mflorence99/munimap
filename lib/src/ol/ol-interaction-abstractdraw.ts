@@ -4,16 +4,16 @@ import { OLMapComponent } from './ol-map';
 import { EventsKey as OLEventsKey } from 'ol/events';
 import { Observable } from 'rxjs';
 
+import { cleanCoords } from '@turf/clean-coords';
 import { inject } from '@angular/core';
+import { simplify } from '@turf/simplify';
 import { takeUntil } from 'rxjs/operators';
 import { unByKey } from 'ol/Observable';
 
-import cleanCoords from '@turf/clean-coords';
 import OLDraw from 'ol/interaction/Draw';
 import OLGeoJSON from 'ol/format/GeoJSON';
 import OLVectorLayer from 'ol/layer/Vector';
 import OLVectorSource from 'ol/source/Vector';
-import simplify from '@turf/simplify';
 
 export abstract class OLInteractionAbstractDrawComponent {
   olDraw: OLDraw;

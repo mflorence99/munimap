@@ -11,6 +11,7 @@ import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 
+import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon';
 import { fromLonLat } from 'ol/proj';
 import { inject } from '@angular/core';
 import { point } from '@turf/helpers';
@@ -18,7 +19,6 @@ import { polygon } from '@turf/helpers';
 import { toLonLat } from 'ol/proj';
 import { viewChild } from '@angular/core';
 
-import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import OLFeature from 'ol/Feature';
 import OLOverlay from 'ol/Overlay';
 

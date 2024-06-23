@@ -162,7 +162,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #handleGeoJSON$(): void {
     // 🔥 HACK FOR APDVD
     //    countables does not have enough data for APDVD legend
-    const map = this.#store.selectSnapshot<Map>(MapState);
+    const map = this.#store.selectSnapshot<Map>(MapState.map);
     this.#geoJSON
       .loadByIndex(
         this.#mapState.currentMap().path,

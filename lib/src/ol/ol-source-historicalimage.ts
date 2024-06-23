@@ -7,11 +7,11 @@ import OLImage from './ol-source-geoimage';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 
+import { buffer } from '@turf/buffer';
 import { effect } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 
-import buffer from '@turf/buffer';
 import copy from 'fast-copy';
 import Feature from 'ol/Feature';
 import Polygon from 'ol/geom/Polygon';

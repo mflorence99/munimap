@@ -6,10 +6,10 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
+import { bboxPolygon } from '@turf/bbox-polygon';
 import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
 
-import bboxPolygon from '@turf/bbox-polygon';
 import GeoJSON from 'ol/format/GeoJSON';
 import OLFeature from 'ol/Feature';
 import OLProjection from 'ol/proj/Projection';

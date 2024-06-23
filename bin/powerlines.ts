@@ -3,11 +3,11 @@ import { theState } from '../lib/src/common';
 
 import * as turf from '@turf/turf';
 
+import { booleanIntersects } from '@turf/boolean-intersects';
 import { mkdirSync } from 'fs';
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
-import booleanIntersects from '@turf/boolean-intersects';
 import chalk from 'chalk';
 import copy from 'fast-copy';
 

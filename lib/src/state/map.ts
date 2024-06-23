@@ -4,6 +4,7 @@ import { Action } from '@ngxs/store';
 import { Coordinate } from 'ol/coordinate';
 import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
+import { Selector } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
@@ -90,6 +91,10 @@ export type MapStateModel = Map;
 export class MapState {
   #firestore = inject(Firestore);
   #store = inject(Store);
+
+  @Selector() static map(state: MapStateModel): Map {
+    return state;
+  }
 
   @Action(ClearMap) clearMap(
     ctx: StateContext<MapStateModel>,

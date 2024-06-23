@@ -11,6 +11,7 @@ import { Message } from 'serverx-ts';
 import { Observable } from 'rxjs';
 import { Optional } from 'injection-js';
 
+import { bbox } from '@turf/bbox';
 import { catchError } from 'rxjs/operators';
 import { from } from 'rxjs';
 import { fromReadableStream } from 'serverx-ts';
@@ -20,7 +21,6 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-import bbox from '@turf/bbox';
 import chalk from 'chalk';
 import copy from 'fast-copy';
 import md5File from 'md5-file';

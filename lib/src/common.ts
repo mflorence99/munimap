@@ -1,20 +1,20 @@
 import { Units } from '@turf/helpers';
 
+import { area } from '@turf/area';
+import { bbox } from '@turf/bbox';
+import { bearing } from '@turf/bearing';
 import { convertArea } from '@turf/helpers';
 import { convertLength } from '@turf/helpers';
+import { distance } from '@turf/distance';
 import { featureCollection } from '@turf/helpers';
+import { length } from '@turf/length';
 import { point } from '@turf/helpers';
+import { rhumbDestination } from '@turf/rhumb-destination';
+import { rhumbDistance } from '@turf/rhumb-distance';
 import { serverTimestamp } from 'firebase/firestore';
+import { transformRotate } from '@turf/transform-rotate';
+import { truncate } from '@turf/truncate';
 
-import area from '@turf/area';
-import bbox from '@turf/bbox';
-import bearing from '@turf/bearing';
-import distance from '@turf/distance';
-import length from '@turf/length';
-import rhumbDestination from '@turf/rhumb-destination';
-import rhumbDistance from '@turf/rhumb-distance';
-import transformRotate from '@turf/transform-rotate';
-import truncate from '@turf/truncate';
 import hash from 'object-hash';
 import polylabel from 'polylabel';
 
@@ -991,7 +991,7 @@ export function calculateParcel(parcel: Partial<Parcel>): void {
       }));
     }
     // 👉 bbox applies to the whole geometry
-    parcel.bbox = bbox(parcel);
+    parcel.bbox = bbox(parcel as any);
     // 👉 now do calculations on each Polygon
     parcel.properties ??= {};
     parcel.properties.areas = polygons.map((polygon) => calculateArea(polygon));

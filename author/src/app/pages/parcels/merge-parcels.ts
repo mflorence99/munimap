@@ -10,11 +10,12 @@ import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
 import { Store } from '@ngxs/store';
 
+import { featureCollection } from '@turf/helpers';
 import { inject } from '@angular/core';
+import { union } from '@turf/union';
 
 import OLFeature from 'ol/Feature';
 import OLGeoJSON from 'ol/format/GeoJSON';
-import union from '@turf/union';
 
 interface MergeRecord {
   mergedID: string;
@@ -135,7 +136,7 @@ export class MergeParcelsComponent implements SidebarComponent {
       return JSON.parse(format.writeFeature(feature));
     });
     mergedParcel.geometry = geojsons.reduce((acc, geojson) =>
-      union(acc, geojson)
+      union(featureCollection([acc, geojson]))
     ).geometry;
     // 👉 that's it!
     this.#store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));

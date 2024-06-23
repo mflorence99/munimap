@@ -14,18 +14,18 @@ import { OnChanges } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
+import { area } from '@turf/area';
+import { combine } from '@turf/combine';
 import { convertArea } from '@turf/helpers';
 import { convertLength } from '@turf/helpers';
 import { forwardRef } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import { getCenter } from 'ol/extent';
 import { inject } from '@angular/core';
+import { length } from '@turf/length';
+import { lineChunk } from '@turf/line-chunk';
 
-import area from '@turf/area';
-import combine from '@turf/combine';
 import cspline from 'ol-ext/render/Cspline';
-import length from '@turf/length';
-import lineChunk from '@turf/line-chunk';
 import OLFeature from 'ol/Feature';
 import OLFill from 'ol/style/Fill';
 import OLFillPattern from 'ol-ext/style/FillPattern';
