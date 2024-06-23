@@ -137,7 +137,7 @@ export class ProxyServer extends Handler {
             //    and the user-agent to satisy API domain rstrictions
             fetch(url, {
               headers: {
-                'Referer': request.headers['Referer'] as string,
+                Referer: request.headers['Referer'] as string,
                 'User-Agent': request.headers['User-Agent'] as string
               }
             })

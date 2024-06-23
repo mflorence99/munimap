@@ -1,1 +1,60 @@
-{"param":{"lon":-72.12833109897478,"lat":43.14553908628926,"rot":null,"zoom":15.383238412130256,"titre":"Sans titre","description":"","status":"brouillon","controlParams":{"limitGeo":"1","zoomBtn":"1","selectLayer":"1","contextMap":"0","legend":"0","scaleLine":"1","pSearchBar":"0","coords":"1","attribution":"1"},"proj":{"valeur":"EPSG:4326","unite":"ds"}},"layers":[{"type":"Geoportail","name":"Plan IGN","titre":"sans-titre","visibility":true,"layer":"GEOGRAPHICALGRIDSYSTEMS.PLANIGN"},{"name":"NH_Lovewell Mountain_329898_1984_25000","visibility":true,"type":"GeoImage","imageCenter":[-8027405.326887065,5340505.489865279],"imageRotate":0.00004870114135645631,"imageScale":[5.800737754216479,5.8007377542166845]},{"dessin":true,"type":"Vector","name":"Dessin","titre":"sans-titre","visibility":true,"opacity":1,"popupContent":{},"style":{},"features":[]}],"symbolLib":{},"legende":{"legend":"","legendPos":"bottom-left","legendWidth":295,"legendVisible":false,"legendtitle":"Ma légende","legendParam":{"lineHeight":55,"width":295}}}
+{
+  "param": {
+    "lon": -72.12833109897478,
+    "lat": 43.14553908628926,
+    "rot": null,
+    "zoom": 15.383238412130256,
+    "titre": "Sans titre",
+    "description": "",
+    "status": "brouillon",
+    "controlParams": {
+      "limitGeo": "1",
+      "zoomBtn": "1",
+      "selectLayer": "1",
+      "contextMap": "0",
+      "legend": "0",
+      "scaleLine": "1",
+      "pSearchBar": "0",
+      "coords": "1",
+      "attribution": "1"
+    },
+    "proj": { "valeur": "EPSG:4326", "unite": "ds" }
+  },
+  "layers": [
+    {
+      "type": "Geoportail",
+      "name": "Plan IGN",
+      "titre": "sans-titre",
+      "visibility": true,
+      "layer": "GEOGRAPHICALGRIDSYSTEMS.PLANIGN"
+    },
+    {
+      "name": "NH_Lovewell Mountain_329898_1984_25000",
+      "visibility": true,
+      "type": "GeoImage",
+      "imageCenter": [-8027405.326887065, 5340505.489865279],
+      "imageRotate": 0.00004870114135645631,
+      "imageScale": [5.800737754216479, 5.8007377542166845]
+    },
+    {
+      "dessin": true,
+      "type": "Vector",
+      "name": "Dessin",
+      "titre": "sans-titre",
+      "visibility": true,
+      "opacity": 1,
+      "popupContent": {},
+      "style": {},
+      "features": []
+    }
+  ],
+  "symbolLib": {},
+  "legende": {
+    "legend": "",
+    "legendPos": "bottom-left",
+    "legendWidth": 295,
+    "legendVisible": false,
+    "legendtitle": "Ma légende",
+    "legendParam": { "lineHeight": 55, "width": 295 }
+  }
+}

@@ -79,7 +79,7 @@
     "firebase:live:patch:culverts": "ts-node --dir bin patch-culverts.ts",
     "firebase:live:restore": "ts-node --dir bin restore.ts",
     "firebase:live:users:curated": "ts-node --dir bin users-curated.ts",
-    "format": "biome format --write ./lib/src/common.ts",
+    "format": "biome format --write ./",
     "postinstall": "npm run patcher",
     "lint": "biome lint ./",
     "patcher": "ts-node --dir bin patcher.ts",

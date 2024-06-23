@@ -654,10 +654,10 @@ writem(
         type: 'Feature',
         geometry: lakeside.lake.geometry,
         properties: {
-          'fill': '#0000FF',
+          fill: '#0000FF',
           'fill-opacity': 0.25,
-          'id': lakeside.lake.id,
-          'stroke': '#0000FF',
+          id: lakeside.lake.id,
+          stroke: '#0000FF',
           'stroke-width': 1
         }
       })
@@ -668,10 +668,10 @@ writem(
         type: 'Feature',
         geometry: parcel.geometry,
         properties: {
-          'fill': '#795548',
+          fill: '#795548',
           'fill-opacity': 0.1,
-          'id': parcel.id,
-          'stroke': '#795548',
+          id: parcel.id,
+          stroke: '#795548',
           'stroke-width': 3
         }
       })
@@ -682,10 +682,10 @@ writem(
         type: 'Feature',
         geometry: roadway.road.geometry,
         properties: {
-          'fill': '#00FF00',
+          fill: '#00FF00',
           'fill-opacity': 0.75,
-          'name': roadway.road.properties.name,
-          'stroke': '#00FF00',
+          name: roadway.road.properties.name,
+          stroke: '#00FF00',
           'stroke-width': 1
         }
       })
@@ -695,9 +695,9 @@ writem(
         type: 'Feature',
         geometry: roadway.leftBorder.geometry,
         properties: {
-          'fill': '#FFFF00',
+          fill: '#FFFF00',
           'fill-opacity': 0.25,
-          'stroke': '#FFFF00',
+          stroke: '#FFFF00',
           'stroke-width': 1
         }
       })
@@ -707,9 +707,9 @@ writem(
         type: 'Feature',
         geometry: roadway.rightBorder.geometry,
         properties: {
-          'fill': '#00FFFF',
+          fill: '#00FFFF',
           'fill-opacity': 0.25,
-          'stroke': '#00FFFF',
+          stroke: '#00FFFF',
           'stroke-width': 1
         }
       })
