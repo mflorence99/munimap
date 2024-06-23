@@ -123,7 +123,7 @@
     "@sentry/angular-ivy": "^7",
     "@sentry/browser": "^8",
     "@sentry/tracing": "^7",
-    "@turf/turf": "^6",
+    "@turf/turf": "^7",
     "backoff-rxjs": "^7",
     "chalk": "^4",
     "comlink": "^4",
