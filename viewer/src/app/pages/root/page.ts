@@ -14,7 +14,6 @@ import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { ParcelCoding } from '@lib/state/view';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { SetGPS } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Title } from '@angular/platform-browser';
@@ -143,32 +142,22 @@ import urlParse from 'url-parse';
   ]
 })
 export class RootPage implements OnInit {
-  @Select(ViewState.gps) gps$: Observable<boolean>;
-
-  @Select(ViewState.historicalMapLeft) historicalMapLeft$: Observable<string>;
-  @Select(ViewState.historicalMapRight) historicalMapRight$: Observable<string>;
-
-  @Select(MapState) map$: Observable<Map>;
-
-  @Select(ViewState.parcelCoding) parcelCoding$: Observable<ParcelCoding>;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
-
-  @Select(ViewState.satelliteYear) satelliteYear$: Observable<string>;
-
-  @Select(ViewState.sideBySideView) sideBySideView$: Observable<boolean>;
-
-  @Select(ViewState.streetFilter) streetFilter$: Observable<string>;
-
-  @Select(AnonState.user) user$: Observable<User>;
-
-  @Select(ViewState) view$: Observable<ViewStateModel>;
-
+  gps$: Observable<boolean>;
   hasLeftSidebar: boolean;
   hasRightSidebar: boolean;
   hasToolbar: boolean;
+  historicalMapLeft$: Observable<string>;
+  historicalMapRight$: Observable<string>;
+  map$: Observable<Map>;
+  parcelCoding$: Observable<ParcelCoding>;
   routedPageComponent: any;
+  satelliteView$: Observable<boolean>;
+  satelliteYear$: Observable<string>;
+  sideBySideView$: Observable<boolean>;
+  streetFilter$: Observable<string>;
   title: string;
+  user$: Observable<User>;
+  view$: Observable<ViewStateModel>;
   zoom$: Observable<number>;
 
   #destroy$ = inject(DestroyService);
@@ -181,6 +170,17 @@ export class RootPage implements OnInit {
   #version = inject(VersionService);
 
   constructor() {
+    this.gps$ = this.#store.select(ViewState.gps);
+    this.historicalMapLeft$ = this.#store.select(ViewState.historicalMapLeft);
+    this.historicalMapRight$ = this.#store.select(ViewState.historicalMapRight);
+    this.map$ = this.#store.select(MapState.map);
+    this.parcelCoding$ = this.#store.select(ViewState.parcelCoding);
+    this.satelliteView$ = this.#store.select(ViewState.satelliteView);
+    this.satelliteYear$ = this.#store.select(ViewState.satelliteYear);
+    this.sideBySideView$ = this.#store.select(ViewState.sideBySideView);
+    this.streetFilter$ = this.#store.select(ViewState.streetFilter);
+    this.user$ = this.#store.select(AnonState.user);
+    this.view$ = this.#store.select(ViewState.view);
     this.zoom$ = combineLatest([this.map$, this.view$]).pipe(
       // 🔥 sometimes triggered by ???
       map(([map, view]) => view.viewByPath[map.path]?.zoom ?? 15)

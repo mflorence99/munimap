@@ -114,7 +114,6 @@ import { OLControlScaleBarComponent } from '@lib/ol/ol-control-scalebar';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/ol-control-searchparcels';
 import { OLControlTitleComponent } from '@lib/ol/ol-control-title';
-import { OLControlTopoLegendComponent } from '@lib/ol/ol-control-topolegend';
 import { OLControlZoomComponent } from '@lib/ol/ol-control-zoom';
 import { OLControlZoomToExtentComponent } from '@lib/ol/ol-control-zoom2extent';
 import { OLFilterColorizeComponent } from '@lib/ol/ol-filter-colorize';
@@ -297,7 +296,6 @@ const COMPONENTS = [
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
   OLControlTitleComponent,
-  OLControlTopoLegendComponent,
   OLControlZoomComponent,
   OLControlZoomToExtentComponent,
   OLFilterColorizeComponent,
@@ -476,7 +474,10 @@ const STATES_SAVED = [RouterState, ViewState];
     MatTooltipModule,
     NgPipesModule,
     NgxsModule.forRoot(STATES, {
-      developmentMode: !environment.production
+      developmentMode: !environment.production,
+      // 🔥 this changed in v18
+      //    we must suppress errors that occure BEFORE state is initialized
+      selectorOptions: { suppressErrors: true }
     }),
     NgxsLoggerPluginModule.forRoot({ collapsed: false }),
     NgxsReduxDevtoolsPluginModule.forRoot({

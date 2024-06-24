@@ -102,7 +102,7 @@ export class AuthState implements NgxsOnInit {
   #store = inject(Store);
 
   @Action(Logout) logout(): void {
-    // 👉 we relaod the app to cancel all the subscriptions
+    // 👉 we reload the app to cancel all the subscriptions
     //    that rely on a logged-in user
     signOut(this.#fireauth).then(() => location.reload());
   }

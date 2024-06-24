@@ -68,6 +68,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   parcelPropertiesOwnership = parcelPropertiesOwnership;
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
+  parcels$: Observable<Parcel[]>;
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
@@ -79,10 +80,13 @@ export abstract class OLControlAbstractParcelsLegendComponent
 
   abstract county: Signal<string>;
   abstract id: Signal<string>;
-  abstract parcels$: Observable<Parcel[]>;
   abstract printing: Signal<boolean>;
   abstract state: Signal<string>;
   abstract title: Signal<string>;
+
+  constructor() {
+    this.parcels$ = this.#store.select(ParcelsState.parcels);
+  }
 
   addToMap(): void {}
 

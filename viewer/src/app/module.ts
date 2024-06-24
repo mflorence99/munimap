@@ -369,7 +369,10 @@ const STATES_SAVED = [ViewState];
     MatToolbarModule,
     MatTooltipModule,
     NgxsModule.forRoot(STATES, {
-      developmentMode: !environment.production
+      developmentMode: !environment.production,
+      // 🔥 this changed in v18
+      //    we must suppress errors that occure BEFORE state is initialized
+      selectorOptions: { suppressErrors: true }
     }),
     NgxsLoggerPluginModule.forRoot({ collapsed: false }),
     NgxsReduxDevtoolsPluginModule.forRoot({

@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 import { Coordinate } from 'ol/coordinate';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
 import { all as allStrategy } from 'ol/loadingstrategy';
 import { bbox } from '@turf/bbox';
@@ -35,11 +35,10 @@ import OLVector from 'ol/source/Vector';
   styles: [':host { display: none }']
 })
 export class OLSourceLandmarksComponent implements OnInit {
-  @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
-
   filterFn = input<(value) => (landmark) => boolean>();
   filterValue = input<any>();
   filterValue$: Observable<string> = toObservable(this.filterValue);
+  landmarks$: Observable<Landmark[]>;
   maxZoom = input(18);
   olVector: OLVector<any>;
   zoomAnimationDuration = input(200);
@@ -47,9 +46,11 @@ export class OLSourceLandmarksComponent implements OnInit {
   #destroy$ = inject(DestroyService);
   #layer = inject(OLLayerVectorComponent);
   #map = inject(OLMapComponent);
+  #store = inject(Store);
   #success: Function;
 
   constructor() {
+    this.landmarks$ = this.#store.select(LandmarksState.landmarks);
     this.olVector = new OLVector({
       format: new GeoJSON(),
       loader: this.#loader.bind(this),

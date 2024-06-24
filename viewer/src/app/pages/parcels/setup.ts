@@ -6,7 +6,6 @@ import { HistoricalsService } from '@lib/services/historicals';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
 import { SetHistoricalMapLeft } from '@lib/state/view';
 import { SetHistoricalMapRight } from '@lib/state/view';
 import { SetParcelCoding } from '@lib/state/view';
@@ -156,8 +155,6 @@ import copy from 'fast-copy';
   `
 })
 export class ParcelsSetupComponent implements OnInit {
-  @Select(ViewState) view$: Observable<ViewStateModel>;
-
   record: Partial<ViewStateModel> = {
     historicalMapLeft: '',
     historicalMapRight: '',
@@ -166,11 +163,17 @@ export class ParcelsSetupComponent implements OnInit {
     satelliteYear: ''
   };
 
+  view$: Observable<ViewStateModel>;
+
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
   #drawer = inject(MatDrawer);
   #historicals = inject(HistoricalsService);
   #store = inject(Store);
+
+  constructor() {
+    this.view$ = this.#store.select(ViewState.view);
+  }
 
   get historicalMaps(): string[] {
     return [

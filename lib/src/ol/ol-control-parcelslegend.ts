@@ -3,15 +3,11 @@ import { Legend } from './ol-control-abstractparcelslegend';
 import { MapableComponent } from './ol-mapable';
 import { OLControlAbstractParcelsLegendComponent } from './ol-control-abstractparcelslegend';
 import { OLMapComponent } from './ol-map';
-import { Parcel } from '../common';
-import { ParcelsState } from '../state/parcels';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
-import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
 
 import { area } from '@turf/area';
 import { convertArea } from '@turf/helpers';
@@ -147,8 +143,6 @@ export class OLControlParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
-
   areaOfTown: number;
   county = input<string>();
   id = input<string>();

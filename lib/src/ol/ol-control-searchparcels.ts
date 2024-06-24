@@ -16,7 +16,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 
 import { combineLatest } from 'rxjs';
@@ -144,15 +144,13 @@ interface SearchTarget {
   ]
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
-
   filterFn = input<(feature) => boolean>();
   fuzzyMaxResults = input(100);
   fuzzyMinLength = input(3);
   fuzzyThreshold = input(-10000);
   matches: SearchTarget[] = [];
   matchesMaxVisible = input(20);
-
+  parcels$: Observable<Parcel[]>;
   searchablesByAddress: Record<string, SearchableParcel[]> = {};
   searchablesByID: Record<ParcelID, SearchableParcel[]> = {};
   searchablesByOwner: Record<string, SearchableParcel[]> = {};
@@ -164,8 +162,11 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   #overridesByID: Record<ParcelID, Override> = {};
   #parcelsState = inject(ParcelsState);
   #searchTargets = [];
+  #store = inject(Store);
 
-  constructor() {}
+  constructor() {
+    this.parcels$ = this.#store.select(ParcelsState.parcels);
+  }
 
   ngOnInit(): void {
     this.#handleGeoJSON$();

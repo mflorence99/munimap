@@ -23,7 +23,6 @@ import { Profile } from '@lib/state/auth';
 import { Redo } from '@lib/state/undo';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Store } from '@ngxs/store';
 import { Undo } from '@lib/state/undo';
 import { UpdateMapError } from '@lib/state/map';
@@ -65,11 +64,19 @@ import { viewChild } from '@angular/core';
           }
         </h1>
 
-        <button (click)="redo()" [disabled]="!canRedo" mat-icon-button>
+        <button 
+          mat-icon-button 
+          (click)="redo()" 
+          [disabled]="!canRedo" 
+          [ngClass]="{ 'mat-icon-button-checked': canRedo }">
           <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
         </button>
 
-        <button (click)="undo()" [disabled]="!canUndo" mat-icon-button>
+        <button 
+          mat-icon-button 
+          (click)="undo()" 
+          [disabled]="!canUndo" 
+          [ngClass]="{ 'mat-icon-button-checked': canUndo }">
           <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>
         </button>
 
@@ -157,21 +164,17 @@ import { viewChild } from '@angular/core';
   ]
 })
 export class RootPage implements OnInit {
-  @Select(MapState) mapState$: Observable<Map>;
-
-  @Select(AuthState.profile) profile$: Observable<Profile>;
-
-  @Select(ViewState.satelliteView) satelliteView$: Observable<boolean>;
-
-  @Select(AuthState.user) user$: Observable<User>;
-
   _version = inject(VersionService) /* 👈 just to get it loaded */;
 
   canRedo = false;
   canUndo = false;
   loading = false;
+  mapState$: Observable<Map>;
   outlet = viewChild(RouterOutlet);
+  profile$: Observable<Profile>;
+  satelliteView$: Observable<boolean>;
   title: string;
+  user$: Observable<User>;
   working = 0;
 
   #actions$ = inject(Actions);
@@ -180,6 +183,13 @@ export class RootPage implements OnInit {
   #dialog = inject(MatDialog);
   #router = inject(Router);
   #store = inject(Store);
+
+  constructor() {
+    this.mapState$ = this.#store.select(MapState.map);
+    this.profile$ = this.#store.select(AuthState.profile);
+    this.satelliteView$ = this.#store.select(ViewState.satelliteView);
+    this.user$ = this.#store.select(AuthState.user);
+  }
 
   getState(): any {
     return this.outlet()?.activatedRouteData?.state;

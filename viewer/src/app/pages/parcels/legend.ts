@@ -2,13 +2,9 @@ import { RootPage } from '../root/page';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 import { OLControlAbstractParcelsLegendComponent } from '@lib/ol/ol-control-abstractparcelslegend';
 import { OnInit } from '@angular/core';
-import { Parcel } from '@lib/common';
 import { ParcelProperties } from '@lib/common';
-import { ParcelsState } from '@lib/state/parcels';
-import { Select } from '@ngxs/store';
 import { Signal } from '@angular/core';
 
 import { colorOfAPDVDExcluded } from '@lib/ol/ol-apdvd2';
@@ -397,8 +393,6 @@ export class ParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
-
   areaOfExcluded: number;
   areaOfIncluded: number;
   colorOfAPDVDExcluded = colorOfAPDVDExcluded;

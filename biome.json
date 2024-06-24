@@ -4,13 +4,7 @@
     "attributePosition": "auto",
     "enabled": true,
     "formatWithErrors": false,
-    "ignore": [
-      "./.angular",
-      "./coverage",
-      "./dist",
-      "./node_modules",
-      "./reports"
-    ],
+    "ignore": ["./.angular", "./.nx", "./data", "./dist", "./node_modules"],
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",

@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
 import { Landmark } from '@lib/common';
 import { LandmarksState } from '@lib/state/landmarks';
 import { Observable } from 'rxjs';
-import { Select } from '@ngxs/store';
 import { SetStreetFilter } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 
@@ -57,14 +56,14 @@ import { map } from 'rxjs';
   ]
 })
 export class DPWToolbarComponent {
-  @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
-
+  landmarks$: Observable<Landmark[]>;
   root = inject(RootPage);
   streets$: Observable<string[]>;
 
   #store = inject(Store);
 
   constructor() {
+    this.landmarks$ = this.#store.select(LandmarksState.landmarks);
     this.streets$ = this.landmarks$.pipe(
       map((landmarks) =>
         landmarks.map(

@@ -9,7 +9,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Profile } from '@lib/state/auth';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { VersionService } from '@lib/services/version';
 
 import { collection } from '@angular/fire/firestore';
@@ -135,7 +135,7 @@ import { workgroup } from '@lib/state/auth';
   ]
 })
 export class NavigatorComponent implements OnInit {
-  @Select(AuthState.profile) profile$: Observable<Profile>;
+  profile$: Observable<Profile>;
 
   maxMapCount = input(5);
   state = theState;
@@ -145,7 +145,12 @@ export class NavigatorComponent implements OnInit {
   #destroy$ = inject(DestroyService);
   #drawer = inject(MatDrawer);
   #firestore = inject(Firestore);
+  #store = inject(Store);
   #version = inject(VersionService);
+
+  constructor() {
+    this.profile$ = this.#store.select(AuthState.profile);
+  }
 
   close(): void {
     this.#drawer.close();

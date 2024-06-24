@@ -25,7 +25,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { NgxsOnInit } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Select } from '@ngxs/store';
+import { Selector } from '@ngxs/store';
 import { State } from '@ngxs/store';
 import { StateContext } from '@ngxs/store';
 import { Store } from '@ngxs/store';
@@ -132,17 +132,26 @@ const undoStack: UndoableAction[] = [];
 })
 @Injectable()
 export class LandmarksState implements NgxsOnInit {
-  @Select(MapState) map$: Observable<Map>;
-
-  // 👇 remember that that author app uses regular logins,
-  //    while the viewer app uses anonymous logins --
-  //    we don't care which here
-  @Select(AnonState.profile) profile1$: Observable<Profile>;
-  @Select(AuthState.profile) profile2$: Observable<Profile>;
+  map$: Observable<Map>;
+  profile1$: Observable<Profile>;
+  profile2$: Observable<Profile>;
 
   #actions$ = inject(Actions);
   #firestore = inject(Firestore);
   #store = inject(Store);
+
+  constructor() {
+    this.map$ = this.#store.select(MapState.map);
+    // 👇 remember that that author app uses regular logins,
+    //    while the viewer app uses anonymous logins --
+    //    we don't care which here
+    this.profile1$ = this.#store.select(AnonState.profile);
+    this.profile2$ = this.#store.select(AuthState.profile);
+  }
+
+  @Selector() static landmarks(state: LandmarksStateModel): Landmark[] {
+    return state;
+  }
 
   @Action(AddLandmark) addLandmark(
     ctx: StateContext<LandmarksStateModel>,

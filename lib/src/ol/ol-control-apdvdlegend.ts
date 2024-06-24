@@ -3,9 +3,7 @@ import { Legend } from './ol-control-abstractparcelslegend';
 import { MapableComponent } from './ol-mapable';
 import { OLControlAbstractParcelsLegendComponent } from './ol-control-abstractparcelslegend';
 import { OLMapComponent } from './ol-map';
-import { Parcel } from '../common';
 import { ParcelProperties } from '../common';
-import { ParcelsState } from '../state/parcels';
 
 import { colorOfAPDVDExcluded } from './ol-apdvd2';
 import { colorOfAPDVDIncluded } from './ol-apdvd2';
@@ -15,9 +13,7 @@ import { isAPDVDIncluded } from './ol-apdvd2';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ElementRef } from '@angular/core';
-import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
 import { Signal } from '@angular/core';
 
 import { forwardRef } from '@angular/core';
@@ -98,8 +94,6 @@ export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  @Select(ParcelsState) parcels$: Observable<Parcel[]>;
-
   areaOfExcluded: number;
   areaOfIncluded: number;
   colorOfAPDVDExcluded = colorOfAPDVDExcluded;

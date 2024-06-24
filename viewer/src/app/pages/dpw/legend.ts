@@ -7,7 +7,7 @@ import { Landmark } from '@lib/common';
 import { LandmarksState } from '@lib/state/landmarks';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { ViewState } from '@lib/state/view';
 
 import { combineLatest } from 'rxjs';
@@ -152,10 +152,6 @@ interface Statistics {
   ]
 })
 export class DPWLegendComponent implements OnInit {
-  @Select(LandmarksState) landmarks$: Observable<Landmark[]>;
-
-  @Select(ViewState.streetFilter) streetFilter$: Observable<string>;
-
   allConditions = culvertConditions;
 
   allMetrics: Metric[] = [
@@ -203,9 +199,18 @@ export class DPWLegendComponent implements OnInit {
   breakdowns: Record<string, Record<string, Record<string, Statistics>>> = {};
   filteredBy: string;
 
+  landmarks$: Observable<Landmark[]>;
+  streetFilter$: Observable<string>;
+
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
   #snapshot: CulvertProperties[] = [];
+  #store = inject(Store);
+
+  constructor() {
+    this.landmarks$ = this.#store.select(LandmarksState.landmarks);
+    this.streetFilter$ = this.#store.select(ViewState.streetFilter);
+  }
 
   export(): void {
     // 👇 build the data
