@@ -219,6 +219,6 @@ export class ViewState {
   }
 
   recentPath(): string {
-    return this.#store.snapshot().view.recentPath;
+    return this.#store.selectSnapshot(ViewState.view).recentPath;
   }
 }

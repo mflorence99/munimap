@@ -198,6 +198,6 @@ export class MapState {
   }
 
   currentMap(): Map {
-    return this.#store.snapshot().map;
+    return this.#store.selectSnapshot<Map>(MapState.map);
   }
 }

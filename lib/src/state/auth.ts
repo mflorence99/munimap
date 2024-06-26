@@ -164,11 +164,11 @@ export class AuthState implements NgxsOnInit {
   }
 
   currentProfile(): Profile {
-    return this.#store.snapshot().auth.profile;
+    return this.#store.selectSnapshot<Profile>(AuthState.profile);
   }
 
   currentUser(): User {
-    return this.#store.snapshot().auth.user;
+    return this.#store.selectSnapshot<User>(AuthState.user);
   }
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {

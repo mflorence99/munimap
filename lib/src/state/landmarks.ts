@@ -289,7 +289,7 @@ export class LandmarksState implements NgxsOnInit {
   }
 
   currentLandmarks(): Landmark[] {
-    return this.#store.snapshot().landmarks;
+    return this.#store.selectSnapshot<Landmark[]>(LandmarksState.landmarks);
   }
 
   ngxsOnInit(): void {
