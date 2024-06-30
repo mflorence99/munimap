@@ -19,52 +19,56 @@ export type ParcelCoding =
 
 export type Path = string;
 
-export class SetGPS {
-  static readonly type = '[View] SetGPS';
-  constructor(public gps: boolean) {}
-}
+const ACTION_SCOPE = 'View';
 
-export class SetHistoricalMapLeft {
-  static readonly type = '[View] SetHistoricalMapLeft';
-  constructor(public historicalMapLeft: string) {}
-}
+export namespace ViewActions {
+  export class SetGPS {
+    static readonly type = `[${ACTION_SCOPE}] SetGPS`;
+    constructor(public gps: boolean) {}
+  }
 
-export class SetHistoricalMapRight {
-  static readonly type = '[View] SetHistoricalMapRight';
-  constructor(public historicalMapRight: string) {}
-}
+  export class SetHistoricalMapLeft {
+    static readonly type = `[${ACTION_SCOPE}] SetHistoricalMapLeft`;
+    constructor(public historicalMapLeft: string) {}
+  }
 
-export class SetParcelCoding {
-  static readonly type = '[View] SetParcelCoding';
-  constructor(public parcelCoding: ParcelCoding) {}
-}
+  export class SetHistoricalMapRight {
+    static readonly type = `[${ACTION_SCOPE}] SetHistoricalMapRight`;
+    constructor(public historicalMapRight: string) {}
+  }
 
-export class SetSatelliteView {
-  static readonly type = '[View] SetSatelliteView';
-  constructor(public satelliteView: boolean) {}
-}
+  export class SetParcelCoding {
+    static readonly type = `[${ACTION_SCOPE}] SetParcelCoding`;
+    constructor(public parcelCoding: ParcelCoding) {}
+  }
 
-export class SetSatelliteYear {
-  static readonly type = '[View] SetSatelliteYear';
-  constructor(public satelliteYear: string) {}
-}
+  export class SetSatelliteView {
+    static readonly type = `[${ACTION_SCOPE}] SetSatelliteView`;
+    constructor(public satelliteView: boolean) {}
+  }
 
-export class SetSideBySideView {
-  static readonly type = '[View] SetSideBySideView';
-  constructor(public sideBySideView: boolean) {}
-}
+  export class SetSatelliteYear {
+    static readonly type = `[${ACTION_SCOPE}] SetSatelliteYear`;
+    constructor(public satelliteYear: string) {}
+  }
 
-export class SetStreetFilter {
-  static readonly type = '[View] SetStreetFilter';
-  constructor(public streetFilter: string) {}
-}
+  export class SetSideBySideView {
+    static readonly type = `[${ACTION_SCOPE}] SetSideBySideView`;
+    constructor(public sideBySideView: boolean) {}
+  }
 
-export class UpdateView {
-  static readonly type = '[View] UpdateView';
-  constructor(
-    public path: Path,
-    public view: View
-  ) {}
+  export class SetStreetFilter {
+    static readonly type = `[${ACTION_SCOPE}] SetStreetFilter`;
+    constructor(public streetFilter: string) {}
+  }
+
+  export class UpdateView {
+    static readonly type = `[${ACTION_SCOPE}] UpdateView`;
+    constructor(
+      public path: Path,
+      public view: View
+    ) {}
+  }
 }
 
 export interface View {
@@ -151,65 +155,65 @@ export class ViewState {
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  @Action(SetGPS) setGPS(
+  @Action(ViewActions.SetGPS) setGPS(
     ctx: StateContext<ViewStateModel>,
-    action: SetGPS
+    action: ViewActions.SetGPS
   ): void {
     ctx.setState(patch({ gps: action.gps }));
   }
 
-  @Action(SetHistoricalMapLeft) setHistoricalMapLeft(
+  @Action(ViewActions.SetHistoricalMapLeft) setHistoricalMapLeft(
     ctx: StateContext<ViewStateModel>,
-    action: SetHistoricalMapLeft
+    action: ViewActions.SetHistoricalMapLeft
   ): void {
     ctx.setState(patch({ historicalMapLeft: action.historicalMapLeft }));
   }
 
-  @Action(SetHistoricalMapRight) setHistoricalMapRight(
+  @Action(ViewActions.SetHistoricalMapRight) setHistoricalMapRight(
     ctx: StateContext<ViewStateModel>,
-    action: SetHistoricalMapRight
+    action: ViewActions.SetHistoricalMapRight
   ): void {
     ctx.setState(patch({ historicalMapRight: action.historicalMapRight }));
   }
 
-  @Action(SetParcelCoding) setParcelCoding(
+  @Action(ViewActions.SetParcelCoding) setParcelCoding(
     ctx: StateContext<ViewStateModel>,
-    action: SetParcelCoding
+    action: ViewActions.SetParcelCoding
   ): void {
     ctx.setState(patch({ parcelCoding: action.parcelCoding }));
   }
 
-  @Action(SetSatelliteView) setSatelliteView(
+  @Action(ViewActions.SetSatelliteView) setSatelliteView(
     ctx: StateContext<ViewStateModel>,
-    action: SetSatelliteView
+    action: ViewActions.SetSatelliteView
   ): void {
     ctx.setState(patch({ satelliteView: action.satelliteView }));
   }
 
-  @Action(SetSatelliteYear) setSatelliteYear(
+  @Action(ViewActions.SetSatelliteYear) setSatelliteYear(
     ctx: StateContext<ViewStateModel>,
-    action: SetSatelliteYear
+    action: ViewActions.SetSatelliteYear
   ): void {
     ctx.setState(patch({ satelliteYear: action.satelliteYear }));
   }
 
-  @Action(SetSideBySideView) setSideBySideView(
+  @Action(ViewActions.SetSideBySideView) setSideBySideView(
     ctx: StateContext<ViewStateModel>,
-    action: SetSideBySideView
+    action: ViewActions.SetSideBySideView
   ): void {
     ctx.setState(patch({ sideBySideView: action.sideBySideView }));
   }
 
-  @Action(SetStreetFilter) setStreetFilter(
+  @Action(ViewActions.SetStreetFilter) setStreetFilter(
     ctx: StateContext<ViewStateModel>,
-    action: SetStreetFilter
+    action: ViewActions.SetStreetFilter
   ): void {
     ctx.setState(patch({ streetFilter: action.streetFilter }));
   }
 
-  @Action(UpdateView) updateView(
+  @Action(ViewActions.UpdateView) updateView(
     ctx: StateContext<ViewStateModel>,
-    action: UpdateView
+    action: ViewActions.UpdateView
   ): void {
     const path = action.path;
     const view = action.view;

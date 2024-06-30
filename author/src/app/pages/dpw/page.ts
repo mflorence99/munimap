@@ -5,13 +5,12 @@ import { CulvertPropertiesComponent } from './culvert-properties';
 import { ImportCulvertsComponent } from './import-culverts';
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { AddLandmark } from '@lib/state/landmarks';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { CulvertProperties } from '@lib/common';
-import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
@@ -482,7 +481,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
         break;
       case 'delete-culvert':
         this.store.dispatch(
-          new DeleteLandmark({ id: this.map().selectedIDs[0] })
+          new LandmarksActions.DeleteLandmark({ id: this.map().selectedIDs[0] })
         );
         break;
       case 'import-culverts':
@@ -529,6 +528,6 @@ export class DPWPage extends AbstractMapPage implements OnInit {
       type: 'Feature'
     };
     landmark.id = makeLandmarkID(landmark);
-    this.store.dispatch(new AddLandmark(landmark));
+    this.store.dispatch(new LandmarksActions.AddLandmark(landmark));
   }
 }

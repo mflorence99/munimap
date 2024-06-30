@@ -5,10 +5,10 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { ClearStacks } from '@lib/state/undo';
 import { Component } from '@angular/core';
-import { CreateMapError } from '@lib/state/map';
 import { DestroyService } from '@lib/services/destroy';
 import { Event } from '@angular/router';
 import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
@@ -25,7 +25,6 @@ import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Undo } from '@lib/state/undo';
-import { UpdateMapError } from '@lib/state/map';
 import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
 import { ViewState } from '@lib/state/view';
@@ -217,15 +216,20 @@ export class RootPage implements OnInit {
   #handleMapErrorActions$(): void {
     this.#actions$
       .pipe(
-        ofActionSuccessful(CreateMapError, UpdateMapError),
+        ofActionSuccessful(
+          MapActions.CreateMapError,
+          MapActions.UpdateMapError
+        ),
         takeUntil(this.#destroy$)
       )
-      .subscribe((action: CreateMapError | UpdateMapError) => {
-        const data: MessageDialogData = {
-          message: action.error
-        };
-        this.#dialog.open(MessageDialogComponent, { data });
-      });
+      .subscribe(
+        (action: MapActions.CreateMapError | MapActions.UpdateMapError) => {
+          const data: MessageDialogData = {
+            message: action.error
+          };
+          this.#dialog.open(MessageDialogComponent, { data });
+        }
+      );
   }
 
   #handleRouterEvents$(): void {

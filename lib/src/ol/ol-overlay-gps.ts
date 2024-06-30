@@ -1,7 +1,7 @@
 import { DestroyService } from '../services/destroy';
 import { GeolocationService } from '../services/geolocation';
 import { OLMapComponent } from './ol-map';
-import { SetGPS } from '../state/view';
+import { ViewActions } from '../state/view';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -159,7 +159,7 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
     //    on a PERMISSION_DENIED error
     console.error('🔥 Geolocation handleGeolocationError', error);
     this.#currentPositionLost(error);
-    this.#store.dispatch(new SetGPS(false));
+    this.#store.dispatch(new ViewActions.SetGPS(false));
   }
 
   #handleGeolocationPosition(position: GeolocationPosition): void {
@@ -179,7 +179,7 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
       );
     } else {
       this.#currentPositionOutsideMap();
-      this.#store.dispatch(new SetGPS(false));
+      this.#store.dispatch(new ViewActions.SetGPS(false));
     }
   }
 

@@ -3,8 +3,8 @@ import { SidebarComponent } from '../../components/sidebar-component';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { CreateMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { ParcelID } from '@lib/common';
@@ -239,7 +239,7 @@ export class CreatePropertyMapComponent implements SidebarComponent {
       printSize: printSize,
       type: 'property'
     };
-    this.#store.dispatch(new CreateMap(map));
+    this.#store.dispatch(new MapActions.CreateMap(map));
     this.drawer.close();
   }
 }

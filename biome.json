@@ -77,7 +77,7 @@
       },
       "recommended": false,
       "style": {
-        "noNamespace": "error",
+        "noNamespace": "off",
         "useAsConstAssertion": "error",
         "useBlockStatements": "off",
         "useDefaultParameterLast": "off"

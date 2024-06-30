@@ -1,12 +1,12 @@
 import { ImportLandmarksComponent } from '../property/import-landmarks';
 
-import { AddLandmark } from '@lib/state/landmarks';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { CulvertProperties } from '@lib/common';
 import { Landmark } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
 import { Store } from '@ngxs/store';
 
 import { culvertConditions } from '@lib/common';
@@ -81,7 +81,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
             landmark.importHash = importHash;
             landmark.properties = properties;
             await firstValueFrom(
-              this.#store.dispatch(new AddLandmark(landmark))
+              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark))
             );
           }
         }

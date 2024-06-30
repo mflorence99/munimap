@@ -1,6 +1,5 @@
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -8,6 +7,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
 import { Store } from '@ngxs/store';
 
 import { featureCollection } from '@turf/helpers';
@@ -139,7 +139,9 @@ export class MergeParcelsComponent implements SidebarComponent {
       union(featureCollection([acc, geojson]))
     ).geometry;
     // 👉 that's it!
-    this.#store.dispatch(new AddParcels([mergedParcel, ...removedParcels]));
+    this.#store.dispatch(
+      new ParcelsActions.AddParcels([mergedParcel, ...removedParcels])
+    );
     this.drawer.close();
   }
 }

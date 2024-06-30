@@ -1,6 +1,5 @@
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -8,6 +7,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
 import { Store } from '@ngxs/store';
 
 import { bbox } from '@turf/bbox';
@@ -173,7 +173,7 @@ export class AddParcelComponent implements SidebarComponent {
       type: 'Feature'
     };
     // that's it!
-    this.#store.dispatch(new AddParcels([addedParcel]));
+    this.#store.dispatch(new ParcelsActions.AddParcels([addedParcel]));
     this.drawer.close();
   }
 }

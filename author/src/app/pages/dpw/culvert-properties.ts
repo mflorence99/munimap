@@ -6,12 +6,12 @@ import { Component } from '@angular/core';
 import { CulvertProperties } from '@lib/common';
 import { Landmark } from '@lib/common';
 import { LandmarkID } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NgForm } from '@angular/forms';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { UpdateLandmark } from '@lib/state/landmarks';
 
 import { culvertConditions } from '@lib/common';
 import { culvertFloodHazards } from '@lib/common';
@@ -274,7 +274,7 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
       },
       type: 'Feature'
     };
-    this.#store.dispatch(new UpdateLandmark(landmark));
+    this.#store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.ngForm().form.markAsPristine();

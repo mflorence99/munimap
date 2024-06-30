@@ -2,8 +2,8 @@ import { ConfirmDialogComponent } from '../components/confirm-dialog';
 import { ConfirmDialogData } from '../components/confirm-dialog';
 import { DestroyService } from '../services/destroy';
 import { Landmark } from '../common';
+import { LandmarksActions } from '../state/landmarks';
 import { OLInteractionAbstractRedrawComponent } from './ol-interaction-abstractredraw';
-import { UpdateLandmark } from '../state/landmarks';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -57,7 +57,7 @@ export class OLInteractionRedrawLandmarkComponent
               geometry: geojson.geometry,
               type: 'Feature'
             };
-            this.#store.dispatch(new UpdateLandmark(landmark));
+            this.#store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
           }
           // 👉 on CANCEL, reset geometry
           else this.resetRedraw();

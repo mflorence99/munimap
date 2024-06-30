@@ -1,8 +1,8 @@
-import { AddParcels } from '../state/parcels';
 import { AuthState } from '../state/auth';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
 import { ParcelID } from '../common';
+import { ParcelsActions } from '../state/parcels';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -84,7 +84,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       },
       type: 'Feature'
     };
-    this.#store.dispatch(new AddParcels([recenteredParcel]));
+    this.#store.dispatch(new ParcelsActions.AddParcels([recenteredParcel]));
     this.olOverlay.setPosition([0, 0]);
     // 👉 https://stackoverflow.com/questions/61157528
     event.source._dragRef.reset();

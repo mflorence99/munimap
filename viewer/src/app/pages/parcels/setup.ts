@@ -6,12 +6,8 @@ import { HistoricalsService } from '@lib/services/historicals';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { SetHistoricalMapLeft } from '@lib/state/view';
-import { SetHistoricalMapRight } from '@lib/state/view';
-import { SetParcelCoding } from '@lib/state/view';
-import { SetSatelliteYear } from '@lib/state/view';
-import { SetSideBySideView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
+import { ViewActions } from '@lib/state/view';
 import { ViewState } from '@lib/state/view';
 import { ViewStateModel } from '@lib/state/view';
 
@@ -200,16 +196,18 @@ export class ParcelsSetupComponent implements OnInit {
 
   save(record: Partial<ViewStateModel>): void {
     if (record.satelliteView)
-      this.#store.dispatch(new SetSatelliteYear(record.satelliteYear));
+      this.#store.dispatch(
+        new ViewActions.SetSatelliteYear(record.satelliteYear)
+      );
     else
       this.#store.dispatch([
-        new SetParcelCoding(record.parcelCoding),
-        new SetHistoricalMapLeft(record.historicalMapLeft),
-        new SetHistoricalMapRight(record.historicalMapRight)
+        new ViewActions.SetParcelCoding(record.parcelCoding),
+        new ViewActions.SetHistoricalMapLeft(record.historicalMapLeft),
+        new ViewActions.SetHistoricalMapRight(record.historicalMapRight)
       ]);
 
     this.#store.dispatch(
-      new SetSideBySideView(
+      new ViewActions.SetSideBySideView(
         (record.satelliteView && !!record.satelliteYear) ||
           (!record.satelliteView && !!record.historicalMapRight)
       )

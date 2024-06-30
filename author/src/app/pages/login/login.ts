@@ -1,4 +1,5 @@
 import { Auth } from '@angular/fire/auth';
+import { AuthActions } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
@@ -6,7 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { MessageDialogData } from '@lib/components/message-dialog';
 import { Store } from '@ngxs/store';
-import { UpdateUser } from '@lib/state/auth';
 
 import { createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { inject } from '@angular/core';
@@ -346,7 +346,7 @@ export class LoginPage {
           'color: goldenrod'
         );
         this.#store.dispatch(
-          new UpdateUser({
+          new AuthActions.UpdateUser({
             ...user,
             displayName: this.login.displayName,
             photoURL: ''

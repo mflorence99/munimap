@@ -5,13 +5,12 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
 import { ConfirmDialogData } from '@lib/components/confirm-dialog';
-import { DeleteMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { UpdateMap } from '@lib/state/map';
 
 import { computed } from '@angular/core';
 import { effect } from '@angular/core';
@@ -218,7 +217,7 @@ export class ControlPanelPropertiesComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.#store.dispatch(new DeleteMap(map.id));
+          this.#store.dispatch(new MapActions.DeleteMap(map.id));
           this.#router.navigate(['/create']);
         }
       });
@@ -227,7 +226,7 @@ export class ControlPanelPropertiesComponent {
   update(map: Map): void {
     // 👇 refresh if parcelIDs have changed
     this.#store.dispatch(
-      new UpdateMap(map, this.ngForm().controls['parcelIDs']?.dirty)
+      new MapActions.UpdateMap(map, this.ngForm().controls['parcelIDs']?.dirty)
     );
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered

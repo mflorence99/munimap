@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
 import { Landmark } from '@lib/common';
 import { LandmarksState } from '@lib/state/landmarks';
 import { Observable } from 'rxjs';
-import { SetStreetFilter } from '@lib/state/view';
 import { Store } from '@ngxs/store';
+import { ViewActions } from '@lib/state/view';
 
 import { inject } from '@angular/core';
 import { map } from 'rxjs';
@@ -84,6 +84,6 @@ export class DPWToolbarComponent {
   }
 
   onFilterStreet(street: string): void {
-    this.#store.dispatch(new SetStreetFilter(street));
+    this.#store.dispatch(new ViewActions.SetStreetFilter(street));
   }
 }

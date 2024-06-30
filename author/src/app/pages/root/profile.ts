@@ -1,13 +1,11 @@
 import { Auth } from '@angular/fire/auth';
+import { AuthActions } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
-import { Logout } from '@lib/state/auth';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Profile } from '@lib/state/auth';
 import { Store } from '@ngxs/store';
-import { UpdateProfile } from '@lib/state/auth';
-import { UpdateUser } from '@lib/state/auth';
 import { User } from '@lib/state/auth';
 
 import { computed } from '@angular/core';
@@ -129,13 +127,16 @@ export class ProfileComponent {
   }
 
   logout(): void {
-    this.#store.dispatch(new Logout());
+    this.#store.dispatch(new AuthActions.Logout());
     this.#drawer.close();
   }
 
   update(user: User, profile: Profile): void {
     this.errorMessage = null;
-    this.#store.dispatch([new UpdateUser(user), new UpdateProfile(profile)]);
+    this.#store.dispatch([
+      new AuthActions.UpdateUser(user),
+      new AuthActions.UpdateProfile(profile)
+    ]);
     // 👇 special code to change password
     if (user.password) {
       updatePassword(this.#fireauth.currentUser, user.password).catch(

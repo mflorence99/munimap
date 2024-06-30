@@ -7,7 +7,7 @@ import { Searcher } from './ol-searcher';
 import { SearcherComponent } from './ol-searcher';
 import { Selector } from './ol-selector';
 import { SelectorComponent } from './ol-selector';
-import { UpdateView } from '../state/view';
+import { ViewActions } from '../state/view';
 import { ViewState } from '../state/view';
 import { ViewStateModel } from '../state/view';
 
@@ -454,7 +454,9 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     const zoom = this.olView.getZoom();
     this.zoomChange.emit(zoom);
     if (!this.fitToBounds())
-      this.#store.dispatch(new UpdateView(this.path(), { center, zoom }));
+      this.#store.dispatch(
+        new ViewActions.UpdateView(this.path(), { center, zoom })
+      );
   }
 
   #onClick(event: OLMapBrowserEvent<any>): void {

@@ -1,10 +1,10 @@
-import { AddLandmark } from '../state/landmarks';
 import { AuthState } from '../state/auth';
 import { ConfirmDialogComponent } from '../components/confirm-dialog';
 import { ConfirmDialogData } from '../components/confirm-dialog';
 import { DestroyService } from '../services/destroy';
 import { Landmark } from '../common';
 import { LandmarkPropertiesClass } from '../common';
+import { LandmarksActions } from '../state/landmarks';
 import { OLInteractionAbstractDrawComponent } from './ol-interaction-abstractdraw';
 import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
 import { OLMapComponent } from './ol-map';
@@ -119,7 +119,7 @@ export class OLInteractionDrawLandmarksComponent
                 };
                 // 👇 select landmark after adding
                 this.#store
-                  .dispatch(new AddLandmark(landmark))
+                  .dispatch(new LandmarksActions.AddLandmark(landmark))
                   .subscribe(() => {
                     const selector =
                       this.#map.selector() as OLInteractionSelectLandmarksComponent;

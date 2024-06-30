@@ -19,28 +19,32 @@ import { signOut } from '@angular/fire/auth';
 import { updateProfile } from '@angular/fire/auth';
 import { user } from '@angular/fire/auth';
 
-export class Logout {
-  static readonly type = '[Auth] Logout';
-}
+const ACTION_SCOPE = 'Auth';
 
-export class SetProfile {
-  static readonly type = '[Auth] SetProfile';
-  constructor(public profile: Profile) {}
-}
+export namespace AuthActions {
+  export class Logout {
+    static readonly type = `[${ACTION_SCOPE}] Logout`;
+  }
 
-export class SetUser {
-  static readonly type = '[Auth] SetUser';
-  constructor(public user: FirebaseUser | User | null) {}
-}
+  export class SetProfile {
+    static readonly type = `[${ACTION_SCOPE}] SetProfile`;
+    constructor(public profile: Profile) {}
+  }
 
-export class UpdateProfile {
-  static readonly type = '[Auth] UpdateProfile';
-  constructor(public profile: Profile) {}
-}
+  export class SetUser {
+    static readonly type = `[${ACTION_SCOPE}] SetUser`;
+    constructor(public user: FirebaseUser | User | null) {}
+  }
 
-export class UpdateUser {
-  static readonly type = '[Auth] UpdateUser';
-  constructor(public user: User) {}
+  export class UpdateProfile {
+    static readonly type = `[${ACTION_SCOPE}] UpdateProfile`;
+    constructor(public profile: Profile) {}
+  }
+
+  export class UpdateUser {
+    static readonly type = `[${ACTION_SCOPE}] UpdateUser`;
+    constructor(public user: User) {}
+  }
 }
 
 export interface Profile {
@@ -101,7 +105,7 @@ export class AuthState implements NgxsOnInit {
   #router = inject(Router);
   #store = inject(Store);
 
-  @Action(Logout) logout(): void {
+  @Action(AuthActions.Logout) logout(): void {
     // 👉 we reload the app to cancel all the subscriptions
     //    that rely on a logged-in user
     signOut(this.#fireauth).then(() => location.reload());
@@ -111,9 +115,9 @@ export class AuthState implements NgxsOnInit {
     return state.profile;
   }
 
-  @Action(SetProfile) setProfile(
+  @Action(AuthActions.SetProfile) setProfile(
     ctx: StateContext<AuthStateModel>,
-    action: SetProfile
+    action: AuthActions.SetProfile
   ): void {
     const state = ctx.getState();
     ctx.setState({
@@ -122,9 +126,9 @@ export class AuthState implements NgxsOnInit {
     });
   }
 
-  @Action(SetUser) setUser(
+  @Action(AuthActions.SetUser) setUser(
     ctx: StateContext<AuthStateModel>,
-    action: SetUser
+    action: AuthActions.SetUser
   ): void {
     const state = ctx.getState();
     ctx.setState({
@@ -133,9 +137,9 @@ export class AuthState implements NgxsOnInit {
     });
   }
 
-  @Action(UpdateProfile) updateProfile(
+  @Action(AuthActions.UpdateProfile) updateProfile(
     ctx: StateContext<AuthStateModel>,
-    action: UpdateProfile
+    action: AuthActions.UpdateProfile
   ): void {
     const user = ctx.getState().user;
     console.log(
@@ -147,15 +151,15 @@ export class AuthState implements NgxsOnInit {
     const docRef = doc(this.#firestore, 'profiles', user.email);
     setDoc(docRef, profileProps(action.profile), {
       merge: true
-    }).then(() => ctx.dispatch(new SetProfile(action.profile)));
+    }).then(() => ctx.dispatch(new AuthActions.SetProfile(action.profile)));
   }
 
-  @Action(UpdateUser) updateUser(
+  @Action(AuthActions.UpdateUser) updateUser(
     ctx: StateContext<AuthStateModel>,
-    action: UpdateUser
+    action: AuthActions.UpdateUser
   ): void {
     updateProfile(this.#fireauth.currentUser, userProps(action.user)).then(() =>
-      ctx.dispatch(new SetUser(action.user))
+      ctx.dispatch(new AuthActions.SetUser(action.user))
     );
   }
 
@@ -179,7 +183,7 @@ export class AuthState implements NgxsOnInit {
     const forwardTo = deepLink || lastRoute || '/create';
     // 👉 the user will be NULL on logout!
     user(this.#fireauth).subscribe((user) => {
-      ctx.dispatch(new SetUser(user));
+      ctx.dispatch(new AuthActions.SetUser(user));
       if (user) {
         console.log(
           `%cFirestore get: profiles ${user.email}`,
@@ -189,10 +193,14 @@ export class AuthState implements NgxsOnInit {
         //    or an empty one if none found
         const docRef = doc(this.#firestore, 'profiles', user.email);
         getDoc(docRef).then((doc) => {
-          if (doc.exists()) ctx.dispatch(new SetProfile(doc.data() as Profile));
+          if (doc.exists())
+            ctx.dispatch(new AuthActions.SetProfile(doc.data() as Profile));
           else
             ctx.dispatch(
-              new UpdateProfile({ email: user.email, workgroup: '' })
+              new AuthActions.UpdateProfile({
+                email: user.email,
+                workgroup: ''
+              })
             );
         });
         // 👉 no point in going to login if we're logged in!

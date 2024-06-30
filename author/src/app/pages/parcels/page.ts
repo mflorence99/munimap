@@ -7,7 +7,6 @@ import { ParcelPropertiesComponent } from './parcel-properties';
 import { SidebarComponent } from '../../components/sidebar-component';
 import { SubdivideParcelComponent } from './subdivide-parcel';
 
-import { AddParcels } from '@lib/state/parcels';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
@@ -19,6 +18,7 @@ import { OLOverlayParcelLabelComponent } from '@lib/ol/ol-overlay-parcellabel';
 import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelPropertiesLabel } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
 import { Type } from '@angular/core';
 
 import { bbox } from '@turf/bbox';
@@ -723,7 +723,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       properties: opts.doProperties ? parcel.properties : null,
       type: 'Feature'
     };
-    this.store.dispatch(new AddParcels([redrawnParcel]));
+    this.store.dispatch(new ParcelsActions.AddParcels([redrawnParcel]));
   }
 
   #rotateLabel(feature: OLFeature<any>): void {

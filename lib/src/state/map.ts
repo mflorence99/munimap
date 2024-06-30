@@ -18,51 +18,55 @@ import { setDoc } from '@angular/fire/firestore';
 
 import copy from 'fast-copy';
 
-export class ClearMap {
-  static readonly type = '[Map] ClearMap';
-  constructor() {}
-}
+const ACTION_SCOPE = 'Map';
 
-export class CreateMap {
-  static readonly type = '[Map] CreateMap';
-  constructor(public map: Map) {}
-}
+export namespace MapActions {
+  export class ClearMap {
+    static readonly type = `[${ACTION_SCOPE}] ClearMap`;
+    constructor() {}
+  }
 
-export class CreateMapError {
-  static readonly type = '[Map] CreateMapError';
-  constructor(public error: string) {}
-}
+  export class CreateMap {
+    static readonly type = `[${ACTION_SCOPE}] CreateMap`;
+    constructor(public map: Map) {}
+  }
 
-export class DeleteMap {
-  static readonly type = '[Map] DeleteMap';
-  constructor(public id: string) {}
-}
+  export class CreateMapError {
+    static readonly type = `[${ACTION_SCOPE}] CreateMapError`;
+    constructor(public error: string) {}
+  }
 
-export class LoadMap {
-  static readonly type = '[Map] LoadMap';
-  constructor(
-    public id: string,
-    public dflt: Map,
-    public touch = false
-  ) {}
-}
+  export class DeleteMap {
+    static readonly type = `[${ACTION_SCOPE}] DeleteMap`;
+    constructor(public id: string) {}
+  }
 
-export class SetMap {
-  static readonly type = '[Map] SetMap';
-  constructor(public map: Map) {}
-}
+  export class LoadMap {
+    static readonly type = `[${ACTION_SCOPE}] LoadMap`;
+    constructor(
+      public id: string,
+      public dflt: Map,
+      public touch = false
+    ) {}
+  }
 
-export class UpdateMap {
-  static readonly type = '[Map] UpdateMap';
-  constructor(
-    public map: Map,
-    public refresh = false
-  ) {}
-}
+  export class SetMap {
+    static readonly type = `[${ACTION_SCOPE}] SetMap`;
+    constructor(public map: Map) {}
+  }
 
-export class UpdateMapError {
-  static readonly type = '[Map] UpdateMapError';
-  constructor(public error: string) {}
+  export class UpdateMap {
+    static readonly type = `[${ACTION_SCOPE}] UpdateMap`;
+    constructor(
+      public map: Map,
+      public refresh = false
+    ) {}
+  }
+
+  export class UpdateMapError {
+    static readonly type = `[${ACTION_SCOPE}] UpdateMapError`;
+    constructor(public error: string) {}
+  }
 }
 
 export type MapType = 'apdvd' | 'area' | 'dpw' | 'parcels' | 'property';
@@ -96,23 +100,23 @@ export class MapState {
     return state;
   }
 
-  @Action(ClearMap) clearMap(
+  @Action(MapActions.ClearMap) clearMap(
     ctx: StateContext<MapStateModel>,
-    _action: ClearMap
+    _action: MapActions.ClearMap
   ): void {
     ctx.setState(null);
   }
 
-  @Action(CreateMap) createMap(
+  @Action(MapActions.CreateMap) createMap(
     ctx: StateContext<MapStateModel>,
-    action: CreateMap
+    action: MapActions.CreateMap
   ): void {
     console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
     const docRef = doc(this.#firestore, 'maps', action.map.id);
     getDoc(docRef).then((doc) => {
       if (doc.exists()) {
         const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
-        ctx.dispatch(new CreateMapError(message));
+        ctx.dispatch(new MapActions.CreateMapError(message));
       } else {
         setDoc(
           docRef,
@@ -123,30 +127,30 @@ export class MapState {
     });
   }
 
-  @Action(DeleteMap) deleteMap(
+  @Action(MapActions.DeleteMap) deleteMap(
     ctx: StateContext<MapStateModel>,
-    action: DeleteMap
+    action: MapActions.DeleteMap
   ): void {
-    ctx.dispatch(new ClearMap());
+    ctx.dispatch(new MapActions.ClearMap());
     console.log(`%cFirestore delete: maps ${action.id}`, 'color: crimson');
     const docRef = doc(this.#firestore, 'maps', action.id);
     deleteDoc(docRef);
   }
 
-  @Action(LoadMap) loadMap(
+  @Action(MapActions.LoadMap) loadMap(
     ctx: StateContext<MapStateModel>,
-    action: LoadMap
+    action: MapActions.LoadMap
   ): void {
     // 👇 there's no map until there is one
     //    we can't use the old one!
-    ctx.dispatch(new ClearMap());
+    ctx.dispatch(new MapActions.ClearMap());
     console.log(`%cFirestore get: maps ${action.id}`, 'color: goldenrod');
     const docRef = doc(this.#firestore, 'maps', action.id);
     getDoc(docRef).then((doc) => {
       const map = doc.exists()
         ? (doc.data() as Map)
         : { ...action.dflt, isDflt: true };
-      ctx.dispatch(new SetMap(map));
+      ctx.dispatch(new MapActions.SetMap(map));
       // 👇 update the last-used timestamp, if this isn't the default map
       if (!map.isDflt && action.touch) {
         setDoc(
@@ -158,31 +162,31 @@ export class MapState {
     });
   }
 
-  @Action(SetMap) setMap(
+  @Action(MapActions.SetMap) setMap(
     ctx: StateContext<MapStateModel>,
-    action: SetMap
+    action: MapActions.SetMap
   ): void {
     ctx.setState(copy(action.map));
   }
 
-  @Action(UpdateMap) updateMap(
+  @Action(MapActions.UpdateMap) updateMap(
     ctx: StateContext<MapStateModel>,
-    action: UpdateMap
+    action: MapActions.UpdateMap
   ): void {
-    if (action.refresh) ctx.dispatch(new ClearMap());
+    if (action.refresh) ctx.dispatch(new MapActions.ClearMap());
     if (action.map.isDflt) {
       console.log(`%cFirestore get: maps ${action.map.id}`, 'color: goldenrod');
       const docRef = doc(this.#firestore, 'maps', action.map.id);
       getDoc(docRef).then((doc) => {
         if (doc.exists()) {
           const message = `Map ID "${action.map.id}" is already in use.  Please choose another.`;
-          ctx.dispatch(new UpdateMapError(message));
+          ctx.dispatch(new MapActions.UpdateMapError(message));
         } else {
           setDoc(
             docRef,
             { ...action.map, isDflt: false, timestamp: serverTimestamp() },
             { merge: true }
-          ).then(() => ctx.dispatch(new SetMap(action.map)));
+          ).then(() => ctx.dispatch(new MapActions.SetMap(action.map)));
         }
       });
     } else {
@@ -192,7 +196,7 @@ export class MapState {
       );
       const docRef = doc(this.#firestore, 'maps', action.map.id);
       setDoc(docRef, action.map, { merge: true }).then(() =>
-        ctx.dispatch(new SetMap(action.map))
+        ctx.dispatch(new MapActions.SetMap(action.map))
       );
     }
   }

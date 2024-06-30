@@ -1,15 +1,15 @@
 import { AnonState } from './anon';
 import { AuthState } from './auth';
 import { CanDo } from './undo';
-import { ClearStacks as ClearStacksProxy } from './undo';
+import { ClearStacks } from './undo';
 import { Map } from './map';
 import { MapState } from './map';
 import { Parcel } from '../common';
 import { ParcelAction } from '../common';
 import { ParcelID } from '../common';
 import { Profile } from './auth';
-import { Redo as RedoProxy } from './undo';
-import { Undo as UndoProxy } from './undo';
+import { Redo } from './undo';
+import { Undo } from './undo';
 import { Working } from './working';
 
 import { calculateParcel } from '../common';
@@ -52,29 +52,33 @@ import { writeBatch } from '@angular/fire/firestore';
 import copy from 'fast-copy';
 import hash from 'object-hash';
 
-export class AddParcels {
-  static readonly type = '[Parcels] AddParcels';
-  constructor(public parcels: Parcel[]) {}
-}
+const ACTION_SCOPE = 'Parcels';
 
-export class ClearStacks {
-  static readonly type = '[Parcels] ClearStacks';
-  constructor() {}
-}
+export namespace ParcelsActions {
+  export class AddParcels {
+    static readonly type = `[${ACTION_SCOPE}] AddParcels`;
+    constructor(public parcels: Parcel[]) {}
+  }
 
-export class Redo {
-  static readonly type = '[Parcels] Redo';
-  constructor() {}
-}
+  export class ClearStacks {
+    static readonly type = `[${ACTION_SCOPE}] ClearStacks`;
+    constructor() {}
+  }
 
-export class SetParcels {
-  static readonly type = '[Parcels] SetParcels';
-  constructor(public parcels: Parcel[]) {}
-}
+  export class Redo {
+    static readonly type = `[${ACTION_SCOPE}] Redo`;
+    constructor() {}
+  }
 
-export class Undo {
-  static readonly type = '[Parcels] Undo';
-  constructor() {}
+  export class SetParcels {
+    static readonly type = `[${ACTION_SCOPE}] SetParcels`;
+    constructor(public parcels: Parcel[]) {}
+  }
+
+  export class Undo {
+    static readonly type = `[${ACTION_SCOPE}] Undo`;
+    constructor() {}
+  }
 }
 
 export type ParcelsStateModel = Parcel[];
@@ -112,9 +116,9 @@ export class ParcelsState implements NgxsOnInit {
     return state;
   }
 
-  @Action(AddParcels) addParcels(
+  @Action(ParcelsActions.AddParcels) addParcels(
     ctx: StateContext<ParcelsStateModel>,
-    action: AddParcels
+    action: ParcelsActions.AddParcels
   ): void {
     // 👉 block any other undo, redo until this is finished
     ctx.dispatch([new CanDo(false, false), new Working(+1)]);
@@ -149,18 +153,18 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 side-effect of handleStreams$ will update state
   }
 
-  @Action(ClearStacks) clearStacks(
+  @Action(ParcelsActions.ClearStacks) clearStacks(
     ctx: StateContext<ParcelsStateModel>,
-    _action: ClearStacks
+    _action: ParcelsActions.ClearStacks
   ): void {
     redoStack.length = 0;
     undoStack.length = 0;
     ctx.dispatch(new CanDo(false, false));
   }
 
-  @Action(Redo) redo(
+  @Action(ParcelsActions.Redo) redo(
     ctx: StateContext<ParcelsStateModel>,
-    _action: Redo
+    _action: ParcelsActions.Redo
   ): void {
     // 👉 quick return if nothing to redo
     if (redoStack.length === 0) return;
@@ -215,17 +219,17 @@ export class ParcelsState implements NgxsOnInit {
     // 👉 side-effect of handleStreams$ will update state
   }
 
-  @Action(SetParcels) setParcels(
+  @Action(ParcelsActions.SetParcels) setParcels(
     ctx: StateContext<ParcelsStateModel>,
-    action: SetParcels
+    action: ParcelsActions.SetParcels
   ): void {
     this.#logParcels(action.parcels);
     ctx.setState(action.parcels);
   }
 
-  @Action(Undo) undo(
+  @Action(ParcelsActions.Undo) undo(
     ctx: StateContext<ParcelsStateModel>,
-    _action: Undo
+    _action: ParcelsActions.Undo
   ): void {
     // 👉 quick return if nothing to undo
     if (undoStack.length === 0) return;
@@ -312,12 +316,14 @@ export class ParcelsState implements NgxsOnInit {
 
   #handleActions$(): void {
     this.#actions$
-      .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
-      .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
-        if (action instanceof ClearStacksProxy)
-          this.#store.dispatch(new ClearStacks());
-        else if (action instanceof RedoProxy) this.#store.dispatch(new Redo());
-        else if (action instanceof UndoProxy) this.#store.dispatch(new Undo());
+      .pipe(ofActionSuccessful(ClearStacks, Redo, Undo))
+      .subscribe((action: ClearStacks | Redo | Undo) => {
+        if (action instanceof ClearStacks)
+          this.#store.dispatch(new ParcelsActions.ClearStacks());
+        else if (action instanceof Redo)
+          this.#store.dispatch(new ParcelsActions.Redo());
+        else if (action instanceof Undo)
+          this.#store.dispatch(new ParcelsActions.Undo());
       });
   }
 
@@ -361,7 +367,7 @@ export class ParcelsState implements NgxsOnInit {
         )
       )
       .subscribe((parcels: Parcel[]) => {
-        this.#store.dispatch(new SetParcels(parcels));
+        this.#store.dispatch(new ParcelsActions.SetParcels(parcels));
       });
   }
 

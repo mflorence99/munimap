@@ -2,8 +2,8 @@ import { RootPage } from '../root/page';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { SetSatelliteView } from '@lib/state/view';
 import { Store } from '@ngxs/store';
+import { ViewActions } from '@lib/state/view';
 
 import { inject } from '@angular/core';
 
@@ -61,6 +61,6 @@ export class ParcelsToolbarComponent {
   #store = inject(Store);
 
   onSatelliteViewToggle(state: boolean): void {
-    this.#store.dispatch(new SetSatelliteView(state));
+    this.#store.dispatch(new ViewActions.SetSatelliteView(state));
   }
 }

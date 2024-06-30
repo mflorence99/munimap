@@ -1,6 +1,5 @@
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -11,6 +10,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
 import { Store } from '@ngxs/store';
 import { ValuesPipe } from 'ngx-pipes';
 
@@ -201,7 +201,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
       // 👉 only save if at least one property override
       if (Object.keys(parcel.properties).length > 0) parcels.push(parcel);
     });
-    this.#store.dispatch(new AddParcels(parcels));
+    this.#store.dispatch(new ParcelsActions.AddParcels(parcels));
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered
     this.ngForm().form.markAsPristine();

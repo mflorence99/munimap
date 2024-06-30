@@ -1,6 +1,5 @@
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { AddParcels } from '@lib/state/parcels';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -9,6 +8,7 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OnInit } from '@angular/core';
 import { Parcel } from '@lib/common';
 import { ParcelID } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
 import { Store } from '@ngxs/store';
 
 import { featureCollection } from '@turf/helpers';
@@ -243,7 +243,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
     });
     // that's it!
     this.#store.dispatch(
-      new AddParcels([...removedParcels, ...subdividedParcels])
+      new ParcelsActions.AddParcels([...removedParcels, ...subdividedParcels])
     );
     this.drawer.close();
   }

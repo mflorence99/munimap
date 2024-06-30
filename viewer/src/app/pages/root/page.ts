@@ -1,11 +1,11 @@
+import { AnonActions } from '@lib/state/anon';
 import { AnonState } from '@lib/state/anon';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
-import { LoadMap } from '@lib/state/map';
-import { LoadProfile } from '@lib/state/anon';
 import { Location } from '@angular/common';
 import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
@@ -14,11 +14,11 @@ import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { ParcelCoding } from '@lib/state/view';
 import { Router } from '@angular/router';
-import { SetGPS } from '@lib/state/view';
 import { Store } from '@ngxs/store';
 import { Title } from '@angular/platform-browser';
 import { User } from '@lib/state/auth';
 import { VersionService } from '@lib/services/version';
+import { ViewActions } from '@lib/state/view';
 import { ViewState } from '@lib/state/view';
 import { ViewStateModel } from '@lib/state/view';
 
@@ -197,7 +197,7 @@ export class RootPage implements OnInit {
   }
 
   onGPSToggle(state: boolean): void {
-    this.#store.dispatch(new SetGPS(state));
+    this.#store.dispatch(new ViewActions.SetGPS(state));
   }
 
   reset(): void {
@@ -222,7 +222,7 @@ export class RootPage implements OnInit {
         } else {
           this.title = map.name;
           this.#title.setTitle(map.name);
-          this.#store.dispatch(new LoadProfile(map.owner));
+          this.#store.dispatch(new AnonActions.LoadProfile(map.owner));
           // 👉 we don't have to wait until the profile is loaded,
           //    because guards prevent
           //    the page from loading until everything is set
@@ -250,7 +250,9 @@ export class RootPage implements OnInit {
         if (parts.length === 3) fromDomain = parts[0];
         // 👇 take the map ID from the params first, so that we can
         //    override it with the domain if necessary
-        this.#store.dispatch(new LoadMap(fromParams ?? fromDomain, null));
+        this.#store.dispatch(
+          new MapActions.LoadMap(fromParams ?? fromDomain, null)
+        );
       });
   }
 

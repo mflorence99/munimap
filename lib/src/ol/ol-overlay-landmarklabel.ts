@@ -1,7 +1,7 @@
 import { DestroyService } from '../services/destroy';
 import { Landmark } from '../common';
+import { LandmarksActions } from '../state/landmarks';
 import { OLMapComponent } from './ol-map';
-import { UpdateLandmark } from '../state/landmarks';
 
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -79,7 +79,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
         geometry: { type: 'Point', coordinates: position },
         type: 'Feature'
       };
-      this.#store.dispatch(new UpdateLandmark(movedLandmark));
+      this.#store.dispatch(new LandmarksActions.UpdateLandmark(movedLandmark));
     }
     // 👉 update point labels
     else if (this.#feature.getGeometry().getType() === 'Polygon') {
@@ -89,7 +89,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
         properties: { textLocation: position as [number, number] },
         type: 'Feature'
       };
-      this.#store.dispatch(new UpdateLandmark(movedLandmark));
+      this.#store.dispatch(new LandmarksActions.UpdateLandmark(movedLandmark));
     }
     this.olOverlay.setPosition([0, 0]);
     // 👉 https://stackoverflow.com/questions/61157528

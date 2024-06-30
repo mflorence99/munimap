@@ -1,15 +1,15 @@
 import { AnonState } from './anon';
 import { AuthState } from './auth';
 import { CanDo } from './undo';
-import { ClearStacks as ClearStacksProxy } from './undo';
+import { ClearStacks } from './undo';
 import { Landmark } from '../common';
 import { LandmarkID } from '../common';
 import { Landmarks } from '../common';
 import { Map } from './map';
 import { MapState } from './map';
 import { Profile } from './auth';
-import { Redo as RedoProxy } from './undo';
-import { Undo as UndoProxy } from './undo';
+import { Redo } from './undo';
+import { Undo } from './undo';
 import { Working } from './working';
 
 import { calculateLandmark } from '../common';
@@ -59,63 +59,67 @@ class Undoable {
   ) {}
 }
 
-export class AddLandmark extends Undoable {
-  static readonly type = '[Landmarks] AddLandmark';
-  constructor(
-    public override landmark: Partial<Landmark>,
-    public override undoable = true
-  ) {
-    super(landmark, undoable);
-    this.redoneBy = AddLandmark;
-    this.undoneBy = DeleteLandmark;
+const ACTION_SCOPE = 'Landmarks';
+
+export namespace LandmarksActions {
+  export class AddLandmark extends Undoable {
+    static readonly type = `[${ACTION_SCOPE}] AddLandmark`;
+    constructor(
+      public override landmark: Partial<Landmark>,
+      public override undoable = true
+    ) {
+      super(landmark, undoable);
+      this.redoneBy = AddLandmark;
+      this.undoneBy = DeleteLandmark;
+    }
+  }
+
+  export class ClearStacks {
+    static readonly type = `[${ACTION_SCOPE}] ClearStacks`;
+    constructor() {}
+  }
+
+  export class DeleteLandmark extends Undoable {
+    static readonly type = `[${ACTION_SCOPE}] DeleteLandmark`;
+    constructor(
+      public override landmark: Partial<Landmark>,
+      public override undoable = true
+    ) {
+      super(landmark, undoable);
+      this.redoneBy = DeleteLandmark;
+      this.undoneBy = AddLandmark;
+    }
+  }
+
+  export class Redo {
+    static readonly type = `[${ACTION_SCOPE}] Redo`;
+    constructor() {}
+  }
+
+  export class SetLandmarks {
+    static readonly type = `[${ACTION_SCOPE}] SetLandmarks`;
+    constructor(public landmarks: Landmark[]) {}
+  }
+
+  export class Undo {
+    static readonly type = `[${ACTION_SCOPE}] Undo`;
+    constructor() {}
+  }
+
+  export class UpdateLandmark extends Undoable {
+    static readonly type = `[${ACTION_SCOPE}] UpdateLandmark`;
+    constructor(
+      public override landmark: Partial<Landmark>,
+      public override undoable = true
+    ) {
+      super(landmark, undoable);
+      this.redoneBy = UpdateLandmark;
+      this.undoneBy = UpdateLandmark;
+    }
   }
 }
 
-export class ClearStacks {
-  static readonly type = '[Landmarks] ClearStacks';
-  constructor() {}
-}
-
-export class DeleteLandmark extends Undoable {
-  static readonly type = '[Landmarks] DeleteLandmark';
-  constructor(
-    public override landmark: Partial<Landmark>,
-    public override undoable = true
-  ) {
-    super(landmark, undoable);
-    this.redoneBy = DeleteLandmark;
-    this.undoneBy = AddLandmark;
-  }
-}
-
-export class Redo {
-  static readonly type = '[Landmarks] Redo';
-  constructor() {}
-}
-
-export class SetLandmarks {
-  static readonly type = '[Landmarks] SetLandmarks';
-  constructor(public landmarks: Landmark[]) {}
-}
-
-export class Undo {
-  static readonly type = '[Landmarks] Undo';
-  constructor() {}
-}
-
-export class UpdateLandmark extends Undoable {
-  static readonly type = '[Landmarks] UpdateLandmark';
-  constructor(
-    public override landmark: Partial<Landmark>,
-    public override undoable = true
-  ) {
-    super(landmark, undoable);
-    this.redoneBy = UpdateLandmark;
-    this.undoneBy = UpdateLandmark;
-  }
-}
-
-type RedoableAction = UpdateLandmark;
+type RedoableAction = LandmarksActions.UpdateLandmark;
 type UndoableAction = RedoableAction;
 
 export type LandmarksStateModel = Landmark[];
@@ -153,9 +157,9 @@ export class LandmarksState implements NgxsOnInit {
     return state;
   }
 
-  @Action(AddLandmark) addLandmark(
+  @Action(LandmarksActions.AddLandmark) addLandmark(
     ctx: StateContext<LandmarksStateModel>,
-    action: AddLandmark
+    action: LandmarksActions.AddLandmark
   ): Promise<void> {
     const normalized = this.#normalize(action.landmark);
     if (!normalized.id) normalized.id = makeLandmarkID(normalized);
@@ -180,9 +184,9 @@ export class LandmarksState implements NgxsOnInit {
     // 👉 side-effect of handleStreams$ will update state
   }
 
-  @Action(DeleteLandmark) deleteLandmark(
+  @Action(LandmarksActions.DeleteLandmark) deleteLandmark(
     ctx: StateContext<LandmarksStateModel>,
-    action: DeleteLandmark
+    action: LandmarksActions.DeleteLandmark
   ): Promise<void> {
     // 👇 don't really need to normalize as only an ID is needed
     //    just following the pattern
@@ -206,9 +210,9 @@ export class LandmarksState implements NgxsOnInit {
     // 👉 side-effect of handleStreams$ will update state
   }
 
-  @Action(Redo) redo(
+  @Action(LandmarksActions.Redo) redo(
     ctx: StateContext<LandmarksStateModel>,
-    _action: Redo
+    _action: LandmarksActions.Redo
   ): void {
     // 👉 quick return if nothing to redo
     if (redoStack.length === 0) return;
@@ -230,17 +234,17 @@ export class LandmarksState implements NgxsOnInit {
     });
   }
 
-  @Action(SetLandmarks) setLandmarks(
+  @Action(LandmarksActions.SetLandmarks) setLandmarks(
     ctx: StateContext<LandmarksStateModel>,
-    action: SetLandmarks
+    action: LandmarksActions.SetLandmarks
   ): void {
     this.#logLandmarks(action.landmarks);
     ctx.setState(action.landmarks);
   }
 
-  @Action(Undo) undo(
+  @Action(LandmarksActions.Undo) undo(
     ctx: StateContext<LandmarksStateModel>,
-    _action: Undo
+    _action: LandmarksActions.Undo
   ): void {
     // 👉 quick return if nothing to undo
     if (undoStack.length === 0) return;
@@ -262,9 +266,9 @@ export class LandmarksState implements NgxsOnInit {
     });
   }
 
-  @Action(UpdateLandmark) updateLandmark(
+  @Action(LandmarksActions.UpdateLandmark) updateLandmark(
     ctx: StateContext<LandmarksStateModel>,
-    action: UpdateLandmark
+    action: LandmarksActions.UpdateLandmark
   ): Promise<void> {
     const normalized = this.#normalize(action.landmark);
     // 👉 block any other undo, redo until this is finished
@@ -303,12 +307,14 @@ export class LandmarksState implements NgxsOnInit {
 
   #handleActions$(): void {
     this.#actions$
-      .pipe(ofActionSuccessful(ClearStacksProxy, RedoProxy, UndoProxy))
-      .subscribe((action: ClearStacksProxy | RedoProxy | UndoProxy) => {
-        if (action instanceof ClearStacksProxy)
-          this.#store.dispatch(new ClearStacks());
-        else if (action instanceof RedoProxy) this.#store.dispatch(new Redo());
-        else if (action instanceof UndoProxy) this.#store.dispatch(new Undo());
+      .pipe(ofActionSuccessful(ClearStacks, Redo, Undo))
+      .subscribe((action: ClearStacks | Redo | Undo) => {
+        if (action instanceof ClearStacks)
+          this.#store.dispatch(new LandmarksActions.ClearStacks());
+        else if (action instanceof Redo)
+          this.#store.dispatch(new LandmarksActions.Redo());
+        else if (action instanceof Undo)
+          this.#store.dispatch(new LandmarksActions.Undo());
       });
   }
 
@@ -351,7 +357,7 @@ export class LandmarksState implements NgxsOnInit {
         )
       )
       .subscribe((landmarks: Landmark[]) => {
-        this.#store.dispatch(new SetLandmarks(landmarks));
+        this.#store.dispatch(new LandmarksActions.SetLandmarks(landmarks));
       });
   }
 

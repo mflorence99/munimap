@@ -1,4 +1,3 @@
-import { AddParcels } from '../state/parcels';
 import { AuthState } from '../state/auth';
 import { ConfirmDialogComponent } from '../components/confirm-dialog';
 import { ConfirmDialogData } from '../components/confirm-dialog';
@@ -6,6 +5,7 @@ import { DestroyService } from '../services/destroy';
 import { OLInteractionAbstractRedrawComponent } from './ol-interaction-abstractredraw';
 import { OLMapComponent } from './ol-map';
 import { Parcel } from '../common';
+import { ParcelsActions } from '../state/parcels';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -61,7 +61,9 @@ export class OLInteractionRedrawParcelComponent
               path: this.#map.path(),
               type: 'Feature'
             };
-            this.#store.dispatch(new AddParcels([redrawnParcel]));
+            this.#store.dispatch(
+              new ParcelsActions.AddParcels([redrawnParcel])
+            );
           }
           // 👉 on CANCEL, reset geometry
           else this.resetRedraw();

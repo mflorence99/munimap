@@ -1,6 +1,5 @@
 import { SidebarComponent } from '../../components/sidebar-component';
 
-import { AddLandmark } from '@lib/state/landmarks';
 import { AuthState } from '@lib/state/auth';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -8,6 +7,7 @@ import { Component } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { Landmark } from '@lib/common';
 import { LandmarkPropertiesClass } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { Store } from '@ngxs/store';
@@ -232,7 +232,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
               name: feature.properties?.name ?? 'Imported Landmark'
             };
             await firstValueFrom(
-              this.#store.dispatch(new AddLandmark(landmark))
+              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark))
             );
           }
         }

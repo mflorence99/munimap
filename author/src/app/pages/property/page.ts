@@ -7,10 +7,10 @@ import { SidebarComponent } from '../../components/sidebar-component';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
-import { DeleteLandmark } from '@lib/state/landmarks';
 import { DestroyService } from '@lib/services/destroy';
 import { Landmark } from '@lib/common';
 import { LandmarkPropertiesClass } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLInteractionDrawLandmarksComponent } from '@lib/ol/ol-interaction-drawlandmarks';
@@ -19,7 +19,6 @@ import { OLMapComponent } from '@lib/ol/ol-map';
 import { OLOverlayLandmarkLabelComponent } from '@lib/ol/ol-overlay-landmarklabel';
 import { OnInit } from '@angular/core';
 import { Type } from '@angular/core';
-import { UpdateLandmark } from '@lib/state/landmarks';
 
 import { bbox } from '@turf/bbox';
 import { bboxPolygon } from '@turf/bbox-polygon';
@@ -734,7 +733,9 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
         break;
       case 'delete-landmarks':
         this.store.dispatch(
-          this.map().selectedIDs.map((id) => new DeleteLandmark({ id }))
+          this.map().selectedIDs.map(
+            (id) => new LandmarksActions.DeleteLandmark({ id })
+          )
         );
         break;
       case 'draw-landmarks':
@@ -774,7 +775,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       if (conversion) {
         const feature = this.map().selected[0];
         const landmark = conversion.converter(feature);
-        this.store.dispatch(new UpdateLandmark(landmark));
+        this.store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
       }
     }
   }
@@ -1204,6 +1205,6 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       },
       type: 'Feature'
     };
-    this.store.dispatch(new UpdateLandmark(landmark));
+    this.store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
   }
 }

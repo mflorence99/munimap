@@ -7,13 +7,12 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthState } from '@lib/state/auth';
 import { ComponentRef } from '@angular/core';
 import { DestroyService } from '@lib/services/destroy';
-import { LoadMap } from '@lib/state/map';
 import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
 import { MapType } from '@lib/state/map';
 import { MatDrawer } from '@angular/material/sidenav';
 import { OLMapComponent } from '@lib/ol/ol-map';
 import { Router } from '@angular/router';
-import { SetMap } from '@lib/state/map';
 import { Signal } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Type } from '@angular/core';
@@ -94,8 +93,8 @@ export abstract class AbstractMapPage {
 
   #handleActions$(): void {
     this.actions$
-      .pipe(ofActionSuccessful(SetMap), takeUntil(this.destroy$))
-      .subscribe((action: SetMap) => {
+      .pipe(ofActionSuccessful(MapActions.SetMap), takeUntil(this.destroy$))
+      .subscribe((action: MapActions.SetMap) => {
         // 👉 when we log in and out on the same computer,
         //    we could be loading the "last used" map
         //    which we aren't authorized to see
@@ -137,7 +136,7 @@ export abstract class AbstractMapPage {
       type: this.getType()
     };
     // 👉 load up the requested (or default) map
-    this.store.dispatch(new LoadMap(id, dflt, /* touch = */ true));
+    this.store.dispatch(new MapActions.LoadMap(id, dflt, /* touch = */ true));
     // 👉 set the window title to something we know for now
     this.root.setTitle(path);
   }

@@ -22,19 +22,23 @@ import { getDoc } from '@angular/fire/firestore';
 import { inject } from '@angular/core';
 import { signInAnonymously } from '@angular/fire/auth';
 
-export class LoadProfile {
-  static readonly type = '[Anon] LoadProfile';
-  constructor(public email: string) {}
-}
+const ACTION_SCOPE = 'Anon';
 
-export class SetProfile {
-  static readonly type = '[Anon] SetProfile';
-  constructor(public profile: Profile) {}
-}
+export namespace AnonActions {
+  export class LoadProfile {
+    static readonly type = `[${ACTION_SCOPE}] LoadProfile`;
+    constructor(public email: string) {}
+  }
 
-export class SetUser {
-  static readonly type = '[Anon] SetUser';
-  constructor(public user: FirebaseUser | User | null) {}
+  export class SetProfile {
+    static readonly type = `[${ACTION_SCOPE}] SetProfile`;
+    constructor(public profile: Profile) {}
+  }
+
+  export class SetUser {
+    static readonly type = `[${ACTION_SCOPE}] SetUser`;
+    constructor(public user: FirebaseUser | User | null) {}
+  }
 }
 
 export type AnonStateModel = AuthStateModel;
@@ -52,9 +56,9 @@ export class AnonState implements NgxsOnInit {
   #firestore = inject(Firestore);
   #store = inject(Store);
 
-  @Action(LoadProfile) loadProfile(
+  @Action(AnonActions.LoadProfile) loadProfile(
     ctx: StateContext<AnonStateModel>,
-    action: LoadProfile
+    action: AnonActions.LoadProfile
   ): void {
     console.log(
       `%cFirestore get: profiles ${action.email}`,
@@ -62,7 +66,7 @@ export class AnonState implements NgxsOnInit {
     );
     const docRef = doc(this.#firestore, 'profiles', action.email);
     getDoc(docRef).then((doc) => {
-      ctx.dispatch(new SetProfile(doc.data() as Profile));
+      ctx.dispatch(new AnonActions.SetProfile(doc.data() as Profile));
     });
   }
 
@@ -70,9 +74,9 @@ export class AnonState implements NgxsOnInit {
     return state.profile;
   }
 
-  @Action(SetProfile) setProfile(
+  @Action(AnonActions.SetProfile) setProfile(
     ctx: StateContext<AnonStateModel>,
-    action: SetProfile
+    action: AnonActions.SetProfile
   ): void {
     const state = ctx.getState();
     ctx.setState({
@@ -81,9 +85,9 @@ export class AnonState implements NgxsOnInit {
     });
   }
 
-  @Action(SetUser) setUser(
+  @Action(AnonActions.SetUser) setUser(
     ctx: StateContext<AnonStateModel>,
-    action: SetUser
+    action: AnonActions.SetUser
   ): void {
     const state = ctx.getState();
     ctx.setState({
@@ -107,10 +111,10 @@ export class AnonState implements NgxsOnInit {
   ngxsOnInit(ctx: StateContext<AnonStateModel>): void {
     signInAnonymously(this.#fireauth)
       .then(() => {
-        ctx.dispatch(new SetUser({} as User));
+        ctx.dispatch(new AnonActions.SetUser({} as User));
       })
       .catch(() => {
-        ctx.dispatch(new SetUser(null));
+        ctx.dispatch(new AnonActions.SetUser(null));
       });
   }
 }
