@@ -115,7 +115,7 @@
     }
   },
   "organizeImports": {
-    "enabled": false
+    "enabled": true
   },
   "overrides": [
     {
