@@ -1,25 +1,25 @@
-import { DestroyService } from '../services/destroy';
-import { OLMapComponent } from './ol-map';
-import { OLSourceParcelsComponent } from './ol-source-parcels';
+import { DestroyService } from "../services/destroy";
+import { OLMapComponent } from "./ol-map";
+import { OLSourceParcelsComponent } from "./ol-source-parcels";
 
-import { simplify } from '../common';
+import { simplify } from "../common";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { bbox } from '@turf/bbox';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { saveAs } from 'file-saver';
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { bbox } from "@turf/bbox";
+import { saveAs } from "file-saver";
 
-import OLFeature from 'ol/Feature';
-import OLGeoJSON from 'ol/format/GeoJSON';
-import OLProjection from 'ol/proj/Projection';
+import OLFeature from "ol/Feature";
+import OLGeoJSON from "ol/format/GeoJSON";
+import OLProjection from "ol/proj/Projection";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-control-exportparcels',
+  selector: "app-ol-control-exportparcels",
   template: `
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
@@ -31,8 +31,8 @@ import OLProjection from 'ol/proj/Projection';
         display: block;
         pointer-events: auto;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLControlExportParcelsComponent {
   fileName = input<string>();
@@ -44,7 +44,7 @@ export class OLControlExportParcelsComponent {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection
+      featureProjection: this.#map.projection,
     });
     this.#source = new OLSourceParcelsComponent();
     this.#source.ngOnInit();
@@ -55,7 +55,7 @@ export class OLControlExportParcelsComponent {
       this.#map.boundaryExtent,
       this.#map.olView.getResolution(),
       new OLProjection({ code: this.#map.projection }),
-      this.#export.bind(this)
+      this.#export.bind(this),
     );
   }
 
@@ -66,7 +66,7 @@ export class OLControlExportParcelsComponent {
       return feature;
     });
     const blob = new Blob([JSON.stringify(simplify(geojson))], {
-      type: 'text/plain;charset=utf-8'
+      type: "text/plain;charset=utf-8",
     });
     saveAs(blob, `${this.fileName()}.geojson`);
   }

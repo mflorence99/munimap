@@ -1,7 +1,7 @@
-import { MatDrawer } from '@angular/material/sidenav';
-import { OLMapComponent } from '@lib/ol/ol-map';
+import { MatDrawer } from "@angular/material/sidenav";
+import { OLMapComponent } from "@lib/ol/ol-map";
 
-import OLFeature from 'ol/Feature';
+import OLFeature from "ol/Feature";
 
 export interface SidebarComponent {
   drawer: MatDrawer;

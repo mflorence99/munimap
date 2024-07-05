@@ -1,26 +1,26 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
+import { OLLayerVectorComponent } from "./ol-layer-vector";
+import { OLMapComponent } from "./ol-map";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Coordinate } from "ol/coordinate";
 
-import { all as allStrategy } from 'ol/loadingstrategy';
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
+import { all as allStrategy } from "ol/loadingstrategy";
 
-import GeoJSON from 'ol/format/GeoJSON';
-import OLFeature from 'ol/Feature';
-import OLProjection from 'ol/proj/Projection';
-import OLVector from 'ol/source/Vector';
+import OLFeature from "ol/Feature";
+import GeoJSON from "ol/format/GeoJSON";
+import OLProjection from "ol/proj/Projection";
+import OLVector from "ol/source/Vector";
 
 const attribution =
   '<a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-boundary',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-boundary",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceBoundaryComponent {
   olVector: OLVector<any>;
@@ -33,7 +33,7 @@ export class OLSourceBoundaryComponent {
       attributions: [attribution],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: allStrategy
+      strategy: allStrategy,
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -45,13 +45,13 @@ export class OLSourceBoundaryComponent {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function
+    success: Function,
   ): void {
     // 👉 convert features into OL format
     const features = this.olVector
       .getFormat()
       .readFeatures(this.#map.boundary(), {
-        featureProjection: this.#map.projection
+        featureProjection: this.#map.projection,
       }) as OLFeature<any>[];
     // 👉 add feature to source
     this.olVector.addFeatures(features);

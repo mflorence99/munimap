@@ -1,28 +1,28 @@
-import { ConfirmDialogComponent } from '../components/confirm-dialog';
-import { ConfirmDialogData } from '../components/confirm-dialog';
-import { OLControlPrintProgressComponent } from './ol-control-printprogress';
-import { OLMapComponent } from './ol-map';
-import { PrintProgressData } from './ol-control-printprogress';
+import { ConfirmDialogComponent } from "../components/confirm-dialog";
+import { ConfirmDialogData } from "../components/confirm-dialog";
+import { OLControlPrintProgressComponent } from "./ol-control-printprogress";
+import { PrintProgressData } from "./ol-control-printprogress";
+import { OLMapComponent } from "./ol-map";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate as OLCoordinate } from 'ol/coordinate';
-import { ElementRef } from '@angular/core';
-import { EventsKey as OLEventsKey } from 'ol/events';
-import { MatDialog } from '@angular/material/dialog';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatDialogRef } from "@angular/material/dialog";
+import { Coordinate as OLCoordinate } from "ol/coordinate";
+import { EventsKey as OLEventsKey } from "ol/events";
 
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { saveAs } from 'file-saver';
-import { unByKey } from 'ol/Observable';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { saveAs } from "file-saver";
+import { unByKey } from "ol/Observable";
 
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-control-print',
+  selector: "app-ol-control-print",
   template: `
     <button (click)="print()" mat-icon-button>
       <fa-icon [icon]="['fas', 'print']" size="2x"></fa-icon>
@@ -36,11 +36,11 @@ import html2canvas from 'html2canvas';
         display: block;
         pointer-events: auto;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLControlPrintComponent {
-  canvas = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>("canvas");
   dpi = input(300);
   fileName = input<string>();
   maxPrintSize = input(12000);
@@ -59,15 +59,15 @@ export class OLControlPrintComponent {
   print(): void {
     const data: ConfirmDialogData = {
       content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize()[0]}" x ${this.printSize()[1]}" paper.`,
-      title: 'Please confirm map print'
+      title: "Please confirm map print",
     };
     this.#dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.#renderCompleteKey = this.#map.olMap.once('rendercomplete', () =>
-            this.#printImpl()
+          this.#renderCompleteKey = this.#map.olMap.once("rendercomplete", () =>
+            this.#printImpl(),
           );
           this.#setup();
         }
@@ -92,7 +92,7 @@ export class OLControlPrintComponent {
       const actual = ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
       console.log(
         `%cPrint padding ${actual[0]} x ${actual[1]}`,
-        'color: lightgreen'
+        "color: lightgreen",
       );
       return actual;
     }
@@ -100,7 +100,7 @@ export class OLControlPrintComponent {
 
   #printArea(cx: number, cy: number): number[] {
     const nominal = [cx * this.dpi(), cy * this.dpi()];
-    const ar = this.#map.orientation === 'portrait' ? cx / cy : cy / cx;
+    const ar = this.#map.orientation === "portrait" ? cx / cy : cy / cx;
     const actual = [];
     if (ar > 1) {
       actual[0] = Math.min(nominal[0], this.maxPrintSize());
@@ -109,22 +109,22 @@ export class OLControlPrintComponent {
       actual[1] = Math.min(nominal[1], this.maxPrintSize());
       actual[0] = actual[1] * ar;
     }
-    console.log(`%cPrint area ${actual[0]} x ${actual[1]}`, 'color: lightblue');
+    console.log(`%cPrint area ${actual[0]} x ${actual[1]}`, "color: lightblue");
     return actual;
   }
 
   #printImpl(): void {
     html2canvas(this.#map.olMap.getViewport(), {
       height: this.#py,
-      width: this.#px
+      width: this.#px,
     }).then((viewport) => {
       // 👉 compute padding and draw it around viewport
       const padding = this.#padding(this.#px, this.#py);
       const printout = this.canvas().nativeElement;
       printout.width = this.#px + padding[0];
       printout.height = this.#py + padding[1];
-      const ctx = printout.getContext('2d');
-      ctx.fillStyle = 'white';
+      const ctx = printout.getContext("2d");
+      ctx.fillStyle = "white";
       ctx.fillRect(0, 0, printout.width, printout.height);
       ctx.drawImage(viewport, padding[0] / 2, padding[1] / 2);
       // 👉 now render printer as image
@@ -133,8 +133,8 @@ export class OLControlPrintComponent {
           saveAs(blob, `${this.fileName()}.jpeg`);
           this.#teardown();
         },
-        'image/jpeg',
-        0.95 /* 👈 juggle quality with resolution to get best image */
+        "image/jpeg",
+        0.95 /* 👈 juggle quality with resolution to get best image */,
       );
     });
   }
@@ -151,11 +151,11 @@ export class OLControlPrintComponent {
     const data: PrintProgressData = {
       map: this.#map,
       px: this.#px,
-      py: this.#py
+      py: this.#py,
     };
     this.#progressRef = this.#dialog.open(OLControlPrintProgressComponent, {
       data,
-      disableClose: true
+      disableClose: true,
     });
     this.#progressRef.afterClosed().subscribe(() => {
       unByKey(this.#renderCompleteKey);
@@ -167,7 +167,7 @@ export class OLControlPrintComponent {
     setTimeout(() => {
       const element = this.#map.olMap.getTargetElement();
       element.style.height = `${this.#py}px`;
-      element.style.overflow = 'visible';
+      element.style.overflow = "visible";
       element.style.width = `${this.#px}px`;
       this.#dpi = this.#map.dpi();
       // 👉 the actual dpi has been clamped!
@@ -184,7 +184,7 @@ export class OLControlPrintComponent {
     // 👇 https://openlayers.org/en/latest/examples/print-to-scale.html
     const element = this.#map.olMap.getTargetElement();
     element.style.height = ``;
-    element.style.overflow = 'hidden';
+    element.style.overflow = "hidden";
     element.style.width = ``;
     this.#map.dpi.set(this.#dpi);
     this.#map.olMap.updateSize();

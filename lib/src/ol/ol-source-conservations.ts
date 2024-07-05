@@ -1,11 +1,11 @@
-import { ConservationProperties } from '../common';
-import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { ConservationProperties } from "../common";
+import { OLSourceArcGISComponent } from "./ol-source-arcgis";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Coordinate } from "ol/coordinate";
 
-import { input } from '@angular/core';
+import { input } from "@angular/core";
 
 // 🔥 we no longer use this source -- we use parcels instead
 
@@ -14,9 +14,9 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-conservations',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-conservations",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
   exclude = input<(number | string)[]>();
@@ -42,7 +42,7 @@ export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'conservation';
+    return "conservation";
   }
 
   getURL(extent: Coordinate): string {

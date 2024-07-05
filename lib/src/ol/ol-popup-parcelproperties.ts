@@ -1,26 +1,26 @@
-import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
-import { OLMapComponent } from './ol-map';
-import { OLPopupSelectionComponent } from './ol-popup-selection';
-import { Parcel } from '../common';
-import { ParcelID } from '../common';
-import { ParcelProperties } from '../common';
+import { Parcel } from "../common";
+import { ParcelID } from "../common";
+import { ParcelProperties } from "../common";
+import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
+import { OLMapComponent } from "./ol-map";
+import { OLPopupSelectionComponent } from "./ol-popup-selection";
 
-import { parcelPropertiesUsage } from '../common';
-import { parcelPropertiesUse } from '../common';
+import { parcelPropertiesUsage } from "../common";
+import { parcelPropertiesUse } from "../common";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { outputToObservable } from '@angular/core/rxjs-interop';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { outputToObservable } from "@angular/core/rxjs-interop";
+import { map } from "rxjs/operators";
 
-import OLFeature from 'ol/Feature';
+import OLFeature from "ol/Feature";
 
 // 👇 we can't use the normal DestroyService protocol here
 //    as snackbar popups don't have a standard lifecycle
@@ -35,7 +35,7 @@ interface Abutter {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-popup-parcelproperties',
+  selector: "app-ol-popup-parcelproperties",
   template: `
     <button (click)="onClose()" class="closer" mat-icon-button>
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
@@ -273,8 +273,8 @@ interface Abutter {
       .wrapper {
         max-width: unset;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLPopupParcelPropertiesComponent {
   abutters: Abutter[] = [];
@@ -287,7 +287,7 @@ export class OLPopupParcelPropertiesComponent {
   sameUsage: boolean;
   splitHorizontally = false;
   splitVertically = true;
-  tables = viewChild<ElementRef>('tables');
+  tables = viewChild<ElementRef>("tables");
 
   #cdf = inject(ChangeDetectorRef);
   #map = inject(OLMapComponent);
@@ -309,7 +309,7 @@ export class OLPopupParcelPropertiesComponent {
     const link = `https://www.google.com/maps/@?api=1&map_action=map&center=${
       property.centers[0][1]
     }%2C${property.centers[0][0]}&zoom=${Math.round(
-      this.#map.olView.getZoom()
+      this.#map.olView.getZoom(),
     )}&basemap=satellite`;
     return link;
   }
@@ -346,14 +346,14 @@ export class OLPopupParcelPropertiesComponent {
               address: feature.properties.address,
               addressOfOwner: feature.properties.addressOfOwner,
               id: feature.id,
-              owner: feature.properties.owner
+              owner: feature.properties.owner,
             }))
-            .sort((p, q) => String(p.id).localeCompare(String(q.id)))
+            .sort((p, q) => String(p.id).localeCompare(String(q.id))),
         ),
         // 👉 only show abutters if there's room
         map((abutters: Abutter[]): Abutter[] =>
-          window.innerWidth >= 480 ? abutters : []
-        )
+          window.innerWidth >= 480 ? abutters : [],
+        ),
       )
       .subscribe((abutters: Abutter[]) => {
         this.abutters = abutters;
@@ -365,31 +365,31 @@ export class OLPopupParcelPropertiesComponent {
     outputToObservable(this.#map.featuresSelected)
       .pipe(
         map((features: OLFeature<any>[]): ParcelProperties[] =>
-          features.map((feature) => feature.getProperties())
+          features.map((feature) => feature.getProperties()),
         ),
         // 👉 show only as many properties as there's room
         map((properties: ParcelProperties[]): ParcelProperties[] => {
           const numProperties = window.innerWidth / 240;
           return properties.slice(
             0,
-            Math.min(properties.length, numProperties, this.maxNumProperties())
+            Math.min(properties.length, numProperties, this.maxNumProperties()),
           );
-        })
+        }),
       )
       .subscribe((properties: ParcelProperties[]) => {
         this.properties = properties;
         if (this.properties.length === 0) this.onClose();
         else {
           this.sameAddress = this.properties.every(
-            (property) => property.address === this.properties[0].address
+            (property) => property.address === this.properties[0].address,
           );
           this.sameOwner = this.properties.every(
-            (property) => property.owner === this.properties[0].owner
+            (property) => property.owner === this.properties[0].owner,
           );
           this.sameUsage = this.properties.every(
             (property) =>
               property.usage === this.properties[0].usage &&
-              property.use === this.properties[0].use
+              property.use === this.properties[0].use,
           );
           // 👉 split depending on # of parcels
           this.splitHorizontally = this.properties.length > 1;

@@ -1,26 +1,26 @@
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
-import { OLMapComponent } from './ol-map';
+import { OLMapComponent } from "./ol-map";
+import { Mapable } from "./ol-mapable";
+import { MapableComponent } from "./ol-mapable";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { forwardRef } from '@angular/core';
-import { inject } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { inject } from "@angular/core";
 
-import OLMousePosition from 'ol/control/MousePosition';
+import OLMousePosition from "ol/control/MousePosition";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlMousePositionComponent)
-    }
+      useExisting: forwardRef(() => OLControlMousePositionComponent),
+    },
   ],
-  selector: 'app-ol-control-mouseposition',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-control-mouseposition",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLControlMousePositionComponent implements Mapable {
   olControl: OLMousePosition;
@@ -29,8 +29,8 @@ export class OLControlMousePositionComponent implements Mapable {
 
   constructor() {
     this.olControl = new OLMousePosition({
-      className: 'ol-control-mouseposition',
-      projection: this.#map.featureProjection
+      className: "ol-control-mouseposition",
+      projection: this.#map.featureProjection,
     });
     this.olControl.setProperties({ component: this }, true);
   }

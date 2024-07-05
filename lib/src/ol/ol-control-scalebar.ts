@@ -1,19 +1,19 @@
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
-import { OLMapComponent } from './ol-map';
+import { OLMapComponent } from "./ol-map";
+import { Mapable } from "./ol-mapable";
+import { MapableComponent } from "./ol-mapable";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Control as OLControl } from 'ol/control';
-import { ElementRef } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Control as OLControl } from "ol/control";
 
-import { convertLength } from '@turf/helpers';
-import { forwardRef } from '@angular/core';
-import { getDistance } from 'ol/sphere';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { viewChild } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { convertLength } from "@turf/helpers";
+import { getDistance } from "ol/sphere";
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -28,10 +28,10 @@ class Scalebar extends OLControl {
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlScaleBarComponent)
-    }
+      useExisting: forwardRef(() => OLControlScaleBarComponent),
+    },
   ],
-  selector: 'app-ol-control-scalebar',
+  selector: "app-ol-control-scalebar",
 
   template: `
     <article
@@ -115,11 +115,11 @@ class Scalebar extends OLControl {
           }
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLControlScaleBarComponent implements Mapable, OnInit {
-  barRef = viewChild<ElementRef>('barRef');
+  barRef = viewChild<ElementRef>("barRef");
   cxUnit: number;
   cxWidth: number;
   ftUnit: number;
@@ -166,8 +166,8 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
     const [minX, minY, maxX] = this.#map.bbox();
     const numFeet = convertLength(
       getDistance([minX, minY], [maxX, minY]),
-      'meters',
-      'feet'
+      "meters",
+      "feet",
     );
     this.ftUnit = Math.pow(10, Math.floor(numFeet).toString().length - 2);
     // 🔥 force 10 units for now

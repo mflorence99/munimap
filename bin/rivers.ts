@@ -1,24 +1,24 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from "../lib/src/common";
+import { theState } from "../lib/src/common";
 
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
 
-import { booleanIntersects } from '@turf/boolean-intersects';
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
+import { booleanIntersects } from "@turf/boolean-intersects";
 
-import chalk from 'chalk';
-import copy from 'fast-copy';
-import shp from 'shpjs';
+import chalk from "chalk";
+import copy from "fast-copy";
+import shp from "shpjs";
 
 const url =
-  'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Inland_Water_Resources/d-designatedrivers/Designated_Rivers_24k';
+  "https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Inland_Water_Resources/d-designatedrivers/Designated_Rivers_24k";
 
-const dist = './data';
+const dist = "./data";
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -40,7 +40,7 @@ async function main(): Promise<void> {
     //    find it from the dataset of all towns
     const towns = allTowns.features.filter((townFeature) =>
       // 👉 https://github.com/Turfjs/turf/pull/2157
-      /* turf. */ booleanIntersects(feature, townFeature)
+      /* turf. */ booleanIntersects(feature, townFeature),
     );
 
     towns
@@ -62,7 +62,7 @@ async function main(): Promise<void> {
             county: county,
             name: river.properties.River_Name ?? river.properties.LAC,
             section: river.properties.River_Sect,
-            town: town
+            town: town,
           };
 
           riversByCountyByTown[county] ??= {};
@@ -77,12 +77,12 @@ async function main(): Promise<void> {
   Object.keys(riversByCountyByTown).forEach((county) => {
     Object.keys(riversByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${theState}/${county}/${town}/rivers.geojson`)
+        chalk.green(`... writing ${theState}/${county}/${town}/rivers.geojson`),
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/rivers.geojson`,
-        JSON.stringify(simplify(riversByCountyByTown[county][town]))
+        JSON.stringify(simplify(riversByCountyByTown[county][town])),
       );
     });
   });
@@ -100,10 +100,10 @@ const sample = {
   GRANITID: 14501858,
   HYA: 6,
   ACODE: 22,
-  Class: 'Rural',
+  Class: "Rural",
   LENGTH_MI: 0.0339205980753,
-  SWQPAExmpt: '',
-  River_Sect: 'Ashuelot River',
-  River_Name: 'Ashuelot River',
-  LAC: 'Ashuelot River'
+  SWQPAExmpt: "",
+  River_Sect: "Ashuelot River",
+  River_Name: "Ashuelot River",
+  LAC: "Ashuelot River",
 };

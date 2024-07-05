@@ -1,11 +1,11 @@
-import { OLSourceArcGISComponent } from './ol-source-arcgis';
-import { RailroadProperties } from '../common';
+import { RailroadProperties } from "../common";
+import { OLSourceArcGISComponent } from "./ol-source-arcgis";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Coordinate } from "ol/coordinate";
 
-import { input } from '@angular/core';
+import { input } from "@angular/core";
 
 // 👇 we replaced railroads.geojson with this data source
 
@@ -14,9 +14,9 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-railroads',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-railroads",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceRailroadsComponent extends OLSourceArcGISComponent {
   exclude = input<(number | string)[]>();
@@ -28,7 +28,7 @@ export class OLSourceRailroadsComponent extends OLSourceArcGISComponent {
       arcgis.features.forEach((feature) => {
         const properties: RailroadProperties = feature.attributes;
         properties.name = properties.NAME;
-        properties.active = properties.STATUS === 'Active';
+        properties.active = properties.STATUS === "Active";
       });
       return arcgis;
     } else return super.filter(arcgis);
@@ -43,7 +43,7 @@ export class OLSourceRailroadsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'railroads';
+    return "railroads";
   }
 
   getURL(extent: Coordinate): string {

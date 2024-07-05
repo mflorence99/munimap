@@ -1,19 +1,19 @@
-import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
-import { OLMapComponent } from './ol-map';
-import { OLPopupSelectionComponent } from './ol-popup-selection';
+import { OLInteractionSelectLandmarksComponent } from "./ol-interaction-selectlandmarks";
+import { OLMapComponent } from "./ol-map";
+import { OLPopupSelectionComponent } from "./ol-popup-selection";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { inject } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { outputToObservable } from '@angular/core/rxjs-interop';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { outputToObservable } from "@angular/core/rxjs-interop";
+import { map } from "rxjs/operators";
 
-import OLFeature from 'ol/Feature';
+import OLFeature from "ol/Feature";
 
 export type Schema = Array<
   [string, string, string?, ((properties: any) => string)?]
@@ -25,7 +25,7 @@ export type Schema = Array<
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-popup-dpwproperties',
+  selector: "app-ol-popup-dpwproperties",
   template: `
     <button (click)="onClose()" class="closer" mat-icon-button>
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
@@ -63,12 +63,12 @@ export type Schema = Array<
         }
       }
     </section>
-  `
+  `,
 })
 export class OLPopupDPWPropertiesComponent {
   geometry: any /* 👈 in practice will be a Point */;
   properties: any /* 👈 could be bridge, stream crossing etc etc */;
-  table = viewChild<ElementRef>('table');
+  table = viewChild<ElementRef>("table");
 
   #cdf = inject(ChangeDetectorRef);
   #map = inject(OLMapComponent);
@@ -96,7 +96,7 @@ export class OLPopupDPWPropertiesComponent {
     const link = `https://www.google.com/maps/search/?api=1&query=${
       marker[1]
     }%2C${marker[0]}&zoom=${Math.round(
-      this.#map.olView.getZoom()
+      this.#map.olView.getZoom(),
     )}&basemap=terrain`;
     return link;
   }
@@ -123,7 +123,7 @@ export class OLPopupDPWPropertiesComponent {
           const geometry = features[0]?.getGeometry();
           if (properties?.metadata) properties = properties.metadata;
           return [properties, geometry];
-        })
+        }),
       )
       .subscribe(([properties, geometry]) => {
         this.properties = properties;

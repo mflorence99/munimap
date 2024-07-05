@@ -1,15 +1,15 @@
-import { LandmarksState } from '../state/landmarks';
+import { LandmarksState } from "../state/landmarks";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { saveAs } from 'file-saver';
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { saveAs } from "file-saver";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-control-exportlandmarks',
+  selector: "app-ol-control-exportlandmarks",
   template: `
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
@@ -21,8 +21,8 @@ import { saveAs } from 'file-saver';
         display: block;
         pointer-events: auto;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLControlExportLandmarksComponent {
   fileName = input<string>();
@@ -32,7 +32,7 @@ export class OLControlExportLandmarksComponent {
   export(): void {
     const geojson = this.#landmarksState.toGeoJSON();
     const blob = new Blob([JSON.stringify(geojson)], {
-      type: 'text/plain;charset=utf-8'
+      type: "text/plain;charset=utf-8",
     });
     saveAs(blob, `${this.fileName()}.geojson`);
   }

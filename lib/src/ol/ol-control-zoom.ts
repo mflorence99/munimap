@@ -1,17 +1,17 @@
-import { OLMapComponent } from './ol-map';
+import { OLMapComponent } from "./ol-map";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
 
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { model } from '@angular/core';
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { model } from "@angular/core";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
-  selector: 'app-ol-control-zoom',
+  selector: "app-ol-control-zoom",
 
   template: `
     <p class="annotation">{{ resolution() | number: '1.0-2' }}</p>
@@ -64,8 +64,8 @@ import { model } from '@angular/core';
         padding: 0;
         width: 3rem;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLControlZoomComponent implements OnInit {
   resolution = model<number>();
@@ -92,7 +92,7 @@ export class OLControlZoomComponent implements OnInit {
     // 🪲 null is not an object (evaluating 'this.map.olView.animate')
     this.#map.olView?.animate({
       duration: this.zoomAnimationDuration(),
-      zoom
+      zoom,
     });
   }
 

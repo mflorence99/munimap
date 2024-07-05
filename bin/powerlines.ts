@@ -1,28 +1,28 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from "../lib/src/common";
+import { theState } from "../lib/src/common";
 
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
 
-import { booleanIntersects } from '@turf/boolean-intersects';
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
+import { booleanIntersects } from "@turf/boolean-intersects";
 
-import chalk from 'chalk';
-import copy from 'fast-copy';
+import chalk from "chalk";
+import copy from "fast-copy";
 
 // 🔥 you need to run powerlines-prepare.ts at least once first
 
-const dist = './data';
+const dist = "./data";
 
 const powerlines = JSON.parse(
   readFileSync(
-    './bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson'
-  ).toString()
+    "./bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson",
+  ).toString(),
 );
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -40,7 +40,7 @@ powerlines.features.forEach((feature: GeoJSON.Feature) => {
   //    find it from the dataset of all towns
   const towns = allTowns.features.filter((townFeature) =>
     // 👉 https://github.com/Turfjs/turf/pull/2157
-    /* turf. */ booleanIntersects(feature, townFeature)
+    /* turf. */ booleanIntersects(feature, townFeature),
   );
 
   towns
@@ -59,7 +59,7 @@ powerlines.features.forEach((feature: GeoJSON.Feature) => {
         powerline.bbox = turf.bbox(powerline);
         powerline.properties = {
           county: county,
-          town: town
+          town: town,
         };
 
         linesByCountyByTown[county] ??= {};
@@ -75,13 +75,13 @@ Object.keys(linesByCountyByTown).forEach((county) => {
   Object.keys(linesByCountyByTown[county]).forEach((town) => {
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/powerlines.geojson`
-      )
+        `... writing ${theState}/${county}/${town}/powerlines.geojson`,
+      ),
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/powerlines.geojson`,
-      JSON.stringify(simplify(linesByCountyByTown[county][town]))
+      JSON.stringify(simplify(linesByCountyByTown[county][town])),
     );
   });
 });
@@ -91,20 +91,20 @@ Object.keys(linesByCountyByTown).forEach((county) => {
 
 const sample = {
   OBJECTID: 1,
-  ID: '212144',
-  TYPE: 'AC; OVERHEAD',
-  STATUS: 'IN SERVICE',
-  NAICS_CODE: '221121',
-  NAICS_DESC: 'ELECTRIC BULK POWER TRANSMISSION AND CONTROL',
-  SOURCE: 'IMAGERY',
-  SOURCEDATE: '2020-03-04T00:00:00Z',
-  VAL_METHOD: 'IMAGERY',
-  VAL_DATE: '2020-03-04T00:00:00Z',
-  OWNER: 'BONNEVILLE POWER ADMINISTRATION',
+  ID: "212144",
+  TYPE: "AC; OVERHEAD",
+  STATUS: "IN SERVICE",
+  NAICS_CODE: "221121",
+  NAICS_DESC: "ELECTRIC BULK POWER TRANSMISSION AND CONTROL",
+  SOURCE: "IMAGERY",
+  SOURCEDATE: "2020-03-04T00:00:00Z",
+  VAL_METHOD: "IMAGERY",
+  VAL_DATE: "2020-03-04T00:00:00Z",
+  OWNER: "BONNEVILLE POWER ADMINISTRATION",
   VOLTAGE: 69,
-  VOLT_CLASS: 'UNDER 100',
-  INFERRED: 'Y',
-  SUB_1: 'EAST ARLINGTON',
-  SUB_2: 'TAP209798',
-  SHAPE_Length: 0.09014889071718463
+  VOLT_CLASS: "UNDER 100",
+  INFERRED: "Y",
+  SUB_1: "EAST ARLINGTON",
+  SUB_2: "TAP209798",
+  SHAPE_Length: 0.09014889071718463,
 };

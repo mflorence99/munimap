@@ -1,29 +1,29 @@
-import { AuthState } from '../state/auth';
-import { ConfirmDialogComponent } from '../components/confirm-dialog';
-import { ConfirmDialogData } from '../components/confirm-dialog';
-import { DestroyService } from '../services/destroy';
-import { OLInteractionAbstractRedrawComponent } from './ol-interaction-abstractredraw';
-import { OLMapComponent } from './ol-map';
-import { Parcel } from '../common';
-import { ParcelsActions } from '../state/parcels';
+import { Parcel } from "../common";
+import { ConfirmDialogComponent } from "../components/confirm-dialog";
+import { ConfirmDialogData } from "../components/confirm-dialog";
+import { DestroyService } from "../services/destroy";
+import { AuthState } from "../state/auth";
+import { ParcelsActions } from "../state/parcels";
+import { OLInteractionAbstractRedrawComponent } from "./ol-interaction-abstractredraw";
+import { OLMapComponent } from "./ol-map";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnDestroy } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 
-import { inject } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { inject } from "@angular/core";
+import { tap } from "rxjs/operators";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-interaction-redrawparcel',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-interaction-redrawparcel",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLInteractionRedrawParcelComponent
   extends OLInteractionAbstractRedrawComponent
@@ -45,7 +45,7 @@ export class OLInteractionRedrawParcelComponent
   saveRedraw(geojson: GeoJSON.Feature<any>): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new parcel boundary for ${this.feature.getId()}?`,
-      title: 'Please confirm new boundary'
+      title: "Please confirm new boundary",
     };
     return this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -54,20 +54,20 @@ export class OLInteractionRedrawParcelComponent
         tap((result) => {
           if (result) {
             const redrawnParcel: Parcel = {
-              action: 'modified',
+              action: "modified",
               geometry: geojson.geometry,
               id: this.feature.getId(),
               owner: this.#authState.currentProfile().email,
               path: this.#map.path(),
-              type: 'Feature'
+              type: "Feature",
             };
             this.#store.dispatch(
-              new ParcelsActions.AddParcels([redrawnParcel])
+              new ParcelsActions.AddParcels([redrawnParcel]),
             );
           }
           // 👉 on CANCEL, reset geometry
           else this.resetRedraw();
-        })
+        }),
       );
   }
 }

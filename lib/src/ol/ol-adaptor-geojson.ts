@@ -1,13 +1,13 @@
-import { Adaptor } from './ol-adaptor';
-import { AdaptorComponent } from './ol-adaptor';
-import { LandmarkProperties } from '../common';
-import { LandmarkPropertiesClass } from '../common';
+import { LandmarkProperties } from "../common";
+import { LandmarkPropertiesClass } from "../common";
+import { Adaptor } from "./ol-adaptor";
+import { AdaptorComponent } from "./ol-adaptor";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { forwardRef } from '@angular/core';
-import { input } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { input } from "@angular/core";
 
 export type FilterFunction = (name: string) => boolean;
 
@@ -16,12 +16,12 @@ export type FilterFunction = (name: string) => boolean;
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorGeoJSONComponent)
-    }
+      useExisting: forwardRef(() => OLAdaptorGeoJSONComponent),
+    },
   ],
-  selector: 'app-ol-adaptor-geojson',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-adaptor-geojson",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLAdaptorGeoJSONComponent implements Adaptor {
   borderOpacity = input(1);
@@ -34,13 +34,13 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
     const unselectable = this.filter() && !this.filter()(source.name);
     return [
       new LandmarkPropertiesClass({
-        fillColor: unselectable ? '--map-feature-disabled' : '--rgb-gray-50',
+        fillColor: unselectable ? "--map-feature-disabled" : "--rgb-gray-50",
         fillOpacity: unselectable ? this.fillOpacity() : 0,
-        strokeColor: '--map-feature-outline',
+        strokeColor: "--map-feature-outline",
         strokeOpacity: this.borderOpacity(),
         strokePixels: this.borderPixels(),
-        strokeStyle: 'solid'
-      })
+        strokeStyle: "solid",
+      }),
     ];
   }
 
@@ -52,18 +52,18 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
     } else {
       return [
         new LandmarkPropertiesClass({
-          fillColor: '--map-feature-fill',
+          fillColor: "--map-feature-fill",
           fillOpacity: this.fillOpacity(),
-          fontColor: '--map-feature-text-color',
+          fontColor: "--map-feature-text-color",
           fontOpacity: 1,
           fontPixels: 20,
-          fontStyle: 'bold',
+          fontStyle: "bold",
           name: source.name,
-          strokeColor: '--map-feature-outline',
+          strokeColor: "--map-feature-outline",
           strokeOpacity: this.borderOpacity(),
           strokePixels: this.borderPixels(),
-          strokeStyle: 'solid'
-        })
+          strokeStyle: "solid",
+        }),
       ];
     }
   }
@@ -76,11 +76,11 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
     } else {
       return [
         new LandmarkPropertiesClass({
-          strokeColor: '--map-feature-outline',
+          strokeColor: "--map-feature-outline",
           strokeOpacity: this.borderOpacity(),
           strokePixels: this.borderPixels(),
-          strokeStyle: 'solid'
-        })
+          strokeStyle: "solid",
+        }),
       ];
     }
   }

@@ -1,29 +1,29 @@
-import { DestroyService } from '../services/destroy';
-import { Landmark } from '../common';
-import { LandmarksActions } from '../state/landmarks';
-import { OLMapComponent } from './ol-map';
+import { Landmark } from "../common";
+import { DestroyService } from "../services/destroy";
+import { LandmarksActions } from "../state/landmarks";
+import { OLMapComponent } from "./ol-map";
 
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { CdkDragEnd } from "@angular/cdk/drag-drop";
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Store } from "@ngxs/store";
 
-import { fromLonLat } from 'ol/proj';
-import { inject } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { toLonLat } from 'ol/proj';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { fromLonLat } from "ol/proj";
+import { toLonLat } from "ol/proj";
+import { takeUntil } from "rxjs/operators";
 
-import OLFeature from 'ol/Feature';
-import OLOverlay from 'ol/Overlay';
-import OLPoint from 'ol/geom/Point';
+import OLFeature from "ol/Feature";
+import OLOverlay from "ol/Overlay";
+import OLPoint from "ol/geom/Point";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-overlay-landmarklabel',
+  selector: "app-ol-overlay-landmarklabel",
   template: `
     <div #label (cdkDragEnded)="onDragEnd($event)" cdkDrag>
       <fa-icon [icon]="['fas', 'crosshairs']" class="icon" size="2x"></fa-icon>
@@ -40,11 +40,11 @@ import OLPoint from 'ol/geom/Point';
       .icon {
         color: var(--background-color);
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLOverlayLandmarkLabelComponent implements OnInit {
-  label = viewChild<ElementRef>('label');
+  label = viewChild<ElementRef>("label");
   olOverlay: OLOverlay;
 
   #destroy$ = inject(DestroyService);
@@ -55,7 +55,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   constructor() {
     this.olOverlay = new OLOverlay({
       position: [0, 0],
-      positioning: 'center-center'
+      positioning: "center-center",
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.#map.olMap.addOverlay(this.olOverlay);
@@ -69,25 +69,25 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   onDragEnd(event: CdkDragEnd): void {
     // 👉 what is the new position?
     const position = toLonLat(
-      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
+      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y),
     );
     // 👉 update point labels
-    if (this.#feature.getGeometry().getType() === 'Point') {
+    if (this.#feature.getGeometry().getType() === "Point") {
       this.#feature.setGeometry(new OLPoint(fromLonLat(position)));
       const movedLandmark: Partial<Landmark> = {
         id: this.#feature.getId() as string,
-        geometry: { type: 'Point', coordinates: position },
-        type: 'Feature'
+        geometry: { type: "Point", coordinates: position },
+        type: "Feature",
       };
       this.#store.dispatch(new LandmarksActions.UpdateLandmark(movedLandmark));
     }
     // 👉 update point labels
-    else if (this.#feature.getGeometry().getType() === 'Polygon') {
-      this.#feature.set('textLocation', position);
+    else if (this.#feature.getGeometry().getType() === "Polygon") {
+      this.#feature.set("textLocation", position);
       const movedLandmark: Partial<Landmark> = {
         id: this.#feature.getId() as string,
         properties: { textLocation: position as [number, number] },
-        type: 'Feature'
+        type: "Feature",
       };
       this.#store.dispatch(new LandmarksActions.UpdateLandmark(movedLandmark));
     }
@@ -101,11 +101,11 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
 
   setFeature(feature: OLFeature<any>): void {
     this.#feature = feature;
-    if (feature.getGeometry().getType() === 'Point')
+    if (feature.getGeometry().getType() === "Point")
       this.olOverlay.setPosition(feature.getGeometry().getCoordinates());
-    else if (feature.getGeometry().getType() === 'Polygon') {
-      if (feature.get('textLocation'))
-        this.olOverlay.setPosition(fromLonLat(feature.get('textLocation')));
+    else if (feature.getGeometry().getType() === "Polygon") {
+      if (feature.get("textLocation"))
+        this.olOverlay.setPosition(fromLonLat(feature.get("textLocation")));
       else {
         const center = feature
           .getGeometry()

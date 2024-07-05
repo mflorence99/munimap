@@ -1,29 +1,29 @@
-import * as fs from 'fs';
-import * as os from 'os';
-import * as path from 'path';
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 
-import { Exception } from 'serverx-ts';
-import { Handler } from 'serverx-ts';
-import { Inject } from 'injection-js';
-import { Injectable } from 'injection-js';
-import { InjectionToken } from 'injection-js';
-import { Message } from 'serverx-ts';
-import { Observable } from 'rxjs';
-import { Optional } from 'injection-js';
+import { Inject } from "injection-js";
+import { Injectable } from "injection-js";
+import { InjectionToken } from "injection-js";
+import { Optional } from "injection-js";
+import { Observable } from "rxjs";
+import { Exception } from "serverx-ts";
+import { Handler } from "serverx-ts";
+import { Message } from "serverx-ts";
 
-import { bbox } from '@turf/bbox';
-import { catchError } from 'rxjs/operators';
-import { from } from 'rxjs';
-import { fromReadableStream } from 'serverx-ts';
-import { mapTo } from 'rxjs/operators';
-import { mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { bbox } from "@turf/bbox";
+import { from } from "rxjs";
+import { of } from "rxjs";
+import { throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { mapTo } from "rxjs/operators";
+import { mergeMap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
+import { fromReadableStream } from "serverx-ts";
 
-import chalk from 'chalk';
-import copy from 'fast-copy';
-import md5File from 'md5-file';
+import chalk from "chalk";
+import copy from "fast-copy";
+import md5File from "md5-file";
 
 export interface GeoServerOpts {
   maxAge?: number;
@@ -31,12 +31,12 @@ export interface GeoServerOpts {
 }
 
 export const GEO_SERVER_OPTS = new InjectionToken<GeoServerOpts>(
-  'GEO_SERVER_OPTS'
+  "GEO_SERVER_OPTS",
 );
 
 export const GEO_SERVER_DEFAULT_OPTS: GeoServerOpts = {
   maxAge: 600,
-  root: os.homedir()
+  root: os.homedir(),
 };
 
 @Injectable()
@@ -59,13 +59,13 @@ export class GeoServer extends Handler {
         const fpath = path.join(this.#opts.root, request.path);
 
         // 👉 Etag is the file hash
-        const etag = request.headers['If-None-Match'];
+        const etag = request.headers["If-None-Match"];
 
         // 👉 extract bbox parameters
-        const minX = Number(request.query.get('minX') ?? 0);
-        const minY = Number(request.query.get('minY') ?? 0);
-        const maxX = Number(request.query.get('maxX') ?? 0);
-        const maxY = Number(request.query.get('maxY') ?? 0);
+        const minX = Number(request.query.get("minX") ?? 0);
+        const minY = Number(request.query.get("minY") ?? 0);
+        const maxX = Number(request.query.get("maxX") ?? 0);
+        const maxY = Number(request.query.get("maxY") ?? 0);
 
         return of(message).pipe(
           // 👉 exception thrown if not found
@@ -73,8 +73,8 @@ export class GeoServer extends Handler {
 
           // 👉 set the response headers
           tap((hash: string) => {
-            response.headers['Cache-Control'] = `max-age=${this.#opts.maxAge}`;
-            response.headers['Etag'] = hash;
+            response.headers["Cache-Control"] = `max-age=${this.#opts.maxAge}`;
+            response.headers["Etag"] = hash;
           }),
 
           // 👉 flip to cached/not cached pipes
@@ -90,16 +90,16 @@ export class GeoServer extends Handler {
                   chalk.cyan(request.method),
                   request.path,
                   chalk.green(response.statusCode),
-                  chalk.green('CACHED')
+                  chalk.green("CACHED"),
                 );
-              })
+              }),
             );
 
             // 👉 not cached pipe
             const notCached$ = of(hash).pipe(
               mergeMap(
                 (): Observable<Buffer> =>
-                  fromReadableStream(fs.createReadStream(fpath))
+                  fromReadableStream(fs.createReadStream(fpath)),
               ),
               tap((buffer: Buffer) => {
                 const geojson = JSON.parse(buffer.toString());
@@ -112,9 +112,9 @@ export class GeoServer extends Handler {
                   chalk.cyan(request.method),
                   request.path,
                   chalk.green(response.statusCode),
-                  chalk.red('FETCHED')
+                  chalk.red("FETCHED"),
                 );
-              })
+              }),
             );
 
             return isCached ? cached$ : notCached$;
@@ -122,9 +122,9 @@ export class GeoServer extends Handler {
           catchError((error) => {
             console.error(error);
             return throwError(() => new Exception({ statusCode: 404 }));
-          })
+          }),
         );
-      })
+      }),
     );
   }
 
@@ -133,7 +133,7 @@ export class GeoServer extends Handler {
     minX: number,
     minY: number,
     maxX: number,
-    maxY: number
+    maxY: number,
   ): Buffer {
     if (minX && minY && maxX && maxY) {
       geojson = copy(geojson);

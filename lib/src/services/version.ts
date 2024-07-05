@@ -1,36 +1,36 @@
-import { VersionDialogComponent } from '../components/version-dialog';
+import { VersionDialogComponent } from "../components/version-dialog";
 
-import { environment } from '../environment';
+import { environment } from "../environment";
 
-import * as Sentry from '@sentry/angular-ivy';
+import * as Sentry from "@sentry/angular-ivy";
 
-import { ApplicationRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
-import { SwPush } from '@angular/service-worker';
-import { SwUpdate } from '@angular/service-worker';
-import { UnrecoverableStateEvent } from '@angular/service-worker';
-import { VersionDetectedEvent } from '@angular/service-worker';
+import { HttpClient } from "@angular/common/http";
+import { ApplicationRef } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { SwPush } from "@angular/service-worker";
+import { SwUpdate } from "@angular/service-worker";
+import { UnrecoverableStateEvent } from "@angular/service-worker";
+import { VersionDetectedEvent } from "@angular/service-worker";
+import { Subject } from "rxjs";
 
-import { catchError } from 'rxjs/operators';
-import { filter } from 'rxjs/operators';
-import { first } from 'rxjs/operators';
-import { inject } from '@angular/core';
-import { mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { takeUntil } from 'rxjs/operators';
-import { tap } from 'rxjs/operators';
-import { timer } from 'rxjs';
+import { inject } from "@angular/core";
+import { of } from "rxjs";
+import { timer } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { filter } from "rxjs/operators";
+import { first } from "rxjs/operators";
+import { mergeMap } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 
 interface Build {
   date: string;
   id: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class VersionService {
   #appRef = inject(ApplicationRef);
   #checkVersionLegacy$ = new Subject<void>();
@@ -54,33 +54,33 @@ export class VersionService {
     navigator.serviceWorker
       ?.getRegistrations()
       .then((registrations) => {
-        console.log('%cUpdating all registrations...', 'color: violet');
+        console.log("%cUpdating all registrations...", "color: violet");
         return Promise.all(
           registrations.map((registration) => {
             console.log(`... ${registration.scope}`);
             return registration.update().then(() => registration.unregister());
-          })
+          }),
         );
       })
       .then((_) => caches.keys())
       .then((keys) => {
-        console.log('%cDeleting all caches...', 'color: orchid');
+        console.log("%cDeleting all caches...", "color: orchid");
         return Promise.all(
           keys.map((key) => {
             console.log(`... ${key}`);
             return caches.delete(key);
-          })
+          }),
         );
       })
       .finally(() => {
-        console.log('%cHard reset', 'color: plum');
+        console.log("%cHard reset", "color: plum");
         location.reload();
       });
   }
 
   #checkUnrecoverableServiceWorker(): void {
     this.#swUpdate.unrecoverable.subscribe((event: UnrecoverableStateEvent) => {
-      console.error('🔥 Unrecoverable PWA error', event.reason);
+      console.error("🔥 Unrecoverable PWA error", event.reason);
       Sentry.captureException(event);
       this.hardReset();
     });
@@ -88,12 +88,12 @@ export class VersionService {
 
   #checkVersionServiceWorker(): void {
     this.#swUpdate.versionUpdates
-      .pipe(filter((event) => event.type === 'VERSION_DETECTED'))
+      .pipe(filter((event) => event.type === "VERSION_DETECTED"))
       .subscribe((event) => {
         console.log(
-          '%c...new PWA version detected',
-          'color: wheat',
-          (event as VersionDetectedEvent).version.hash
+          "%c...new PWA version detected",
+          "color: wheat",
+          (event as VersionDetectedEvent).version.hash,
         );
         if (environment.version.autoReload)
           this.#swUpdate.activateUpdate().then(() => this.hardReset());
@@ -118,8 +118,8 @@ export class VersionService {
           this.#checkVersionLegacy$.next();
           this.#checkVersionLegacy$.complete();
           console.log(
-            '%cUser declines further legacy version checks',
-            'color: orchid'
+            "%cUser declines further legacy version checks",
+            "color: orchid",
           );
         }
       });
@@ -136,7 +136,7 @@ export class VersionService {
   #pollVersionLegacy(): void {
     const periodically$ = timer(
       environment.version.checkVersionAfter,
-      environment.version.checkVersionInterval
+      environment.version.checkVersionInterval,
     );
     periodically$
       .pipe(
@@ -145,20 +145,20 @@ export class VersionService {
           this.#http
             .get<Build>(`assets/build.json`, {
               params: {
-                x: Math.random()
-              }
+                x: Math.random(),
+              },
             })
-            .pipe(catchError(() => of(environment.build)))
-        )
+            .pipe(catchError(() => of(environment.build))),
+        ),
       )
       .subscribe((build: Build) => {
-        console.log('%cPolling for new legacy version...', 'color: khaki');
+        console.log("%cPolling for new legacy version...", "color: khaki");
         if (build.id !== environment.build.id) {
           console.log(
-            '%c...new legacy version detected',
-            'color: tan',
+            "%c...new legacy version detected",
+            "color: tan",
             build.id,
-            build.date
+            build.date,
           );
           if (environment.version.autoReload) this.hardReset();
           else this.#newVersionDetected();
@@ -172,16 +172,16 @@ export class VersionService {
         // 🔥 looks like firebase is preventing the app from
         //    becoming stable but not totally sure
         first(/* (isStable) => isStable */),
-        tap(() => console.log('%cPWA is stable', 'color: thistle')),
+        tap(() => console.log("%cPWA is stable", "color: thistle")),
         switchMap(() =>
           timer(
             environment.version.checkVersionAfter,
-            environment.version.checkVersionInterval
-          )
-        )
+            environment.version.checkVersionInterval,
+          ),
+        ),
       )
       .subscribe((): any => {
-        console.log('%cPolling for new PWA version...', 'color: moccasin');
+        console.log("%cPolling for new PWA version...", "color: moccasin");
         this.#swUpdate.checkForUpdate().then();
       });
   }

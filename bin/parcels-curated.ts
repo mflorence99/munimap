@@ -1,16 +1,16 @@
-import { Parcels } from '../lib/src/common';
+import { Parcels } from "../lib/src/common";
 
-import { normalizeParcel } from '../lib/src/common';
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { normalizeParcel } from "../lib/src/common";
+import { simplify } from "../lib/src/common";
+import { theState } from "../lib/src/common";
 
-import { GeoJSON } from 'geojson';
+import { GeoJSON } from "geojson";
 
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 
 const loadem = (fn): Parcels => JSON.parse(readFileSync(fn).toString());
 
@@ -18,14 +18,14 @@ const loadem = (fn): Parcels => JSON.parse(readFileSync(fn).toString());
 
 const curated = {
   MERRIMACK: {
-    HENNIKER: loadem('./bin/assets/henniker-parcels.geojson')
+    HENNIKER: loadem("./bin/assets/henniker-parcels.geojson"),
   },
   SULLIVAN: {
-    WASHINGTON: loadem('./bin/assets/washington-parcels.geojson')
-  }
+    WASHINGTON: loadem("./bin/assets/washington-parcels.geojson"),
+  },
 };
 
-const dist = './data';
+const dist = "./data";
 
 // 👇 for each curated county, town
 
@@ -39,12 +39,12 @@ Object.keys(curated).forEach((county) => {
     });
 
     console.log(
-      chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
+      chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`),
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/parcels.geojson`,
-      JSON.stringify(simplify(geojson))
+      JSON.stringify(simplify(geojson)),
     );
 
     // 👉 the idea behind searchables is to provide just enough data for
@@ -53,8 +53,8 @@ Object.keys(curated).forEach((county) => {
 
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/searchables.geojson`
-      )
+        `... writing ${theState}/${county}/${town}/searchables.geojson`,
+      ),
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
@@ -66,15 +66,15 @@ Object.keys(curated).forEach((county) => {
         properties: {
           address: feature.properties.address,
           id: feature.properties.id,
-          owner: feature.properties.owner
+          owner: feature.properties.owner,
         },
-        type: 'Feature'
+        type: "Feature",
       })),
-      type: 'FeatureCollection'
+      type: "FeatureCollection",
     };
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/searchables.geojson`,
-      JSON.stringify(searchables)
+      JSON.stringify(searchables),
     );
 
     // 👉 the idea behind countables is to provide just enough data for
@@ -83,8 +83,8 @@ Object.keys(curated).forEach((county) => {
 
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/countables.geojson`
-      )
+        `... writing ${theState}/${county}/${town}/countables.geojson`,
+      ),
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
 
@@ -96,15 +96,15 @@ Object.keys(curated).forEach((county) => {
           area: feature.properties.area,
           ownership: feature.properties.ownership,
           usage: feature.properties.usage,
-          use: feature.properties.use
+          use: feature.properties.use,
         },
-        type: 'Feature'
+        type: "Feature",
       })),
-      type: 'FeatureCollection'
+      type: "FeatureCollection",
     };
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/countables.geojson`,
-      JSON.stringify(countables)
+      JSON.stringify(countables),
     );
   });
 });

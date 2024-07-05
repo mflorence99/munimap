@@ -1,11 +1,11 @@
-import { OLSourceArcGISComponent } from './ol-source-arcgis';
-import { RiverProperties } from '../common';
+import { RiverProperties } from "../common";
+import { OLSourceArcGISComponent } from "./ol-source-arcgis";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Coordinate } from "ol/coordinate";
 
-import copy from 'fast-copy';
+import copy from "fast-copy";
 
 const attribution =
   '<a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
@@ -15,9 +15,9 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-rivers',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-rivers",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceRiversComponent extends OLSourceArcGISComponent {
   // 👇 see PlaceProperties
@@ -27,11 +27,11 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
       arcgis.features.forEach((feature) => {
         const properties: RiverProperties = feature.attributes;
         properties.name = properties.GNIS_Name;
-        properties.type = 'stream';
+        properties.type = "stream";
       });
       const filtered = copy(arcgis);
       filtered.features = arcgis.features.filter(
-        (feature) => !!feature.attributes.name
+        (feature) => !!feature.attributes.name,
       );
       return filtered;
     } else return super.filter(arcgis);
@@ -46,7 +46,7 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'rivers';
+    return "rivers";
   }
 
   getURL(extent: Coordinate): string {

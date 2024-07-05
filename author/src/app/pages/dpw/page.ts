@@ -1,37 +1,37 @@
-import { AbstractMapPage } from '../abstract-map';
-import { ContextMenuComponent } from '../../components/contextmenu';
-import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
-import { CulvertPropertiesComponent } from './culvert-properties';
-import { ImportCulvertsComponent } from './import-culverts';
-import { SidebarComponent } from '../../components/sidebar-component';
+import { ContextMenuComponent } from "../../components/contextmenu";
+import { SidebarComponent } from "../../components/sidebar-component";
+import { ContextMenuHostDirective } from "../../directives/contextmenu-host";
+import { AbstractMapPage } from "../abstract-map";
+import { CulvertPropertiesComponent } from "./culvert-properties";
+import { ImportCulvertsComponent } from "./import-culverts";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { CulvertProperties } from '@lib/common';
-import { DestroyService } from '@lib/services/destroy';
-import { Landmark } from '@lib/common';
-import { LandmarksActions } from '@lib/state/landmarks';
-import { MapType } from '@lib/state/map';
-import { MatDrawer } from '@angular/material/sidenav';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { OLOverlayLandmarkLabelComponent } from '@lib/ol/ol-overlay-landmarklabel';
-import { OnInit } from '@angular/core';
-import { Type } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Type } from "@angular/core";
+import { MatDrawer } from "@angular/material/sidenav";
+import { CulvertProperties } from "@lib/common";
+import { Landmark } from "@lib/common";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { OLOverlayLandmarkLabelComponent } from "@lib/ol/ol-overlay-landmarklabel";
+import { DestroyService } from "@lib/services/destroy";
+import { LandmarksActions } from "@lib/state/landmarks";
+import { MapType } from "@lib/state/map";
 
-import { culvertConditions } from '@lib/common';
-import { culvertFloodHazards } from '@lib/common';
-import { culvertHeadwalls } from '@lib/common';
-import { culvertMaterials } from '@lib/common';
-import { makeLandmarkID } from '@lib/common';
-import { toLonLat } from 'ol/proj';
-import { viewChild } from '@angular/core';
+import { viewChild } from "@angular/core";
+import { culvertConditions } from "@lib/common";
+import { culvertFloodHazards } from "@lib/common";
+import { culvertHeadwalls } from "@lib/common";
+import { culvertMaterials } from "@lib/common";
+import { makeLandmarkID } from "@lib/common";
+import { toLonLat } from "ol/proj";
 
 // 🔥 only culverts are supported for now
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-dpw',
+  selector: "app-dpw",
   template: `
     <app-sink
       #sink
@@ -427,7 +427,7 @@ import { viewChild } from '@angular/core';
         </ul>
       </nav>
     </ng-template>
-  `
+  `,
 })
 export class DPWPage extends AbstractMapPage implements OnInit {
   contextMenu = viewChild(ContextMenuComponent);
@@ -443,14 +443,14 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   canCulvertProperties(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.map().roSelection && this.map().selected.length === 1
+      !this.map().roSelection && this.map().selected.length === 1,
     );
   }
 
   canDeleteCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.map().roSelection && this.map().selected.length === 1
+      !this.map().roSelection && this.map().selected.length === 1,
     );
   }
 
@@ -461,12 +461,12 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   canMoveCulvert(event?: MouseEvent): boolean {
     return this.#can(
       event,
-      !this.map().roSelection && this.map().selected.length === 1
+      !this.map().roSelection && this.map().selected.length === 1,
     );
   }
 
   getType(): MapType {
-    return 'dpw';
+    return "dpw";
   }
 
   ngOnInit(): void {
@@ -476,21 +476,23 @@ export class DPWPage extends AbstractMapPage implements OnInit {
   onContextMenu(key: string): void {
     let component: Type<SidebarComponent>;
     switch (key) {
-      case 'add-culvert':
+      case "add-culvert":
         this.#createCulvert();
         break;
-      case 'delete-culvert':
+      case "delete-culvert":
         this.store.dispatch(
-          new LandmarksActions.DeleteLandmark({ id: this.map().selectedIDs[0] })
+          new LandmarksActions.DeleteLandmark({
+            id: this.map().selectedIDs[0],
+          }),
         );
         break;
-      case 'import-culverts':
+      case "import-culverts":
         component = ImportCulvertsComponent;
         break;
-      case 'culvert-properties':
+      case "culvert-properties":
         component = CulvertPropertiesComponent;
         break;
-      case 'move-culvert':
+      case "move-culvert":
         this.moveLandmark().setFeature(this.map().selected[0]);
         break;
     }
@@ -508,7 +510,7 @@ export class DPWPage extends AbstractMapPage implements OnInit {
     const landmark: Partial<Landmark> = {
       geometry: {
         coordinates: toLonLat(this.map().contextMenuAt),
-        type: 'Point'
+        type: "Point",
       },
       owner: this.authState.currentProfile().email,
       path: this.map().path(),
@@ -521,11 +523,11 @@ export class DPWPage extends AbstractMapPage implements OnInit {
           headwall: culvertHeadwalls[0],
           length: 20,
           material: culvertMaterials[0],
-          type: 'culvert',
-          year: null
-        } as Partial<CulvertProperties>
+          type: "culvert",
+          year: null,
+        } as Partial<CulvertProperties>,
       },
-      type: 'Feature'
+      type: "Feature",
     };
     landmark.id = makeLandmarkID(landmark);
     this.store.dispatch(new LandmarksActions.AddLandmark(landmark));

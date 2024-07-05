@@ -1,23 +1,23 @@
-import { Adaptor } from './ol-adaptor';
-import { AdaptorComponent } from './ol-adaptor';
-import { BridgeProperties } from '../common';
-import { CulvertProperties } from '../common';
-import { FloodHazardProperties } from '../common';
-import { LandmarkProperties } from '../common';
-import { OLAdaptorBridgesComponent } from './ol-adaptor-bridges';
-import { OLAdaptorCulvertsComponent } from './ol-adaptor-culverts';
-import { OLAdaptorFloodHazardsComponent } from './ol-adaptor-floodhazards';
-import { OLAdaptorLandmarksComponent } from './ol-adaptor-landmarks';
-import { OLAdaptorStreamCrossingsComponent } from './ol-adaptor-streamcrossings';
-import { StreamCrossingProperties } from '../common';
+import { BridgeProperties } from "../common";
+import { CulvertProperties } from "../common";
+import { FloodHazardProperties } from "../common";
+import { LandmarkProperties } from "../common";
+import { StreamCrossingProperties } from "../common";
+import { Adaptor } from "./ol-adaptor";
+import { AdaptorComponent } from "./ol-adaptor";
+import { OLAdaptorBridgesComponent } from "./ol-adaptor-bridges";
+import { OLAdaptorCulvertsComponent } from "./ol-adaptor-culverts";
+import { OLAdaptorFloodHazardsComponent } from "./ol-adaptor-floodhazards";
+import { OLAdaptorLandmarksComponent } from "./ol-adaptor-landmarks";
+import { OLAdaptorStreamCrossingsComponent } from "./ol-adaptor-streamcrossings";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ViewContainerRef } from "@angular/core";
 
-import { forwardRef } from '@angular/core';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
 
 // 🔥 this special adaptor handles both standard landmarks
 //    and DPW landmarks which use LandmarkProperties.metadata
@@ -29,12 +29,12 @@ import { input } from '@angular/core';
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorDPWLandmarksComponent)
-    }
+      useExisting: forwardRef(() => OLAdaptorDPWLandmarksComponent),
+    },
   ],
-  selector: 'app-ol-adaptor-dpwlandmarks',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-adaptor-dpwlandmarks",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLAdaptorDPWLandmarksComponent implements Adaptor {
   dpwLandmarkWidth = input(36);
@@ -42,46 +42,46 @@ export class OLAdaptorDPWLandmarksComponent implements Adaptor {
 
   adapt(properties: LandmarkProperties): LandmarkProperties[] {
     return this.#makeAdaptor(properties).adapt?.(
-      this.#makeProperties(properties)
+      this.#makeProperties(properties),
     );
   }
 
   adaptWhenHovering?(properties: LandmarkProperties): LandmarkProperties[] {
     return this.#makeAdaptor(properties).adaptWhenHovering?.(
-      this.#makeProperties(properties)
+      this.#makeProperties(properties),
     );
   }
 
   adaptWhenSelected?(properties: LandmarkProperties): LandmarkProperties[] {
     return this.#makeAdaptor(properties).adaptWhenSelected?.(
-      this.#makeProperties(properties)
+      this.#makeProperties(properties),
     );
   }
 
   #makeAdaptor(properties: LandmarkProperties): Adaptor {
     let adaptor;
     switch (properties.metadata?.type) {
-      case 'bridge':
+      case "bridge":
         adaptor = this.vcRef.createComponent(
-          OLAdaptorBridgesComponent
+          OLAdaptorBridgesComponent,
         ).instance;
         adaptor.bridgeWidth = this.dpwLandmarkWidth;
         break;
-      case 'culvert':
+      case "culvert":
         adaptor = this.vcRef.createComponent(
-          OLAdaptorCulvertsComponent
+          OLAdaptorCulvertsComponent,
         ).instance;
         adaptor.culvertWidth = this.dpwLandmarkWidth;
         break;
-      case 'flood hazard':
+      case "flood hazard":
         adaptor = this.vcRef.createComponent(
-          OLAdaptorFloodHazardsComponent
+          OLAdaptorFloodHazardsComponent,
         ).instance;
         adaptor.floodHazardWidth = this.dpwLandmarkWidth;
         break;
-      case 'stream crossing':
+      case "stream crossing":
         adaptor = this.vcRef.createComponent(
-          OLAdaptorStreamCrossingsComponent
+          OLAdaptorStreamCrossingsComponent,
         ).instance;
         adaptor.streamCrossingWidth = this.dpwLandmarkWidth;
         break;
@@ -93,7 +93,7 @@ export class OLAdaptorDPWLandmarksComponent implements Adaptor {
   }
 
   #makeProperties(
-    properties: LandmarkProperties
+    properties: LandmarkProperties,
   ):
     | BridgeProperties
     | CulvertProperties

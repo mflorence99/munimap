@@ -1,25 +1,25 @@
-import { Landmark } from '../common';
-import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
-import { OLMapComponent } from './ol-map';
-import { OLPopupSelectionComponent } from './ol-popup-selection';
+import { Landmark } from "../common";
+import { OLInteractionSelectLandmarksComponent } from "./ol-interaction-selectlandmarks";
+import { OLMapComponent } from "./ol-map";
+import { OLPopupSelectionComponent } from "./ol-popup-selection";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { area } from '@turf/area';
-import { convertArea } from '@turf/helpers';
-import { convertLength } from '@turf/helpers';
-import { inject } from '@angular/core';
-import { length } from '@turf/length';
-import { map } from 'rxjs/operators';
-import { outputToObservable } from '@angular/core/rxjs-interop';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { outputToObservable } from "@angular/core/rxjs-interop";
+import { area } from "@turf/area";
+import { convertArea } from "@turf/helpers";
+import { convertLength } from "@turf/helpers";
+import { length } from "@turf/length";
+import { map } from "rxjs/operators";
 
-import OLFeature from 'ol/Feature';
-import OLGeoJSON from 'ol/format/GeoJSON';
+import OLFeature from "ol/Feature";
+import OLGeoJSON from "ol/format/GeoJSON";
 
 interface Coordinate {
   elevation: number;
@@ -33,7 +33,7 @@ interface Coordinate {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-popup-landmarkproperties',
+  selector: "app-ol-popup-landmarkproperties",
   template: `
     <button (click)="onClose()" class="closer" mat-icon-button>
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
@@ -97,11 +97,11 @@ interface Coordinate {
         }
       </table>
     }
-  `
+  `,
 })
 export class OLPopupLandmarkPropertiesComponent {
   landmark: Landmark;
-  table = viewChild<ElementRef>('table');
+  table = viewChild<ElementRef>("table");
 
   #cdf = inject(ChangeDetectorRef);
   #format: OLGeoJSON;
@@ -112,14 +112,14 @@ export class OLPopupLandmarkPropertiesComponent {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection
+      featureProjection: this.#map.projection,
     });
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleFeatureSelected$();
   }
 
   area(): number {
-    return convertArea(area(this.landmark), 'meters', 'acres');
+    return convertArea(area(this.landmark), "meters", "acres");
   }
 
   canClipboard(): boolean {
@@ -127,7 +127,7 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   length(): number {
-    return length(this.landmark, { units: 'feet' });
+    return length(this.landmark, { units: "feet" });
   }
 
   onClipboard(): void {
@@ -145,10 +145,10 @@ export class OLPopupLandmarkPropertiesComponent {
   toCoordinate(raw: any[]): Coordinate {
     return {
       elevation: raw[2]
-        ? convertLength(Number(raw[2]), 'meters', 'feet')
+        ? convertLength(Number(raw[2]), "meters", "feet")
         : null,
       latitude: raw[1],
-      longitude: raw[0]
+      longitude: raw[0],
     };
   }
 
@@ -162,8 +162,8 @@ export class OLPopupLandmarkPropertiesComponent {
           (features: OLFeature<any>[]): Landmark =>
             features.length > 0
               ? JSON.parse(this.#format.writeFeature(features[0]))
-              : null
-        )
+              : null,
+        ),
       )
       .subscribe((landmark: Landmark) => {
         this.landmark = landmark;

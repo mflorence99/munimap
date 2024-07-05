@@ -1,76 +1,76 @@
-import { Parcel } from '../lib/src/common';
-import { Parcels } from '../lib/src/common';
+import { Parcel } from "../lib/src/common";
+import { Parcels } from "../lib/src/common";
 
-import { calculateParcel } from '../lib/src/common';
-import { normalizeParcel } from '../lib/src/common';
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { calculateParcel } from "../lib/src/common";
+import { normalizeParcel } from "../lib/src/common";
+import { simplify } from "../lib/src/common";
+import { theState } from "../lib/src/common";
 
-import * as turf from '@turf/turf';
-import * as yargs from 'yargs';
+import * as turf from "@turf/turf";
+import * as yargs from "yargs";
 
-import { mkdirSync } from 'fs';
-import { stat } from 'fs';
-import { unlinkSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from "fs";
+import { stat } from "fs";
+import { unlinkSync } from "fs";
+import { writeFileSync } from "fs";
 
-import chalk from 'chalk';
-import hash from 'object-hash';
-import shp from 'shpjs';
+import chalk from "chalk";
+import hash from "object-hash";
+import shp from "shpjs";
 
-const county = yargs.argv['county'];
+const county = yargs.argv["county"];
 
-const dist = './data';
+const dist = "./data";
 
 const urlByCounty = {
   BELKNAP:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Belknap_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Belknap_ParcelsCAMA.zip",
   CARROLL:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Carroll_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Carroll_ParcelsCAMA.zip",
   CHESHIRE:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Cheshire_ParcelsCAMA.zip',
-  COOS: 'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Coos_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Cheshire_ParcelsCAMA.zip",
+  COOS: "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Coos_ParcelsCAMA.zip",
   GRAFTON:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Grafton_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Grafton_ParcelsCAMA.zip",
   HILLSBOROUGH:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Hillsborough_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Hillsborough_ParcelsCAMA.zip",
   MERRIMACK:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Merrimack_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Merrimack_ParcelsCAMA.zip",
   ROCKINGHAM:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Rockingham_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Rockingham_ParcelsCAMA.zip",
   STRAFFORD:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Strafford_ParcelsCAMA.zip',
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Strafford_ParcelsCAMA.zip",
   SULLIVAN:
-    'https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Sullivan_ParcelsCAMA.zip'
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Sullivan_ParcelsCAMA.zip",
 };
 
 const usageByClass = {
-  'Apt Bldg 5+ Units': '120',
-  'Commercial Condo': '260',
-  'Commercial L&B': '260',
-  'Commercial Land': '260',
-  'Condominiumized Land Site': '130',
-  'Garage/Storage Unit': '130',
-  'Industrial Condo': '260',
-  'Industrial L&B': '260',
-  'Industrial Land': '260',
-  'Mfg Housing With Land': '130',
-  'Mfg Housing Without Land': '130',
-  'Mixed Use Cmcl/Ind L&B': '260',
-  'Mixed Use Cmcl/Ind Land': '260',
-  'Mixed Use Res/Cmcl L&B': '260',
-  'Mixed Use Res/Cmcl Land': '260',
-  'Multi Family 2-4 Units': '120',
-  'Non Res Bldg Only': '260',
-  'Res Bldg Only': '130',
-  'Res Condo 2-4 Unit Bldg': '120',
-  'Residential Land': '190',
-  'Single Family Home': '110',
-  'Single Res Condo Unit': '130',
-  'Unclass/Unk Imp Res': '190',
-  'Unclass/Unk Land': '190',
-  'Unclass/Unk Non-Res L&B': '190',
-  'Unclass/Unk Other': '190'
+  "Apt Bldg 5+ Units": "120",
+  "Commercial Condo": "260",
+  "Commercial L&B": "260",
+  "Commercial Land": "260",
+  "Condominiumized Land Site": "130",
+  "Garage/Storage Unit": "130",
+  "Industrial Condo": "260",
+  "Industrial L&B": "260",
+  "Industrial Land": "260",
+  "Mfg Housing With Land": "130",
+  "Mfg Housing Without Land": "130",
+  "Mixed Use Cmcl/Ind L&B": "260",
+  "Mixed Use Cmcl/Ind Land": "260",
+  "Mixed Use Res/Cmcl L&B": "260",
+  "Mixed Use Res/Cmcl Land": "260",
+  "Multi Family 2-4 Units": "120",
+  "Non Res Bldg Only": "260",
+  "Res Bldg Only": "130",
+  "Res Condo 2-4 Unit Bldg": "120",
+  "Residential Land": "190",
+  "Single Family Home": "110",
+  "Single Res Condo Unit": "130",
+  "Unclass/Unk Imp Res": "190",
+  "Unclass/Unk Land": "190",
+  "Unclass/Unk Non-Res L&B": "190",
+  "Unclass/Unk Other": "190",
 };
 
 // 👇 no town can have more than this number of parcels
@@ -85,18 +85,18 @@ const tooManyZeroAreaParcelsRatio = 0.5;
 //    NOTE: we exclude WASHINGTON because we already have its legacy data
 // 👉 https://www.newhampshire-demographics.com/cities_by_population
 const exclusions = [
-  'CONCORD',
-  'DERRY',
-  'DOVER',
-  'HENNIKER',
-  'HUDSON',
-  'LONDONDERRY',
-  'MANCHESTER',
-  'MERRIMACK',
-  'NASHUA',
-  'ROCHESTER',
-  'SALEM',
-  'WASHINGTON'
+  "CONCORD",
+  "DERRY",
+  "DOVER",
+  "HENNIKER",
+  "HUDSON",
+  "LONDONDERRY",
+  "MANCHESTER",
+  "MERRIMACK",
+  "NASHUA",
+  "ROCHESTER",
+  "SALEM",
+  "WASHINGTON",
 ];
 
 async function main(): Promise<void> {
@@ -143,9 +143,9 @@ async function main(): Promise<void> {
               Math.round(
                 turf.convertArea(
                   feature.properties.Shape_Area ?? 0,
-                  'feet',
-                  'acres'
-                ) * 100
+                  "feet",
+                  "acres",
+                ) * 100,
               ) / 100 /* 👈 sq feet to acres to 2dps */,
             building$: feature.properties.TaxBldg,
             county: county,
@@ -154,9 +154,9 @@ async function main(): Promise<void> {
             other$: feature.properties.TaxFeature,
             taxed$: feature.properties.TaxTotal,
             town: town,
-            usage: usageByClass[feature.properties.SLUC_desc] ?? '190'
+            usage: usageByClass[feature.properties.SLUC_desc] ?? "190",
           },
-          type: 'Feature'
+          type: "Feature",
         };
 
         // 👉 we've gone to great lengths to make a bridge to share this
@@ -184,8 +184,8 @@ async function main(): Promise<void> {
         chalk.magenta(
           `... ${theState}/${county}/${town}/parcels.geojson has more than ${
             tooManyZeroAreaParcelsRatio * 100
-          }% zero-area parcels`
-        )
+          }% zero-area parcels`,
+        ),
       );
       stat(fn, (err, _stats) => {
         if (!err) unlinkSync(fn);
@@ -193,15 +193,17 @@ async function main(): Promise<void> {
     } else if (countByTown[town] > tooManyParcels) {
       console.log(
         chalk.red(
-          `... ${theState}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`
-        )
+          `... ${theState}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`,
+        ),
       );
       stat(fn, (err, _stats) => {
         if (!err) unlinkSync(fn);
       });
     } else {
       console.log(
-        chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
+        chalk.green(
+          `... writing ${theState}/${county}/${town}/parcels.geojson`,
+        ),
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
@@ -216,8 +218,8 @@ async function main(): Promise<void> {
     const fn = `${dist}/${theState}/${county}/${town}/searchables.geojson`;
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/searchables.geojson`
-      )
+        `... writing ${theState}/${county}/${town}/searchables.geojson`,
+      ),
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     // 👉 now do this again, converting the real parcels into searchables
@@ -228,10 +230,10 @@ async function main(): Promise<void> {
         properties: {
           address: feature.properties.address,
           id: feature.properties.id,
-          owner: feature.properties.owner
+          owner: feature.properties.owner,
         },
-        type: 'Feature'
-      })
+        type: "Feature",
+      }),
     );
     writeFileSync(fn, JSON.stringify(parcelsByTown[town]));
   });
@@ -244,8 +246,8 @@ async function main(): Promise<void> {
     const fn = `${dist}/${theState}/${county}/${town}/countables.geojson`;
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/countables.geojson`
-      )
+        `... writing ${theState}/${county}/${town}/countables.geojson`,
+      ),
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     // 👉 now do this again, converting the real parcels into countables
@@ -256,10 +258,10 @@ async function main(): Promise<void> {
           area: feature.properties.area,
           ownership: feature.properties.ownership,
           usage: feature.properties.usage,
-          use: feature.properties.use
+          use: feature.properties.use,
         },
-        type: 'Feature'
-      })
+        type: "Feature",
+      }),
     );
     writeFileSync(fn, JSON.stringify(parcelsByTown[town]));
   });
@@ -276,7 +278,7 @@ function makeAddress(feature: GeoJSON.Feature): string {
   }
   // 👉 sometimes address is street, number
   else if (feature.properties.StreetAddr) {
-    const parts = feature.properties.StreetAddr.split(',');
+    const parts = feature.properties.StreetAddr.split(",");
     address =
       parts.length > 1
         ? `${parts[1].trim()} ${parts[0]}`
@@ -290,13 +292,13 @@ function makeAddress(feature: GeoJSON.Feature): string {
 function makeID(feature: GeoJSON.Feature): string {
   const strip0 = (str: string): string => {
     let stripped = str;
-    while (stripped.length && stripped[0] === '0') stripped = stripped.slice(1);
+    while (stripped.length && stripped[0] === "0") stripped = stripped.slice(1);
     return stripped;
   };
-  const parts = feature.properties.DisplayId.split('-')
+  const parts = feature.properties.DisplayId.split("-")
     .map((part) => strip0(part))
     .filter((part) => part);
-  return parts.join('-');
+  return parts.join("-");
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -305,23 +307,23 @@ function makeID(feature: GeoJSON.Feature): string {
 const sample = {
   OBJECTID: 549240,
   ParcelOID: 591063,
-  Name: 'ParcelID: 62-6',
-  TownID: '042',
-  CountyID: '10',
-  TOWN: 'CLAREMONT',
-  PID: '62-6',
-  OID_1: '',
-  NH_GIS_ID: '10042-62-6',
-  SLU: '57',
-  SLUC: '57',
-  SLUM: '',
+  Name: "ParcelID: 62-6",
+  TownID: "042",
+  CountyID: "10",
+  TOWN: "CLAREMONT",
+  PID: "62-6",
+  OID_1: "",
+  NH_GIS_ID: "10042-62-6",
+  SLU: "57",
+  SLUC: "57",
+  SLUM: "",
   Shape_Leng: 8564.18355814,
   Shape_Area: 3768708.97914,
   IS_CIRCLE: 2,
   OBJECTID_1: 106188,
   CamaOID: 106188,
-  Name_1: 'CamaID: 62-6',
-  LocalNBC: '200',
+  Name_1: "CamaID: 62-6",
+  LocalNBC: "200",
   NBC: 7,
   TaxLand: 101900,
   TaxBldg: 0,
@@ -333,31 +335,31 @@ const sample = {
   PrevTaxTot: 101900,
   CamaYear: 2020,
   CamaVendor: 8,
-  U_ID: '042-438',
-  NHGIS_ID: '10042-62-6',
-  RawId: '62-6',
-  AltId: '10042-62-6',
-  DisplayId: '62-6',
-  TownId_1: '042',
-  CountyId_1: '10',
-  SLU_1: '57',
-  SLUC_1: '57',
-  SLUM_1: '',
-  LocalCamaI: '438',
-  Map: '62',
-  MapCut: '',
-  Block: '',
-  BlockCut: '',
-  Lot: '6',
-  LotCut: '',
-  Unit: '',
-  UnitCut: '',
-  Sub: '',
+  U_ID: "042-438",
+  NHGIS_ID: "10042-62-6",
+  RawId: "62-6",
+  AltId: "10042-62-6",
+  DisplayId: "62-6",
+  TownId_1: "042",
+  CountyId_1: "10",
+  SLU_1: "57",
+  SLUC_1: "57",
+  SLUM_1: "",
+  LocalCamaI: "438",
+  Map: "62",
+  MapCut: "",
+  Block: "",
+  BlockCut: "",
+  Lot: "6",
+  LotCut: "",
+  Unit: "",
+  UnitCut: "",
+  Sub: "",
   CardCount: 0,
-  StreetNumb: '',
-  StreetName: 'CAT HOLE RD',
-  StreetAddr: 'CAT HOLE RD',
-  TownName: 'Claremont',
-  CountyName: 'Sullivan',
-  SLUC_desc: 'Unclass/Unk Other'
+  StreetNumb: "",
+  StreetName: "CAT HOLE RD",
+  StreetAddr: "CAT HOLE RD",
+  TownName: "Claremont",
+  CountyName: "Sullivan",
+  SLUC_desc: "Unclass/Unk Other",
 };

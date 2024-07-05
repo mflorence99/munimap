@@ -1,25 +1,25 @@
-import { SidebarComponent } from '../../components/sidebar-component';
+import { SidebarComponent } from "../../components/sidebar-component";
 
-import { AuthState } from '@lib/state/auth';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { OnInit } from '@angular/core';
-import { Parcel } from '@lib/common';
-import { ParcelID } from '@lib/common';
-import { ParcelsActions } from '@lib/state/parcels';
-import { Store } from '@ngxs/store';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { MatDrawer } from "@angular/material/sidenav";
+import { Parcel } from "@lib/common";
+import { ParcelID } from "@lib/common";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { AuthState } from "@lib/state/auth";
+import { ParcelsActions } from "@lib/state/parcels";
+import { Store } from "@ngxs/store";
 
-import { featureCollection } from '@turf/helpers';
-import { inject } from '@angular/core';
-import { intersect } from '@turf/intersect';
-import { randomPoint } from '@turf/random';
-import { transformExtent } from 'ol/proj';
-import { voronoi } from '@turf/voronoi';
+import { inject } from "@angular/core";
+import { featureCollection } from "@turf/helpers";
+import { intersect } from "@turf/intersect";
+import { randomPoint } from "@turf/random";
+import { voronoi } from "@turf/voronoi";
+import { transformExtent } from "ol/proj";
 
-import OLFeature from 'ol/Feature';
-import OLGeoJSON from 'ol/format/GeoJSON';
+import OLFeature from "ol/Feature";
+import OLGeoJSON from "ol/format/GeoJSON";
 
 interface Subdivision {
   area: number;
@@ -28,7 +28,7 @@ interface Subdivision {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-subdivide-parcel',
+  selector: "app-subdivide-parcel",
   template: `
     <header class="header">
       <figure class="icon">
@@ -131,8 +131,8 @@ interface Subdivision {
           width: 10rem;
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;
@@ -156,18 +156,18 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   ngOnInit(): void {
     this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection
+      featureProjection: this.map.projection,
     });
     const source = this.features[0];
     this.subdivisions = [
       {
         area: source.getProperties().area,
-        id: `${source.getId()}`
+        id: `${source.getId()}`,
       },
       {
         area: null,
-        id: null
-      }
+        id: null,
+      },
     ];
   }
 
@@ -184,12 +184,12 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
     const bbox: any = transformExtent(
       this.features[0].getGeometry().getExtent(),
       this.map.projection,
-      this.map.featureProjection
+      this.map.featureProjection,
     );
     // 👉 there's guaranteed to be only one selected parcel
     const source = this.features[0];
     const sourceGeoJSON = JSON.parse(
-      this.#format.writeFeature(this.features[0])
+      this.#format.writeFeature(this.features[0]),
     );
     // 👉 keep creating voronoi ploygons until we have enough
     //    reason: a randpom point may fall outside the source
@@ -197,7 +197,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
     for (let ix = 0; targetGeoJSONs.length < subdivisions.length; ix++) {
       const randomPoints = randomPoint(subdivisions.length + ix, { bbox });
       targetGeoJSONs = voronoi(randomPoints, { bbox }).features.map((polygon) =>
-        intersect(featureCollection([polygon, sourceGeoJSON]))
+        intersect(featureCollection([polygon, sourceGeoJSON])),
       );
     }
     // 👉 trim any excess
@@ -209,11 +209,11 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
       subdivisions.every((subdivision) => subdivision.id !== source.getId())
     ) {
       removedParcels.push({
-        action: 'removed',
+        action: "removed",
         id: source.getId(),
         owner: this.#authState.currentProfile().email,
         path: this.map.path(),
-        type: 'Feature'
+        type: "Feature",
       });
     }
     // 👉 create a new geometry for each subdivision
@@ -221,7 +221,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
       const props = source.getProperties();
       const subdivision = subdivisions[ix];
       return {
-        action: subdivision.id !== source.getId() ? 'added' : 'modified',
+        action: subdivision.id !== source.getId() ? "added" : "modified",
         geometry: geojson.geometry,
         id: subdivision.id,
         owner: this.#authState.currentProfile().email,
@@ -236,14 +236,14 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
           town: props.town,
           usage: props.usage,
           use: props.use,
-          zone: props.zone
+          zone: props.zone,
         },
-        type: 'Feature'
+        type: "Feature",
       };
     });
     // that's it!
     this.#store.dispatch(
-      new ParcelsActions.AddParcels([...removedParcels, ...subdividedParcels])
+      new ParcelsActions.AddParcels([...removedParcels, ...subdividedParcels]),
     );
     this.drawer.close();
   }

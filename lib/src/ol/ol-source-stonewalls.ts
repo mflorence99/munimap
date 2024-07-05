@@ -1,17 +1,17 @@
-import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { OLSourceArcGISComponent } from "./ol-source-arcgis";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Coordinate } from "ol/coordinate";
 
 const attribution =
   '<a href="https://www.facebook.com/groups/NHstonewalls/" target="_blank">NH Stone Wall</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-stonewalls',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-stonewalls",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceStoneWallsComponent extends OLSourceArcGISComponent {
   getAttribution(): string {
@@ -23,7 +23,7 @@ export class OLSourceStoneWallsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'stonewalls';
+    return "stonewalls";
   }
 
   getURL(extent: Coordinate): string {

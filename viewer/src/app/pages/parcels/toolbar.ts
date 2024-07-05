@@ -1,15 +1,15 @@
-import { RootPage } from '../root/page';
+import { RootPage } from "../root/page";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { ViewActions } from '@lib/state/view';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ViewActions } from "@lib/state/view";
+import { Store } from "@ngxs/store";
 
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-parcels-toolbar',
+  selector: "app-parcels-toolbar",
   template: `
     <app-sink
       #sink
@@ -52,8 +52,8 @@ import { inject } from '@angular/core';
         background-color: var(--mat-gray-800);
         color: var(--text-color);
       }
-    `
-  ]
+    `,
+  ],
 })
 export class ParcelsToolbarComponent {
   root = inject(RootPage);

@@ -1,18 +1,18 @@
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
-import { OLMapComponent } from './ol-map';
+import { OLMapComponent } from "./ol-map";
+import { Mapable } from "./ol-mapable";
+import { MapableComponent } from "./ol-mapable";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { Control as OLControl } from 'ol/control';
-import { ElementRef } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Control as OLControl } from "ol/control";
 
-import { forwardRef } from '@angular/core';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { viewChild } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { viewChild } from "@angular/core";
 
 // 🔥 this control is designed ONLY to be printed on the map
 
@@ -27,10 +27,10 @@ class Credits extends OLControl {
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlCreditsComponent)
-    }
+      useExisting: forwardRef(() => OLControlCreditsComponent),
+    },
   ],
-  selector: 'app-ol-control-credits',
+  selector: "app-ol-control-credits",
 
   template: `
     <article
@@ -84,12 +84,12 @@ class Credits extends OLControl {
           }
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLControlCreditsComponent implements Mapable, OnInit {
   attributions: string[] = [];
-  creditsRef = viewChild<ElementRef>('creditsRef');
+  creditsRef = viewChild<ElementRef>("creditsRef");
   now = Date.now();
   olControl: OLControl;
   scaleFactor = input(125);
@@ -129,7 +129,7 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
       .getLayers()
       .getArray()
       .map(
-        (layer: any): string[] => layer.getSource().getAttributions()?.() ?? []
+        (layer: any): string[] => layer.getSource().getAttributions()?.() ?? [],
       )
       .flat();
     this.attributions = Array.from(new Set(raw));

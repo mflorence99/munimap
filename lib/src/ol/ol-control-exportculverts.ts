@@ -1,16 +1,16 @@
-import { CulvertProperties } from '../common';
-import { LandmarksState } from '../state/landmarks';
+import { CulvertProperties } from "../common";
+import { LandmarksState } from "../state/landmarks";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { saveAs } from 'file-saver';
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { saveAs } from "file-saver";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-control-exportculverts',
+  selector: "app-ol-control-exportculverts",
   template: `
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
@@ -22,8 +22,8 @@ import { saveAs } from 'file-saver';
         display: block;
         pointer-events: auto;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLControlExportCulvertsComponent {
   fileName = input<string>();
@@ -36,7 +36,7 @@ export class OLControlExportCulvertsComponent {
     const wpts = geojson.features.reduce((acc, feature) => {
       const coords = feature.geometry.coordinates;
       const props = <CulvertProperties>feature.properties.metadata;
-      if (props.type === 'culvert') {
+      if (props.type === "culvert") {
         // 👇 the opening is special
         const opening = props.diameter || `${props.width}x${props.height}`;
         // 👇 the rest of the culvert properties
@@ -45,7 +45,7 @@ export class OLControlExportCulvertsComponent {
           <name><![CDATA[${opening}" ${props.length}' ${props.condition} ${
             props.count
           }x ${props.floodHazard} ${props.headwall} ${props.material} ${
-            props.year ?? ''
+            props.year ?? ""
           }]]></name>
           <ele>${coords[2] ?? 0}</ele>
           <desc><![CDATA[${props.description}]]></desc>
@@ -54,7 +54,7 @@ export class OLControlExportCulvertsComponent {
       `;
       }
       return acc;
-    }, '');
+    }, "");
     // 👇 complete the GPX XML
     const gpx = `
     <gpx
@@ -68,7 +68,7 @@ export class OLControlExportCulvertsComponent {
     `;
     // 👇 emit the data
     const blob = new Blob([gpx], {
-      type: 'text/plain;charset=utf-8'
+      type: "text/plain;charset=utf-8",
     });
     saveAs(blob, `${this.fileName()}.gpx`);
   }

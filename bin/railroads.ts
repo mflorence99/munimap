@@ -1,22 +1,22 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from "../lib/src/common";
+import { theState } from "../lib/src/common";
 
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
 
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 
 // 👉 file on server uses eastings, northings and has no properties
 //    so we grabbed a file that works and we assume it won't change
 // url: 'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-railroads/rr'
 const railroads = JSON.parse(
-  readFileSync('./bin/assets/New_Hampshire_Railroads.geojson').toString()
+  readFileSync("./bin/assets/New_Hampshire_Railroads.geojson").toString(),
 );
 
-const dist = './data';
+const dist = "./data";
 
 console.log(chalk.green(`... writing /${theState}/railroads.geojson`));
 
@@ -31,7 +31,7 @@ railroads.features.forEach((feature: GeoJSON.Feature) => {
   feature.bbox = turf.bbox(feature);
   feature.properties = {
     name: feature.properties.NAME,
-    status: feature.properties.STATUS
+    status: feature.properties.STATUS,
   };
 });
 
@@ -39,7 +39,7 @@ railroads.features.forEach((feature: GeoJSON.Feature) => {
 mkdirSync(`${dist}/${theState}`, { recursive: true });
 writeFileSync(
   `${dist}/${theState}/railroads.geojson`,
-  JSON.stringify(simplify(railroads))
+  JSON.stringify(simplify(railroads)),
 );
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -47,24 +47,24 @@ writeFileSync(
 
 const sample = {
   OBJECTID: 1,
-  NAME: 'Spur Boston and Maine Corp - 2a',
+  NAME: "Spur Boston and Maine Corp - 2a",
   SECT_LENGTH: 0.29725199,
   NAME_HISTORIC: null,
-  STATUS: 'Abandoned',
+  STATUS: "Abandoned",
   PURCHASE: null,
   ABANDONMENT_YEAR: null,
-  OPERATOR: 'BM',
+  OPERATOR: "BM",
   CREATE_USER: null,
   CREATE_DATE: null,
-  UPDT_USER: 'N46EP',
-  UPDT_DATE: '2013-12-16T08:27:59Z',
-  OWNERSHIP: 'BM',
+  UPDT_USER: "N46EP",
+  UPDT_DATE: "2013-12-16T08:27:59Z",
+  OWNERSHIP: "BM",
   SHAPE_Length: 1569.4905317078653,
   RRI_UID: 102,
-  RRI: 'SP003_01',
+  RRI: "SP003_01",
   MP_START: 0,
   MP_END: 0.29725199,
   NEEDS_CALIBRATION: null,
   PARTS: null,
-  IS_PASSENGER: null
+  IS_PASSENGER: null,
 };

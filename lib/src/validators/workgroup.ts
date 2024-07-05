@@ -1,9 +1,9 @@
-import { AbstractControl } from '@angular/forms';
-import { Directive } from '@angular/core';
-import { NG_VALIDATORS } from '@angular/forms';
-import { ValidationErrors } from '@angular/forms';
-import { Validator } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms';
+import { Directive } from "@angular/core";
+import { AbstractControl } from "@angular/forms";
+import { NG_VALIDATORS } from "@angular/forms";
+import { ValidationErrors } from "@angular/forms";
+import { Validator } from "@angular/forms";
+import { ValidatorFn } from "@angular/forms";
 
 function workgroupValidatorFactory(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
@@ -17,8 +17,8 @@ function workgroupValidatorFactory(): ValidatorFn {
     if (emails.length > 10)
       return {
         tooMany: {
-          valid: false
-        }
+          valid: false,
+        },
       };
 
     // 👉 every email must be empty or valid
@@ -26,13 +26,13 @@ function workgroupValidatorFactory(): ValidatorFn {
       !emails.every(
         (email) =>
           !email ||
-          /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)
+          /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email),
       )
     )
       return {
         invalidEmail: {
-          valid: false
-        }
+          valid: false,
+        },
       };
 
     return null;
@@ -41,9 +41,9 @@ function workgroupValidatorFactory(): ValidatorFn {
 
 @Directive({
   providers: [
-    { provide: NG_VALIDATORS, useExisting: WorkgroupValidator, multi: true }
+    { provide: NG_VALIDATORS, useExisting: WorkgroupValidator, multi: true },
   ],
-  selector: '[appWorkgroup][ngModel]'
+  selector: "[appWorkgroup][ngModel]",
 })
 export class WorkgroupValidator implements Validator {
   validator: ValidatorFn = workgroupValidatorFactory();

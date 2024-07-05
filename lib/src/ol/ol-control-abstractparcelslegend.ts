@@ -1,31 +1,31 @@
-import { CountableParcels } from '../common';
-import { DestroyService } from '../services/destroy';
-import { GeoJSONService } from '../services/geojson';
-import { Map } from '../state/map';
-import { Mapable } from './ol-mapable';
-import { MapState } from '../state/map';
-import { Parcel } from '../common';
-import { ParcelID } from '../common';
-import { ParcelProperties } from '../common';
-import { ParcelsState } from '../state/parcels';
+import { CountableParcels } from "../common";
+import { Parcel } from "../common";
+import { ParcelID } from "../common";
+import { ParcelProperties } from "../common";
+import { DestroyService } from "../services/destroy";
+import { GeoJSONService } from "../services/geojson";
+import { Map } from "../state/map";
+import { MapState } from "../state/map";
+import { ParcelsState } from "../state/parcels";
+import { Mapable } from "./ol-mapable";
 
-import { isParcelStollen } from '../common';
-import { parcelPropertiesOwnership } from '../common';
-import { parcelPropertiesUsage } from '../common';
-import { parcelPropertiesUse } from '../common';
+import { isParcelStollen } from "../common";
+import { parcelPropertiesOwnership } from "../common";
+import { parcelPropertiesUsage } from "../common";
+import { parcelPropertiesUse } from "../common";
 
-import { ChangeDetectorRef } from '@angular/core';
-import { Control as OLControl } from 'ol/control';
-import { Observable } from 'rxjs';
-import { Signal } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { Subject } from 'rxjs';
+import { ChangeDetectorRef } from "@angular/core";
+import { Signal } from "@angular/core";
+import { Store } from "@ngxs/store";
+import { Control as OLControl } from "ol/control";
+import { Observable } from "rxjs";
+import { Subject } from "rxjs";
 
-import { combineLatest } from 'rxjs';
-import { inject } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { inject } from "@angular/core";
+import { combineLatest } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
-import copy from 'fast-copy';
+import copy from "fast-copy";
 
 type Accumulator = Record<string, number>;
 
@@ -53,13 +53,13 @@ export abstract class OLControlAbstractParcelsLegendComponent
   areaOfParcels: number;
   // 🔥 this only works for Washington
   conformities: Conformity[] = [
-    ['\u00bc acre', 0.25],
-    ['\u00bd acre', 0.5],
-    ['\u00be acre', 0.75],
-    ['1 acre', 1],
-    ['2 acres', 2],
-    ['3 acres', 3],
-    ['4 acres', 4]
+    ["\u00bc acre", 0.25],
+    ["\u00bd acre", 0.5],
+    ["\u00be acre", 0.75],
+    ["1 acre", 1],
+    ["2 acres", 2],
+    ["3 acres", 3],
+    ["4 acres", 4],
   ];
   countByConformity: Accumulator;
   countByOwnership: Accumulator;
@@ -142,7 +142,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     // 👉 count the total area of all parcels
     this.areaOfParcels = Object.values(this.areaByUsage).reduce(
       (p, q) => p + q,
-      0
+      0,
     );
   }
 
@@ -154,7 +154,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #filterRemovedFeatures(geojson: CountableParcels, parcels: Parcel[]): void {
     const removed = this.#parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
-      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
+      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id),
     );
   }
 
@@ -170,7 +170,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     this.#geoJSON
       .loadByIndex(
         this.#mapState.currentMap().path,
-        map?.id === 'apdvd' ? 'parcels' : 'countables'
+        map?.id === "apdvd" ? "parcels" : "countables",
       )
       .subscribe((geojson: CountableParcels) => this.#geojson$.next(geojson));
   }
@@ -195,7 +195,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
         geometry: undefined,
         id: id,
         properties: {},
-        type: 'Feature'
+        type: "Feature",
       });
     });
   }
@@ -208,7 +208,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
       modified[id].forEach((parcel) => {
         const props = parcel.properties;
         if (props) {
-          ['area', 'ownership', 'usage', 'use'].forEach((prop) => {
+          ["area", "ownership", "usage", "use"].forEach((prop) => {
             if (props[prop] !== undefined && override[prop] === undefined)
               override[prop] = props[prop];
           });

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { OnDestroy } from "@angular/core";
+import { Observable } from "rxjs";
+import { Subject } from "rxjs";
 
 // 👀  https://twitter.com/Waterplea/status/1271037735332204544/photo/1
 

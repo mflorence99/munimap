@@ -1,35 +1,35 @@
-import { SidebarComponent } from '../../components/sidebar-component';
+import { SidebarComponent } from "../../components/sidebar-component";
 
-import { AuthState } from '@lib/state/auth';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
-import { Landmark } from '@lib/common';
-import { LandmarkPropertiesClass } from '@lib/common';
-import { LandmarksActions } from '@lib/state/landmarks';
-import { MatDrawer } from '@angular/material/sidenav';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { Store } from '@ngxs/store';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { Firestore } from "@angular/fire/firestore";
+import { MatDrawer } from "@angular/material/sidenav";
+import { Landmark } from "@lib/common";
+import { LandmarkPropertiesClass } from "@lib/common";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { AuthState } from "@lib/state/auth";
+import { LandmarksActions } from "@lib/state/landmarks";
+import { Store } from "@ngxs/store";
 
-import { collection } from '@angular/fire/firestore';
-import { firstValueFrom } from 'rxjs';
-import { getDocs } from '@angular/fire/firestore';
-import { inject } from '@angular/core';
-import { makeLandmarkID } from '@lib/common';
-import { query } from '@angular/fire/firestore';
-import { where } from '@angular/fire/firestore';
-import { workgroup } from '@lib/state/auth';
+import { inject } from "@angular/core";
+import { collection } from "@angular/fire/firestore";
+import { getDocs } from "@angular/fire/firestore";
+import { query } from "@angular/fire/firestore";
+import { where } from "@angular/fire/firestore";
+import { makeLandmarkID } from "@lib/common";
+import { workgroup } from "@lib/state/auth";
+import { firstValueFrom } from "rxjs";
 
-import Feature from 'ol/Feature';
-import hash from 'object-hash';
-import JSZip from 'jszip';
-import toGeoJSON from '@mapbox/togeojson';
+import toGeoJSON from "@mapbox/togeojson";
+import JSZip from "jszip";
+import hash from "object-hash";
+import Feature from "ol/Feature";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-import-landmarks',
-  templateUrl: '../abstract-import.html'
+  selector: "app-import-landmarks",
+  templateUrl: "../abstract-import.html",
 })
 export class ImportLandmarksComponent implements SidebarComponent {
   cancelling = false;
@@ -56,16 +56,16 @@ export class ImportLandmarksComponent implements SidebarComponent {
   async alreadyImported(importHash: string): Promise<boolean> {
     console.log(
       `%cFirestore query: landmarks where owner in ${JSON.stringify(
-        workgroup(this.#authState.currentProfile())
+        workgroup(this.#authState.currentProfile()),
       )} and importHash = ${importHash}`,
-      'color: goldenrod'
+      "color: goldenrod",
     );
     const docs = await getDocs(
       query(
-        collection(this.#firestore, 'landmarks'),
-        where('owner', 'in', workgroup(this.#authState.currentProfile())),
-        where('importHash', '==', importHash)
-      )
+        collection(this.#firestore, "landmarks"),
+        where("owner", "in", workgroup(this.#authState.currentProfile())),
+        where("importHash", "==", importHash),
+      ),
     );
     return !docs.empty;
   }
@@ -77,31 +77,31 @@ export class ImportLandmarksComponent implements SidebarComponent {
         if (this.cancelling) break;
         if (record[file.name]) {
           // 👇 decompress ZIP files
-          if (file.name.toLowerCase().endsWith('.zip')) {
+          if (file.name.toLowerCase().endsWith(".zip")) {
             const zip = await JSZip.loadAsync(file);
             const entries = zip.filter(
               (path) =>
-                path.toLowerCase().endsWith('.gpx') ||
-                path.toLowerCase().endsWith('.kml')
+                path.toLowerCase().endsWith(".gpx") ||
+                path.toLowerCase().endsWith(".kml"),
             );
             if (entries.length === 0)
               this.errorMessages.push(
-                `No GPX or KML data found in ${file.name}`
+                `No GPX or KML data found in ${file.name}`,
               );
             else {
               // 🔥 NOTE EasyTrails hack where we only take the first of
               //    Waypoint.gpx or Waypoint.kml
-              if (file.name.startsWith('EasyTrailsGPS_exported'))
+              if (file.name.startsWith("EasyTrailsGPS_exported"))
                 entries.length = 1;
               // 👇 convert each entry to GeoJSON
               for (const entry of entries) {
-                const raw = await entry.async('text');
-                const xml = new DOMParser().parseFromString(raw, 'text/xml');
-                const geojson = entry.name.toLowerCase().endsWith('.gpx')
+                const raw = await entry.async("text");
+                const xml = new DOMParser().parseFromString(raw, "text/xml");
+                const geojson = entry.name.toLowerCase().endsWith(".gpx")
                   ? toGeoJSON.gpx(xml)
                   : toGeoJSON.kml(xml);
                 // 🔥 non-standard GeoJSON field for convenience
-                geojson['filename'] = file.name;
+                geojson["filename"] = file.name;
                 geojsons.push(geojson);
               }
             }
@@ -109,12 +109,12 @@ export class ImportLandmarksComponent implements SidebarComponent {
           // 👇 read GPX and KML files directly
           else {
             const raw = await file.text();
-            const xml = new DOMParser().parseFromString(raw, 'text/xml');
-            const geojson = file.name.toLowerCase().endsWith('.gpx')
+            const xml = new DOMParser().parseFromString(raw, "text/xml");
+            const geojson = file.name.toLowerCase().endsWith(".gpx")
               ? toGeoJSON.gpx(xml)
               : toGeoJSON.kml(xml);
             // 🔥 non-standard GeoJSON field for convenience
-            geojson['filename'] = file.name;
+            geojson["filename"] = file.name;
             geojsons.push(geojson);
           }
         }
@@ -144,7 +144,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
     const geojsons = await this.analyzeImports(record);
     this.numImporting = geojsons.reduce(
       (acc, geojson) => acc + geojson.features.length,
-      0
+      0,
     );
     this.#cdf.markForCheck();
     await this.makeLandmarks(geojsons);
@@ -155,7 +155,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
   }
 
   async makeLandmarks(
-    geojsons: GeoJSON.FeatureCollection<any>[]
+    geojsons: GeoJSON.FeatureCollection<any>[],
   ): Promise<void> {
     for (const geojson of geojsons) {
       if (this.cancelling) break;
@@ -174,52 +174,52 @@ export class ImportLandmarksComponent implements SidebarComponent {
             geometry: feature.geometry,
             owner: this.#authState.currentProfile().email,
             path: this.map.path(),
-            type: 'Feature'
+            type: "Feature",
           };
           let properties;
           switch (feature.geometry?.type) {
-            case 'Point':
+            case "Point":
               properties = new LandmarkPropertiesClass({
-                fontColor: '--rgb-blue-gray-800',
+                fontColor: "--rgb-blue-gray-800",
                 fontOpacity: 1,
                 fontOutline: true,
-                fontSize: 'large',
-                fontStyle: 'bold'
+                fontSize: "large",
+                fontStyle: "bold",
               });
               break;
-            case 'LineString':
+            case "LineString":
               properties = new LandmarkPropertiesClass({
-                fontColor: '--rgb-blue-gray-800',
+                fontColor: "--rgb-blue-gray-800",
                 fontOpacity: 1,
                 fontOutline: true,
-                fontSize: 'medium',
-                fontStyle: 'italic',
+                fontSize: "medium",
+                fontStyle: "italic",
                 lineChunk: true,
                 lineDash: [1, 1],
                 lineSpline: true,
                 showDimension: true,
-                strokeColor: '--rgb-blue-gray-800',
+                strokeColor: "--rgb-blue-gray-800",
                 strokeOpacity: 1,
-                strokeStyle: 'dashed',
-                strokeWidth: 'medium'
+                strokeStyle: "dashed",
+                strokeWidth: "medium",
               });
               break;
-            case 'Polygon':
+            case "Polygon":
               properties = new LandmarkPropertiesClass({
-                fillColor: '--rgb-blue-gray-600',
+                fillColor: "--rgb-blue-gray-600",
                 fillOpacity: 0.15,
-                fontColor: '--rgb-blue-gray-800',
+                fontColor: "--rgb-blue-gray-800",
                 fontOpacity: 1,
                 fontOutline: true,
-                fontSize: 'medium',
-                fontStyle: 'normal',
+                fontSize: "medium",
+                fontStyle: "normal",
                 lineDash: [1, 1],
                 showDimension: true,
-                strokeColor: '--rgb-blue-gray-800',
+                strokeColor: "--rgb-blue-gray-800",
                 strokeOpacity: 1,
-                strokeStyle: 'dashed',
-                strokeWidth: 'medium',
-                textRotate: true
+                strokeStyle: "dashed",
+                strokeWidth: "medium",
+                textRotate: true,
               });
               break;
           }
@@ -229,10 +229,10 @@ export class ImportLandmarksComponent implements SidebarComponent {
             landmark.importHash = importHash;
             landmark.properties = {
               ...properties,
-              name: feature.properties?.name ?? 'Imported Landmark'
+              name: feature.properties?.name ?? "Imported Landmark",
             };
             await firstValueFrom(
-              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark))
+              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark)),
             );
           }
         }

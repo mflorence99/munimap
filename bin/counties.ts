@@ -1,21 +1,21 @@
-import { bboxByAspectRatio } from '../lib/src/common';
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { bboxByAspectRatio } from "../lib/src/common";
+import { simplify } from "../lib/src/common";
+import { theState } from "../lib/src/common";
 
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
 
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 
-const dist = './data';
+const dist = "./data";
 
 const counties = JSON.parse(
   readFileSync(
-    './bin/assets/New_Hampshire_County_Boundaries.geojson'
-  ).toString()
+    "./bin/assets/New_Hampshire_County_Boundaries.geojson",
+  ).toString(),
 );
 
 const wholeState: GeoJSON.Feature[] = [];
@@ -24,7 +24,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   const county = (feature.properties.NAME as string).toUpperCase();
 
   console.log(
-    chalk.green(`... writing ${theState}/${county}/boundary.geojson`)
+    chalk.green(`... writing ${theState}/${county}/boundary.geojson`),
   );
 
   // 👉 we don't need the properties, but we do need the bbox
@@ -35,12 +35,12 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   delete feature.properties;
 
   feature.properties = {
-    name: county
+    name: county,
   };
 
   // 👉 ouch! the source data uses MultiPolygon, we need Polygon
-  if (feature.geometry.type === 'MultiPolygon') {
-    feature.geometry.type = 'Polygon';
+  if (feature.geometry.type === "MultiPolygon") {
+    feature.geometry.type = "Polygon";
     feature.geometry.coordinates = feature.geometry.coordinates.flat(1);
   }
 
@@ -53,7 +53,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   mkdirSync(`${dist}/${theState}/${county}`, { recursive: true });
   writeFileSync(
     `${dist}/${theState}/${county}/boundary.geojson`,
-    JSON.stringify(simplify(geojson))
+    JSON.stringify(simplify(geojson)),
   );
 });
 
@@ -62,5 +62,5 @@ console.log(chalk.green(`... writing ${theState}/counties.geojson`));
 const geojson = turf.featureCollection(wholeState);
 writeFileSync(
   `${dist}/${theState}/counties.geojson`,
-  JSON.stringify(simplify(geojson))
+  JSON.stringify(simplify(geojson)),
 );

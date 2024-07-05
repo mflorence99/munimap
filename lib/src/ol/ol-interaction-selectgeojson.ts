@@ -1,27 +1,27 @@
-import { Mapable } from './ol-mapable';
-import { MapableComponent } from './ol-mapable';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
-import { Selector } from './ol-selector';
-import { SelectorComponent } from './ol-selector';
+import { OLLayerVectorComponent } from "./ol-layer-vector";
+import { OLMapComponent } from "./ol-map";
+import { Mapable } from "./ol-mapable";
+import { MapableComponent } from "./ol-mapable";
+import { Selector } from "./ol-selector";
+import { SelectorComponent } from "./ol-selector";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { EventsKey as OLEventsKey } from 'ol/events';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnDestroy } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { EventsKey as OLEventsKey } from "ol/events";
+import { SelectEvent as OLSelectEvent } from "ol/interaction/Select";
 
-import { click } from 'ol/events/condition';
-import { forwardRef } from '@angular/core';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { output } from '@angular/core';
-import { pointerMove } from 'ol/events/condition';
-import { unByKey } from 'ol/Observable';
+import { forwardRef } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { output } from "@angular/core";
+import { unByKey } from "ol/Observable";
+import { click } from "ol/events/condition";
+import { pointerMove } from "ol/events/condition";
 
-import OLFeature from 'ol/Feature';
-import OLSelect from 'ol/interaction/Select';
+import OLFeature from "ol/Feature";
+import OLSelect from "ol/interaction/Select";
 
 export type FilterFunction = (name: number | string) => boolean;
 
@@ -30,16 +30,16 @@ export type FilterFunction = (name: number | string) => boolean;
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
+      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent),
     },
     {
       provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
-    }
+      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent),
+    },
   ],
-  selector: 'app-ol-interaction-selectgeojson',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-interaction-selectgeojson",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLInteractionSelectGeoJSONComponent
   implements Mapable, OnDestroy, OnInit, Selector
@@ -66,7 +66,7 @@ export class OLInteractionSelectGeoJSONComponent
       condition: (event): boolean => pointerMove(event),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
-      style: this.layer.styleWhenHovering()
+      style: this.layer.styleWhenHovering(),
     });
     this.olHover.setProperties({ component: this }, true);
     // 👉 for selecting
@@ -74,7 +74,7 @@ export class OLInteractionSelectGeoJSONComponent
       condition: (event): boolean => click(event),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
-      style: this.layer.styleWhenSelected()
+      style: this.layer.styleWhenSelected(),
     });
     this.olSelect.setProperties({ component: this }, true);
   }
@@ -97,7 +97,7 @@ export class OLInteractionSelectGeoJSONComponent
   }
 
   ngOnInit(): void {
-    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
+    this.#selectKey = this.olSelect.on("select", this.#onSelect.bind(this));
   }
 
   #filter(feature: OLFeature<any>): boolean {
@@ -105,8 +105,8 @@ export class OLInteractionSelectGeoJSONComponent
   }
 
   #onSelect(_event?: OLSelectEvent): void {
-    const ids = this.selectedIDs.join(', ');
-    console.log(`%cSelected features`, 'color: lightcoral', `[${ids}]`);
+    const ids = this.selectedIDs.join(", ");
+    console.log(`%cSelected features`, "color: lightcoral", `[${ids}]`);
     this.featuresSelected.emit(this.selected);
   }
 }

@@ -1,31 +1,31 @@
-import { DestroyService } from '../services/destroy';
-import { Legend } from './ol-control-abstractparcelslegend';
-import { MapableComponent } from './ol-mapable';
-import { OLControlAbstractParcelsLegendComponent } from './ol-control-abstractparcelslegend';
-import { OLMapComponent } from './ol-map';
+import { DestroyService } from "../services/destroy";
+import { Legend } from "./ol-control-abstractparcelslegend";
+import { OLControlAbstractParcelsLegendComponent } from "./ol-control-abstractparcelslegend";
+import { OLMapComponent } from "./ol-map";
+import { MapableComponent } from "./ol-mapable";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { OnInit } from "@angular/core";
 
-import { area } from '@turf/area';
-import { convertArea } from '@turf/helpers';
-import { forwardRef } from '@angular/core';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { viewChild } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { area } from "@turf/area";
+import { convertArea } from "@turf/helpers";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlParcelsLegendComponent)
+      useExisting: forwardRef(() => OLControlParcelsLegendComponent),
     },
-    DestroyService
+    DestroyService,
   ],
-  selector: 'app-ol-control-parcelslegend',
+  selector: "app-ol-control-parcelslegend",
 
   template: `
     <article
@@ -137,7 +137,7 @@ import { viewChild } from '@angular/core';
         </tbody>
       </table>
     </article>
-  `
+  `,
 })
 export class OLControlParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
@@ -146,7 +146,7 @@ export class OLControlParcelsLegendComponent
   areaOfTown: number;
   county = input<string>();
   id = input<string>();
-  legend = viewChild<ElementRef>('legend');
+  legend = viewChild<ElementRef>("legend");
   printing = input<boolean>();
   state = input<string>();
   title = input<string>();
@@ -160,8 +160,8 @@ export class OLControlParcelsLegendComponent
   ngOnInit(): void {
     this.areaOfTown = convertArea(
       area(this.#map.boundary()),
-      'meters',
-      'acres'
+      "meters",
+      "acres",
     );
     this.olControl = new Legend({ element: this.legend().nativeElement });
     this.olControl.setProperties({ component: this }, true);

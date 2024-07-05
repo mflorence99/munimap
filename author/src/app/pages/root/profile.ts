@@ -1,23 +1,23 @@
-import { Auth } from '@angular/fire/auth';
-import { AuthActions } from '@lib/state/auth';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
-import { Profile } from '@lib/state/auth';
-import { Store } from '@ngxs/store';
-import { User } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { Auth } from "@angular/fire/auth";
+import { MatDrawer } from "@angular/material/sidenav";
+import { AuthActions } from "@lib/state/auth";
+import { Profile } from "@lib/state/auth";
+import { User } from "@lib/state/auth";
+import { Store } from "@ngxs/store";
 
-import { computed } from '@angular/core';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { updatePassword } from '@angular/fire/auth';
+import { computed } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { updatePassword } from "@angular/fire/auth";
 
-import copy from 'fast-copy';
+import copy from "fast-copy";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-profile',
+  selector: "app-profile",
   template: `
     <header class="header">
       <app-avatar [name]="userCopy().displayName" class="icon"></app-avatar>
@@ -108,10 +108,10 @@ import copy from 'fast-copy';
         UPDATE
       </button>
     </article>
-  `
+  `,
 })
 export class ProfileComponent {
-  errorMessage = '';
+  errorMessage = "";
   profile = input<Profile>();
   profileCopy = computed(() => copy(this.profile()));
   user = input<User>();
@@ -135,7 +135,7 @@ export class ProfileComponent {
     this.errorMessage = null;
     this.#store.dispatch([
       new AuthActions.UpdateUser(user),
-      new AuthActions.UpdateProfile(profile)
+      new AuthActions.UpdateProfile(profile),
     ]);
     // 👇 special code to change password
     if (user.password) {
@@ -143,7 +143,7 @@ export class ProfileComponent {
         (error) => {
           this.errorMessage = this.#extractFirebaseMessage(error.message);
           this.#cdf.detectChanges();
-        }
+        },
       );
     }
   }

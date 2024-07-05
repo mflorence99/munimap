@@ -1,30 +1,30 @@
-import { AuthState } from '../state/auth';
-import { OLMapComponent } from './ol-map';
-import { Parcel } from '../common';
-import { ParcelID } from '../common';
-import { ParcelsActions } from '../state/parcels';
+import { Parcel } from "../common";
+import { ParcelID } from "../common";
+import { AuthState } from "../state/auth";
+import { ParcelsActions } from "../state/parcels";
+import { OLMapComponent } from "./ol-map";
 
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { CdkDragEnd } from "@angular/cdk/drag-drop";
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Store } from "@ngxs/store";
 
-import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon';
-import { fromLonLat } from 'ol/proj';
-import { inject } from '@angular/core';
-import { point } from '@turf/helpers';
-import { polygon } from '@turf/helpers';
-import { toLonLat } from 'ol/proj';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { booleanPointInPolygon } from "@turf/boolean-point-in-polygon";
+import { point } from "@turf/helpers";
+import { polygon } from "@turf/helpers";
+import { fromLonLat } from "ol/proj";
+import { toLonLat } from "ol/proj";
 
-import OLFeature from 'ol/Feature';
-import OLOverlay from 'ol/Overlay';
+import OLFeature from "ol/Feature";
+import OLOverlay from "ol/Overlay";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-overlay-parcellabel',
+  selector: "app-ol-overlay-parcellabel",
   template: `
     <div #label (cdkDragEnded)="onDragEnd($event)" cdkDrag>
       <fa-icon [icon]="['fas', 'crosshairs']" class="icon" size="2x"></fa-icon>
@@ -41,11 +41,11 @@ import OLOverlay from 'ol/Overlay';
       .icon {
         color: var(--background-color);
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLOverlayParcelLabelComponent implements OnInit {
-  label = viewChild<ElementRef<HTMLDivElement>>('label');
+  label = viewChild<ElementRef<HTMLDivElement>>("label");
   olOverlay: OLOverlay;
 
   #authState = inject(AuthState);
@@ -58,7 +58,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
   constructor() {
     this.olOverlay = new OLOverlay({
       position: [0, 0],
-      positioning: 'center-center'
+      positioning: "center-center",
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.#map.olMap.addOverlay(this.olOverlay);
@@ -72,17 +72,17 @@ export class OLOverlayParcelLabelComponent implements OnInit {
     // 👉 construct a parcel to override the label position
     const centers = this.#centers;
     centers[this.#ix] = toLonLat(
-      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
+      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y),
     );
     const recenteredParcel: Parcel = {
-      action: 'modified',
+      action: "modified",
       id: this.#id,
       owner: this.#authState.currentProfile().email,
       path: this.#map.path(),
       properties: {
-        centers: centers
+        centers: centers,
       },
-      type: 'Feature'
+      type: "Feature",
     };
     this.#store.dispatch(new ParcelsActions.AddParcels([recenteredParcel]));
     this.olOverlay.setPosition([0, 0]);
@@ -97,7 +97,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
     this.#centers = feature.getProperties().centers;
     this.#id = feature.getId();
     this.#ix = 0;
-    if (feature.getGeometry().getType() === 'MultiPolygon') {
+    if (feature.getGeometry().getType() === "MultiPolygon") {
       const polygons = feature.getGeometry().getPolygons();
       for (this.#ix = 0; this.#ix < polygons.length; this.#ix++) {
         // 👉 we need to know which of the possible multiple ploygons

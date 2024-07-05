@@ -1,28 +1,28 @@
-import { RootPage } from '../pages//root/page';
+import { RootPage } from "../pages//root/page";
 
-import { AuthState } from '@lib/state/auth';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { ConfirmDialogComponent } from '@lib/components/confirm-dialog';
-import { ConfirmDialogData } from '@lib/components/confirm-dialog';
-import { Map } from '@lib/state/map';
-import { MapActions } from '@lib/state/map';
-import { MatDialog } from '@angular/material/dialog';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { NgForm } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
+import { ConfirmDialogComponent } from "@lib/components/confirm-dialog";
+import { ConfirmDialogData } from "@lib/components/confirm-dialog";
+import { AuthState } from "@lib/state/auth";
+import { Map } from "@lib/state/map";
+import { MapActions } from "@lib/state/map";
+import { Store } from "@ngxs/store";
 
-import { computed } from '@angular/core';
-import { effect } from '@angular/core';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
-import { viewChild } from '@angular/core';
+import { computed } from "@angular/core";
+import { effect } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
+import { viewChild } from "@angular/core";
 
-import copy from 'fast-copy';
+import copy from "fast-copy";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-controlpanel-properties',
+  selector: "app-controlpanel-properties",
   template: `
     <mat-card appearance="outlined" [class.rolledup]="rolledup" class="card">
       <mat-card-header>
@@ -172,13 +172,13 @@ import copy from 'fast-copy';
           padding: 0;
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class ControlPanelPropertiesComponent {
   mapCopy = computed(() => copy(this.mapState()));
   mapState = input<Map>();
-  ngForm = viewChild<NgForm>('setupForm');
+  ngForm = viewChild<NgForm>("setupForm");
   rolledup: boolean;
 
   #authState = inject(AuthState);
@@ -209,8 +209,8 @@ export class ControlPanelPropertiesComponent {
   delete(map: Map): void {
     const data: ConfirmDialogData = {
       content:
-        'The map will be permanently deleted, but any changes made to parcels will be kept for use in other maps.',
-      title: 'Please confirm map deletion'
+        "The map will be permanently deleted, but any changes made to parcels will be kept for use in other maps.",
+      title: "Please confirm map deletion",
     };
     this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -218,7 +218,7 @@ export class ControlPanelPropertiesComponent {
       .subscribe((result) => {
         if (result) {
           this.#store.dispatch(new MapActions.DeleteMap(map.id));
-          this.#router.navigate(['/create']);
+          this.#router.navigate(["/create"]);
         }
       });
   }
@@ -226,7 +226,7 @@ export class ControlPanelPropertiesComponent {
   update(map: Map): void {
     // 👇 refresh if parcelIDs have changed
     this.#store.dispatch(
-      new MapActions.UpdateMap(map, this.ngForm().controls['parcelIDs']?.dirty)
+      new MapActions.UpdateMap(map, this.ngForm().controls["parcelIDs"]?.dirty),
     );
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered

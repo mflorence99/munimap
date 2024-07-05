@@ -1,72 +1,72 @@
-import { AnonState } from './anon';
-import { AuthState } from './auth';
-import { CanDo } from './undo';
-import { ClearStacks } from './undo';
-import { Landmark } from '../common';
-import { LandmarkID } from '../common';
-import { Landmarks } from '../common';
-import { Map } from './map';
-import { MapState } from './map';
-import { Profile } from './auth';
-import { Redo } from './undo';
-import { Undo } from './undo';
-import { Working } from './working';
+import { Landmark } from "../common";
+import { LandmarkID } from "../common";
+import { Landmarks } from "../common";
+import { AnonState } from "./anon";
+import { AuthState } from "./auth";
+import { Profile } from "./auth";
+import { Map } from "./map";
+import { MapState } from "./map";
+import { CanDo } from "./undo";
+import { ClearStacks } from "./undo";
+import { Redo } from "./undo";
+import { Undo } from "./undo";
+import { Working } from "./working";
 
-import { calculateLandmark } from '../common';
-import { deserializeLandmark } from '../common';
-import { makeLandmarkID } from '../common';
-import { serializeLandmark } from '../common';
-import { workgroup } from './auth';
+import { calculateLandmark } from "../common";
+import { deserializeLandmark } from "../common";
+import { makeLandmarkID } from "../common";
+import { serializeLandmark } from "../common";
+import { workgroup } from "./auth";
 
-import { Action } from '@ngxs/store';
-import { Actions } from '@ngxs/store';
-import { CollectionReference } from '@angular/fire/firestore';
-import { Firestore } from '@angular/fire/firestore';
-import { Injectable } from '@angular/core';
-import { NgxsOnInit } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { Selector } from '@ngxs/store';
-import { State } from '@ngxs/store';
-import { StateContext } from '@ngxs/store';
-import { Store } from '@ngxs/store';
+import { Injectable } from "@angular/core";
+import { CollectionReference } from "@angular/fire/firestore";
+import { Firestore } from "@angular/fire/firestore";
+import { Action } from "@ngxs/store";
+import { Actions } from "@ngxs/store";
+import { NgxsOnInit } from "@ngxs/store";
+import { Selector } from "@ngxs/store";
+import { State } from "@ngxs/store";
+import { StateContext } from "@ngxs/store";
+import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 
-import { collection } from '@angular/fire/firestore';
-import { collectionData } from '@angular/fire/firestore';
-import { combineLatest } from 'rxjs';
-import { deleteDoc } from '@angular/fire/firestore';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { doc } from '@angular/fire/firestore';
-import { featureCollection } from '@turf/helpers';
-import { inject } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { merge } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { ofActionSuccessful } from '@ngxs/store';
-import { query } from '@angular/fire/firestore';
-import { setDoc } from '@angular/fire/firestore';
-import { where } from '@angular/fire/firestore';
+import { inject } from "@angular/core";
+import { collection } from "@angular/fire/firestore";
+import { collectionData } from "@angular/fire/firestore";
+import { deleteDoc } from "@angular/fire/firestore";
+import { doc } from "@angular/fire/firestore";
+import { query } from "@angular/fire/firestore";
+import { setDoc } from "@angular/fire/firestore";
+import { where } from "@angular/fire/firestore";
+import { ofActionSuccessful } from "@ngxs/store";
+import { featureCollection } from "@turf/helpers";
+import { combineLatest } from "rxjs";
+import { merge } from "rxjs";
+import { of } from "rxjs";
+import { distinctUntilChanged } from "rxjs/operators";
+import { map } from "rxjs/operators";
+import { mergeMap } from "rxjs/operators";
 
-import copy from 'fast-copy';
-import hash from 'object-hash';
+import copy from "fast-copy";
+import hash from "object-hash";
 
 class Undoable {
   redoneBy: typeof Undoable;
   undoneBy: typeof Undoable;
   constructor(
     public landmark: Partial<Landmark>,
-    public undoable: boolean
+    public undoable: boolean,
   ) {}
 }
 
-const ACTION_SCOPE = 'Landmarks';
+const ACTION_SCOPE = "Landmarks";
 
 export namespace LandmarksActions {
   export class AddLandmark extends Undoable {
     static readonly type = `[${ACTION_SCOPE}] AddLandmark`;
     constructor(
       public override landmark: Partial<Landmark>,
-      public override undoable = true
+      public override undoable = true,
     ) {
       super(landmark, undoable);
       this.redoneBy = AddLandmark;
@@ -83,7 +83,7 @@ export namespace LandmarksActions {
     static readonly type = `[${ACTION_SCOPE}] DeleteLandmark`;
     constructor(
       public override landmark: Partial<Landmark>,
-      public override undoable = true
+      public override undoable = true,
     ) {
       super(landmark, undoable);
       this.redoneBy = DeleteLandmark;
@@ -110,7 +110,7 @@ export namespace LandmarksActions {
     static readonly type = `[${ACTION_SCOPE}] UpdateLandmark`;
     constructor(
       public override landmark: Partial<Landmark>,
-      public override undoable = true
+      public override undoable = true,
     ) {
       super(landmark, undoable);
       this.redoneBy = UpdateLandmark;
@@ -131,8 +131,8 @@ const redoStack: RedoableAction[] = [];
 const undoStack: UndoableAction[] = [];
 
 @State<LandmarksStateModel>({
-  name: 'landmarks',
-  defaults: []
+  name: "landmarks",
+  defaults: [],
 })
 @Injectable()
 export class LandmarksState implements NgxsOnInit {
@@ -159,7 +159,7 @@ export class LandmarksState implements NgxsOnInit {
 
   @Action(LandmarksActions.AddLandmark) addLandmark(
     ctx: StateContext<LandmarksStateModel>,
-    action: LandmarksActions.AddLandmark
+    action: LandmarksActions.AddLandmark,
   ): Promise<void> {
     const normalized = this.#normalize(action.landmark);
     if (!normalized.id) normalized.id = makeLandmarkID(normalized);
@@ -168,17 +168,17 @@ export class LandmarksState implements NgxsOnInit {
     // 👇 add the landmark
     console.log(
       `%cFirestore add: landmarks ${normalized.id} ${JSON.stringify(
-        normalized
+        normalized,
       )}`,
-      'color: crimson'
+      "color: crimson",
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
+    const docRef = doc(this.#firestore, "landmarks", normalized.id);
     return setDoc(docRef, normalized).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
         new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
+        new Working(-1),
       ]);
     });
     // 👉 side-effect of handleStreams$ will update state
@@ -186,7 +186,7 @@ export class LandmarksState implements NgxsOnInit {
 
   @Action(LandmarksActions.DeleteLandmark) deleteLandmark(
     ctx: StateContext<LandmarksStateModel>,
-    action: LandmarksActions.DeleteLandmark
+    action: LandmarksActions.DeleteLandmark,
   ): Promise<void> {
     // 👇 don't really need to normalize as only an ID is needed
     //    just following the pattern
@@ -196,15 +196,15 @@ export class LandmarksState implements NgxsOnInit {
     // 👇 delete the landmark
     console.log(
       `%cFirestore delete: landmarks ${normalized.id}`,
-      'color: crimson'
+      "color: crimson",
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
+    const docRef = doc(this.#firestore, "landmarks", normalized.id);
     return deleteDoc(docRef).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
         new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
+        new Working(-1),
       ]);
     });
     // 👉 side-effect of handleStreams$ will update state
@@ -212,7 +212,7 @@ export class LandmarksState implements NgxsOnInit {
 
   @Action(LandmarksActions.Redo) redo(
     ctx: StateContext<LandmarksStateModel>,
-    _action: LandmarksActions.Redo
+    _action: LandmarksActions.Redo,
   ): void {
     // 👉 quick return if nothing to redo
     if (redoStack.length === 0) return;
@@ -222,21 +222,21 @@ export class LandmarksState implements NgxsOnInit {
     const redoAction = redoStack.pop();
     const undoAction = new redoAction.redoneBy(
       this.#landmarkByID(ctx, redoAction.landmark.id),
-      /* undoable = */ false
+      /* undoable = */ false,
     );
     // 👇 execute the redo action
     ctx.dispatch(redoAction).subscribe(() => {
       undoStack.push(undoAction);
       ctx.dispatch([
         new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
+        new Working(-1),
       ]);
     });
   }
 
   @Action(LandmarksActions.SetLandmarks) setLandmarks(
     ctx: StateContext<LandmarksStateModel>,
-    action: LandmarksActions.SetLandmarks
+    action: LandmarksActions.SetLandmarks,
   ): void {
     this.#logLandmarks(action.landmarks);
     ctx.setState(action.landmarks);
@@ -244,7 +244,7 @@ export class LandmarksState implements NgxsOnInit {
 
   @Action(LandmarksActions.Undo) undo(
     ctx: StateContext<LandmarksStateModel>,
-    _action: LandmarksActions.Undo
+    _action: LandmarksActions.Undo,
   ): void {
     // 👉 quick return if nothing to undo
     if (undoStack.length === 0) return;
@@ -254,21 +254,21 @@ export class LandmarksState implements NgxsOnInit {
     const undoAction = undoStack.pop();
     const redoAction = new undoAction.redoneBy(
       this.#landmarkByID(ctx, undoAction.landmark.id),
-      /* undoable = */ false
+      /* undoable = */ false,
     );
     // 👇 execute the undo action
     ctx.dispatch(undoAction).subscribe(() => {
       redoStack.push(redoAction);
       ctx.dispatch([
         new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
+        new Working(-1),
       ]);
     });
   }
 
   @Action(LandmarksActions.UpdateLandmark) updateLandmark(
     ctx: StateContext<LandmarksStateModel>,
-    action: LandmarksActions.UpdateLandmark
+    action: LandmarksActions.UpdateLandmark,
   ): Promise<void> {
     const normalized = this.#normalize(action.landmark);
     // 👉 block any other undo, redo until this is finished
@@ -276,17 +276,17 @@ export class LandmarksState implements NgxsOnInit {
     // 👉 update the landmark
     console.log(
       `%cFirestore set: landmarks ${normalized.id} ${JSON.stringify(
-        normalized
+        normalized,
       )}`,
-      'color: chocolate'
+      "color: chocolate",
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
+    const docRef = doc(this.#firestore, "landmarks", normalized.id);
     return setDoc(docRef, normalized, { merge: true }).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
         new CanDo(undoStack.length > 0, redoStack.length > 0),
-        new Working(-1)
+        new Working(-1),
       ]);
     });
     // 👉 side-effect of handleStreams$ will update state
@@ -330,20 +330,20 @@ export class LandmarksState implements NgxsOnInit {
           } else {
             console.log(
               `%cFirestore query: landmarks where owner in ${JSON.stringify(
-                workgroup(profile)
+                workgroup(profile),
               )} and path == "${map.path}"`,
-              'color: goldenrod'
+              "color: goldenrod",
             );
             return collectionData<Landmark>(
               query(
                 collection(
                   this.#firestore,
-                  'landmarks'
+                  "landmarks",
                 ) as CollectionReference<Landmark>,
-                where('owner', 'in', workgroup(profile)),
-                where('path', '==', map.path)
+                where("owner", "in", workgroup(profile)),
+                where("path", "==", map.path),
               ),
-              { idField: '$id' }
+              { idField: "$id" },
             );
           }
         }),
@@ -353,8 +353,8 @@ export class LandmarksState implements NgxsOnInit {
         }),
         // 👉 cut down on noise
         distinctUntilChanged(
-          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q)
-        )
+          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q),
+        ),
       )
       .subscribe((landmarks: Landmark[]) => {
         this.#store.dispatch(new LandmarksActions.SetLandmarks(landmarks));
@@ -363,7 +363,7 @@ export class LandmarksState implements NgxsOnInit {
 
   #landmarkByID(
     ctx: StateContext<LandmarksStateModel>,
-    id: string
+    id: string,
   ): Partial<Landmark> {
     const original = ctx.getState().find((landmark) => landmark.id === id);
     return original ? copy(original) : { id };
@@ -375,16 +375,16 @@ export class LandmarksState implements NgxsOnInit {
         return {
           id: landmark.$id,
           geometry: landmark.geometry?.type,
-          name: landmark.properties?.name
+          name: landmark.properties?.name,
         };
-      })
+      }),
     );
   }
 
   #makeUndoAction(
     ctx: StateContext<LandmarksStateModel>,
     origAction: Undoable,
-    id: LandmarkID
+    id: LandmarkID,
   ): Undoable {
     let undoAction;
     if (origAction.undoable) {
@@ -393,7 +393,7 @@ export class LandmarksState implements NgxsOnInit {
       // 👉 push the undo action onto the undo stack
       undoAction = new origAction.undoneBy(
         this.#landmarkByID(ctx, id),
-        /* undoable = */ false
+        /* undoable = */ false,
       );
     }
     return undoAction;

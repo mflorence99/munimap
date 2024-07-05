@@ -1,37 +1,37 @@
-import { RootPage } from '../root/page';
+import { RootPage } from "../root/page";
 
-import { AuthState } from '@lib/state/auth';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { CollectionReference } from '@angular/fire/firestore';
-import { Component } from '@angular/core';
-import { DestroyService } from '@lib/services/destroy';
-import { Firestore } from '@angular/fire/firestore';
-import { Map } from '@lib/state/map';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
-import { OnInit } from '@angular/core';
-import { Profile } from '@lib/state/auth';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { CollectionReference } from "@angular/fire/firestore";
+import { Firestore } from "@angular/fire/firestore";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { Router } from "@angular/router";
+import { DestroyService } from "@lib/services/destroy";
+import { AuthState } from "@lib/state/auth";
+import { Profile } from "@lib/state/auth";
+import { Map } from "@lib/state/map";
+import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 
-import { collection } from '@angular/fire/firestore';
-import { collectionData } from '@angular/fire/firestore';
-import { inject } from '@angular/core';
-import { mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { orderBy } from '@angular/fire/firestore';
-import { query } from '@angular/fire/firestore';
-import { takeUntil } from 'rxjs/operators';
-import { viewChild } from '@angular/core';
-import { where } from '@angular/fire/firestore';
-import { workgroup } from '@lib/state/auth';
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { collection } from "@angular/fire/firestore";
+import { collectionData } from "@angular/fire/firestore";
+import { orderBy } from "@angular/fire/firestore";
+import { query } from "@angular/fire/firestore";
+import { where } from "@angular/fire/firestore";
+import { workgroup } from "@lib/state/auth";
+import { of } from "rxjs";
+import { mergeMap } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-list',
+  selector: "app-list",
   template: `
     <table matSort mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="name">
@@ -155,11 +155,11 @@ import { workgroup } from '@lib/state/auth';
           border-color: var(--text-color);
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class ListPage implements OnInit {
-  columns = ['name', 'id', 'owner', 'type', 'path'];
+  columns = ["name", "id", "owner", "type", "path"];
   dataSource: MatTableDataSource<Map>;
   profile$: Observable<Profile>;
   sort = viewChild(MatSort);
@@ -173,7 +173,7 @@ export class ListPage implements OnInit {
 
   constructor() {
     this.profile$ = this.#store.select(AuthState.profile);
-    this.#root.setTitle('All Maps');
+    this.#root.setTitle("All Maps");
   }
 
   ngOnInit(): void {
@@ -201,19 +201,19 @@ export class ListPage implements OnInit {
           // 👇 show the N most recently-used maps
           console.log(
             `%cFirestore query: maps where owner in ${JSON.stringify(
-              workgroup(profile)
+              workgroup(profile),
             )} orderBy timestamp desc`,
-            'color: goldenrod'
+            "color: goldenrod",
           );
           return collectionData<Map>(
             query(
-              collection(this.#firestore, 'maps') as CollectionReference<Map>,
-              where('owner', 'in', workgroup(profile)),
-              orderBy('name')
-            )
+              collection(this.#firestore, "maps") as CollectionReference<Map>,
+              where("owner", "in", workgroup(profile)),
+              orderBy("name"),
+            ),
           );
         }
-      })
+      }),
     );
   }
 }

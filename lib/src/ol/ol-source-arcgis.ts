@@ -1,33 +1,33 @@
-import { CacheService } from '../services/cache';
-import { OLLayerVectorComponent } from './ol-layer-vector';
-import { OLMapComponent } from './ol-map';
+import { CacheService } from "../services/cache";
+import { OLLayerVectorComponent } from "./ol-layer-vector";
+import { OLMapComponent } from "./ol-map";
 
-import { dedupe } from '../common';
-import { environment } from '../environment';
+import { dedupe } from "../common";
+import { environment } from "../environment";
 
-import { Coordinate } from 'ol/coordinate';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from "@angular/common/http";
+import { Coordinate } from "ol/coordinate";
 
-import { all as allStrategy } from 'ol/loadingstrategy';
-import { arcgisToGeoJSON } from '@esri/arcgis-to-geojson-utils';
-import { bbox as bboxStrategy } from 'ol/loadingstrategy';
-import { bbox } from '@turf/bbox';
-import { bboxPolygon } from '@turf/bbox-polygon';
-import { booleanIntersects } from '@turf/boolean-intersects';
-import { catchError } from 'rxjs/operators';
-import { delay } from 'rxjs/operators';
-import { inject } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { merge } from 'rxjs';
-import { of } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { toArray } from 'rxjs/operators';
-import { transformExtent } from 'ol/proj';
+import { inject } from "@angular/core";
+import { arcgisToGeoJSON } from "@esri/arcgis-to-geojson-utils";
+import { bbox } from "@turf/bbox";
+import { bboxPolygon } from "@turf/bbox-polygon";
+import { booleanIntersects } from "@turf/boolean-intersects";
+import { all as allStrategy } from "ol/loadingstrategy";
+import { bbox as bboxStrategy } from "ol/loadingstrategy";
+import { transformExtent } from "ol/proj";
+import { merge } from "rxjs";
+import { of } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { delay } from "rxjs/operators";
+import { map } from "rxjs/operators";
+import { tap } from "rxjs/operators";
+import { toArray } from "rxjs/operators";
 
-import GeoJSON from 'ol/format/GeoJSON';
-import OLFeature from 'ol/Feature';
-import OLProjection from 'ol/proj/Projection';
-import OLVector from 'ol/source/Vector';
+import OLFeature from "ol/Feature";
+import GeoJSON from "ol/format/GeoJSON";
+import OLProjection from "ol/proj/Projection";
+import OLVector from "ol/source/Vector";
 
 // 👇 we don't care about the ArcGIS schema as defined in
 //    @arcgis/core because we immediately convert it to GeoJSON
@@ -44,13 +44,13 @@ export abstract class OLSourceArcGISComponent {
 
   constructor() {
     let strategy;
-    if (this.#map.loadingStrategy() === 'all') strategy = allStrategy;
-    else if (this.#map.loadingStrategy() === 'bbox') strategy = bboxStrategy;
+    if (this.#map.loadingStrategy() === "all") strategy = allStrategy;
+    else if (this.#map.loadingStrategy() === "bbox") strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: strategy
+      strategy: strategy,
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -64,7 +64,7 @@ export abstract class OLSourceArcGISComponent {
     const visible = transformExtent(
       this.#map.bbox(),
       this.#map.featureProjection,
-      projection
+      projection,
     ) as GeoJSON.BBox;
     return [visible];
   }
@@ -74,14 +74,14 @@ export abstract class OLSourceArcGISComponent {
       transformExtent(
         extent,
         projection,
-        this.#map.featureProjection
-      ) as GeoJSON.BBox
+        this.#map.featureProjection,
+      ) as GeoJSON.BBox,
     );
     return this.#map.boundaryGrid.features
       .filter((feature) => booleanIntersects(visible, feature))
       .map((feature) => bbox(feature))
       .map((bbox) =>
-        transformExtent(bbox, this.#map.featureProjection, projection)
+        transformExtent(bbox, this.#map.featureProjection, projection),
       )
       .map((bbox) => {
         const [minX, minY, maxX, maxY] = bbox;
@@ -89,7 +89,7 @@ export abstract class OLSourceArcGISComponent {
           Math.round(minX),
           Math.round(minY),
           Math.round(maxX),
-          Math.round(maxY)
+          Math.round(maxY),
         ];
       });
   }
@@ -98,23 +98,23 @@ export abstract class OLSourceArcGISComponent {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function
+    success: Function,
   ): void {
     let grids: Coordinate[];
     // 👇 get everyrhing at once
-    if (this.#map.loadingStrategy() === 'all')
+    if (this.#map.loadingStrategy() === "all")
       grids = this.#gridsFromBBox(projection);
     // 👇 one URL for each grid square covered by the extent
     //    this way requests are repeatable and cachable
-    else if (this.#map.loadingStrategy() === 'bbox')
+    else if (this.#map.loadingStrategy() === "bbox")
       grids = this.#gridsFromExtent(extent, projection);
     const urls = grids.map(
       (grid) =>
         `${
           environment.endpoints.proxy
         }/proxy/${this.getProxyPath()}?url=${encodeURIComponent(
-          this.getURL(grid)
-        )}`
+          this.getURL(grid),
+        )}`,
     );
     // 👇 we cache responses by URL
     const requests = urls.map((url) => {
@@ -126,19 +126,19 @@ export abstract class OLSourceArcGISComponent {
             catchError(() => of({ features: [] })),
             // 👇 arcgis can return just an "error" which we ignore
             map((arcgis: any): any =>
-              arcgis?.features ? arcgis : { features: [], fields: [] }
+              arcgis?.features ? arcgis : { features: [], fields: [] },
             ),
             tap((arcgis: any) => this.#schema(arcgis)),
             map(
               (arcgis: any): GeoJSON.FeatureCollection<any, any> =>
-                arcgisToGeoJSON(this.filter(arcgis))
+                arcgisToGeoJSON(this.filter(arcgis)),
             ),
             tap((geojson: GeoJSON.FeatureCollection<any, any>) => {
               geojson.features.forEach(
-                (feature) => (feature.id = this.getFeatureID(feature))
+                (feature) => (feature.id = this.getFeatureID(feature)),
               );
               this.#cache.set(url, geojson);
-            })
+            }),
           );
     });
     // 👇 run the requests with a maximum concurrency
@@ -146,8 +146,8 @@ export abstract class OLSourceArcGISComponent {
       .pipe(
         toArray(),
         map((geojsons: GeoJSON.FeatureCollection<any, any>[]) =>
-          dedupe(geojsons)
-        )
+          dedupe(geojsons),
+        ),
       )
       .subscribe((geojson: GeoJSON.FeatureCollection<any, any>) => {
         // 👉 convert features into OL format
@@ -173,25 +173,25 @@ export abstract class OLSourceArcGISComponent {
       const js = fields.map((field) => {
         let type;
         switch (field.type) {
-          case 'esriFieldTypeBoolean':
-            type = 'boolean';
+          case "esriFieldTypeBoolean":
+            type = "boolean";
             break;
-          case 'esriFieldTypeDate':
-            type = 'Date';
+          case "esriFieldTypeDate":
+            type = "Date";
             break;
-          case 'esriFieldTypeDouble':
-          case 'esriFieldTypeInteger':
-            type = 'number';
+          case "esriFieldTypeDouble":
+          case "esriFieldTypeInteger":
+            type = "number";
             break;
           default:
-            type = 'string';
+            type = "string";
             break;
         }
         return `${field.name}: ${type} /* 👈 ${field.alias.trim()} */;`;
       });
       js.unshift(`// 👇 original ${this.getProxyPath()} schema`);
       js.push(`// 👇 translated ${this.getProxyPath()} schema`);
-      console.log(`${js.join('\n')}\n`);
+      console.log(`${js.join("\n")}\n`);
     }
   }
 

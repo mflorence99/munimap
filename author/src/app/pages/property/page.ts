@@ -1,44 +1,44 @@
-import { AbstractMapPage } from '../abstract-map';
-import { ContextMenuComponent } from '../../components/contextmenu';
-import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
-import { ImportLandmarksComponent } from './import-landmarks';
-import { LandmarkPropertiesComponent } from './landmark-properties';
-import { SidebarComponent } from '../../components/sidebar-component';
+import { ContextMenuComponent } from "../../components/contextmenu";
+import { SidebarComponent } from "../../components/sidebar-component";
+import { ContextMenuHostDirective } from "../../directives/contextmenu-host";
+import { AbstractMapPage } from "../abstract-map";
+import { ImportLandmarksComponent } from "./import-landmarks";
+import { LandmarkPropertiesComponent } from "./landmark-properties";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { DestroyService } from '@lib/services/destroy';
-import { Landmark } from '@lib/common';
-import { LandmarkPropertiesClass } from '@lib/common';
-import { LandmarksActions } from '@lib/state/landmarks';
-import { MapType } from '@lib/state/map';
-import { MatDrawer } from '@angular/material/sidenav';
-import { OLInteractionDrawLandmarksComponent } from '@lib/ol/ol-interaction-drawlandmarks';
-import { OLInteractionRedrawLandmarkComponent } from '@lib/ol/ol-interaction-redrawlandmark';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { OLOverlayLandmarkLabelComponent } from '@lib/ol/ol-overlay-landmarklabel';
-import { OnInit } from '@angular/core';
-import { Type } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Type } from "@angular/core";
+import { MatDrawer } from "@angular/material/sidenav";
+import { Landmark } from "@lib/common";
+import { LandmarkPropertiesClass } from "@lib/common";
+import { OLInteractionDrawLandmarksComponent } from "@lib/ol/ol-interaction-drawlandmarks";
+import { OLInteractionRedrawLandmarkComponent } from "@lib/ol/ol-interaction-redrawlandmark";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { OLOverlayLandmarkLabelComponent } from "@lib/ol/ol-overlay-landmarklabel";
+import { DestroyService } from "@lib/services/destroy";
+import { LandmarksActions } from "@lib/state/landmarks";
+import { MapType } from "@lib/state/map";
 
-import { bbox } from '@turf/bbox';
-import { bboxPolygon } from '@turf/bbox-polygon';
-import { calculateOrientation } from '@lib/common';
-import { lineToPolygon } from '@turf/line-to-polygon';
-import { transformRotate } from '@turf/transform-rotate';
-import { viewChild } from '@angular/core';
+import { viewChild } from "@angular/core";
+import { calculateOrientation } from "@lib/common";
+import { bbox } from "@turf/bbox";
+import { bboxPolygon } from "@turf/bbox-polygon";
+import { lineToPolygon } from "@turf/line-to-polygon";
+import { transformRotate } from "@turf/transform-rotate";
 
-import OLFeature from 'ol/Feature';
+import OLFeature from "ol/Feature";
 
 interface LandmarkConversion {
   converter: (feature: OLFeature<any>) => Partial<Landmark>;
-  geometryType: 'Point' | 'LineString' | 'Polygon';
+  geometryType: "Point" | "LineString" | "Polygon";
   label: string;
 }
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-property',
+  selector: "app-property",
   template: `
     <app-sink
       #sink
@@ -556,8 +556,8 @@ interface LandmarkConversion {
           color: var(--text-color);
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class PropertyPage extends AbstractMapPage implements OnInit {
   contextMenu = viewChild(ContextMenuComponent);
@@ -572,94 +572,94 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   conversions: LandmarkConversion[] = [
     {
       converter: this.#convertToArea.bind(this),
-      geometryType: 'LineString',
-      label: 'area'
+      geometryType: "LineString",
+      label: "area",
     },
     {
       converter: this.#convertToBuilding.bind(this),
-      geometryType: 'Polygon',
-      label: 'building'
+      geometryType: "Polygon",
+      label: "building",
     },
     {
       converter: this.#convertToCulvert.bind(this),
-      geometryType: 'Point',
-      label: 'culvert'
+      geometryType: "Point",
+      label: "culvert",
     },
     {
       converter: this.#convertToDistance.bind(this),
-      geometryType: 'LineString',
-      label: 'distance'
+      geometryType: "LineString",
+      label: "distance",
     },
     {
       converter: this.#convertToDitch.bind(this),
-      geometryType: 'LineString',
-      label: 'ditch'
+      geometryType: "LineString",
+      label: "ditch",
     },
     {
       converter: this.#convertToDriveway.bind(this),
-      geometryType: 'LineString',
-      label: 'driveway'
+      geometryType: "LineString",
+      label: "driveway",
     },
     {
       converter: this.#convertToField.bind(this),
-      geometryType: 'Polygon',
-      label: 'field'
+      geometryType: "Polygon",
+      label: "field",
     },
     {
       converter: this.#convertToForest.bind(this),
-      geometryType: 'Polygon',
-      label: 'forest'
+      geometryType: "Polygon",
+      label: "forest",
     },
     {
       converter: this.#convertToImpervious.bind(this),
-      geometryType: 'Polygon',
-      label: 'impervious'
+      geometryType: "Polygon",
+      label: "impervious",
     },
     {
       converter: this.#convertToObject.bind(this),
-      geometryType: 'Point',
-      label: 'object'
+      geometryType: "Point",
+      label: "object",
     },
     {
       converter: this.#convertToPlace.bind(this),
-      geometryType: 'Point',
-      label: 'place'
+      geometryType: "Point",
+      label: "place",
     },
     {
       converter: this.#convertToPond.bind(this),
-      geometryType: 'Polygon',
-      label: 'pond'
+      geometryType: "Polygon",
+      label: "pond",
     },
     {
       converter: this.#convertToStonewall.bind(this),
-      geometryType: 'LineString',
-      label: 'stonewall'
+      geometryType: "LineString",
+      label: "stonewall",
     },
     {
       converter: this.#convertToStream.bind(this),
-      geometryType: 'LineString',
-      label: 'stream'
+      geometryType: "LineString",
+      label: "stream",
     },
     {
       converter: this.#convertToTrail.bind(this),
-      geometryType: 'LineString',
-      label: 'trail'
+      geometryType: "LineString",
+      label: "trail",
     },
     {
       converter: this.#convertToTree.bind(this),
-      geometryType: 'Point',
-      label: 'tree'
+      geometryType: "Point",
+      label: "tree",
     },
     {
       converter: this.#convertToWell.bind(this),
-      geometryType: 'Point',
-      label: 'well'
+      geometryType: "Point",
+      label: "well",
     },
     {
       converter: this.#convertToWetland.bind(this),
-      geometryType: 'Polygon',
-      label: 'wetland'
-    }
+      geometryType: "Polygon",
+      label: "wetland",
+    },
   ];
 
   canConvertFor(conversion: LandmarkConversion): boolean {
@@ -695,8 +695,8 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return this.#can(
       event,
       this.map().selected.length === 1 &&
-        feature.get('name') &&
-        ['Point', 'Polygon'].includes(feature.getGeometry().getType())
+        feature.get("name") &&
+        ["Point", "Polygon"].includes(feature.getGeometry().getType()),
     );
   }
 
@@ -705,7 +705,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return this.#can(
       event,
       this.map().selected.length === 1 &&
-        ['LineString', 'Polygon'].includes(feature.getGeometry().getType())
+        ["LineString", "Polygon"].includes(feature.getGeometry().getType()),
     );
   }
 
@@ -718,7 +718,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   }
 
   getType(): MapType {
-    return 'property';
+    return "property";
   }
 
   ngOnInit(): void {
@@ -728,32 +728,32 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   onContextMenu(key: string, opaque?: any): void {
     let component: Type<SidebarComponent>;
     switch (key) {
-      case 'convert-landmark':
+      case "convert-landmark":
         this.#convertTo(opaque);
         break;
-      case 'delete-landmarks':
+      case "delete-landmarks":
         this.store.dispatch(
           this.map().selectedIDs.map(
-            (id) => new LandmarksActions.DeleteLandmark({ id })
-          )
+            (id) => new LandmarksActions.DeleteLandmark({ id }),
+          ),
         );
         break;
-      case 'draw-landmarks':
+      case "draw-landmarks":
         if (opaque) this.drawLandmarks().startDraw(opaque);
         break;
-      case 'import-landmarks':
+      case "import-landmarks":
         component = ImportLandmarksComponent;
         break;
-      case 'landmark-properties':
+      case "landmark-properties":
         component = LandmarkPropertiesComponent;
         break;
-      case 'move-landmark':
+      case "move-landmark":
         this.moveLandmark().setFeature(this.map().selected[0]);
         break;
-      case 'redraw-landmark':
+      case "redraw-landmark":
         this.redrawLandmark().setFeature(this.map().selected[0]);
         break;
-      case 'rename-landmark':
+      case "rename-landmark":
         this.#renameTo(opaque);
         break;
     }
@@ -770,7 +770,7 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
   #convertTo(label: string): void {
     if (label) {
       const conversion = this.conversions.find(
-        (conversion) => conversion.label === label
+        (conversion) => conversion.label === label,
       );
       if (conversion) {
         const feature = this.map().selected[0];
@@ -797,24 +797,24 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       id: feature.getId() as string,
       geometry: munged.geometry as any /* 👈 types no help here */,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--rgb-blue-gray-600',
+        fillColor: "--rgb-blue-gray-600",
         fillOpacity: 0.15,
-        fontColor: '--rgb-blue-gray-800',
+        fontColor: "--rgb-blue-gray-800",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'normal',
+        fontSize: "medium",
+        fontStyle: "normal",
         lineDash: [1, 1],
-        name: feature.get('name'),
+        name: feature.get("name"),
         showDimension: true,
-        strokeColor: '--rgb-blue-gray-800',
+        strokeColor: "--rgb-blue-gray-800",
         strokeOpacity: 1,
-        strokeStyle: 'dashed',
-        strokeWidth: 'medium',
+        strokeStyle: "dashed",
+        strokeWidth: "medium",
         textRotate: true,
-        zIndex: feature.get('zIndex')
+        zIndex: feature.get("zIndex"),
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -831,27 +831,27 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       id: feature.getId() as string,
       geometry: munged.geometry,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--map-building-fill',
+        fillColor: "--map-building-fill",
         fillOpacity: 1,
-        fontColor: '--map-building-outline',
+        fontColor: "--map-building-outline",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'italic',
-        name: 'Building',
-        orientation: feature.get('orientation'),
-        shadowColor: '--map-building-outline',
+        fontSize: "medium",
+        fontStyle: "italic",
+        name: "Building",
+        orientation: feature.get("orientation"),
+        shadowColor: "--map-building-outline",
         shadowOffsetFeet: [2, -2],
         shadowOpacity: 0.75,
         showDimension: false,
-        strokeColor: '--map-building-outline',
+        strokeColor: "--map-building-outline",
         strokeOpacity: 1,
         strokePixels: 1,
-        strokeStyle: 'solid',
+        strokeStyle: "solid",
         textRotate: true,
-        zIndex: 4
+        zIndex: 4,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -859,19 +859,19 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--rgb-blue-gray-600',
+        fontColor: "--rgb-blue-gray-600",
         fontFeet: 16,
         fontOpacity: 1,
         fontOutline: true,
-        fontStyle: 'normal',
+        fontStyle: "normal",
         iconOpacity: 1,
-        iconSymbol: '\uf1ce' /* 👈 circle-notch */,
-        name: 'Culvert',
-        textAlign: 'center',
-        textBaseline: 'bottom',
-        zIndex: 3
+        iconSymbol: "\uf1ce" /* 👈 circle-notch */,
+        name: "Culvert",
+        textAlign: "center",
+        textBaseline: "bottom",
+        zIndex: 3,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -881,25 +881,25 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     // 👇 eliminate all but the start and end points
     geojson.geometry.coordinates = [
       geojson.geometry.coordinates[0],
-      geojson.geometry.coordinates[geojson.geometry.coordinates.length - 1]
+      geojson.geometry.coordinates[geojson.geometry.coordinates.length - 1],
     ];
     return {
       id: feature.getId() as string,
       geometry: geojson.geometry,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--rgb-blue-gray-800',
+        fontColor: "--rgb-blue-gray-800",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'small',
-        fontStyle: 'normal',
+        fontSize: "small",
+        fontStyle: "normal",
         showDimension: true,
-        strokeColor: '--rgb-blue-gray-800',
+        strokeColor: "--rgb-blue-gray-800",
         strokeOpacity: 1,
-        strokeStyle: 'solid',
-        strokeWidth: 'thin',
-        zIndex: feature.get('zIndex')
+        strokeStyle: "solid",
+        strokeWidth: "thin",
+        zIndex: feature.get("zIndex"),
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -909,13 +909,13 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       properties: new LandmarkPropertiesClass({
         lineDash: [1, 1],
         lineSpline: true,
-        strokeColor: '--map-river-line-color',
+        strokeColor: "--map-river-line-color",
         strokeOpacity: 1,
-        strokeStyle: 'dashed',
-        strokeWidth: 'thin',
-        zIndex: 1
+        strokeStyle: "dashed",
+        strokeWidth: "thin",
+        zIndex: 1,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -924,17 +924,17 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
         lineSpline: true,
-        strokeColor: '--map-road-lane-VI',
+        strokeColor: "--map-road-lane-VI",
         strokeFeet: 15 /* 👈 feet */,
         strokeOpacity: 1,
         strokeOutline: true,
-        strokeOutlineColor: '--map-road-edge-VI',
-        strokePattern: 'conglomerate',
+        strokeOutlineColor: "--map-road-edge-VI",
+        strokePattern: "conglomerate",
         strokePatternScale: 0.66,
-        strokeStyle: 'solid',
-        zIndex: 2
+        strokeStyle: "solid",
+        zIndex: 2,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -942,24 +942,24 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--map-parcel-fill-u190',
+        fillColor: "--map-parcel-fill-u190",
         fillOpacity: 0.25,
-        fillPattern: 'grass',
+        fillPattern: "grass",
         fillPatternAndColor: true,
-        fontColor: '--map-conservation-outline',
+        fontColor: "--map-conservation-outline",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'small',
-        fontStyle: 'normal',
-        minWidth: feature.get('minWidth'),
-        name: 'Field',
-        orientation: feature.get('orientation'),
+        fontSize: "small",
+        fontStyle: "normal",
+        minWidth: feature.get("minWidth"),
+        name: "Field",
+        orientation: feature.get("orientation"),
         showDimension: true,
-        textLocation: feature.get('textLocation'),
+        textLocation: feature.get("textLocation"),
         textRotate: true,
-        zIndex: 0
+        zIndex: 0,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -967,24 +967,24 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--map-parcel-fill-u501',
+        fillColor: "--map-parcel-fill-u501",
         fillOpacity: 0.5,
-        fillPattern: 'mixtree2',
+        fillPattern: "mixtree2",
         fillPatternAndColor: true,
-        fontColor: '--map-conservation-outline',
+        fontColor: "--map-conservation-outline",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'small',
-        fontStyle: 'normal',
-        minWidth: feature.get('minWidth'),
-        name: 'Forest',
-        orientation: feature.get('orientation'),
+        fontSize: "small",
+        fontStyle: "normal",
+        minWidth: feature.get("minWidth"),
+        name: "Forest",
+        orientation: feature.get("orientation"),
         showDimension: true,
-        textLocation: feature.get('textLocation'),
+        textLocation: feature.get("textLocation"),
         textRotate: true,
-        zIndex: 0
+        zIndex: 0,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -992,24 +992,24 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--rgb-gray-900',
+        fillColor: "--rgb-gray-900",
         fillOpacity: 0.5,
-        fillPattern: 'conglomerate',
+        fillPattern: "conglomerate",
         fillPatternAndColor: true,
-        fontColor: '--rgb-gray-900',
+        fontColor: "--rgb-gray-900",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'small',
-        fontStyle: 'normal',
-        minWidth: feature.get('minWidth'),
-        name: 'Impervious',
-        orientation: feature.get('orientation'),
+        fontSize: "small",
+        fontStyle: "normal",
+        minWidth: feature.get("minWidth"),
+        name: "Impervious",
+        orientation: feature.get("orientation"),
         showDimension: true,
-        textLocation: feature.get('textLocation'),
+        textLocation: feature.get("textLocation"),
         textRotate: true,
-        zIndex: 0
+        zIndex: 0,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1017,19 +1017,19 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--rgb-brown-700',
+        fontColor: "--rgb-brown-700",
         fontFeet: 6,
         fontOpacity: 1,
         fontOutline: true,
-        fontStyle: 'normal',
+        fontStyle: "normal",
         iconOpacity: 1,
         iconOutline: true,
-        iconSymbol: '\uf00d' /* 👈 xmark */,
-        textAlign: 'center',
-        textBaseline: 'bottom',
-        zIndex: 3
+        iconSymbol: "\uf00d" /* 👈 xmark */,
+        textAlign: "center",
+        textBaseline: "bottom",
+        zIndex: 3,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1037,15 +1037,15 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--map-place-text-color',
+        fontColor: "--map-place-text-color",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'large',
-        fontStyle: 'italic',
-        name: 'Place',
-        zIndex: 5
+        fontSize: "large",
+        fontStyle: "italic",
+        name: "Place",
+        zIndex: 5,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1053,21 +1053,21 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--map-waterbody-fill',
+        fillColor: "--map-waterbody-fill",
         fillOpacity: 1,
-        fontColor: '--map-place-water-color',
+        fontColor: "--map-place-water-color",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'italic',
-        minWidth: feature.get('minWidth'),
-        name: 'Pond',
-        orientation: feature.get('orientation'),
-        textLocation: feature.get('textLocation'),
+        fontSize: "medium",
+        fontStyle: "italic",
+        minWidth: feature.get("minWidth"),
+        name: "Pond",
+        orientation: feature.get("orientation"),
+        textLocation: feature.get("textLocation"),
         textRotate: true,
-        zIndex: 4
+        zIndex: 4,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1075,15 +1075,15 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        strokeColor: '--map-stonewall-rocks',
+        strokeColor: "--map-stonewall-rocks",
         strokeOpacity: 0.5,
-        strokePattern: 'rocks',
+        strokePattern: "rocks",
         strokePatternScale: 2,
-        strokeStyle: 'solid',
-        strokeWidth: 'medium',
-        zIndex: 4
+        strokeStyle: "solid",
+        strokeWidth: "medium",
+        zIndex: 4,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1091,21 +1091,21 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--map-place-water-color',
+        fontColor: "--map-place-water-color",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'italic',
+        fontSize: "medium",
+        fontStyle: "italic",
         lineChunk: true,
         lineSpline: true,
-        name: 'Stream',
-        strokeColor: '--map-river-line-color',
+        name: "Stream",
+        strokeColor: "--map-river-line-color",
         strokeOpacity: 1,
-        strokeStyle: 'solid',
-        strokeWidth: 'medium',
-        zIndex: 1
+        strokeStyle: "solid",
+        strokeWidth: "medium",
+        zIndex: 1,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1113,22 +1113,22 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--map-trail-text-color',
+        fontColor: "--map-trail-text-color",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'medium',
-        fontStyle: 'italic',
+        fontSize: "medium",
+        fontStyle: "italic",
         lineChunk: true,
         lineDash: [2, 1],
         lineSpline: true,
-        name: 'Trail',
-        strokeColor: '--map-trail-line-color',
+        name: "Trail",
+        strokeColor: "--map-trail-line-color",
         strokeOpacity: 1,
-        strokeStyle: 'dashed',
-        strokeWidth: 'medium',
-        zIndex: 2
+        strokeStyle: "dashed",
+        strokeWidth: "medium",
+        zIndex: 2,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1136,19 +1136,19 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--rgb-green-700',
+        fontColor: "--rgb-green-700",
         fontFeet: 8,
         fontOpacity: 1,
         fontOutline: true,
-        fontStyle: 'normal',
+        fontStyle: "normal",
         iconOpacity: 1,
         iconOutline: true,
-        iconSymbol: '\uf1bb' /* 👈 tree */,
-        textAlign: 'center',
-        textBaseline: 'bottom',
-        zIndex: 3
+        iconSymbol: "\uf1bb" /* 👈 tree */,
+        textAlign: "center",
+        textBaseline: "bottom",
+        zIndex: 3,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1156,19 +1156,19 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fontColor: '--rgb-blue-700',
+        fontColor: "--rgb-blue-700",
         fontFeet: 6,
         fontOpacity: 1,
         fontOutline: true,
-        fontStyle: 'normal',
+        fontStyle: "normal",
         iconOpacity: 1,
         iconOutline: true,
-        iconSymbol: '\uf043' /* 👈 droplet */,
-        textAlign: 'center',
-        textBaseline: 'bottom',
-        zIndex: 3
+        iconSymbol: "\uf043" /* 👈 droplet */,
+        textAlign: "center",
+        textBaseline: "bottom",
+        zIndex: 3,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1176,23 +1176,23 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     return {
       id: feature.getId() as string,
       properties: new LandmarkPropertiesClass({
-        fillColor: '--map-wetland-swamp',
+        fillColor: "--map-wetland-swamp",
         fillOpacity: 0.25,
-        fillPattern: 'swamp',
-        fontColor: '--map-place-water-color',
+        fillPattern: "swamp",
+        fontColor: "--map-place-water-color",
         fontOpacity: 1,
         fontOutline: true,
-        fontSize: 'small',
-        fontStyle: 'normal',
-        minWidth: feature.get('minWidth'),
-        name: 'Wetland',
-        orientation: feature.get('orientation'),
+        fontSize: "small",
+        fontStyle: "normal",
+        minWidth: feature.get("minWidth"),
+        name: "Wetland",
+        orientation: feature.get("orientation"),
         showDimension: true,
-        textLocation: feature.get('textLocation'),
+        textLocation: feature.get("textLocation"),
         textRotate: true,
-        zIndex: 0
+        zIndex: 0,
       }),
-      type: 'Feature'
+      type: "Feature",
     };
   }
 
@@ -1201,9 +1201,9 @@ export class PropertyPage extends AbstractMapPage implements OnInit {
     const landmark: Partial<Landmark> = {
       id: feature.getId() as string,
       properties: {
-        name: name
+        name: name,
       },
-      type: 'Feature'
+      type: "Feature",
     };
     this.store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
   }

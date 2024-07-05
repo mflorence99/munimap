@@ -1,45 +1,45 @@
-import { AbstractMapPage } from '../abstract-map';
-import { AddParcelComponent } from './add-parcel';
-import { ContextMenuHostDirective } from '../../directives/contextmenu-host';
-import { CreatePropertyMapComponent } from './create-propertymap';
-import { MergeParcelsComponent } from './merge-parcels';
-import { ParcelPropertiesComponent } from './parcel-properties';
-import { SidebarComponent } from '../../components/sidebar-component';
-import { SubdivideParcelComponent } from './subdivide-parcel';
+import { SidebarComponent } from "../../components/sidebar-component";
+import { ContextMenuHostDirective } from "../../directives/contextmenu-host";
+import { AbstractMapPage } from "../abstract-map";
+import { AddParcelComponent } from "./add-parcel";
+import { CreatePropertyMapComponent } from "./create-propertymap";
+import { MergeParcelsComponent } from "./merge-parcels";
+import { ParcelPropertiesComponent } from "./parcel-properties";
+import { SubdivideParcelComponent } from "./subdivide-parcel";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { DestroyService } from '@lib/services/destroy';
-import { MapType } from '@lib/state/map';
-import { MatDrawer } from '@angular/material/sidenav';
-import { OLInteractionRedrawParcelComponent } from '@lib/ol/ol-interaction-redrawparcel';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { OLOverlayParcelLabelComponent } from '@lib/ol/ol-overlay-parcellabel';
-import { OnInit } from '@angular/core';
-import { Parcel } from '@lib/common';
-import { ParcelPropertiesLabel } from '@lib/common';
-import { ParcelsActions } from '@lib/state/parcels';
-import { Type } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Type } from "@angular/core";
+import { MatDrawer } from "@angular/material/sidenav";
+import { Parcel } from "@lib/common";
+import { ParcelPropertiesLabel } from "@lib/common";
+import { OLInteractionRedrawParcelComponent } from "@lib/ol/ol-interaction-redrawparcel";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { OLOverlayParcelLabelComponent } from "@lib/ol/ol-overlay-parcellabel";
+import { DestroyService } from "@lib/services/destroy";
+import { MapType } from "@lib/state/map";
+import { ParcelsActions } from "@lib/state/parcels";
 
-import { bbox } from '@turf/bbox';
-import { bboxPolygon } from '@turf/bbox-polygon';
-import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon';
-import { calculateParcel } from '@lib/common';
-import { circle } from '@turf/circle';
-import { fromLonLat } from 'ol/proj';
-import { point } from '@turf/helpers';
-import { polygon } from '@turf/helpers';
-import { toLonLat } from 'ol/proj';
-import { viewChild } from '@angular/core';
+import { viewChild } from "@angular/core";
+import { calculateParcel } from "@lib/common";
+import { bbox } from "@turf/bbox";
+import { bboxPolygon } from "@turf/bbox-polygon";
+import { booleanPointInPolygon } from "@turf/boolean-point-in-polygon";
+import { circle } from "@turf/circle";
+import { point } from "@turf/helpers";
+import { polygon } from "@turf/helpers";
+import { fromLonLat } from "ol/proj";
+import { toLonLat } from "ol/proj";
 
-import OLFeature from 'ol/Feature';
-import OLGeoJSON from 'ol/format/GeoJSON';
-import OLMultiPolygon from 'ol/geom/MultiPolygon';
+import OLFeature from "ol/Feature";
+import OLGeoJSON from "ol/format/GeoJSON";
+import OLMultiPolygon from "ol/geom/MultiPolygon";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-parcels',
+  selector: "app-parcels",
   template: `
     <app-sink
       #sink
@@ -561,7 +561,7 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
         </ul>
       </nav>
     </ng-template>
-  `
+  `,
 })
 export class ParcelsPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);
@@ -586,7 +586,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     return this.#can(
       event,
       this.map().selectedIDs.length === 1 &&
-        this.map().selected[0].getGeometry().getType() === 'MultiPolygon'
+        this.map().selected[0].getGeometry().getType() === "MultiPolygon",
     );
   }
 
@@ -619,7 +619,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   }
 
   getType(): MapType {
-    return 'parcels';
+    return "parcels";
   }
 
   ngOnInit(): void {
@@ -629,37 +629,37 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   onContextMenu(key: string): void {
     let component: Type<SidebarComponent>;
     switch (key) {
-      case 'add-parcel':
+      case "add-parcel":
         component = AddParcelComponent;
         break;
-      case 'add-polygon':
+      case "add-polygon":
         this.#addPolygon(this.map().selected[0]);
         break;
-      case 'create-propertymap':
+      case "create-propertymap":
         component = CreatePropertyMapComponent;
         break;
-      case 'delete-polygon':
+      case "delete-polygon":
         this.#deletePolygon(this.map().selected[0]);
         break;
-      case 'parcel-properties':
+      case "parcel-properties":
         component = ParcelPropertiesComponent;
         break;
-      case 'merge-parcels':
+      case "merge-parcels":
         component = MergeParcelsComponent;
         break;
-      case 'recenter-label':
+      case "recenter-label":
         this.overlayLabel().setFeature(this.map().selected[0]);
         break;
-      case 'redraw-boundary':
+      case "redraw-boundary":
         this.interactionRedraw().setFeature(this.map().selected[0]);
         break;
-      case 'rotate-label':
+      case "rotate-label":
         this.#rotateLabel(this.map().selected[0]);
         break;
-      case 'split-label':
+      case "split-label":
         this.#splitLabel(this.map().selected[0]);
         break;
-      case 'subdivide-parcel':
+      case "subdivide-parcel":
         component = SubdivideParcelComponent;
         break;
     }
@@ -667,23 +667,23 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
   }
 
   #addPolygon(feature: OLFeature<any>): void {
-    if (feature.getGeometry().getType() === 'Polygon')
+    if (feature.getGeometry().getType() === "Polygon")
       feature.setGeometry(
-        new OLMultiPolygon([feature.getGeometry().getCoordinates()])
+        new OLMultiPolygon([feature.getGeometry().getCoordinates()]),
       );
     // 👇 create a square centered on the context menu
     const polygon = bboxPolygon(
       bbox(
         circle(toLonLat(this.map().contextMenuAt), 100, {
           steps: 16,
-          units: 'feet'
-        })
-      )
+          units: "feet",
+        }),
+      ),
     );
     // 👇 add the new polygon to the feature
     const coords = feature.getGeometry().getCoordinates();
     coords.push([
-      polygon.geometry.coordinates[0].map((coord: any) => fromLonLat(coord))
+      polygon.geometry.coordinates[0].map((coord: any) => fromLonLat(coord)),
     ]);
     feature.getGeometry().setCoordinates(coords);
     this.#modifyFeature(feature, { doGeometry: true });
@@ -703,11 +703,11 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
 
   #modifyFeature(
     feature: OLFeature<any>,
-    opts: { doGeometry?: boolean; doProperties?: boolean } = {}
+    opts: { doGeometry?: boolean; doProperties?: boolean } = {},
   ): void {
     const format = new OLGeoJSON({
       dataProjection: this.map().featureProjection,
-      featureProjection: this.map().projection
+      featureProjection: this.map().projection,
     });
     // 👉 convert to feature to geojson and recalculate centers etc
     const parcel = JSON.parse(format.writeFeature(feature));
@@ -715,13 +715,13 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
     feature.setProperties(parcel.properties);
     // 👉 record the modification
     const redrawnParcel: Parcel = {
-      action: 'modified',
+      action: "modified",
       geometry: opts.doGeometry ? parcel.geometry : null,
       id: feature.getId(),
       owner: this.authState.currentProfile().email,
       path: this.map().path(),
       properties: opts.doProperties ? parcel.properties : null,
-      type: 'Feature'
+      type: "Feature",
     };
     this.store.dispatch(new ParcelsActions.AddParcels([redrawnParcel]));
   }
@@ -732,7 +732,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       feature.getProperties().labels ?? [];
     const label: ParcelPropertiesLabel = labels[ix] ?? {
       split: null,
-      rotate: null
+      rotate: null,
     };
     label.rotate = label.rotate ? false : true;
     labels[ix] = label;
@@ -746,7 +746,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
       feature.getProperties().labels ?? [];
     const label: ParcelPropertiesLabel = labels[ix] ?? {
       split: null,
-      rotate: null
+      rotate: null,
     };
     label.split = label.split ? null : true;
     labels[ix] = label;
@@ -756,7 +756,7 @@ export class ParcelsPage extends AbstractMapPage implements OnInit {
 
   #whichPolygon(feature: OLFeature<any>): number {
     let ix = 0;
-    if (feature.getGeometry().getType() === 'MultiPolygon') {
+    if (feature.getGeometry().getType() === "MultiPolygon") {
       const polygons = feature.getGeometry().getPolygons();
       for (ix = 0; ix < polygons.length; ix++) {
         const pt = point(this.map().contextMenuAt);

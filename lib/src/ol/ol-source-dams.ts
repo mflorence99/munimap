@@ -1,9 +1,9 @@
-import { DamProperties } from '../common';
-import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { DamProperties } from "../common";
+import { OLSourceArcGISComponent } from "./ol-source-arcgis";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Coordinate } from "ol/coordinate";
 
 // 👇 places.geojson does contain dams, but only major ones
 //    so we augment it with this data source
@@ -13,9 +13,9 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-dams',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-dams",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceDamsComponent extends OLSourceArcGISComponent {
   // 👇 see PlaceProperties
@@ -25,7 +25,7 @@ export class OLSourceDamsComponent extends OLSourceArcGISComponent {
       arcgis.features.forEach((feature) => {
         const properties: DamProperties = feature.attributes;
         properties.name = properties.NAME;
-        properties.type = 'dam';
+        properties.type = "dam";
       });
       return arcgis;
     } else return super.filter(arcgis);
@@ -40,7 +40,7 @@ export class OLSourceDamsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'dams';
+    return "dams";
   }
 
   getURL(extent: Coordinate): string {

@@ -1,28 +1,28 @@
-import { Units } from '@turf/helpers';
+import { Units } from "@turf/helpers";
 
-import { area } from '@turf/area';
-import { bbox } from '@turf/bbox';
-import { bearing } from '@turf/bearing';
-import { convertArea } from '@turf/helpers';
-import { convertLength } from '@turf/helpers';
-import { distance } from '@turf/distance';
-import { featureCollection } from '@turf/helpers';
-import { length } from '@turf/length';
-import { point } from '@turf/helpers';
-import { rhumbDestination } from '@turf/rhumb-destination';
-import { rhumbDistance } from '@turf/rhumb-distance';
-import { serverTimestamp } from 'firebase/firestore';
-import { transformRotate } from '@turf/transform-rotate';
-import { truncate } from '@turf/truncate';
+import { area } from "@turf/area";
+import { bbox } from "@turf/bbox";
+import { bearing } from "@turf/bearing";
+import { distance } from "@turf/distance";
+import { convertArea } from "@turf/helpers";
+import { convertLength } from "@turf/helpers";
+import { featureCollection } from "@turf/helpers";
+import { point } from "@turf/helpers";
+import { length } from "@turf/length";
+import { rhumbDestination } from "@turf/rhumb-destination";
+import { rhumbDistance } from "@turf/rhumb-distance";
+import { transformRotate } from "@turf/transform-rotate";
+import { truncate } from "@turf/truncate";
+import { serverTimestamp } from "firebase/firestore";
 
-import hash from 'object-hash';
-import polylabel from 'polylabel';
+import hash from "object-hash";
+import polylabel from "polylabel";
 
 // 🔥 we need to share this code with the "bin" programs
 //    that's why it isn't an Angular service, for example
 
 // 👇 we currently only support one state
-export const theState = 'NEW HAMPSHIRE';
+export const theState = "NEW HAMPSHIRE";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -93,7 +93,7 @@ export interface BridgeProperties {
   // 👇 translated bridges schema
   name: string;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
-  type: 'bridge';
+  type: "bridge";
 }
 
 export type Building = GeoJSON.Feature<GeoJSON.Polygon, BuildingProperties>;
@@ -117,19 +117,19 @@ export interface ConservationProperties {
 
 // 👀 https://stackoverflow.com/questions/44480644/string-union-to-string-array
 
-export const culvertConditions = ['Unknown', 'Poor', 'Fair', 'Good'] as const;
+export const culvertConditions = ["Unknown", "Poor", "Fair", "Good"] as const;
 export const culvertFloodHazards = [
-  'None',
-  'Minor',
-  'Moderate',
-  'Major'
+  "None",
+  "Minor",
+  "Moderate",
+  "Major",
 ] as const;
-export const culvertHeadwalls = ['None', 'Handmade', 'Precast'] as const;
+export const culvertHeadwalls = ["None", "Handmade", "Precast"] as const;
 export const culvertMaterials = [
-  'Unknown',
-  'Concrete',
-  'Plastic',
-  'Steel'
+  "Unknown",
+  "Concrete",
+  "Plastic",
+  "Steel",
 ] as const;
 
 export type CulvertCondition = (typeof culvertConditions)[number];
@@ -149,7 +149,7 @@ export interface CulvertProperties {
   location: string;
   material: CulvertMaterial;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
-  type: 'culvert';
+  type: "culvert";
   width: number /* 👈 inches, elliptical pipes */;
   year: number;
 }
@@ -176,7 +176,7 @@ export interface DamProperties {
   USE: string /* 👈 USE */;
   // 👇 translated dams schema
   name: string;
-  type: 'dam';
+  type: "dam";
 }
 
 export interface FloodHazardProperties {
@@ -212,7 +212,7 @@ export interface FloodHazardProperties {
   // 👇 translated floodhazards schema  name: string;
   name: string;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
-  type: 'flood hazard';
+  type: "flood hazard";
 }
 
 export interface FloodplainProperties {
@@ -243,7 +243,7 @@ export interface LabelProperties {
   OBJECTID: string;
   // 👇 translated floodplain schema
   name: string;
-  type: 'park' | 'stream';
+  type: "park" | "stream";
 }
 
 export interface LakeProperties {
@@ -284,8 +284,8 @@ export class LandmarkPropertiesClass {
   public fontOutline = false;
   public fontOutlineColor = null;
   public fontPixels: number = null;
-  public fontSize: 'huge' | 'large' | 'medium' | 'small' | 'tiny' | null = null;
-  public fontStyle: 'normal' | 'bold' | 'italic' | null = null;
+  public fontSize: "huge" | "large" | "medium" | "small" | "tiny" | null = null;
+  public fontStyle: "normal" | "bold" | "italic" | null = null;
   public iconColor: string = null;
   public iconOpacity = 0;
   public iconOutline = false;
@@ -311,16 +311,16 @@ export class LandmarkPropertiesClass {
   public strokePattern: string = null /* 👈 should be OLStrokePatternType */;
   public strokePatternScale = 1;
   public strokePixels: number = null;
-  public strokeStyle: 'dashed' | 'solid' | null = null;
-  public strokeWidth: 'thick' | 'medium' | 'thin' | null = null;
-  public textAlign: 'left' | 'center' | 'right' | 'start' | 'end' | null = null;
+  public strokeStyle: "dashed" | "solid" | null = null;
+  public strokeWidth: "thick" | "medium" | "thin" | null = null;
+  public textAlign: "left" | "center" | "right" | "start" | "end" | null = null;
   public textBaseline:
-    | 'top'
-    | 'middle'
-    | 'bottom'
-    | 'alphabetic'
-    | 'hanging'
-    | 'ideographic'
+    | "top"
+    | "middle"
+    | "bottom"
+    | "alphabetic"
+    | "hanging"
+    | "ideographic"
     | null = null;
   public textLocation: number[] = null;
   public textOffsetFeet: number[] = null;
@@ -341,7 +341,8 @@ export const landmarkProperties = Object.keys(modelLandmark);
 //    and deserialize these properties
 
 const serializedLandmarkProperties = Object.keys(modelLandmark).filter(
-  (prop) => Array.isArray(modelLandmark[prop]) && modelLandmark[prop].length > 0
+  (prop) =>
+    Array.isArray(modelLandmark[prop]) && modelLandmark[prop].length > 0,
 );
 
 export interface LandmarkStyle {
@@ -373,7 +374,7 @@ export type CountableParcels = Partial<Parcels>;
 
 export type SearchableParcels = Partial<Parcels>;
 
-export type ParcelAction = 'added' | 'modified' | 'removed';
+export type ParcelAction = "added" | "modified" | "removed";
 
 export type ParcelID = string | number;
 
@@ -381,14 +382,14 @@ export type ParcelID = string | number;
 
 export class ParcelPropertiesClass {
   public abutters: string[] /* 👈 legacy support */ = [];
-  public address = '';
-  public addressOfOwner = '';
+  public address = "";
+  public addressOfOwner = "";
   public area = 0;
   public areas: number[] = [];
   public building$ = null;
   public callouts: number[][] /* 👈 legacy support */ = [[]];
   public centers: number[][] = [[]];
-  public county = '';
+  public county = "";
   public elevations: number[] /* 👈 legacy support */ = [];
   public id: ParcelID = null;
   public labels: ParcelPropertiesLabel[] /* 👈 legacy support */ = [];
@@ -398,15 +399,15 @@ export class ParcelPropertiesClass {
   public neighborhood: ParcelPropertiesNeighborhood = null;
   public orientations: number[] = [];
   public other$ = 0;
-  public owner = '';
+  public owner = "";
   public ownership: ParcelPropertiesOwnership = null;
   public perimeters: number[] = [];
   public sqarcities: number[] = [];
   public taxed$ = 0;
-  public town = '';
+  public town = "";
   public usage: ParcelPropertiesUsage = null;
   public use: ParcelPropertiesUse = null;
-  public zone = '';
+  public zone = "";
   constructor(opts?: ParcelProperties) {
     Object.assign(this, opts ?? {});
   }
@@ -422,7 +423,7 @@ export const parcelProperties = Object.keys(modelParcel);
 //    and deserialize these properties
 
 const serializedParcelProperties = Object.keys(modelParcel).filter(
-  (prop) => Array.isArray(modelParcel[prop]) && modelParcel[prop].length > 0
+  (prop) => Array.isArray(modelParcel[prop]) && modelParcel[prop].length > 0,
 );
 
 export interface ParcelPropertiesLabel {
@@ -430,45 +431,45 @@ export interface ParcelPropertiesLabel {
   split: boolean;
 }
 
-export type ParcelPropertiesNeighborhood = '' | 'U' | 'V' | 'W';
+export type ParcelPropertiesNeighborhood = "" | "U" | "V" | "W";
 
 export const parcelPropertiesOwnership: Record<string, string> = {
-  R: 'Resident',
-  N: 'Non-resident',
-  I: 'Institution',
-  X: 'Unknown'
+  R: "Resident",
+  N: "Non-resident",
+  I: "Institution",
+  X: "Unknown",
 };
 
 export type ParcelPropertiesOwnership = keyof typeof parcelPropertiesOwnership;
 
 export const parcelPropertiesUsage: Record<string, string> = {
-  '110': 'Single Family Residence',
-  '120': 'Multi Family Residence',
-  '130': 'Other Residential',
-  '190': 'Current Use',
-  '260': 'Commercial / Industrial',
-  '300': 'Town Property',
-  '400': 'State Property',
-  '500': 'State Park',
-  '501': 'Town Forest',
-  '502': 'Conservation Land'
+  "110": "Single Family Residence",
+  "120": "Multi Family Residence",
+  "130": "Other Residential",
+  "190": "Current Use",
+  "260": "Commercial / Industrial",
+  "300": "Town Property",
+  "400": "State Property",
+  "500": "State Park",
+  "501": "Town Forest",
+  "502": "Conservation Land",
 };
 
 export type ParcelPropertiesUsage = keyof typeof parcelPropertiesUsage;
 
 export const parcelPropertiesUse: Record<string, string> = {
-  '': null,
-  CUWL: 'Wetland',
-  CUFL: 'Farmland',
-  CUMH: 'Managed Hardwood',
-  CUUH: 'Unmanaged Hardwood',
-  CUMW: 'Managed Pine',
-  CUUW: 'Unmanaged Pine',
-  CUMO: 'Managed (Other)',
-  CUUO: 'Unmanaged (Other)',
-  CUDE: 'Discretionary',
-  CUNS: 'Christmas Tree',
-  CUUL: 'Unproductive'
+  "": null,
+  CUWL: "Wetland",
+  CUFL: "Farmland",
+  CUMH: "Managed Hardwood",
+  CUUH: "Unmanaged Hardwood",
+  CUMW: "Managed Pine",
+  CUUW: "Unmanaged Pine",
+  CUMO: "Managed (Other)",
+  CUUO: "Unmanaged (Other)",
+  CUDE: "Discretionary",
+  CUNS: "Christmas Tree",
+  CUUL: "Unproductive",
 };
 
 export type ParcelPropertiesUse = keyof typeof parcelPropertiesUse;
@@ -481,59 +482,59 @@ export interface PlaceProperties {
 }
 
 export type PlacePropertiesType =
-  | 'airport'
-  | 'area'
-  | 'bar'
-  | 'basin'
-  | 'bay'
-  | 'beach'
-  | 'bench'
-  | 'bend'
-  | 'bridge'
-  | 'building'
-  | 'canal'
-  | 'cape'
-  | 'cave'
-  | 'cemetery'
-  | 'channel'
-  | 'church'
-  | 'civil'
-  | 'cliff'
-  | 'crossing'
-  | 'dam'
-  | 'falls'
-  | 'flat'
-  | 'forest'
-  | 'gap'
-  | 'gut'
-  | 'harbor'
-  | 'hospital'
-  | 'island'
-  | 'lake'
-  | 'locale'
-  | 'military'
-  | 'mine'
-  | 'other'
-  | 'park'
-  | 'pillar'
-  | 'po'
-  | 'ppl'
-  | 'range'
-  | 'rapids'
-  | 'reserve'
-  | 'reservoir'
-  | 'ridge'
-  | 'school'
-  | 'sea'
-  | 'slope'
-  | 'spring'
-  | 'stream'
-  | 'summit'
-  | 'swamp'
-  | 'tower'
-  | 'trail'
-  | 'valley'
-  | 'woods';
+  | "airport"
+  | "area"
+  | "bar"
+  | "basin"
+  | "bay"
+  | "beach"
+  | "bench"
+  | "bend"
+  | "bridge"
+  | "building"
+  | "canal"
+  | "cape"
+  | "cave"
+  | "cemetery"
+  | "channel"
+  | "church"
+  | "civil"
+  | "cliff"
+  | "crossing"
+  | "dam"
+  | "falls"
+  | "flat"
+  | "forest"
+  | "gap"
+  | "gut"
+  | "harbor"
+  | "hospital"
+  | "island"
+  | "lake"
+  | "locale"
+  | "military"
+  | "mine"
+  | "other"
+  | "park"
+  | "pillar"
+  | "po"
+  | "ppl"
+  | "range"
+  | "rapids"
+  | "reserve"
+  | "reservoir"
+  | "ridge"
+  | "school"
+  | "sea"
+  | "slope"
+  | "spring"
+  | "stream"
+  | "summit"
+  | "swamp"
+  | "tower"
+  | "trail"
+  | "valley"
+  | "woods";
 
 export interface PowerlineProperties {
   county: string;
@@ -591,7 +592,7 @@ export interface RiverProperties {
   name: string;
   section: string;
   town: string;
-  type: 'river' | 'stream';
+  type: "river" | "stream";
 }
 
 export interface RoadProperties {
@@ -603,7 +604,7 @@ export interface RoadProperties {
   width: number;
 }
 
-export type RoadPropertiesClass = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | '0';
+export type RoadPropertiesClass = "I" | "II" | "III" | "IV" | "V" | "VI" | "0";
 
 export interface StreamCrossingProperties {
   // 👇 original streamcrossings schema
@@ -722,7 +723,7 @@ export interface StreamCrossingProperties {
   WingAngL: string /* 👈 24) Inlet Wingwall Angle - Stream Left */;
   WingAngR: string /* 👈 25) Inlet Wingwall Angle - Stream Right */;
   // 🔥 disambiguate bridges, culverts, flood hazards and stream crossings
-  type: 'stream crossing';
+  type: "stream crossing";
 }
 
 export interface StoneWallProperties {
@@ -785,7 +786,7 @@ export interface WetlandProperties {
   Shape_Length: number /* 👈 Shape_Length */;
   WETLAND_TY: string /* 👈 WETLAND_TY */;
   // 👇 translated wetland schema
-  type: 'water' | 'marsh';
+  type: "water" | "marsh";
 }
 
 export interface CountyIndex {
@@ -838,7 +839,7 @@ export interface StateIndex {
 export type HistoricalMap = {
   attribution: string;
   name: string;
-  type: 'image' | 'xyz';
+  type: "image" | "xyz";
   url: string;
 } & (HistoricalMapImage | HistoricalMapXYZ);
 
@@ -851,13 +852,13 @@ export type HistoricalMapImage = {
   masked: boolean;
   rotate: number;
   scale: [number, number];
-  type: 'image';
+  type: "image";
 };
 
 export type HistoricalMapXYZ = {
   maxZoom: number;
   minZoom: number;
-  type: 'xyz';
+  type: "xyz";
 };
 
 export type HistoricalMapIndex = Record<string, HistoricalMap[]>;
@@ -872,7 +873,7 @@ export function bboxByAspectRatio(
   geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
   x: number,
   y: number,
-  b = 0.5 /* 👈 buffer in km */
+  b = 0.5 /* 👈 buffer in km */,
 ): GeoJSON.BBox {
   if (x < y) console.error(`🔥 x(${x}) must be greater than y(${y})`);
   const [minX, minY, maxX, maxY] = bboxByAspectRatioImpl(geojson, x, y, b);
@@ -883,7 +884,7 @@ function bboxByAspectRatioImpl(
   geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
   x: number,
   y: number,
-  b: number
+  b: number,
 ): GeoJSON.BBox {
   // 👉 calculate bbox dimensions
   const [minX, minY, maxX, maxY] = Array.isArray(geojson)
@@ -923,7 +924,7 @@ function bboxByAspectRatioImpl(
 export function bboxByDimensions(
   geojson: GeoJSON.FeatureCollection | GeoJSON.Feature | number[],
   cxDesired: number,
-  cyDesired: number
+  cyDesired: number,
 ): GeoJSON.BBox {
   // 👉 calculate bbox dimensions
   const [minX, minY, maxX, maxY] = Array.isArray(geojson)
@@ -945,7 +946,7 @@ export function bboxByDimensions(
     cxDelta ? newMinX.geometry.coordinates[0] : minX,
     cyDelta ? newMinY.geometry.coordinates[1] : minY,
     cxDelta ? newMaxX.geometry.coordinates[0] : maxX,
-    cyDelta ? newMaxY.geometry.coordinates[1] : maxY
+    cyDelta ? newMaxY.geometry.coordinates[1] : maxY,
   ];
 }
 
@@ -954,7 +955,7 @@ export function bboxSize(
   minY: number,
   maxX: number,
   maxY: number,
-  units: Units = 'kilometers'
+  units: Units = "kilometers",
 ): [number, number] {
   const cx = rhumbDistance([minX, minY], [maxX, minY], { units });
   const cy = rhumbDistance([minX, minY], [minX, maxY], { units });
@@ -962,13 +963,13 @@ export function bboxSize(
 }
 
 export function calculateLandmark(landmark: Partial<Landmark>): void {
-  if (landmark.geometry && landmark.geometry.type === 'Polygon') {
+  if (landmark.geometry && landmark.geometry.type === "Polygon") {
     const polygon = landmark as GeoJSON.Feature<GeoJSON.Polygon>;
     landmark.properties ??= {};
     landmark.properties.orientation = calculateOrientation(polygon);
     landmark.properties.minWidth = calculateMinWidth(
       polygon,
-      landmark.properties.orientation
+      landmark.properties.orientation,
     );
     // 👇 note that we can edit text location
     if (!landmark.properties.textLocation)
@@ -980,14 +981,14 @@ export function calculateParcel(parcel: Partial<Parcel>): void {
   if (parcel.geometry) {
     // 👉 convert MultiPolygons into an array of Polygons
     let polygons: GeoJSON.Feature<GeoJSON.Polygon>[] = [parcel as any];
-    if (parcel.geometry.type === 'MultiPolygon') {
+    if (parcel.geometry.type === "MultiPolygon") {
       polygons = parcel.geometry.coordinates.map((coordinates) => ({
         geometry: {
           coordinates: coordinates,
-          type: 'Polygon'
+          type: "Polygon",
         },
         properties: {},
-        type: 'Feature'
+        type: "Feature",
       }));
     }
     // 👉 bbox applies to the whole geometry
@@ -996,19 +997,19 @@ export function calculateParcel(parcel: Partial<Parcel>): void {
     parcel.properties ??= {};
     parcel.properties.areas = polygons.map((polygon) => calculateArea(polygon));
     parcel.properties.centers = polygons.map((polygon) =>
-      calculateCenter(polygon)
+      calculateCenter(polygon),
     );
     parcel.properties.lengths = polygons.map((polygon) =>
-      calculateLengths(polygon)
+      calculateLengths(polygon),
     );
     parcel.properties.orientations = polygons.map((polygon) =>
-      calculateOrientation(polygon)
+      calculateOrientation(polygon),
     );
     parcel.properties.minWidths = polygons.map((polygon, ix) =>
-      calculateMinWidth(polygon, parcel.properties.orientations[ix])
+      calculateMinWidth(polygon, parcel.properties.orientations[ix]),
     );
     parcel.properties.sqarcities = polygons.map((polygon, ix) =>
-      calculateSqarcity(polygon, parcel.properties.lengths[ix])
+      calculateSqarcity(polygon, parcel.properties.lengths[ix]),
     );
   } else if (parcel.geometry === null) {
     parcel.bbox = null;
@@ -1023,13 +1024,13 @@ export function calculateParcel(parcel: Partial<Parcel>): void {
 }
 
 export function calculateArea(
-  polygon: GeoJSON.Feature<GeoJSON.Polygon>
+  polygon: GeoJSON.Feature<GeoJSON.Polygon>,
 ): number {
-  return convertArea(area(polygon), 'meters', 'acres');
+  return convertArea(area(polygon), "meters", "acres");
 }
 
 export function calculateCenter(
-  polygon: GeoJSON.Feature<GeoJSON.Polygon>
+  polygon: GeoJSON.Feature<GeoJSON.Polygon>,
 ): number[] {
   // 👉 we only want the polygon's outer ring
   const points = polygon.geometry.coordinates[0];
@@ -1037,7 +1038,7 @@ export function calculateCenter(
 }
 
 export function calculateLengths(
-  polygon: GeoJSON.Feature<GeoJSON.Polygon>
+  polygon: GeoJSON.Feature<GeoJSON.Polygon>,
 ): number[] {
   const lengths = [];
   // 👉 we only want the polygon's outer ring
@@ -1046,29 +1047,29 @@ export function calculateLengths(
     const lineString: GeoJSON.Feature = {
       geometry: {
         coordinates: [points[ix - 1], points[ix]],
-        type: 'LineString'
+        type: "LineString",
       },
       properties: {},
-      type: 'Feature'
+      type: "Feature",
     };
-    lengths.push(Math.round(length(lineString, { units: 'feet' })));
+    lengths.push(Math.round(length(lineString, { units: "feet" })));
   }
   return lengths;
 }
 
 export function calculateMinWidth(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>,
-  orientation: number
+  orientation: number,
 ): number {
   const rotated = transformRotate(polygon, -orientation);
   const [minX, minY, , maxY] = bbox(rotated);
   const from = point([minX, minY]);
   const to = point([minX, maxY]);
-  return Math.round(distance(from, to, { units: 'feet' }));
+  return Math.round(distance(from, to, { units: "feet" }));
 }
 
 export function calculateOrientation(
-  polygon: GeoJSON.Feature<GeoJSON.Polygon>
+  polygon: GeoJSON.Feature<GeoJSON.Polygon>,
 ): number {
   let angle = 0;
   let longest = 0;
@@ -1094,12 +1095,12 @@ export function calculateOrientation(
 
 export function calculateSqarcity(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>,
-  lengths: number[]
+  lengths: number[],
 ): number {
   const perimeter = convertLength(
     lengths.reduce((sum, length) => sum + length),
-    'feet',
-    'meters'
+    "feet",
+    "meters",
   );
   return (area(polygon) / Math.pow(perimeter, 2)) * 4 * Math.PI;
 }
@@ -1151,7 +1152,7 @@ export function isIndex(name: string): boolean {
 // 👉 yes, we really did mean to misspell "stollen"
 
 export function isParcelStollen(id: ParcelID): boolean {
-  return typeof id === 'string' && id.startsWith('(') && id.endsWith(')');
+  return typeof id === "string" && id.startsWith("(") && id.endsWith(")");
 }
 
 // 👇 we use this when landmarks are imported from an external source,
@@ -1163,8 +1164,8 @@ export function makeLandmarkID(landmark: Partial<Landmark>): LandmarkID {
 export function normalizeParcel(parcel: Partial<Parcel>): void {
   if (parcel.properties) {
     normalizeAddress(parcel);
-    normalizeFld(parcel, 'addressOfOwner');
-    normalizeFld(parcel, 'owner');
+    normalizeFld(parcel, "addressOfOwner");
+    normalizeFld(parcel, "owner");
     normalizeOwnership(parcel);
   }
 }
@@ -1172,23 +1173,23 @@ export function normalizeParcel(parcel: Partial<Parcel>): void {
 export function normalizeAddress(parcel: Partial<Parcel>): void {
   if (parcel.properties.address) {
     let normalized = parcel.properties.address.trim().toUpperCase();
-    normalized = normalized.replace(/\bCIR\b/, ' CIRCLE ');
-    normalized = normalized.replace(/\bDR\b/, ' DRIVE ');
-    normalized = normalized.replace(/\bE\b/, ' EAST ');
-    normalized = normalized.replace(/\bHGTS\b/, ' HEIGHTS ');
-    normalized = normalized.replace(/\bLN\b/, ' LANE ');
-    normalized = normalized.replace(/\bMT\b/, ' MOUNTAIN ');
-    normalized = normalized.replace(/\bN\b/, ' NORTH ');
-    normalized = normalized.replace(/\bNO\b/, ' NORTH ');
-    normalized = normalized.replace(/\bPD\b/, ' POND ');
-    normalized = normalized.replace(/\bRD\b/, ' ROAD ');
-    normalized = normalized.replace(/\bS\b/, ' SOUTH ');
-    normalized = normalized.replace(/\bSO\b/, ' SOUTH ');
-    normalized = normalized.replace(/\bST\b/, ' STREET ');
-    normalized = normalized.replace(/\bTER\b/, ' TERRACE ');
-    normalized = normalized.replace(/\bTERR\b/, ' TERRACE ');
-    normalized = normalized.replace(/\bW\b/, ' WEST ');
-    parcel.properties.address = normalized.replace(/ {2,}/g, ' ').trim();
+    normalized = normalized.replace(/\bCIR\b/, " CIRCLE ");
+    normalized = normalized.replace(/\bDR\b/, " DRIVE ");
+    normalized = normalized.replace(/\bE\b/, " EAST ");
+    normalized = normalized.replace(/\bHGTS\b/, " HEIGHTS ");
+    normalized = normalized.replace(/\bLN\b/, " LANE ");
+    normalized = normalized.replace(/\bMT\b/, " MOUNTAIN ");
+    normalized = normalized.replace(/\bN\b/, " NORTH ");
+    normalized = normalized.replace(/\bNO\b/, " NORTH ");
+    normalized = normalized.replace(/\bPD\b/, " POND ");
+    normalized = normalized.replace(/\bRD\b/, " ROAD ");
+    normalized = normalized.replace(/\bS\b/, " SOUTH ");
+    normalized = normalized.replace(/\bSO\b/, " SOUTH ");
+    normalized = normalized.replace(/\bST\b/, " STREET ");
+    normalized = normalized.replace(/\bTER\b/, " TERRACE ");
+    normalized = normalized.replace(/\bTERR\b/, " TERRACE ");
+    normalized = normalized.replace(/\bW\b/, " WEST ");
+    parcel.properties.address = normalized.replace(/ {2,}/g, " ").trim();
   }
 }
 
@@ -1202,15 +1203,15 @@ export function normalizeFld(parcel: Partial<Parcel>, fld: string): void {
 // 🔥 this only works for Washington!!
 export function normalizeOwnership(parcel: Partial<Parcel>): void {
   if (parcel.properties.addressOfOwner) {
-    if (['300', '400', '500', '501', '502'].includes(parcel.properties.usage))
-      parcel.properties.ownership = 'I';
+    if (["300", "400", "500", "501", "502"].includes(parcel.properties.usage))
+      parcel.properties.ownership = "I";
     else if (
-      parcel.properties.addressOfOwner.includes('03280') ||
-      parcel.properties.addressOfOwner.includes('03244') ||
-      parcel.properties.addressOfOwner.includes('03456')
+      parcel.properties.addressOfOwner.includes("03280") ||
+      parcel.properties.addressOfOwner.includes("03244") ||
+      parcel.properties.addressOfOwner.includes("03456")
     )
-      parcel.properties.ownership = 'R';
-    else parcel.properties.ownership = 'N';
+      parcel.properties.ownership = "R";
+    else parcel.properties.ownership = "N";
   }
 }
 
@@ -1247,7 +1248,7 @@ export function serializeParcel(parcel: Partial<Parcel>): void {
 //    we used to use our own code, but now just use standard turf function
 //    http://wiki.gis.com/wiki/index.php/Decimal_degrees
 export function simplify(
-  geojson: GeoJSON.FeatureCollection<any>
+  geojson: GeoJSON.FeatureCollection<any>,
 ): GeoJSON.FeatureCollection<any> {
   return truncate(geojson, { precision: 7 });
 }

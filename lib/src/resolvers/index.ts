@@ -1,13 +1,13 @@
-import { GeoJSONService } from '../services/geojson';
-import { Index } from '../common';
+import { Index } from "../common";
+import { GeoJSONService } from "../services/geojson";
 
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Resolve } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { Resolve } from "@angular/router";
+import { Observable } from "rxjs";
 
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class IndexResolver implements Resolve<Index> {
   #geoJSON = inject(GeoJSONService);
 

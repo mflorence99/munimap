@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { computed } from '@angular/core';
-import { input } from '@angular/core';
+import { computed } from "@angular/core";
+import { input } from "@angular/core";
 
 // 🔥 this is a quick-and-dirty hack to replace ngx-avatar as
 //    it looks like that will not be updated for Ivy -- if that changes,
@@ -10,7 +10,7 @@ import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-avatar',
+  selector: "app-avatar",
   template: `
     <section class="avatar">{{ initials() }}</section>
   `,
@@ -26,17 +26,17 @@ import { input } from '@angular/core';
         justify-content: center;
         width: 48px;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class AvatarComponent {
   initials = computed(() => {
     if (this.name()) {
-      const names = this.name().split(' ');
+      const names = this.name().split(" ");
       const first = names.at(0);
       const last = names.at(-1);
       return `${first[0]}${last[0]}`.toUpperCase();
-    } else return '';
+    } else return "";
   });
 
   name = input<string>();

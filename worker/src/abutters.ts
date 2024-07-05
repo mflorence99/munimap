@@ -2,12 +2,12 @@
 
 /// <reference lib="webworker" />
 
-import * as Comlink from 'comlink';
-import * as Sentry from '@sentry/angular-ivy';
+import * as Sentry from "@sentry/angular-ivy";
+import * as Comlink from "comlink";
 
-import { buffer } from '@turf/buffer';
-import { featureCollection } from '@turf/helpers';
-import { intersect } from '@turf/intersect';
+import { buffer } from "@turf/buffer";
+import { featureCollection } from "@turf/helpers";
+import { intersect } from "@turf/intersect";
 
 type Feature = GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>;
 
@@ -22,13 +22,13 @@ export class Abutters {
         try {
           // 👉 inflate selected feature by N ft all around
           buffered = buffer(selected, abutterRange, {
-            units: 'feet'
+            units: "feet",
           });
         } catch (e) {
           // 🔥 try to capture problem of invalid geometry
           buffered = selected;
           Sentry.captureMessage(
-            `Inflate failed for ${selected.id} ${e.message}`
+            `Inflate failed for ${selected.id} ${e.message}`,
           );
         }
         return (
@@ -50,7 +50,7 @@ export class Abutters {
                 );
               } catch (e) {
                 Sentry.captureMessage(
-                  `Intersect failed for ${feature.id} with ${selected.id} ${e.message}`
+                  `Intersect failed for ${feature.id} with ${selected.id} ${e.message}`,
                 );
                 return false;
               }

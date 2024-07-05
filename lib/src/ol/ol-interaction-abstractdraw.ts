@@ -1,19 +1,19 @@
-import { DestroyService } from '../services/destroy';
-import { OLMapComponent } from './ol-map';
+import { DestroyService } from "../services/destroy";
+import { OLMapComponent } from "./ol-map";
 
-import { EventsKey as OLEventsKey } from 'ol/events';
-import { Observable } from 'rxjs';
+import { EventsKey as OLEventsKey } from "ol/events";
+import { Observable } from "rxjs";
 
-import { cleanCoords } from '@turf/clean-coords';
-import { inject } from '@angular/core';
-import { simplify } from '@turf/simplify';
-import { takeUntil } from 'rxjs/operators';
-import { unByKey } from 'ol/Observable';
+import { inject } from "@angular/core";
+import { cleanCoords } from "@turf/clean-coords";
+import { simplify } from "@turf/simplify";
+import { unByKey } from "ol/Observable";
+import { takeUntil } from "rxjs/operators";
 
-import OLDraw from 'ol/interaction/Draw';
-import OLGeoJSON from 'ol/format/GeoJSON';
-import OLVectorLayer from 'ol/layer/Vector';
-import OLVectorSource from 'ol/source/Vector';
+import OLGeoJSON from "ol/format/GeoJSON";
+import OLDraw from "ol/interaction/Draw";
+import OLVectorLayer from "ol/layer/Vector";
+import OLVectorSource from "ol/source/Vector";
 
 export abstract class OLInteractionAbstractDrawComponent {
   olDraw: OLDraw;
@@ -29,7 +29,7 @@ export abstract class OLInteractionAbstractDrawComponent {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection
+      featureProjection: this.#map.projection,
     });
   }
 
@@ -58,11 +58,11 @@ export abstract class OLInteractionAbstractDrawComponent {
       freehand: true,
       source: this.#source,
       stopClick: true,
-      type: geometryType
+      type: geometryType,
     });
     this.#drawStartKey = this.olDraw.on(
-      'drawstart',
-      () => (this.#touched = true)
+      "drawstart",
+      () => (this.#touched = true),
     );
     this.#map.olMap.addInteraction(this.olDraw);
   }
@@ -76,7 +76,7 @@ export abstract class OLInteractionAbstractDrawComponent {
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           return simplify(cleanCoords(geojson), {
             tolerance: 0.00001,
-            highQuality: false
+            highQuality: false,
           });
         });
         this.saveFeatures(geojsons).subscribe(() => this.#stopDraw());

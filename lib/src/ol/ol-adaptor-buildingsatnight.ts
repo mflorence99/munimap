@@ -1,13 +1,13 @@
-import { Adaptor } from './ol-adaptor';
-import { AdaptorComponent } from './ol-adaptor';
-import { LandmarkProperties } from '../common';
-import { LandmarkPropertiesClass } from '../common';
+import { LandmarkProperties } from "../common";
+import { LandmarkPropertiesClass } from "../common";
+import { Adaptor } from "./ol-adaptor";
+import { AdaptorComponent } from "./ol-adaptor";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { forwardRef } from '@angular/core';
-import { input } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { input } from "@angular/core";
 
 // 🔥 highly experimental
 
@@ -16,12 +16,12 @@ import { input } from '@angular/core';
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBuildingsAtNightComponent)
-    }
+      useExisting: forwardRef(() => OLAdaptorBuildingsAtNightComponent),
+    },
   ],
-  selector: 'app-ol-adaptor-buildingsatnight',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-adaptor-buildingsatnight",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLAdaptorBuildingsAtNightComponent implements Adaptor {
   fillOpacity = input(1);
@@ -30,9 +30,9 @@ export class OLAdaptorBuildingsAtNightComponent implements Adaptor {
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: '--map-buildingatnight-fill',
-        fillOpacity: this.fillOpacity()
-      })
+        fillColor: "--map-buildingatnight-fill",
+        fillOpacity: this.fillOpacity(),
+      }),
     ];
   }
 }

@@ -1,27 +1,27 @@
-import { Index } from '../lib/src/common';
-import { Layer } from '../lib/src/common';
+import { Index } from "../lib/src/common";
+import { Layer } from "../lib/src/common";
 
-import { theState } from '../lib/src/common';
+import { theState } from "../lib/src/common";
 
-import { existsSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { existsSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 
 const towns = JSON.parse(
   readFileSync(
-    './bin/assets/New_Hampshire_Political_Boundaries.geojson'
-  ).toString()
+    "./bin/assets/New_Hampshire_Political_Boundaries.geojson",
+  ).toString(),
 );
 
-const dist = './data';
+const dist = "./data";
 
 function available({ name, url }): Layer {
   return {
     available: existsSync(`${dist}${url}`),
     name,
-    url
+    url,
   };
 }
 
@@ -29,27 +29,27 @@ const index: Index = {
   [theState]: {
     layers: {
       boundary: available({
-        name: 'New Hampshire State Boundary',
-        url: `/${theState}/boundary.geojson`
+        name: "New Hampshire State Boundary",
+        url: `/${theState}/boundary.geojson`,
       }),
       counties: available({
-        name: 'New Hampshire County Boundaries',
-        url: `/${theState}/counties.geojson`
+        name: "New Hampshire County Boundaries",
+        url: `/${theState}/counties.geojson`,
       }),
       railroads: available({
-        name: 'New Hampshire Railroads',
-        url: `/${theState}/railroads.geojson`
+        name: "New Hampshire Railroads",
+        url: `/${theState}/railroads.geojson`,
       }),
       selectables: available({
-        name: 'New Hampshire County Boundaries',
-        url: `/${theState}/counties.geojson`
+        name: "New Hampshire County Boundaries",
+        url: `/${theState}/counties.geojson`,
       }),
       towns: available({
-        name: 'New Hampshire Town Boundaries',
-        url: `/${theState}/towns.geojson`
-      })
-    }
-  }
+        name: "New Hampshire Town Boundaries",
+        url: `/${theState}/towns.geojson`,
+      }),
+    },
+  },
 };
 
 towns.features.forEach((feature: GeoJSON.Feature) => {
@@ -66,17 +66,17 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
       layers: {
         boundary: available({
           name: `${county} Boundary`,
-          url: `/${theState}/${county}/boundary.geojson`
+          url: `/${theState}/${county}/boundary.geojson`,
         }),
         selectables: available({
           name: `${county} Town Boundaries`,
-          url: `/${theState}/${county}/towns.geojson`
+          url: `/${theState}/${county}/towns.geojson`,
         }),
         towns: available({
           name: `${county} Town Boundaries`,
-          url: `/${theState}/${county}/towns.geojson`
-        })
-      }
+          url: `/${theState}/${county}/towns.geojson`,
+        }),
+      },
     };
   }
 
@@ -84,53 +84,53 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
     layers: {
       boundary: available({
         name: `${town} Boundary`,
-        url: `/${theState}/${county}/${town}/boundary.geojson`
+        url: `/${theState}/${county}/${town}/boundary.geojson`,
       }),
       buildings: available({
         name: `${town} Buildings`,
-        url: `/${theState}/${county}/${town}/buildings.geojson`
+        url: `/${theState}/${county}/${town}/buildings.geojson`,
       }),
       countables: available({
         name: `${town} Countables`,
-        url: `/${theState}/${county}/${town}/countables.geojson`
+        url: `/${theState}/${county}/${town}/countables.geojson`,
       }),
       lakes: available({
         name: `${town} Lakes`,
-        url: `/${theState}/${county}/${town}/lakes.geojson`
+        url: `/${theState}/${county}/${town}/lakes.geojson`,
       }),
       parcels: available({
         name: `${town} Parcels`,
-        url: `/${theState}/${county}/${town}/parcels.geojson`
+        url: `/${theState}/${county}/${town}/parcels.geojson`,
       }),
       places: available({
         name: `${town} Places of Interest`,
-        url: `/${theState}/${county}/${town}/places.geojson`
+        url: `/${theState}/${county}/${town}/places.geojson`,
       }),
       powerlines: available({
         name: `${town} Powerlines`,
-        url: `/${theState}/${county}/${town}/powerlines.geojson`
+        url: `/${theState}/${county}/${town}/powerlines.geojson`,
       }),
       searchables: available({
         name: `${town} Searchables`,
-        url: `/${theState}/${county}/${town}/searchables.geojson`
+        url: `/${theState}/${county}/${town}/searchables.geojson`,
       }),
       selectables: available({
         name: `${town} Parcels`,
-        url: `/${theState}/${county}/${town}/parcels.geojson`
+        url: `/${theState}/${county}/${town}/parcels.geojson`,
       }),
       rivers: available({
         name: `${town} Rivers`,
-        url: `/${theState}/${county}/${town}/rivers.geojson`
+        url: `/${theState}/${county}/${town}/rivers.geojson`,
       }),
       roads: available({
         name: `${town} Roads`,
-        url: `/${theState}/${county}/${town}/roads.geojson`
+        url: `/${theState}/${county}/${town}/roads.geojson`,
       }),
       trails: available({
         name: `${town} Trails`,
-        url: `/${theState}/${county}/${town}/trails.geojson`
-      })
-    }
+        url: `/${theState}/${county}/${town}/trails.geojson`,
+      }),
+    },
   };
 });
 

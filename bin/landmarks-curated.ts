@@ -1,19 +1,19 @@
-import { Landmark } from '../lib/src/common';
-import { LandmarkPropertiesClass } from '../lib/src/common';
-import { Landmarks } from '../lib/src/common';
+import { Landmark } from "../lib/src/common";
+import { LandmarkPropertiesClass } from "../lib/src/common";
+import { Landmarks } from "../lib/src/common";
 
-import { calculateLandmark } from '../lib/src/common';
-import { makeLandmarkID } from '../lib/src/common';
-import { serializeLandmark } from '../lib/src/common';
+import { calculateLandmark } from "../lib/src/common";
+import { makeLandmarkID } from "../lib/src/common";
+import { serializeLandmark } from "../lib/src/common";
 
-import * as firebase from 'firebase-admin/app';
-import * as firestore from 'firebase-admin/firestore';
-import * as inquirer from 'inquirer';
-import * as yargs from 'yargs';
+import * as firebase from "firebase-admin/app";
+import * as firestore from "firebase-admin/firestore";
+import * as inquirer from "inquirer";
+import * as yargs from "yargs";
 
-import { readFileSync } from 'fs';
+import { readFileSync } from "fs";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 
 interface Curation {
   geojson?: Landmarks;
@@ -27,9 +27,9 @@ const CURATIONS: Curation[] = [
   // 👇 Florence/Hendrickson property bootstrap data
   // ///////////////////////////////////////////////////////////////////
   {
-    owner: 'mflo999+flo@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    source: './bin/assets/mflo-landmarks.geojson'
+    owner: "mflo999+flo@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
+    source: "./bin/assets/mflo-landmarks.geojson",
   },
   // ///////////////////////////////////////////////////////////////////
   // 👇 Correct Wolf Way alignment
@@ -39,7 +39,7 @@ const CURATIONS: Curation[] = [
       features: [
         {
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: [
               [-72.11332918690051, 43.17637767292953],
               [-72.11329035023122, 43.176338427028924],
@@ -60,34 +60,34 @@ const CURATIONS: Curation[] = [
               [-72.1142520570034, 43.17565212553566],
               [-72.11432067188095, 43.17576220914333],
               [-72.11434034853117, 43.175847000742124],
-              [-72.11440987122175, 43.17597987387427]
-            ]
+              [-72.11440987122175, 43.17597987387427],
+            ],
           },
           properties: {
             ...new LandmarkPropertiesClass({
-              fontColor: '--map-road-text-color-V',
+              fontColor: "--map-road-text-color-V",
               fontOpacity: 1,
               fontOutline: true,
-              fontSize: 'medium',
-              fontStyle: 'bold',
+              fontSize: "medium",
+              fontStyle: "bold",
               lineSpline: true,
-              strokeColor: '--map-road-lane-V',
+              strokeColor: "--map-road-lane-V",
               strokeFeet: 48 /* 👈 feet */,
               strokeOpacity: 1,
               strokeOutline: true,
-              strokeOutlineColor: '--map-road-edge-V',
-              strokeStyle: 'solid',
-              zIndex: 1
+              strokeOutlineColor: "--map-road-edge-V",
+              strokeStyle: "solid",
+              zIndex: 1,
             }),
-            name: 'Wolf Way'
+            name: "Wolf Way",
           },
-          type: 'Feature'
-        }
+          type: "Feature",
+        },
       ],
-      type: 'FeatureCollection'
+      type: "FeatureCollection",
     },
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
   },
   // ///////////////////////////////////////////////////////////////////
   // 👇 Tom Cross's map amendments
@@ -97,7 +97,7 @@ const CURATIONS: Curation[] = [
       features: [
         {
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: [
               [-72.15684443476792, 43.15072211573772],
               [-72.15680718420808, 43.15063152763469],
@@ -116,34 +116,34 @@ const CURATIONS: Curation[] = [
               [-72.15350430123631, 43.1484754911568],
               [-72.15344842539655, 43.1483396039572],
               [-72.15340496641008, 43.14818106850913],
-              [-72.15340496641008, 43.14797270700919]
-            ]
+              [-72.15340496641008, 43.14797270700919],
+            ],
           },
           properties: {
             ...new LandmarkPropertiesClass({
-              fontColor: '--map-road-edge-VI',
+              fontColor: "--map-road-edge-VI",
               fontOpacity: 1,
               fontOutline: true,
-              fontSize: 'medium',
-              fontStyle: 'bold',
+              fontSize: "medium",
+              fontStyle: "bold",
               lineSpline: true,
-              strokeColor: '--map-road-lane-VI',
+              strokeColor: "--map-road-lane-VI",
               strokeFeet: 48 /* 👈 feet */,
               strokeOpacity: 1,
               strokeOutline: true,
-              strokeOutlineColor: '--map-road-edge-VI',
-              strokePattern: 'conglomerate',
+              strokeOutlineColor: "--map-road-edge-VI",
+              strokePattern: "conglomerate",
               strokePatternScale: 0.66,
-              strokeStyle: 'solid',
-              zIndex: 1
+              strokeStyle: "solid",
+              zIndex: 1,
             }),
-            name: 'Private Way'
+            name: "Private Way",
           },
-          type: 'Feature'
+          type: "Feature",
         },
         {
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: [
               [-72.15666439039539, 43.15076288034035],
               [-72.15670784938186, 43.15069946872458],
@@ -155,77 +155,77 @@ const CURATIONS: Curation[] = [
               [-72.15719210665968, 43.14977546343101],
               [-72.1572107319396, 43.149743757119126],
               [-72.15723556564616, 43.149562577878555],
-              [-72.1572914414859, 43.14935875059095]
-            ]
+              [-72.1572914414859, 43.14935875059095],
+            ],
           },
           properties: {
             ...new LandmarkPropertiesClass({
-              fontColor: '--map-place-water-color',
+              fontColor: "--map-place-water-color",
               fontOpacity: 1,
               fontOutline: true,
-              fontSize: 'large',
-              fontStyle: 'bold'
+              fontSize: "large",
+              fontStyle: "bold",
             }),
-            name: 'Ashuelot River'
+            name: "Ashuelot River",
           },
-          type: 'Feature'
-        }
+          type: "Feature",
+        },
       ],
-      type: 'FeatureCollection'
+      type: "FeatureCollection",
     },
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
-  }
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
+  },
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv['useEmulator'];
+const useEmulator = yargs.argv["useEmulator"];
 
-if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
+if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
 
 // 👇 https://stackoverflow.com/questions/49691215/cloud-functions-how-to-copy-firestore-collection-to-a-new-document
 
 firebase.initializeApp({
-  credential: firebase.cert('./firebase-admin.json'),
-  databaseURL: 'https://washington-app-319514.firebaseio.com'
+  credential: firebase.cert("./firebase-admin.json"),
+  databaseURL: "https://washington-app-319514.firebaseio.com",
 });
 
 const db = firestore.getFirestore();
-const landmarks = db.collection('landmarks');
+const landmarks = db.collection("landmarks");
 
 async function main(): Promise<void> {
   if (!useEmulator) {
     const response = await inquirer.prompt([
       {
-        type: 'input',
-        name: 'proceed',
-        choices: ['y', 'n'],
-        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
-      }
+        type: "input",
+        name: "proceed",
+        choices: ["y", "n"],
+        message: "WARNING: running on live Firestore. Proceed? (y/N)",
+      },
     ]);
-    if (response.proceed.toLowerCase() !== 'y') return;
+    if (response.proceed.toLowerCase() !== "y") return;
   }
 
   // 👇 delete all curated Landmarks
   let numDeleted = 0;
-  const curated = await landmarks.where('curated', '==', true).get();
+  const curated = await landmarks.where("curated", "==", true).get();
   for (const doc of curated.docs) {
     await doc.ref.delete();
-    process.stdout.write('.');
+    process.stdout.write(".");
     numDeleted += 1;
   }
 
   console.log(
-    chalk.red(`... ${numDeleted} previously curated landmarks deleted`)
+    chalk.red(`... ${numDeleted} previously curated landmarks deleted`),
   );
 
   // 👇 for each curation ...
   for (const curation of CURATIONS) {
     console.log(
       chalk.green(
-        `... processing curation for ${curation.owner} in ${curation.path}`
-      )
+        `... processing curation for ${curation.owner} in ${curation.path}`,
+      ),
     );
 
     // 👉 source is external GPX or inline GeoJSON
@@ -240,8 +240,8 @@ async function main(): Promise<void> {
 
       console.log(
         chalk.yellow(
-          `...... adding curated landmark ${feature.properties.name}`
-        )
+          `...... adding curated landmark ${feature.properties.name}`,
+        ),
       );
 
       // 👇 construct the new landmark
@@ -252,7 +252,7 @@ async function main(): Promise<void> {
         owner: curation.owner,
         path: curation.path,
         properties: feature.properties,
-        type: 'Feature'
+        type: "Feature",
       };
 
       // 👇 so that they can't get duplicated
@@ -265,7 +265,7 @@ async function main(): Promise<void> {
     }
 
     console.log(
-      chalk.blue(`...... waiting for ${promises.length} promises to resolve`)
+      chalk.blue(`...... waiting for ${promises.length} promises to resolve`),
     );
     await Promise.all(promises);
   }

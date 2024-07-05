@@ -1,20 +1,20 @@
-import { HistoricalMap } from '../common';
-import { OLLayerTileComponent } from './ol-layer-tile';
+import { HistoricalMap } from "../common";
+import { OLLayerTileComponent } from "./ol-layer-tile";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { effect } from '@angular/core';
-import { inject } from '@angular/core';
-import { input } from '@angular/core';
+import { effect } from "@angular/core";
+import { inject } from "@angular/core";
+import { input } from "@angular/core";
 
-import OLXYZ from 'ol/source/XYZ';
+import OLXYZ from "ol/source/XYZ";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-historicalxyz',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-historicalxyz",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceHistoricalXYZComponent {
   historicalMap = input.required<HistoricalMap>();
@@ -25,14 +25,14 @@ export class OLSourceHistoricalXYZComponent {
   constructor() {
     effect(() => {
       const historicalMap = this.historicalMap();
-      if (historicalMap.type === 'xyz') {
+      if (historicalMap.type === "xyz") {
         // 👇 create the image source
         this.olXYZ = new OLXYZ({
           attributions: [historicalMap.attribution],
-          crossOrigin: 'anonymous',
+          crossOrigin: "anonymous",
           maxZoom: historicalMap.maxZoom,
           minZoom: historicalMap.minZoom,
-          url: historicalMap.url
+          url: historicalMap.url,
         });
         this.olXYZ.setProperties({ component: this }, true);
       }

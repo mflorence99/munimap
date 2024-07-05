@@ -4,7 +4,7 @@
     "attributePosition": "auto",
     "enabled": true,
     "formatWithErrors": false,
-    "ignore": ["./.angular", "./.nx", "./data", "./dist", "./node_modules"],
+    "ignore": [".angular/", ".nx/", "data/", "dist/", "node_modules/"],
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",

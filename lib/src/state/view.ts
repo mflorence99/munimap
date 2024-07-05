@@ -1,25 +1,25 @@
-import { theState } from '../common';
+import { theState } from "../common";
 
-import { Action } from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { Selector } from '@ngxs/store';
-import { State } from '@ngxs/store';
-import { StateContext } from '@ngxs/store';
-import { Store } from '@ngxs/store';
+import { Injectable } from "@angular/core";
+import { Action } from "@ngxs/store";
+import { Selector } from "@ngxs/store";
+import { State } from "@ngxs/store";
+import { StateContext } from "@ngxs/store";
+import { Store } from "@ngxs/store";
 
-import { inject } from '@angular/core';
-import { patch } from '@ngxs/store/operators';
+import { inject } from "@angular/core";
+import { patch } from "@ngxs/store/operators";
 
 export type ParcelCoding =
-  | 'conformity'
-  | 'history'
-  | 'ownership'
-  | 'topography'
-  | 'usage';
+  | "conformity"
+  | "history"
+  | "ownership"
+  | "topography"
+  | "usage";
 
 export type Path = string;
 
-const ACTION_SCOPE = 'View';
+const ACTION_SCOPE = "View";
 
 export namespace ViewActions {
   export class SetGPS {
@@ -66,7 +66,7 @@ export namespace ViewActions {
     static readonly type = `[${ACTION_SCOPE}] UpdateView`;
     constructor(
       public path: Path,
-      public view: View
+      public view: View,
     ) {}
   }
 }
@@ -90,21 +90,21 @@ export interface ViewStateModel {
 }
 
 @State<ViewStateModel>({
-  name: 'view',
+  name: "view",
   defaults: {
     gps: false,
-    historicalMapLeft: '',
-    historicalMapRight: '',
-    parcelCoding: 'usage',
+    historicalMapLeft: "",
+    historicalMapRight: "",
+    parcelCoding: "usage",
     recentPath: null,
     satelliteView: false,
-    satelliteYear: '',
+    satelliteYear: "",
     sideBySideView: false,
-    streetFilter: '',
+    streetFilter: "",
     viewByPath: {
-      [theState]: { center: null, zoom: null }
-    }
-  }
+      [theState]: { center: null, zoom: null },
+    },
+  },
 })
 @Injectable()
 export class ViewState {
@@ -117,20 +117,20 @@ export class ViewState {
   @Selector() static historicalMapLeft(state: ViewStateModel): string {
     return (
       state.historicalMapLeft ||
-      '' /* 👈 b/c historicalMapLeft was added later */
+      "" /* 👈 b/c historicalMapLeft was added later */
     );
   }
 
   @Selector() static historicalMapRight(state: ViewStateModel): string {
     return (
       state.historicalMapRight ||
-      '' /* 👈 b/c historicalMapRight was added later */
+      "" /* 👈 b/c historicalMapRight was added later */
     );
   }
 
   @Selector() static parcelCoding(state: ViewStateModel): ParcelCoding {
     return (
-      state.parcelCoding || 'usage' /* 👈 b/c parcelCoding was added later */
+      state.parcelCoding || "usage" /* 👈 b/c parcelCoding was added later */
     );
   }
 
@@ -139,7 +139,7 @@ export class ViewState {
   }
 
   @Selector() static satelliteYear(state: ViewStateModel): string {
-    return state.satelliteYear || '' /* 👈 b/c satelliteYear was added later */;
+    return state.satelliteYear || "" /* 👈 b/c satelliteYear was added later */;
   }
 
   @Selector() static sideBySideView(state: ViewStateModel): boolean {
@@ -147,7 +147,7 @@ export class ViewState {
   }
 
   @Selector() static streetFilter(state: ViewStateModel): string {
-    return state.streetFilter || '' /* 👈 b/c streetFilter was added later */;
+    return state.streetFilter || "" /* 👈 b/c streetFilter was added later */;
   }
 
   @Selector() static view(state: ViewStateModel): ViewStateModel {
@@ -157,68 +157,68 @@ export class ViewState {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @Action(ViewActions.SetGPS) setGPS(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetGPS
+    action: ViewActions.SetGPS,
   ): void {
     ctx.setState(patch({ gps: action.gps }));
   }
 
   @Action(ViewActions.SetHistoricalMapLeft) setHistoricalMapLeft(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetHistoricalMapLeft
+    action: ViewActions.SetHistoricalMapLeft,
   ): void {
     ctx.setState(patch({ historicalMapLeft: action.historicalMapLeft }));
   }
 
   @Action(ViewActions.SetHistoricalMapRight) setHistoricalMapRight(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetHistoricalMapRight
+    action: ViewActions.SetHistoricalMapRight,
   ): void {
     ctx.setState(patch({ historicalMapRight: action.historicalMapRight }));
   }
 
   @Action(ViewActions.SetParcelCoding) setParcelCoding(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetParcelCoding
+    action: ViewActions.SetParcelCoding,
   ): void {
     ctx.setState(patch({ parcelCoding: action.parcelCoding }));
   }
 
   @Action(ViewActions.SetSatelliteView) setSatelliteView(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetSatelliteView
+    action: ViewActions.SetSatelliteView,
   ): void {
     ctx.setState(patch({ satelliteView: action.satelliteView }));
   }
 
   @Action(ViewActions.SetSatelliteYear) setSatelliteYear(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetSatelliteYear
+    action: ViewActions.SetSatelliteYear,
   ): void {
     ctx.setState(patch({ satelliteYear: action.satelliteYear }));
   }
 
   @Action(ViewActions.SetSideBySideView) setSideBySideView(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetSideBySideView
+    action: ViewActions.SetSideBySideView,
   ): void {
     ctx.setState(patch({ sideBySideView: action.sideBySideView }));
   }
 
   @Action(ViewActions.SetStreetFilter) setStreetFilter(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetStreetFilter
+    action: ViewActions.SetStreetFilter,
   ): void {
     ctx.setState(patch({ streetFilter: action.streetFilter }));
   }
 
   @Action(ViewActions.UpdateView) updateView(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.UpdateView
+    action: ViewActions.UpdateView,
   ): void {
     const path = action.path;
     const view = action.view;
     ctx.setState(
-      patch({ recentPath: path, viewByPath: patch({ [path]: view }) })
+      patch({ recentPath: path, viewByPath: patch({ [path]: view }) }),
     );
   }
 

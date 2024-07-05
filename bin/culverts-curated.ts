@@ -1,23 +1,23 @@
-import { CulvertProperties } from '../lib/src/common';
-import { Landmark } from '../lib/src/common';
+import { CulvertProperties } from "../lib/src/common";
+import { Landmark } from "../lib/src/common";
 
-import { culvertConditions } from '../lib/src/common';
-import { culvertFloodHazards } from '../lib/src/common';
-import { culvertHeadwalls } from '../lib/src/common';
-import { culvertMaterials } from '../lib/src/common';
-import { makeLandmarkID } from '../lib/src/common';
-import { serializeLandmark } from '../lib/src/common';
+import { culvertConditions } from "../lib/src/common";
+import { culvertFloodHazards } from "../lib/src/common";
+import { culvertHeadwalls } from "../lib/src/common";
+import { culvertMaterials } from "../lib/src/common";
+import { makeLandmarkID } from "../lib/src/common";
+import { serializeLandmark } from "../lib/src/common";
 
-import * as firebase from 'firebase-admin/app';
-import * as firestore from 'firebase-admin/firestore';
-import * as inquirer from 'inquirer';
-import * as yargs from 'yargs';
+import * as firebase from "firebase-admin/app";
+import * as firestore from "firebase-admin/firestore";
+import * as inquirer from "inquirer";
+import * as yargs from "yargs";
 
-import { XMLParser } from 'fast-xml-parser';
+import { XMLParser } from "fast-xml-parser";
 
-import { readFileSync } from 'fs';
+import { readFileSync } from "fs";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 
 interface Curation {
   owner: string;
@@ -30,27 +30,27 @@ const CURATIONS: Curation[] = [
   // 👇 DPW culverts
   // ///////////////////////////////////////////////////////////////////
   {
-    owner: 'ljg@gsinet.net',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
-    source: './bin/assets/dpw/culverts-curated.gpx'
-  }
+    owner: "ljg@gsinet.net",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
+    source: "./bin/assets/dpw/culverts-curated.gpx",
+  },
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv['useEmulator'];
+const useEmulator = yargs.argv["useEmulator"];
 
-if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
+if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
 
 // 👇 https://stackoverflow.com/questions/49691215/cloud-functions-how-to-copy-firestore-collection-to-a-new-document
 
 firebase.initializeApp({
-  credential: firebase.cert('./firebase-admin.json'),
-  databaseURL: 'https://washington-app-319514.firebaseio.com'
+  credential: firebase.cert("./firebase-admin.json"),
+  databaseURL: "https://washington-app-319514.firebaseio.com",
 });
 
 const db = firestore.getFirestore();
-const landmarks = db.collection('landmarks');
+const landmarks = db.collection("landmarks");
 
 // 👇 let's rock!
 
@@ -58,34 +58,34 @@ async function main(): Promise<void> {
   if (!useEmulator) {
     const response = await inquirer.prompt([
       {
-        type: 'input',
-        name: 'proceed',
-        choices: ['y', 'n'],
-        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
-      }
+        type: "input",
+        name: "proceed",
+        choices: ["y", "n"],
+        message: "WARNING: running on live Firestore. Proceed? (y/N)",
+      },
     ]);
-    if (response.proceed.toLowerCase() !== 'y') return;
+    if (response.proceed.toLowerCase() !== "y") return;
   }
 
   // 👇 for each curation ...
   for (const curation of CURATIONS) {
     console.log(
       chalk.green(
-        `... processing curation for ${curation.owner} in ${curation.path}`
-      )
+        `... processing curation for ${curation.owner} in ${curation.path}`,
+      ),
     );
 
     // 👇 delete all curated culverts
     let numDeleted = 0;
-    const curated = await landmarks.where('owner', '==', curation.owner).get();
+    const curated = await landmarks.where("owner", "==", curation.owner).get();
     for (const doc of curated.docs) {
       await doc.ref.delete();
-      process.stdout.write('.');
+      process.stdout.write(".");
       numDeleted += 1;
     }
 
     console.log(
-      chalk.red(`... ${numDeleted} previously curated culverts deleted`)
+      chalk.red(`... ${numDeleted} previously curated culverts deleted`),
     );
 
     // 👇 load up GPX
@@ -107,7 +107,7 @@ async function main(): Promise<void> {
       const properties: CulvertProperties = {
         condition: culvertConditions[0],
         count: 1,
-        description: culvert.desc !== 'undefined' ? culvert.desc : null,
+        description: culvert.desc !== "undefined" ? culvert.desc : null,
         diameter: 0,
         floodHazard: culvertFloodHazards[0],
         headwall: culvertHeadwalls[0],
@@ -115,9 +115,9 @@ async function main(): Promise<void> {
         length: 0,
         location: culvert.keywords,
         material: culvertMaterials[0],
-        type: 'culvert',
+        type: "culvert",
         width: 0,
-        year: null
+        year: null,
       };
 
       // 🔥 see import-culverts.ts
@@ -132,7 +132,7 @@ async function main(): Promise<void> {
         if (/^[\d]+"$/.test(part))
           properties.diameter = Number(part.substring(0, part.length - 1));
         if (/^[\d]+["']?x[\d]+["']?$/.test(part)) {
-          const dims = part.replaceAll(/["']/g, '').split('x');
+          const dims = part.replaceAll(/["']/g, "").split("x");
           properties.height = Number(dims[1]);
           properties.width = Number(dims[0]);
         }
@@ -146,21 +146,21 @@ async function main(): Promise<void> {
 
       console.log(
         chalk.yellow(
-          `...... adding curated culvert [${culvert['@_lon']}, ${culvert['@_lat']}] ${culvert.name} ${culvert.keywords}`
-        )
+          `...... adding curated culvert [${culvert["@_lon"]}, ${culvert["@_lat"]}] ${culvert.name} ${culvert.keywords}`,
+        ),
       );
 
       // 👇 construct the new landmark
       const landmark: Landmark = {
         geometry: {
-          coordinates: [culvert['@_lon'], culvert['@_lat']],
-          type: 'Point'
+          coordinates: [culvert["@_lon"], culvert["@_lat"]],
+          type: "Point",
         },
         id: null,
         owner: curation.owner,
         path: curation.path,
         properties: { metadata: properties },
-        type: 'Feature'
+        type: "Feature",
       };
 
       // 👇 so that they can't get duplicated
@@ -172,7 +172,7 @@ async function main(): Promise<void> {
     });
 
     console.log(
-      chalk.blue(`...... waiting for ${promises.length} promises to resolve`)
+      chalk.blue(`...... waiting for ${promises.length} promises to resolve`),
     );
     await Promise.all(promises);
   }

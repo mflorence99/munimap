@@ -1,23 +1,23 @@
-import { SidebarComponent } from '../../components/sidebar-component';
+import { SidebarComponent } from "../../components/sidebar-component";
 
-import { AuthState } from '@lib/state/auth';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { Parcel } from '@lib/common';
-import { ParcelID } from '@lib/common';
-import { ParcelsActions } from '@lib/state/parcels';
-import { Store } from '@ngxs/store';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { MatDrawer } from "@angular/material/sidenav";
+import { Parcel } from "@lib/common";
+import { ParcelID } from "@lib/common";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { AuthState } from "@lib/state/auth";
+import { ParcelsActions } from "@lib/state/parcels";
+import { Store } from "@ngxs/store";
 
-import { bbox } from '@turf/bbox';
-import { bboxPolygon } from '@turf/bbox-polygon';
-import { circle } from '@turf/circle';
-import { convertArea } from '@turf/helpers';
-import { inject } from '@angular/core';
-import { toLonLat } from 'ol/proj';
+import { inject } from "@angular/core";
+import { bbox } from "@turf/bbox";
+import { bboxPolygon } from "@turf/bbox-polygon";
+import { circle } from "@turf/circle";
+import { convertArea } from "@turf/helpers";
+import { toLonLat } from "ol/proj";
 
-import OLFeature from 'ol/Feature';
+import OLFeature from "ol/Feature";
 
 interface Addition {
   area: number;
@@ -26,7 +26,7 @@ interface Addition {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-add-parcel',
+  selector: "app-add-parcel",
   template: `
     <header class="header">
       <figure class="icon">
@@ -116,8 +116,8 @@ interface Addition {
           width: 10rem;
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class AddParcelComponent implements SidebarComponent {
   addition: Addition = {} as Addition;
@@ -142,35 +142,35 @@ export class AddParcelComponent implements SidebarComponent {
   save(addition: Addition): void {
     // 👇 create a square centered on the context menu of area equal
     //    to the given area of the addition
-    const diameter = Math.sqrt(convertArea(addition.area, 'acres', 'miles'));
+    const diameter = Math.sqrt(convertArea(addition.area, "acres", "miles"));
     const geojson = bboxPolygon(
       bbox(
         circle(toLonLat(this.map.contextMenuAt), diameter / 2, {
           steps: 16,
-          units: 'miles'
-        })
-      )
+          units: "miles",
+        }),
+      ),
     );
     // 👉 build the new parcel
     const addedParcel: Parcel = {
-      action: 'added',
+      action: "added",
       geometry: geojson.geometry,
       id: addition.id,
       owner: this.#authState.currentProfile().email,
       path: this.map.path(),
       properties: {
-        address: 'UNKNOWN',
+        address: "UNKNOWN",
         area: addition.area,
-        county: this.map.path().split(':')[1],
+        county: this.map.path().split(":")[1],
         id: addition.id,
-        neighborhood: '',
-        owner: 'UNKNOWN',
-        town: this.map.path().split(':')[2],
-        usage: '110',
-        use: '',
-        zone: ''
+        neighborhood: "",
+        owner: "UNKNOWN",
+        town: this.map.path().split(":")[2],
+        usage: "110",
+        use: "",
+        zone: "",
       },
-      type: 'Feature'
+      type: "Feature",
     };
     // that's it!
     this.#store.dispatch(new ParcelsActions.AddParcels([addedParcel]));

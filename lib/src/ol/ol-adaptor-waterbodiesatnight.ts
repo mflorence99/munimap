@@ -1,14 +1,14 @@
-import { Adaptor } from './ol-adaptor';
-import { AdaptorComponent } from './ol-adaptor';
-import { LandmarkProperties } from '../common';
-import { LandmarkPropertiesClass } from '../common';
-import { OLFillPatternType } from './ol-styler';
+import { LandmarkProperties } from "../common";
+import { LandmarkPropertiesClass } from "../common";
+import { Adaptor } from "./ol-adaptor";
+import { AdaptorComponent } from "./ol-adaptor";
+import { OLFillPatternType } from "./ol-styler";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { forwardRef } from '@angular/core';
-import { input } from '@angular/core';
+import { forwardRef } from "@angular/core";
+import { input } from "@angular/core";
 
 // 🔥 highly experimental -- would like to show some reflection at least!
 
@@ -17,16 +17,16 @@ import { input } from '@angular/core';
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorWaterbodiesAtNightComponent)
-    }
+      useExisting: forwardRef(() => OLAdaptorWaterbodiesAtNightComponent),
+    },
   ],
-  selector: 'app-ol-adaptor-waterbodiesatnight',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-adaptor-waterbodiesatnight",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLAdaptorWaterbodiesAtNightComponent implements Adaptor {
   fillOpacity = input(1);
-  pattern = input<OLFillPatternType>('conglomerate2');
+  pattern = input<OLFillPatternType>("conglomerate2");
   patternOpacity = input(1);
   patternScale = input(0.5);
 
@@ -34,15 +34,15 @@ export class OLAdaptorWaterbodiesAtNightComponent implements Adaptor {
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: '--map-waterbodyatnight-fill',
-        fillOpacity: this.fillOpacity()
+        fillColor: "--map-waterbodyatnight-fill",
+        fillOpacity: this.fillOpacity(),
       }),
       new LandmarkPropertiesClass({
-        fillColor: '--map-waterbodyatnight-pattern',
+        fillColor: "--map-waterbodyatnight-pattern",
         fillOpacity: this.patternOpacity(),
         fillPattern: this.pattern(),
-        fillPatternScale: this.patternScale()
-      })
+        fillPatternScale: this.patternScale(),
+      }),
     ];
   }
 }

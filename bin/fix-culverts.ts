@@ -1,13 +1,13 @@
-import * as inquirer from 'inquirer';
+import * as inquirer from "inquirer";
 
-import { XMLBuilder } from 'fast-xml-parser';
-import { XMLParser } from 'fast-xml-parser';
+import { XMLBuilder } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser";
 
-import { exit } from 'process';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
+import { exit } from "process";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 // import jsome from 'jsome';
 
 type Culvert = {
@@ -29,9 +29,9 @@ type GPX = {
 type LonLat = { lat: number; lon: number };
 
 const XMLOptions = {
-  attributeNamePrefix: '$$',
+  attributeNamePrefix: "$$",
   format: true,
-  ignoreAttributes: false
+  ignoreAttributes: false,
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -43,9 +43,9 @@ const XMLOptions = {
 async function main(): Promise<void> {
   // 👇 which GPX?
   const input = await inquirer.prompt({
-    message: 'Enter path to culverts GPX:',
-    name: 'path',
-    type: 'input'
+    message: "Enter path to culverts GPX:",
+    name: "path",
+    type: "input",
   });
 
   // 👇 read and parse the GPX
@@ -56,11 +56,11 @@ async function main(): Promise<void> {
   // 🔥 if not enough coordinates, bail
   const numCulverts = gpx.gpx.wpt.length;
   const withCoordinates = gpx.gpx.wpt.filter((culvert) =>
-    isCoord(lonlat(culvert))
+    isCoord(lonlat(culvert)),
   );
   const numCoordinates = withCoordinates.length;
   if (numCoordinates < 3 || numCoordinates / numCulverts < 0.75) {
-    console.log(chalk.red('🔥 Too many missing coordinates found in GPX!'));
+    console.log(chalk.red("🔥 Too many missing coordinates found in GPX!"));
     exit(-1);
   }
 
@@ -79,7 +79,7 @@ async function main(): Promise<void> {
         const next = lonlat(array.at(ix + 1));
         acc.push({
           lon: Math.abs(next.lon - curr.lon),
-          lat: Math.abs(next.lat - curr.lat)
+          lat: Math.abs(next.lat - curr.lat),
         });
       }
       return acc;
@@ -93,7 +93,7 @@ async function main(): Promise<void> {
           ? { lon: acc.lon / array.length, lat: acc.lat / array.length }
           : acc;
       },
-      { lon: 0, lat: 0 }
+      { lon: 0, lat: 0 },
     );
 
   // 👇 for each culvert ...
@@ -102,7 +102,7 @@ async function main(): Promise<void> {
     let extrapolated = false;
 
     // 👇 description can't be undefined
-    if (culvert.desc === 'undefined') delete culvert.desc;
+    if (culvert.desc === "undefined") delete culvert.desc;
 
     // 👇 we don't use type or time at all
     delete culvert.time;
@@ -133,13 +133,13 @@ async function main(): Promise<void> {
       culvert.$$lon = String(curr.lon);
       culvert.$$lat = String(curr.lat);
       if (extrapolated) {
-        const flag = 'LOCATION EXTRAPOLATED';
+        const flag = "LOCATION EXTRAPOLATED";
         if (culvert.desc) culvert.desc = `${culvert.desc} (${flag})`;
         else culvert.desc = flag;
       }
     } else {
       console.log(
-        chalk.red('🔥 SHOULD NOT OCCUR - unable to extrapolate coordinate!')
+        chalk.red("🔥 SHOULD NOT OCCUR - unable to extrapolate coordinate!"),
       );
       exit(-1);
     }
@@ -148,18 +148,18 @@ async function main(): Promise<void> {
     console.log(
       chalk.whiteBright(`#${ix + 1}`),
       (extrapolated ? chalk.redBright : chalk.yellow)(
-        `[${curr.lon}, ${curr.lat}]`
+        `[${curr.lon}, ${curr.lat}]`,
       ),
       chalk.cyan(`${culvert.name}`),
-      chalk.magenta(`${culvert.desc ?? ''}`)
+      chalk.magenta(`${culvert.desc ?? ""}`),
     );
   });
 
   // 👇 where to write?
   const output = await inquirer.prompt({
-    message: 'Enter path to culverts GPX:',
-    name: 'path',
-    type: 'input'
+    message: "Enter path to culverts GPX:",
+    name: "path",
+    type: "input",
   });
 
   // 👇 reconstitute the GPX and save it
@@ -174,7 +174,7 @@ async function main(): Promise<void> {
 function findCoord(
   culverts: Culvert[],
   ix: number,
-  step: number
+  step: number,
 ): [LonLat, number] {
   let count, coord;
   for (count = 1; ix > 0 && ix < culverts.length - 1; count++) {

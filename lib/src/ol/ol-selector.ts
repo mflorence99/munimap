@@ -1,9 +1,9 @@
-import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLLayerVectorComponent } from "./ol-layer-vector";
 
-import { Injectable } from '@angular/core';
-import { OutputEmitterRef } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { OutputEmitterRef } from "@angular/core";
 
-import OLFeature from 'ol/Feature';
+import OLFeature from "ol/Feature";
 
 // 👇 https://sambleckley.com/writing/angular-mixed-type-contentchildren-that-share-an-interface.html
 

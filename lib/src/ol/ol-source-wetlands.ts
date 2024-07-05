@@ -1,18 +1,18 @@
-import { OLSourceArcGISComponent } from './ol-source-arcgis';
-import { WetlandProperties } from '../common';
+import { WetlandProperties } from "../common";
+import { OLSourceArcGISComponent } from "./ol-source-arcgis";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Coordinate } from "ol/coordinate";
 
 const attribution =
   '<a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-source-wetlands',
-  template: '<ng-content></ng-content>',
-  styles: [':host { display: none }']
+  selector: "app-ol-source-wetlands",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
 })
 export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
   // 👇 see WetlandProperties
@@ -21,11 +21,11 @@ export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: WetlandProperties = feature.attributes;
-        properties.type = ['Freshwater Pond', 'Riverine'].includes(
-          properties.WETLAND_TY
+        properties.type = ["Freshwater Pond", "Riverine"].includes(
+          properties.WETLAND_TY,
         )
-          ? 'water'
-          : 'marsh';
+          ? "water"
+          : "marsh";
       });
       return arcgis;
     } else return super.filter(arcgis);
@@ -40,7 +40,7 @@ export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return 'wetland';
+    return "wetland";
   }
 
   getURL(extent: Coordinate): string {

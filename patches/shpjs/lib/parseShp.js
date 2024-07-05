@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function isClockWise(array) {
   let sum = 0;
@@ -24,8 +24,8 @@ function polyReduce(a, b) {
 }
 ParseShp.prototype.parsePoint = function (data) {
   return {
-    type: 'Point',
-    coordinates: this.parseCoord(data, 0)
+    type: "Point",
+    coordinates: this.parseCoord(data, 0),
   };
 };
 ParseShp.prototype.parseZPoint = function (data) {
@@ -47,7 +47,7 @@ ParseShp.prototype.parseZPointArray = function (
   data,
   zOffset,
   num,
-  coordinates
+  coordinates,
 ) {
   let i = 0;
   while (i < num) {
@@ -62,7 +62,7 @@ ParseShp.prototype.parseArrayGroup = function (
   offset,
   partOffset,
   num,
-  tot
+  tot,
 ) {
   const out = [];
   let done = 0;
@@ -91,7 +91,7 @@ ParseShp.prototype.parseZArrayGroup = function (
   data,
   zOffset,
   num,
-  coordinates
+  coordinates,
 ) {
   let i = 0;
   while (i < num) {
@@ -99,7 +99,7 @@ ParseShp.prototype.parseZArrayGroup = function (
       data,
       zOffset,
       coordinates[i].length,
-      coordinates[i]
+      coordinates[i],
     );
     zOffset += coordinates[i].length << 3;
     i++;
@@ -114,10 +114,10 @@ ParseShp.prototype.parseMultiPoint = function (data) {
   const num = data.readInt32LE(32, true);
   const offset = 36;
   if (num === 1) {
-    out.type = 'Point';
+    out.type = "Point";
     out.coordinates = this.parseCoord(data, offset);
   } else {
-    out.type = 'MultiPoint';
+    out.type = "MultiPoint";
     out.coordinates = this.parsePointArray(data, offset, num);
   }
   return out;
@@ -125,7 +125,7 @@ ParseShp.prototype.parseMultiPoint = function (data) {
 ParseShp.prototype.parseZMultiPoint = function (data) {
   const geoJson = this.parseMultiPoint(data);
   let num;
-  if (geoJson.type === 'Point') {
+  if (geoJson.type === "Point") {
     geoJson.coordinates.push(data.readDoubleLE(72));
     return geoJson;
   } else {
@@ -136,7 +136,7 @@ ParseShp.prototype.parseZMultiPoint = function (data) {
     data,
     zOffset,
     num,
-    geoJson.coordinates
+    geoJson.coordinates,
   );
   return geoJson;
 };
@@ -149,11 +149,11 @@ ParseShp.prototype.parsePolyline = function (data) {
   const num = data.readInt32LE(36);
   let offset, partOffset;
   if (numParts === 1) {
-    out.type = 'LineString';
+    out.type = "LineString";
     offset = 44;
     out.coordinates = this.parsePointArray(data, offset, num);
   } else {
-    out.type = 'MultiLineString';
+    out.type = "MultiLineString";
     offset = 40 + (numParts << 2);
     partOffset = 40;
     out.coordinates = this.parseArrayGroup(
@@ -161,7 +161,7 @@ ParseShp.prototype.parsePolyline = function (data) {
       offset,
       partOffset,
       numParts,
-      num
+      num,
     );
   }
   return out;
@@ -170,13 +170,13 @@ ParseShp.prototype.parseZPolyline = function (data) {
   const geoJson = this.parsePolyline(data);
   const num = geoJson.coordinates.length;
   let zOffset;
-  if (geoJson.type === 'LineString') {
+  if (geoJson.type === "LineString") {
     zOffset = 60 + (num << 4);
     geoJson.coordinates = this.parseZPointArray(
       data,
       zOffset,
       num,
-      geoJson.coordinates
+      geoJson.coordinates,
     );
     return geoJson;
   } else {
@@ -188,24 +188,24 @@ ParseShp.prototype.parseZPolyline = function (data) {
       data,
       zOffset,
       num,
-      geoJson.coordinates
+      geoJson.coordinates,
     );
     return geoJson;
   }
 };
 ParseShp.prototype.polyFuncs = function (out) {
-  if (out.type === 'LineString') {
-    out.type = 'Polygon';
+  if (out.type === "LineString") {
+    out.type = "Polygon";
     out.coordinates = [out.coordinates];
     return out;
   } else {
     out.coordinates = out.coordinates.reduce(polyReduce, []);
     if (out.coordinates.length === 1) {
-      out.type = 'Polygon';
+      out.type = "Polygon";
       out.coordinates = out.coordinates[0];
       return out;
     } else {
-      out.type = 'MultiPolygon';
+      out.type = "MultiPolygon";
       return out;
     }
   }
@@ -217,14 +217,14 @@ ParseShp.prototype.parseZPolygon = function (data) {
   return this.polyFuncs(this.parseZPolyline(data));
 };
 const shpFuncObj = {
-  1: 'parsePoint',
-  3: 'parsePolyline',
-  5: 'parsePolygon',
-  8: 'parseMultiPoint',
-  11: 'parseZPoint',
-  13: 'parseZPolyline',
-  15: 'parseZPolygon',
-  18: 'parseZMultiPoint'
+  1: "parsePoint",
+  3: "parsePolyline",
+  5: "parsePolygon",
+  8: "parseMultiPoint",
+  11: "parseZPoint",
+  13: "parseZPolyline",
+  15: "parseZPolygon",
+  18: "parseZMultiPoint",
 };
 
 function makeParseCoord(trans) {
@@ -233,7 +233,7 @@ function makeParseCoord(trans) {
       try {
         return trans.inverse([
           data.readDoubleLE(offset),
-          data.readDoubleLE(offset + 8)
+          data.readDoubleLE(offset + 8),
         ]);
       } catch (ignored) {
         return data;
@@ -286,8 +286,8 @@ ParseShp.prototype.parseHeader = function () {
       view.readDoubleLE(9 << 2),
       view.readDoubleLE(11 << 2),
       view.readDoubleLE(13 << 2),
-      view.readDoubleLE(13 << 2)
-    ]
+      view.readDoubleLE(13 << 2),
+    ],
   };
 };
 ParseShp.prototype.getRows = function () {
@@ -318,14 +318,14 @@ ParseShp.prototype.getRow = function (offset) {
     return {
       id: id,
       len: len,
-      type: 0
+      type: 0,
     };
   }
   return {
     id: id,
     len: len,
     data: this.buffer.slice(offset + 12, offset + len + 8),
-    type: view.readInt32LE(8)
+    type: view.readInt32LE(8),
   };
 };
 module.exports = function (buffer, trans) {

@@ -1,16 +1,16 @@
-import { RootPage } from '../root/page';
+import { RootPage } from "../root/page";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { HistoricalMap } from '@lib/common';
-import { HistoricalsService } from '@lib/services/historicals';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { HistoricalMap } from "@lib/common";
+import { HistoricalsService } from "@lib/services/historicals";
 
-import { environment } from '@lib/environment';
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
+import { environment } from "@lib/environment";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-parcels',
+  selector: "app-parcels",
   template: `
     <app-sink
       #sink
@@ -492,7 +492,7 @@ import { inject } from '@angular/core';
         }
       </app-ol-map>
     }
-  `
+  `,
 })
 export class ParcelsPage {
   env = environment;

@@ -1,51 +1,51 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from "../lib/src/common";
+import { theState } from "../lib/src/common";
 
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
 
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFileSync } from "fs";
 
-import chalk from 'chalk';
-import copy from 'fast-copy';
-import hash from 'object-hash';
-import request from 'request';
-import unzipper from 'unzipper';
+import chalk from "chalk";
+import copy from "fast-copy";
+import hash from "object-hash";
+import request from "request";
+import unzipper from "unzipper";
 
 // 👉 https://github.com/microsoft/USBuildingFootprints
 
-const dist = './data';
+const dist = "./data";
 
 // 👇 we won't even bother to look at these towns as we know they're
 //    too big and analyzing them can cause out-of-memory conditions
 //    NOTE: we exclude WASHINGTON because we already have its legacy data
 // 👉 https://www.newhampshire-demographics.com/cities_by_population
 const exclusions = [
-  'CONCORD',
-  'DERRY',
-  'DOVER',
-  'HUDSON',
-  'LONDONDERRY',
-  'MANCHESTER',
-  'MERRIMACK',
-  'NASHUA',
-  'ROCHESTER',
-  'SALEM',
-  'WASHINGTON'
+  "CONCORD",
+  "DERRY",
+  "DOVER",
+  "HUDSON",
+  "LONDONDERRY",
+  "MANCHESTER",
+  "MERRIMACK",
+  "NASHUA",
+  "ROCHESTER",
+  "SALEM",
+  "WASHINGTON",
 ];
 
 // 👉 we SHOULD be reading from this URL
 const url =
-  'https://usbuildingdata.blob.core.windows.net/usbuildings-v2/NewHampshire.geojson.zip';
-const fileName = 'NewHampshire.geojson';
+  "https://usbuildingdata.blob.core.windows.net/usbuildings-v2/NewHampshire.geojson.zip";
+const fileName = "NewHampshire.geojson";
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
 );
 
 const allTownFeatures = allTowns.features.filter(
-  (feature) => !exclusions.includes(feature.id)
+  (feature) => !exclusions.includes(feature.id),
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -87,9 +87,9 @@ async function main(): Promise<void> {
           chalk.cyan(
             `ETA ${
               (((numBuildings - ix) / gulp) * duration) / (1000 * 60 * 60)
-            } hours`
-          )
-        )
+            } hours`,
+          ),
+        ),
       );
       lastIndex = index;
       lastTime = timeNow;
@@ -99,13 +99,13 @@ async function main(): Promise<void> {
     //    find it from the dataset of all towns
     const towns = allTownFeatures.filter((townFeature) =>
       // 👉 https://github.com/Turfjs/turf/pull/2157
-      turf.booleanContains(townFeature, feature)
+      turf.booleanContains(townFeature, feature),
     );
 
     // 👉 we already have legacy Washington data
     towns
       .map((town) => town.id)
-      .filter((town) => town !== 'WASHINGTON')
+      .filter((town) => town !== "WASHINGTON")
       .forEach((town) => {
         const county = lookupCounty(town);
         if (county) {
@@ -131,13 +131,13 @@ async function main(): Promise<void> {
     Object.keys(buildingsByCountyByTown[county]).forEach((town) => {
       console.log(
         chalk.green(
-          `... writing ${theState}/${county}/${town}/buildings.geojson`
-        )
+          `... writing ${theState}/${county}/${town}/buildings.geojson`,
+        ),
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/buildings.geojson`,
-        JSON.stringify(simplify(buildingsByCountyByTown[county][town]))
+        JSON.stringify(simplify(buildingsByCountyByTown[county][town])),
       );
     });
   });
@@ -147,21 +147,21 @@ main();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sample = {
-  type: 'Feature',
+  type: "Feature",
   geometry: {
-    type: 'Polygon',
+    type: "Polygon",
     coordinates: [
       [
         [-70.875614, 43.197566],
         [-70.875541, 43.197566],
         [-70.875541, 43.197603],
         [-70.875614, 43.197603],
-        [-70.875614, 43.197566]
-      ]
-    ]
+        [-70.875614, 43.197566],
+      ],
+    ],
   },
   properties: {
     release: 1,
-    capture_dates_range: ''
-  }
+    capture_dates_range: "",
+  },
 };

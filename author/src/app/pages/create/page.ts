@@ -1,25 +1,25 @@
-import { RootPage } from '../root/page';
+import { RootPage } from "../root/page";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { FilterFunction } from '@lib/ol/ol-adaptor-geojson';
-import { GeoJSONService } from '@lib/services/geojson';
-import { Index } from '@lib/common';
-import { OLLayerVectorComponent } from '@lib/ol/ol-layer-vector';
-import { Path } from '@lib/state/view';
-import { Router } from '@angular/router';
-import { TownIndex } from '@lib/common';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { Index } from "@lib/common";
+import { TownIndex } from "@lib/common";
+import { FilterFunction } from "@lib/ol/ol-adaptor-geojson";
+import { OLLayerVectorComponent } from "@lib/ol/ol-layer-vector";
+import { GeoJSONService } from "@lib/services/geojson";
+import { Path } from "@lib/state/view";
 
-import { environment } from '@lib/environment';
-import { inject } from '@angular/core';
-import { theState } from '@lib/common';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { theState } from "@lib/common";
+import { environment } from "@lib/environment";
 
-import OLFeature from 'ol/Feature';
+import OLFeature from "ol/Feature";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-create',
+  selector: "app-create",
   template: `
     <app-ol-map #map [fitToBounds]="true" [path]="path" [minZoom]="0">
       <app-builder
@@ -89,14 +89,14 @@ import OLFeature from 'ol/Feature';
         }
       }
     </app-ol-map>
-  `
+  `,
 })
 export class CreatePage {
   env = environment;
   index: Index;
   path = theState;
   selectables = viewChild(OLLayerVectorComponent);
-  type = 'parcels';
+  type = "parcels";
 
   #geoJSON = inject(GeoJSONService);
   #root = inject(RootPage);
@@ -108,27 +108,27 @@ export class CreatePage {
   }
 
   atCountyLevel(path: Path): boolean {
-    return path.split(':').length === 2;
+    return path.split(":").length === 2;
   }
 
   atStateLevel(path: Path): boolean {
-    return path.split(':').length === 1;
+    return path.split(":").length === 1;
   }
 
   atTownLevel(path: Path): boolean {
-    return path.split(':').length === 3;
+    return path.split(":").length === 3;
   }
 
   currentCounty(): string {
-    return this.path.split(':')[1];
+    return this.path.split(":")[1];
   }
 
   currentState(): string {
-    return this.path.split(':')[0];
+    return this.path.split(":")[0];
   }
 
   currentTown(): string {
-    return this.path.split(':')[2];
+    return this.path.split(":")[2];
   }
 
   filter(): FilterFunction {
@@ -138,7 +138,7 @@ export class CreatePage {
           name
         ] as TownIndex;
         return (
-          !['dpw', 'parcels'].includes(this.type) ||
+          !["dpw", "parcels"].includes(this.type) ||
           townIndex?.layers.parcels.available
         );
       } else return true;

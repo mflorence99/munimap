@@ -1,18 +1,18 @@
-import { OLControlSearchParcelsComponent } from '../ol/ol-control-searchparcels';
+import { OLControlSearchParcelsComponent } from "../ol/ol-control-searchparcels";
 
-import { AbstractControl } from '@angular/forms';
-import { Directive } from '@angular/core';
-import { NG_VALIDATORS } from '@angular/forms';
-import { OnInit } from '@angular/core';
-import { ValidationErrors } from '@angular/forms';
-import { Validator } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms';
+import { Directive } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { AbstractControl } from "@angular/forms";
+import { NG_VALIDATORS } from "@angular/forms";
+import { ValidationErrors } from "@angular/forms";
+import { Validator } from "@angular/forms";
+import { ValidatorFn } from "@angular/forms";
 
-import { input } from '@angular/core';
+import { input } from "@angular/core";
 
 function parcelIDValidatorFactory(
   searcher: OLControlSearchParcelsComponent,
-  original: any
+  original: any,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
     const value = control.value;
@@ -27,8 +27,8 @@ function parcelIDValidatorFactory(
     if (searcher.searchablesByID[value])
       return {
         duplicate: {
-          valid: false
-        }
+          valid: false,
+        },
       };
 
     return null;
@@ -37,9 +37,9 @@ function parcelIDValidatorFactory(
 
 @Directive({
   providers: [
-    { provide: NG_VALIDATORS, useExisting: ParcelIDValidator, multi: true }
+    { provide: NG_VALIDATORS, useExisting: ParcelIDValidator, multi: true },
   ],
-  selector: '[appParcelID][ngModel]'
+  selector: "[appParcelID][ngModel]",
 })
 export class ParcelIDValidator implements OnInit, Validator {
   appParcelID = input<[OLControlSearchParcelsComponent, any]>();
@@ -49,7 +49,7 @@ export class ParcelIDValidator implements OnInit, Validator {
   ngOnInit(): void {
     this.validator = parcelIDValidatorFactory(
       this.appParcelID()[0],
-      this.appParcelID()[1]
+      this.appParcelID()[1],
     );
   }
 

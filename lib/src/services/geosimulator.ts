@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Subscriber } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { Subscriber } from "rxjs";
 
-import { bearing } from '@turf/bearing';
-import { finalize } from 'rxjs/operators';
-import { point } from '@turf/helpers';
-import { shareReplay } from 'rxjs/operators';
+import { bearing } from "@turf/bearing";
+import { point } from "@turf/helpers";
+import { finalize } from "rxjs/operators";
+import { shareReplay } from "rxjs/operators";
 
 const maxIntervalBetweenPositions = 500;
 
@@ -56,10 +56,10 @@ const simulated = [
   [-72.103451, 43.173966],
   [-72.103352, 43.174076],
   [-72.10318, 43.174242],
-  [-72.103011, 43.174412]
+  [-72.103011, 43.174412],
 ];
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class GeosimulatorService extends Observable<GeolocationPosition> {
   constructor() {
     let counter = 0;
@@ -81,9 +81,9 @@ export class GeosimulatorService extends Observable<GeolocationPosition> {
             heading: lastPoint
               ? bearing(point(lastPoint), point(currentPoint))
               : null,
-            speed: null
+            speed: null,
           },
-          timestamp: Date.now()
+          timestamp: Date.now(),
         };
         // 👇 simulate loss of GPS signal
         // if (counter === 0 || (counter >= 10 && counter < 12)) {
@@ -105,7 +105,7 @@ export class GeosimulatorService extends Observable<GeolocationPosition> {
 
     return this.pipe(
       finalize(() => clearInterval(loopID)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     ) as GeosimulatorService;
   }
 }

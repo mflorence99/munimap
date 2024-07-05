@@ -1,264 +1,264 @@
-import { Parcel } from '../lib/src/common';
-import { ParcelID } from '../lib/src/common';
-import { Parcels } from '../lib/src/common';
+import { Parcel } from "../lib/src/common";
+import { ParcelID } from "../lib/src/common";
+import { Parcels } from "../lib/src/common";
 
-import { bboxByAspectRatio } from '../lib/src/common';
-import { deserializeParcel } from '../lib/src/common';
-import { isParcelStollen } from '../lib/src/common';
+import { bboxByAspectRatio } from "../lib/src/common";
+import { deserializeParcel } from "../lib/src/common";
+import { isParcelStollen } from "../lib/src/common";
 
-import * as firebase from 'firebase-admin/app';
-import * as firestore from 'firebase-admin/firestore';
-import * as inquirer from 'inquirer';
-import * as yargs from 'yargs';
+import * as firebase from "firebase-admin/app";
+import * as firestore from "firebase-admin/firestore";
+import * as inquirer from "inquirer";
+import * as yargs from "yargs";
 
-import { bboxPolygon } from '@turf/bbox-polygon';
-import { featureCollection } from '@turf/helpers';
-import { readFileSync } from 'fs';
-import { union } from '@turf/union';
+import { readFileSync } from "fs";
+import { bboxPolygon } from "@turf/bbox-polygon";
+import { featureCollection } from "@turf/helpers";
+import { union } from "@turf/union";
 
-import chalk from 'chalk';
+import chalk from "chalk";
 
-const dist = './data';
+const dist = "./data";
 
 const MAPS = [
   {
     bbox: null,
-    id: 'henniker',
+    id: "henniker",
     isDflt: false,
-    name: 'Town of Henniker',
-    owner: 'mflo999+flo@gmail.com',
-    path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
+    name: "Town of Henniker",
+    owner: "mflo999+flo@gmail.com",
+    path: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
     printSize: [45, 60],
     timestamp: null,
-    type: 'parcels'
+    type: "parcels",
   },
   {
     bbox: null,
-    id: 'washington',
+    id: "washington",
     isDflt: false,
-    name: 'Town of Washington',
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    name: "Town of Washington",
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [45, 60],
     timestamp: null,
-    type: 'parcels'
+    type: "parcels",
   },
   {
     bbox: null,
     cxFeet: 15840,
     cyFeet: 10560,
-    id: 'washington-center',
+    id: "washington-center",
     isDflt: false,
-    name: 'Town Center',
+    name: "Town Center",
     origin: [-72.13330520983168, 43.18490951655938],
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 36],
     timestamp: null,
-    type: 'area'
+    type: "area",
   },
   {
     bbox: null,
     cxFeet: 10560,
     cyFeet: 10560,
-    id: 'washington-east',
+    id: "washington-east",
     isDflt: false,
-    name: 'East Washington',
+    name: "East Washington",
     origin: [-72.04833282823988, 43.21047135814069],
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 24],
     timestamp: null,
-    type: 'area'
+    type: "area",
   },
   {
     bbox: null,
     cxFeet: 15840,
     cyFeet: 10560,
-    id: 'washington-highland',
+    id: "washington-highland",
     isDflt: false,
-    name: 'Highland Lake',
+    name: "Highland Lake",
     origin: [-72.10798515673109, 43.157376566018925],
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 36],
     timestamp: null,
-    type: 'area'
+    type: "area",
   },
   {
     bbox: null,
     cxFeet: 10560,
     cyFeet: 10560,
-    id: 'washington-island',
+    id: "washington-island",
     isDflt: false,
-    name: 'Island Pond',
+    name: "Island Pond",
     origin: [-72.07845939989515, 43.188444997708324],
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 24],
     timestamp: null,
-    type: 'area'
+    type: "area",
   },
   {
     bbox: null,
     cxFeet: 10560,
     cyFeet: 15840,
-    id: 'washington-lae',
+    id: "washington-lae",
     isDflt: false,
-    name: 'Lake Ashuelot Estates',
+    name: "Lake Ashuelot Estates",
     origin: [-72.17305139671191, 43.17727946502029],
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 36],
     timestamp: null,
-    type: 'area'
+    type: "area",
   },
   {
     bbox: null,
-    id: 'washington-dpw',
+    id: "washington-dpw",
     isDflt: false,
-    name: 'Washington DPW',
-    owner: 'mflo999+dpw@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    name: "Washington DPW",
+    owner: "mflo999+dpw@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [45, 60],
     timestamp: null,
-    type: 'dpw'
+    type: "dpw",
   },
   {
     bbox: null,
     cxFeet: 15840,
     cyFeet: 15840,
-    id: 'apdvd',
+    id: "apdvd",
     isDflt: false,
-    name: 'APDVD Redistricting',
+    name: "APDVD Redistricting",
     origin: [-72.18, 43.18429544567368],
-    owner: 'mflo999@gmail.com',
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    owner: "mflo999@gmail.com",
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [36, 36],
     timestamp: null,
-    type: 'apdvd'
+    type: "apdvd",
   },
   {
     bbox: null,
     contours2ft: false,
-    id: 'tcv-library',
+    id: "tcv-library",
     isDflt: false,
-    name: 'TCV - Library',
-    owner: 'mflo999+flo@gmail.com',
-    parcelIDs: ['22-8', '22-9'],
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    name: "TCV - Library",
+    owner: "mflo999+flo@gmail.com",
+    parcelIDs: ["22-8", "22-9"],
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [12, 18],
     timestamp: null,
-    type: 'property'
+    type: "property",
   },
   {
     bbox: null,
-    id: 'florence',
+    id: "florence",
     isDflt: false,
-    name: 'Florence/Hendrickson Estate',
-    owner: 'mflo999+flo@gmail.com',
-    parcelIDs: ['9-7', '(12-4)'],
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    name: "Florence/Hendrickson Estate",
+    owner: "mflo999+flo@gmail.com",
+    parcelIDs: ["9-7", "(12-4)"],
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [18, 24],
     timestamp: null,
-    type: 'property'
+    type: "property",
   },
   {
     bbox: null,
     contours2ft: true,
-    id: 'florence-2ft',
+    id: "florence-2ft",
     isDflt: false,
-    name: 'Florence/Hendrickson Survey',
-    owner: 'mflo999+flo@gmail.com',
-    parcelIDs: ['9-7', '(12-4)'],
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    name: "Florence/Hendrickson Survey",
+    owner: "mflo999+flo@gmail.com",
+    parcelIDs: ["9-7", "(12-4)"],
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [8.5, 11],
     timestamp: null,
-    type: 'property'
+    type: "property",
   },
   {
     bbox: null,
-    id: 'marshall',
+    id: "marshall",
     isDflt: false,
-    name: 'Marshall Estate',
-    owner: 'marshal@gsinet.net',
-    parcelIDs: ['9-6', '9-28'],
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    name: "Marshall Estate",
+    owner: "marshal@gsinet.net",
+    parcelIDs: ["9-6", "9-28"],
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [18, 24],
     timestamp: null,
-    type: 'property'
+    type: "property",
   },
   {
     bbox: null,
     contours2ft: true,
-    id: 'marshall-2ft',
+    id: "marshall-2ft",
     isDflt: false,
-    name: 'Marshall Survey',
-    owner: 'marshal@gsinet.net',
-    parcelIDs: ['9-6', '9-28'],
-    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    name: "Marshall Survey",
+    owner: "marshal@gsinet.net",
+    parcelIDs: ["9-6", "9-28"],
+    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [8.5, 11],
     timestamp: null,
-    type: 'property'
+    type: "property",
   },
   {
     bbox: null,
-    id: 'moskey',
+    id: "moskey",
     isDflt: false,
-    name: 'Moskey Estate',
-    owner: 'cmoskey@gmail.com',
+    name: "Moskey Estate",
+    owner: "cmoskey@gmail.com",
     parcelIDs: [
-      '(202-6)',
-      '(401-36)',
-      '1-633-A',
-      '1-716',
-      '1-717-A',
-      '1-717-X',
-      '1-717',
-      '1-719-A',
-      '1-721',
-      '1-723-A',
-      '1-723-B',
-      '1-723',
-      '1-724',
-      '1-725'
+      "(202-6)",
+      "(401-36)",
+      "1-633-A",
+      "1-716",
+      "1-717-A",
+      "1-717-X",
+      "1-717",
+      "1-719-A",
+      "1-721",
+      "1-723-A",
+      "1-723-B",
+      "1-723",
+      "1-724",
+      "1-725",
     ],
-    path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
+    path: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
     printSize: [30, 40],
     timestamp: null,
-    type: 'property'
+    type: "property",
   },
   {
     bbox: null,
     contours2ft: true,
-    id: 'moskey-717',
+    id: "moskey-717",
     isDflt: false,
-    name: 'Moskey Lot 1-717',
-    owner: 'cmoskey@gmail.com',
-    parcelIDs: ['1-717'],
-    path: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
+    name: "Moskey Lot 1-717",
+    owner: "cmoskey@gmail.com",
+    parcelIDs: ["1-717"],
+    path: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
     printSize: [8.5, 11],
     timestamp: null,
-    type: 'property'
-  }
+    type: "property",
+  },
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv['useEmulator'];
+const useEmulator = yargs.argv["useEmulator"];
 
-if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
+if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
 
 // 👇 https://stackoverflow.com/questions/49691215/cloud-functions-how-to-copy-firestore-collection-to-a-new-document
 
 firebase.initializeApp({
-  credential: firebase.cert('./firebase-admin.json'),
-  databaseURL: 'https://washington-app-319514.firebaseio.com'
+  credential: firebase.cert("./firebase-admin.json"),
+  databaseURL: "https://washington-app-319514.firebaseio.com",
 });
 
 const db = firestore.getFirestore();
-const maps = db.collection('maps');
-const parcels = db.collection('parcels');
+const maps = db.collection("maps");
+const parcels = db.collection("parcels");
 
 // 👀 old Washington App
 const DEG2RAD = Math.PI / 180;
@@ -285,16 +285,16 @@ async function bboxFromParcelIDs(map, border: number): Promise<number[]> {
   });
   const bounds: GeoJSON.Feature = {
     geometry: parcels.reduce((acc, parcel) =>
-      union(featureCollection([acc, parcel]))
+      union(featureCollection([acc, parcel])),
     ).geometry,
     properties: {},
-    type: 'Feature'
+    type: "Feature",
   };
   return bboxByAspectRatio(bounds, map.printSize[1], map.printSize[0], border);
 }
 
 function loadGeoJSON(map): Record<ParcelID, Parcel> {
-  const [state, county, town] = map.path.split(':');
+  const [state, county, town] = map.path.split(":");
   const fn = `${dist}/${state}/${county}/${town}/parcels.geojson`;
   const parcels: Parcels = JSON.parse(readFileSync(fn).toString());
   return parcels.features.reduce((acc, parcel) => {
@@ -319,13 +319,13 @@ async function main(): Promise<void> {
   if (!useEmulator) {
     const response = await inquirer.prompt([
       {
-        type: 'input',
-        name: 'proceed',
-        choices: ['y', 'n'],
-        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
-      }
+        type: "input",
+        name: "proceed",
+        choices: ["y", "n"],
+        message: "WARNING: running on live Firestore. Proceed? (y/N)",
+      },
     ]);
-    if (response.proceed.toLowerCase() !== 'y') return;
+    if (response.proceed.toLowerCase() !== "y") return;
   }
 
   for (const map of MAPS.slice().reverse()) {
@@ -335,9 +335,9 @@ async function main(): Promise<void> {
     await maps.doc(map.id).delete();
 
     // 👉 calculate bbox with 100ft border
-    if (['apdvd', 'area'].includes(map.type))
+    if (["apdvd", "area"].includes(map.type))
       map.bbox = bboxFromDimensions(map, 100 * 0.0003048 /* 👈 km */);
-    if (map.type === 'property')
+    if (map.type === "property")
       map.bbox = await bboxFromParcelIDs(map, 100 * 0.0003048 /* 👈 km */);
 
     // 👁️ https://titanwolf.org/Network/Articles/Article?AID=c2f8e1f8-31d8-4b5a-9a73-1c50f7614057

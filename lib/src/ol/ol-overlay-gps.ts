@@ -1,24 +1,24 @@
-import { DestroyService } from '../services/destroy';
-import { GeolocationService } from '../services/geolocation';
-import { OLMapComponent } from './ol-map';
-import { ViewActions } from '../state/view';
+import { DestroyService } from "../services/destroy";
+import { GeolocationService } from "../services/geolocation";
+import { ViewActions } from "../state/view";
+import { OLMapComponent } from "./ol-map";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ElementRef } from "@angular/core";
+import { OnDestroy } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Store } from "@ngxs/store";
 
-import { fromLonLat } from 'ol/proj';
-import { inject } from '@angular/core';
-import { linear } from 'ol/easing';
-import { retryBackoff } from 'backoff-rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { viewChild } from '@angular/core';
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { retryBackoff } from "backoff-rxjs";
+import { linear } from "ol/easing";
+import { fromLonLat } from "ol/proj";
+import { takeUntil } from "rxjs/operators";
 
-import OLOverlay from 'ol/Overlay';
+import OLOverlay from "ol/Overlay";
 
 const backoffInitialInterval = 100;
 const backoffMaxInterval = 1000;
@@ -26,7 +26,7 @@ const backoffMaxInterval = 1000;
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-ol-overlay-gps',
+  selector: "app-ol-overlay-gps",
   template: `
     <div #tracker class="tracker">
       <svg viewPort="0 0 96 96" [attr.width]="96" [attr.height]="96">
@@ -79,12 +79,12 @@ const backoffMaxInterval = 1000;
           r: 10px;
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class OLOverlayGPSComponent implements OnDestroy, OnInit {
   olOverlay: OLOverlay;
-  tracker = viewChild<ElementRef<HTMLDivElement>>('tracker');
+  tracker = viewChild<ElementRef<HTMLDivElement>>("tracker");
 
   #destroy$ = inject(DestroyService);
   #geolocation$ = inject(GeolocationService);
@@ -98,10 +98,10 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
       autoPan: {
         animation: {
           duration: 100,
-          easing: linear
-        }
+          easing: linear,
+        },
       },
-      positioning: 'center-center'
+      positioning: "center-center",
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.#map.olMap.addOverlay(this.olOverlay);
@@ -118,13 +118,13 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
 
   #currentPositionLost(error: GeolocationPositionError): void {
     this.#snackBar.open(`🔥 GPS tracking ${error.message}`, null, {
-      duration: 5000
+      duration: 5000,
     });
   }
 
   #currentPositionOutsideMap(): void {
-    this.#snackBar.open('👉 GPS position is outside of map', null, {
-      duration: 5000
+    this.#snackBar.open("👉 GPS position is outside of map", null, {
+      duration: 5000,
     });
   }
 
@@ -142,22 +142,22 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
           shouldRetry: (error: GeolocationPositionError) => {
             // 👇 we need to use addClass b/c OL has yanked
             //    the tracker out of the DOM
-            this.tracker().nativeElement.classList.add('disabled');
+            this.tracker().nativeElement.classList.add("disabled");
             // 👇 GeolocationPositionError.PERMISSION_DENIED throws error on iOS
             return error.code !== 1;
-          }
-        })
+          },
+        }),
       )
       .subscribe({
         error: this.#handleGeolocationError.bind(this),
-        next: this.#handleGeolocationPosition.bind(this)
+        next: this.#handleGeolocationPosition.bind(this),
       });
   }
 
   #handleGeolocationError(error: GeolocationPositionError): void {
     // 👇 because shouldRetry has no maxRetries, we should only get here
     //    on a PERMISSION_DENIED error
-    console.error('🔥 Geolocation handleGeolocationError', error);
+    console.error("🔥 Geolocation handleGeolocationError", error);
     this.#currentPositionLost(error);
     this.#store.dispatch(new ViewActions.SetGPS(false));
   }
@@ -170,12 +170,12 @@ export class OLOverlayGPSComponent implements OnDestroy, OnInit {
         : 0;
       this.#lastTimestamp = position.timestamp;
       const style = document.body.style;
-      style.setProperty('--ol-overlay-animate-duration', `${interval}`);
+      style.setProperty("--ol-overlay-animate-duration", `${interval}`);
       // 👇 we need to use removeClass b/c OL has yanked
       //    the tracker out of the DOM
-      this.tracker().nativeElement.classList.remove('disabled');
+      this.tracker().nativeElement.classList.remove("disabled");
       this.olOverlay.setPosition(
-        fromLonLat([position.coords.longitude, position.coords.latitude])
+        fromLonLat([position.coords.longitude, position.coords.latitude]),
       );
     } else {
       this.#currentPositionOutsideMap();
