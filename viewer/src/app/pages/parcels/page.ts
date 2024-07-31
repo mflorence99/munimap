@@ -1,29 +1,30 @@
-import { RootPage } from "../root/page";
+import { RootPage } from '../root/page';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { HistoricalMap } from "@lib/common";
-import { HistoricalsService } from "@lib/services/historicals";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { HistoricalMap } from '@lib/common';
+import { HistoricalsService } from '@lib/services/historicals';
 
-import { inject } from "@angular/core";
-import { environment } from "@lib/environment";
+import { inject } from '@angular/core';
+import { environment } from '@lib/environment';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-parcels",
+  selector: 'app-parcels',
   template: `
-    <app-sink
-      #sink
-      [gps]="root.gps$ | async"
-      [historicalMapLeft]="root.historicalMapLeft$ | async"
-      [historicalMapRight]="root.historicalMapRight$ | async"
-      [mapState]="root.map$ | async"
-      [parcelCoding]="root.parcelCoding$ | async"
-      [satelliteView]="root.satelliteView$ | async"
-      [satelliteYear]="root.satelliteYear$ | async"
-      [sideBySideView]="root.sideBySideView$ | async"
-      [user]="root.user$ | async"
-      [zoom]="root.zoom$ | async" />
+
+    @let sink = {
+      gps: root.gps$ | async,
+      historicalMapLeft: root.historicalMapLeft$ | async,
+      historicalMapRight: root.historicalMapRight$ | async,
+      mapState: root.mapState$ | async,
+      parcelCoding: root.parcelCoding$ | async,
+      satelliteView: root.satelliteView$ | async,
+      satelliteYear: root.satelliteYear$ | async,
+      sideBySideView: root.sideBySideView$ | async,
+      user: root.user$ | async,
+      zoom: root.zoom$ | async
+    };
 
     @if (sink.mapState) {
       <app-ol-map
@@ -492,7 +493,7 @@ import { environment } from "@lib/environment";
         }
       </app-ol-map>
     }
-  `,
+  `
 })
 export class ParcelsPage {
   env = environment;

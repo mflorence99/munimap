@@ -1,41 +1,44 @@
-import { Location } from "@angular/common";
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Title } from "@angular/platform-browser";
-import { Router } from "@angular/router";
-import { MessageDialogComponent } from "@lib/components/message-dialog";
-import { MessageDialogData } from "@lib/components/message-dialog";
-import { DestroyService } from "@lib/services/destroy";
-import { VersionService } from "@lib/services/version";
-import { AnonActions } from "@lib/state/anon";
-import { AnonState } from "@lib/state/anon";
-import { User } from "@lib/state/auth";
-import { Map } from "@lib/state/map";
-import { MapActions } from "@lib/state/map";
-import { MapState } from "@lib/state/map";
-import { ParcelCoding } from "@lib/state/view";
-import { ViewActions } from "@lib/state/view";
-import { ViewState } from "@lib/state/view";
-import { ViewStateModel } from "@lib/state/view";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Location } from '@angular/common';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
+import { MessageDialogData } from '@lib/components/message-dialog';
+import { DestroyService } from '@lib/services/destroy';
+import { VersionService } from '@lib/services/version';
+import { AnonActions } from '@lib/state/anon';
+import { AnonState } from '@lib/state/anon';
+import { User } from '@lib/state/auth';
+import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
+import { ParcelCoding } from '@lib/state/view';
+import { ViewActions } from '@lib/state/view';
+import { ViewState } from '@lib/state/view';
+import { ViewStateModel } from '@lib/state/view';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
-import { inject } from "@angular/core";
-import { combineLatest } from "rxjs";
-import { filter } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { takeUntil } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
-import urlParse from "url-parse";
+import urlParse from 'url-parse';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-root",
+  selector: 'app-root',
   template: `
-    <app-sink #sink [gps]="gps$ | async" />
+
+    @let sink = {
+      gps: gps$ | async
+    };
 
     <main class="page">
       <mat-toolbar class="toolbar">
@@ -138,8 +141,8 @@ import urlParse from "url-parse";
         position: absolute;
         width: 100%;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class RootPage implements OnInit {
   gps$: Observable<boolean>;
@@ -148,7 +151,7 @@ export class RootPage implements OnInit {
   hasToolbar: boolean;
   historicalMapLeft$: Observable<string>;
   historicalMapRight$: Observable<string>;
-  map$: Observable<Map>;
+  mapState$: Observable<Map>;
   parcelCoding$: Observable<ParcelCoding>;
   routedPageComponent: any;
   satelliteView$: Observable<boolean>;
@@ -173,7 +176,7 @@ export class RootPage implements OnInit {
     this.gps$ = this.#store.select(ViewState.gps);
     this.historicalMapLeft$ = this.#store.select(ViewState.historicalMapLeft);
     this.historicalMapRight$ = this.#store.select(ViewState.historicalMapRight);
-    this.map$ = this.#store.select(MapState.map);
+    this.mapState$ = this.#store.select(MapState.map);
     this.parcelCoding$ = this.#store.select(ViewState.parcelCoding);
     this.satelliteView$ = this.#store.select(ViewState.satelliteView);
     this.satelliteYear$ = this.#store.select(ViewState.satelliteYear);
@@ -181,9 +184,9 @@ export class RootPage implements OnInit {
     this.streetFilter$ = this.#store.select(ViewState.streetFilter);
     this.user$ = this.#store.select(AnonState.user);
     this.view$ = this.#store.select(ViewState.view);
-    this.zoom$ = combineLatest([this.map$, this.view$]).pipe(
+    this.zoom$ = combineLatest([this.mapState$, this.view$]).pipe(
       // 🔥 sometimes triggered by ???
-      map(([map, view]) => view.viewByPath[map.path]?.zoom ?? 15),
+      map(([mapState, view]) => view.viewByPath[mapState.path]?.zoom ?? 15)
     );
   }
 
@@ -207,27 +210,27 @@ export class RootPage implements OnInit {
   // 👉 when we've loaded the map, we can load the profile of the
   //    map's owner, which will give us their workgroup
   #handleMap$(): void {
-    this.map$
+    this.mapState$
       .pipe(
         takeUntil(this.#destroy$),
-        filter((map) => !!map),
+        filter((mapState) => !!mapState)
       )
-      .subscribe((map) => {
+      .subscribe((mapState) => {
         // 👉 if the LoadMap fails, the default will be set
-        if (map.isDflt) {
+        if (mapState.isDflt) {
           const data: MessageDialogData = {
-            message: "The requested app is no longer available",
+            message: 'The requested app is no longer available'
           };
           this.#dialog.open(MessageDialogComponent, { data });
         } else {
-          this.title = map.name;
-          this.#title.setTitle(map.name);
-          this.#store.dispatch(new AnonActions.LoadProfile(map.owner));
+          this.title = mapState.name;
+          this.#title.setTitle(mapState.name);
+          this.#store.dispatch(new AnonActions.LoadProfile(mapState.owner));
           // 👉 we don't have to wait until the profile is loaded,
           //    because guards prevent
           //    the page from loading until everything is set
-          this.#router.navigateByUrl(this.#makeURL(map), {
-            skipLocationChange: true,
+          this.#router.navigateByUrl(this.#makeURL(mapState), {
+            skipLocationChange: true
           });
         }
       });
@@ -241,17 +244,17 @@ export class RootPage implements OnInit {
       .pipe(
         takeUntil(this.#destroy$),
         // 🐛 Firebase Missing or insufficient permissions.
-        filter((user) => !!user),
+        filter((user) => !!user)
       )
       .subscribe(() => {
         let fromDomain;
         const fromParams = this.#url.query.id;
-        const parts = this.#url.hostname.split(".");
+        const parts = this.#url.hostname.split('.');
         if (parts.length === 3) fromDomain = parts[0];
         // 👇 take the map ID from the params first, so that we can
         //    override it with the domain if necessary
         this.#store.dispatch(
-          new MapActions.LoadMap(fromParams ?? fromDomain, null),
+          new MapActions.LoadMap(fromParams ?? fromDomain, null)
         );
       });
   }
@@ -264,12 +267,12 @@ export class RootPage implements OnInit {
     const inner = [];
     // 👉 what data associated with this route?
     let route = this.#router.config[0].children.find(
-      (route) => route.path === `${map.type}`,
+      (route) => route.path === `${map.type}`
     );
     // 👉 is there a left sidebar?
     route = this.#router.config[0].children.find(
       (route) =>
-        route.path.startsWith(`${map.type}-`) && route.outlet === "leftSidebar",
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'leftSidebar'
     );
     if (route) {
       inner.push(`leftSidebar:${route.path}`);
@@ -278,8 +281,7 @@ export class RootPage implements OnInit {
     // 👉 is there a right sidebar?
     route = this.#router.config[0].children.find(
       (route) =>
-        route.path.startsWith(`${map.type}-`) &&
-        route.outlet === "rightSidebar",
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'rightSidebar'
     );
     if (route) {
       inner.push(`rightSidebar:${route.path}`);
@@ -288,15 +290,15 @@ export class RootPage implements OnInit {
     // 👉 is there a toolbar?
     route = this.#router.config[0].children.find(
       (route) =>
-        route.path.startsWith(`${map.type}-`) && route.outlet === "toolbar",
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'toolbar'
     );
     if (route) {
       inner.push(`toolbar:${route.path}`);
       this.hasToolbar = true;
     }
     // 👉 maybe no sidebars at all?
-    if (inner.length > 0) parts.push(`(${inner.join("//")})`);
+    if (inner.length > 0) parts.push(`(${inner.join('//')})`);
     parts.push(`?id=${map.id}`);
-    return parts.join("");
+    return parts.join('');
   }
 }

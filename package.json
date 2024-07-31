@@ -83,12 +83,12 @@
     "postinstall": "npm run patcher",
     "lint": "biome lint ./",
     "patcher": "ts-node --dir bin patcher.ts",
-    "serve:author": "ng serve author --port 4200 --allowed-hosts admin.lots.online",
+    "serve:author": "ng serve author --port 4200",
     "serve:author:ssl": "ws -p 8100 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/author --log.format dev",
     "serve:proxy": "npm run compile:proxy && node dist/proxy/server.js --port 4201",
-    "serve:viewer:henniker": "npm run assets:viewer:henniker && ng serve viewer --port 4202 --allowed-hosts henniker.lots.online",
+    "serve:viewer:henniker": "npm run assets:viewer:henniker && ng serve viewer --port 4202",
     "serve:viewer:ssl": "ws -p 8102 --cert .ssh/ssl/cert.pem --key .ssh/ssl/key.pem --https --spa index.html --directory dist/viewer --log.format dev",
-    "serve:viewer:washington": "npm run assets:viewer:washington && ng serve viewer --port 4202 --allowed-hosts washington.lots.online"
+    "serve:viewer:washington": "npm run assets:viewer:washington && ng serve viewer --port 4202"
   },
   "dependencies": {
     "@angular/animations": "^18",
@@ -143,10 +143,9 @@
     "md5-file": "^5",
     "ngx-pipes": "^3",
     "ngx-router-animations": "^13",
-    "ngxtension": "^3",
     "node-fetch": "2.6.7",
     "object-hash": "^3",
-    "ol": "^9",
+    "ol": "^10",
     "ol-ext": "^4",
     "ol-mapbox-style": "^12",
     "polylabel": "1.1.0",

@@ -1,23 +1,24 @@
-import { RootPage } from "../root/page";
+import { RootPage } from '../root/page';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { inject } from "@angular/core";
-import { environment } from "@lib/environment";
-import { isAPDVDExisting } from "@lib/ol/ol-apdvd";
-import { isAPDVDProposed } from "@lib/ol/ol-apdvd";
+import { inject } from '@angular/core';
+import { environment } from '@lib/environment';
+import { isAPDVDExisting } from '@lib/ol/ol-apdvd';
+import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-apdvd",
+  selector: 'app-apdvd',
   template: `
-    <app-sink
-      #sink
-      [gps]="root.gps$ | async"
-      [mapState]="root.map$ | async"
-      [user]="root.user$ | async"
-      [zoom]="root.zoom$ | async" />
+
+    @let sink = {
+      gps: root.gps$ | async,
+      mapState: root.mapState$ | async,
+      user: root.user$ | async,
+      zoom: root.zoom$ | async
+    };
 
     @if (sink.mapState) {
       <app-ol-map
@@ -315,7 +316,7 @@ import { isAPDVDProposed } from "@lib/ol/ol-apdvd";
         }
       </app-ol-map>
     }
-  `,
+  `
 })
 export class APDVDPage {
   env = environment;

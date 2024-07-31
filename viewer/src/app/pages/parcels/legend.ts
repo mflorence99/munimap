@@ -1,26 +1,27 @@
-import { RootPage } from "../root/page";
+import { RootPage } from '../root/page';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { Signal } from "@angular/core";
-import { ParcelProperties } from "@lib/common";
-import { OLControlAbstractParcelsLegendComponent } from "@lib/ol/ol-control-abstractparcelslegend";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Signal } from '@angular/core';
+import { ParcelProperties } from '@lib/common';
+import { OLControlAbstractParcelsLegendComponent } from '@lib/ol/ol-control-abstractparcelslegend';
 
-import { inject } from "@angular/core";
-import { colorOfAPDVDExcluded } from "@lib/ol/ol-apdvd2";
-import { colorOfAPDVDIncluded } from "@lib/ol/ol-apdvd2";
-import { isAPDVDExcluded } from "@lib/ol/ol-apdvd2";
-import { isAPDVDIncluded } from "@lib/ol/ol-apdvd2";
+import { inject } from '@angular/core';
+import { colorOfAPDVDExcluded } from '@lib/ol/ol-apdvd2';
+import { colorOfAPDVDIncluded } from '@lib/ol/ol-apdvd2';
+import { isAPDVDExcluded } from '@lib/ol/ol-apdvd2';
+import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-parcels-legend",
+  selector: 'app-parcels-legend',
   template: `
-    <app-sink
-      #sink
-      [mapState]="root.map$ | async"
-      [parcelCoding]="root.parcelCoding$ | async" />
+
+      @let sink = {
+        mapState: root.mapState$ | async,
+        parcelCoding: root.parcelCoding$ | async
+      };
 
     <header class="header">
       <figure class="icon">
@@ -386,8 +387,8 @@ import { isAPDVDIncluded } from "@lib/ol/ol-apdvd2";
           }
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class ParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
