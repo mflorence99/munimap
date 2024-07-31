@@ -27,8 +27,7 @@
               "namedChunks": false,
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "vendorChunk": false
+              "sourceMap": false
             }
           },
           "defaultConfiguration": "",
@@ -84,9 +83,7 @@
               "node_modules/ol/ol.css",
               "node_modules/ol-ext/dist/ol-ext.css"
             ],
-            "tsConfig": "author/src/tsconfig.json",
-            "vendorChunk": true,
-            "webWorkerTsConfig": "worker/src/tsconfig.json"
+            "tsConfig": "author/src/tsconfig.json"
           }
         },
         "serve": {
@@ -134,8 +131,7 @@
               "namedChunks": false,
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "vendorChunk": false
+              "sourceMap": false
             }
           },
           "defaultConfiguration": "",
@@ -191,9 +187,7 @@
               "node_modules/ol/ol.css",
               "node_modules/ol-ext/dist/ol-ext.css"
             ],
-            "tsConfig": "viewer/src/tsconfig.json",
-            "vendorChunk": true,
-            "webWorkerTsConfig": "worker/src/tsconfig.json"
+            "tsConfig": "viewer/src/tsconfig.json"
           }
         },
         "serve": {
