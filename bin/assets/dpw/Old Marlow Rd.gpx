@@ -1,0 +1,82 @@
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="EasyTrails GPS ( http://www.easytrailsgps.com )" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <wpt lat="43.18144198726972" lon="-72.1189331016921">
+    <ele>520</ele>
+    <name>12&quot; 30&apos; fair  concrete handmade </name>
+  </wpt>
+  <wpt lat="43.181313" lon="-72.117645">
+    <ele>520.9032</ele>
+    <name>12&quot; 30&apos; good steel  handmade minor</name>
+  </wpt>
+  <wpt lat="43.18102" lon="-72.1171">
+    <ele>546.5064</ele>
+    <name>12&quot; 30&apos; good steel handmade  minor</name>
+  </wpt>
+  <wpt lat="43.18102" lon="-72.11611">
+    <ele>555.6504</ele>
+    <name>12&quot; 30&apos; good  steel handmade </name>
+  </wpt>
+  <wpt lat="43.18066514376645" lon="-72.11482049273629">
+    <ele>555.3456</ele>
+    <name>12&quot; 30&apos; good  plastic  handmade </name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.18165" lon="-72.11403">
+    <ele>543.4584</ele>
+    <name>15&quot; 30&apos; 2022 good steel handmade</name>
+  </wpt>
+  <wpt lat="43.180965" lon="-72.11288">
+    <ele>535.8384</ele>
+    <name>18&quot; 40&apos; fair  steel handmade</name>
+  </wpt>
+  <wpt lat="43.180603" lon="-72.11183">
+    <ele>528.2184</ele>
+    <name>18&quot; 40&apos; poor steel handmade</name>
+  </wpt>
+  <wpt lat="43.18024814376645" lon="-72.11054049273628">
+    <ele>509.016</ele>
+    <name>24&quot; 50&apos; 2022 good plastic handmade </name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.180794" lon="-72.10859">
+    <ele>494.3856</ele>
+    <name>24&quot; 40&apos; 2022 good plastic handmade </name>
+  </wpt>
+  <wpt lat="43.18043914376645" lon="-72.10730049273629">
+    <ele>493.4712</ele>
+    <name>12&quot; 30&apos; 2019  good steel handmade</name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.180683" lon="-72.1076">
+    <ele>494.3856</ele>
+    <name>18&quot; 32&apos; good plastic handmade </name>
+  </wpt>
+  <wpt lat="43.180122" lon="-72.10676">
+    <ele>498.348</ele>
+    <name>12&quot; 40&apos; good steel handmade</name>
+  </wpt>
+  <wpt lat="43.179462" lon="-72.105804">
+    <ele>512.064</ele>
+    <name>12&quot; 26&apos; poor plastic handmade </name>
+  </wpt>
+  <wpt lat="43.17885" lon="-72.10389">
+    <ele>479.4504</ele>
+    <name>36&quot;×36&quot; 25&apos; fair  concrete handmade </name>
+  </wpt>
+  <wpt lat="43.17849514376645" lon="-72.10260049273629">
+    <ele>469.392</ele>
+    <name>8&quot; 25&apos; good plastic  handmade </name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.178596" lon="-72.10281">
+    <ele>471.2208</ele>
+    <name>36&quot; 45&apos; good plastic handmade </name>
+  </wpt>
+  <wpt lat="43.17826" lon="-72.10145">
+    <ele>477.9264</ele>
+    <name>15&quot; 30&apos;  2019  good steel handmade</name>
+  </wpt>
+  <wpt lat="43.178116" lon="-72.10088">
+    <ele>474.8784</ele>
+    <name>8&quot; 40&apos; poor steel handmade</name>
+  </wpt>
+</gpx>

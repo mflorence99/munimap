@@ -55,6 +55,13 @@
           <keywords><![CDATA[MILLEN POND RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.18122459399214" lon="-72.11779262388664">
+          <name><![CDATA[12" 30' Good 1x Minor Handmade Steel ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.172806" lon="-72.1181">
           <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
           <ele>488.2896</ele>
@@ -81,6 +88,13 @@
           <ele>518.7696</ele>
           <desc><![CDATA[undefined]]></desc>
           <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.180603" lon="-72.11183">
+          <name><![CDATA[18" 40' Poor 1x None Handmade Steel ]]></name>
+          <ele>528.2184</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.16727" lon="-72.079475">
@@ -125,6 +139,13 @@
           <keywords><![CDATA[MILLEN POND RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.180122" lon="-72.10676">
+          <name><![CDATA[12" 40' Good 1x None Handmade Steel ]]></name>
+          <ele>498.348</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.16455" lon="-72.05505">
           <name><![CDATA[15" 50' Fair 1x None Handmade Concrete ]]></name>
           <ele>408.432</ele>
@@ -167,6 +188,13 @@
           <keywords><![CDATA[AYERS POND RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.178596" lon="-72.10281">
+          <name><![CDATA[36" 45' Good 1x None Handmade Plastic ]]></name>
+          <ele>471.2208</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.189274" lon="-72.02455">
           <name><![CDATA[96x12" 30' Good 1x None Handmade Steel ]]></name>
           <ele>313.6392</ele>
@@ -179,6 +207,13 @@
           <ele>356.616</ele>
           <desc><![CDATA[]]></desc>
           <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18132423296649" lon="-72.11500662636999">
+          <name><![CDATA[12" 30' Good 1x None Handmade Plastic ]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[LOCATION EXTRAPOLATED]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.17900879306109" lon="-72.10139581749604">
@@ -207,6 +242,20 @@
           <ele>317.6016</ele>
           <desc><![CDATA[]]></desc>
           <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18102" lon="-72.11611">
+          <name><![CDATA[12" 30' Good 1x None Handmade Steel ]]></name>
+          <ele>555.6504</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18165" lon="-72.11403">
+          <name><![CDATA[15" 30' Good 1x None Handmade Steel 2022]]></name>
+          <ele>543.4584</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.180714" lon="-72.103485">
@@ -265,6 +314,13 @@
           <keywords><![CDATA[FAXON HILL RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.179462" lon="-72.105804">
+          <name><![CDATA[12" 26' Poor 1x None Handmade Plastic ]]></name>
+          <ele>512.064</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.16705" lon="-72.126144">
           <name><![CDATA[15" 30' Good 1x None Handmade Plastic ]]></name>
           <ele>492.5568</ele>
@@ -284,6 +340,13 @@
           <ele>481.58398</ele>
           <desc><![CDATA[undefined]]></desc>
           <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.178116" lon="-72.10088">
+          <name><![CDATA[8" 40' Poor 1x None Handmade Steel ]]></name>
+          <ele>474.8784</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.17593" lon="-72.043785">
@@ -587,11 +650,25 @@
           <keywords><![CDATA[E WASHINGTON RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.18047176093032" lon="-72.11056573114594">
+          <name><![CDATA[24" 50' Good 1x None Handmade Plastic 2022]]></name>
+          <ele>0</ele>
+          <desc><![CDATA[LOCATION EXTRAPOLATED]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.192383" lon="-72.02523">
           <name><![CDATA[30" 50' Good 1x None Precast Plastic ]]></name>
           <ele>285.9024</ele>
           <desc><![CDATA[]]></desc>
           <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.17849514376645" lon="-72.10260049273629">
+          <name><![CDATA[8" 25' Good 1x None Handmade Plastic ]]></name>
+          <ele>469.392</ele>
+          <desc><![CDATA[LOCATION EXTRAPOLATED]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.167866" lon="-72.07799">
@@ -659,6 +736,13 @@
           <keywords><![CDATA[E WASHINGTON RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.17826" lon="-72.10145">
+          <name><![CDATA[15" 30' Good 1x None Handmade Steel 2019]]></name>
+          <ele>477.9264</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.175564" lon="-72.10655">
           <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
           <ele>477.9264</ele>
@@ -692,6 +776,13 @@
           <ele>490.728</ele>
           <desc><![CDATA[undefined]]></desc>
           <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18144198726972" lon="-72.1189331016921">
+          <name><![CDATA[12" 30' Fair 1x None Handmade Concrete ]]></name>
+          <ele>520</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.18908" lon="-72.03771">
@@ -750,11 +841,25 @@
           <keywords><![CDATA[AYERS POND RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.17885" lon="-72.10389">
+          <name><![CDATA[36" 25' Fair 1x None Handmade Concrete ]]></name>
+          <ele>479.4504</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.193848" lon="-72.0308">
           <name><![CDATA[8" 20' Good 1x None Handmade Unknown ]]></name>
           <ele>320.3448</ele>
           <desc><![CDATA[]]></desc>
           <keywords><![CDATA[AYERS POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.180683" lon="-72.1076">
+          <name><![CDATA[18" 32' Good 1x None Handmade Plastic ]]></name>
+          <ele>494.3856</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.167076" lon="-72.05206">
@@ -799,6 +904,13 @@
           <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.180965" lon="-72.11288">
+          <name><![CDATA[18" 40' Fair 1x None Handmade Steel ]]></name>
+          <ele>535.8384</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.164215" lon="-72.06098">
           <name><![CDATA[12" 40' Good 1x None Handmade Plastic ]]></name>
           <ele>442.8744</ele>
@@ -827,11 +939,25 @@
           <keywords><![CDATA[AYERS POND RD]]></keywords>
         </wpt>
       
+        <wpt lat="43.18102" lon="-72.1171">
+          <name><![CDATA[12" 30' Good 1x Minor Handmade Steel ]]></name>
+          <ele>546.5064</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
+        </wpt>
+      
         <wpt lat="43.175095" lon="-72.10525">
           <name><![CDATA[24" 40' Fair 1x None None Steel ]]></name>
           <ele>441.3504</ele>
           <desc><![CDATA[undefined]]></desc>
           <keywords><![CDATA[MILLEN POND RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.180794" lon="-72.10859">
+          <name><![CDATA[24" 40' Good 1x None Handmade Plastic 2022]]></name>
+          <ele>494.3856</ele>
+          <desc><![CDATA[]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.1887" lon="-72.11355">
@@ -995,7 +1121,7 @@
           <keywords><![CDATA[LEMPSTER MTN RD]]></keywords>
         </wpt>
       
-        <wpt lat="43.2028786830698" lon="-72.03017939777375">
+        <wpt lat="43.2021627564223" lon="-72.03028843005589">
           <name><![CDATA[12" 28' Good 1x None Handmade Steel 2023]]></name>
           <ele>0</ele>
           <desc><![CDATA[]]></desc>
@@ -1077,6 +1203,13 @@
           <ele>349.6056</ele>
           <desc><![CDATA[]]></desc>
           <keywords><![CDATA[E WASHINGTON RD]]></keywords>
+        </wpt>
+      
+        <wpt lat="43.18043914376645" lon="-72.10730049273629">
+          <name><![CDATA[12" 30' Good 1x None Handmade Steel 2019]]></name>
+          <ele>493.4712</ele>
+          <desc><![CDATA[LOCATION EXTRAPOLATED]]></desc>
+          <keywords><![CDATA[OLD MARLOW RD]]></keywords>
         </wpt>
       
         <wpt lat="43.2071" lon="-72.03608">
