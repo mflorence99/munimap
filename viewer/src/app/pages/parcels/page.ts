@@ -35,6 +35,7 @@ import { environment } from '@lib/environment';
         [maxZoom]="22"
         [path]="sink.mapState.path"
         class="content">
+
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->
         <!-- ---------------------------------------------------------- -->
@@ -46,10 +47,14 @@ import { environment } from '@lib/environment';
 
         <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
+        <app-ol-control-parcel-list
+          mapControlParcelList></app-ol-control-parcel-list>
+
         <app-ol-control-attribution
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
+          
           <!-- ------------------------------------------------------- -->
           <!-- 🗺️ Internal control panels                              -->
           <!-- ------------------------------------------------------- -->

@@ -1,59 +1,59 @@
-import { Parcel } from "../common";
-import { GeoJSONService } from "../services/geojson";
-import { Path } from "../state/view";
-import { ViewActions } from "../state/view";
-import { ViewState } from "../state/view";
-import { ViewStateModel } from "../state/view";
-import { Mapable } from "./ol-mapable";
-import { MapableComponent } from "./ol-mapable";
-import { Searcher } from "./ol-searcher";
-import { SearcherComponent } from "./ol-searcher";
-import { Selector } from "./ol-selector";
-import { SelectorComponent } from "./ol-selector";
+import { Parcel } from '../common';
+import { GeoJSONService } from '../services/geojson';
+import { Path } from '../state/view';
+import { ViewActions } from '../state/view';
+import { ViewState } from '../state/view';
+import { ViewStateModel } from '../state/view';
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
+import { Searcher } from './ol-searcher';
+import { SearcherComponent } from './ol-searcher';
+import { Selector } from './ol-selector';
+import { SelectorComponent } from './ol-selector';
 
-import { bboxSize } from "../common";
+import { bboxSize } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { ElementRef } from "@angular/core";
-import { HostListener } from "@angular/core";
-import { OnDestroy } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { OutputRefSubscription } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Coordinate } from "ol/coordinate";
-import { EventsKey as OLEventsKey } from "ol/events";
-import { BehaviorSubject } from "rxjs";
-import { Subject } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { HostListener } from '@angular/core';
+import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { OutputRefSubscription } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { Coordinate } from 'ol/coordinate';
+import { EventsKey as OLEventsKey } from 'ol/events';
+import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { computed } from "@angular/core";
-import { contentChild } from "@angular/core";
-import { contentChildren } from "@angular/core";
-import { effect } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { model } from "@angular/core";
-import { output } from "@angular/core";
-import { signal } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { centerOfMass } from "@turf/center-of-mass";
-import { squareGrid } from "@turf/square-grid";
-import { unByKey } from "ol/Observable";
-import { fromLonLat } from "ol/proj";
-import { toLonLat } from "ol/proj";
-import { transformExtent } from "ol/proj";
+import { computed } from '@angular/core';
+import { contentChild } from '@angular/core';
+import { contentChildren } from '@angular/core';
+import { effect } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { model } from '@angular/core';
+import { output } from '@angular/core';
+import { signal } from '@angular/core';
+import { viewChild } from '@angular/core';
+import { centerOfMass } from '@turf/center-of-mass';
+import { squareGrid } from '@turf/square-grid';
+import { unByKey } from 'ol/Observable';
+import { fromLonLat } from 'ol/proj';
+import { toLonLat } from 'ol/proj';
+import { transformExtent } from 'ol/proj';
 
-import OLFeature from "ol/Feature";
-import OLMap from "ol/Map";
-import OLMapBrowserEvent from "ol/MapBrowserEvent";
-import OLView from "ol/View";
+import OLFeature from 'ol/Feature';
+import OLMap from 'ol/Map';
+import OLMapBrowserEvent from 'ol/MapBrowserEvent';
+import OLView from 'ol/View';
 
 const nominalDPI = 96;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-map",
+  selector: 'app-ol-map',
   template: `
     <section class="controls">
       <article class="panels">
@@ -70,6 +70,7 @@ const nominalDPI = 96;
           <ng-content select="[mapControlZoomToExtent]"></ng-content>
           <ng-content select="[mapControlExport]"></ng-content>
           <ng-content select="[mapControlPrint]"></ng-content>
+          <ng-content select="[mapControlParcelList]"></ng-content>
           <ng-content select="[mapControlAttribution]"></ng-content>
         </div>
       </article>
@@ -142,31 +143,31 @@ const nominalDPI = 96;
         grid-area: panels;
         justify-content: flex-start;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   // 👉 proxy this from the real selector (if any) to ensure safe access
   abuttersFound = output<Parcel[]>();
   bbox = computed(
-    () => this.bounds() ?? this.boundary()?.features?.[0]?.bbox ?? [0, 0, 0, 0],
+    () => this.bounds() ?? this.boundary()?.features?.[0]?.bbox ?? [0, 0, 0, 0]
   );
   boundary = signal<GeoJSON.FeatureCollection<any, any>>(null);
   boundaryExtent: Coordinate;
   boundaryGrid: GeoJSON.FeatureCollection<any, any>;
   bounds = input<Coordinate>();
-  canvas = viewChild<ElementRef<HTMLCanvasElement>>("canvas");
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   click$ = new Subject<OLMapBrowserEvent<any>>();
   contextMenu$ = new BehaviorSubject<PointerEvent>(null);
   contextMenuAt: number[];
   dpi = model(nominalDPI) /* 👈 nominal pixels per inch of screen */;
   escape$ = new Subject<KeyboardEvent>();
-  featureProjection = "EPSG:4326";
+  featureProjection = 'EPSG:4326';
   // 👉 proxy this from the real selector (if any) to ensure safe access
   featuresSelected = output<OLFeature<any>[]>();
   fitToBounds = input(false);
   initialized = false;
-  loadingStrategy = input<"all" | "bbox">();
+  loadingStrategy = input<'all' | 'bbox'>();
   mapables = contentChildren<Mapable>(MapableComponent, { descendants: true });
   maxZoom = input(22);
   minUsefulZoom = input(15);
@@ -174,7 +175,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   olMap: OLMap;
   olView: OLView;
   path = input<Path>();
-  projection = "EPSG:3857";
+  projection = 'EPSG:3857';
   searcher = contentChild<Searcher>(SearcherComponent);
   selector = contentChild<Selector>(SelectorComponent);
   vars: Record<string, string> = {};
@@ -197,7 +198,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
       maxTilesLoading: 256,
       moveTolerance: 1,
       target: null,
-      view: null,
+      view: null
     });
     this.olMap.setProperties({ component: this }, true);
     // 👉 get these up front, all at once,
@@ -211,13 +212,13 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
       // 👉 proxy any selector events
       this.#subToAbuttersFound?.unsubscribe();
       this.#subToAbuttersFound = this.selector()?.abuttersFound?.subscribe(
-        (abutters) => this.abuttersFound.emit(abutters),
+        (abutters) => this.abuttersFound.emit(abutters)
       );
       this.#subToFeaturesSelected?.unsubscribe();
       this.#subToFeaturesSelected = this.selector()?.featuresSelected.subscribe(
         (features) => {
           this.featuresSelected.emit(features);
-        },
+        }
       );
       // 👉 when there's no selector, there are no features selected
       if (!this.selector) {
@@ -227,15 +228,15 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
       // 👇 redraw on next tick
       setTimeout(
         () => this.mapables().forEach((mapable) => mapable.mapUpdated?.()),
-        0,
+        0
       );
     });
   }
 
-  get orientation(): "landscape" | "portrait" {
+  get orientation(): 'landscape' | 'portrait' {
     const [minX, minY, maxX, maxY] = this.bbox();
     const [cx, cy] = bboxSize(minX, minY, maxX, maxY);
-    return cx > cy ? "landscape" : "portrait";
+    return cx > cy ? 'landscape' : 'portrait';
   }
 
   get printing(): boolean {
@@ -262,8 +263,8 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     this.#cdf.markForCheck();
   }
 
-  @HostListener("contextmenu", ["$event"]) onContextMenu(
-    event: PointerEvent,
+  @HostListener('contextmenu', ['$event']) onContextMenu(
+    event: PointerEvent
   ): void {
     event.preventDefault();
     this.contextMenuAt = this.coordinateFromEvent(event.clientX, event.clientY);
@@ -271,8 +272,8 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     this.contextMenu$.next(event);
   }
 
-  @HostListener("document:keydown.escape", ["$event"]) onEscape(
-    event: KeyboardEvent,
+  @HostListener('document:keydown.escape', ['$event']) onEscape(
+    event: KeyboardEvent
   ): void {
     this.escape$.next(event);
     event.stopPropagation();
@@ -281,24 +282,24 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   coordinateFromEvent(x: number, y: number): Coordinate {
     // 👉 need to hack Y offsets by the height of the toolbar
     const style = getComputedStyle(document.documentElement);
-    const hack = Number(style.getPropertyValue("--map-cy-toolbar"));
+    const hack = Number(style.getPropertyValue('--map-cy-toolbar'));
     return this.olMap.getCoordinateFromPixel([x, y - hack]);
   }
 
   currentCounty(): string {
-    return this.path()?.split(":")[1];
+    return this.path()?.split(':')[1];
   }
 
   currentState(): string {
-    return this.path()?.split(":")[0];
+    return this.path()?.split(':')[0];
   }
 
   currentTown(): string {
-    return this.path()?.split(":")[2];
+    return this.path()?.split(':')[2];
   }
 
   measureText(text: string, font: string): TextMetrics {
-    const ctx = this.canvas().nativeElement.getContext("2d");
+    const ctx = this.canvas().nativeElement.getContext('2d');
     ctx.font = font;
     return ctx.measureText(text);
   }
@@ -309,7 +310,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   }
 
   ngOnInit(): void {
-    this.#clickKey = this.olMap.on("click", this.#onClick.bind(this));
+    this.#clickKey = this.olMap.on('click', this.#onClick.bind(this));
     this.olMap.setTarget(this.#host.nativeElement);
   }
 
@@ -326,19 +327,19 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     // 👇 we only want to remove the controls we added
     const controls = [...this.olMap.getControls().getArray()];
     controls.forEach((control) => {
-      if (control.get("component")) this.olMap.removeControl(control);
+      if (control.get('component')) this.olMap.removeControl(control);
     });
     // 👇 we only want to remove the interactions we added
     //    OL adds a bunch of its own we must keep intact
     const interactions = [...this.olMap.getInteractions().getArray()];
     interactions.forEach((interaction) => {
-      if (interaction.get("component"))
+      if (interaction.get('component'))
         this.olMap.removeInteraction(interaction);
     });
     // 👇 we only want to remove the layers we added
     const layers = [...this.olMap.getLayers().getArray()];
     layers.forEach((layer) => {
-      if (layer.get("component")) this.olMap.removeLayer(layer);
+      if (layer.get('component')) this.olMap.removeLayer(layer);
     });
   }
 
@@ -348,22 +349,22 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     this.boundaryExtent = transformExtent(
       this.bbox(),
       this.featureProjection,
-      this.projection,
+      this.projection
     );
     // 👉 precompute boundary grid, but only if needed
     //    we need to make sure that the bounding box is an even
     //    multiple of the cell size for complete grid coverage
-    if (this.loadingStrategy() === "bbox") {
+    if (this.loadingStrategy() === 'bbox') {
       const [minX, minY, maxX, maxY] = this.bbox();
       const floored: GeoJSON.BBox = [
         Math.floor(minX * 10) / 10,
         Math.floor(minY * 10) / 10,
         Math.ceil(maxX * 10) / 10,
-        Math.ceil(maxY * 10) / 10,
+        Math.ceil(maxY * 10) / 10
       ];
       this.boundaryGrid = squareGrid(floored, 0.02, {
-        units: "degrees",
-        mask: boundary.features[0],
+        units: 'degrees',
+        mask: boundary.features[0]
       });
     }
     // 👉 create view
@@ -372,7 +373,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
       maxZoom: this.maxZoom(),
       minZoom: this.minZoom(),
       smoothExtentConstraint: true,
-      showFullExtent: true,
+      showFullExtent: true
     });
     this.olView.setProperties({ component: this }, true);
     this.olMap.setView(this.olView);
@@ -389,14 +390,14 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
       this.olView.setZoom(this.minUsefulZoom());
     }
     // 👉 handle events
-    this.#changeKey = this.olView.on("change", this.#onChange.bind(this));
+    this.#changeKey = this.olView.on('change', this.#onChange.bind(this));
   }
 
   #findAllCustomVariables(): Record<string, string> {
     // 👉 https://stackoverflow.com/questions/48760274
     const names = Array.from(document.styleSheets)
       .filter(
-        (sheet) => sheet.href == null || sheet.href.startsWith(location.origin),
+        (sheet) => sheet.href == null || sheet.href.startsWith(location.origin)
       )
       // 🐛 Failed to read the 'cssRules' property from 'CSSStyleSheet': Cannot access rules
       .filter((sheet) => {
@@ -413,13 +414,13 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
             ...Array.from(sheet.cssRules).reduce(
               (def, rule: any) =>
                 (def =
-                  rule.selectorText === ":root"
+                  rule.selectorText === ':root'
                     ? [...def, ...Array.from(rule.style)]
                     : def),
-              [],
-            ),
+              []
+            )
           ]),
-        [],
+        []
       );
     const style = getComputedStyle(document.documentElement);
     // 👉 now organize them as { name: value }
@@ -439,7 +440,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     //    it must be loaded before we proceed
     document.fonts.load(`normal bold 10px 'Font Awesome'`).then(() => {
       this.#geoJSON
-        .loadByIndex(path, "boundary")
+        .loadByIndex(path, 'boundary')
         .subscribe((boundary: GeoJSON.FeatureCollection<any, any>) => {
           this.#createView(boundary);
           this.initialized = true;
@@ -455,7 +456,7 @@ export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
     this.zoomChange.emit(zoom);
     if (!this.fitToBounds())
       this.#store.dispatch(
-        new ViewActions.UpdateView(this.path(), { center, zoom }),
+        new ViewActions.UpdateView(this.path(), { center, zoom })
       );
   }
 

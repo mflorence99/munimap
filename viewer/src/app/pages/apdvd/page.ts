@@ -29,6 +29,7 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
         [maxZoom]="22"
         [path]="sink.mapState.path"
         class="content">
+
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->
         <!-- ---------------------------------------------------------- -->
@@ -45,6 +46,7 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
+          
           <!-- ---------------------------------------------------------- -->
           <!-- 🗺️ Internal control panels                                 -->
           <!-- ---------------------------------------------------------- -->

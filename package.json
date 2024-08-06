@@ -158,7 +158,7 @@
     "tslib": "^2",
     "typeface-roboto": "^1",
     "ua-parser-js": "^1",
-    "unzipper": "^0.12.1",
+    "unzipper": "0.12.3",
     "url-parse": "^1",
     "yargs": "^17",
     "zone.js": "~0.14.4"

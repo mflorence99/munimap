@@ -1,17 +1,17 @@
-import { OLMapComponent } from "./ol-map";
+import { OLMapComponent } from './ol-map';
 
-import { environment } from "../environment";
+import { environment } from '../environment';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { inject } from "@angular/core";
+import { inject } from '@angular/core';
 
-import OLLayer from "ol/layer/Layer";
+import OLLayer from 'ol/layer/Layer';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-attribution",
+  selector: 'app-ol-control-attribution',
   template: `
     <article class="control">
       <ul #attribution class="attribution" [class.collapsed]="collapsed">
@@ -47,7 +47,7 @@ import OLLayer from "ol/layer/Layer";
         opacity: 1;
         padding: 0.5rem;
         position: absolute;
-        right: 3.25rem;
+        right: 4rem;
         transition: opacity 0.25s ease-in-out;
         width: auto;
 
@@ -70,8 +70,8 @@ import OLLayer from "ol/layer/Layer";
       .header {
         font-weight: bold;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlAttributionComponent {
   attributions: string[] = [];

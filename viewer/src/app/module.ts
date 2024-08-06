@@ -64,6 +64,7 @@ import { OLAdaptorWetlandsComponent } from '@lib/ol/ol-adaptor-wetlands';
 import { OLAttributionComponent } from '@lib/ol/ol-attribution';
 import { OLControlAttributionComponent } from '@lib/ol/ol-control-attribution';
 import { OLControlGraticuleComponent } from '@lib/ol/ol-control-graticule';
+import { OLControlParcelListComponent } from '@lib/ol/ol-control-parcel-list';
 import { OLControlPlusMinusComponent } from '@lib/ol/ol-control-plusminus';
 import { OLControlScaleLineComponent } from '@lib/ol/ol-control-scaleline';
 import { OLControlSearchParcelsComponent } from '@lib/ol/ol-control-searchparcels';
@@ -164,6 +165,7 @@ import { faMap } from '@fortawesome/pro-duotone-svg-icons';
 import { faMapMarkerAlt } from '@fortawesome/pro-duotone-svg-icons';
 import { faPalette } from '@fortawesome/pro-duotone-svg-icons';
 import { faRoad } from '@fortawesome/pro-duotone-svg-icons';
+import { faListOl } from '@fortawesome/pro-light-svg-icons';
 import { faMinus } from '@fortawesome/pro-light-svg-icons';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { faClipboard } from '@fortawesome/pro-regular-svg-icons';
@@ -206,6 +208,7 @@ const COMPONENTS = [
   OLAttributionComponent,
   OLControlAttributionComponent,
   OLControlGraticuleComponent,
+  OLControlParcelListComponent,
   OLControlPlusMinusComponent,
   OLControlScaleLineComponent,
   OLControlSearchParcelsComponent,
@@ -449,6 +452,7 @@ export class RootModule {
       faExpandArrows,
       faGlobeAmericas,
       faInfoCircle,
+      faListOl,
       faMap,
       faMapMarkerAlt,
       faMinus,
