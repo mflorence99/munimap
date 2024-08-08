@@ -1,53 +1,53 @@
-import { Parcel } from "../common";
-import { ParcelID } from "../common";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
-import { Mapable } from "./ol-mapable";
-import { MapableComponent } from "./ol-mapable";
-import { Selector } from "./ol-selector";
-import { SelectorComponent } from "./ol-selector";
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
+import { Selector } from './ol-selector';
+import { SelectorComponent } from './ol-selector';
 
-import * as Comlink from "comlink";
+import * as Comlink from 'comlink';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnDestroy } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { EventsKey as OLEventsKey } from "ol/events";
-import { SelectEvent as OLSelectEvent } from "ol/interaction/Select";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { EventsKey as OLEventsKey } from 'ol/events';
+import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
 
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { output } from "@angular/core";
-import { unByKey } from "ol/Observable";
-import { click } from "ol/events/condition";
-import { never } from "ol/events/condition";
-import { platformModifierKeyOnly } from "ol/events/condition";
-import { shiftKeyOnly } from "ol/events/condition";
-import { extend } from "ol/extent";
-import { transformExtent } from "ol/proj";
+import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { output } from '@angular/core';
+import { unByKey } from 'ol/Observable';
+import { click } from 'ol/events/condition';
+import { never } from 'ol/events/condition';
+import { platformModifierKeyOnly } from 'ol/events/condition';
+import { shiftKeyOnly } from 'ol/events/condition';
+import { extend } from 'ol/extent';
+import { transformExtent } from 'ol/proj';
 
-import Debounce from "debounce-decorator";
-import OLFeature from "ol/Feature";
-import OLGeoJSON from "ol/format/GeoJSON";
-import OLSelect from "ol/interaction/Select";
+import Debounce from 'debounce-decorator';
+import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
+import OLSelect from 'ol/interaction/Select';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent),
+      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
     },
     {
       provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent),
-    },
+      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
+    }
   ],
-  selector: "app-ol-interaction-selectparcels",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-interaction-selectparcels',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }']
 })
 export class OLInteractionSelectParcelsComponent
   implements Mapable, OnDestroy, OnInit, Selector
@@ -83,13 +83,13 @@ export class OLInteractionSelectParcelsComponent
       removeCondition: (event): boolean =>
         click(event) && platformModifierKeyOnly(event),
       style: this.layer.styleWhenSelected(),
-      toggleCondition: (): boolean => never(),
+      toggleCondition: (): boolean => never()
     });
     this.olSelect.setProperties({ component: this }, true);
     // 👉 one to rule them all
     this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection,
+      featureProjection: this.map.projection
     });
   }
 
@@ -110,20 +110,20 @@ export class OLInteractionSelectParcelsComponent
     //    available is ID and bbox
     const bbox = parcels.reduce(
       (bbox, parcel) => extend(bbox, parcel.bbox),
-      [...parcels[0].bbox],
+      [...parcels[0].bbox]
     );
     // 👉 that's the union of the extent
     const extent = transformExtent(
       bbox,
       this.map.featureProjection,
-      this.map.projection,
+      this.map.projection
     );
     // 👇 setup a listener to select later if the zoom loads more parcels
     const ids = parcels.map((parcel) => parcel.id);
     if (this.#featuresLoadEndKey) unByKey(this.#featuresLoadEndKey);
     this.#featuresLoadEndKey = this.layer.olLayer
       .getSource()
-      .once("featuresloadend", () => this.#selectParcels(ids));
+      .once('featuresloadend', () => this.#selectParcels(ids));
     // 👇 zoom to the extent of all the selected parcels and select them
     const minZoom = this.map.olView.getMinZoom();
     this.map.olView.setMinZoom(this.map.minUsefulZoom());
@@ -134,7 +134,7 @@ export class OLInteractionSelectParcelsComponent
       },
       duration: this.zoomAnimationDuration(),
       maxZoom: this.maxZoom() ?? this.map.maxZoom(),
-      size: this.map.olMap.getSize(),
+      size: this.map.olMap.getSize()
     });
   }
 
@@ -149,7 +149,7 @@ export class OLInteractionSelectParcelsComponent
 
   ngOnInit(): void {
     if (this.findAbutters()) this.#createAbuttersWorker();
-    this.#selectKey = this.olSelect.on("select", this.#onSelect.bind(this));
+    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 
   reselectParcels(ids: ParcelID[]): void {
@@ -162,14 +162,14 @@ export class OLInteractionSelectParcelsComponent
 
   #createAbuttersWorker(): void {
     const proxy: any = Comlink.wrap(
-      new Worker(new URL("../../../worker/src/abutters", import.meta.url)),
+      new Worker(new URL('../../../worker/src/abutters', import.meta.url))
     );
     new proxy().then((instance) => (this.#abuttersWorker = instance));
   }
 
   #findAbutters(): void {
     const selecteds = this.selected.map((feature) =>
-      JSON.parse(this.#format.writeFeature(feature)),
+      JSON.parse(this.#format.writeFeature(feature))
     );
     const allFeatures = this.layer.olLayer
       .getSource()
@@ -181,7 +181,7 @@ export class OLInteractionSelectParcelsComponent
       // 👉 jank-free repaint of abutter features
       const source = this.layer.olLayer.getSource();
       abutters.forEach((abutter) =>
-        source.getFeatureById(abutter.id).changed(),
+        source.getFeatureById(abutter.id).changed()
       );
       // 👉 propgate abutters
       this.abutters = abutters;
@@ -197,8 +197,8 @@ export class OLInteractionSelectParcelsComponent
   }
 
   #onSelect(_event?: OLSelectEvent): void {
-    const ids = this.selectedIDs.join(", ");
-    console.log(`%cSelected parcels`, "color: lightcoral", `[${ids}]`);
+    const ids = this.selectedIDs.join(', ');
+    console.log(`%cSelected parcels`, 'color: lightcoral', `[${ids}]`);
     this.featuresSelected.emit(this.selected);
     // 👉 find the abutters
     if (this.findAbutters()) this.#findAbutters();
