@@ -181,7 +181,7 @@
     "@types/recursive-readdir": "^2",
     "@types/shpjs": "^3",
     "@types/ua-parser-js": "0.7.39",
-    "@types/unzipper": "0.10.9",
+    "@types/unzipper": "0.10.10",
     "@types/url-parse": "^1",
     "@types/yargs": "^17",
     "fast-xml-parser": "^4",

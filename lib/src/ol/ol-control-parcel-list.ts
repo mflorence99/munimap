@@ -16,7 +16,6 @@ import { Component } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
@@ -33,27 +32,36 @@ import copy from 'fast-copy';
     <article class="control">
       <section #list class="list" [class.collapsed]="collapsed">
 
-        <select 
-          (change)="onFilterCategory($any($event.target).value)"
-          class="categories">
-          <option class="category" value="deed">Deeded Properties</option>
-          <option class="category" value="300">Town Properties</option>
-          <option class="category" value="400">State Properties</option>
-          <option class="category" value="500">State Parks</option>
-          <option class="category" value="501">Town Forests</option>
-          <option class="category" value="502">Conservation Lands</option>
-        </select>
+        <section class="simlist">
+          @let listSize = parcels.length ? 1 : categories.length;
+
+          @if (listSize === 1) {
+            &#9660;
+          }
+
+          <select 
+            (change)="onFilterCategory($any($event.target).value)"
+            [size]="listSize"
+            class="categories">
+            @for (category of categories; track category[0]) {
+              <option [value]="category[0]" class="category">
+                {{ category[1] }}
+              </option>
+            }
+          </select>
+        </section>
 
         <aside class="wrapper">
           <table class="properties">
 
             <tbody>
-              @for (parcel of parcels; track parcel.id) {
+              @for (parcel of parcels; track parcel.id; let ix = $index) {
                 <tr>
+                  <td class="index">{{ ix + 1 }}.</td>
                   <td>
                     <a (click)="onSelect(parcel)">{{ parcel.id }}</a>
                   </td>
-                  <td>{{ parcel.properties.address }}</td>
+                  <td class="address">{{ parcel.properties.address }}</td>
                 </tr>
               }
             </tbody>
@@ -116,8 +124,22 @@ import copy from 'fast-copy';
         width: 100%;
 
         td {
+          padding-right: 0.25rem;
           white-space: nowrap;
         }
+
+        td.address {
+          width: 100%;
+        }
+
+        td.index {
+          font-weight: bold;
+          text-align: right;
+        }
+      }
+
+      .simlist {
+        display: flex;
       }
 
       .wrapper {
@@ -130,11 +152,20 @@ import copy from 'fast-copy';
   ]
 })
 export class OLControlParcelListComponent implements OnInit {
+  categories = [
+    ['deed', 'Deeded Properties'],
+    ['300', 'Town Properties'],
+    ['400', 'State Properties'],
+    ['500', 'State Parks'],
+    ['501', 'Town Forests'],
+    ['502', 'Conservation Lands']
+  ];
   collapsed = true;
   parcels: Parcel[] = [];
   parcels$: Observable<Parcel[]>;
+  ready = false;
 
-  #category$ = new BehaviorSubject<string>('deed');
+  #category$ = new Subject<string>();
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
   #geoJSON = inject(GeoJSONService);
@@ -149,10 +180,7 @@ export class OLControlParcelListComponent implements OnInit {
     this.parcels$ = this.#store.select(ParcelsState.parcels);
   }
 
-  ngOnInit(): void {
-    this.#handleGeoJSON$();
-    this.#handleStreams$();
-  }
+  ngOnInit(): void {}
 
   onFilterCategory(category: string): void {
     this.#category$.next(category);
@@ -168,6 +196,11 @@ export class OLControlParcelListComponent implements OnInit {
   toggleList(): void {
     this.collapsed = !this.collapsed;
     if (!this.collapsed) {
+      if (!this.ready) {
+        this.#handleGeoJSON$();
+        this.#handleStreams$();
+        this.ready = true;
+      }
     }
   }
 
