@@ -29,12 +29,13 @@ For a live demo, please see [washington.munimap.online](https://washington.munim
 3. Update version in `package.json`
 4. Rebuild author and viewer for a sanity check
    1. Check that parcels in live Firestore database now appear in test
-5. Use `filezilla` to SFTP `geojson` files to AWS EFS
+5. `npm run bin:aws:transfer` to create AWS Transfer server
+   1. Use `filezilla` to SFTP `geojson` files to AWS EFS
 6. `npm run lint`
    1. Correct any errors
 7. Commit all changes
 8. `npm run deploy:aws:author`
-9. `npm run deploy:aws:viewer:washington`
+9.  `npm run deploy:aws:viewer:washington`
 10. Sanity test on live author and viewer
 11. `npm run firebase:live:backup`
 12. `npm run firebase:live:clean` to remove parcel deltas
