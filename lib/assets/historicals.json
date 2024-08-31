@@ -57,6 +57,14 @@
       "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1964 USGS/tiles/{z}/{x}/{y}.jpg"
     },
     {
+      "attribution": "Yusko & Williams",
+      "maxZoom": 15,
+      "minZoom": 13,
+      "name": "1976 Portrait of Hill Town",
+      "type": "xyz",
+      "url": "https://munimap-historical-images.s3.us-east-1.amazonaws.com/NEW HAMPSHIRE:SULLIVAN:WASHINGTON/1976 Portrait of Hill Town/tiles/{z}/{x}/{y}.jpg"
+    },
+    {
       "attribution": "USGS",
       "maxZoom": 15,
       "minZoom": 13,

@@ -1,0 +1,100 @@
+<PAMDataset>
+  <Metadata domain="IMAGE_STRUCTURE">
+    <MDI key="COMPRESSION">JPEG</MDI>
+    <MDI key="INTERLEAVE">PIXEL</MDI>
+    <MDI key="SOURCE_COLOR_SPACE">YCbCr</MDI>
+  </Metadata>
+  <Metadata>
+    <MDI key="EXIF_ApertureValue">(5.3107)</MDI>
+    <MDI key="EXIF_BodySerialNumber">3040449</MDI>
+    <MDI key="EXIF_CFAPattern">0x02 0x00 0x02 0x00 0x00 0x01 0x01 0x02</MDI>
+    <MDI key="EXIF_Contrast">0</MDI>
+    <MDI key="EXIF_CustomRendered">1</MDI>
+    <MDI key="EXIF_DateTime">2024:08:31 11:08:16</MDI>
+    <MDI key="EXIF_DateTimeDigitized">2024:08:28 12:46:13</MDI>
+    <MDI key="EXIF_DateTimeOriginal">2024:08:28 12:46:13</MDI>
+    <MDI key="EXIF_ExifVersion">0231</MDI>
+    <MDI key="EXIF_ExposureBiasValue">(0.666667)</MDI>
+    <MDI key="EXIF_ExposureMode">0</MDI>
+    <MDI key="EXIF_ExposureProgram">3</MDI>
+    <MDI key="EXIF_ExposureTime">(0.008)</MDI>
+    <MDI key="EXIF_FileSource">0x03</MDI>
+    <MDI key="EXIF_Flash">0</MDI>
+    <MDI key="EXIF_FNumber">(6.3)</MDI>
+    <MDI key="EXIF_FocalLength">(50)</MDI>
+    <MDI key="EXIF_FocalLengthIn35mmFilm">75</MDI>
+    <MDI key="EXIF_FocalPlaneResolutionUnit">3</MDI>
+    <MDI key="EXIF_FocalPlaneXResolution">(2301.32)</MDI>
+    <MDI key="EXIF_FocalPlaneYResolution">(2301.32)</MDI>
+    <MDI key="EXIF_GainControl">1</MDI>
+    <MDI key="EXIF_ISOSpeedRatings">800</MDI>
+    <MDI key="EXIF_LensModel">VR 24-120mm f/4G</MDI>
+    <MDI key="EXIF_LensSpecification">(24) (120) (4) (4)</MDI>
+    <MDI key="EXIF_LightSource">0</MDI>
+    <MDI key="EXIF_Make">NIKON CORPORATION</MDI>
+    <MDI key="EXIF_MeteringMode">2</MDI>
+    <MDI key="EXIF_Model">NIKON Z 7_2</MDI>
+    <MDI key="EXIF_OffsetTime">-04:00</MDI>
+    <MDI key="EXIF_OffsetTimeDigitized">-04:00</MDI>
+    <MDI key="EXIF_OffsetTimeOriginal">-04:00</MDI>
+    <MDI key="EXIF_Orientation">1</MDI>
+    <MDI key="EXIF_PixelXDimension">3408</MDI>
+    <MDI key="EXIF_PixelYDimension">3996</MDI>
+    <MDI key="EXIF_RecommendedExposureIndex">800</MDI>
+    <MDI key="EXIF_ResolutionUnit">2</MDI>
+    <MDI key="EXIF_Saturation">0</MDI>
+    <MDI key="EXIF_SceneCaptureType">0</MDI>
+    <MDI key="EXIF_SceneType">0x01</MDI>
+    <MDI key="EXIF_SensingMethod">2</MDI>
+    <MDI key="EXIF_SensitivityType">2</MDI>
+    <MDI key="EXIF_Sharpness">0</MDI>
+    <MDI key="EXIF_ShutterSpeedValue">(6.96578)</MDI>
+    <MDI key="EXIF_Software">GIMP 2.10.30</MDI>
+    <MDI key="EXIF_SubjectDistanceRange">0</MDI>
+    <MDI key="EXIF_SubSecTime">27</MDI>
+    <MDI key="EXIF_SubSecTime_Digitized">27</MDI>
+    <MDI key="EXIF_SubSecTime_Original">27</MDI>
+    <MDI key="EXIF_WhiteBalance">0</MDI>
+    <MDI key="EXIF_XResolution">(300)</MDI>
+    <MDI key="EXIF_YResolution">(300)</MDI>
+  </Metadata>
+  <PAMRasterBand band="1">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MAXIMUM">255</MDI>
+      <MDI key="STATISTICS_MEAN">207.35942875573</MDI>
+      <MDI key="STATISTICS_MINIMUM">72</MDI>
+      <MDI key="STATISTICS_STDDEV">37.040562671436</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="2">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MAXIMUM">253</MDI>
+      <MDI key="STATISTICS_MEAN">174.73838876147</MDI>
+      <MDI key="STATISTICS_MINIMUM">38</MDI>
+      <MDI key="STATISTICS_STDDEV">39.847823810427</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="3">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MAXIMUM">222</MDI>
+      <MDI key="STATISTICS_MEAN">136.31174741972</MDI>
+      <MDI key="STATISTICS_MINIMUM">3</MDI>
+      <MDI key="STATISTICS_STDDEV">37.127849540232</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>

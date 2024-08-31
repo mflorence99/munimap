@@ -1,19 +1,19 @@
-import { HistoricalMapIndex } from "../lib/src/common";
+import { HistoricalMapIndex } from '../lib/src/common';
 
-import { theState } from "../lib/src/common";
+import { theState } from '../lib/src/common';
 
-import { GetObjectAttributesCommand } from "@aws-sdk/client-s3";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { S3Client } from "@aws-sdk/client-s3";
-import { Units } from "@turf/helpers";
+import { GetObjectAttributesCommand } from '@aws-sdk/client-s3';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client } from '@aws-sdk/client-s3';
+import { Units } from '@turf/helpers';
 
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
-import { env } from "process";
-import { stdout } from "process";
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
+import { env } from 'process';
+import { stdout } from 'process';
 
-import chalk from "chalk";
-import JSZip from "jszip";
+import chalk from 'chalk';
+import JSZip from 'jszip';
 
 // 🔥 lots of assumptions here:
 //     1. map image in directory is named map.jpeg
@@ -27,7 +27,7 @@ type HistoricalSource = {
   attribution: string;
   dir: string;
   name: string;
-  type: "image" | "xyz";
+  type: 'image' | 'xyz';
 } & (HistoricalSourceImage | HistoricalSourceXYZ);
 
 type HistoricalSourceImage = {
@@ -36,16 +36,16 @@ type HistoricalSourceImage = {
   feathered?: boolean;
   filter?: string;
   masked: boolean;
-  type: "image";
+  type: 'image';
 };
 
 type HistoricalSourceXYZ = {
   maxZoom: number;
   minZoom: number;
-  type: "xyz";
+  type: 'xyz';
 };
 
-const bucket = "munimap-historical-images";
+const bucket = 'munimap-historical-images';
 
 type County = string;
 type Town = string;
@@ -54,88 +54,96 @@ const curated: Record<County, Record<Town, HistoricalSource[]>> = {
   SULLIVAN: {
     WASHINGTON: [
       {
-        attribution: "HF Walling",
-        dir: "./bin/assets/washington-1860",
+        attribution: 'HF Walling',
+        dir: './bin/assets/washington-1860',
         maxZoom: 15,
         minZoom: 13,
-        name: "1860 HF Walling",
-        type: "xyz",
+        name: '1860 HF Walling',
+        type: 'xyz'
       },
       {
-        attribution: "R&G Jager",
-        dir: "./bin/assets/washington-1860-schools",
+        attribution: 'R&G Jager',
+        dir: './bin/assets/washington-1860-schools',
         maxZoom: 15,
         minZoom: 13,
-        name: "1860 Schools",
-        type: "xyz",
+        name: '1860 Schools',
+        type: 'xyz'
       },
       {
-        attribution: "DH Hurd",
-        dir: "./bin/assets/washington-1892",
+        attribution: 'DH Hurd',
+        dir: './bin/assets/washington-1892',
         maxZoom: 15,
         minZoom: 13,
-        name: "1892 DH Hurd",
-        type: "xyz",
+        name: '1892 DH Hurd',
+        type: 'xyz'
       },
       {
-        attribution: "USGS",
-        dir: "./bin/assets/washington-usgs-1930",
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1930',
         maxZoom: 15,
         minZoom: 13,
-        name: "1930 USGS",
-        type: "xyz",
+        name: '1930 USGS',
+        type: 'xyz'
       },
       {
-        attribution: "USGS",
-        dir: "./bin/assets/washington-usgs-1942",
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1942',
         maxZoom: 15,
         minZoom: 13,
-        name: "1942 USGS",
-        type: "xyz",
+        name: '1942 USGS',
+        type: 'xyz'
       },
       {
-        attribution: "USGS",
-        dir: "./bin/assets/washington-usgs-1957",
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1957',
         maxZoom: 15,
         minZoom: 13,
-        name: "1957 USGS",
-        type: "xyz",
+        name: '1957 USGS',
+        type: 'xyz'
       },
       {
-        attribution: "USGS",
-        dir: "./bin/assets/washington-usgs-1964",
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1964',
         maxZoom: 15,
         minZoom: 13,
-        name: "1964 USGS",
-        type: "xyz",
+        name: '1964 USGS',
+        type: 'xyz'
       },
       {
-        attribution: "USGS",
-        dir: "./bin/assets/washington-usgs-1984",
+        attribution: 'Yusko & Williams',
+        dir: './bin/assets/washington-yusko-1976',
         maxZoom: 15,
         minZoom: 13,
-        name: "1984 USGS",
-        type: "xyz",
+        name: '1976 Portrait of Hill Town',
+        type: 'xyz'
       },
       {
-        attribution: "USGS",
-        dir: "./bin/assets/washington-usgs-1998",
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1984',
         maxZoom: 15,
         minZoom: 13,
-        name: "1998 USGS",
-        type: "xyz",
+        name: '1984 USGS',
+        type: 'xyz'
       },
-    ],
-  },
+      {
+        attribution: 'USGS',
+        dir: './bin/assets/washington-usgs-1998',
+        maxZoom: 15,
+        minZoom: 13,
+        name: '1998 USGS',
+        type: 'xyz'
+      }
+    ]
+  }
 };
 
 const client = new S3Client({});
 
-const dist = "./lib/assets";
+const dist = './lib/assets';
 
 const historicalMaps: HistoricalMapIndex = {};
 
-const s3Domain = `s3.${env.AWS_BUCKET ?? "us-east-1"}.amazonaws.com`;
+const s3Domain = `s3.${env.AWS_BUCKET ?? 'us-east-1'}.amazonaws.com`;
 
 async function main(): Promise<void> {
   // 👇 for each curated county, town
@@ -148,18 +156,18 @@ async function main(): Promise<void> {
       // 👇 for each historical map ...
       for (const source of curated[county][town]) {
         // 👇 type IMAGE
-        if (source.type === "image") {
+        if (source.type === 'image') {
           // 👇 start the copy process
           console.log(
-            chalk.green(`... writing ${source.name} image to ${path}`),
+            chalk.green(`... writing ${source.name} image to ${path}`)
           );
 
           // 👇 load the metadata describing the image
           const metadata = JSON.parse(
-            readFileSync(`${source.dir}/metadata.json`).toString(),
+            readFileSync(`${source.dir}/metadata.json`).toString()
           );
           const layer = metadata.layers.find(
-            (layer) => layer.type === "GeoImage",
+            (layer) => layer.type === 'GeoImage'
           );
 
           // 👇 populate the historical map descriptor
@@ -174,8 +182,8 @@ async function main(): Promise<void> {
             name: source.name,
             rotate: layer.imageRotate,
             scale: layer.imageScale,
-            type: "image",
-            url: `https://${bucket}.${s3Domain}/${path}/${source.name}.jpeg`,
+            type: 'image',
+            url: `https://${bucket}.${s3Domain}/${path}/${source.name}.jpeg`
           });
 
           // 👇 upload the untiled map image to S3
@@ -185,23 +193,23 @@ async function main(): Promise<void> {
               Bucket: bucket,
               Key: `${path}/${source.name}.jpeg`,
               Body: buffer,
-              ContentType: "image/jpeg",
-            }),
+              ContentType: 'image/jpeg'
+            })
           );
 
           // 👇 log progress
           console.log(
             chalk.yellow(
-              `...... S3 object ${path}/${source.name}.jpeg uploaded`,
-            ),
+              `...... S3 object ${path}/${source.name}.jpeg uploaded`
+            )
           );
         }
 
         // 👇 upload the map tiles to S3
-        if (source.type === "xyz") {
+        if (source.type === 'xyz') {
           // 👇 start the copy process
           console.log(
-            chalk.blue(`... processing ${source.name} tiles to ${path}`),
+            chalk.blue(`... processing ${source.name} tiles to ${path}`)
           );
 
           // 👇 populate the historical map descriptor
@@ -210,13 +218,13 @@ async function main(): Promise<void> {
             maxZoom: source.maxZoom,
             minZoom: source.minZoom,
             name: source.name,
-            type: "xyz",
-            url: `https://${bucket}.${s3Domain}/${path}/${source.name}/tiles/{z}/{x}/{y}.jpg`,
+            type: 'xyz',
+            url: `https://${bucket}.${s3Domain}/${path}/${source.name}/tiles/{z}/{x}/{y}.jpg`
           });
 
           // 👇 load and parse the zip of tiles
           const zip = await JSZip.loadAsync(
-            readFileSync(`${source.dir}/tiles.zip`),
+            readFileSync(`${source.dir}/tiles.zip`)
           );
           const entries = zip.filter((path, file) => !file.dir);
 
@@ -231,8 +239,8 @@ async function main(): Promise<void> {
                 new GetObjectAttributesCommand({
                   Bucket: bucket,
                   Key: `${path}/${source.name}/${entry.name}`,
-                  ObjectAttributes: ["ETag"],
-                }),
+                  ObjectAttributes: ['ETag']
+                })
               );
             } catch (e) {}
 
@@ -240,29 +248,29 @@ async function main(): Promise<void> {
             if (
               !s3Object ||
               entry.date.getTime() >
-                new Date(s3Object["LastModified"]).getTime()
+                new Date(s3Object['LastModified']).getTime()
             ) {
-              const buffer = await entry.async("nodebuffer");
+              const buffer = await entry.async('nodebuffer');
               await client.send(
                 new PutObjectCommand({
                   Bucket: bucket,
                   Key: `${path}/${source.name}/${entry.name}`,
                   Body: buffer,
-                  ContentType: "image/jpeg",
-                }),
+                  ContentType: 'image/jpeg'
+                })
               );
-              stdout.write("+");
+              stdout.write('+');
               count += 1;
-            } else stdout.write(".");
+            } else stdout.write('.');
           }
-          stdout.write("\n");
+          stdout.write('\n');
 
           // 👇 log progress
           if (count > 0) {
             console.log(
               chalk.yellow(
-                `...... ${count} S3 objects for ${path}/${source.name} tiles uploaded`,
-              ),
+                `...... ${count} S3 objects for ${path}/${source.name} tiles uploaded`
+              )
             );
           }
         }
@@ -275,7 +283,7 @@ async function main(): Promise<void> {
   console.log(chalk.green(`... writing ${dist}/historicals.json`));
   writeFileSync(
     `${dist}/historicals.json`,
-    JSON.stringify(historicalMaps, null, 2),
+    JSON.stringify(historicalMaps, null, 2)
   );
 }
 
