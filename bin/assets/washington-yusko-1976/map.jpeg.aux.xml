@@ -10,7 +10,7 @@
     <MDI key="EXIF_CFAPattern">0x02 0x00 0x02 0x00 0x00 0x01 0x01 0x02</MDI>
     <MDI key="EXIF_Contrast">0</MDI>
     <MDI key="EXIF_CustomRendered">1</MDI>
-    <MDI key="EXIF_DateTime">2024:08:31 11:08:16</MDI>
+    <MDI key="EXIF_DateTime">2024:09:01 14:01:59</MDI>
     <MDI key="EXIF_DateTimeDigitized">2024:08:28 12:46:13</MDI>
     <MDI key="EXIF_DateTimeOriginal">2024:08:28 12:46:13</MDI>
     <MDI key="EXIF_ExifVersion">0231</MDI>
@@ -38,8 +38,8 @@
     <MDI key="EXIF_OffsetTimeDigitized">-04:00</MDI>
     <MDI key="EXIF_OffsetTimeOriginal">-04:00</MDI>
     <MDI key="EXIF_Orientation">1</MDI>
-    <MDI key="EXIF_PixelXDimension">3408</MDI>
-    <MDI key="EXIF_PixelYDimension">3996</MDI>
+    <MDI key="EXIF_PixelXDimension">3332</MDI>
+    <MDI key="EXIF_PixelYDimension">3427</MDI>
     <MDI key="EXIF_RecommendedExposureIndex">800</MDI>
     <MDI key="EXIF_ResolutionUnit">2</MDI>
     <MDI key="EXIF_Saturation">0</MDI>
@@ -65,9 +65,9 @@
     <Metadata>
       <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
       <MDI key="STATISTICS_MAXIMUM">255</MDI>
-      <MDI key="STATISTICS_MEAN">207.35942875573</MDI>
-      <MDI key="STATISTICS_MINIMUM">72</MDI>
-      <MDI key="STATISTICS_STDDEV">37.040562671436</MDI>
+      <MDI key="STATISTICS_MEAN">219.38470262097</MDI>
+      <MDI key="STATISTICS_MINIMUM">63</MDI>
+      <MDI key="STATISTICS_STDDEV">34.474282492011</MDI>
       <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
     </Metadata>
   </PAMRasterBand>
@@ -77,10 +77,10 @@
     </Metadata>
     <Metadata>
       <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
-      <MDI key="STATISTICS_MAXIMUM">253</MDI>
-      <MDI key="STATISTICS_MEAN">174.73838876147</MDI>
-      <MDI key="STATISTICS_MINIMUM">38</MDI>
-      <MDI key="STATISTICS_STDDEV">39.847823810427</MDI>
+      <MDI key="STATISTICS_MAXIMUM">255</MDI>
+      <MDI key="STATISTICS_MEAN">219.38470262097</MDI>
+      <MDI key="STATISTICS_MINIMUM">63</MDI>
+      <MDI key="STATISTICS_STDDEV">34.474282492011</MDI>
       <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
     </Metadata>
   </PAMRasterBand>
@@ -90,10 +90,10 @@
     </Metadata>
     <Metadata>
       <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
-      <MDI key="STATISTICS_MAXIMUM">222</MDI>
-      <MDI key="STATISTICS_MEAN">136.31174741972</MDI>
-      <MDI key="STATISTICS_MINIMUM">3</MDI>
-      <MDI key="STATISTICS_STDDEV">37.127849540232</MDI>
+      <MDI key="STATISTICS_MAXIMUM">255</MDI>
+      <MDI key="STATISTICS_MEAN">219.38470262097</MDI>
+      <MDI key="STATISTICS_MINIMUM">63</MDI>
+      <MDI key="STATISTICS_STDDEV">34.474282492011</MDI>
       <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
     </Metadata>
   </PAMRasterBand>
