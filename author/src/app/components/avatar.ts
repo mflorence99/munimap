@@ -26,8 +26,8 @@ import { input } from "@angular/core";
         justify-content: center;
         width: 48px;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class AvatarComponent {
   initials = computed(() => {

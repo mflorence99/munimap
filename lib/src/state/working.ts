@@ -14,7 +14,7 @@ export type WorkingStateModel = any;
 
 @State<WorkingStateModel>({
   name: "working",
-  defaults: {},
+  defaults: {}
 })
 @Injectable()
 export class WorkingState {}

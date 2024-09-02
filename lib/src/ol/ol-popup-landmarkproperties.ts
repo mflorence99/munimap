@@ -97,7 +97,7 @@ interface Coordinate {
         }
       </table>
     }
-  `,
+  `
 })
 export class OLPopupLandmarkPropertiesComponent {
   landmark: Landmark;
@@ -112,7 +112,7 @@ export class OLPopupLandmarkPropertiesComponent {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection,
+      featureProjection: this.#map.projection
     });
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleFeatureSelected$();
@@ -148,7 +148,7 @@ export class OLPopupLandmarkPropertiesComponent {
         ? convertLength(Number(raw[2]), "meters", "feet")
         : null,
       latitude: raw[1],
-      longitude: raw[0],
+      longitude: raw[0]
     };
   }
 
@@ -162,8 +162,8 @@ export class OLPopupLandmarkPropertiesComponent {
           (features: OLFeature<any>[]): Landmark =>
             features.length > 0
               ? JSON.parse(this.#format.writeFeature(features[0]))
-              : null,
-        ),
+              : null
+        )
       )
       .subscribe((landmark: Landmark) => {
         this.landmark = landmark;

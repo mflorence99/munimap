@@ -19,12 +19,12 @@ import OLImage from "ol-ext/layer/GeoImage";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLLayerImageComponent),
-    },
+      useExisting: forwardRef(() => OLLayerImageComponent)
+    }
   ],
   selector: "app-ol-layer-image",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: block; visibility: hidden }"],
+  styles: [":host { display: block; visibility: hidden }"]
 })
 export class OLLayerImageComponent implements Mapable {
   id = input<string>();

@@ -19,7 +19,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-waterbodies",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
   exclude = input<(number | string)[]>();

@@ -66,7 +66,7 @@ export namespace ViewActions {
     static readonly type = `[${ACTION_SCOPE}] UpdateView`;
     constructor(
       public path: Path,
-      public view: View,
+      public view: View
     ) {}
   }
 }
@@ -102,9 +102,9 @@ export interface ViewStateModel {
     sideBySideView: false,
     streetFilter: "",
     viewByPath: {
-      [theState]: { center: null, zoom: null },
-    },
-  },
+      [theState]: { center: null, zoom: null }
+    }
+  }
 })
 @Injectable()
 export class ViewState {
@@ -157,68 +157,68 @@ export class ViewState {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @Action(ViewActions.SetGPS) setGPS(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetGPS,
+    action: ViewActions.SetGPS
   ): void {
     ctx.setState(patch({ gps: action.gps }));
   }
 
   @Action(ViewActions.SetHistoricalMapLeft) setHistoricalMapLeft(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetHistoricalMapLeft,
+    action: ViewActions.SetHistoricalMapLeft
   ): void {
     ctx.setState(patch({ historicalMapLeft: action.historicalMapLeft }));
   }
 
   @Action(ViewActions.SetHistoricalMapRight) setHistoricalMapRight(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetHistoricalMapRight,
+    action: ViewActions.SetHistoricalMapRight
   ): void {
     ctx.setState(patch({ historicalMapRight: action.historicalMapRight }));
   }
 
   @Action(ViewActions.SetParcelCoding) setParcelCoding(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetParcelCoding,
+    action: ViewActions.SetParcelCoding
   ): void {
     ctx.setState(patch({ parcelCoding: action.parcelCoding }));
   }
 
   @Action(ViewActions.SetSatelliteView) setSatelliteView(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetSatelliteView,
+    action: ViewActions.SetSatelliteView
   ): void {
     ctx.setState(patch({ satelliteView: action.satelliteView }));
   }
 
   @Action(ViewActions.SetSatelliteYear) setSatelliteYear(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetSatelliteYear,
+    action: ViewActions.SetSatelliteYear
   ): void {
     ctx.setState(patch({ satelliteYear: action.satelliteYear }));
   }
 
   @Action(ViewActions.SetSideBySideView) setSideBySideView(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetSideBySideView,
+    action: ViewActions.SetSideBySideView
   ): void {
     ctx.setState(patch({ sideBySideView: action.sideBySideView }));
   }
 
   @Action(ViewActions.SetStreetFilter) setStreetFilter(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.SetStreetFilter,
+    action: ViewActions.SetStreetFilter
   ): void {
     ctx.setState(patch({ streetFilter: action.streetFilter }));
   }
 
   @Action(ViewActions.UpdateView) updateView(
     ctx: StateContext<ViewStateModel>,
-    action: ViewActions.UpdateView,
+    action: ViewActions.UpdateView
   ): void {
     const path = action.path;
     const view = action.view;
     ctx.setState(
-      patch({ recentPath: path, viewByPath: patch({ [path]: view }) }),
+      patch({ recentPath: path, viewByPath: patch({ [path]: view }) })
     );
   }
 

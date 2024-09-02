@@ -57,8 +57,8 @@ export interface PrintProgressData {
         display: block;
         width: 30rem;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   giveUpAfter = input(30 * 1000);
@@ -102,7 +102,7 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
       .map((layer: any) => layer.getSource());
     this.#eventKeys = sources.flatMap((olSource) => [
       olSource.on("tileloadstart", this.#progress.bind(this)),
-      olSource.on("tileloadend", this.#progress.bind(this)),
+      olSource.on("tileloadend", this.#progress.bind(this))
     ]);
   }
 

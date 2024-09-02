@@ -55,7 +55,7 @@ class Dimension {
     public clockwise: boolean,
     public angle = 0,
     public length = 0,
-    public path: OLCoordinate[] = [],
+    public path: OLCoordinate[] = []
   ) {}
 }
 
@@ -77,8 +77,8 @@ type ShowStatus = "always" | "never" | "onlyParcelIDs" | "whenSelected";
   providers: [
     {
       provide: StylerComponent,
-      useExisting: forwardRef(() => OLStyleParcelsComponent),
-    },
+      useExisting: forwardRef(() => OLStyleParcelsComponent)
+    }
   ],
   selector: "app-ol-style-parcels",
   template: `
@@ -96,7 +96,7 @@ type ShowStatus = "always" | "never" | "onlyParcelIDs" | "whenSelected";
     <img appPattern src="assets/forest.svg" />
     <ng-content></ng-content>
   `,
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLStyleParcelsComponent implements OnChanges, Styler {
   // 👇 @Input/OnChanges works just fine here!
@@ -165,7 +165,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           resolution,
           whenRedrawn || this.forceRedrawn,
           whenSelected || this.forceSelected,
-          whenAbutted || this.forceAbutted,
+          whenAbutted || this.forceAbutted
         );
       }
     };
@@ -186,7 +186,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           resolution,
           whenRedrawn,
           whenSelected,
-          whenAbutted,
+          whenAbutted
         );
       }
     };
@@ -217,14 +217,14 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     //    but no bigger than the max size specified
     return Math.min(
       this.maxBorderPixels,
-      this.borderWidth / convertLength(resolution, "meters", "feet"),
+      this.borderWidth / convertLength(resolution, "meters", "feet")
     );
   }
 
   #canShow(
     feature: OLFeature<any>,
     showStatus: ShowStatus,
-    whenSelected: boolean,
+    whenSelected: boolean
   ): boolean {
     return (
       showStatus === "always" ||
@@ -238,7 +238,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     props: ParcelProperties,
     resolution: number,
     polygons: OLPolygon[],
-    contrast: boolean,
+    contrast: boolean
   ): OLStyle[] {
     // 👉 we will draw the length of each "straight" line in each polygon
     const color = contrast
@@ -270,12 +270,12 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
             placement: "line",
             stroke: new OLStroke({
               color: `rgba(${outline}, 1)`,
-              width: fontSizes[dimension.ix] * 0.25,
+              width: fontSizes[dimension.ix] * 0.25
             }),
-            text: `${Math.round(dimension.length)}`,
+            text: `${Math.round(dimension.length)}`
           });
           const geometry = new OLLineString(
-            dimension.path.map((p) => fromLonLat(p)),
+            dimension.path.map((p) => fromLonLat(p))
           );
           return new OLStyle({ geometry, text, zIndex: 100 });
         })
@@ -285,7 +285,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #dimensionsAnalyze(
     props: ParcelProperties,
     resolution: number,
-    polygons: OLPolygon[],
+    polygons: OLPolygon[]
   ): Dimension[] {
     const dimensions: Dimension[] = [];
     const lengthss = this.#dimensionsLengths(polygons);
@@ -330,7 +330,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #dimensionsFontSizes(
     props: ParcelProperties,
     resolution: number,
-    polygons: OLPolygon[],
+    polygons: OLPolygon[]
   ): number[] {
     return polygons.map((polygon, ix) => {
       const labelFontSize = this.#labelFontSize(props, resolution, ix);
@@ -414,8 +414,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           fill: new OLFill({ color: `rgba(${fill}, ${this.opacity})` }),
           pattern: "dot",
           size: 2,
-          spacing: 4,
-        }),
+          spacing: 4
+        })
       );
     } catch (ignored) {}
     return patterns.map((pattern) => new OLStyle({ fill: pattern }));
@@ -423,13 +423,13 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
 
   #iconForUse(use: string): OLIcon {
     const appPattern = this.appPatterns().find((image) =>
-      image.matches(new RegExp(use)),
+      image.matches(new RegExp(use))
     );
     return appPattern
       ? new OLIcon({
           img: appPattern.host.nativeElement,
           width: appPattern.size()[0],
-          height: appPattern.size()[1],
+          height: appPattern.size()[1]
         })
       : null;
   }
@@ -458,7 +458,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #labelFontSize(
     props: ParcelProperties,
     resolution: number,
-    ix: number,
+    ix: number
   ): number {
     const acres = props.areas[ix];
     let nominal = 0;
@@ -489,7 +489,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #labelFontSizeMax(
     props: ParcelProperties,
     resolution: number,
-    numPolygons: number,
+    numPolygons: number
   ): number {
     const fontSizes: number[] = [];
     for (let ix = 0; ix < numPolygons; ix++)
@@ -501,7 +501,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     props: ParcelProperties,
     resolution: number,
     numPolygons: number,
-    contrast: boolean,
+    contrast: boolean
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
     if (
@@ -529,10 +529,10 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           stroke: contrast
             ? new OLStroke({
                 color: `rgba(${outline}, ${this.labelOpacity})`,
-                width: Math.min(label.fontSize / 8, this.maxBorderPixels),
+                width: Math.min(label.fontSize / 8, this.maxBorderPixels)
               })
             : null,
-          text: label.text,
+          text: label.text
         });
         return new OLStyle({ geometry: label.point, text });
       });
@@ -542,7 +542,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #labelsImpl(
     props: ParcelProperties,
     resolution: number,
-    numLabels: number,
+    numLabels: number
   ): Label[] {
     const labels: Label[] = [];
     for (let ix = 0; ix < numLabels; ix++) {
@@ -558,7 +558,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           offsetY: 0,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
-          text: `${props.id}`,
+          text: `${props.id}`
         });
       } else {
         // 👉 measure up the parcel id and the subtitle text
@@ -566,17 +566,17 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         const fAddress = this.fontSizeAddressRatio;
         const mID = this.#map.measureText(
           `${props.id}`,
-          `bold ${fontSize}px '${this.fontFamily}'`,
+          `bold ${fontSize}px '${this.fontFamily}'`
         );
         const mGap = this.#map.measureText(
           " ",
-          `normal ${fontSize * fAcreage}px '${this.fontFamily}'`,
+          `normal ${fontSize * fAcreage}px '${this.fontFamily}'`
         );
         // 👉 measure up the subtitles
         const acres = `${this.#decimal.transform(props.area, "1.0-2")} ac`;
         const mAcres = this.#map.measureText(
           acres,
-          `normal ${fontSize * fAcreage}px '${this.fontFamily}'`,
+          `normal ${fontSize * fAcreage}px '${this.fontFamily}'`
         );
         const address = this.#abbreviateAddress(props.address);
         // 👇 turns out we don't need this for now
@@ -625,7 +625,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           offsetY: y1,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
-          text: `${props.id}`,
+          text: `${props.id}`
         });
         labels.push({
           fontFamily: this.fontFamily,
@@ -635,7 +635,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           offsetY: y2,
           point: this.#point(props, ix),
           rotation: this.#rotation(props, ix),
-          text: acres,
+          text: acres
         });
         if (showAddress)
           labels.push({
@@ -646,7 +646,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
             offsetY: y3,
             point: this.#point(props, ix),
             rotation: this.#rotation(props, ix),
-            text: address,
+            text: address
           });
       }
     }
@@ -685,7 +685,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
   #strokeBorder(
     props: ParcelProperties,
     resolution: number,
-    numPolygons: number,
+    numPolygons: number
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
     if (
@@ -701,8 +701,8 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
           stroke: new OLStroke({
             color: `rgba(255, 255, 255, ${this.borderOpacity})`,
             lineCap: "square",
-            width: borderPixels,
-          }),
+            width: borderPixels
+          })
         }),
         new OLStyle({
           fill: new OLFill({ color: [0, 0, 0, 0] }),
@@ -713,9 +713,9 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
               borderPixels > 1
                 ? [borderPixels, borderPixels * 2]
                 : [borderPixels * 2, borderPixels],
-            width: borderPixels,
-          }),
-        }),
+            width: borderPixels
+          })
+        })
       ];
     }
   }
@@ -726,7 +726,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     numPolygons: number,
     whenRedrawn = false,
     whenSelected = false,
-    whenAbutted = false,
+    whenAbutted = false
   ): OLStyle[] {
     // 👇 only if feature's label will be visible
     if (
@@ -744,14 +744,14 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     const fill = new OLFill({ color: [0, 0, 0, 0] });
     const stroke = new OLStroke({
       color: `rgba(${outline}, ${this.borderOpacity})`,
-      width: borderPixels,
+      width: borderPixels
     });
     return [
       new OLStyle({
         fill,
         stroke: outline ? stroke : null,
-        zIndex: whenSelected ? 2 : 1,
-      }),
+        zIndex: whenSelected ? 2 : 1
+      })
     ];
   }
 
@@ -760,7 +760,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
     resolution: number,
     whenRedrawn = false,
     whenSelected = false,
-    whenAbutted = false,
+    whenAbutted = false
   ): OLStyle[] {
     let numPolygons = 1;
     if (feature.getGeometry().getType() === "MultiPolygon")
@@ -788,13 +788,13 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       const contrast = this.#canShow(
         feature,
         this.showDimensionContrast,
-        whenSelected,
+        whenSelected
       );
       const dimensions = this.#dimensions(
         props,
         resolution,
         polygons,
-        contrast,
+        contrast
       );
       if (dimensions) styles.push(...dimensions);
     }
@@ -803,7 +803,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
       const contrast = this.#canShow(
         feature,
         this.showLabelContrast,
-        whenSelected,
+        whenSelected
       );
       const lotLabels = this.#labels(props, resolution, numPolygons, contrast);
       if (lotLabels) styles.push(...lotLabels);
@@ -816,7 +816,7 @@ export class OLStyleParcelsComponent implements OnChanges, Styler {
         numPolygons,
         whenRedrawn,
         whenSelected,
-        whenAbutted,
+        whenAbutted
       );
       if (strokes) styles.push(...strokes);
     }

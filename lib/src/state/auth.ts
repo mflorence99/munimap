@@ -68,7 +68,7 @@ export interface AuthStateModel {
 export function profileProps(obj: any): any {
   return {
     email: obj.email,
-    workgroup: obj.workgroup,
+    workgroup: obj.workgroup
   };
 }
 
@@ -77,7 +77,7 @@ export function userProps(obj: any): any {
     displayName: obj.displayName,
     email: obj.email,
     photoURL: obj.photoURL ?? "",
-    uid: obj.uid,
+    uid: obj.uid
   };
 }
 
@@ -94,8 +94,8 @@ export function workgroup(profile: Profile): string[] {
   name: "auth",
   defaults: {
     profile: null,
-    user: null,
-  },
+    user: null
+  }
 })
 @Injectable()
 export class AuthState implements NgxsOnInit {
@@ -117,49 +117,49 @@ export class AuthState implements NgxsOnInit {
 
   @Action(AuthActions.SetProfile) setProfile(
     ctx: StateContext<AuthStateModel>,
-    action: AuthActions.SetProfile,
+    action: AuthActions.SetProfile
   ): void {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      profile: profileProps(action.profile),
+      profile: profileProps(action.profile)
     });
   }
 
   @Action(AuthActions.SetUser) setUser(
     ctx: StateContext<AuthStateModel>,
-    action: AuthActions.SetUser,
+    action: AuthActions.SetUser
   ): void {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      user: action.user ? userProps(action.user) : null,
+      user: action.user ? userProps(action.user) : null
     });
   }
 
   @Action(AuthActions.UpdateProfile) updateProfile(
     ctx: StateContext<AuthStateModel>,
-    action: AuthActions.UpdateProfile,
+    action: AuthActions.UpdateProfile
   ): void {
     const user = ctx.getState().user;
     console.log(
       `%cFirestore set: profiles ${user.email} ${JSON.stringify(
-        action.profile,
+        action.profile
       )}`,
-      "color: chocolate",
+      "color: chocolate"
     );
     const docRef = doc(this.#firestore, "profiles", user.email);
     setDoc(docRef, profileProps(action.profile), {
-      merge: true,
+      merge: true
     }).then(() => ctx.dispatch(new AuthActions.SetProfile(action.profile)));
   }
 
   @Action(AuthActions.UpdateUser) updateUser(
     ctx: StateContext<AuthStateModel>,
-    action: AuthActions.UpdateUser,
+    action: AuthActions.UpdateUser
   ): void {
     updateProfile(this.#fireauth.currentUser, userProps(action.user)).then(() =>
-      ctx.dispatch(new AuthActions.SetUser(action.user)),
+      ctx.dispatch(new AuthActions.SetUser(action.user))
     );
   }
 
@@ -187,7 +187,7 @@ export class AuthState implements NgxsOnInit {
       if (user) {
         console.log(
           `%cFirestore get: profiles ${user.email}`,
-          "color: goldenrod",
+          "color: goldenrod"
         );
         // 👉 set the profile corresponding to the User
         //    or an empty one if none found
@@ -199,13 +199,13 @@ export class AuthState implements NgxsOnInit {
             ctx.dispatch(
               new AuthActions.UpdateProfile({
                 email: user.email,
-                workgroup: "",
-              }),
+                workgroup: ""
+              })
             );
         });
         // 👉 no point in going to login if we're logged in!
         this.#router.navigateByUrl(
-          forwardTo === "/login" ? "/create" : forwardTo,
+          forwardTo === "/login" ? "/create" : forwardTo
         );
       }
     });

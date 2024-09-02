@@ -1,33 +1,33 @@
-import { Parcel } from '../common';
-import { ParcelID } from '../common';
-import { Parcels } from '../common';
-import { DestroyService } from '../services/destroy';
-import { GeoJSONService } from '../services/geojson';
-import { MapState } from '../state/map';
-import { ParcelsState } from '../state/parcels';
-import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
-import { OLMapComponent } from './ol-map';
+import { Parcel } from "../common";
+import { ParcelID } from "../common";
+import { Parcels } from "../common";
+import { DestroyService } from "../services/destroy";
+import { GeoJSONService } from "../services/geojson";
+import { MapState } from "../state/map";
+import { ParcelsState } from "../state/parcels";
+import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
+import { OLMapComponent } from "./ol-map";
 
-import { isParcelStollen } from '../common';
-import { parcelProperties } from '../common';
+import { isParcelStollen } from "../common";
+import { parcelProperties } from "../common";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { Subject } from "rxjs";
 
-import { inject } from '@angular/core';
-import { combineLatest } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { inject } from "@angular/core";
+import { combineLatest } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
-import copy from 'fast-copy';
+import copy from "fast-copy";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-control-parcel-list',
+  selector: "app-ol-control-parcel-list",
   template: `
     <article class="control">
       <section #list class="list" [class.collapsed]="collapsed">
@@ -153,12 +153,12 @@ import copy from 'fast-copy';
 })
 export class OLControlParcelListComponent implements OnInit {
   categories = [
-    ['deed', 'Deeded Properties'],
-    ['300', 'Town Properties'],
-    ['400', 'State Properties'],
-    ['500', 'State Parks'],
-    ['501', 'Town Forests'],
-    ['502', 'Conservation Lands']
+    ["deed", "Deeded Properties"],
+    ["300", "Town Properties"],
+    ["400", "State Properties"],
+    ["500", "State Parks"],
+    ["501", "Town Forests"],
+    ["502", "Conservation Lands"]
   ];
   collapsed = true;
   parcels: Parcel[] = [];
@@ -214,7 +214,7 @@ export class OLControlParcelListComponent implements OnInit {
 
   #handleGeoJSON$(): void {
     this.#geoJSON
-      .loadByIndex(this.#mapState.currentMap().path, 'parcels')
+      .loadByIndex(this.#mapState.currentMap().path, "parcels")
       .subscribe((geojson: Parcels) => this.#geojson$.next(geojson));
   }
 
@@ -241,12 +241,12 @@ export class OLControlParcelListComponent implements OnInit {
             };
           })
           .filter((feature) => {
-            if (category !== 'deed')
+            if (category !== "deed")
               return feature.properties?.usage === category;
             else
               return (
-                feature.properties.owner?.endsWith(' TC DEED') ||
-                feature.properties.owner?.endsWith(' TC - DEED')
+                feature.properties.owner?.endsWith(" TC DEED") ||
+                feature.properties.owner?.endsWith(" TC - DEED")
               );
           });
         this.#cdf.markForCheck();
@@ -261,7 +261,7 @@ export class OLControlParcelListComponent implements OnInit {
         geometry: undefined,
         id: id,
         properties: {},
-        type: 'Feature'
+        type: "Feature"
       });
     });
   }

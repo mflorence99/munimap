@@ -20,7 +20,7 @@ import Polygon from "ol/geom/Polygon";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-historicalimage",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceHistoricalImageComponent {
   historicalMap = input.required<HistoricalMap>();
@@ -36,7 +36,7 @@ export class OLSourceHistoricalImageComponent {
       if (historicalMap.type === "image") {
         // 👇 this is the boundary we will clip to
         const coords: any = copy(
-          this.#map.boundary().features[0].geometry.coordinates,
+          this.#map.boundary().features[0].geometry.coordinates
         );
         const boundary = new Feature(new Polygon(coords));
         boundary
@@ -49,8 +49,8 @@ export class OLSourceHistoricalImageComponent {
             copy(this.#map.boundary().features[0]),
             historicalMap.featherWidth[0],
             {
-              units: historicalMap.featherWidth[1],
-            },
+              units: historicalMap.featherWidth[1]
+            }
           ).geometry.coordinates;
           feathered = new Feature(new Polygon(buffered));
           feathered
@@ -72,7 +72,7 @@ export class OLSourceHistoricalImageComponent {
           imageRotate: historicalMap.rotate,
           imageScale: historicalMap.scale,
           projection: "EPSG:3857",
-          url: historicalMap.url,
+          url: historicalMap.url
         });
         this.olImage.setProperties({ component: this }, true);
         this.#layer.olLayer.setSource(this.olImage);

@@ -16,14 +16,14 @@ const LABELS: {
 } = {
   conservation: {
     url: "https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_Labels/MapServer/21/query",
-    place: "park",
+    place: "park"
   },
   // 🔥 stream labels are really promising but the data coverage
   //    is too limited -- ol-source-rivers is much better
   stream: {
     url: "https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_ExtractDataLayers/MapServer/17/query",
-    place: "stream",
-  },
+    place: "stream"
+  }
 };
 
 const attribution =
@@ -33,7 +33,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-labels",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceLabelsComponent extends OLSourceArcGISComponent {
   dedupe = input<boolean>();

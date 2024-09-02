@@ -118,7 +118,7 @@ const included = new Set<ParcelID>([
   "14-454-04",
   "18-11",
   "14-508",
-  "14-503",
+  "14-503"
 ]);
 
 const excluded = new Set<ParcelID>([

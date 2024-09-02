@@ -26,7 +26,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-geojson",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceGeoJSONComponent {
   exclude = input<(number | string)[]>();
@@ -46,7 +46,7 @@ export class OLSourceGeoJSONComponent {
       attributions: [attribution],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: strategy,
+      strategy: strategy
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -56,7 +56,7 @@ export class OLSourceGeoJSONComponent {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function,
+    success: Function
   ): void {
     let bbox;
     // 👉 get everything at once
@@ -75,16 +75,16 @@ export class OLSourceGeoJSONComponent {
             //    on a field other than "type"
             filtered.features = geojson.features.filter(
               (feature: any) =>
-                !this.exclude().includes(feature.properties.type),
+                !this.exclude().includes(feature.properties.type)
             );
             return filtered;
           } else return geojson;
-        }),
+        })
       )
       .subscribe((geojson: GeoJSON.FeatureCollection<any, any>) => {
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
-          featureProjection: this.#map.projection,
+          featureProjection: this.#map.projection
         }) as OLFeature<any>[];
         // 👉 add each feature not already present
         features.forEach((feature) => {

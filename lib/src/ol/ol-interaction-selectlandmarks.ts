@@ -39,16 +39,16 @@ import OLStyle from "ol/style/Style";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent),
+      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
     },
     {
       provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent),
-    },
+      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
+    }
   ],
   selector: "app-ol-interaction-selectlandmarks",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLInteractionSelectLandmarksComponent
   implements Mapable, OnDestroy, OnInit, Selector
@@ -82,7 +82,7 @@ export class OLInteractionSelectLandmarksComponent
       // 👇 don't hover over something that's already selected
       filter: (feature): boolean => !this.selectedIDs.includes(feature.getId()),
       layers: whichLayers,
-      style: this.#styleWhenHovering(),
+      style: this.#styleWhenHovering()
     });
     this.olHover.setProperties({ component: this }, true);
     // 👉 for selecting
@@ -95,7 +95,7 @@ export class OLInteractionSelectLandmarksComponent
       removeCondition: (event): boolean =>
         this.multi() ? click(event) && platformModifierKeyOnly(event) : never(),
       style: this.#styleWhenSelected(),
-      toggleCondition: (): boolean => never(),
+      toggleCondition: (): boolean => never()
     });
     this.olSelect.setProperties({ component: this }, true);
   }
@@ -104,7 +104,7 @@ export class OLInteractionSelectLandmarksComponent
   //    which is not the primary layer
   get roSelection(): boolean {
     return this.selected.some(
-      (feature) => this.olSelect.getLayer(feature) !== this.layer.olLayer,
+      (feature) => this.olSelect.getLayer(feature) !== this.layer.olLayer
     );
   }
 
@@ -125,13 +125,13 @@ export class OLInteractionSelectLandmarksComponent
     //    available is ID and bbox
     const bbox = parcels.reduce(
       (bbox, parcel) => extend(bbox, parcel.bbox),
-      [...parcels[0].bbox],
+      [...parcels[0].bbox]
     );
     // 👉 that's the union of the extent
     const extent = transformExtent(
       bbox,
       this.#map.featureProjection,
-      this.#map.projection,
+      this.#map.projection
     );
     // 👇 zoom to the extent of all the selected parcels and select them
     const minZoom = this.#map.olView.getMinZoom();
@@ -142,7 +142,7 @@ export class OLInteractionSelectLandmarksComponent
       },
       duration: this.zoomAnimationDuration(),
       maxZoom: this.maxZoom() ?? this.#map.maxZoom(),
-      size: this.#map.olMap.getSize(),
+      size: this.#map.olMap.getSize()
     });
   }
 

@@ -10,7 +10,7 @@ import { input } from "@angular/core";
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-popup-floodhazardproperties",
-  templateUrl: "./ol-popup-dpwproperties-impl.html",
+  templateUrl: "./ol-popup-dpwproperties-impl.html"
 })
 export class OLPopupFloodHazardPropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);
@@ -22,6 +22,6 @@ export class OLPopupFloodHazardPropertiesComponent {
     ["Flood Type", "FloodType"],
     ["Issue", "CrossIssue"],
     ["Previous Actions", "MitAction"],
-    ["Report Source", "Source"],
+    ["Report Source", "Source"]
   ];
 }

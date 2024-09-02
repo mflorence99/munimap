@@ -28,8 +28,8 @@ class Scalebar extends OLControl {
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlScaleBarComponent),
-    },
+      useExisting: forwardRef(() => OLControlScaleBarComponent)
+    }
   ],
   selector: "app-ol-control-scalebar",
 
@@ -115,8 +115,8 @@ class Scalebar extends OLControl {
           }
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlScaleBarComponent implements Mapable, OnInit {
   barRef = viewChild<ElementRef>("barRef");
@@ -167,7 +167,7 @@ export class OLControlScaleBarComponent implements Mapable, OnInit {
     const numFeet = convertLength(
       getDistance([minX, minY], [maxX, minY]),
       "meters",
-      "feet",
+      "feet"
     );
     this.ftUnit = Math.pow(10, Math.floor(numFeet).toString().length - 2);
     // 🔥 force 10 units for now

@@ -1,18 +1,18 @@
-import { AbstractMapPage } from '../abstract-map';
+import { AbstractMapPage } from "../abstract-map";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { DestroyService } from '@lib/services/destroy';
-import { MapType } from '@lib/state/map';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { DestroyService } from "@lib/services/destroy";
+import { MapType } from "@lib/state/map";
 
-import { viewChild } from '@angular/core';
+import { viewChild } from "@angular/core";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-apdvd',
+  selector: "app-apdvd",
   template: `
 
     @let sink = {
@@ -305,7 +305,7 @@ export class APDVDPage extends AbstractMapPage implements OnInit {
   map = viewChild(OLMapComponent);
 
   getType(): MapType {
-    return 'apdvd';
+    return "apdvd";
   }
 
   ngOnInit(): void {

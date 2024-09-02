@@ -79,15 +79,15 @@ interface MergeRecord {
         gap: 1rem;
         grid-template-columns: 33.3% 33.3% 33.3%;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class MergeParcelsComponent implements SidebarComponent {
   drawer: MatDrawer;
   features: OLFeature<any>[];
   map: OLMapComponent;
   record: MergeRecord = {
-    mergedID: null,
+    mergedID: null
   };
   selectedIDs: ParcelID[];
 
@@ -109,7 +109,7 @@ export class MergeParcelsComponent implements SidebarComponent {
         id: removedID,
         owner: this.#authState.currentProfile().email,
         path: this.map.path(),
-        type: "Feature",
+        type: "Feature"
       };
     });
     // 👉 this is a model for the parcel that will remain
@@ -120,27 +120,27 @@ export class MergeParcelsComponent implements SidebarComponent {
       owner: this.#authState.currentProfile().email,
       path: this.map.path(),
       properties: {},
-      type: "Feature",
+      type: "Feature"
     };
     // 👉 the new area will be the sum of the merged parcels
     mergedParcel.properties.area = this.features.reduce(
       (acc, feature) => acc + (feature.getProperties().area as number),
-      0,
+      0
     );
     // 👉 calculate new geometry as the union of all
     const geojsons = this.features.map((feature) => {
       const format = new OLGeoJSON({
         dataProjection: this.map.featureProjection,
-        featureProjection: this.map.projection,
+        featureProjection: this.map.projection
       });
       return JSON.parse(format.writeFeature(feature));
     });
     mergedParcel.geometry = geojsons.reduce((acc, geojson) =>
-      union(featureCollection([acc, geojson])),
+      union(featureCollection([acc, geojson]))
     ).geometry;
     // 👉 that's it!
     this.#store.dispatch(
-      new ParcelsActions.AddParcels([mergedParcel, ...removedParcels]),
+      new ParcelsActions.AddParcels([mergedParcel, ...removedParcels])
     );
     this.drawer.close();
   }

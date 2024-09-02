@@ -13,7 +13,7 @@ if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
 
 firebase.initializeApp({
   credential: firebase.cert("./firebase-admin.json"),
-  databaseURL: "https://washington-app-319514.firebaseio.com",
+  databaseURL: "https://washington-app-319514.firebaseio.com"
 });
 
 const batchSize = 100;
@@ -74,8 +74,8 @@ async function main(): Promise<void> {
         type: "input",
         name: "proceed",
         choices: ["y", "n"],
-        message: "WARNING: running on backup Firestore. Proceed? (y/N)",
-      },
+        message: "WARNING: running on backup Firestore. Proceed? (y/N)"
+      }
     ]);
     if (response.proceed.toLowerCase() !== "y") return;
   }

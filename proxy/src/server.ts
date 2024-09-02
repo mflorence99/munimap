@@ -44,17 +44,17 @@ const dir = argv["dir"] ?? isDev ? "./data" : "/mnt/efs/MuniMap/proxy";
 
 const fileServerOpts = {
   provide: FILE_SERVER_OPTS,
-  useValue: { maxAge: 365 * 24 * 60 * 60 /* 👈 1 year */, root: dir },
+  useValue: { maxAge: 365 * 24 * 60 * 60 /* 👈 1 year */, root: dir }
 };
 
 const geoServerOpts = {
   provide: GEO_SERVER_OPTS,
-  useValue: { maxAge: 365 * 24 * 60 * 60 /* 👈 1 year */, root: dir },
+  useValue: { maxAge: 365 * 24 * 60 * 60 /* 👈 1 year */, root: dir }
 };
 
 const loggerOpts = {
   provide: REQUEST_LOGGER_OPTS,
-  useValue: { format: "tiny" },
+  useValue: { format: "tiny" }
 };
 
 // 👇 the proxy serves hillshade, satellite view etc which changes
@@ -64,8 +64,8 @@ const proxyServerOpts = {
   provide: PROXY_SERVER_OPTS,
   useValue: {
     maxAge: 45 * 24 * 60 * 60 /* 👈 45 days */,
-    root: join(dir, "cache"),
-  },
+    root: join(dir, "cache")
+  }
 };
 
 const routes: Route[] = [
@@ -74,14 +74,14 @@ const routes: Route[] = [
     methods: ["GET"],
     handler: ProxyServer,
     middlewares: isDev ? [BinaryTyper, Compressor, CORS] : [BinaryTyper, CORS],
-    services: [proxyServerOpts],
+    services: [proxyServerOpts]
   },
   {
     path: "/NEW HAMPSHIRE",
     methods: ["GET"],
     handler: GeoServer,
     middlewares: isDev ? [Compressor, CORS] : [CORS],
-    services: [loggerOpts, geoServerOpts],
+    services: [loggerOpts, geoServerOpts]
   },
   {
     path: "/",
@@ -90,13 +90,13 @@ const routes: Route[] = [
     middlewares: isDev
       ? [Compressor, CORS, RequestLogger]
       : [CORS, RequestLogger],
-    services: [loggerOpts, fileServerOpts],
+    services: [loggerOpts, fileServerOpts]
   },
   {
     path: "/",
     methods: ["OPTIONS"],
-    middlewares: [CORS],
-  },
+    middlewares: [CORS]
+  }
 ];
 
 let app;
@@ -110,8 +110,8 @@ if (isDev) {
   const server = createServer(listener).on("listening", () => {
     console.log(
       chalk.blue(
-        `MuniMap proxy listening on port ${argv["port"]} deploying from ${dir}`,
-      ),
+        `MuniMap proxy listening on port ${argv["port"]} deploying from ${dir}`
+      )
     );
   });
 

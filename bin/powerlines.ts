@@ -17,12 +17,12 @@ const dist = "./data";
 
 const powerlines = JSON.parse(
   readFileSync(
-    "./bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson",
-  ).toString(),
+    "./bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson"
+  ).toString()
 );
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -40,7 +40,7 @@ powerlines.features.forEach((feature: GeoJSON.Feature) => {
   //    find it from the dataset of all towns
   const towns = allTowns.features.filter((townFeature) =>
     // 👉 https://github.com/Turfjs/turf/pull/2157
-    /* turf. */ booleanIntersects(feature, townFeature),
+    /* turf. */ booleanIntersects(feature, townFeature)
   );
 
   towns
@@ -59,7 +59,7 @@ powerlines.features.forEach((feature: GeoJSON.Feature) => {
         powerline.bbox = turf.bbox(powerline);
         powerline.properties = {
           county: county,
-          town: town,
+          town: town
         };
 
         linesByCountyByTown[county] ??= {};
@@ -75,13 +75,13 @@ Object.keys(linesByCountyByTown).forEach((county) => {
   Object.keys(linesByCountyByTown[county]).forEach((town) => {
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/powerlines.geojson`,
-      ),
+        `... writing ${theState}/${county}/${town}/powerlines.geojson`
+      )
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/powerlines.geojson`,
-      JSON.stringify(simplify(linesByCountyByTown[county][town])),
+      JSON.stringify(simplify(linesByCountyByTown[county][town]))
     );
   });
 });
@@ -106,5 +106,5 @@ const sample = {
   INFERRED: "Y",
   SUB_1: "EAST ARLINGTON",
   SUB_2: "TAP209798",
-  SHAPE_Length: 0.09014889071718463,
+  SHAPE_Length: 0.09014889071718463
 };

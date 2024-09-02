@@ -47,8 +47,8 @@ export type AnonStateModel = AuthStateModel;
   name: "anon",
   defaults: {
     profile: null,
-    user: null,
-  },
+    user: null
+  }
 })
 @Injectable()
 export class AnonState implements NgxsOnInit {
@@ -58,11 +58,11 @@ export class AnonState implements NgxsOnInit {
 
   @Action(AnonActions.LoadProfile) loadProfile(
     ctx: StateContext<AnonStateModel>,
-    action: AnonActions.LoadProfile,
+    action: AnonActions.LoadProfile
   ): void {
     console.log(
       `%cFirestore get: profiles ${action.email}`,
-      "color: goldenrod",
+      "color: goldenrod"
     );
     const docRef = doc(this.#firestore, "profiles", action.email);
     getDoc(docRef).then((doc) => {
@@ -76,23 +76,23 @@ export class AnonState implements NgxsOnInit {
 
   @Action(AnonActions.SetProfile) setProfile(
     ctx: StateContext<AnonStateModel>,
-    action: AnonActions.SetProfile,
+    action: AnonActions.SetProfile
   ): void {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      profile: profileProps(action.profile),
+      profile: profileProps(action.profile)
     });
   }
 
   @Action(AnonActions.SetUser) setUser(
     ctx: StateContext<AnonStateModel>,
-    action: AnonActions.SetUser,
+    action: AnonActions.SetUser
   ): void {
     const state = ctx.getState();
     ctx.setState({
       ...state,
-      user: action.user ? userProps(action.user) : null,
+      user: action.user ? userProps(action.user) : null
     });
   }
 

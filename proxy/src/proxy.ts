@@ -32,13 +32,13 @@ export interface ProxyServerOpts {
 }
 
 export const PROXY_SERVER_OPTS = new InjectionToken<ProxyServerOpts>(
-  "PROXY_SERVER_OPTS",
+  "PROXY_SERVER_OPTS"
 );
 
 export const PROXY_SERVER_DEFAULT_OPTS: ProxyServerOpts = {
   maxAge: 600,
   minSize: 100,
-  root: "/tmp",
+  root: "/tmp"
 };
 
 // 👇 a trivial proxy server so that we can use ArcGIS etc
@@ -78,7 +78,7 @@ export class ProxyServer extends Handler {
         const fdir = path.join(
           this.#opts.root,
           fname.substring(0, 2),
-          fname.substring(2, 4),
+          fname.substring(2, 4)
         );
         const fpath = path.join(fdir, `${fname}.proxy`);
 
@@ -114,10 +114,10 @@ export class ProxyServer extends Handler {
                 chalk.green(response.statusCode),
                 stat.mtime,
                 stat.size,
-                chalk.blue("CACHED"),
+                chalk.blue("CACHED")
               );
             }),
-            mapTo(message),
+            mapTo(message)
           );
         }
 
@@ -138,9 +138,9 @@ export class ProxyServer extends Handler {
             fetch(url, {
               headers: {
                 Referer: request.headers["Referer"] as string,
-                "User-Agent": request.headers["User-Agent"] as string,
-              },
-            }),
+                "User-Agent": request.headers["User-Agent"] as string
+              }
+            })
           ).pipe(
             tap((resp) => {
               // 👇 DON'T proxy content-encoding, because fetch will
@@ -170,13 +170,13 @@ export class ProxyServer extends Handler {
                 x && y && z ? `${request.path}/${x}/${y}/${z}` : request.path,
                 chalk.green(response.statusCode),
                 Buffer.byteLength(buffer),
-                chalk.red("FETCHED"),
+                chalk.red("FETCHED")
               );
             }),
-            mapTo(message),
+            mapTo(message)
           );
         }
-      }),
+      })
     );
   }
 }

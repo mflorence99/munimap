@@ -32,7 +32,7 @@ const exclusions = [
   "NASHUA",
   "ROCHESTER",
   "SALEM",
-  "WASHINGTON",
+  "WASHINGTON"
 ];
 
 // 👉 we SHOULD be reading from this URL
@@ -41,11 +41,11 @@ const url =
 const fileName = "NewHampshire.geojson";
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
 const allTownFeatures = allTowns.features.filter(
-  (feature) => !exclusions.includes(feature.id),
+  (feature) => !exclusions.includes(feature.id)
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -87,9 +87,9 @@ async function main(): Promise<void> {
           chalk.cyan(
             `ETA ${
               (((numBuildings - ix) / gulp) * duration) / (1000 * 60 * 60)
-            } hours`,
-          ),
-        ),
+            } hours`
+          )
+        )
       );
       lastIndex = index;
       lastTime = timeNow;
@@ -99,7 +99,7 @@ async function main(): Promise<void> {
     //    find it from the dataset of all towns
     const towns = allTownFeatures.filter((townFeature) =>
       // 👉 https://github.com/Turfjs/turf/pull/2157
-      turf.booleanContains(townFeature, feature),
+      turf.booleanContains(townFeature, feature)
     );
 
     // 👉 we already have legacy Washington data
@@ -131,13 +131,13 @@ async function main(): Promise<void> {
     Object.keys(buildingsByCountyByTown[county]).forEach((town) => {
       console.log(
         chalk.green(
-          `... writing ${theState}/${county}/${town}/buildings.geojson`,
-        ),
+          `... writing ${theState}/${county}/${town}/buildings.geojson`
+        )
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/buildings.geojson`,
-        JSON.stringify(simplify(buildingsByCountyByTown[county][town])),
+        JSON.stringify(simplify(buildingsByCountyByTown[county][town]))
       );
     });
   });
@@ -156,12 +156,12 @@ const sample = {
         [-70.875541, 43.197566],
         [-70.875541, 43.197603],
         [-70.875614, 43.197603],
-        [-70.875614, 43.197566],
-      ],
-    ],
+        [-70.875614, 43.197566]
+      ]
+    ]
   },
   properties: {
     release: 1,
-    capture_dates_range: "",
-  },
+    capture_dates_range: ""
+  }
 };

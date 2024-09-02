@@ -14,7 +14,7 @@ import OLXYZ from "ol/source/XYZ";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-historicalxyz",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceHistoricalXYZComponent {
   historicalMap = input.required<HistoricalMap>();
@@ -32,7 +32,7 @@ export class OLSourceHistoricalXYZComponent {
           crossOrigin: "anonymous",
           maxZoom: historicalMap.maxZoom,
           minZoom: historicalMap.minZoom,
-          url: historicalMap.url,
+          url: historicalMap.url
         });
         this.olXYZ.setProperties({ component: this }, true);
       }

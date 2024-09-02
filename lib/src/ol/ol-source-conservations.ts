@@ -16,7 +16,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-conservations",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceConservationsComponent extends OLSourceArcGISComponent {
   exclude = input<(number | string)[]>();

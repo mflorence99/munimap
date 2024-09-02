@@ -30,8 +30,8 @@ export interface ConfirmDialogData {
         display: block;
         width: 30rem;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class ConfirmDialogComponent {
   data: ConfirmDialogData = inject(MAT_DIALOG_DATA);

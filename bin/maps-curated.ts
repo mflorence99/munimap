@@ -30,7 +30,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
     printSize: [45, 60],
     timestamp: null,
-    type: "parcels",
+    type: "parcels"
   },
   {
     bbox: null,
@@ -41,7 +41,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [45, 60],
     timestamp: null,
-    type: "parcels",
+    type: "parcels"
   },
   {
     bbox: null,
@@ -55,7 +55,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 36],
     timestamp: null,
-    type: "area",
+    type: "area"
   },
   {
     bbox: null,
@@ -69,7 +69,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 24],
     timestamp: null,
-    type: "area",
+    type: "area"
   },
   {
     bbox: null,
@@ -83,7 +83,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 36],
     timestamp: null,
-    type: "area",
+    type: "area"
   },
   {
     bbox: null,
@@ -97,7 +97,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 24],
     timestamp: null,
-    type: "area",
+    type: "area"
   },
   {
     bbox: null,
@@ -111,7 +111,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [24, 36],
     timestamp: null,
-    type: "area",
+    type: "area"
   },
   {
     bbox: null,
@@ -122,7 +122,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [45, 60],
     timestamp: null,
-    type: "dpw",
+    type: "dpw"
   },
   {
     bbox: null,
@@ -136,7 +136,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [36, 36],
     timestamp: null,
-    type: "apdvd",
+    type: "apdvd"
   },
   {
     bbox: null,
@@ -149,7 +149,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [12, 18],
     timestamp: null,
-    type: "property",
+    type: "property"
   },
   {
     bbox: null,
@@ -161,7 +161,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [18, 24],
     timestamp: null,
-    type: "property",
+    type: "property"
   },
   {
     bbox: null,
@@ -174,7 +174,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [8.5, 11],
     timestamp: null,
-    type: "property",
+    type: "property"
   },
   {
     bbox: null,
@@ -186,7 +186,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [18, 24],
     timestamp: null,
-    type: "property",
+    type: "property"
   },
   {
     bbox: null,
@@ -199,7 +199,7 @@ const MAPS = [
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
     printSize: [8.5, 11],
     timestamp: null,
-    type: "property",
+    type: "property"
   },
   {
     bbox: null,
@@ -221,12 +221,12 @@ const MAPS = [
       "1-723-B",
       "1-723",
       "1-724",
-      "1-725",
+      "1-725"
     ],
     path: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
     printSize: [30, 40],
     timestamp: null,
-    type: "property",
+    type: "property"
   },
   {
     bbox: null,
@@ -239,8 +239,8 @@ const MAPS = [
     path: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
     printSize: [8.5, 11],
     timestamp: null,
-    type: "property",
-  },
+    type: "property"
+  }
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
@@ -253,7 +253,7 @@ if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
 
 firebase.initializeApp({
   credential: firebase.cert("./firebase-admin.json"),
-  databaseURL: "https://washington-app-319514.firebaseio.com",
+  databaseURL: "https://washington-app-319514.firebaseio.com"
 });
 
 const db = firestore.getFirestore();
@@ -285,10 +285,10 @@ async function bboxFromParcelIDs(map, border: number): Promise<number[]> {
   });
   const bounds: GeoJSON.Feature = {
     geometry: parcels.reduce((acc, parcel) =>
-      union(featureCollection([acc, parcel])),
+      union(featureCollection([acc, parcel]))
     ).geometry,
     properties: {},
-    type: "Feature",
+    type: "Feature"
   };
   return bboxByAspectRatio(bounds, map.printSize[1], map.printSize[0], border);
 }
@@ -322,8 +322,8 @@ async function main(): Promise<void> {
         type: "input",
         name: "proceed",
         choices: ["y", "n"],
-        message: "WARNING: running on live Firestore. Proceed? (y/N)",
-      },
+        message: "WARNING: running on live Firestore. Proceed? (y/N)"
+      }
     ]);
     if (response.proceed.toLowerCase() !== "y") return;
   }

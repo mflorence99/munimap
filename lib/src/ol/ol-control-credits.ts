@@ -27,8 +27,8 @@ class Credits extends OLControl {
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlCreditsComponent),
-    },
+      useExisting: forwardRef(() => OLControlCreditsComponent)
+    }
   ],
   selector: "app-ol-control-credits",
 
@@ -84,8 +84,8 @@ class Credits extends OLControl {
           }
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlCreditsComponent implements Mapable, OnInit {
   attributions: string[] = [];
@@ -129,7 +129,7 @@ export class OLControlCreditsComponent implements Mapable, OnInit {
       .getLayers()
       .getArray()
       .map(
-        (layer: any): string[] => layer.getSource().getAttributions()?.() ?? [],
+        (layer: any): string[] => layer.getSource().getAttributions()?.() ?? []
       )
       .flat();
     this.attributions = Array.from(new Set(raw));

@@ -41,7 +41,7 @@ const urlByCounty = {
   STRAFFORD:
     "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Strafford_ParcelsCAMA.zip",
   SULLIVAN:
-    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Sullivan_ParcelsCAMA.zip",
+    "https://ftp.granit.sr.unh.edu/ParcelMosaic/20210301_NHParcelMosaic_CountyShapefiles/Sullivan_ParcelsCAMA.zip"
 };
 
 const usageByClass = {
@@ -70,7 +70,7 @@ const usageByClass = {
   "Unclass/Unk Imp Res": "190",
   "Unclass/Unk Land": "190",
   "Unclass/Unk Non-Res L&B": "190",
-  "Unclass/Unk Other": "190",
+  "Unclass/Unk Other": "190"
 };
 
 // 👇 no town can have more than this number of parcels
@@ -96,7 +96,7 @@ const exclusions = [
   "NASHUA",
   "ROCHESTER",
   "SALEM",
-  "WASHINGTON",
+  "WASHINGTON"
 ];
 
 async function main(): Promise<void> {
@@ -144,8 +144,8 @@ async function main(): Promise<void> {
                 turf.convertArea(
                   feature.properties.Shape_Area ?? 0,
                   "feet",
-                  "acres",
-                ) * 100,
+                  "acres"
+                ) * 100
               ) / 100 /* 👈 sq feet to acres to 2dps */,
             building$: feature.properties.TaxBldg,
             county: county,
@@ -154,9 +154,9 @@ async function main(): Promise<void> {
             other$: feature.properties.TaxFeature,
             taxed$: feature.properties.TaxTotal,
             town: town,
-            usage: usageByClass[feature.properties.SLUC_desc] ?? "190",
+            usage: usageByClass[feature.properties.SLUC_desc] ?? "190"
           },
-          type: "Feature",
+          type: "Feature"
         };
 
         // 👉 we've gone to great lengths to make a bridge to share this
@@ -184,8 +184,8 @@ async function main(): Promise<void> {
         chalk.magenta(
           `... ${theState}/${county}/${town}/parcels.geojson has more than ${
             tooManyZeroAreaParcelsRatio * 100
-          }% zero-area parcels`,
-        ),
+          }% zero-area parcels`
+        )
       );
       stat(fn, (err, _stats) => {
         if (!err) unlinkSync(fn);
@@ -193,17 +193,15 @@ async function main(): Promise<void> {
     } else if (countByTown[town] > tooManyParcels) {
       console.log(
         chalk.red(
-          `... ${theState}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`,
-        ),
+          `... ${theState}/${county}/${town}/parcels.geojson has more than ${tooManyParcels} parcels`
+        )
       );
       stat(fn, (err, _stats) => {
         if (!err) unlinkSync(fn);
       });
     } else {
       console.log(
-        chalk.green(
-          `... writing ${theState}/${county}/${town}/parcels.geojson`,
-        ),
+        chalk.green(`... writing ${theState}/${county}/${town}/parcels.geojson`)
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(fn, JSON.stringify(simplify(parcelsByTown[town])));
@@ -218,8 +216,8 @@ async function main(): Promise<void> {
     const fn = `${dist}/${theState}/${county}/${town}/searchables.geojson`;
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/searchables.geojson`,
-      ),
+        `... writing ${theState}/${county}/${town}/searchables.geojson`
+      )
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     // 👉 now do this again, converting the real parcels into searchables
@@ -230,10 +228,10 @@ async function main(): Promise<void> {
         properties: {
           address: feature.properties.address,
           id: feature.properties.id,
-          owner: feature.properties.owner,
+          owner: feature.properties.owner
         },
-        type: "Feature",
-      }),
+        type: "Feature"
+      })
     );
     writeFileSync(fn, JSON.stringify(parcelsByTown[town]));
   });
@@ -246,8 +244,8 @@ async function main(): Promise<void> {
     const fn = `${dist}/${theState}/${county}/${town}/countables.geojson`;
     console.log(
       chalk.green(
-        `... writing ${theState}/${county}/${town}/countables.geojson`,
-      ),
+        `... writing ${theState}/${county}/${town}/countables.geojson`
+      )
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     // 👉 now do this again, converting the real parcels into countables
@@ -258,10 +256,10 @@ async function main(): Promise<void> {
           area: feature.properties.area,
           ownership: feature.properties.ownership,
           usage: feature.properties.usage,
-          use: feature.properties.use,
+          use: feature.properties.use
         },
-        type: "Feature",
-      }),
+        type: "Feature"
+      })
     );
     writeFileSync(fn, JSON.stringify(parcelsByTown[town]));
   });
@@ -361,5 +359,5 @@ const sample = {
   StreetAddr: "CAT HOLE RD",
   TownName: "Claremont",
   CountyName: "Sullivan",
-  SLUC_desc: "Unclass/Unk Other",
+  SLUC_desc: "Unclass/Unk Other"
 };

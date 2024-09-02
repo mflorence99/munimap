@@ -44,9 +44,9 @@ interface SearchTarget {
   providers: [
     {
       provide: SearcherComponent,
-      useExisting: forwardRef(() => OLControlSearchParcelsComponent),
+      useExisting: forwardRef(() => OLControlSearchParcelsComponent)
     },
-    DestroyService,
+    DestroyService
   ],
   selector: "app-ol-control-searchparcels",
   template: `
@@ -140,8 +140,8 @@ interface SearchTarget {
         font-size: 1rem;
         height: 100%;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   filterFn = input<(feature) => boolean>();
@@ -193,7 +193,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
           const override = this.#overridesByID[searchable.id];
           if (override?.bbox) return { ...searchable, bbox: override.bbox };
           else return searchable;
-        }),
+        })
       );
     } else if (searchFor.length > this.fuzzyMinLength()) {
       // 👉 no hit, but enough characters to go for a fuzzy match
@@ -201,7 +201,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
         .go(searchFor, this.#searchTargets, {
           key: "key",
           limit: this.fuzzyMaxResults(),
-          threshold: this.fuzzyThreshold(),
+          threshold: this.fuzzyThreshold()
         })
         .map((fuzzy) => ({ count: fuzzy.obj.count, key: fuzzy.target }))
         .sort((p, q) => p.key.localeCompare(q.key));
@@ -215,13 +215,13 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   #filterRemovedFeatures(geojson: SearchableParcels, parcels: Parcel[]): void {
     const removed = this.#parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
-      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id),
+      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
     );
   }
 
   #groupSearchablesByProperty(
     searchables: SearchableParcel[],
-    prop: string,
+    prop: string
   ): Record<string, any> {
     return searchables.reduce((acc, searchable) => {
       const props = searchable.properties;
@@ -260,19 +260,19 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
         this.#searchTargets = this.#makeSearchTargets(
           this.filterFn()
             ? geojson.features.filter(this.filterFn())
-            : geojson.features,
+            : geojson.features
         );
         this.searchablesByAddress = this.#groupSearchablesByProperty(
           geojson.features,
-          "address",
+          "address"
         );
         this.searchablesByID = this.#groupSearchablesByProperty(
           geojson.features,
-          "id",
+          "id"
         );
         this.searchablesByOwner = this.#groupSearchablesByProperty(
           geojson.features,
-          "owner",
+          "owner"
         );
       });
   }
@@ -285,7 +285,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
         geometry: undefined,
         id: id,
         properties: {},
-        type: "Feature",
+        type: "Feature"
       });
     });
   }
@@ -331,7 +331,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     });
     return Object.keys(counts).map((key) => ({
       count: counts[key],
-      key: fuzzysort.prepare(key),
+      key: fuzzysort.prepare(key)
     }));
   }
 }

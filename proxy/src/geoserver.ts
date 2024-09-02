@@ -31,12 +31,12 @@ export interface GeoServerOpts {
 }
 
 export const GEO_SERVER_OPTS = new InjectionToken<GeoServerOpts>(
-  "GEO_SERVER_OPTS",
+  "GEO_SERVER_OPTS"
 );
 
 export const GEO_SERVER_DEFAULT_OPTS: GeoServerOpts = {
   maxAge: 600,
-  root: os.homedir(),
+  root: os.homedir()
 };
 
 @Injectable()
@@ -90,16 +90,16 @@ export class GeoServer extends Handler {
                   chalk.cyan(request.method),
                   request.path,
                   chalk.green(response.statusCode),
-                  chalk.green("CACHED"),
+                  chalk.green("CACHED")
                 );
-              }),
+              })
             );
 
             // 👉 not cached pipe
             const notCached$ = of(hash).pipe(
               mergeMap(
                 (): Observable<Buffer> =>
-                  fromReadableStream(fs.createReadStream(fpath)),
+                  fromReadableStream(fs.createReadStream(fpath))
               ),
               tap((buffer: Buffer) => {
                 const geojson = JSON.parse(buffer.toString());
@@ -112,9 +112,9 @@ export class GeoServer extends Handler {
                   chalk.cyan(request.method),
                   request.path,
                   chalk.green(response.statusCode),
-                  chalk.red("FETCHED"),
+                  chalk.red("FETCHED")
                 );
-              }),
+              })
             );
 
             return isCached ? cached$ : notCached$;
@@ -122,9 +122,9 @@ export class GeoServer extends Handler {
           catchError((error) => {
             console.error(error);
             return throwError(() => new Exception({ statusCode: 404 }));
-          }),
+          })
         );
-      }),
+      })
     );
   }
 
@@ -133,7 +133,7 @@ export class GeoServer extends Handler {
     minX: number,
     minY: number,
     maxX: number,
-    maxY: number,
+    maxY: number
   ): Buffer {
     if (minX && minY && maxX && maxY) {
       geojson = copy(geojson);

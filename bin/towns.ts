@@ -20,11 +20,11 @@ const towns = loadem("./bin/assets/New_Hampshire_Political_Boundaries.geojson");
 
 const overrides = {
   MERRIMACK: {
-    HENNIKER: loadem("./bin/assets/henniker-boundary.geojson"),
+    HENNIKER: loadem("./bin/assets/henniker-boundary.geojson")
   },
   SULLIVAN: {
-    WASHINGTON: loadem("./bin/assets/washington-boundary.geojson"),
-  },
+    WASHINGTON: loadem("./bin/assets/washington-boundary.geojson")
+  }
 };
 
 const dist = "./data";
@@ -34,13 +34,13 @@ const wholeState: GeoJSON.Feature[] = [];
 
 towns.features.forEach((feature: GeoJSON.Feature) => {
   const county = String(
-    feature.properties.PB_TOWN_Census_2010_StatsCOUNTYNAME,
+    feature.properties.PB_TOWN_Census_2010_StatsCOUNTYNAME
   ).toUpperCase();
 
   const town = (feature.properties.pbpNAME as string).toUpperCase();
 
   console.log(
-    chalk.green(`... writing ${theState}/${county}/${town}/boundary.geojson`),
+    chalk.green(`... writing ${theState}/${county}/${town}/boundary.geojson`)
   );
 
   // 👉 we don't need the properties, but we do need the bbox
@@ -50,7 +50,7 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
   delete feature.properties;
 
   feature.properties = {
-    name: town,
+    name: town
   };
 
   // 👉 gather all the towns in one file, then by county
@@ -70,7 +70,7 @@ towns.features.forEach((feature: GeoJSON.Feature) => {
   mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
   writeFileSync(
     `${dist}/${theState}/${county}/${town}/boundary.geojson`,
-    JSON.stringify(override ?? simplify(geojson)),
+    JSON.stringify(override ?? simplify(geojson))
   );
 });
 
@@ -80,7 +80,7 @@ Object.keys(townsByCounty).forEach((county) => {
   const geojson = turf.featureCollection(townsByCounty[county]);
   writeFileSync(
     `${dist}/${theState}/${county}/towns.geojson`,
-    JSON.stringify(simplify(geojson)),
+    JSON.stringify(simplify(geojson))
   );
 });
 
@@ -89,5 +89,5 @@ console.log(chalk.green(`... writing ${theState}/towns.geojson`));
 const geojson = turf.featureCollection(wholeState);
 writeFileSync(
   `${dist}/${theState}/towns.geojson`,
-  JSON.stringify(simplify(geojson)),
+  JSON.stringify(simplify(geojson))
 );

@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorRailroadsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorRailroadsComponent)
+    }
   ],
   selector: "app-ol-adaptor-railroads",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorRailroadsComponent implements Adaptor {
   rightOfWayWidth = input(24);
@@ -38,7 +38,7 @@ export class OLAdaptorRailroadsComponent implements Adaptor {
         strokeFeet: this.rightOfWayWidth(),
         strokeOpacity: 1,
         strokeStyle: "solid",
-        zIndex: 1,
+        zIndex: 1
       }),
       new LandmarkPropertiesClass({
         lineSpline: true,
@@ -46,7 +46,7 @@ export class OLAdaptorRailroadsComponent implements Adaptor {
         strokeFeet: this.trackWidth(),
         strokeOpacity: 1,
         strokeStyle: "solid",
-        zIndex: 2,
+        zIndex: 2
       }),
       new LandmarkPropertiesClass({
         lineDash: [4, 4],
@@ -55,7 +55,7 @@ export class OLAdaptorRailroadsComponent implements Adaptor {
         strokeFeet: this.trackWidth(),
         strokeOpacity: 1,
         strokeStyle: "dashed",
-        zIndex: 3,
+        zIndex: 3
       }),
       new LandmarkPropertiesClass({
         fontColor: color,
@@ -66,8 +66,8 @@ export class OLAdaptorRailroadsComponent implements Adaptor {
         lineChunk: true,
         lineSpline: true,
         name: railroad.name,
-        zIndex: 4,
-      }),
+        zIndex: 4
+      })
     ];
   }
 }

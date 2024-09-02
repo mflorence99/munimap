@@ -59,7 +59,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     ["1 acre", 1],
     ["2 acres", 2],
     ["3 acres", 3],
-    ["4 acres", 4],
+    ["4 acres", 4]
   ];
   countByConformity: Accumulator;
   countByOwnership: Accumulator;
@@ -142,7 +142,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     // 👉 count the total area of all parcels
     this.areaOfParcels = Object.values(this.areaByUsage).reduce(
       (p, q) => p + q,
-      0,
+      0
     );
   }
 
@@ -154,7 +154,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
   #filterRemovedFeatures(geojson: CountableParcels, parcels: Parcel[]): void {
     const removed = this.#parcelsState.parcelsRemoved(parcels);
     geojson.features = geojson.features.filter(
-      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id),
+      (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
     );
   }
 
@@ -170,7 +170,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
     this.#geoJSON
       .loadByIndex(
         this.#mapState.currentMap().path,
-        map?.id === "apdvd" ? "parcels" : "countables",
+        map?.id === "apdvd" ? "parcels" : "countables"
       )
       .subscribe((geojson: CountableParcels) => this.#geojson$.next(geojson));
   }
@@ -195,7 +195,7 @@ export abstract class OLControlAbstractParcelsLegendComponent
         geometry: undefined,
         id: id,
         properties: {},
-        type: "Feature",
+        type: "Feature"
       });
     });
   }

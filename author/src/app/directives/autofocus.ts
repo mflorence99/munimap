@@ -6,7 +6,7 @@ import { inject } from "@angular/core";
 import { input } from "@angular/core";
 
 @Directive({
-  selector: "[appAutoFocus]",
+  selector: "[appAutoFocus]"
 })
 export class AutoFocusDirective {
   appAutoFocus = input<boolean>();

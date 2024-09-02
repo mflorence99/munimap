@@ -130,7 +130,7 @@ type ValueRecord = Record<string, Value>;
         SAVE
       </button>
     </article>
-  `,
+  `
 })
 export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;
@@ -145,7 +145,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     { prop: "building$", label: "Building", type: "number" },
     { prop: "land$", label: "Land", type: "number" },
     { prop: "other$", label: "Other", type: "number" },
-    { prop: "taxed$", label: "Total", type: "number" },
+    { prop: "taxed$", label: "Total", type: "number" }
   ];
   features: OLFeature<any>[];
   map: OLMapComponent;
@@ -185,7 +185,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
         owner: this.#authState.currentProfile().email,
         path: this.map.path(),
         properties: {},
-        type: "Feature",
+        type: "Feature"
       };
       // 👇 some controls are conditional so they may no longer be
       //    in the form, in which case we don't record a value
@@ -218,7 +218,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
         prop: prop,
         step: editable.step ?? 1,
         type: editable.type,
-        value: undefined,
+        value: undefined
       };
       // 👉 scan the input features -- these are the ones selected
       this.features.forEach((feature) => {

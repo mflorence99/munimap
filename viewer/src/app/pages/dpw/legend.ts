@@ -148,8 +148,8 @@ interface Statistics {
           border-bottom: 1px solid var(--mat-gray-800);
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class DPWLegendComponent implements OnInit {
   allConditions = culvertConditions;
@@ -160,7 +160,7 @@ export class DPWLegendComponent implements OnInit {
         return ["-"];
       },
       key: () => "-" /* 👈 fakeroo field in every row */,
-      tag: "All",
+      tag: "All"
     },
     {
       enum: (): string[] => {
@@ -170,29 +170,29 @@ export class DPWLegendComponent implements OnInit {
         culvert.diameter
           ? String(culvert.diameter).padStart(2, " ")
           : `${culvert.width}x${culvert.height}`,
-      tag: "Opening",
+      tag: "Opening"
     },
     {
       enum: (): string[] => {
         return culvertMaterials as any;
       },
       key: (culvert) => culvert.material,
-      tag: "Material",
+      tag: "Material"
     },
     {
       enum: (): string[] => {
         return culvertHeadwalls as any;
       },
       key: (culvert) => culvert.headwall,
-      tag: "Headwall",
+      tag: "Headwall"
     },
     {
       enum: (): string[] => {
         return culvertFloodHazards as any;
       },
       key: (culvert) => culvert.floodHazard,
-      tag: "Hazard",
-    },
+      tag: "Hazard"
+    }
   ];
 
   // 👇 metric -> value -> condition -> { count, length }
@@ -216,18 +216,18 @@ export class DPWLegendComponent implements OnInit {
     // 👇 build the data
     const lines = [];
     lines.push(
-      `Location\tCondition\tCount\tDiameter\tWidth\tHeight\tLength\tHeadWall\tMaterial\tFlood Hazard\tYear\tDescription`,
+      `Location\tCondition\tCount\tDiameter\tWidth\tHeight\tLength\tHeadWall\tMaterial\tFlood Hazard\tYear\tDescription`
     );
     this.#snapshot.forEach((culvert) => {
       const c = copy(culvert);
       Object.keys(c).forEach((k) => (c[k] = c[k] || ""));
       lines.push(
-        `${c.location}\t${c.condition}\t${c.count}\t${c.diameter}\t${c.width}\t${c.height}\t${c.length}\t${c.headwall}\t${c.material}\t${c.floodHazard}\t${c.year}\t${c.description}\t`,
+        `${c.location}\t${c.condition}\t${c.count}\t${c.diameter}\t${c.width}\t${c.height}\t${c.length}\t${c.headwall}\t${c.material}\t${c.floodHazard}\t${c.year}\t${c.description}\t`
       );
     });
     // 👇 emit the data
     const blob = new Blob([lines.join("\n")], {
-      type: "text/tab-separated-values; charset=UTF-8",
+      type: "text/tab-separated-values; charset=UTF-8"
     });
     saveAs(blob, `${this.filteredBy ?? "ALL STREETS"} culverts.tsv`);
   }
@@ -260,21 +260,21 @@ export class DPWLegendComponent implements OnInit {
         takeUntil(this.#destroy$),
         map(([landmarks, street]): [CulvertProperties[], string] => {
           const culverts = landmarks.filter(
-            (landmark) => landmark.properties.metadata?.type === "culvert",
+            (landmark) => landmark.properties.metadata?.type === "culvert"
           );
           const filteredCulverts = culverts.filter(
             (culvert) =>
-              !street || culvert.properties.metadata?.location === street,
+              !street || culvert.properties.metadata?.location === street
           );
           const filteredBy =
             culverts.length !== filteredCulverts.length
               ? filteredCulverts[0].properties.metadata.location
               : null;
           const properties = filteredCulverts.map(
-            (culvert) => culvert.properties.metadata as CulvertProperties,
+            (culvert) => culvert.properties.metadata as CulvertProperties
           );
           return [properties, filteredBy];
-        }),
+        })
       )
       .subscribe(([culverts, filteredBy]) => {
         this.filteredBy = filteredBy;

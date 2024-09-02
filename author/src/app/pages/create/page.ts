@@ -89,7 +89,7 @@ import OLFeature from "ol/Feature";
         }
       }
     </app-ol-map>
-  `,
+  `
 })
 export class CreatePage {
   env = environment;

@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorTrailsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorTrailsComponent)
+    }
   ],
   selector: "app-ol-adaptor-trails",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorTrailsComponent implements Adaptor {
   accentuate = input(false);
@@ -41,8 +41,8 @@ export class OLAdaptorTrailsComponent implements Adaptor {
         strokeOpacity: 1,
         strokeStyle: "dashed",
         strokeWidth: this.accentuate() ? "thick" : "medium",
-        zIndex: 1,
-      }),
+        zIndex: 1
+      })
     ];
   }
 }

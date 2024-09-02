@@ -27,7 +27,7 @@ import { tap } from "rxjs/operators";
   providers: [DestroyService],
   selector: "app-ol-interaction-drawlandmarks",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLInteractionDrawLandmarksComponent
   extends OLInteractionAbstractDrawComponent
@@ -49,7 +49,7 @@ export class OLInteractionDrawLandmarksComponent
   saveFeatures(geojsons: GeoJSON.Feature<any>[]): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save these new landmarks?`,
-      title: "Please confirm new landmarks",
+      title: "Please confirm new landmarks"
     };
     return this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -62,7 +62,7 @@ export class OLInteractionDrawLandmarksComponent
                 geometry: geojson.geometry,
                 owner: this.#authState.currentProfile().email,
                 path: this.#map.path(),
-                type: "Feature",
+                type: "Feature"
               };
               let properties;
               switch (geojson.geometry.type) {
@@ -72,7 +72,7 @@ export class OLInteractionDrawLandmarksComponent
                     fontOpacity: 1,
                     fontOutline: true,
                     fontSize: "large",
-                    fontStyle: "bold",
+                    fontStyle: "bold"
                   });
                   break;
                 case "LineString":
@@ -89,7 +89,7 @@ export class OLInteractionDrawLandmarksComponent
                     strokeColor: "--rgb-blue-gray-800",
                     strokeOpacity: 1,
                     strokeStyle: "dashed",
-                    strokeWidth: "medium",
+                    strokeWidth: "medium"
                   });
                   break;
                 case "Polygon":
@@ -107,7 +107,7 @@ export class OLInteractionDrawLandmarksComponent
                     strokeOpacity: 1,
                     strokeStyle: "dashed",
                     strokeWidth: "medium",
-                    textRotate: true,
+                    textRotate: true
                   });
                   break;
               }
@@ -115,7 +115,7 @@ export class OLInteractionDrawLandmarksComponent
                 landmark.id = makeLandmarkID(landmark);
                 landmark.properties = {
                   ...properties,
-                  name: `New landmark #${ix + 1}`,
+                  name: `New landmark #${ix + 1}`
                 };
                 // 👇 select landmark after adding
                 this.#store
@@ -128,7 +128,7 @@ export class OLInteractionDrawLandmarksComponent
               }
             });
           } else this.resetDraw();
-        }),
+        })
       );
   }
 }

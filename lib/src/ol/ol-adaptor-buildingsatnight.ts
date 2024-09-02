@@ -16,12 +16,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBuildingsAtNightComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorBuildingsAtNightComponent)
+    }
   ],
   selector: "app-ol-adaptor-buildingsatnight",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorBuildingsAtNightComponent implements Adaptor {
   fillOpacity = input(1);
@@ -31,8 +31,8 @@ export class OLAdaptorBuildingsAtNightComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fillColor: "--map-buildingatnight-fill",
-        fillOpacity: this.fillOpacity(),
-      }),
+        fillOpacity: this.fillOpacity()
+      })
     ];
   }
 }

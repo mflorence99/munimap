@@ -19,7 +19,7 @@ const url =
 const dist = "./data";
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -55,9 +55,9 @@ async function main(): Promise<void> {
           chalk.cyan(
             `ETA ${
               (((numTrails - ix) / gulp) * duration) / (1000 * 60 * 60)
-            } hours`,
-          ),
-        ),
+            } hours`
+          )
+        )
       );
       lastIndex = index;
       lastTime = timeNow;
@@ -67,7 +67,7 @@ async function main(): Promise<void> {
     //    find it from the dataset of all towns
     const towns = allTowns.features.filter((townFeature) =>
       // 👉 https://github.com/Turfjs/turf/pull/2157
-      /* turf. */ booleanIntersects(feature, townFeature),
+      /* turf. */ booleanIntersects(feature, townFeature)
     );
 
     towns
@@ -90,7 +90,7 @@ async function main(): Promise<void> {
             county: county,
             name: trail.properties.TRAILNAME,
             system: trail.properties.TRAILSYS,
-            town: town,
+            town: town
           };
 
           trailsByCountyByTown[county] ??= {};
@@ -105,12 +105,12 @@ async function main(): Promise<void> {
   Object.keys(trailsByCountyByTown).forEach((county) => {
     Object.keys(trailsByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${theState}/${county}/${town}/trails.geojson`),
+        chalk.green(`... writing ${theState}/${county}/${town}/trails.geojson`)
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/trails.geojson`,
-        JSON.stringify(simplify(trailsByCountyByTown[county][town])),
+        JSON.stringify(simplify(trailsByCountyByTown[county][town]))
       );
     });
   });
@@ -149,5 +149,5 @@ const sample = {
   ACCURACY: 1,
   MAPURL:
     "https://www.trailfinder.info/trails/trail/drummer-hill-and-goose-pond",
-  SHAPE_Leng: 2398.71556147,
+  SHAPE_Leng: 2398.71556147
 };

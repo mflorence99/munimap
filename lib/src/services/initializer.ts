@@ -10,7 +10,7 @@ import { getAnalytics } from "firebase/analytics";
 import { logEvent } from "firebase/analytics";
 
 export function initializeAppProvider(
-  initializer: InitializerService,
+  initializer: InitializerService
 ): Function {
   return (): Observable<any> => initializer.initialize();
 }
@@ -31,7 +31,7 @@ export class InitializerService {
       Sentry.init({
         debug: true,
         dsn: "https://c4cd041a16584464b8c0f6b2c984b516@o918490.ingest.sentry.io/5861734",
-        release: `MuniMap v${environment.package.version}`,
+        release: `MuniMap v${environment.package.version}`
       });
     }
 
@@ -40,7 +40,7 @@ export class InitializerService {
     if (environment.production) {
       const analytics = getAnalytics();
       logEvent(analytics, "app_launch", {
-        version: environment.package.version,
+        version: environment.package.version
       });
     }
 

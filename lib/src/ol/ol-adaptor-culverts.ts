@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorCulvertsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorCulvertsComponent)
+    }
   ],
   selector: "app-ol-adaptor-culverts",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorCulvertsComponent implements Adaptor {
   culvertWidth = input(48);
@@ -42,8 +42,8 @@ export class OLAdaptorCulvertsComponent implements Adaptor {
         iconSymbol: "\uf1ce" /* 👈 circle-notch */,
         name: this.#makeCulvertName(culvert),
         textAlign: "center",
-        textBaseline: "bottom",
-      }),
+        textBaseline: "bottom"
+      })
     ];
   }
 

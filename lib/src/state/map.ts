@@ -46,7 +46,7 @@ export namespace MapActions {
     constructor(
       public id: string,
       public dflt: Map,
-      public touch = false,
+      public touch = false
     ) {}
   }
 
@@ -59,7 +59,7 @@ export namespace MapActions {
     static readonly type = `[${ACTION_SCOPE}] UpdateMap`;
     constructor(
       public map: Map,
-      public refresh = false,
+      public refresh = false
     ) {}
   }
 
@@ -89,7 +89,7 @@ export type MapStateModel = Map;
 
 @State<MapStateModel>({
   name: "map",
-  defaults: null,
+  defaults: null
 })
 @Injectable()
 export class MapState {
@@ -102,14 +102,14 @@ export class MapState {
 
   @Action(MapActions.ClearMap) clearMap(
     ctx: StateContext<MapStateModel>,
-    _action: MapActions.ClearMap,
+    _action: MapActions.ClearMap
   ): void {
     ctx.setState(null);
   }
 
   @Action(MapActions.CreateMap) createMap(
     ctx: StateContext<MapStateModel>,
-    action: MapActions.CreateMap,
+    action: MapActions.CreateMap
   ): void {
     console.log(`%cFirestore get: maps ${action.map.id}`, "color: goldenrod");
     const docRef = doc(this.#firestore, "maps", action.map.id);
@@ -121,7 +121,7 @@ export class MapState {
         setDoc(
           docRef,
           { ...action.map, isDflt: false, timestamp: serverTimestamp() },
-          { merge: true },
+          { merge: true }
         );
       }
     });
@@ -129,7 +129,7 @@ export class MapState {
 
   @Action(MapActions.DeleteMap) deleteMap(
     ctx: StateContext<MapStateModel>,
-    action: MapActions.DeleteMap,
+    action: MapActions.DeleteMap
   ): void {
     ctx.dispatch(new MapActions.ClearMap());
     console.log(`%cFirestore delete: maps ${action.id}`, "color: crimson");
@@ -139,7 +139,7 @@ export class MapState {
 
   @Action(MapActions.LoadMap) loadMap(
     ctx: StateContext<MapStateModel>,
-    action: MapActions.LoadMap,
+    action: MapActions.LoadMap
   ): void {
     // 👇 there's no map until there is one
     //    we can't use the old one!
@@ -156,7 +156,7 @@ export class MapState {
         setDoc(
           docRef,
           { ...map, timestamp: serverTimestamp() },
-          { merge: true },
+          { merge: true }
         );
       }
     });
@@ -164,14 +164,14 @@ export class MapState {
 
   @Action(MapActions.SetMap) setMap(
     ctx: StateContext<MapStateModel>,
-    action: MapActions.SetMap,
+    action: MapActions.SetMap
   ): void {
     ctx.setState(copy(action.map));
   }
 
   @Action(MapActions.UpdateMap) updateMap(
     ctx: StateContext<MapStateModel>,
-    action: MapActions.UpdateMap,
+    action: MapActions.UpdateMap
   ): void {
     if (action.refresh) ctx.dispatch(new MapActions.ClearMap());
     if (action.map.isDflt) {
@@ -185,18 +185,18 @@ export class MapState {
           setDoc(
             docRef,
             { ...action.map, isDflt: false, timestamp: serverTimestamp() },
-            { merge: true },
+            { merge: true }
           ).then(() => ctx.dispatch(new MapActions.SetMap(action.map)));
         }
       });
     } else {
       console.log(
         `%cFirestore set: maps ${action.map.id} ${JSON.stringify(action.map)}`,
-        "color: chocolate",
+        "color: chocolate"
       );
       const docRef = doc(this.#firestore, "maps", action.map.id);
       setDoc(docRef, action.map, { merge: true }).then(() =>
-        ctx.dispatch(new MapActions.SetMap(action.map)),
+        ctx.dispatch(new MapActions.SetMap(action.map))
       );
     }
   }

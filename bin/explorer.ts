@@ -21,8 +21,8 @@ import jsome from "jsome";
 
 const geojson = JSON.parse(
   readFileSync(
-    "./data/NEW HAMPSHIRE/SULLIVAN/WASHINGTON/countables.geojson",
-  ).toString(),
+    "./data/NEW HAMPSHIRE/SULLIVAN/WASHINGTON/countables.geojson"
+  ).toString()
 );
 
 jsome(`# features ${geojson.features.length}`);

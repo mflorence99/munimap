@@ -131,8 +131,8 @@ interface Subdivision {
           width: 10rem;
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;
@@ -156,18 +156,18 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   ngOnInit(): void {
     this.#format = new OLGeoJSON({
       dataProjection: this.map.featureProjection,
-      featureProjection: this.map.projection,
+      featureProjection: this.map.projection
     });
     const source = this.features[0];
     this.subdivisions = [
       {
         area: source.getProperties().area,
-        id: `${source.getId()}`,
+        id: `${source.getId()}`
       },
       {
         area: null,
-        id: null,
-      },
+        id: null
+      }
     ];
   }
 
@@ -184,12 +184,12 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
     const bbox: any = transformExtent(
       this.features[0].getGeometry().getExtent(),
       this.map.projection,
-      this.map.featureProjection,
+      this.map.featureProjection
     );
     // 👉 there's guaranteed to be only one selected parcel
     const source = this.features[0];
     const sourceGeoJSON = JSON.parse(
-      this.#format.writeFeature(this.features[0]),
+      this.#format.writeFeature(this.features[0])
     );
     // 👉 keep creating voronoi ploygons until we have enough
     //    reason: a randpom point may fall outside the source
@@ -197,7 +197,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
     for (let ix = 0; targetGeoJSONs.length < subdivisions.length; ix++) {
       const randomPoints = randomPoint(subdivisions.length + ix, { bbox });
       targetGeoJSONs = voronoi(randomPoints, { bbox }).features.map((polygon) =>
-        intersect(featureCollection([polygon, sourceGeoJSON])),
+        intersect(featureCollection([polygon, sourceGeoJSON]))
       );
     }
     // 👉 trim any excess
@@ -213,7 +213,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
         id: source.getId(),
         owner: this.#authState.currentProfile().email,
         path: this.map.path(),
-        type: "Feature",
+        type: "Feature"
       });
     }
     // 👉 create a new geometry for each subdivision
@@ -236,14 +236,14 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
           town: props.town,
           usage: props.usage,
           use: props.use,
-          zone: props.zone,
+          zone: props.zone
         },
-        type: "Feature",
+        type: "Feature"
       };
     });
     // that's it!
     this.#store.dispatch(
-      new ParcelsActions.AddParcels([...removedParcels, ...subdividedParcels]),
+      new ParcelsActions.AddParcels([...removedParcels, ...subdividedParcels])
     );
     this.drawer.close();
   }

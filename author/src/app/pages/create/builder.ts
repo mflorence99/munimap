@@ -113,8 +113,8 @@ import { isIndex } from "@lib/common";
         display: grid;
         gap: 1rem;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class BuilderComponent {
   index: Index;
@@ -190,7 +190,7 @@ export class BuilderComponent {
 
   switchTown(town: string): void {
     this.pathChanged.emit(
-      `${this.currentState()}:${this.currentCounty()}:${town}`,
+      `${this.currentState()}:${this.currentCounty()}:${town}`
     );
   }
 

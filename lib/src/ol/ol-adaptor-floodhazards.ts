@@ -14,12 +14,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorFloodHazardsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorFloodHazardsComponent)
+    }
   ],
   selector: "app-ol-adaptor-floodhazards",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorFloodHazardsComponent implements Adaptor {
   floodHazardWidth = input(36);
@@ -42,8 +42,8 @@ export class OLAdaptorFloodHazardsComponent implements Adaptor {
         textBaseline: "bottom",
         // 👉 flood hazard can be co-located with a bridge
         //    or a stream crossing
-        textOffsetFeet: [this.floodHazardWidth(), -this.floodHazardWidth()],
-      }),
+        textOffsetFeet: [this.floodHazardWidth(), -this.floodHazardWidth()]
+      })
     ];
   }
 

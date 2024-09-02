@@ -31,8 +31,8 @@ import OLProjection from "ol/proj/Projection";
         display: block;
         pointer-events: auto;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlExportParcelsComponent {
   fileName = input<string>();
@@ -44,7 +44,7 @@ export class OLControlExportParcelsComponent {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection,
+      featureProjection: this.#map.projection
     });
     this.#source = new OLSourceParcelsComponent();
     this.#source.ngOnInit();
@@ -55,7 +55,7 @@ export class OLControlExportParcelsComponent {
       this.#map.boundaryExtent,
       this.#map.olView.getResolution(),
       new OLProjection({ code: this.#map.projection }),
-      this.#export.bind(this),
+      this.#export.bind(this)
     );
   }
 
@@ -66,7 +66,7 @@ export class OLControlExportParcelsComponent {
       return feature;
     });
     const blob = new Blob([JSON.stringify(simplify(geojson))], {
-      type: "text/plain;charset=utf-8",
+      type: "text/plain;charset=utf-8"
     });
     saveAs(blob, `${this.fileName()}.geojson`);
   }

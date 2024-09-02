@@ -172,8 +172,8 @@ import copy from "fast-copy";
           padding: 0;
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class ControlPanelPropertiesComponent {
   mapCopy = computed(() => copy(this.mapState()));
@@ -210,7 +210,7 @@ export class ControlPanelPropertiesComponent {
     const data: ConfirmDialogData = {
       content:
         "The map will be permanently deleted, but any changes made to parcels will be kept for use in other maps.",
-      title: "Please confirm map deletion",
+      title: "Please confirm map deletion"
     };
     this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -226,7 +226,7 @@ export class ControlPanelPropertiesComponent {
   update(map: Map): void {
     // 👇 refresh if parcelIDs have changed
     this.#store.dispatch(
-      new MapActions.UpdateMap(map, this.ngForm().controls["parcelIDs"]?.dirty),
+      new MapActions.UpdateMap(map, this.ngForm().controls["parcelIDs"]?.dirty)
     );
     // 👉 this resets the dirty flag, disabling SAVE until
     //    additional data entered

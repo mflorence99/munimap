@@ -36,8 +36,8 @@ import html2canvas from "html2canvas";
         display: block;
         pointer-events: auto;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlPrintComponent {
   canvas = viewChild<ElementRef<HTMLCanvasElement>>("canvas");
@@ -59,7 +59,7 @@ export class OLControlPrintComponent {
   print(): void {
     const data: ConfirmDialogData = {
       content: `The entire map will be exported as a JPEG file, suitable for large-format printing. It may take several minutes to produce. This map is designed to be printed on ${this.printSize()[0]}" x ${this.printSize()[1]}" paper.`,
-      title: "Please confirm map print",
+      title: "Please confirm map print"
     };
     this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -67,7 +67,7 @@ export class OLControlPrintComponent {
       .subscribe((result) => {
         if (result) {
           this.#renderCompleteKey = this.#map.olMap.once("rendercomplete", () =>
-            this.#printImpl(),
+            this.#printImpl()
           );
           this.#setup();
         }
@@ -92,7 +92,7 @@ export class OLControlPrintComponent {
       const actual = ar > 1 ? [nominal, nominal / ar] : [nominal * ar, nominal];
       console.log(
         `%cPrint padding ${actual[0]} x ${actual[1]}`,
-        "color: lightgreen",
+        "color: lightgreen"
       );
       return actual;
     }
@@ -116,7 +116,7 @@ export class OLControlPrintComponent {
   #printImpl(): void {
     html2canvas(this.#map.olMap.getViewport(), {
       height: this.#py,
-      width: this.#px,
+      width: this.#px
     }).then((viewport) => {
       // 👉 compute padding and draw it around viewport
       const padding = this.#padding(this.#px, this.#py);
@@ -134,7 +134,7 @@ export class OLControlPrintComponent {
           this.#teardown();
         },
         "image/jpeg",
-        0.95 /* 👈 juggle quality with resolution to get best image */,
+        0.95 /* 👈 juggle quality with resolution to get best image */
       );
     });
   }
@@ -151,11 +151,11 @@ export class OLControlPrintComponent {
     const data: PrintProgressData = {
       map: this.#map,
       px: this.#px,
-      py: this.#py,
+      py: this.#py
     };
     this.#progressRef = this.#dialog.open(OLControlPrintProgressComponent, {
       data,
-      disableClose: true,
+      disableClose: true
     });
     this.#progressRef.afterClosed().subscribe(() => {
       unByKey(this.#renderCompleteKey);

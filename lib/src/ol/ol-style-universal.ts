@@ -44,12 +44,12 @@ import OLText from "ol/style/Text";
   providers: [
     {
       provide: StylerComponent,
-      useExisting: forwardRef(() => OLStyleUniversalComponent),
-    },
+      useExisting: forwardRef(() => OLStyleUniversalComponent)
+    }
   ],
   selector: "app-ol-style-universal",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLStyleUniversalComponent implements OnChanges, Styler {
   // 👇 @Input/OnChanges works just fine here!
@@ -91,7 +91,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection,
+      featureProjection: this.#map.projection
     });
   }
 
@@ -108,7 +108,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       // 👉 add any backdoor styles
       if ((this.#adaptor as Adaptor)?.backdoor)
         styles.push(
-          ...(this.#adaptor as Adaptor).backdoor(feature, resolution),
+          ...(this.#adaptor as Adaptor).backdoor(feature, resolution)
         );
       return styles;
     };
@@ -118,7 +118,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return (feature: any, resolution: number): OLStyle[] => {
       if ((this.#adaptor as Adaptor)?.adaptWhenHovering) {
         const propss = (this.#adaptor as Adaptor).adaptWhenHovering(
-          feature.getProperties(),
+          feature.getProperties()
         );
         const whenHovering = true;
         const whenSelected = false;
@@ -127,7 +127,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           resolution,
           propss,
           whenHovering,
-          whenSelected,
+          whenSelected
         );
       } else return [];
     };
@@ -137,7 +137,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return (feature: any, resolution: number): OLStyle[] => {
       if ((this.#adaptor as Adaptor)?.adaptWhenSelected) {
         const propss = (this.#adaptor as Adaptor).adaptWhenSelected(
-          feature.getProperties(),
+          feature.getProperties()
         );
         const whenHovering = false;
         const whenSelected = true;
@@ -146,7 +146,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           resolution,
           propss,
           whenHovering,
-          whenSelected,
+          whenSelected
         );
       } else return [];
     };
@@ -177,7 +177,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     else if (props.strokeWidth)
       strokePixels = this.#calcPixelsForFeet(
         this[`strokeWidth_${props.strokeWidth}`],
-        resolution,
+        resolution
       );
     return strokePixels;
   }
@@ -194,7 +194,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     colorKey: string,
     whenHovering = false,
     whenSelected = false,
-    whenRedrawing = false,
+    whenRedrawing = false
   ): string {
     if (this.contrast === "blackOnWhite") {
       if (whenHovering) colorKey = "--rgb-indigo-a700";
@@ -221,16 +221,16 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   #fillEmptyPolygon(
     feature: OLFeature<any>,
     props: LandmarkProperties,
-    _resolution: number,
+    _resolution: number
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     // 👇 here's the style
     const style = new OLStyle({
       fill: new OLFill({
         // 👇 polygon can be totally transparent and still be selectable
-        color: [0, 0, 0, 0],
+        color: [0, 0, 0, 0]
       }),
-      zIndex: props.zIndex,
+      zIndex: props.zIndex
     });
     styles.push(style);
     return styles;
@@ -241,21 +241,21 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     props: LandmarkProperties,
     resolution: number,
     whenHovering = false,
-    whenSelected = false,
+    whenSelected = false
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (props.fillColor) {
       const fillColor = this.#colorOf(
         props.fillColor,
         whenHovering,
-        whenSelected,
+        whenSelected
       );
       // 🐛 FillPattern sometimes throws InvalidStateError
       let style = new OLStyle({
         fill: new OLFill({
-          color: `rgba(${fillColor}, ${props.fillOpacity})`,
+          color: `rgba(${fillColor}, ${props.fillOpacity})`
         }),
-        zIndex: props.zIndex,
+        zIndex: props.zIndex
       });
       if (props.fillPattern) {
         if (props.fillPatternAndColor) styles.push(style);
@@ -266,9 +266,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 props.fillPatternAndColor ? 1 : props.fillOpacity
               })`,
               pattern: props.fillPattern,
-              scale: props.fillPatternScale,
+              scale: props.fillPatternScale
             }),
-            zIndex: props.zIndex,
+            zIndex: props.zIndex
           });
         } finally {
           styles.push(style);
@@ -279,22 +279,22 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         const shadowColor = this.#colorOf(
           props.shadowColor,
           whenHovering,
-          whenSelected,
+          whenSelected
         );
         const shadowLocation = new OLPolygon(
-          feature.getGeometry().getCoordinates(),
+          feature.getGeometry().getCoordinates()
         );
         // 👉 offset is in feet, translation units are meters
         shadowLocation.translate(
           this.#translationOffset(props.shadowOffsetFeet[0]),
-          this.#translationOffset(props.shadowOffsetFeet[1]),
+          this.#translationOffset(props.shadowOffsetFeet[1])
         );
         const shadow = new OLStyle({
           fill: new OLFill({
-            color: `rgba(${shadowColor}, ${props.shadowOpacity})`,
+            color: `rgba(${shadowColor}, ${props.shadowOpacity})`
           }),
           geometry: shadowLocation,
-          zIndex: props.zIndex - 1,
+          zIndex: props.zIndex - 1
         });
         styles.push(shadow);
       }
@@ -311,15 +311,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     return new OLLineString(
       cspline(feature.getGeometry().getCoordinates(), {
         tension: 0.5,
-        pointsPerSeg: 3,
-      }),
+        pointsPerSeg: 3
+      })
     );
   }
 
   #strokeEmptyLine(
     feature: OLFeature<any>,
     props: LandmarkProperties,
-    resolution: number,
+    resolution: number
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     // 👇 here's the style
@@ -327,9 +327,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       stroke: new OLStroke({
         // 👇 line must be miniminally opaque to be selectable ??
         color: [0, 0, 0, 0.01],
-        width: this.#calcStrokePixels(props, resolution),
+        width: this.#calcStrokePixels(props, resolution)
       }),
-      zIndex: props.zIndex,
+      zIndex: props.zIndex
     });
     styles.push(style);
     return styles;
@@ -340,14 +340,14 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     props: LandmarkProperties,
     resolution: number,
     whenHovering = false,
-    whenSelected = false,
+    whenSelected = false
   ): OLStyle[] {
     return this.#strokePolygon(
       feature,
       props,
       resolution,
       whenHovering,
-      whenSelected,
+      whenSelected
     );
   }
 
@@ -356,7 +356,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     props: LandmarkProperties,
     resolution: number,
     whenHovering = false,
-    whenSelected = false,
+    whenSelected = false
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
@@ -370,13 +370,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         props.strokeColor,
         whenHovering,
         whenSelected,
-        whenRedrawing,
+        whenRedrawing
       );
       const strokeOutlineColor = this.#colorOf(
         props.strokeOutlineColor,
         whenHovering,
         whenSelected,
-        whenRedrawing,
+        whenRedrawing
       );
       let strokePixels = this.#calcStrokePixels(props, resolution);
       // 👇 if we're drawing a stroke outline, we first stroke
@@ -388,9 +388,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             color: `rgba(${strokeOutlineColor}, 1)`,
             lineCap: this.lineCap,
             lineJoin: this.lineJoin,
-            width: strokePixels,
+            width: strokePixels
           }),
-          zIndex: props.zIndex - 2,
+          zIndex: props.zIndex - 2
         });
         styles.push(style);
         strokePixels = strokePixels * (1 - this.strokeOutlineRatio);
@@ -400,9 +400,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
               color: `rgba(${strokeColor}, ${props.strokeOpacity})`,
               lineCap: this.lineCap,
               lineJoin: this.lineJoin,
-              width: strokePixels,
+              width: strokePixels
             }),
-            zIndex: props.zIndex - 1,
+            zIndex: props.zIndex - 1
           });
           styles.push(style);
         }
@@ -412,7 +412,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       if (props.strokeStyle === "dashed" && props.lineDash)
         lineDash = [
           strokePixels * props.lineDash[0],
-          strokePixels * props.lineDash[1],
+          strokePixels * props.lineDash[1]
         ];
       // 🐛 StrokePattern sometimes throws InvalidStateError
       let stroke = new OLStroke({
@@ -420,7 +420,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         lineCap: this.lineCap,
         lineDash: lineDash,
         lineJoin: this.lineJoin,
-        width: strokePixels,
+        width: strokePixels
       });
       if (props.strokePattern) {
         try {
@@ -429,14 +429,14 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
               props.strokeOutline ? strokeOutlineColor : strokeColor
             }, ${props.strokeOpacity})`,
             pattern: props.strokePattern as any,
-            scale: props.strokePatternScale,
+            scale: props.strokePatternScale
           });
         } catch (ignored) {}
       }
       // 👇 here's the style
       const style = new OLStyle({
         stroke: stroke,
-        zIndex: props.zIndex,
+        zIndex: props.zIndex
       });
       styles.push(style);
     }
@@ -448,7 +448,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     resolution: number,
     propss: LandmarkProperties[],
     whenHovering = false,
-    whenSelected = false,
+    whenSelected = false
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     // 👇 iterate over all the props
@@ -466,15 +466,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                     props,
                     resolution,
                     whenHovering,
-                    whenSelected,
-                  ),
+                    whenSelected
+                  )
                 );
               break;
             case "LineString":
             case "MultiLineString":
               if (this.overlaySelectable)
                 styles.push(
-                  ...this.#strokeEmptyLine(feature, props, resolution),
+                  ...this.#strokeEmptyLine(feature, props, resolution)
                 );
               if (
                 this.showAll ||
@@ -488,8 +488,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                     props,
                     resolution,
                     whenHovering,
-                    whenSelected,
-                  ),
+                    whenSelected
+                  )
                 );
               if (this.showAll || this.showText || whenHovering || whenSelected)
                 styles.push(
@@ -498,15 +498,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                     props,
                     resolution,
                     whenHovering,
-                    whenSelected,
-                  ),
+                    whenSelected
+                  )
                 );
               break;
             case "Polygon":
             case "MultiPolygon":
               if (this.overlaySelectable)
                 styles.push(
-                  ...this.#fillEmptyPolygon(feature, props, resolution),
+                  ...this.#fillEmptyPolygon(feature, props, resolution)
                 );
               if (this.showAll || this.showFill || whenHovering || whenSelected)
                 styles.push(
@@ -515,8 +515,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                     props,
                     resolution,
                     whenHovering,
-                    whenSelected,
-                  ),
+                    whenSelected
+                  )
                 );
               if (
                 this.showAll ||
@@ -530,8 +530,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                     props,
                     resolution,
                     whenHovering,
-                    whenSelected,
-                  ),
+                    whenSelected
+                  )
                 );
               if (this.showAll || this.showText || whenHovering || whenSelected)
                 styles.push(
@@ -540,8 +540,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                     props,
                     resolution,
                     whenHovering,
-                    whenSelected,
-                  ),
+                    whenSelected
+                  )
                 );
               break;
           }
@@ -555,7 +555,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     props: LandmarkProperties,
     resolution: number,
     whenHovering = false,
-    whenSelected = false,
+    whenSelected = false
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
@@ -571,11 +571,11 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         const fontColor = this.#colorOf(
           props.fontColor,
           whenHovering,
-          whenSelected,
+          whenSelected
         );
         const dfltOutlineColor = "--rgb-gray-50";
         const fontOutlineColor = this.#colorOfOpposite(
-          props.fontOutlineColor ?? dfltOutlineColor,
+          props.fontOutlineColor ?? dfltOutlineColor
         );
         // 👇 calculate the length if requested
         let text = props.name ?? "";
@@ -584,7 +584,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           text += ` (${this.#decimal.transform(
             length(geojson, { units: "feet" }),
-            "1.0-0",
+            "1.0-0"
           )} ft)`;
         }
         // 👇 we may need to chunk the text into multiple lines
@@ -596,7 +596,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             : feature;
           chunked = this.#chunkLine(
             chunkable,
-            textLength * this.lineChunkRatio,
+            textLength * this.lineChunkRatio
           );
         }
         // 👇 here's the style
@@ -609,19 +609,19 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
               : null,
           text: new OLText({
             fill: new OLFill({
-              color: `rgba(${fontColor}, ${props.fontOpacity})`,
+              color: `rgba(${fontColor}, ${props.fontOpacity})`
             }),
             font: font,
             placement: "line",
             stroke: props.fontOutline
               ? new OLStroke({
                   color: `rgba(${fontOutlineColor}, 1)`,
-                  width: fontPixels * 0.25,
+                  width: fontPixels * 0.25
                 })
               : null,
-            text: text,
+            text: text
           }),
-          zIndex: props.zIndex,
+          zIndex: props.zIndex
         });
         styles.push(style);
       }
@@ -634,14 +634,14 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     props: LandmarkProperties,
     resolution: number,
     whenHovering = false,
-    whenSelected = false,
+    whenSelected = false
   ): OLStyle[] {
     return this.#textPolygon(
       feature,
       props,
       resolution,
       whenHovering,
-      whenSelected,
+      whenSelected
     );
   }
 
@@ -650,7 +650,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     props: LandmarkProperties,
     resolution: number,
     whenHovering = false,
-    whenSelected = false,
+    whenSelected = false
   ): OLStyle[] {
     const styles: OLStyle[] = [];
     if (
@@ -666,17 +666,17 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         const fontColor = this.#colorOf(
           props.fontColor,
           whenHovering,
-          whenSelected,
+          whenSelected
         );
         const dfltOutlineColor = "--rgb-gray-50";
         const fontOutlineColor = this.#colorOfOpposite(
-          props.fontOutlineColor ?? dfltOutlineColor,
+          props.fontOutlineColor ?? dfltOutlineColor
         );
         const iconColor = props.iconColor
           ? this.#colorOf(props.iconColor, whenHovering, whenSelected)
           : this.#colorOf(props.fontColor, whenHovering, whenSelected);
         const iconOutlineColor = this.#colorOfOpposite(
-          props.iconOutlineColor ?? dfltOutlineColor,
+          props.iconOutlineColor ?? dfltOutlineColor
         );
         // 👇 calculate the acreage if requested
         let text = props.name?.replace(/ /g, "\n") ?? "";
@@ -685,7 +685,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           text += `\n(${this.#decimal.transform(
             convertArea(area(geojson), "meters", "acres"),
-            "1.0-2",
+            "1.0-2"
           )} ac)`;
         }
         // 👇 establish the location of the text
@@ -694,13 +694,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           textLocation = new OLPoint(fromLonLat(props.textLocation));
         else {
           textLocation = new OLPoint(
-            getCenter(feature.getGeometry().getExtent()),
+            getCenter(feature.getGeometry().getExtent())
           );
           // 👉 offset is in feet, translation units are meters
           if (props.textOffsetFeet)
             textLocation.translate(
               this.#translationOffset(props.textOffsetFeet[0]),
-              this.#translationOffset(props.textOffsetFeet[1]),
+              this.#translationOffset(props.textOffsetFeet[1])
             );
         }
         // 👇 will the text rotate?
@@ -729,16 +729,16 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 stroke: props.iconOutline
                   ? new OLStroke({
                       color: `rgba(${iconOutlineColor}, 1)`,
-                      width: fontPixels * this.fontOutlineRatio,
+                      width: fontPixels * this.fontOutlineRatio
                     })
                   : null,
-                text: props.iconSymbol,
+                text: props.iconSymbol
               })
             : null,
           text: props.name
             ? new OLText({
                 fill: new OLFill({
-                  color: `rgba(${fontColor}, ${props.fontOpacity})`,
+                  color: `rgba(${fontColor}, ${props.fontOpacity})`
                 }),
                 font: font,
                 offsetY: props.iconSymbol ? -fontPixels : 0,
@@ -747,15 +747,15 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 stroke: props.fontOutline
                   ? new OLStroke({
                       color: `rgba(${fontOutlineColor}, 1)`,
-                      width: fontPixels * this.iconOutlineRatio,
+                      width: fontPixels * this.iconOutlineRatio
                     })
                   : null,
                 text: text,
                 textAlign: props.textAlign,
-                textBaseline: props.textBaseline,
+                textBaseline: props.textBaseline
               })
             : null,
-          zIndex: props.zIndex,
+          zIndex: props.zIndex
         });
         styles.push(style);
       }

@@ -55,7 +55,7 @@ const theRoads = [];
 
 const dupeRoads = [
   // 🔥 two roads with same name, or discontiguous road
-  "Purling Beck Rd",
+  "Purling Beck Rd"
 ];
 
 const notRoads = [
@@ -64,7 +64,7 @@ const notRoads = [
   "Old Haying Rd",
   "Pillsbury State Park",
   "Ulrich Rd",
-  "Winding Way Rd",
+  "Winding Way Rd"
 ];
 
 const theParcels = ["^25-[\\d]+", "^26-[\\d]+", "^27-[\\d]+"];
@@ -76,7 +76,7 @@ const notParcels = [
   "12-206",
   "12-207",
   "12-208",
-  "15-82",
+  "15-82"
 ];
 
 // ////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ const parcels = allParcels.features.filter(
   (parcel) =>
     (!theParcels.length ||
       theParcels.some((id) => new RegExp(id).test(String(parcel.id)))) &&
-    !notParcels.includes(String(parcel.id)),
+    !notParcels.includes(String(parcel.id))
 );
 
 const bbox = turf.bboxPolygon(turf.bbox(turf.featureCollection(parcels)));
@@ -127,7 +127,7 @@ interface Lakeside {
 const lakesides: Lakeside[] = loadem("./bin/assets/washington-lakes.geojson")
   .features.filter(
     (lake) =>
-      turf.convertArea(lake.properties.Shape_Area, "feet", "acres") >= 10,
+      turf.convertArea(lake.properties.Shape_Area, "feet", "acres") >= 10
   )
   .map((lake) => {
     console.log(chalk.yellow(`- analyzing lake ${lake.id}`));
@@ -161,11 +161,11 @@ interface Roadway {
 }
 
 const roadSegments = loadem(
-  "./bin/assets/washington-roads.geojson",
+  "./bin/assets/washington-roads.geojson"
 ).features.filter(
   (feature) =>
     (!theRoads.length || theRoads.includes(feature.properties.name)) &&
-    !notRoads.includes(feature.properties.name),
+    !notRoads.includes(feature.properties.name)
 );
 
 // 👉 gather all the segments for a road together
@@ -178,7 +178,7 @@ const segmentsByRoadName: Record<string, Feature[]> = roadSegments.reduce(
     acc[nm] = segments;
     return acc;
   },
-  {},
+  {}
 );
 
 // 👉 for each road ...
@@ -187,7 +187,7 @@ const roadways = Object.values(segmentsByRoadName).map(
     // 👉 1 meter is roughly 5 digits of lat/lon precision
     const near = (p1: Position, p2: Position): boolean =>
       turf.distance(turf.point(p1), turf.point(p2), {
-        units: "meters",
+        units: "meters"
       }) <= 1;
     // 👉 helper functions
     const atBeginningOfRoad = (segment: Feature): boolean =>
@@ -203,11 +203,11 @@ const roadways = Object.values(segmentsByRoadName).map(
       centerLine.geometry.coordinates.splice(
         ix,
         0,
-        ...segment.geometry.coordinates,
+        ...segment.geometry.coordinates
       );
       centerLine.properties.width = Math.max(
         centerLine.properties.width,
-        segment.properties.width,
+        segment.properties.width
       );
       joined.add(segment);
     };
@@ -215,19 +215,19 @@ const roadways = Object.values(segmentsByRoadName).map(
     const lineOffset = (
       line: Feature,
       offset: number,
-      reverse = false,
+      reverse = false
     ): Feature =>
       turf.lineOffset(
         reverse
           ? turf.feature({
               coordinates: turf.getCoords(line).slice().reverse(),
-              type: "LineString",
+              type: "LineString"
             })
           : line,
         offset,
         {
-          units: "feet",
-        },
+          units: "feet"
+        }
       );
     // 👉 helper function
     const rewind = (segment: Feature): Feature => {
@@ -245,14 +245,14 @@ const roadways = Object.values(segmentsByRoadName).map(
           else if (atEndOfRoad(segment))
             joinSegmentToRoadAt(
               segment,
-              centerLine.geometry.coordinates.length,
+              centerLine.geometry.coordinates.length
             );
           else if (startsAtBeginning(segment))
             joinSegmentToRoadAt(rewind(segment), 0);
           else if (endsAtEnd(segment))
             joinSegmentToRoadAt(
               rewind(segment),
-              centerLine.geometry.coordinates.length,
+              centerLine.geometry.coordinates.length
             );
         }
       });
@@ -268,45 +268,45 @@ const roadways = Object.values(segmentsByRoadName).map(
     const rightOutsideEdge = lineOffset(
       rightInsideEdge,
       -width * edgeFactor,
-      true,
+      true
     );
     const rightBorder = turf.lineToPolygon(
       turf.feature({
         coordinates: [
           ...turf.getCoords(rightInsideEdge),
-          ...turf.getCoords(rightOutsideEdge),
+          ...turf.getCoords(rightOutsideEdge)
         ],
-        type: "LineString",
-      }),
+        type: "LineString"
+      })
     );
     const leftInsideEdge = lineOffset(centerLine, width / 2, true);
     const leftOutsideEdge = lineOffset(
       leftInsideEdge,
       -width * edgeFactor,
-      true,
+      true
     );
     const leftBorder = turf.lineToPolygon(
       turf.feature({
         coordinates: [
           ...turf.getCoords(leftOutsideEdge),
-          ...turf.getCoords(leftInsideEdge),
+          ...turf.getCoords(leftInsideEdge)
         ],
-        type: "LineString",
-      }),
+        type: "LineString"
+      })
     );
     const road = turf.lineToPolygon(
       turf.feature({
         coordinates: [
           ...turf.getCoords(leftInsideEdge),
-          ...turf.getCoords(rightInsideEdge),
+          ...turf.getCoords(rightInsideEdge)
         ],
-        type: "LineString",
+        type: "LineString"
       }),
       {
         properties: {
-          name: centerLine.properties.name,
-        },
-      },
+          name: centerLine.properties.name
+        }
+      }
     );
     // 👉 find the intersecting parcels
     const parcelsOverRoad: Feature[] = [];
@@ -329,9 +329,9 @@ const roadways = Object.values(segmentsByRoadName).map(
       rightInsideEdge,
       rightOutsideEdge,
       road,
-      width,
+      width
     };
-  },
+  }
 );
 
 // ////////////////////////////////////////////////////////////////////
@@ -342,7 +342,7 @@ const roadways = Object.values(segmentsByRoadName).map(
 // 👉 for each road ...
 roadways.forEach((roadway: Roadway) => {
   console.log(
-    chalk.yellow(`- clipping parcels to ${roadway.road.properties.name}`),
+    chalk.yellow(`- clipping parcels to ${roadway.road.properties.name}`)
   );
   // 👉 for each parcel that intersects with the road ...
   roadway.parcelsOverRoad.forEach((parcel) => {
@@ -356,13 +356,13 @@ roadways.forEach((roadway: Roadway) => {
         //    original parcel might straddle the road
         //    then use that as the clipped extent
         const delta = turf.flatten(
-          turf.difference(featureCollection([polygon, roadway.road])),
+          turf.difference(featureCollection([polygon, roadway.road]))
         );
         delta.features.sort((p, q) => turf.area(p) - turf.area(q));
         acc.features.push(delta.features.at(-1));
         return acc;
       },
-      turf.featureCollection<any, any>([]),
+      turf.featureCollection<any, any>([])
     );
     parcel.geometry = turf.combine(clipped).features.at(0).geometry;
     // 🔥 if the parcel ended up as a degenerate MultiPolygon,
@@ -385,8 +385,8 @@ roadways.forEach((roadway: Roadway) => {
 roadways.forEach((roadway: Roadway) => {
   console.log(
     chalk.yellow(
-      `- finding parcels that border ${roadway.road.properties.name}`,
-    ),
+      `- finding parcels that border ${roadway.road.properties.name}`
+    )
   );
   // 🔥 to avoid false positives from clips at road intersections
   const intersect = (p: Feature, q: Feature): boolean => {
@@ -429,10 +429,10 @@ class Gap {
         //    the polygon of the gap between the parcel and the road
         const sides = [
           [this.roadside, this.onRoadside],
-          [turf.polygonToLine(this.polygon), this.onParcel],
+          [turf.polygonToLine(this.polygon), this.onParcel]
         ];
         const edges = sides.map(([line, points]: [Feature, Feature[]]) =>
-          this.lineSlice(points.at(0), points.at(-1), line),
+          this.lineSlice(points.at(0), points.at(-1), line)
         );
         const gap = this.linesToPolygon(edges);
         // 👉 expand the parcel with the gap between it and the road
@@ -466,7 +466,7 @@ class Gap {
       const l1 = turf.length(slice1);
       const reversed = turf.feature<any, any>({
         coordinates: coords.slice().reverse(),
-        type: "LineString",
+        type: "LineString"
       });
       const slice2 = turf.lineSlice(p1, p2, reversed);
       const l2 = turf.length(slice2);
@@ -478,7 +478,7 @@ class Gap {
 
   linesToPolygon(lines: Feature[]): Feature {
     lines.forEach((line) =>
-      turf.featureOf(line, "LineString", "linesToPolygon"),
+      turf.featureOf(line, "LineString", "linesToPolygon")
     );
     const clockwises = lines.map((line) => turf.booleanClockwise(line));
     const coordinates = lines.reduce((acc, line, ix) => {
@@ -492,8 +492,8 @@ class Gap {
     const polygon: Feature = turf.lineToPolygon(
       turf.feature<any, any>({
         coordinates,
-        type: "LineString",
-      }),
+        type: "LineString"
+      })
     );
     const deformed =
       turf.kinks(polygon).features.length > 1 ||
@@ -528,12 +528,12 @@ roadways.forEach((roadway: Roadway) => {
         onInside,
         roadway.width * roadway.edgeFactor,
         turf.bearing(onCenter, onInside),
-        { units: "feet" },
+        { units: "feet" }
       );
       const probe = turf.lineString([
         turf.getCoord(onCenter),
         turf.getCoord(onInside),
-        turf.getCoord(onOutside),
+        turf.getCoord(onOutside)
       ]);
       // DEBUG([onCenter, onInside, onOutside, probe], '#000000');
       // 👉 now see what parcel it hits first and where
@@ -546,13 +546,13 @@ roadways.forEach((roadway: Roadway) => {
                 ...turf.lineIntersect(probe, polygon).features.map((hit) =>
                   turf.feature(hit.geometry, {
                     distance: turf.distance(onCenter, hit),
-                    polygon,
-                  }),
-                ),
+                    polygon
+                  })
+                )
               );
               return acc;
             },
-            [],
+            []
           );
           // 👉 get the closest first
           hits.sort((p, q) => p.properties.distance - q.properties.distance);
@@ -572,8 +572,8 @@ roadways.forEach((roadway: Roadway) => {
           onParcel: turf.feature(null, { distance: Number.MAX_VALUE }),
           onRoadside: null,
           parcel: null,
-          polygon: null,
-        },
+          polygon: null
+        }
       );
       // 👉 when we get a parcel hit ...
       if (hit.parcel) {
@@ -605,7 +605,7 @@ lakesides.forEach((lakeside: Lakeside) => {
     console.log(chalk.cyan(`-- clipping ${parcel.id}`));
     // 👉 use the difference
     parcel.geometry = turf.difference(
-      featureCollection([parcel, lakeside.lake]),
+      featureCollection([parcel, lakeside.lake])
     ).geometry;
   });
 });
@@ -624,7 +624,7 @@ parcels.forEach((parcel) => {
       console.log(chalk.magenta(`- clipping ${parcel.id} with ${neighbor.id}`));
       // 👉 use the difference
       parcel.geometry = turf.difference(
-        featureCollection([parcel, neighbor]),
+        featureCollection([parcel, neighbor])
       ).geometry;
     }
   });
@@ -646,7 +646,7 @@ parcels.forEach((parcel) => {
 writem(
   "/home/mflo/parcels.geojson",
   simplify(turf.featureCollection(Object.values(allParcelsByID))),
-  null,
+  null
 );
 
 // ////////////////////////////////////////////////////////////////////
@@ -667,9 +667,9 @@ writem(
           "fill-opacity": 0.25,
           id: lakeside.lake.id,
           stroke: "#0000FF",
-          "stroke-width": 1,
-        },
-      }),
+          "stroke-width": 1
+        }
+      })
     ),
     ...parcels.map(
       (parcel): Feature => ({
@@ -681,9 +681,9 @@ writem(
           "fill-opacity": 0.1,
           id: parcel.id,
           stroke: "#795548",
-          "stroke-width": 3,
-        },
-      }),
+          "stroke-width": 3
+        }
+      })
     ),
     ...roadways.map(
       (roadway): Feature => ({
@@ -695,9 +695,9 @@ writem(
           "fill-opacity": 0.75,
           name: roadway.road.properties.name,
           stroke: "#00FF00",
-          "stroke-width": 1,
-        },
-      }),
+          "stroke-width": 1
+        }
+      })
     ),
     ...roadways.map(
       (roadway): Feature => ({
@@ -707,9 +707,9 @@ writem(
           fill: "#FFFF00",
           "fill-opacity": 0.25,
           stroke: "#FFFF00",
-          "stroke-width": 1,
-        },
-      }),
+          "stroke-width": 1
+        }
+      })
     ),
     ...roadways.map(
       (roadway): Feature => ({
@@ -719,10 +719,10 @@ writem(
           fill: "#00FFFF",
           "fill-opacity": 0.25,
           stroke: "#00FFFF",
-          "stroke-width": 1,
-        },
-      }),
+          "stroke-width": 1
+        }
+      })
     ),
-    ...debugged.features,
-  ]),
+    ...debugged.features
+  ])
 );

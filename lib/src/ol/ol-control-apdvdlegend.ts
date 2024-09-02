@@ -26,9 +26,9 @@ import { viewChild } from "@angular/core";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlAPDVDLegendComponent),
+      useExisting: forwardRef(() => OLControlAPDVDLegendComponent)
     },
-    DestroyService,
+    DestroyService
   ],
   selector: "app-ol-control-apdvdlegend",
 
@@ -88,7 +88,7 @@ import { viewChild } from "@angular/core";
         </tbody>
       </table>
     </article>
-  `,
+  `
 })
 export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent

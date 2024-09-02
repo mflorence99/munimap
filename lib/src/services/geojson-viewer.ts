@@ -24,14 +24,14 @@ import { tap } from "rxjs/operators";
 export class GeoJSONViewerService extends GeoJSONService {
   #cache = inject(CacheService);
   #cacheBuster = {
-    version: environment.package.version,
+    version: environment.package.version
   };
   #http = inject(HttpClient);
 
   loadByIndex(
     path: string,
     layerKey: string,
-    extent: Coordinate = [],
+    extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection> {
     const cached = this.#cache.get(layerKey);
     return (
@@ -51,11 +51,11 @@ export class GeoJSONViewerService extends GeoJSONService {
   #load(layerKey: string): Observable<GeoJSON.FeatureCollection<any, any>> {
     return this.#http
       .get<GeoJSON.FeatureCollection<any, any>>(`assets/${layerKey}.geojson`, {
-        params: this.#cacheBuster,
+        params: this.#cacheBuster
       })
       .pipe(
         catchError(() => of(this.empty)),
-        tap((geojson) => this.#cache.set(layerKey, geojson)),
+        tap((geojson) => this.#cache.set(layerKey, geojson))
       );
   }
 }

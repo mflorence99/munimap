@@ -16,8 +16,8 @@ function emailAddressValidatorFactory(): ValidatorFn {
     if (!/^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value))
       return {
         invalidEmail: {
-          valid: false,
-        },
+          valid: false
+        }
       };
 
     return null;
@@ -26,9 +26,9 @@ function emailAddressValidatorFactory(): ValidatorFn {
 
 @Directive({
   providers: [
-    { provide: NG_VALIDATORS, useExisting: EmailAddressValidator, multi: true },
+    { provide: NG_VALIDATORS, useExisting: EmailAddressValidator, multi: true }
   ],
-  selector: "[appEmailAddress][ngModel]",
+  selector: "[appEmailAddress][ngModel]"
 })
 export class EmailAddressValidator implements Validator {
   validator: ValidatorFn = emailAddressValidatorFactory();

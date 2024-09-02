@@ -1,53 +1,53 @@
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Event } from '@angular/router';
-import { NavigationCancel } from '@angular/router';
-import { NavigationEnd } from '@angular/router';
-import { NavigationError } from '@angular/router';
-import { NavigationStart } from '@angular/router';
-import { Router } from '@angular/router';
-import { RouterOutlet } from '@angular/router';
-import { MessageDialogComponent } from '@lib/components/message-dialog';
-import { MessageDialogData } from '@lib/components/message-dialog';
-import { DestroyService } from '@lib/services/destroy';
-import { VersionService } from '@lib/services/version';
-import { AuthState } from '@lib/state/auth';
-import { Profile } from '@lib/state/auth';
-import { User } from '@lib/state/auth';
-import { Map } from '@lib/state/map';
-import { MapActions } from '@lib/state/map';
-import { MapState } from '@lib/state/map';
-import { CanDo } from '@lib/state/undo';
-import { ClearStacks } from '@lib/state/undo';
-import { Redo } from '@lib/state/undo';
-import { Undo } from '@lib/state/undo';
-import { ViewState } from '@lib/state/view';
-import { Working } from '@lib/state/working';
-import { Actions } from '@ngxs/store';
-import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { Event } from "@angular/router";
+import { NavigationCancel } from "@angular/router";
+import { NavigationEnd } from "@angular/router";
+import { NavigationError } from "@angular/router";
+import { NavigationStart } from "@angular/router";
+import { Router } from "@angular/router";
+import { RouterOutlet } from "@angular/router";
+import { MessageDialogComponent } from "@lib/components/message-dialog";
+import { MessageDialogData } from "@lib/components/message-dialog";
+import { DestroyService } from "@lib/services/destroy";
+import { VersionService } from "@lib/services/version";
+import { AuthState } from "@lib/state/auth";
+import { Profile } from "@lib/state/auth";
+import { User } from "@lib/state/auth";
+import { Map } from "@lib/state/map";
+import { MapActions } from "@lib/state/map";
+import { MapState } from "@lib/state/map";
+import { CanDo } from "@lib/state/undo";
+import { ClearStacks } from "@lib/state/undo";
+import { Redo } from "@lib/state/undo";
+import { Undo } from "@lib/state/undo";
+import { ViewState } from "@lib/state/view";
+import { Working } from "@lib/state/working";
+import { Actions } from "@ngxs/store";
+import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 
-import { transition } from '@angular/animations';
-import { trigger } from '@angular/animations';
-import { useAnimation } from '@angular/animations';
-import { inject } from '@angular/core';
-import { viewChild } from '@angular/core';
-import { ofActionSuccessful } from '@ngxs/store';
-import { moveFromLeftFade } from 'ngx-router-animations';
-import { takeUntil } from 'rxjs/operators';
+import { transition } from "@angular/animations";
+import { trigger } from "@angular/animations";
+import { useAnimation } from "@angular/animations";
+import { inject } from "@angular/core";
+import { viewChild } from "@angular/core";
+import { ofActionSuccessful } from "@ngxs/store";
+import { moveFromLeftFade } from "ngx-router-animations";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   animations: [
-    trigger('moveFromLeftFade', [
-      transition('* => *', useAnimation(moveFromLeftFade))
+    trigger("moveFromLeftFade", [
+      transition("* => *", useAnimation(moveFromLeftFade))
     ])
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-root',
+  selector: "app-root",
   template: `
 
     @let sink = {

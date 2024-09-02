@@ -44,7 +44,7 @@ const attribution =
   providers: [DestroyService],
   selector: "app-ol-source-parcels",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceParcelsComponent implements OnInit {
   olVector: OLVector<any>;
@@ -72,7 +72,7 @@ export class OLSourceParcelsComponent implements OnInit {
       attributions: [attribution],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: strategy,
+      strategy: strategy
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -88,7 +88,7 @@ export class OLSourceParcelsComponent implements OnInit {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function,
+    success: Function
   ): void {
     this.#loader(extent, resolution, projection, success);
   }
@@ -106,7 +106,7 @@ export class OLSourceParcelsComponent implements OnInit {
     });
     // 👉 remove them from the geojson
     geojson.features = geojson.features.filter(
-      (feature) => !removed.has(feature.id),
+      (feature) => !removed.has(feature.id)
     );
     return removed;
   }
@@ -139,7 +139,7 @@ export class OLSourceParcelsComponent implements OnInit {
           });
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
-          featureProjection: this.#map.projection,
+          featureProjection: this.#map.projection
         }) as OLFeature<any>[];
         // 👉 add each feature not already present
         features.forEach((feature) => {
@@ -164,7 +164,7 @@ export class OLSourceParcelsComponent implements OnInit {
         geometry: undefined,
         id: id,
         properties: {},
-        type: "Feature",
+        type: "Feature"
       });
     });
     return added;
@@ -174,7 +174,7 @@ export class OLSourceParcelsComponent implements OnInit {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function,
+    success: Function
   ): void {
     let bbox;
     // 👉 get everything at once

@@ -9,7 +9,7 @@ export class CanDo {
   static readonly type = "[Undo] CanDo";
   constructor(
     public canUndo: boolean,
-    public canRedo: boolean,
+    public canRedo: boolean
   ) {}
 }
 
@@ -32,7 +32,7 @@ export type UndoStateModel = any;
 
 @State<UndoStateModel>({
   name: "undo",
-  defaults: {},
+  defaults: {}
 })
 @Injectable()
 export class UndoState {}

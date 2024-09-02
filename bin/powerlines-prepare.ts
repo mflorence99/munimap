@@ -19,27 +19,27 @@ import { booleanIntersects } from "@turf/boolean-intersects";
 
 const powerlines = JSON.parse(
   readFileSync(
-    "/home/mflo/Downloads/Electric_Power_Transmission_Lines.geojson",
-  ).toString(),
+    "/home/mflo/Downloads/Electric_Power_Transmission_Lines.geojson"
+  ).toString()
 );
 
 const dist = "./data";
 
 const boundary = JSON.parse(
-  readFileSync(`${dist}/${theState}/boundary.geojson`).toString(),
+  readFileSync(`${dist}/${theState}/boundary.geojson`).toString()
 );
 
 const geojson = turf.featureCollection([]);
 
 powerlines.features
   .filter((feature: GeoJSON.Feature<any, any>) =>
-    booleanIntersects(feature, boundary),
+    booleanIntersects(feature, boundary)
   )
   .forEach((feature: GeoJSON.Feature<any, any>) =>
-    geojson.features.push(feature),
+    geojson.features.push(feature)
   );
 
 writeFileSync(
   `./bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson`,
-  JSON.stringify(simplify(geojson)),
+  JSON.stringify(simplify(geojson))
 );

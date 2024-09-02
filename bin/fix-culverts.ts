@@ -31,7 +31,7 @@ type LonLat = { lat: number; lon: number };
 const XMLOptions = {
   attributeNamePrefix: "$$",
   format: true,
-  ignoreAttributes: false,
+  ignoreAttributes: false
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ async function main(): Promise<void> {
   const input = await inquirer.prompt({
     message: "Enter path to culverts GPX:",
     name: "path",
-    type: "input",
+    type: "input"
   });
 
   // 👇 read and parse the GPX
@@ -56,7 +56,7 @@ async function main(): Promise<void> {
   // 🔥 if not enough coordinates, bail
   const numCulverts = gpx.gpx.wpt.length;
   const withCoordinates = gpx.gpx.wpt.filter((culvert) =>
-    isCoord(lonlat(culvert)),
+    isCoord(lonlat(culvert))
   );
   const numCoordinates = withCoordinates.length;
   if (numCoordinates < 3 || numCoordinates / numCulverts < 0.75) {
@@ -79,7 +79,7 @@ async function main(): Promise<void> {
         const next = lonlat(array.at(ix + 1));
         acc.push({
           lon: Math.abs(next.lon - curr.lon),
-          lat: Math.abs(next.lat - curr.lat),
+          lat: Math.abs(next.lat - curr.lat)
         });
       }
       return acc;
@@ -93,7 +93,7 @@ async function main(): Promise<void> {
           ? { lon: acc.lon / array.length, lat: acc.lat / array.length }
           : acc;
       },
-      { lon: 0, lat: 0 },
+      { lon: 0, lat: 0 }
     );
 
   // 👇 for each culvert ...
@@ -139,7 +139,7 @@ async function main(): Promise<void> {
       }
     } else {
       console.log(
-        chalk.red("🔥 SHOULD NOT OCCUR - unable to extrapolate coordinate!"),
+        chalk.red("🔥 SHOULD NOT OCCUR - unable to extrapolate coordinate!")
       );
       exit(-1);
     }
@@ -148,10 +148,10 @@ async function main(): Promise<void> {
     console.log(
       chalk.whiteBright(`#${ix + 1}`),
       (extrapolated ? chalk.redBright : chalk.yellow)(
-        `[${curr.lon}, ${curr.lat}]`,
+        `[${curr.lon}, ${curr.lat}]`
       ),
       chalk.cyan(`${culvert.name}`),
-      chalk.magenta(`${culvert.desc ?? ""}`),
+      chalk.magenta(`${culvert.desc ?? ""}`)
     );
   });
 
@@ -159,7 +159,7 @@ async function main(): Promise<void> {
   const output = await inquirer.prompt({
     message: "Enter path to culverts GPX:",
     name: "path",
-    type: "input",
+    type: "input"
   });
 
   // 👇 reconstitute the GPX and save it
@@ -174,7 +174,7 @@ async function main(): Promise<void> {
 function findCoord(
   culverts: Culvert[],
   ix: number,
-  step: number,
+  step: number
 ): [LonLat, number] {
   let count, coord;
   for (count = 1; ix > 0 && ix < culverts.length - 1; count++) {

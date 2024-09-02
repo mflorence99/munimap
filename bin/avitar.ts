@@ -35,7 +35,7 @@ parser.parse();
 // 👇 load base geojson
 
 const featureByID = JSON.parse(
-  readFileSync("./bin/assets/washington-parcels.geojson").toString(),
+  readFileSync("./bin/assets/washington-parcels.geojson").toString()
 ).features.reduce((acc, feature) => {
   acc[feature.id] = feature;
   return acc;
@@ -65,11 +65,11 @@ function eliminateStolenParcels(): void {
 function saveGeoJSON(): void {
   const geojson = {
     type: "FeatureCollection",
-    features: Object.values(featureByID),
+    features: Object.values(featureByID)
   };
   writeFileSync(
     "./bin/assets/washington-parcels.geojson",
-    JSON.stringify(geojson),
+    JSON.stringify(geojson)
   );
 }
 
@@ -78,16 +78,16 @@ function searchForAnomalies(): void {
   // 👇 these lots are no longer in the Avitar database
   // ///////////////////////////////////////////////////////////////////////
   const missingFromAvitar = Object.keys(featureByID).filter(
-    (id) => !avitarByID[id],
+    (id) => !avitarByID[id]
   );
   if (missingFromAvitar.length > 0) {
     console.log(
-      chalk.red(`\n\n${missingFromAvitar.length} LOTS NOT FOUND IN Avitar:`),
+      chalk.red(`\n\n${missingFromAvitar.length} LOTS NOT FOUND IN Avitar:`)
     );
     missingFromAvitar.forEach((id) => {
       const feature = featureByID[id];
       console.log(
-        `${feature.id}\t${feature.properties.address}\t${feature.properties.owner}`,
+        `${feature.id}\t${feature.properties.address}\t${feature.properties.owner}`
       );
     });
   }
@@ -95,13 +95,13 @@ function searchForAnomalies(): void {
   // 👇 these lots are in Avitar but new to us
   // ///////////////////////////////////////////////////////////////////////
   const missingFromData = Object.keys(avitarByID).filter(
-    (id) => !featureByID[id] && Number(avitarByID[id].area) > 0,
+    (id) => !featureByID[id] && Number(avitarByID[id].area) > 0
   );
   if (missingFromData.length > 0) {
     console.log(
       chalk.red(
-        `\n\n${missingFromData.length} LOTS NOT FOUND IN parcel-data.ts:`,
-      ),
+        `\n\n${missingFromData.length} LOTS NOT FOUND IN parcel-data.ts:`
+      )
     );
     missingFromData.forEach((id) => {
       const assessors = avitarByID[id];
@@ -186,5 +186,5 @@ const sample = {
   PRIORFEATX: 0,
   PRIORTOTTX: 0,
   TOWNNAME: "WASHINGTON",
-  PARCELNOTE: "",
+  PARCELNOTE: ""
 };

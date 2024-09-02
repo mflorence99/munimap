@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorRoadsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorRoadsComponent)
+    }
   ],
   selector: "app-ol-adaptor-roads",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorRoadsComponent implements Adaptor {
   class6Pattern = input("conglomerate");
@@ -47,7 +47,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
         strokeFeet: this.#roadFeet(road),
         strokeOpacity: 1,
         strokeStyle: "solid",
-        zIndex: 1,
+        zIndex: 1
       }),
       new LandmarkPropertiesClass({
         lineSpline: true,
@@ -55,7 +55,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
         strokeFeet: this.#roadFeet(road) * this.roadLaneRatio(),
         strokeOpacity: 1,
         strokeStyle: "solid",
-        zIndex: 2,
+        zIndex: 2
       }),
       road.class === "VI"
         ? new LandmarkPropertiesClass({
@@ -66,7 +66,7 @@ export class OLAdaptorRoadsComponent implements Adaptor {
             strokePattern: this.class6Pattern(),
             strokePatternScale: 0.66,
             strokeStyle: "solid",
-            zIndex: 3,
+            zIndex: 3
           })
         : null,
       new LandmarkPropertiesClass({
@@ -78,8 +78,8 @@ export class OLAdaptorRoadsComponent implements Adaptor {
         fontOpacity: 1,
         fontOutline: true,
         fontStyle: "bold",
-        zIndex: 4,
-      }),
+        zIndex: 4
+      })
     ];
   }
 

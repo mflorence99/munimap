@@ -21,12 +21,12 @@ import OLGraticule from "ol-ext/control/Graticule";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlGraticuleComponent),
-    },
+      useExisting: forwardRef(() => OLControlGraticuleComponent)
+    }
   ],
   selector: "app-ol-control-graticule",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLControlGraticuleComponent implements Mapable, OnInit {
   borderPixels = input<number>();
@@ -45,7 +45,7 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
       // 👇 ol-ext/control/graticule is special in that it can take only a single
       //    style, so in this logic, the last one wins
       this.stylers().forEach((styler) =>
-        this.olControl.setStyle(styler.style()),
+        this.olControl.setStyle(styler.style())
       );
     });
   }
@@ -67,7 +67,7 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
         : undefined,
       spacing: this.spacing(),
       step: this.step(),
-      stepCoord: this.stepCoord(),
+      stepCoord: this.stepCoord()
     });
     this.olControl.setProperties({ component: this }, true);
   }

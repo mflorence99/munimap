@@ -20,7 +20,7 @@ import OLFill from "ol/style/Fill";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-filter-mask2boundary",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLFilterMask2BoundaryComponent
   implements AfterContentInit, OnDestroy
@@ -37,7 +37,7 @@ export class OLFilterMask2BoundaryComponent
     this.#layer = this.#layer1 ?? this.#layer2 ?? this.#layer3;
     // 👇 build the filter
     const coords: any = copy(
-      this.#map.boundary().features[0].geometry.coordinates,
+      this.#map.boundary().features[0].geometry.coordinates
     );
     const boundary = new Feature(new Polygon(coords));
     boundary
@@ -46,7 +46,7 @@ export class OLFilterMask2BoundaryComponent
     this.olFilter = new Mask({
       feature: boundary,
       fill: new OLFill({ color: [255, 255, 255, 0.1] }),
-      inner: false,
+      inner: false
     });
   }
 

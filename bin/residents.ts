@@ -2,24 +2,21 @@ import { readFileSync } from "fs";
 import { writeFileSync } from "fs";
 
 const geojson = JSON.parse(
-  readFileSync("./bin/assets/washington-parcels.geojson").toString(),
+  readFileSync("./bin/assets/washington-parcels.geojson").toString()
 );
 
 const lines = geojson.features
   .filter(
     (feature) =>
-      feature.properties.ownership === "R" &&
-      feature.properties.usage === "110",
+      feature.properties.ownership === "R" && feature.properties.usage === "110"
   )
   .sort((p, q) =>
-    sortaddr(p.properties.address).localeCompare(
-      sortaddr(q.properties.address),
-    ),
+    sortaddr(p.properties.address).localeCompare(sortaddr(q.properties.address))
   )
   .reduce(
     (acc, feature) =>
       (acc += `${feature.properties.address}\t${feature.properties.owner}\t ${feature.id}\n`),
-    "",
+    ""
   );
 
 writeFileSync("/home/mflo/Downloads/residents.csv", lines);

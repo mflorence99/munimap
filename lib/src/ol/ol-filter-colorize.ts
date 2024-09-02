@@ -31,7 +31,7 @@ type Operation =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-filter-colorize",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
   color = input<ColorLike>("#000000");
@@ -76,7 +76,7 @@ export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
         this.olFilter.setFilter({
           color: this.color(),
           operation: this.operation(),
-          value: this.value(),
+          value: this.value()
         });
         break;
     }

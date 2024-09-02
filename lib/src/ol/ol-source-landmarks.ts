@@ -32,7 +32,7 @@ import OLVector from "ol/source/Vector";
   providers: [DestroyService],
   selector: "app-ol-source-landmarks",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceLandmarksComponent implements OnInit {
   filterFn = input<(value) => (landmark) => boolean>();
@@ -54,7 +54,7 @@ export class OLSourceLandmarksComponent implements OnInit {
     this.olVector = new OLVector({
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: allStrategy,
+      strategy: allStrategy
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -76,7 +76,7 @@ export class OLSourceLandmarksComponent implements OnInit {
         const geojson = featureCollection(filteredLandmarks);
         // 👉 convert features into OL format
         const features = this.olVector.getFormat().readFeatures(geojson, {
-          featureProjection: this.#map.projection,
+          featureProjection: this.#map.projection
         }) as OLFeature<any>[];
         // 👉 add feature to source
         this.olVector.clear();
@@ -92,7 +92,7 @@ export class OLSourceLandmarksComponent implements OnInit {
           const extent = transformExtent(
             bbox(geojson),
             this.#map.featureProjection,
-            this.#map.projection,
+            this.#map.projection
           );
           const minZoom = this.#map.olView.getMinZoom();
           this.#map.olView.setMinZoom(this.#map.minUsefulZoom());
@@ -102,7 +102,7 @@ export class OLSourceLandmarksComponent implements OnInit {
             },
             duration: this.zoomAnimationDuration(),
             maxZoom: this.maxZoom() ?? this.#map.maxZoom(),
-            size: this.#map.olMap.getSize(),
+            size: this.#map.olMap.getSize()
           });
         }
         this.#success?.(features);
@@ -113,7 +113,7 @@ export class OLSourceLandmarksComponent implements OnInit {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function,
+    success: Function
   ): void {
     this.#success = success;
   }

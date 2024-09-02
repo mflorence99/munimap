@@ -28,7 +28,7 @@ import hash from "object-hash";
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-import-culverts",
-  templateUrl: "../abstract-import.html",
+  templateUrl: "../abstract-import.html"
 })
 export class ImportCulvertsComponent extends ImportLandmarksComponent {
   #authState = inject(AuthState);
@@ -36,7 +36,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
   #store = inject(Store);
 
   override async makeLandmarks(
-    geojsons: GeoJSON.FeatureCollection<any>[],
+    geojsons: GeoJSON.FeatureCollection<any>[]
   ): Promise<void> {
     for (const geojson of geojsons) {
       // 🔥 non-standard GeoJSON field for convenience
@@ -59,7 +59,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
             geometry: feature.geometry,
             owner: this.#authState.currentProfile().email,
             path: this.map.path(),
-            type: "Feature",
+            type: "Feature"
           };
           let properties;
           // 👇 only import waypoints
@@ -70,8 +70,8 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
                   feature.properties.keywords ?? filename,
                   feature.properties.name,
                   feature.properties.description /* 👈 KML */ ??
-                    feature.properties.desc /* 👈 GPX */,
-                ),
+                    feature.properties.desc /* 👈 GPX */
+                )
               };
               break;
           }
@@ -81,7 +81,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
             landmark.importHash = importHash;
             landmark.properties = properties;
             await firstValueFrom(
-              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark)),
+              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark))
             );
           }
         }
@@ -92,7 +92,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
   #makeCulvertProperties(
     location: string,
     props: string,
-    description = "",
+    description = ""
   ): Partial<CulvertProperties> {
     // 👇 split props and eliminate decoration and smart quotes
     const parts = props
@@ -123,7 +123,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       material: culvertMaterials[0],
       type: "culvert",
       width: 0,
-      year: null,
+      year: null
     };
     // 👇 the data in each part is unambiguous with respect to culvert property
     parts.forEach((part: any) => {

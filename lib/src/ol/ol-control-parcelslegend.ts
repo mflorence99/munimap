@@ -21,9 +21,9 @@ import { convertArea } from "@turf/helpers";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlParcelsLegendComponent),
+      useExisting: forwardRef(() => OLControlParcelsLegendComponent)
     },
-    DestroyService,
+    DestroyService
   ],
   selector: "app-ol-control-parcelslegend",
 
@@ -137,7 +137,7 @@ import { convertArea } from "@turf/helpers";
         </tbody>
       </table>
     </article>
-  `,
+  `
 })
 export class OLControlParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
@@ -161,7 +161,7 @@ export class OLControlParcelsLegendComponent
     this.areaOfTown = convertArea(
       area(this.#map.boundary()),
       "meters",
-      "acres",
+      "acres"
     );
     this.olControl = new Legend({ element: this.legend().nativeElement });
     this.olControl.setProperties({ component: this }, true);

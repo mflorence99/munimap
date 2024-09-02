@@ -23,7 +23,7 @@ import { tap } from "rxjs/operators";
   providers: [DestroyService],
   selector: "app-ol-interaction-redrawparcel",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLInteractionRedrawParcelComponent
   extends OLInteractionAbstractRedrawComponent
@@ -45,7 +45,7 @@ export class OLInteractionRedrawParcelComponent
   saveRedraw(geojson: GeoJSON.Feature<any>): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new parcel boundary for ${this.feature.getId()}?`,
-      title: "Please confirm new boundary",
+      title: "Please confirm new boundary"
     };
     return this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -59,15 +59,15 @@ export class OLInteractionRedrawParcelComponent
               id: this.feature.getId(),
               owner: this.#authState.currentProfile().email,
               path: this.#map.path(),
-              type: "Feature",
+              type: "Feature"
             };
             this.#store.dispatch(
-              new ParcelsActions.AddParcels([redrawnParcel]),
+              new ParcelsActions.AddParcels([redrawnParcel])
             );
           }
           // 👉 on CANCEL, reset geometry
           else this.resetRedraw();
-        }),
+        })
       );
   }
 }

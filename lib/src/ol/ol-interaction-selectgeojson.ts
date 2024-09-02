@@ -30,16 +30,16 @@ export type FilterFunction = (name: number | string) => boolean;
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent),
+      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
     },
     {
       provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent),
-    },
+      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
+    }
   ],
   selector: "app-ol-interaction-selectgeojson",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLInteractionSelectGeoJSONComponent
   implements Mapable, OnDestroy, OnInit, Selector
@@ -66,7 +66,7 @@ export class OLInteractionSelectGeoJSONComponent
       condition: (event): boolean => pointerMove(event),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
-      style: this.layer.styleWhenHovering(),
+      style: this.layer.styleWhenHovering()
     });
     this.olHover.setProperties({ component: this }, true);
     // 👉 for selecting
@@ -74,7 +74,7 @@ export class OLInteractionSelectGeoJSONComponent
       condition: (event): boolean => click(event),
       filter: this.#filter.bind(this),
       layers: [this.layer.olLayer],
-      style: this.layer.styleWhenSelected(),
+      style: this.layer.styleWhenSelected()
     });
     this.olSelect.setProperties({ component: this }, true);
   }

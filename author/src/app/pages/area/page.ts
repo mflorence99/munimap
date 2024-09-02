@@ -1,20 +1,20 @@
-import { AbstractMapPage } from '../abstract-map';
+import { AbstractMapPage } from "../abstract-map";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { OLMapComponent } from '@lib/ol/ol-map';
-import { DestroyService } from '@lib/services/destroy';
-import { MapType } from '@lib/state/map';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { OLMapComponent } from "@lib/ol/ol-map";
+import { DestroyService } from "@lib/services/destroy";
+import { MapType } from "@lib/state/map";
 
-import { viewChild } from '@angular/core';
+import { viewChild } from "@angular/core";
 
 // 🔥 we only expect "area" maps to be printed, never viewed in the viewer
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: 'app-area',
+  selector: "app-area",
   template: `
 
     @let sink = {
@@ -307,7 +307,7 @@ export class AreaPage extends AbstractMapPage implements OnInit {
   map = viewChild(OLMapComponent);
 
   getType(): MapType {
-    return 'area';
+    return "area";
   }
 
   ngOnInit(): void {

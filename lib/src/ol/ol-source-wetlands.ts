@@ -12,7 +12,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-wetlands",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
   // 👇 see WetlandProperties
@@ -22,7 +22,7 @@ export class OLSourceWetlandsComponent extends OLSourceArcGISComponent {
       arcgis.features.forEach((feature) => {
         const properties: WetlandProperties = feature.attributes;
         properties.type = ["Freshwater Pond", "Riverine"].includes(
-          properties.WETLAND_TY,
+          properties.WETLAND_TY
         )
           ? "water"
           : "marsh";

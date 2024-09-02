@@ -41,8 +41,8 @@ import OLOverlay from "ol/Overlay";
       .icon {
         color: var(--background-color);
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLOverlayParcelLabelComponent implements OnInit {
   label = viewChild<ElementRef<HTMLDivElement>>("label");
@@ -58,7 +58,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
   constructor() {
     this.olOverlay = new OLOverlay({
       position: [0, 0],
-      positioning: "center-center",
+      positioning: "center-center"
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.#map.olMap.addOverlay(this.olOverlay);
@@ -72,7 +72,7 @@ export class OLOverlayParcelLabelComponent implements OnInit {
     // 👉 construct a parcel to override the label position
     const centers = this.#centers;
     centers[this.#ix] = toLonLat(
-      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y),
+      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
     );
     const recenteredParcel: Parcel = {
       action: "modified",
@@ -80,9 +80,9 @@ export class OLOverlayParcelLabelComponent implements OnInit {
       owner: this.#authState.currentProfile().email,
       path: this.#map.path(),
       properties: {
-        centers: centers,
+        centers: centers
       },
-      type: "Feature",
+      type: "Feature"
     };
     this.#store.dispatch(new ParcelsActions.AddParcels([recenteredParcel]));
     this.olOverlay.setPosition([0, 0]);

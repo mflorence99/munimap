@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorConservationsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorConservationsComponent)
+    }
   ],
   selector: "app-ol-adaptor-conservations",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorConservationsComponent implements Adaptor {
   borderOpacity = input(1);
@@ -40,8 +40,8 @@ export class OLAdaptorConservationsComponent implements Adaptor {
           strokeColor: "--map-conservation-outline",
           strokeOpacity: this.borderOpacity(),
           strokePixels: this.borderPixels(),
-          strokeStyle: "dashed",
-        }),
+          strokeStyle: "dashed"
+        })
       ];
     } else return [];
   }

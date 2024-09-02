@@ -25,8 +25,8 @@ const loadem = (fn): Buildings => JSON.parse(readFileSync(fn).toString());
 
 const curated = {
   SULLIVAN: {
-    WASHINGTON: loadem("./bin/assets/washington-buildings.geojson"),
-  },
+    WASHINGTON: loadem("./bin/assets/washington-buildings.geojson")
+  }
 };
 
 const dist = "./data";
@@ -93,15 +93,13 @@ Object.keys(curated).forEach((county) => {
     });
 
     console.log(
-      chalk.green(
-        `... writing ${theState}/${county}/${town}/buildings.geojson`,
-      ),
+      chalk.green(`... writing ${theState}/${county}/${town}/buildings.geojson`)
     );
     mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
     // 👎 CANNOT use simplify due to accuracy needed in buildings
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/buildings.geojson`,
-      JSON.stringify(geojson),
+      JSON.stringify(geojson)
     );
   });
 });

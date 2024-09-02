@@ -22,12 +22,12 @@ import OLStyle from "ol/style/Style";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLLayerVectorComponent),
-    },
+      useExisting: forwardRef(() => OLLayerVectorComponent)
+    }
   ],
   selector: "app-ol-layer-vector",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: block; visibility: hidden }"],
+  styles: [":host { display: block; visibility: hidden }"]
 })
 export class OLLayerVectorComponent implements Mapable {
   id = input<string>();

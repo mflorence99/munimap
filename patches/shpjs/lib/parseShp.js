@@ -25,7 +25,7 @@ function polyReduce(a, b) {
 ParseShp.prototype.parsePoint = function (data) {
   return {
     type: "Point",
-    coordinates: this.parseCoord(data, 0),
+    coordinates: this.parseCoord(data, 0)
   };
 };
 ParseShp.prototype.parseZPoint = function (data) {
@@ -47,7 +47,7 @@ ParseShp.prototype.parseZPointArray = function (
   data,
   zOffset,
   num,
-  coordinates,
+  coordinates
 ) {
   let i = 0;
   while (i < num) {
@@ -62,7 +62,7 @@ ParseShp.prototype.parseArrayGroup = function (
   offset,
   partOffset,
   num,
-  tot,
+  tot
 ) {
   const out = [];
   let done = 0;
@@ -91,7 +91,7 @@ ParseShp.prototype.parseZArrayGroup = function (
   data,
   zOffset,
   num,
-  coordinates,
+  coordinates
 ) {
   let i = 0;
   while (i < num) {
@@ -99,7 +99,7 @@ ParseShp.prototype.parseZArrayGroup = function (
       data,
       zOffset,
       coordinates[i].length,
-      coordinates[i],
+      coordinates[i]
     );
     zOffset += coordinates[i].length << 3;
     i++;
@@ -136,7 +136,7 @@ ParseShp.prototype.parseZMultiPoint = function (data) {
     data,
     zOffset,
     num,
-    geoJson.coordinates,
+    geoJson.coordinates
   );
   return geoJson;
 };
@@ -161,7 +161,7 @@ ParseShp.prototype.parsePolyline = function (data) {
       offset,
       partOffset,
       numParts,
-      num,
+      num
     );
   }
   return out;
@@ -176,7 +176,7 @@ ParseShp.prototype.parseZPolyline = function (data) {
       data,
       zOffset,
       num,
-      geoJson.coordinates,
+      geoJson.coordinates
     );
     return geoJson;
   } else {
@@ -188,7 +188,7 @@ ParseShp.prototype.parseZPolyline = function (data) {
       data,
       zOffset,
       num,
-      geoJson.coordinates,
+      geoJson.coordinates
     );
     return geoJson;
   }
@@ -224,7 +224,7 @@ const shpFuncObj = {
   11: "parseZPoint",
   13: "parseZPolyline",
   15: "parseZPolygon",
-  18: "parseZMultiPoint",
+  18: "parseZMultiPoint"
 };
 
 function makeParseCoord(trans) {
@@ -233,7 +233,7 @@ function makeParseCoord(trans) {
       try {
         return trans.inverse([
           data.readDoubleLE(offset),
-          data.readDoubleLE(offset + 8),
+          data.readDoubleLE(offset + 8)
         ]);
       } catch (ignored) {
         return data;
@@ -286,8 +286,8 @@ ParseShp.prototype.parseHeader = function () {
       view.readDoubleLE(9 << 2),
       view.readDoubleLE(11 << 2),
       view.readDoubleLE(13 << 2),
-      view.readDoubleLE(13 << 2),
-    ],
+      view.readDoubleLE(13 << 2)
+    ]
   };
 };
 ParseShp.prototype.getRows = function () {
@@ -318,14 +318,14 @@ ParseShp.prototype.getRow = function (offset) {
     return {
       id: id,
       len: len,
-      type: 0,
+      type: 0
     };
   }
   return {
     id: id,
     len: len,
     data: this.buffer.slice(offset + 12, offset + len + 8),
-    type: view.readInt32LE(8),
+    type: view.readInt32LE(8)
   };
 };
 module.exports = function (buffer, trans) {

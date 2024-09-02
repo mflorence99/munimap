@@ -155,8 +155,8 @@ import { takeUntil } from "rxjs/operators";
           border-color: var(--text-color);
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class ListPage implements OnInit {
   columns = ["name", "id", "owner", "type", "path"];
@@ -201,19 +201,19 @@ export class ListPage implements OnInit {
           // 👇 show the N most recently-used maps
           console.log(
             `%cFirestore query: maps where owner in ${JSON.stringify(
-              workgroup(profile),
+              workgroup(profile)
             )} orderBy timestamp desc`,
-            "color: goldenrod",
+            "color: goldenrod"
           );
           return collectionData<Map>(
             query(
               collection(this.#firestore, "maps") as CollectionReference<Map>,
               where("owner", "in", workgroup(profile)),
-              orderBy("name"),
-            ),
+              orderBy("name")
+            )
           );
         }
-      }),
+      })
     );
   }
 }

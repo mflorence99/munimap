@@ -46,8 +46,8 @@ import { model } from "@angular/core";
         font-size: 0.75rem;
         text-align: center;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlPlusMinusComponent implements OnInit {
   zoom = model<number>();
@@ -73,7 +73,7 @@ export class OLControlPlusMinusComponent implements OnInit {
     // 🐛 null is not an object (evaluating 'this.map.olView.animate')
     this.#map.olView?.animate({
       duration: this.zoomAnimationDuration(),
-      zoom,
+      zoom
     });
   }
 

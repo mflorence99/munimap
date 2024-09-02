@@ -29,7 +29,7 @@ import Feature from "ol/Feature";
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-import-landmarks",
-  templateUrl: "../abstract-import.html",
+  templateUrl: "../abstract-import.html"
 })
 export class ImportLandmarksComponent implements SidebarComponent {
   cancelling = false;
@@ -56,16 +56,16 @@ export class ImportLandmarksComponent implements SidebarComponent {
   async alreadyImported(importHash: string): Promise<boolean> {
     console.log(
       `%cFirestore query: landmarks where owner in ${JSON.stringify(
-        workgroup(this.#authState.currentProfile()),
+        workgroup(this.#authState.currentProfile())
       )} and importHash = ${importHash}`,
-      "color: goldenrod",
+      "color: goldenrod"
     );
     const docs = await getDocs(
       query(
         collection(this.#firestore, "landmarks"),
         where("owner", "in", workgroup(this.#authState.currentProfile())),
-        where("importHash", "==", importHash),
-      ),
+        where("importHash", "==", importHash)
+      )
     );
     return !docs.empty;
   }
@@ -82,11 +82,11 @@ export class ImportLandmarksComponent implements SidebarComponent {
             const entries = zip.filter(
               (path) =>
                 path.toLowerCase().endsWith(".gpx") ||
-                path.toLowerCase().endsWith(".kml"),
+                path.toLowerCase().endsWith(".kml")
             );
             if (entries.length === 0)
               this.errorMessages.push(
-                `No GPX or KML data found in ${file.name}`,
+                `No GPX or KML data found in ${file.name}`
               );
             else {
               // 🔥 NOTE EasyTrails hack where we only take the first of
@@ -144,7 +144,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
     const geojsons = await this.analyzeImports(record);
     this.numImporting = geojsons.reduce(
       (acc, geojson) => acc + geojson.features.length,
-      0,
+      0
     );
     this.#cdf.markForCheck();
     await this.makeLandmarks(geojsons);
@@ -155,7 +155,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
   }
 
   async makeLandmarks(
-    geojsons: GeoJSON.FeatureCollection<any>[],
+    geojsons: GeoJSON.FeatureCollection<any>[]
   ): Promise<void> {
     for (const geojson of geojsons) {
       if (this.cancelling) break;
@@ -174,7 +174,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
             geometry: feature.geometry,
             owner: this.#authState.currentProfile().email,
             path: this.map.path(),
-            type: "Feature",
+            type: "Feature"
           };
           let properties;
           switch (feature.geometry?.type) {
@@ -184,7 +184,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
                 fontOpacity: 1,
                 fontOutline: true,
                 fontSize: "large",
-                fontStyle: "bold",
+                fontStyle: "bold"
               });
               break;
             case "LineString":
@@ -201,7 +201,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
                 strokeColor: "--rgb-blue-gray-800",
                 strokeOpacity: 1,
                 strokeStyle: "dashed",
-                strokeWidth: "medium",
+                strokeWidth: "medium"
               });
               break;
             case "Polygon":
@@ -219,7 +219,7 @@ export class ImportLandmarksComponent implements SidebarComponent {
                 strokeOpacity: 1,
                 strokeStyle: "dashed",
                 strokeWidth: "medium",
-                textRotate: true,
+                textRotate: true
               });
               break;
           }
@@ -229,10 +229,10 @@ export class ImportLandmarksComponent implements SidebarComponent {
             landmark.importHash = importHash;
             landmark.properties = {
               ...properties,
-              name: feature.properties?.name ?? "Imported Landmark",
+              name: feature.properties?.name ?? "Imported Landmark"
             };
             await firstValueFrom(
-              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark)),
+              this.#store.dispatch(new LandmarksActions.AddLandmark(landmark))
             );
           }
         }

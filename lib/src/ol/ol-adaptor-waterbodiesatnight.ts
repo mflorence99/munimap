@@ -17,12 +17,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorWaterbodiesAtNightComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorWaterbodiesAtNightComponent)
+    }
   ],
   selector: "app-ol-adaptor-waterbodiesatnight",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorWaterbodiesAtNightComponent implements Adaptor {
   fillOpacity = input(1);
@@ -35,14 +35,14 @@ export class OLAdaptorWaterbodiesAtNightComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fillColor: "--map-waterbodyatnight-fill",
-        fillOpacity: this.fillOpacity(),
+        fillOpacity: this.fillOpacity()
       }),
       new LandmarkPropertiesClass({
         fillColor: "--map-waterbodyatnight-pattern",
         fillOpacity: this.patternOpacity(),
         fillPattern: this.pattern(),
-        fillPatternScale: this.patternScale(),
-      }),
+        fillPatternScale: this.patternScale()
+      })
     ];
   }
 }

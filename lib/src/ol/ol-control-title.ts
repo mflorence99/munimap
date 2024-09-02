@@ -26,8 +26,8 @@ class Title extends OLControl {
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlTitleComponent),
-    },
+      useExisting: forwardRef(() => OLControlTitleComponent)
+    }
   ],
   selector: "app-ol-control-title",
 
@@ -65,8 +65,8 @@ class Title extends OLControl {
           }
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlTitleComponent implements Mapable, OnInit {
   olControl: OLControl;

@@ -18,7 +18,7 @@ import OLXYZ from "ol/source/XYZ";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-xyz",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceXYZComponent implements OnInit {
   attributions = contentChildren(OLAttributionComponent);
@@ -32,7 +32,7 @@ export class OLSourceXYZComponent implements OnInit {
   constructor() {
     effect(() => {
       this.olXYZ.setAttributions(
-        this.attributions().map((attribution) => attribution.getAttribution()),
+        this.attributions().map((attribution) => attribution.getAttribution())
       );
     });
   }
@@ -47,7 +47,7 @@ export class OLSourceXYZComponent implements OnInit {
       maxZoom: this.maxZoom(),
       url: `${environment.endpoints.proxy}/proxy/${
         parsed.hostname
-      }?url=${encoded}&x={x}&y={y}&z={z}&s=${this.s().join(",")}`,
+      }?url=${encoded}&x={x}&y={y}&z={z}&s=${this.s().join(",")}`
     });
     this.olXYZ.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olXYZ);

@@ -27,14 +27,14 @@ import { tap } from "rxjs/operators";
 export class GeoJSONAuthorService extends GeoJSONService {
   #cache = inject(CacheService);
   #cacheBuster = {
-    version: environment.package.version,
+    version: environment.package.version
   };
   #http = inject(HttpClient);
 
   loadByIndex(
     path: string,
     layerKey: string,
-    extent: Coordinate = [],
+    extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<any, any>> {
     const base = this.findIndex();
     return this.#loadFromIndex(base, path, layerKey, extent);
@@ -43,14 +43,14 @@ export class GeoJSONAuthorService extends GeoJSONService {
   loadIndex(): Observable<Index> {
     return this.#http
       .get<Index>(`${environment.endpoints.proxy}/index.json`, {
-        params: this.#cacheBuster,
+        params: this.#cacheBuster
       })
       .pipe(tap((index) => (this.index = index)));
   }
 
   #indexFromPath(
     base: Index,
-    path: Path,
+    path: Path
   ): StateIndex | CountyIndex | TownIndex {
     const parts = path.split(":");
     let index: any = base;
@@ -60,7 +60,7 @@ export class GeoJSONAuthorService extends GeoJSONService {
 
   #load(
     path: string,
-    extent: Coordinate = [],
+    extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<any, any>> {
     const cached = this.#cache.get(path);
     const stream$ = cached
@@ -70,12 +70,12 @@ export class GeoJSONAuthorService extends GeoJSONService {
           .get<GeoJSON.FeatureCollection<any, any>>(
             `${environment.endpoints.proxy}${path}`,
             {
-              params: this.#cacheBuster,
-            },
+              params: this.#cacheBuster
+            }
           )
           .pipe(
             catchError(() => of(this.empty)),
-            tap((geojson) => this.#cache.set(path, geojson)),
+            tap((geojson) => this.#cache.set(path, geojson))
           );
     return stream$.pipe(map((geojson) => this.filter(geojson, extent)));
   }
@@ -84,7 +84,7 @@ export class GeoJSONAuthorService extends GeoJSONService {
     base: Index,
     path: string,
     layerKey: string,
-    extent: Coordinate = [],
+    extent: Coordinate = []
   ): Observable<GeoJSON.FeatureCollection<any, any>> {
     const index = this.#indexFromPath(base, path);
     const layer = index.layers[layerKey];

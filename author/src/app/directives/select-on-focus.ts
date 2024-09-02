@@ -4,7 +4,7 @@ import { HostListener } from "@angular/core";
 import { input } from "@angular/core";
 
 @Directive({
-  selector: "[appSelectOnFocus]",
+  selector: "[appSelectOnFocus]"
 })
 export class SelectOnFocusDirective {
   appSelectOnFocus = input<boolean>();

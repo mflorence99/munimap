@@ -12,7 +12,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-floodhazards",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
   // 👇 see FloodHazardProperties

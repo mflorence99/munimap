@@ -1,17 +1,17 @@
-import { OLMapComponent } from './ol-map';
+import { OLMapComponent } from "./ol-map";
 
-import { environment } from '../environment';
+import { environment } from "../environment";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
 
-import OLLayer from 'ol/layer/Layer';
+import OLLayer from "ol/layer/Layer";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-ol-control-attribution',
+  selector: "app-ol-control-attribution",
   template: `
     <article class="control">
       <ul #attribution class="attribution" [class.collapsed]="collapsed">

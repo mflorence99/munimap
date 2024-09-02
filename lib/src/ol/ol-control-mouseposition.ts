@@ -15,12 +15,12 @@ import OLMousePosition from "ol/control/MousePosition";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlMousePositionComponent),
-    },
+      useExisting: forwardRef(() => OLControlMousePositionComponent)
+    }
   ],
   selector: "app-ol-control-mouseposition",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLControlMousePositionComponent implements Mapable {
   olControl: OLMousePosition;
@@ -30,7 +30,7 @@ export class OLControlMousePositionComponent implements Mapable {
   constructor() {
     this.olControl = new OLMousePosition({
       className: "ol-control-mouseposition",
-      projection: this.#map.featureProjection,
+      projection: this.#map.featureProjection
     });
     this.olControl.setProperties({ component: this }, true);
   }

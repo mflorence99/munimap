@@ -21,7 +21,7 @@ import { tap } from "rxjs/operators";
   providers: [DestroyService],
   selector: "app-ol-interaction-redrawlandmark",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLInteractionRedrawLandmarkComponent
   extends OLInteractionAbstractRedrawComponent
@@ -41,9 +41,9 @@ export class OLInteractionRedrawLandmarkComponent
   saveRedraw(geojson: GeoJSON.Feature<any>): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new landmark alignment for ${this.feature.get(
-        "name",
+        "name"
       )}?`,
-      title: "Please confirm new alignment",
+      title: "Please confirm new alignment"
     };
     return this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -55,13 +55,13 @@ export class OLInteractionRedrawLandmarkComponent
             const landmark: Partial<Landmark> = {
               id: this.feature.getId() as string,
               geometry: geojson.geometry,
-              type: "Feature",
+              type: "Feature"
             };
             this.#store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
           }
           // 👉 on CANCEL, reset geometry
           else this.resetRedraw();
-        }),
+        })
       );
   }
 }

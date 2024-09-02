@@ -11,7 +11,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-floodplains",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceFloodplainsComponent extends OLSourceArcGISComponent {
   getAttribution(): string {

@@ -20,9 +20,9 @@ const exceptions = {
   SULLIVAN: {
     WASHINGTON: [
       "Juniper Dr", // 👈 id 124177
-      "Wolf Way", // 👈 id 125282
-    ],
-  },
+      "Wolf Way" // 👈 id 125282
+    ]
+  }
 };
 
 const roadsByCountyByTown = {};
@@ -54,7 +54,7 @@ async function main(): Promise<void> {
           name: feature.properties.STREET,
           owner: feature.properties.OWNERSHIP,
           town: feature.properties.TOWN_NAME,
-          width: feature.properties.ROADWAY_WI,
+          width: feature.properties.ROADWAY_WI
         };
 
         roadsByCountyByTown[county] ??= {};
@@ -69,12 +69,12 @@ async function main(): Promise<void> {
   Object.keys(roadsByCountyByTown).forEach((county) => {
     Object.keys(roadsByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${theState}/${county}/${town}/roads.geojson`),
+        chalk.green(`... writing ${theState}/${county}/${town}/roads.geojson`)
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/roads.geojson`,
-        JSON.stringify(simplify(roadsByCountyByTown[county][town])),
+        JSON.stringify(simplify(roadsByCountyByTown[county][town]))
       );
     });
   });
@@ -144,5 +144,5 @@ const sample = {
   DUAL_CARRI: "Minor DC, Inventory Direction, 2-Way Counter",
   AGGREGATE_: 4558,
   CREATE_DAT: "2021-10-02T04:00:00.000Z",
-  SHAPE_Leng: 58.607242089,
+  SHAPE_Leng: 58.607242089
 };

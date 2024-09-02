@@ -36,8 +36,8 @@ import { takeUntil } from "rxjs/operators";
         position: absolute;
         visibility: fixed;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class ContextMenuComponent implements OnInit {
   contextMenu = contentChild(MatMenu);
@@ -47,7 +47,7 @@ export class ContextMenuComponent implements OnInit {
 
   menuPosition = {
     x: 0,
-    y: 0,
+    y: 0
   };
 
   #cdf = inject(ChangeDetectorRef);
@@ -69,7 +69,7 @@ export class ContextMenuComponent implements OnInit {
     this.map.contextMenu$
       .pipe(
         takeUntil(this.#destroy$),
-        filter((event) => !!event),
+        filter((event) => !!event)
       )
       .subscribe((event: PointerEvent) => {
         if (this.contextMenu()) {

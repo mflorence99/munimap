@@ -20,7 +20,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-boundary",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceBoundaryComponent {
   olVector: OLVector<any>;
@@ -33,7 +33,7 @@ export class OLSourceBoundaryComponent {
       attributions: [attribution],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: allStrategy,
+      strategy: allStrategy
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -45,13 +45,13 @@ export class OLSourceBoundaryComponent {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function,
+    success: Function
   ): void {
     // 👉 convert features into OL format
     const features = this.olVector
       .getFormat()
       .readFeatures(this.#map.boundary(), {
-        featureProjection: this.#map.projection,
+        featureProjection: this.#map.projection
       }) as OLFeature<any>[];
     // 👉 add feature to source
     this.olVector.addFeatures(features);

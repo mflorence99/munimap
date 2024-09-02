@@ -16,7 +16,7 @@ export class HistoricalsService {
   historicals: HistoricalMapIndex;
 
   #cacheBuster = {
-    version: environment.package.version,
+    version: environment.package.version
   };
   #http = inject(HttpClient);
 
@@ -28,7 +28,7 @@ export class HistoricalsService {
   loadHistoricals(): Observable<HistoricalMapIndex> {
     return this.#http
       .get<HistoricalMapIndex>(`assets/historicals.json`, {
-        params: this.#cacheBuster,
+        params: this.#cacheBuster
       })
       .pipe(tap((historicals) => (this.historicals = historicals)));
   }

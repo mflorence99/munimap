@@ -38,7 +38,7 @@ export class ReadyResolver implements Resolve<boolean> {
         const root = document.querySelector("app-root");
         root.classList.add("ready");
       }),
-      take(1),
+      take(1)
     );
   }
 }

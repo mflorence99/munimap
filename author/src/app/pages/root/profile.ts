@@ -108,7 +108,7 @@ import copy from "fast-copy";
         UPDATE
       </button>
     </article>
-  `,
+  `
 })
 export class ProfileComponent {
   errorMessage = "";
@@ -135,7 +135,7 @@ export class ProfileComponent {
     this.errorMessage = null;
     this.#store.dispatch([
       new AuthActions.UpdateUser(user),
-      new AuthActions.UpdateProfile(profile),
+      new AuthActions.UpdateProfile(profile)
     ]);
     // 👇 special code to change password
     if (user.password) {
@@ -143,7 +143,7 @@ export class ProfileComponent {
         (error) => {
           this.errorMessage = this.#extractFirebaseMessage(error.message);
           this.#cdf.detectChanges();
-        },
+        }
       );
     }
   }

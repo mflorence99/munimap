@@ -116,8 +116,8 @@ interface Addition {
           width: 10rem;
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class AddParcelComponent implements SidebarComponent {
   addition: Addition = {} as Addition;
@@ -147,9 +147,9 @@ export class AddParcelComponent implements SidebarComponent {
       bbox(
         circle(toLonLat(this.map.contextMenuAt), diameter / 2, {
           steps: 16,
-          units: "miles",
-        }),
-      ),
+          units: "miles"
+        })
+      )
     );
     // 👉 build the new parcel
     const addedParcel: Parcel = {
@@ -168,9 +168,9 @@ export class AddParcelComponent implements SidebarComponent {
         town: this.map.path().split(":")[2],
         usage: "110",
         use: "",
-        zone: "",
+        zone: ""
       },
-      type: "Feature",
+      type: "Feature"
     };
     // that's it!
     this.#store.dispatch(new ParcelsActions.AddParcels([addedParcel]));

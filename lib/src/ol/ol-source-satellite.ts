@@ -35,7 +35,7 @@ const urls = {
   "2003":
     "https://nhgeodata.unh.edu/nhgeodata/rest/services/IBM/Orthophotography/MapServer/export?dpi=96&transparent=true&format=png32&layers=show%3A83&dynamicLayers=%5B%7B%22id%22%3A83%2C%22name%22%3A%22NH%20NAIP%202003%20RGB%20Image%22%2C%22source%22%3A%7B%22type%22%3A%22mapLayer%22%2C%22mapLayerId%22%3A83%7D%2C%22minScale%22%3A0%2C%22maxScale%22%3A0%7D%5D&bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&f=image",
   "1992":
-    "https://nhgeodata.unh.edu/nhgeodata/rest/services/IBM/Orthophotography/MapServer/export?dpi=96&transparent=true&format=png32&layers=show%3A84&dynamicLayers=%5B%7B%22id%22%3A84%2C%22name%22%3A%22NH%20DOQs%201992%2F98%22%2C%22source%22%3A%7B%22type%22%3A%22mapLayer%22%2C%22mapLayerId%22%3A84%7D%2C%22minScale%22%3A0%2C%22maxScale%22%3A0%7D%5D&bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&f=image",
+    "https://nhgeodata.unh.edu/nhgeodata/rest/services/IBM/Orthophotography/MapServer/export?dpi=96&transparent=true&format=png32&layers=show%3A84&dynamicLayers=%5B%7B%22id%22%3A84%2C%22name%22%3A%22NH%20DOQs%201992%2F98%22%2C%22source%22%3A%7B%22type%22%3A%22mapLayer%22%2C%22mapLayerId%22%3A84%7D%2C%22minScale%22%3A0%2C%22maxScale%22%3A0%7D%5D&bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&f=image"
 };
 
 export const satelliteYears = Object.keys(urls);
@@ -44,7 +44,7 @@ export const satelliteYears = Object.keys(urls);
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-satellite",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceSatelliteComponent {
   olTileWMS: OLTileWMS;
@@ -58,7 +58,7 @@ export class OLSourceSatelliteComponent {
       crossOrigin: "anonymous",
       params: { LAYERS: "dummy" },
       tileLoadFunction: this.#loader.bind(this),
-      url: "http://dummy.com",
+      url: "http://dummy.com"
     });
     this.olTileWMS.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olTileWMS);
@@ -75,7 +75,7 @@ export class OLSourceSatelliteComponent {
     const url = `${
       environment.endpoints.proxy
     }/proxy/satellite?url=${encodeURIComponent(
-      urls[this.year()].replace("XXXXXX", bbox),
+      urls[this.year()].replace("XXXXXX", bbox)
     )}`;
     img.src = url;
   }

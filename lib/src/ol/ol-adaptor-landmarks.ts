@@ -14,12 +14,12 @@ export type FilterFunction = (name: string) => boolean;
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorLandmarksComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorLandmarksComponent)
+    }
   ],
   selector: "app-ol-adaptor-landmarks",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorLandmarksComponent implements Adaptor {
   // 👇 pass thru LandmarkProperties

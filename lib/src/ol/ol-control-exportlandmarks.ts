@@ -21,8 +21,8 @@ import { saveAs } from "file-saver";
         display: block;
         pointer-events: auto;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlExportLandmarksComponent {
   fileName = input<string>();
@@ -32,7 +32,7 @@ export class OLControlExportLandmarksComponent {
   export(): void {
     const geojson = this.#landmarksState.toGeoJSON();
     const blob = new Blob([JSON.stringify(geojson)], {
-      type: "text/plain;charset=utf-8",
+      type: "text/plain;charset=utf-8"
     });
     saveAs(blob, `${this.fileName()}.geojson`);
   }

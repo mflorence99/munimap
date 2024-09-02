@@ -9,7 +9,7 @@ import { contentChildren } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-layers",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: block; visibility: hidden }"],
+  styles: [":host { display: block; visibility: hidden }"]
 })
 export class OLLayersComponent {
   layers = contentChildren(MapableComponent, { descendants: true });

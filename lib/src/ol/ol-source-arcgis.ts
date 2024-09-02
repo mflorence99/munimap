@@ -50,7 +50,7 @@ export abstract class OLSourceArcGISComponent {
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: strategy,
+      strategy: strategy
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -64,7 +64,7 @@ export abstract class OLSourceArcGISComponent {
     const visible = transformExtent(
       this.#map.bbox(),
       this.#map.featureProjection,
-      projection,
+      projection
     ) as GeoJSON.BBox;
     return [visible];
   }
@@ -74,14 +74,14 @@ export abstract class OLSourceArcGISComponent {
       transformExtent(
         extent,
         projection,
-        this.#map.featureProjection,
-      ) as GeoJSON.BBox,
+        this.#map.featureProjection
+      ) as GeoJSON.BBox
     );
     return this.#map.boundaryGrid.features
       .filter((feature) => booleanIntersects(visible, feature))
       .map((feature) => bbox(feature))
       .map((bbox) =>
-        transformExtent(bbox, this.#map.featureProjection, projection),
+        transformExtent(bbox, this.#map.featureProjection, projection)
       )
       .map((bbox) => {
         const [minX, minY, maxX, maxY] = bbox;
@@ -89,7 +89,7 @@ export abstract class OLSourceArcGISComponent {
           Math.round(minX),
           Math.round(minY),
           Math.round(maxX),
-          Math.round(maxY),
+          Math.round(maxY)
         ];
       });
   }
@@ -98,7 +98,7 @@ export abstract class OLSourceArcGISComponent {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function,
+    success: Function
   ): void {
     let grids: Coordinate[];
     // 👇 get everyrhing at once
@@ -113,8 +113,8 @@ export abstract class OLSourceArcGISComponent {
         `${
           environment.endpoints.proxy
         }/proxy/${this.getProxyPath()}?url=${encodeURIComponent(
-          this.getURL(grid),
-        )}`,
+          this.getURL(grid)
+        )}`
     );
     // 👇 we cache responses by URL
     const requests = urls.map((url) => {
@@ -126,19 +126,19 @@ export abstract class OLSourceArcGISComponent {
             catchError(() => of({ features: [] })),
             // 👇 arcgis can return just an "error" which we ignore
             map((arcgis: any): any =>
-              arcgis?.features ? arcgis : { features: [], fields: [] },
+              arcgis?.features ? arcgis : { features: [], fields: [] }
             ),
             tap((arcgis: any) => this.#schema(arcgis)),
             map(
               (arcgis: any): GeoJSON.FeatureCollection<any, any> =>
-                arcgisToGeoJSON(this.filter(arcgis)),
+                arcgisToGeoJSON(this.filter(arcgis))
             ),
             tap((geojson: GeoJSON.FeatureCollection<any, any>) => {
               geojson.features.forEach(
-                (feature) => (feature.id = this.getFeatureID(feature)),
+                (feature) => (feature.id = this.getFeatureID(feature))
               );
               this.#cache.set(url, geojson);
-            }),
+            })
           );
     });
     // 👇 run the requests with a maximum concurrency
@@ -146,8 +146,8 @@ export abstract class OLSourceArcGISComponent {
       .pipe(
         toArray(),
         map((geojsons: GeoJSON.FeatureCollection<any, any>[]) =>
-          dedupe(geojsons),
-        ),
+          dedupe(geojsons)
+        )
       )
       .subscribe((geojson: GeoJSON.FeatureCollection<any, any>) => {
         // 👉 convert features into OL format

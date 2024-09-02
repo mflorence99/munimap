@@ -19,7 +19,7 @@ const attribution = '<a href="https://www.usgs.gov/" target="_blank">USGS</a>';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-hillshade",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceHillshadeComponent {
   colorize = input(false);
@@ -39,7 +39,7 @@ export class OLSourceHillshadeComponent {
       crossOrigin: "anonymous",
       params: { LAYERS: "dummy" },
       tileLoadFunction: this.#loader.bind(this),
-      url: "http://dummy.com",
+      url: "http://dummy.com"
     });
     this.olTileWMS.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olTileWMS);
@@ -58,7 +58,7 @@ export class OLSourceHillshadeComponent {
       this.url
         .replace("VVVVVV", environment.package.version)
         .replace("XXXXXX", bbox)
-        .replace("YYYYYY", JSON.stringify(renderingRule)),
+        .replace("YYYYYY", JSON.stringify(renderingRule))
     )}`;
     img.src = url;
   }

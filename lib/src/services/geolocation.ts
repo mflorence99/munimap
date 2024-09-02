@@ -35,17 +35,17 @@ export class GeolocationService extends Observable<GeolocationPosition> {
                   ? bearing(
                       point([
                         lastPosition.coords.longitude,
-                        lastPosition.coords.latitude,
+                        lastPosition.coords.latitude
                       ]),
                       point([
                         position.coords.longitude,
-                        position.coords.latitude,
-                      ]),
+                        position.coords.latitude
+                      ])
                     )
                   : position.coords.heading,
-              speed: position.coords.speed,
+              speed: position.coords.speed
             },
-            timestamp: position.timestamp,
+            timestamp: position.timestamp
           };
           lastPosition = thisPosition;
           subscriber.next(thisPosition);
@@ -53,7 +53,7 @@ export class GeolocationService extends Observable<GeolocationPosition> {
         (error: GeolocationPositionError) => {
           console.error("🔥 Geolocation position error", error);
           subscriber.error(error);
-        },
+        }
       );
     });
 
@@ -61,16 +61,16 @@ export class GeolocationService extends Observable<GeolocationPosition> {
     //    depends on "motion" to detect position
     return combineLatest({
       position: this,
-      tick: timer(0, maxIntervalBetweenPositions),
+      tick: timer(0, maxIntervalBetweenPositions)
     }).pipe(
       finalize(() => {
         navigator.geolocation.clearWatch(watchPositionID);
       }),
       map(({ position }) => ({
         coords: position.coords,
-        timestamp: Date.now(),
+        timestamp: Date.now()
       })),
-      shareReplay({ bufferSize: 1, refCount: true }),
+      shareReplay({ bufferSize: 1, refCount: true })
     ) as GeolocationService;
   }
 }

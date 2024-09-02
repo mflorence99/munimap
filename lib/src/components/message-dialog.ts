@@ -26,8 +26,8 @@ export interface MessageDialogData {
         display: block;
         width: 30rem;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class MessageDialogComponent {
   data: MessageDialogData = inject(MAT_DIALOG_DATA);

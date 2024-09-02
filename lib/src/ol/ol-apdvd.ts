@@ -25,7 +25,7 @@ const existingExcept = new Set<ParcelID>([
   "15-119",
   "15-97",
   "15-98",
-  "18-10",
+  "18-10"
 ]);
 
 const existingStreets = [
@@ -52,7 +52,7 @@ const existingStreets = [
   "STOWELL",
   "TAFT",
   "TAYLOR",
-  "VAN BUREN",
+  "VAN BUREN"
 ];
 
 const proposed = new Set<ParcelID>([
@@ -173,7 +173,7 @@ const proposed = new Set<ParcelID>([
   "18-31",
   "18-32",
   "18-35",
-  "18-36",
+  "18-36"
 ]);
 
 export const colorOfAPDVDExcluded = "255, 255, 255";

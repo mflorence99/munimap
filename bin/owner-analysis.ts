@@ -3,7 +3,7 @@ import { readFileSync } from "fs";
 import jsome from "jsome";
 
 const geojson = JSON.parse(
-  readFileSync("./bin/assets/washington-parcels.geojson").toString(),
+  readFileSync("./bin/assets/washington-parcels.geojson").toString()
 );
 
 const keyOf = (addressOfOwner: string): string => {
@@ -20,7 +20,7 @@ const countByOwner: Record<string, number> = geojson.features.reduce(
     else acc[key] += 1;
     return acc;
   },
-  {},
+  {}
 );
 
 jsome(["NONE", countByOwner["NONE"]]);
@@ -37,14 +37,14 @@ geojson.features
     jsome([
       feature.id,
       feature.properties.ownership,
-      feature.properties.addressOfOwner,
-    ]),
+      feature.properties.addressOfOwner
+    ])
   );
 
 const neighborhoods = new Set<string>();
 
 geojson.features.forEach((feature) =>
-  neighborhoods.add(feature.properties.neighborhood),
+  neighborhoods.add(feature.properties.neighborhood)
 );
 
 jsome(Array.from(neighborhoods));

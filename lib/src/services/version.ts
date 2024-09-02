@@ -59,7 +59,7 @@ export class VersionService {
           registrations.map((registration) => {
             console.log(`... ${registration.scope}`);
             return registration.update().then(() => registration.unregister());
-          }),
+          })
         );
       })
       .then((_) => caches.keys())
@@ -69,7 +69,7 @@ export class VersionService {
           keys.map((key) => {
             console.log(`... ${key}`);
             return caches.delete(key);
-          }),
+          })
         );
       })
       .finally(() => {
@@ -93,7 +93,7 @@ export class VersionService {
         console.log(
           "%c...new PWA version detected",
           "color: wheat",
-          (event as VersionDetectedEvent).version.hash,
+          (event as VersionDetectedEvent).version.hash
         );
         if (environment.version.autoReload)
           this.#swUpdate.activateUpdate().then(() => this.hardReset());
@@ -119,7 +119,7 @@ export class VersionService {
           this.#checkVersionLegacy$.complete();
           console.log(
             "%cUser declines further legacy version checks",
-            "color: orchid",
+            "color: orchid"
           );
         }
       });
@@ -136,7 +136,7 @@ export class VersionService {
   #pollVersionLegacy(): void {
     const periodically$ = timer(
       environment.version.checkVersionAfter,
-      environment.version.checkVersionInterval,
+      environment.version.checkVersionInterval
     );
     periodically$
       .pipe(
@@ -145,11 +145,11 @@ export class VersionService {
           this.#http
             .get<Build>(`assets/build.json`, {
               params: {
-                x: Math.random(),
-              },
+                x: Math.random()
+              }
             })
-            .pipe(catchError(() => of(environment.build))),
-        ),
+            .pipe(catchError(() => of(environment.build)))
+        )
       )
       .subscribe((build: Build) => {
         console.log("%cPolling for new legacy version...", "color: khaki");
@@ -158,7 +158,7 @@ export class VersionService {
             "%c...new legacy version detected",
             "color: tan",
             build.id,
-            build.date,
+            build.date
           );
           if (environment.version.autoReload) this.hardReset();
           else this.#newVersionDetected();
@@ -176,9 +176,9 @@ export class VersionService {
         switchMap(() =>
           timer(
             environment.version.checkVersionAfter,
-            environment.version.checkVersionInterval,
-          ),
-        ),
+            environment.version.checkVersionInterval
+          )
+        )
       )
       .subscribe((): any => {
         console.log("%cPolling for new PWA version...", "color: moccasin");

@@ -18,7 +18,7 @@ const url =
 const dist = "./data";
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
@@ -40,7 +40,7 @@ async function main(): Promise<void> {
     //    find it from the dataset of all towns
     const towns = allTowns.features.filter((townFeature) =>
       // 👉 https://github.com/Turfjs/turf/pull/2157
-      /* turf. */ booleanIntersects(feature, townFeature),
+      /* turf. */ booleanIntersects(feature, townFeature)
     );
 
     towns
@@ -62,7 +62,7 @@ async function main(): Promise<void> {
             county: county,
             name: river.properties.River_Name ?? river.properties.LAC,
             section: river.properties.River_Sect,
-            town: town,
+            town: town
           };
 
           riversByCountyByTown[county] ??= {};
@@ -77,12 +77,12 @@ async function main(): Promise<void> {
   Object.keys(riversByCountyByTown).forEach((county) => {
     Object.keys(riversByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${theState}/${county}/${town}/rivers.geojson`),
+        chalk.green(`... writing ${theState}/${county}/${town}/rivers.geojson`)
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/rivers.geojson`,
-        JSON.stringify(simplify(riversByCountyByTown[county][town])),
+        JSON.stringify(simplify(riversByCountyByTown[county][town]))
       );
     });
   });
@@ -105,5 +105,5 @@ const sample = {
   SWQPAExmpt: "",
   River_Sect: "Ashuelot River",
   River_Name: "Ashuelot River",
-  LAC: "Ashuelot River",
+  LAC: "Ashuelot River"
 };

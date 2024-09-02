@@ -32,8 +32,8 @@ const CURATIONS: Curation[] = [
   {
     owner: "ljg@gsinet.net",
     path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
-    source: "./bin/assets/dpw/culverts-curated.gpx",
-  },
+    source: "./bin/assets/dpw/culverts-curated.gpx"
+  }
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
@@ -46,7 +46,7 @@ if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
 
 firebase.initializeApp({
   credential: firebase.cert("./firebase-admin.json"),
-  databaseURL: "https://washington-app-319514.firebaseio.com",
+  databaseURL: "https://washington-app-319514.firebaseio.com"
 });
 
 const db = firestore.getFirestore();
@@ -61,8 +61,8 @@ async function main(): Promise<void> {
         type: "input",
         name: "proceed",
         choices: ["y", "n"],
-        message: "WARNING: running on live Firestore. Proceed? (y/N)",
-      },
+        message: "WARNING: running on live Firestore. Proceed? (y/N)"
+      }
     ]);
     if (response.proceed.toLowerCase() !== "y") return;
   }
@@ -71,8 +71,8 @@ async function main(): Promise<void> {
   for (const curation of CURATIONS) {
     console.log(
       chalk.green(
-        `... processing curation for ${curation.owner} in ${curation.path}`,
-      ),
+        `... processing curation for ${curation.owner} in ${curation.path}`
+      )
     );
 
     // 👇 delete all curated culverts
@@ -85,7 +85,7 @@ async function main(): Promise<void> {
     }
 
     console.log(
-      chalk.red(`... ${numDeleted} previously curated culverts deleted`),
+      chalk.red(`... ${numDeleted} previously curated culverts deleted`)
     );
 
     // 👇 load up GPX
@@ -117,7 +117,7 @@ async function main(): Promise<void> {
         material: culvertMaterials[0],
         type: "culvert",
         width: 0,
-        year: null,
+        year: null
       };
 
       // 🔥 see import-culverts.ts
@@ -146,21 +146,21 @@ async function main(): Promise<void> {
 
       console.log(
         chalk.yellow(
-          `...... adding curated culvert [${culvert["@_lon"]}, ${culvert["@_lat"]}] ${culvert.name} ${culvert.keywords}`,
-        ),
+          `...... adding curated culvert [${culvert["@_lon"]}, ${culvert["@_lat"]}] ${culvert.name} ${culvert.keywords}`
+        )
       );
 
       // 👇 construct the new landmark
       const landmark: Landmark = {
         geometry: {
           coordinates: [culvert["@_lon"], culvert["@_lat"]],
-          type: "Point",
+          type: "Point"
         },
         id: null,
         owner: curation.owner,
         path: curation.path,
         properties: { metadata: properties },
-        type: "Feature",
+        type: "Feature"
       };
 
       // 👇 so that they can't get duplicated
@@ -172,7 +172,7 @@ async function main(): Promise<void> {
     });
 
     console.log(
-      chalk.blue(`...... waiting for ${promises.length} promises to resolve`),
+      chalk.blue(`...... waiting for ${promises.length} promises to resolve`)
     );
     await Promise.all(promises);
   }

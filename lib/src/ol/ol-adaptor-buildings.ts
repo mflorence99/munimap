@@ -14,12 +14,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBuildingsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorBuildingsComponent)
+    }
   ],
   selector: "app-ol-adaptor-buildings",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorBuildingsComponent implements Adaptor {
   borderOpacity = input(1);
@@ -40,8 +40,8 @@ export class OLAdaptorBuildingsComponent implements Adaptor {
         strokeColor: "--map-building-outline",
         strokeFeet: this.borderWidth(),
         strokeOpacity: this.borderOpacity(),
-        strokeStyle: "solid",
-      }),
+        strokeStyle: "solid"
+      })
     ];
   }
 }

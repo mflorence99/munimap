@@ -267,8 +267,8 @@ import { signInWithEmailAndPassword } from "@angular/fire/auth";
           width: 100%;
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class LoginPage {
   errorMessage = "";
@@ -276,7 +276,7 @@ export class LoginPage {
   login = {
     displayName: "",
     emailAddress: "",
-    password: "",
+    password: ""
   };
 
   state: "initial" | "login" | "signup" = "initial";
@@ -291,7 +291,7 @@ export class LoginPage {
     signInWithEmailAndPassword(
       this.#fireauth,
       this.login.emailAddress,
-      String(Math.random()),
+      String(Math.random())
     )
       .then(() => console.error("Should not happen!"))
       .catch((error) => {
@@ -306,13 +306,13 @@ export class LoginPage {
     signInWithEmailAndPassword(
       this.#fireauth,
       this.login.emailAddress,
-      this.login.password,
+      this.login.password
     )
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(
           `%cFirestore auth: login ${user.email}`,
-          "color: goldenrod",
+          "color: goldenrod"
         );
       })
       .catch(() => {
@@ -326,7 +326,7 @@ export class LoginPage {
   resetPassword(): void {
     sendPasswordResetEmail(this.#fireauth, this.login.emailAddress).then(() => {
       const data: MessageDialogData = {
-        message: `An email has been sent to ${this.login.emailAddress} from which your password can be reset`,
+        message: `An email has been sent to ${this.login.emailAddress} from which your password can be reset`
       };
       this.#dialog.open(MessageDialogComponent, { data });
     });
@@ -337,20 +337,20 @@ export class LoginPage {
     createUserWithEmailAndPassword(
       this.#fireauth,
       this.login.emailAddress,
-      this.login.password,
+      this.login.password
     )
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(
           `%cFirestore auth: signup ${user.email}`,
-          "color: goldenrod",
+          "color: goldenrod"
         );
         this.#store.dispatch(
           new AuthActions.UpdateUser({
             ...user,
             displayName: this.login.displayName,
-            photoURL: "",
-          }),
+            photoURL: ""
+          })
         );
       })
       .catch((error) => {

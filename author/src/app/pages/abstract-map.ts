@@ -45,7 +45,7 @@ export abstract class AbstractMapPage {
   getGeoJSONFormatter(): OLGeoJSON {
     return new OLGeoJSON({
       dataProjection: this.map().featureProjection,
-      featureProjection: this.map().projection,
+      featureProjection: this.map().projection
     });
   }
 
@@ -133,7 +133,7 @@ export abstract class AbstractMapPage {
       owner: owner,
       path: path ?? recentPath,
       printSize: [45, 60],
-      type: this.getType(),
+      type: this.getType()
     };
     // 👉 load up the requested (or default) map
     this.store.dispatch(new MapActions.LoadMap(id, dflt, /* touch = */ true));

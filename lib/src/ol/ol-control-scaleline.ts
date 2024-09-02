@@ -15,12 +15,12 @@ import OLScaleLine from "ol/control/ScaleLine";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlScaleLineComponent),
-    },
+      useExisting: forwardRef(() => OLControlScaleLineComponent)
+    }
   ],
   selector: "app-ol-control-scaleline",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLControlScaleLineComponent implements Mapable {
   olControl: OLScaleLine;
@@ -30,7 +30,7 @@ export class OLControlScaleLineComponent implements Mapable {
   constructor() {
     this.olControl = new OLScaleLine({
       className: "ol-scaleline-line",
-      units: "us",
+      units: "us"
     });
     this.olControl.setProperties({ component: this }, true);
   }

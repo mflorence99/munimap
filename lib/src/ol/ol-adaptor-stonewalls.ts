@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorStoneWallsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorStoneWallsComponent)
+    }
   ],
   selector: "app-ol-adaptor-stonewalls",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorStoneWallsComponent implements Adaptor {
   pattern = input<OLStrokePatternType>("rocks");
@@ -35,7 +35,7 @@ export class OLAdaptorStoneWallsComponent implements Adaptor {
         strokeOpacity: this.patternOpacity(),
         strokeStyle: "solid",
         strokeWidth: "thick",
-        zIndex: 1,
+        zIndex: 1
       }),
       new LandmarkPropertiesClass({
         strokeColor: "--map-stonewall-rocks",
@@ -44,8 +44,8 @@ export class OLAdaptorStoneWallsComponent implements Adaptor {
         strokePatternScale: this.patternScale(),
         strokeStyle: "solid",
         strokeWidth: "medium",
-        zIndex: 2,
-      }),
+        zIndex: 2
+      })
     ];
   }
 }

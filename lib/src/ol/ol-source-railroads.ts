@@ -16,7 +16,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-railroads",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceRailroadsComponent extends OLSourceArcGISComponent {
   exclude = input<(number | string)[]>();

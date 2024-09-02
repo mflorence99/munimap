@@ -8,7 +8,7 @@ import { inject } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-attribution",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAttributionComponent {
   #host = inject(ElementRef);

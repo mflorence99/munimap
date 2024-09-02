@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBridgesComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorBridgesComponent)
+    }
   ],
   selector: "app-ol-adaptor-bridges",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorBridgesComponent implements Adaptor {
   bridgeWidth = input(48);
@@ -43,8 +43,8 @@ export class OLAdaptorBridgesComponent implements Adaptor {
         textAlign: "center",
         textBaseline: "bottom",
         // 👉 a bridge is often co-located with a stream crossing
-        textOffsetFeet: [-this.bridgeWidth(), this.bridgeWidth()],
-      }),
+        textOffsetFeet: [-this.bridgeWidth(), this.bridgeWidth()]
+      })
     ];
   }
 

@@ -14,12 +14,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorWaterbodiesComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorWaterbodiesComponent)
+    }
   ],
   selector: "app-ol-adaptor-waterbodies",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorWaterbodiesComponent implements Adaptor {
   fillOpacity = input(1);
@@ -29,8 +29,8 @@ export class OLAdaptorWaterbodiesComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fillColor: "--map-waterbody-fill",
-        fillOpacity: this.fillOpacity(),
-      }),
+        fillOpacity: this.fillOpacity()
+      })
     ];
   }
 }

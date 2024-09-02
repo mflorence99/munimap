@@ -35,8 +35,8 @@ async function main(): Promise<void> {
       Domain: "EFS",
       EndpointType: "PUBLIC",
       IdentityProviderType: "SERVICE_MANAGED",
-      Protocols: ["SFTP"],
-    }),
+      Protocols: ["SFTP"]
+    })
   );
   console.log(chalk.green(`... creating transfer server ${server.ServerId}`));
 
@@ -50,29 +50,29 @@ async function main(): Promise<void> {
     const user = await client.send(
       new CreateUserCommand({
         HomeDirectoryMappings: [
-          { Entry: "/", Target: "/fs-0b4ac33814e61435a/MuniMap/proxy" },
+          { Entry: "/", Target: "/fs-0b4ac33814e61435a/MuniMap/proxy" }
         ],
         HomeDirectoryType: "LOGICAL",
         PosixProfile: {
           Uid: 1000,
-          Gid: 1000,
+          Gid: 1000
         },
         Role: "arn:aws:iam::010151131616:role/MyTransferRole",
         ServerId: server.ServerId,
         SshPublicKeyBody: publicKey,
-        UserName: "mflo",
-      }),
+        UserName: "mflo"
+      })
     );
     console.log(
-      chalk.blue(`...... creating user ${server.ServerId}:${user.UserName}`),
+      chalk.blue(`...... creating user ${server.ServerId}:${user.UserName}`)
     );
 
     // 👇 poll until server is ready
     while (true) {
       const status = await client.send(
         new DescribeServerCommand({
-          ServerId: server.ServerId,
-        }),
+          ServerId: server.ServerId
+        })
       );
       if (status.Server.State === "ONLINE") {
         stdout.write("\n");
@@ -83,7 +83,7 @@ async function main(): Promise<void> {
       }
     }
     console.log(
-      chalk.yellow(`... transfer server ${server.ServerId} is ONLINE`),
+      chalk.yellow(`... transfer server ${server.ServerId} is ONLINE`)
     );
 
     // 👇 run FileZilla to manually transfer files
@@ -92,8 +92,8 @@ async function main(): Promise<void> {
     // 👇 we're done with the server now
     await client.send(
       new DeleteServerCommand({
-        ServerId: server.ServerId,
-      }),
+        ServerId: server.ServerId
+      })
     );
     console.log(chalk.red(`... deleted transfer server ${server.ServerId}`));
   }

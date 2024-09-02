@@ -19,7 +19,7 @@ import OLVector from "ol/source/Vector";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-bbox",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceBBoxComponent {
   olVector: OLVector<any>;
@@ -31,7 +31,7 @@ export class OLSourceBBoxComponent {
     this.olVector = new OLVector({
       format: new GeoJSON(),
       loader: this.#loader.bind(this),
-      strategy: allStrategy,
+      strategy: allStrategy
     });
     this.olVector.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olVector);
@@ -43,13 +43,13 @@ export class OLSourceBBoxComponent {
     extent: Coordinate,
     resolution: number,
     projection: OLProjection,
-    success: Function,
+    success: Function
   ): void {
     // 👉 convert features into OL format
     const features = this.olVector
       .getFormat()
       .readFeatures(featureCollection([bboxPolygon(this.#map.bbox() as any)]), {
-        featureProjection: this.#map.projection,
+        featureProjection: this.#map.projection
       }) as OLFeature<any>[];
     // 👉 add feature to source
     this.olVector.addFeatures(features);

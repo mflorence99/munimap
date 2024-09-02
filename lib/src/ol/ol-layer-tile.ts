@@ -17,12 +17,12 @@ import OLTile from "ol/layer/Tile";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLLayerTileComponent),
-    },
+      useExisting: forwardRef(() => OLLayerTileComponent)
+    }
   ],
   selector: "app-ol-layer-tile",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: block; visibility: hidden }"],
+  styles: [":host { display: block; visibility: hidden }"]
 })
 export class OLLayerTileComponent implements Mapable {
   id = input<string>();

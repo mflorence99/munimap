@@ -14,12 +14,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBackgroundComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorBackgroundComponent)
+    }
   ],
   selector: "app-ol-adaptor-background",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorBackgroundComponent implements Adaptor {
   fillColor = input("--rgb-gray-900");
@@ -30,8 +30,8 @@ export class OLAdaptorBackgroundComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fillColor: this.fillColor(),
-        fillOpacity: this.fillOpacity(),
-      }),
+        fillOpacity: this.fillOpacity()
+      })
     ];
   }
 }

@@ -22,12 +22,12 @@ import OLSwipe from "ol-ext/control/Swipe";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlSplitScreenComponent),
-    },
+      useExisting: forwardRef(() => OLControlSplitScreenComponent)
+    }
   ],
   selector: "app-ol-control-splitscreen",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLControlSplitScreenComponent implements Mapable {
   olControl: OLSwipe;

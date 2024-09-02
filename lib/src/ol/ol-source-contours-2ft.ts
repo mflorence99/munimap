@@ -48,14 +48,14 @@ const HUCS = [
   "01080106",
   "01080107",
   "01080201" /* 👈 also Washington ?? */,
-  "01080202",
+  "01080202"
 ];
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-contours-2ft",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceContours2ftComponent {
   maxRequests = input(8);
@@ -69,7 +69,7 @@ export class OLSourceContours2ftComponent {
       attributions: [attribution],
       crossOrigin: "anonymous",
       tileLoadFunction: this.#loader.bind(this),
-      url: "https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_XXXXXXXX_smooth_cached/MapServer/tile/{z}/{y}/{x}",
+      url: "https://nhgeodata.unh.edu/nhgeodata/rest/services/EDP/LiDAR_Contours_2ft_XXXXXXXX_smooth_cached/MapServer/tile/{z}/{y}/{x}"
     });
     this.olXYZ.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olXYZ);
@@ -93,14 +93,14 @@ export class OLSourceContours2ftComponent {
       const url = `${
         environment.endpoints.proxy
       }/proxy/contours2ft?url=${encodeURIComponent(
-        src.replace("XXXXXXXX", huc),
+        src.replace("XXXXXXXX", huc)
       )}`;
       return this.#http.get(url, { responseType: "blob" }).pipe(
         catchError(() => of(null)),
         filter((blob) => blob !== null),
         mergeMap((blob: Blob) => this.#createImageBitmap(blob)),
         catchError(() => of(null)),
-        filter((bitmap: ImageBitmap) => bitmap !== null),
+        filter((bitmap: ImageBitmap) => bitmap !== null)
       );
     });
     // 👇 run the requests with a maximum concurrency

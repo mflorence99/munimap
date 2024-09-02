@@ -29,7 +29,7 @@ export abstract class OLInteractionAbstractDrawComponent {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection,
+      featureProjection: this.#map.projection
     });
   }
 
@@ -58,11 +58,11 @@ export abstract class OLInteractionAbstractDrawComponent {
       freehand: true,
       source: this.#source,
       stopClick: true,
-      type: geometryType,
+      type: geometryType
     });
     this.#drawStartKey = this.olDraw.on(
       "drawstart",
-      () => (this.#touched = true),
+      () => (this.#touched = true)
     );
     this.#map.olMap.addInteraction(this.olDraw);
   }
@@ -76,7 +76,7 @@ export abstract class OLInteractionAbstractDrawComponent {
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           return simplify(cleanCoords(geojson), {
             tolerance: 0.00001,
-            highQuality: false,
+            highQuality: false
           });
         });
         this.saveFeatures(geojsons).subscribe(() => this.#stopDraw());

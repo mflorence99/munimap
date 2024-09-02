@@ -14,12 +14,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorFloodplainsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorFloodplainsComponent)
+    }
   ],
   selector: "app-ol-adaptor-floodplains",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorFloodplainsComponent implements Adaptor {
   fillOpacity = input(0.1);
@@ -29,8 +29,8 @@ export class OLAdaptorFloodplainsComponent implements Adaptor {
     return [
       new LandmarkPropertiesClass({
         fillColor: "--map-floodplain-fill",
-        fillOpacity: this.fillOpacity(),
-      }),
+        fillOpacity: this.fillOpacity()
+      })
     ];
   }
 }

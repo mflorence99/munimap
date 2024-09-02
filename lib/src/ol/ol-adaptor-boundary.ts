@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBoundaryComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorBoundaryComponent)
+    }
   ],
   selector: "app-ol-adaptor-boundary",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorBoundaryComponent implements Adaptor {
   borderOpacity = input(0.5);
@@ -34,21 +34,21 @@ export class OLAdaptorBoundaryComponent implements Adaptor {
       new LandmarkPropertiesClass({
         fillColor: "--map-boundary-fill",
         fillOpacity: this.fillOpacity(),
-        zIndex: 1,
+        zIndex: 1
       }),
       new LandmarkPropertiesClass({
         fillColor: "--map-boundary-pattern",
         fillOpacity: this.fillOpacity(),
         fillPattern: this.fillPattern(),
-        zIndex: 2,
+        zIndex: 2
       }),
       new LandmarkPropertiesClass({
         strokeColor: "--map-boundary-outline",
         strokeOpacity: this.borderOpacity(),
         strokePixels: this.borderPixels(),
         strokeStyle: "solid",
-        zIndex: 3,
-      }),
+        zIndex: 3
+      })
     ];
   }
 }

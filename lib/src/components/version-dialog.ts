@@ -22,7 +22,7 @@ import { Component } from "@angular/core";
         display: block;
         width: 30rem;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class VersionDialogComponent {}

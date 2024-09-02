@@ -91,7 +91,7 @@ const undoStack: Parcel[][] = [];
 
 @State<ParcelsStateModel>({
   name: "parcels",
-  defaults: [],
+  defaults: []
 })
 @Injectable()
 export class ParcelsState implements NgxsOnInit {
@@ -118,7 +118,7 @@ export class ParcelsState implements NgxsOnInit {
 
   @Action(ParcelsActions.AddParcels) addParcels(
     ctx: StateContext<ParcelsStateModel>,
-    action: ParcelsActions.AddParcels,
+    action: ParcelsActions.AddParcels
   ): void {
     // 👉 block any other undo, redo until this is finished
     ctx.dispatch([new CanDo(false, false), new Working(+1)]);
@@ -133,11 +133,11 @@ export class ParcelsState implements NgxsOnInit {
       const normalized = this.#normalize(parcel);
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(normalized)}`,
-        "color: chocolate",
+        "color: chocolate"
       );
       const collectionRef = collection(this.#firestore, "parcels");
       return addDoc(collectionRef, normalized).then((ref) =>
-        undos.push({ ...(normalized as Parcel), $id: ref.id }),
+        undos.push({ ...(normalized as Parcel), $id: ref.id })
       );
     });
     // 🔥 we have a great opportunity here to "cull" extraneous parcels
@@ -147,7 +147,7 @@ export class ParcelsState implements NgxsOnInit {
       .then(() => {
         ctx.dispatch([
           new CanDo(undoStack.length > 0, redoStack.length > 0),
-          new Working(-1),
+          new Working(-1)
         ]);
       });
     // 👉 side-effect of handleStreams$ will update state
@@ -155,7 +155,7 @@ export class ParcelsState implements NgxsOnInit {
 
   @Action(ParcelsActions.ClearStacks) clearStacks(
     ctx: StateContext<ParcelsStateModel>,
-    _action: ParcelsActions.ClearStacks,
+    _action: ParcelsActions.ClearStacks
   ): void {
     redoStack.length = 0;
     undoStack.length = 0;
@@ -164,7 +164,7 @@ export class ParcelsState implements NgxsOnInit {
 
   @Action(ParcelsActions.Redo) redo(
     ctx: StateContext<ParcelsStateModel>,
-    _action: ParcelsActions.Redo,
+    _action: ParcelsActions.Redo
   ): void {
     // 👉 quick return if nothing to redo
     if (redoStack.length === 0) return;
@@ -184,26 +184,26 @@ export class ParcelsState implements NgxsOnInit {
           delete parcel.$id;
           parcel.action = "removed";
           promise = addDoc(collectionRef, parcel).then(() =>
-            undos.push(parcel),
+            undos.push(parcel)
           );
           break;
         case "modified":
           delete parcel.$id;
           promise = addDoc(collectionRef, parcel).then((ref) =>
-            undos.push({ ...copy(parcel), $id: ref.id }),
+            undos.push({ ...copy(parcel), $id: ref.id })
           );
           break;
         case "removed":
           delete parcel.$id;
           parcel.action = "added";
           promise = addDoc(collectionRef, parcel).then(() =>
-            undos.push(parcel),
+            undos.push(parcel)
           );
           break;
       }
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
-        "color: chocolate",
+        "color: chocolate"
       );
       return promise;
     });
@@ -213,7 +213,7 @@ export class ParcelsState implements NgxsOnInit {
       .then(() => {
         ctx.dispatch([
           new CanDo(undoStack.length > 0, redoStack.length > 0),
-          new Working(-1),
+          new Working(-1)
         ]);
       });
     // 👉 side-effect of handleStreams$ will update state
@@ -221,7 +221,7 @@ export class ParcelsState implements NgxsOnInit {
 
   @Action(ParcelsActions.SetParcels) setParcels(
     ctx: StateContext<ParcelsStateModel>,
-    action: ParcelsActions.SetParcels,
+    action: ParcelsActions.SetParcels
   ): void {
     this.#logParcels(action.parcels);
     ctx.setState(action.parcels);
@@ -229,7 +229,7 @@ export class ParcelsState implements NgxsOnInit {
 
   @Action(ParcelsActions.Undo) undo(
     ctx: StateContext<ParcelsStateModel>,
-    _action: ParcelsActions.Undo,
+    _action: ParcelsActions.Undo
   ): void {
     // 👉 quick return if nothing to undo
     if (undoStack.length === 0) return;
@@ -249,7 +249,7 @@ export class ParcelsState implements NgxsOnInit {
           delete parcel.$id;
           parcel.action = "removed";
           promise = addDoc(collectionRef, parcel).then(() =>
-            redos.push(parcel),
+            redos.push(parcel)
           );
           break;
         case "modified":
@@ -260,13 +260,13 @@ export class ParcelsState implements NgxsOnInit {
           delete parcel.$id;
           parcel.action = "added";
           promise = addDoc(collectionRef, parcel).then(() =>
-            redos.push(parcel),
+            redos.push(parcel)
           );
           break;
       }
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
-        "color: chocolate",
+        "color: chocolate"
       );
       return promise;
     });
@@ -276,7 +276,7 @@ export class ParcelsState implements NgxsOnInit {
       .then(() => {
         ctx.dispatch([
           new CanDo(undoStack.length > 0, redoStack.length > 0),
-          new Working(-1),
+          new Working(-1)
         ]);
       });
     // 👉 side-effect of handleStreams$ will update state
@@ -339,21 +339,21 @@ export class ParcelsState implements NgxsOnInit {
           } else {
             console.log(
               `%cFirestore query: parcels where owner in ${JSON.stringify(
-                workgroup(profile),
+                workgroup(profile)
               )} and path == "${map.path}" orderBy timestamp desc`,
-              "color: goldenrod",
+              "color: goldenrod"
             );
             return collectionData<Parcel>(
               query(
                 collection(
                   this.#firestore,
-                  "parcels",
+                  "parcels"
                 ) as CollectionReference<Parcel>,
                 where("owner", "in", workgroup(profile)),
                 where("path", "==", map.path),
-                orderBy("timestamp", "desc"),
+                orderBy("timestamp", "desc")
               ),
-              { idField: "$id" },
+              { idField: "$id" }
             );
           }
         }),
@@ -363,8 +363,8 @@ export class ParcelsState implements NgxsOnInit {
         }),
         // 👉 cut down on noise
         distinctUntilChanged(
-          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q),
-        ),
+          (p: any, q: any): boolean => hash.MD5(p) === hash.MD5(q)
+        )
       )
       .subscribe((parcels: Parcel[]) => {
         this.#store.dispatch(new ParcelsActions.SetParcels(parcels));
@@ -398,9 +398,9 @@ export class ParcelsState implements NgxsOnInit {
           building$: parcel.properties?.building$,
           land$: parcel.properties?.land$,
           other$: parcel.properties?.other$,
-          taxed$: parcel.properties?.taxed$,
+          taxed$: parcel.properties?.taxed$
         };
-      }),
+      })
     );
   }
 

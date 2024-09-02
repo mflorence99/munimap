@@ -54,7 +54,7 @@ async function main(): Promise<void> {
           lake.properties = {
             county: county,
             name: lake.properties.LAKE,
-            town: town,
+            town: town
           };
 
           lakesByCountyByTown[county] ??= {};
@@ -70,12 +70,12 @@ async function main(): Promise<void> {
   Object.keys(lakesByCountyByTown).forEach((county) => {
     Object.keys(lakesByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${theState}/${county}/${town}/lakes.geojson`),
+        chalk.green(`... writing ${theState}/${county}/${town}/lakes.geojson`)
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/lakes.geojson`,
-        JSON.stringify(simplify(lakesByCountyByTown[county][town])),
+        JSON.stringify(simplify(lakesByCountyByTown[county][town]))
       );
     });
   });
@@ -96,5 +96,5 @@ const sample = {
   DEPTHMAX: 0,
   COUNTY: "ROCKINGHAM",
   LAKE: "CANOBIE LAKE",
-  SOURCE: "NHDES",
+  SOURCE: "NHDES"
 };

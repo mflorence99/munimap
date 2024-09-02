@@ -16,12 +16,12 @@ export type FilterFunction = (name: string) => boolean;
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorGeoJSONComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorGeoJSONComponent)
+    }
   ],
   selector: "app-ol-adaptor-geojson",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorGeoJSONComponent implements Adaptor {
   borderOpacity = input(1);
@@ -39,8 +39,8 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
         strokeColor: "--map-feature-outline",
         strokeOpacity: this.borderOpacity(),
         strokePixels: this.borderPixels(),
-        strokeStyle: "solid",
-      }),
+        strokeStyle: "solid"
+      })
     ];
   }
 
@@ -62,8 +62,8 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
           strokeColor: "--map-feature-outline",
           strokeOpacity: this.borderOpacity(),
           strokePixels: this.borderPixels(),
-          strokeStyle: "solid",
-        }),
+          strokeStyle: "solid"
+        })
       ];
     }
   }
@@ -79,8 +79,8 @@ export class OLAdaptorGeoJSONComponent implements Adaptor {
           strokeColor: "--map-feature-outline",
           strokeOpacity: this.borderOpacity(),
           strokePixels: this.borderPixels(),
-          strokeStyle: "solid",
-        }),
+          strokeStyle: "solid"
+        })
       ];
     }
   }

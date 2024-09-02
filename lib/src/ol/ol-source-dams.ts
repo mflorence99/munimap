@@ -15,7 +15,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-dams",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceDamsComponent extends OLSourceArcGISComponent {
   // 👇 see PlaceProperties

@@ -27,13 +27,13 @@ import OLModify from "ol/interaction/Modify";
   providers: [
     {
       provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionRedrawBoundaryComponent),
+      useExisting: forwardRef(() => OLInteractionRedrawBoundaryComponent)
     },
-    DestroyService,
+    DestroyService
   ],
   selector: "app-ol-interaction-redrawboundary",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
   olModify: OLModify;
@@ -47,7 +47,7 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
     // 👉 one to rule them all
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection,
+      featureProjection: this.#map.projection
     });
   }
 
@@ -56,7 +56,7 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
       deleteCondition: (event): boolean =>
         click(event) && platformModifierKeyOnly(event),
       hitDetection: this.#layer.olLayer,
-      source: this.#layer.olLayer.getSource(),
+      source: this.#layer.olLayer.getSource()
     });
     this.olModify.setProperties({ component: this }, true);
     this.#map.olMap.addInteraction(this.olModify);
@@ -70,9 +70,9 @@ export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
     const geojson = featureCollection([
       JSON.parse(
         this.#format.writeFeatures(
-          this.#layer.olLayer.getSource().getFeatures(),
-        ),
-      ),
+          this.#layer.olLayer.getSource().getFeatures()
+        )
+      )
     ]);
     // 👉 jam original bbox, which was calculated as 4:3
     geojson.features[0].bbox = this.#map.boundary().features[0].bbox;

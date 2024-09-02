@@ -12,7 +12,7 @@ export abstract class GeoJSONService {
 
   filter(
     geojson: GeoJSON.FeatureCollection<any, any>,
-    extent: Coordinate,
+    extent: Coordinate
   ): GeoJSON.FeatureCollection<any, any> {
     const [minX, minY, maxX, maxY] = extent ?? [];
     if (minX && minY && maxX && maxY) {
@@ -23,7 +23,7 @@ export abstract class GeoJSONService {
           const [left, bottom, right, top] = feature.bbox ?? bbox(feature);
           // 👉 https://gamedev.stackexchange.com/questions/586
           return !(minX > right || maxX < left || maxY < bottom || minY > top);
-        }),
+        })
       );
     } else return geojson;
   }
@@ -36,7 +36,7 @@ export abstract class GeoJSONService {
   abstract loadByIndex(
     path: string,
     layerKey: string,
-    extent?: Coordinate,
+    extent?: Coordinate
   ): Observable<GeoJSON.FeatureCollection<any, any>>;
 
   abstract loadIndex(): Observable<Index>;

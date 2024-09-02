@@ -15,7 +15,7 @@ interface Subdivision {
 
 function subdivisionIDValidatorFactory(
   subdivisions: Subdivision[],
-  ix: number,
+  ix: number
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
     const value = control.value;
@@ -26,13 +26,13 @@ function subdivisionIDValidatorFactory(
     // 👉 error if duplicate
     if (
       subdivisions.some(
-        (subdivision, iy) => subdivision.id === value && ix !== iy,
+        (subdivision, iy) => subdivision.id === value && ix !== iy
       )
     )
       return {
         duplicate: {
-          valid: false,
-        },
+          valid: false
+        }
       };
 
     return null;
@@ -44,10 +44,10 @@ function subdivisionIDValidatorFactory(
     {
       provide: NG_VALIDATORS,
       useExisting: SubdivisionIDValidator,
-      multi: true,
-    },
+      multi: true
+    }
   ],
-  selector: "[appSubdivisionID][ngModel]",
+  selector: "[appSubdivisionID][ngModel]"
 })
 export class SubdivisionIDValidator implements OnInit, Validator {
   appSubdivisionID = input<[Subdivision[], number]>();
@@ -57,7 +57,7 @@ export class SubdivisionIDValidator implements OnInit, Validator {
   ngOnInit(): void {
     this.validator = subdivisionIDValidatorFactory(
       this.appSubdivisionID()[0],
-      this.appSubdivisionID()[1],
+      this.appSubdivisionID()[1]
     );
   }
 

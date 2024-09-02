@@ -16,7 +16,7 @@ const url =
 const dist = "./data";
 
 const allTowns = JSON.parse(
-  readFileSync(`${dist}/${theState}/towns.geojson`).toString(),
+  readFileSync(`${dist}/${theState}/towns.geojson`).toString()
 );
 
 const placesByCountyByTown = {};
@@ -31,7 +31,7 @@ async function main(): Promise<void> {
       // 👇 the data doesn't have the town, so lets see if turf can
       //    find it from the dataset of all towns
       const town = allTowns.features.find((townFeature) =>
-        turf.booleanPointInPolygon(feature, townFeature),
+        turf.booleanPointInPolygon(feature, townFeature)
       )?.id;
 
       if (town) {
@@ -47,7 +47,7 @@ async function main(): Promise<void> {
           county: county,
           type: feature.properties.FEATYPE,
           name: feature.properties.FEATURE,
-          town: town,
+          town: town
         };
 
         placesByCountyByTown[county] ??= {};
@@ -62,12 +62,12 @@ async function main(): Promise<void> {
   Object.keys(placesByCountyByTown).forEach((county) => {
     Object.keys(placesByCountyByTown[county]).forEach((town) => {
       console.log(
-        chalk.green(`... writing ${theState}/${county}/${town}/places.geojson`),
+        chalk.green(`... writing ${theState}/${county}/${town}/places.geojson`)
       );
       mkdirSync(`${dist}/${theState}/${county}/${town}`, { recursive: true });
       writeFileSync(
         `${dist}/${theState}/${county}/${town}/places.geojson`,
-        JSON.stringify(simplify(placesByCountyByTown[county][town])),
+        JSON.stringify(simplify(placesByCountyByTown[county][town]))
       );
     });
   });
@@ -83,5 +83,5 @@ const sample = {
   STCODE: 33,
   COCODE: 11,
   QUAD: "Manchester South",
-  FeatID: 1915859,
+  FeatID: 1915859
 };

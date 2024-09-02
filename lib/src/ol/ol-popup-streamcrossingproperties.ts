@@ -10,7 +10,7 @@ import { input } from "@angular/core";
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-popup-streamcrossingproperties",
-  templateUrl: "./ol-popup-dpwproperties-impl.html",
+  templateUrl: "./ol-popup-dpwproperties-impl.html"
 })
 export class OLPopupStreamCrossingPropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);
@@ -24,6 +24,6 @@ export class OLPopupStreamCrossingPropertiesComponent {
     ["Inlet Material", "UsWingwallMat"],
     ["Inlet Condition", "UsHwCon"],
     ["Outlet Material", "DsWingwallMat"],
-    ["Outlet Condition", "DsHwCon"],
+    ["Outlet Condition", "DsHwCon"]
   ];
 }

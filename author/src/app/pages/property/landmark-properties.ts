@@ -76,7 +76,7 @@ import OLFeature from "ol/Feature";
         SAVE
       </button>
     </article>
-  `,
+  `
 })
 export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;
@@ -107,7 +107,7 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
     const landmark: Partial<Landmark> = {
       id: this.features[0].getId() as string,
       properties: record,
-      type: "Feature",
+      type: "Feature"
     };
     this.#store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
     // 👉 this resets the dirty flag, disabling SAVE until

@@ -18,7 +18,7 @@ import { viewChild } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-popup-selection",
   template: "<ng-template #popup><ng-content></ng-content></ng-template>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLPopupSelectionComponent implements OnInit {
   popup = viewChild<TemplateRef<any>>("popup");
@@ -44,14 +44,14 @@ export class OLPopupSelectionComponent implements OnInit {
     const data = [
       new ClipboardItem({
         [type]: new Blob([element.nativeElement.innerHTML], {
-          type,
-        }) as any,
-      }),
+          type
+        }) as any
+      })
     ];
     navigator.clipboard
       .write(data)
       .then(() =>
-        console.log("%cElement copied to clipboard", "color: skyblue"),
+        console.log("%cElement copied to clipboard", "color: skyblue")
       )
       .catch(() => {
         console.error("🔥 Copy to clipboard failed");
@@ -67,7 +67,7 @@ export class OLPopupSelectionComponent implements OnInit {
       if (features.length === 0) this.#snackBar.dismiss();
       else if (!this.snackBarRef || this.snackBarRef.instance.destroyed) {
         this.snackBarRef = this.#snackBar.openFromTemplate(this.popup(), {
-          horizontalPosition: "left",
+          horizontalPosition: "left"
         });
       }
     });

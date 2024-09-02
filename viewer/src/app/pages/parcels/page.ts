@@ -1,16 +1,16 @@
-import { RootPage } from '../root/page';
+import { RootPage } from "../root/page";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
-import { HistoricalMap } from '@lib/common';
-import { HistoricalsService } from '@lib/services/historicals';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { HistoricalMap } from "@lib/common";
+import { HistoricalsService } from "@lib/services/historicals";
 
-import { inject } from '@angular/core';
-import { environment } from '@lib/environment';
+import { inject } from "@angular/core";
+import { environment } from "@lib/environment";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-parcels',
+  selector: "app-parcels",
   template: `
 
     @let sink = {
@@ -94,6 +94,7 @@ import { environment } from '@lib/environment';
 
           <app-ol-control-splitscreen>
             <app-ol-layers #left>
+              
               <!-- -------------------------------------------------------- -->
               <!-- 🗺️ Satellite view                                        -->
               <!-- -------------------------------------------------------- -->

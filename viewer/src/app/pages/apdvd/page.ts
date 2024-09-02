@@ -1,16 +1,16 @@
-import { RootPage } from '../root/page';
+import { RootPage } from "../root/page";
 
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 
-import { inject } from '@angular/core';
-import { environment } from '@lib/environment';
-import { isAPDVDExisting } from '@lib/ol/ol-apdvd';
-import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
+import { inject } from "@angular/core";
+import { environment } from "@lib/environment";
+import { isAPDVDExisting } from "@lib/ol/ol-apdvd";
+import { isAPDVDProposed } from "@lib/ol/ol-apdvd";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-apdvd',
+  selector: "app-apdvd",
   template: `
 
     @let sink = {

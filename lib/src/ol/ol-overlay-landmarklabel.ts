@@ -40,8 +40,8 @@ import OLPoint from "ol/geom/Point";
       .icon {
         color: var(--background-color);
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLOverlayLandmarkLabelComponent implements OnInit {
   label = viewChild<ElementRef>("label");
@@ -55,7 +55,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   constructor() {
     this.olOverlay = new OLOverlay({
       position: [0, 0],
-      positioning: "center-center",
+      positioning: "center-center"
     });
     this.olOverlay.setProperties({ component: this }, true);
     this.#map.olMap.addOverlay(this.olOverlay);
@@ -69,7 +69,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
   onDragEnd(event: CdkDragEnd): void {
     // 👉 what is the new position?
     const position = toLonLat(
-      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y),
+      this.#map.coordinateFromEvent(event.dropPoint.x, event.dropPoint.y)
     );
     // 👉 update point labels
     if (this.#feature.getGeometry().getType() === "Point") {
@@ -77,7 +77,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
       const movedLandmark: Partial<Landmark> = {
         id: this.#feature.getId() as string,
         geometry: { type: "Point", coordinates: position },
-        type: "Feature",
+        type: "Feature"
       };
       this.#store.dispatch(new LandmarksActions.UpdateLandmark(movedLandmark));
     }
@@ -87,7 +87,7 @@ export class OLOverlayLandmarkLabelComponent implements OnInit {
       const movedLandmark: Partial<Landmark> = {
         id: this.#feature.getId() as string,
         properties: { textLocation: position as [number, number] },
-        type: "Feature",
+        type: "Feature"
       };
       this.#store.dispatch(new LandmarksActions.UpdateLandmark(movedLandmark));
     }

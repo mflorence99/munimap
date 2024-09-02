@@ -15,7 +15,7 @@ import PencilSketch from "ol-ext/filter/PencilSketch";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-filter-pencil",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLFilterPencilComponent implements AfterContentInit, OnDestroy {
   olFilter: PencilSketch;

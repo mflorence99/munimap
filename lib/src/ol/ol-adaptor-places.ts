@@ -21,7 +21,7 @@ interface PlaceStyleAttributes {
 const DEFAULT: PlaceStyleAttributes = {
   color: "--map-place-text-color",
   fontSize: "tiny",
-  placement: "point",
+  placement: "point"
 };
 
 const EXCEPTIONS: {
@@ -30,18 +30,18 @@ const EXCEPTIONS: {
   lake: {
     color: "--map-place-water-color",
     fontSize: "huge",
-    placement: "point",
+    placement: "point"
   },
   park: {
     color: "--map-place-text-color",
     fontSize: "huge",
-    placement: "point",
+    placement: "point"
   },
   stream: {
     color: "--map-place-water-color",
     fontSize: "large",
-    placement: "line",
-  },
+    placement: "line"
+  }
 };
 
 // 👇 place types not in this list are ignored
@@ -101,7 +101,7 @@ const ICONS: {
   tower: "\uf041",
   trail: "\uf041",
   valley: "\uf041",
-  woods: "\uf1bb",
+  woods: "\uf1bb"
 };
 
 @Component({
@@ -109,12 +109,12 @@ const ICONS: {
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorPlacesComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorPlacesComponent)
+    }
   ],
   selector: "app-ol-adaptor-places",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorPlacesComponent implements Adaptor {
   // 👇 construct LandmarkProperties
@@ -141,8 +141,8 @@ export class OLAdaptorPlacesComponent implements Adaptor {
               ? this.#mungeName(place.name)
               : place.name,
           textAlign: ICONS[place.type] ? "center" : null,
-          textBaseline: ICONS[place.type] ? "bottom" : null,
-        }),
+          textBaseline: ICONS[place.type] ? "bottom" : null
+        })
       ];
     }
   }
@@ -153,7 +153,7 @@ export class OLAdaptorPlacesComponent implements Adaptor {
         // 👇 to title case
         .replace(
           /\w\S*/g,
-          (str) => str.charAt(0).toUpperCase() + str.substring(1).toLowerCase(),
+          (str) => str.charAt(0).toUpperCase() + str.substring(1).toLowerCase()
         )
         // 👇 remove excessive punctuation
         .replace(/ - /g, " ")

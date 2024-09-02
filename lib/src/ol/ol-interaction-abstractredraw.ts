@@ -40,7 +40,7 @@ export abstract class OLInteractionAbstractRedrawComponent {
   constructor() {
     this.#format = new OLGeoJSON({
       dataProjection: this.#map.featureProjection,
-      featureProjection: this.#map.projection,
+      featureProjection: this.#map.projection
     });
   }
 
@@ -71,13 +71,13 @@ export abstract class OLInteractionAbstractRedrawComponent {
     this.olModify = new OLModify({
       deleteCondition: (event): boolean =>
         click(event) && platformModifierKeyOnly(event),
-      features,
+      features
       // 🔥 why does thus no longer work?
       // hitDetection: this.#layer.olLayer
     });
     this.#modifyStartKey = this.olModify.on(
       "modifystart",
-      () => (this.#touched = true),
+      () => (this.#touched = true)
     );
     this.#map.olMap.addInteraction(this.olModify);
     // 👇 create a standard OL Snap interaction
@@ -94,7 +94,7 @@ export abstract class OLInteractionAbstractRedrawComponent {
         if (this.#touched) {
           const geojson = JSON.parse(this.#format.writeFeature(this.feature));
           this.saveRedraw(cleanCoords(geojson)).subscribe(() =>
-            this.#unsetFeature(),
+            this.#unsetFeature()
           );
         } else this.#unsetFeature();
       });

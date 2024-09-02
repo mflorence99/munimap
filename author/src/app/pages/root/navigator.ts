@@ -131,8 +131,8 @@ import { takeUntil } from "rxjs/operators";
           }
         }
       }
-    `,
-  ],
+    `
+  ]
 })
 export class NavigatorComponent implements OnInit {
   profile$: Observable<Profile>;
@@ -173,20 +173,20 @@ export class NavigatorComponent implements OnInit {
           // 👇 show the N most recently-used maps
           console.log(
             `%cFirestore query: maps where owner in ${JSON.stringify(
-              workgroup(profile),
+              workgroup(profile)
             )} orderBy timestamp desc`,
-            "color: goldenrod",
+            "color: goldenrod"
           );
           return collectionData<Map>(
             query(
               collection(this.#firestore, "maps") as CollectionReference<Map>,
               where("owner", "in", workgroup(profile)),
               orderBy("timestamp", "desc"),
-              limit(this.maxMapCount()),
-            ),
+              limit(this.maxMapCount())
+            )
           );
         }
-      }),
+      })
     );
   }
 }

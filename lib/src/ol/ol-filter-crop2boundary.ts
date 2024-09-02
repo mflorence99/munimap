@@ -19,7 +19,7 @@ import Polygon from "ol/geom/Polygon";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-filter-crop2boundary",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLFilterCrop2BoundaryComponent
   implements AfterContentInit, OnDestroy
@@ -36,7 +36,7 @@ export class OLFilterCrop2BoundaryComponent
     this.#layer = this.#layer1 ?? this.#layer2 ?? this.#layer3;
     // 👇 build the filter
     const coords: any = copy(
-      this.#map.boundary().features[0].geometry.coordinates,
+      this.#map.boundary().features[0].geometry.coordinates
     );
     const boundary = new Feature(new Polygon(coords));
     boundary
@@ -44,7 +44,7 @@ export class OLFilterCrop2BoundaryComponent
       .transform(this.#map.featureProjection, this.#map.projection);
     this.olFilter = new Crop({
       feature: boundary,
-      inner: false,
+      inner: false
     });
   }
 

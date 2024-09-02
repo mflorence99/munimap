@@ -11,7 +11,7 @@ export class UtilsService {
         "iPod Simulator",
         "iPad",
         "iPhone",
-        "iPod",
+        "iPod"
       ].includes(navigator.platform) ||
       // iPad on iOS 13 detection
       (navigator.userAgent.includes("Mac") && "ontouchend" in document)

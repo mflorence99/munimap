@@ -16,12 +16,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorWetlandsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorWetlandsComponent)
+    }
   ],
   selector: "app-ol-adaptor-wetlands",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorWetlandsComponent implements Adaptor {
   riverbank = input<OLFillPatternType>("rocks");
@@ -38,14 +38,14 @@ export class OLAdaptorWetlandsComponent implements Adaptor {
           new LandmarkPropertiesClass({
             fillColor: "--map-wetland-swamp",
             fillOpacity: this.swampOpacity(),
-            fillPattern: this.swamp(),
-          }),
+            fillPattern: this.swamp()
+          })
         ];
       case "water":
         return [
           new LandmarkPropertiesClass({
             fillColor: "--map-waterbody-fill",
-            fillOpacity: 1,
+            fillOpacity: 1
           }),
           new LandmarkPropertiesClass({
             strokeColor: "--map-riverbank-rocks",
@@ -53,8 +53,8 @@ export class OLAdaptorWetlandsComponent implements Adaptor {
             strokePattern: this.riverbank(),
             strokePatternScale: this.riverbankScale(),
             strokeStyle: "solid",
-            strokeWidth: "thick",
-          }),
+            strokeWidth: "thick"
+          })
         ];
     }
   }

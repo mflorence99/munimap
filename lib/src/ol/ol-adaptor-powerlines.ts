@@ -23,12 +23,12 @@ import OLStyle from "ol/style/Style";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorPowerlinesComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorPowerlinesComponent)
+    }
   ],
   selector: "app-ol-adaptor-powerlines",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorPowerlinesComponent implements Adaptor {
   iconSize = input(15);
@@ -43,8 +43,8 @@ export class OLAdaptorPowerlinesComponent implements Adaptor {
         strokeOpacity: 1,
         strokeStyle: "solid",
         strokeWidth: "thick",
-        zIndex: 1,
-      }),
+        zIndex: 1
+      })
     ];
   }
 
@@ -53,7 +53,7 @@ export class OLAdaptorPowerlinesComponent implements Adaptor {
 
   backdoor(
     powerline: OLFeature<OLMultiLineString>,
-    resolution: number,
+    resolution: number
   ): OLStyle[] {
     const icons: OLStyle[] = [];
     const iconColor = this.#map.vars["--map-powerline-icon-color"];
@@ -79,12 +79,12 @@ export class OLAdaptorPowerlinesComponent implements Adaptor {
                 rotation: -rotation,
                 stroke: new OLStroke({
                   color: `rgba(${lineColor}, 1)`,
-                  width: 1,
+                  width: 1
                 }),
-                text: "\uf0e7" /* 👈 bolt */,
+                text: "\uf0e7" /* 👈 bolt */
               }),
-              zIndex: 2,
-            }),
+              zIndex: 2
+            })
           );
         });
       });

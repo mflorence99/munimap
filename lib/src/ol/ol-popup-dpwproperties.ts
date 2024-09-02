@@ -63,7 +63,7 @@ export type Schema = Array<
         }
       }
     </section>
-  `,
+  `
 })
 export class OLPopupDPWPropertiesComponent {
   geometry: any /* 👈 in practice will be a Point */;
@@ -96,7 +96,7 @@ export class OLPopupDPWPropertiesComponent {
     const link = `https://www.google.com/maps/search/?api=1&query=${
       marker[1]
     }%2C${marker[0]}&zoom=${Math.round(
-      this.#map.olView.getZoom(),
+      this.#map.olView.getZoom()
     )}&basemap=terrain`;
     return link;
   }
@@ -123,7 +123,7 @@ export class OLPopupDPWPropertiesComponent {
           const geometry = features[0]?.getGeometry();
           if (properties?.metadata) properties = properties.metadata;
           return [properties, geometry];
-        }),
+        })
       )
       .subscribe(([properties, geometry]) => {
         this.properties = properties;

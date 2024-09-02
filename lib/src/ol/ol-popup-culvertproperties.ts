@@ -10,7 +10,7 @@ import { input } from "@angular/core";
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-popup-culvertproperties",
-  templateUrl: "./ol-popup-dpwproperties-impl.html",
+  templateUrl: "./ol-popup-dpwproperties-impl.html"
 })
 export class OLPopupCulvertPropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);
@@ -25,7 +25,7 @@ export class OLPopupCulvertPropertiesComponent {
       "dimension",
       "inches",
       (properties: any): string =>
-        properties.diameter || `${properties.width}x${properties.height}`,
+        properties.diameter || `${properties.width}x${properties.height}`
     ],
     ["Length", "length", "feet"],
     ["Count", "count", "x"],
@@ -33,6 +33,6 @@ export class OLPopupCulvertPropertiesComponent {
     ["Condition", "condition"],
     ["Headwall", "headwall"],
     ["Flood Hazard", "floodHazard"],
-    ["Year Re/built", "year"],
+    ["Year Re/built", "year"]
   ];
 }

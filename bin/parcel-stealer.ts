@@ -46,15 +46,15 @@ const STEALS: Steal[] = [
               [-72.02718756150263, 43.20774966506883],
               [-72.02785631063652, 43.208512961621295],
               [-72.02844266120816, 43.209141200030984],
-              [-72.02144540842676, 43.209150876779745],
-            ],
-          ],
+              [-72.02144540842676, 43.209150876779745]
+            ]
+          ]
         },
-        parcelID: "12-4",
-      },
+        parcelID: "12-4"
+      }
     ],
     toPath: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
-    uid: 1,
+    uid: 1
   },
   {
     fromPath: "NEW HAMPSHIRE:HILLSBOROUGH:DEERING",
@@ -72,15 +72,15 @@ const STEALS: Steal[] = [
               [-71.81264, 43.12378000000004],
               [-71.81179, 43.12395000000001],
               [-71.80966, 43.124300000000005],
-              [-71.80956883291732, 43.12370311524194],
-            ],
-          ],
+              [-71.80956883291732, 43.12370311524194]
+            ]
+          ]
         },
-        parcelID: "202-6",
-      },
+        parcelID: "202-6"
+      }
     ],
     toPath: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
-    uid: 2,
+    uid: 2
   },
   {
     fromPath: "NEW HAMPSHIRE:HILLSBOROUGH:WEARE",
@@ -125,16 +125,16 @@ const STEALS: Steal[] = [
               [-71.80956883291732, 43.12370311524194],
               [-71.80978, 43.12517],
               [-71.80533553036386, 43.12596127324829],
-              [-71.80501, 43.12517999999997],
-            ],
-          ],
+              [-71.80501, 43.12517999999997]
+            ]
+          ]
         },
-        parcelID: "401-36",
-      },
+        parcelID: "401-36"
+      }
     ],
     toPath: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
-    uid: 3,
-  },
+    uid: 3
+  }
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
@@ -147,7 +147,7 @@ if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
 
 firebase.initializeApp({
   credential: firebase.cert("./firebase-admin.json"),
-  databaseURL: "https://washington-app-319514.firebaseio.com",
+  databaseURL: "https://washington-app-319514.firebaseio.com"
 });
 
 const db = firestore.getFirestore();
@@ -166,8 +166,8 @@ async function main(): Promise<void> {
         type: "input",
         name: "proceed",
         choices: ["y", "n"],
-        message: "WARNING: running on live Firestore. Proceed? (y/N)",
-      },
+        message: "WARNING: running on live Firestore. Proceed? (y/N)"
+      }
     ]);
     if (response.proceed.toLowerCase() !== "y") return;
   }
@@ -177,8 +177,8 @@ async function main(): Promise<void> {
 
     console.log(
       chalk.green(
-        `... processing steal for ${steal.owner} from ${steal.fromPath}`,
-      ),
+        `... processing steal for ${steal.owner} from ${steal.fromPath}`
+      )
     );
 
     // 👉 load up the "from" parcels
@@ -195,7 +195,7 @@ async function main(): Promise<void> {
 
       // 👉 steal the parcel from the "from" path
       const feature = geojson.features.find(
-        (feature) => feature.id === stolen.parcelID,
+        (feature) => feature.id === stolen.parcelID
       );
 
       // 👉 construct the new parcel
@@ -215,9 +215,9 @@ async function main(): Promise<void> {
           town: town,
           usage: feature.properties.usage ?? "110",
           use: feature.properties.use ?? "",
-          zone: "",
+          zone: ""
         },
-        type: "Feature",
+        type: "Feature"
       };
 
       // 👉 normalize the parcel
@@ -232,7 +232,7 @@ async function main(): Promise<void> {
 
     await Promise.all(promises);
     console.log(
-      chalk.blue(`...... waiting for ${promises.length} promises to resolve`),
+      chalk.blue(`...... waiting for ${promises.length} promises to resolve`)
     );
   }
 }

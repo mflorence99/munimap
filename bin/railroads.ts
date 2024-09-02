@@ -13,7 +13,7 @@ import chalk from "chalk";
 //    so we grabbed a file that works and we assume it won't change
 // url: 'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-railroads/rr'
 const railroads = JSON.parse(
-  readFileSync("./bin/assets/New_Hampshire_Railroads.geojson").toString(),
+  readFileSync("./bin/assets/New_Hampshire_Railroads.geojson").toString()
 );
 
 const dist = "./data";
@@ -31,7 +31,7 @@ railroads.features.forEach((feature: GeoJSON.Feature) => {
   feature.bbox = turf.bbox(feature);
   feature.properties = {
     name: feature.properties.NAME,
-    status: feature.properties.STATUS,
+    status: feature.properties.STATUS
   };
 });
 
@@ -39,7 +39,7 @@ railroads.features.forEach((feature: GeoJSON.Feature) => {
 mkdirSync(`${dist}/${theState}`, { recursive: true });
 writeFileSync(
   `${dist}/${theState}/railroads.geojson`,
-  JSON.stringify(simplify(railroads)),
+  JSON.stringify(simplify(railroads))
 );
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -66,5 +66,5 @@ const sample = {
   MP_END: 0.29725199,
   NEEDS_CALIBRATION: null,
   PARTS: null,
-  IS_PASSENGER: null,
+  IS_PASSENGER: null
 };

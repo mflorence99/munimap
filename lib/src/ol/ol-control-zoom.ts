@@ -64,8 +64,8 @@ import { model } from "@angular/core";
         padding: 0;
         width: 3rem;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlZoomComponent implements OnInit {
   resolution = model<number>();
@@ -92,7 +92,7 @@ export class OLControlZoomComponent implements OnInit {
     // 🪲 null is not an object (evaluating 'this.map.olView.animate')
     this.#map.olView?.animate({
       duration: this.zoomAnimationDuration(),
-      zoom,
+      zoom
     });
   }
 

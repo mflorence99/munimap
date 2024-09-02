@@ -22,12 +22,12 @@ import OLText from "ol/style/Text";
   providers: [
     {
       provide: StylerComponent,
-      useExisting: forwardRef(() => OLStyleGraticuleComponent),
-    },
+      useExisting: forwardRef(() => OLStyleGraticuleComponent)
+    }
   ],
   selector: "app-ol-style-graticule",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLStyleGraticuleComponent implements Styler {
   fontFamily = input("Roboto");
@@ -45,7 +45,7 @@ export class OLStyleGraticuleComponent implements Styler {
     return new OLStyle({
       fill: this.#border(),
       stroke: this.#line(),
-      text: this.#coords(),
+      text: this.#coords()
     });
   }
 
@@ -70,8 +70,8 @@ export class OLStyleGraticuleComponent implements Styler {
       fill: new OLFill({ color: `rgba(${color}, 1)` }),
       stroke: new OLStroke({
         color: `rgba(${outline}, 3)`,
-        width: 1,
-      }),
+        width: 1
+      })
     });
   }
 
@@ -81,7 +81,7 @@ export class OLStyleGraticuleComponent implements Styler {
       color: `rgba(${color},  1)`,
       lineCap: "square",
       lineDash: this.lineDash(),
-      width: this.lineWidth(),
+      width: this.lineWidth()
     });
   }
 }

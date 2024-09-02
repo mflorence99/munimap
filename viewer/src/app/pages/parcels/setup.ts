@@ -148,7 +148,7 @@ import copy from "fast-copy";
         SAVE
       </button>
     </article>
-  `,
+  `
 })
 export class ParcelsSetupComponent implements OnInit {
   record: Partial<ViewStateModel> = {
@@ -156,7 +156,7 @@ export class ParcelsSetupComponent implements OnInit {
     historicalMapRight: "",
     parcelCoding: "usage",
     recentPath: "",
-    satelliteYear: "",
+    satelliteYear: ""
   };
 
   view$: Observable<ViewStateModel>;
@@ -178,7 +178,7 @@ export class ParcelsSetupComponent implements OnInit {
         .historicalsFor(this.record.recentPath)
         .map((historical) => historical.name)
         .sort()
-        .reverse(),
+        .reverse()
     ];
   }
 
@@ -197,20 +197,20 @@ export class ParcelsSetupComponent implements OnInit {
   save(record: Partial<ViewStateModel>): void {
     if (record.satelliteView)
       this.#store.dispatch(
-        new ViewActions.SetSatelliteYear(record.satelliteYear),
+        new ViewActions.SetSatelliteYear(record.satelliteYear)
       );
     else
       this.#store.dispatch([
         new ViewActions.SetParcelCoding(record.parcelCoding),
         new ViewActions.SetHistoricalMapLeft(record.historicalMapLeft),
-        new ViewActions.SetHistoricalMapRight(record.historicalMapRight),
+        new ViewActions.SetHistoricalMapRight(record.historicalMapRight)
       ]);
 
     this.#store.dispatch(
       new ViewActions.SetSideBySideView(
         (record.satelliteView && !!record.satelliteYear) ||
-          (!record.satelliteView && !!record.historicalMapRight),
-      ),
+          (!record.satelliteView && !!record.historicalMapRight)
+      )
     );
     this.#drawer.close();
   }

@@ -19,8 +19,8 @@ import { inject } from "@angular/core";
         display: block;
         pointer-events: auto;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlZoomToExtentComponent {
   #map = inject(OLMapComponent);

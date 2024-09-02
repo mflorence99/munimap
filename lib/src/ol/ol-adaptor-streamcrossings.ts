@@ -15,12 +15,12 @@ import { input } from "@angular/core";
   providers: [
     {
       provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorStreamCrossingsComponent),
-    },
+      useExisting: forwardRef(() => OLAdaptorStreamCrossingsComponent)
+    }
   ],
   selector: "app-ol-adaptor-streamcrossings",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLAdaptorStreamCrossingsComponent implements Adaptor {
   streamCrossingWidth = input(36);
@@ -40,14 +40,14 @@ export class OLAdaptorStreamCrossingsComponent implements Adaptor {
         iconOutlineColor: "--map-streamcrossing-line-color",
         iconSymbol: "\ue4ce" /* 👈 bridge-water */,
         textAlign: "center",
-        textBaseline: "bottom",
-      }),
+        textBaseline: "bottom"
+      })
     ];
   }
 
   // 👇 tweak style when hovering
   adaptWhenHovering(
-    streamCrossing: StreamCrossingProperties,
+    streamCrossing: StreamCrossingProperties
   ): LandmarkProperties[] {
     const hovering = this.adapt(streamCrossing)[0];
     hovering.fontColor = "--map-landmark-hover";
@@ -57,7 +57,7 @@ export class OLAdaptorStreamCrossingsComponent implements Adaptor {
 
   // 👇 tweak style when selected
   adaptWhenSelected(
-    streamCrossing: StreamCrossingProperties,
+    streamCrossing: StreamCrossingProperties
   ): LandmarkProperties[] {
     const selected = this.adapt(streamCrossing)[0];
     selected.fontColor = "--map-landmark-select";

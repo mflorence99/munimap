@@ -12,7 +12,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-streamcrossings",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
   // 👇 see BridgeProperties

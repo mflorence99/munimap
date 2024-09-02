@@ -13,7 +13,7 @@ import OLOSM from "ol/source/OSM";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-osm",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceOSMComponent implements OnInit {
   maxZoom = input<number>();

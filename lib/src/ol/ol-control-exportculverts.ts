@@ -22,8 +22,8 @@ import { saveAs } from "file-saver";
         display: block;
         pointer-events: auto;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class OLControlExportCulvertsComponent {
   fileName = input<string>();
@@ -68,7 +68,7 @@ export class OLControlExportCulvertsComponent {
     `;
     // 👇 emit the data
     const blob = new Blob([gpx], {
-      type: "text/plain;charset=utf-8",
+      type: "text/plain;charset=utf-8"
     });
     saveAs(blob, `${this.fileName()}.gpx`);
   }

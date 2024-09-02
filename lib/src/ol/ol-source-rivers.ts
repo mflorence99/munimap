@@ -17,7 +17,7 @@ const attribution =
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-source-rivers",
   template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  styles: [":host { display: none }"]
 })
 export class OLSourceRiversComponent extends OLSourceArcGISComponent {
   // 👇 see PlaceProperties
@@ -31,7 +31,7 @@ export class OLSourceRiversComponent extends OLSourceArcGISComponent {
       });
       const filtered = copy(arcgis);
       filtered.features = arcgis.features.filter(
-        (feature) => !!feature.attributes.name,
+        (feature) => !!feature.attributes.name
       );
       return filtered;
     } else return super.filter(arcgis);

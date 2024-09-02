@@ -189,12 +189,12 @@ function convertRingsToGeoJSON(rings) {
   if (outerRings.length === 1) {
     return {
       type: "Polygon",
-      coordinates: outerRings[0],
+      coordinates: outerRings[0]
     };
   } else {
     return {
       type: "MultiPolygon",
-      coordinates: outerRings,
+      coordinates: outerRings
     };
   }
 }
@@ -321,8 +321,8 @@ export function arcgisToGeoJSON(arcgis, idAttribute) {
         [arcgis.xmin, arcgis.ymax],
         [arcgis.xmin, arcgis.ymin],
         [arcgis.xmax, arcgis.ymin],
-        [arcgis.xmax, arcgis.ymax],
-      ],
+        [arcgis.xmax, arcgis.ymax]
+      ]
     ];
   }
 
@@ -424,5 +424,5 @@ export function geojsonToArcGIS(geojson, idAttribute) {
 
 export default {
   arcgisToGeoJSON: arcgisToGeoJSON,
-  geojsonToArcGIS: geojsonToArcGIS,
+  geojsonToArcGIS: geojsonToArcGIS
 };
