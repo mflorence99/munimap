@@ -48,7 +48,7 @@ export class GeolocationService extends Observable<GeolocationPosition> {
             timestamp: position.timestamp
           };
           lastPosition = thisPosition;
-          subscriber.next(thisPosition);
+          subscriber.next(thisPosition as any);
         },
         (error: GeolocationPositionError) => {
           console.error("🔥 Geolocation position error", error);

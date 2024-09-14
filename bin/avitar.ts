@@ -4,7 +4,6 @@ import { readFileSync } from "fs";
 import { writeFileSync } from "fs";
 
 import chalk from "chalk";
-import jsome from "jsome";
 import DBFParser from "node-dbf";
 
 // 🔥 only washington has an avitar.dbf
@@ -22,7 +21,7 @@ parser.on("record", (record) => {
     id = `${id}-${sub}`;
   }
   avitarByID[id] = record;
-  if (record.OWNER.startsWith("NONNO")) jsome(record);
+  // if (record.OWNER.startsWith("NONNO")) jsome(record);
 });
 
 parser.on("end", () => {
@@ -46,10 +45,10 @@ const featureByID = JSON.parse(
 function main(): void {
   try {
     eliminateStolenParcels();
-    searchForAnomalies();
     updateFromAvitar();
-    jsome(avitarByID["15-70-01"]);
-    jsome(featureByID["9-7"]);
+    searchForAnomalies();
+    // jsome(avitarByID["15-70-01"]);
+    // jsome(featureByID["9-7"]);
     saveGeoJSON();
   } catch (error) {
     console.log(chalk.red(error.message));
@@ -115,6 +114,7 @@ function updateFromAvitar(): void {
     .map((id) => [avitarByID[id], featureByID[id]])
     .filter(([_, feature]) => !!feature)
     .forEach(([avitar, feature]) => {
+      console.log(chalk.green(`... ${feature.id}`));
       // 👇 assessment
       feature.properties.building$ = avitar.BLDTXVAL;
       feature.properties.land$ = avitar.LNDTXVAL;

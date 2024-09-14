@@ -95,7 +95,7 @@ export class GeosimulatorService extends Observable<GeolocationPosition> {
         //   subscriber.error({ code: 1, message: 'unauthorized' });
         // }
         // 👇 simulate movement
-        /* else */ subscriber.next(position);
+        /* else */ subscriber.next(position as any);
         // setup for next point
         counter += 1;
         if (counter === simulated.length) counter = 0;

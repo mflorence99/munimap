@@ -1,6 +1,6 @@
 {
   "name": "munimap",
-  "version": "4.2.6",
+  "version": "5.0.2",
   "description": "MuniMap",
   "repository": {
     "type": "git",
@@ -157,7 +157,7 @@
     "shpjs": "4.0.2",
     "tslib": "^2",
     "typeface-roboto": "^1",
-    "ua-parser-js": "^1",
+    "ua-parser-js": "0.7.39",
     "unzipper": "0.12.3",
     "url-parse": "^1",
     "yargs": "^17",
