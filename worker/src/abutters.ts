@@ -11,7 +11,13 @@ import { intersect } from "@turf/intersect";
 
 type Feature = GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>;
 
-const abutterRange = 200; /* 👈 feet */
+// 👀 https://www.gencourt.state.nh.us/bill_status/pdf.aspx?id=31993&q=billVersion
+
+// 🔥 this algorithm inflates both the selected and the target lot by 50 feeet
+//    it is very close to but not exactly what's in the RSA
+//    the good news is that it is more ge nerous
+
+const abutterRange = 50; /* 👈 feet */
 
 export class Abutters {
   find(selecteds: Feature[], allFeatures: Feature[]): Feature[] {
@@ -46,7 +52,14 @@ export class Abutters {
               try {
                 return (
                   !selectedIDs.includes(feature.id) &&
-                  intersect(featureCollection([feature, buffered]))
+                  intersect(
+                    featureCollection([
+                      buffer(feature, abutterRange, {
+                        units: "feet"
+                      }),
+                      buffered
+                    ])
+                  )
                 );
               } catch (e) {
                 Sentry.captureMessage(
