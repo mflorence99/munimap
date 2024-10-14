@@ -199,6 +199,6 @@
 		"stylelint-config-standard": "^36",
 		"stylelint-order": "^6",
 		"ts-node": "^10",
-		"typescript": "^5.4"
+		"typescript": "~5.4"
 	}
 }
