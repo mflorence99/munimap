@@ -24,7 +24,7 @@ export class Abutters {
     const selectedIDs = selecteds.map((selected) => selected.id);
     const unique = selecteds
       .flatMap((selected) => {
-        let buffered;
+        let buffered: Feature;
         try {
           // 👉 inflate selected feature by N ft all around
           buffered = buffer(selected, abutterRange, {
