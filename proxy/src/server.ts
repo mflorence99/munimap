@@ -36,7 +36,7 @@ const argv = yargs
 
 const isDev = argv["port"];
 
-const dir = argv["dir"] ?? isDev ? "./data" : "/mnt/efs/MuniMap/proxy";
+const dir = (argv["dir"] ?? isDev) ? "./data" : "/mnt/efs/MuniMap/proxy";
 
 // 👇 we cache bust geojson requests with the caller's version number
 //    so we can effectively cache this data forever -- as long as we deploy
