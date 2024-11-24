@@ -42,6 +42,8 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ConfirmDialogComponent } from "@lib/components/confirm-dialog";
 import { MessageDialogComponent } from "@lib/components/message-dialog";
 import { VersionDialogComponent } from "@lib/components/version-dialog";
+import { AutoFocusDirective } from "@lib/directives/autofocus";
+import { SelectOnFocusDirective } from "@lib/directives/select-on-focus";
 import { OLAdaptorBoundaryComponent } from "@lib/ol/ol-adaptor-boundary";
 import { OLAdaptorBridgesComponent } from "@lib/ol/ol-adaptor-bridges";
 import { OLAdaptorBuildingsComponent } from "@lib/ol/ol-adaptor-buildings";
@@ -270,7 +272,7 @@ const COMPONENTS = [
   VersionDialogComponent
 ];
 
-const DIRECTIVES = [];
+const DIRECTIVES = [AutoFocusDirective, SelectOnFocusDirective];
 
 const PAGES = [APDVDPage, DPWPage, ParcelsPage, PropertyPage, RootPage];
 

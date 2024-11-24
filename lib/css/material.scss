@@ -67,6 +67,10 @@ button[mat-icon-button] {
 
     color: var(--disabled-color) !important;
   }
+
+  &.cdk-focused {
+    backdrop-filter: contrast(50%);
+  }
 }
 
 .mat-mdc-menu-panel {

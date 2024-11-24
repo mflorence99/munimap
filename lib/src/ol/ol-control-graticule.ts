@@ -54,8 +54,7 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
   addToMap(): void {
     // 🔥 due to special ngOnInit, this might be called
     //    out of sequence ???
-    if (this.olControl) 
-      this.#map.olMap.addControl(this.olControl);
+    if (this.olControl) this.#map.olMap.addControl(this.olControl);
   }
 
   ngOnInit(): void {

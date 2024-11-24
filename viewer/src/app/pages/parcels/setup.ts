@@ -76,6 +76,7 @@ import copy from "fast-copy";
 
         <mat-radio-group
           [(ngModel)]="record.parcelCoding"
+          aria-label="Select an option"
           class="list"
           name="parcelCoding"
           required>

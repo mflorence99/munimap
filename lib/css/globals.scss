@@ -126,11 +126,11 @@ $dark-app-theme: mat.m2-define-dark-theme(
 }
 
 ::input-placeholder {
-  color: var(--mat-gray-600);
+  color: var(--mat-gray-800);
 }
 
 ::placeholder {
-  color: var(--mat-gray-600);
+  color: var(--mat-gray-800);
 }
 
 ::-webkit-scrollbar {
@@ -145,10 +145,6 @@ $dark-app-theme: mat.m2-define-dark-theme(
 ::-webkit-scrollbar-thumb {
   background-color: var(--mat-gray-700);
   border-radius: 0.25rem;
-}
-
-:focus {
-  outline: 0;
 }
 
 a {

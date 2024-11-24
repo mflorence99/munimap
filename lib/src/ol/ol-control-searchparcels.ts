@@ -68,18 +68,18 @@ interface SearchTarget {
       </button>
     </article>
 
-    <ul
+    <article
       [class.hidden]="matches.length === 0 || !theSearcher.value"
       class="matcher">
       @for (match of matches; track match.key) {
-        <li (click)="onSearch(match.key)" class="match">
+        <a (click)="onSearch(match.key)" class="match" href="javascript: void(0);">
           <div class="key">{{ match.key }}</div>
           @if (match.count > 1) {
             <div class="count">({{ match.count }})</div>
           }
-        </li>
+        </a>
       }
-    </ul>
+    </article>
   `,
   styles: [
     `
@@ -99,7 +99,7 @@ interface SearchTarget {
         display: grid;
         gap: 0.5rem;
         grid-template-columns: auto 1fr auto;
-        height: 3rem;
+        // height: 3rem;
         max-width: 90vmin;
         padding: 0 0.5rem;
         position: absolute;
@@ -112,7 +112,7 @@ interface SearchTarget {
         max-width: 90vmin;
         position: absolute;
         right: 0;
-        top: 3.1rem;
+        top: 3.5rem;
         width: 24.5rem;
 
         &.hidden {

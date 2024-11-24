@@ -1,9 +1,7 @@
 import { AvatarComponent } from "./components/avatar";
 import { ContextMenuComponent } from "./components/contextmenu";
 import { ControlPanelPropertiesComponent } from "./components/controlpanel-properties";
-import { AutoFocusDirective } from "./directives/autofocus";
 import { ContextMenuHostDirective } from "./directives/contextmenu-host";
-import { SelectOnFocusDirective } from "./directives/select-on-focus";
 import { APDVDPage } from "./pages/apdvd/page";
 import { AreaPage } from "./pages/area/page";
 import { BuilderComponent } from "./pages/create/builder";
@@ -66,6 +64,8 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ConfirmDialogComponent } from "@lib/components/confirm-dialog";
 import { MessageDialogComponent } from "@lib/components/message-dialog";
 import { VersionDialogComponent } from "@lib/components/version-dialog";
+import { AutoFocusDirective } from "@lib/directives/autofocus";
+import { SelectOnFocusDirective } from "@lib/directives/select-on-focus";
 import { OLAdaptorBackgroundComponent } from "@lib/ol/ol-adaptor-background";
 import { OLAdaptorBoundaryComponent } from "@lib/ol/ol-adaptor-boundary";
 import { OLAdaptorBridgesComponent } from "@lib/ol/ol-adaptor-bridges";
