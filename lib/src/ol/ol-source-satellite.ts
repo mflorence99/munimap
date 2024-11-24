@@ -41,11 +41,11 @@ const urls = {
 export const satelliteYears = Object.keys(urls);
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-source-satellite",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-source-satellite",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLSourceSatelliteComponent {
   olTileWMS: OLTileWMS;

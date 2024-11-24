@@ -31,10 +31,10 @@ import { takeUntil } from "rxjs/operators";
 import urlParse from "url-parse";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DestroyService],
-    selector: "app-root",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
+  selector: "app-root",
+  template: `
 
     @let sink = {
       gps: gps$ | async
@@ -91,8 +91,8 @@ import urlParse from "url-parse";
       </mat-drawer-container>
     </main>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         height: 100%;
@@ -142,8 +142,8 @@ import urlParse from "url-parse";
         width: 100%;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class RootPage implements OnInit {
   gps$: Observable<boolean>;

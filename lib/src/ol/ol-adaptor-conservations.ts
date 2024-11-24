@@ -11,17 +11,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: AdaptorComponent,
-            useExisting: forwardRef(() => OLAdaptorConservationsComponent)
-        }
-    ],
-    selector: "app-ol-adaptor-conservations",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorConservationsComponent)
+    }
+  ],
+  selector: "app-ol-adaptor-conservations",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLAdaptorConservationsComponent implements Adaptor {
   borderOpacity = input(1);

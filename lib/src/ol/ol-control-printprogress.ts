@@ -22,9 +22,9 @@ export interface PrintProgressData {
 }
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "ol-control-printprogress",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "ol-control-printprogress",
+  template: `
     <h1 mat-dialog-title>Print Progress</h1>
 
     <article mat-dialog-content>
@@ -51,15 +51,15 @@ export interface PrintProgressData {
       </button>
     </article>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         width: 30rem;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
   giveUpAfter = input(30 * 1000);

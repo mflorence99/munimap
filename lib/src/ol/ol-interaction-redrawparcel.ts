@@ -19,12 +19,12 @@ import { inject } from "@angular/core";
 import { tap } from "rxjs/operators";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DestroyService],
-    selector: "app-ol-interaction-redrawparcel",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
+  selector: "app-ol-interaction-redrawparcel",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLInteractionRedrawParcelComponent
   extends OLInteractionAbstractRedrawComponent

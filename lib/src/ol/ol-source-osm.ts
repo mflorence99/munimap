@@ -10,11 +10,11 @@ import { input } from "@angular/core";
 import OLOSM from "ol/source/OSM";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-source-osm",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-source-osm",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLSourceOSMComponent implements OnInit {
   maxZoom = input<number>();

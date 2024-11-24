@@ -9,13 +9,13 @@ import { input } from "@angular/core";
 //    we'll toss this component
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-avatar",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-avatar",
+  template: `
     <section class="avatar">{{ initials() }}</section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       .avatar {
         align-items: center;
         background-color: var(--primary-color);
@@ -27,8 +27,8 @@ import { input } from "@angular/core";
         width: 48px;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class AvatarComponent {
   initials = computed(() => {

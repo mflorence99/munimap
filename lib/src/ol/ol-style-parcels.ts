@@ -73,15 +73,15 @@ interface Label {
 type ShowStatus = "always" | "never" | "onlyParcelIDs" | "whenSelected";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: StylerComponent,
-            useExisting: forwardRef(() => OLStyleParcelsComponent)
-        }
-    ],
-    selector: "app-ol-style-parcels",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleParcelsComponent)
+    }
+  ],
+  selector: "app-ol-style-parcels",
+  template: `
     <img appPattern src="assets/CUDE.svg" />
     <img appPattern src="assets/CUFL.svg" />
     <img appPattern src="assets/CUMH.svg" />
@@ -96,8 +96,8 @@ type ShowStatus = "always" | "never" | "onlyParcelIDs" | "whenSelected";
     <img appPattern src="assets/forest.svg" />
     <ng-content></ng-content>
   `,
-    styles: [":host { display: none }"],
-    standalone: false
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLStyleParcelsComponent implements OnChanges, Styler {
   // 👇 @Input/OnChanges works just fine here!

@@ -11,17 +11,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: AdaptorComponent,
-            useExisting: forwardRef(() => OLAdaptorRoadsComponent)
-        }
-    ],
-    selector: "app-ol-adaptor-roads",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorRoadsComponent)
+    }
+  ],
+  selector: "app-ol-adaptor-roads",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLAdaptorRoadsComponent implements Adaptor {
   class6Pattern = input("conglomerate");

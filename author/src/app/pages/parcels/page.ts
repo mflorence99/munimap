@@ -37,10 +37,10 @@ import OLGeoJSON from "ol/format/GeoJSON";
 import OLMultiPolygon from "ol/geom/MultiPolygon";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DestroyService],
-    selector: "app-parcels",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
+  selector: "app-parcels",
+  template: `
   
     @let sink = {
       mapState: root.mapState$ | async,
@@ -564,7 +564,7 @@ import OLMultiPolygon from "ol/geom/MultiPolygon";
       </nav>
     </ng-template>
   `,
-    standalone: false
+  standalone: false
 })
 export class ParcelsPage extends AbstractMapPage implements OnInit {
   contextMenuHost = viewChild(ContextMenuHostDirective);

@@ -34,9 +34,9 @@ interface Abutter {
 }
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-popup-parcelproperties",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-popup-parcelproperties",
+  template: `
     <button (click)="onClose()" class="closer" mat-icon-button>
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
     </button>
@@ -203,8 +203,8 @@ interface Abutter {
       }
     </section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       .abutters,
       .properties {
         border-collapse: collapse;
@@ -274,8 +274,8 @@ interface Abutter {
         max-width: unset;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class OLPopupParcelPropertiesComponent {
   abutters: Abutter[] = [];

@@ -12,17 +12,17 @@ import { input } from "@angular/core";
 export type FilterFunction = (name: string) => boolean;
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: AdaptorComponent,
-            useExisting: forwardRef(() => OLAdaptorGeoJSONComponent)
-        }
-    ],
-    selector: "app-ol-adaptor-geojson",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorGeoJSONComponent)
+    }
+  ],
+  selector: "app-ol-adaptor-geojson",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLAdaptorGeoJSONComponent implements Adaptor {
   borderOpacity = input(1);

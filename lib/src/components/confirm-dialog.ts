@@ -10,9 +10,9 @@ export interface ConfirmDialogData {
 }
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-confirm-dialog",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-confirm-dialog",
+  template: `
     <h1 mat-dialog-title>{{ data.title }}</h1>
 
     <article mat-dialog-content>{{ data.content }}</article>
@@ -24,15 +24,15 @@ export interface ConfirmDialogData {
       </button>
     </article>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         width: 30rem;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class ConfirmDialogComponent {
   data: ConfirmDialogData = inject(MAT_DIALOG_DATA);

@@ -21,9 +21,9 @@ import { viewChild } from "@angular/core";
 import copy from "fast-copy";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-controlpanel-properties",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-controlpanel-properties",
+  template: `
     <mat-card appearance="outlined" [class.rolledup]="rolledup" class="card">
       <mat-card-header>
         <img
@@ -117,8 +117,8 @@ import copy from "fast-copy";
       </mat-card-actions>
     </mat-card>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         pointer-events: auto;
@@ -173,8 +173,8 @@ import copy from "fast-copy";
         }
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class ControlPanelPropertiesComponent {
   mapCopy = computed(() => copy(this.mapState()));

@@ -40,17 +40,17 @@ import OLStyle from "ol/style/Style";
 import OLText from "ol/style/Text";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: StylerComponent,
-            useExisting: forwardRef(() => OLStyleUniversalComponent)
-        }
-    ],
-    selector: "app-ol-style-universal",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: StylerComponent,
+      useExisting: forwardRef(() => OLStyleUniversalComponent)
+    }
+  ],
+  selector: "app-ol-style-universal",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLStyleUniversalComponent implements OnChanges, Styler {
   // 👇 @Input/OnChanges works just fine here!

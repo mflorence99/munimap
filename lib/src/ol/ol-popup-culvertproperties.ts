@@ -8,10 +8,10 @@ import { inject } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-popup-culvertproperties",
-    templateUrl: "./ol-popup-dpwproperties-impl.html",
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-popup-culvertproperties",
+  templateUrl: "./ol-popup-dpwproperties-impl.html",
+  standalone: false
 })
 export class OLPopupCulvertPropertiesComponent {
   container = inject(OLPopupDPWPropertiesComponent);

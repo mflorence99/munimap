@@ -40,15 +40,15 @@ import { moveFromLeftFade } from "ngx-router-animations";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
-    animations: [
-        trigger("moveFromLeftFade", [
-            transition("* => *", useAnimation(moveFromLeftFade))
-        ])
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DestroyService],
-    selector: "app-root",
-    template: `
+  animations: [
+    trigger("moveFromLeftFade", [
+      transition("* => *", useAnimation(moveFromLeftFade))
+    ])
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
+  selector: "app-root",
+  template: `
 
     @let sink = {
       profile: profile$ | async,
@@ -118,8 +118,8 @@ import { takeUntil } from "rxjs/operators";
       </mat-drawer-container>
     </main>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         height: 100%;
@@ -164,8 +164,8 @@ import { takeUntil } from "rxjs/operators";
         width: 100%;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class RootPage implements OnInit {
   _version = inject(VersionService) /* 👈 just to get it loaded */;

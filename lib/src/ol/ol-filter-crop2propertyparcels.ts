@@ -25,11 +25,11 @@ import OLGeoJSON from "ol/format/GeoJSON";
 import OLFill from "ol/style/Fill";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-filter-crop2propertyparcels",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-filter-crop2propertyparcels",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLFilterCrop2PropertyParcelsComponent
   implements OnDestroy, OnInit

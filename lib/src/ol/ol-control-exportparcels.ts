@@ -17,23 +17,23 @@ import OLGeoJSON from "ol/format/GeoJSON";
 import OLProjection from "ol/proj/Projection";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DestroyService],
-    selector: "app-ol-control-exportparcels",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
+  selector: "app-ol-control-exportparcels",
+  template: `
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         pointer-events: auto;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class OLControlExportParcelsComponent {
   fileName = input<string>();

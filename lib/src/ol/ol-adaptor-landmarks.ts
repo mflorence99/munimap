@@ -10,17 +10,17 @@ import { forwardRef } from "@angular/core";
 export type FilterFunction = (name: string) => boolean;
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: AdaptorComponent,
-            useExisting: forwardRef(() => OLAdaptorLandmarksComponent)
-        }
-    ],
-    selector: "app-ol-adaptor-landmarks",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorLandmarksComponent)
+    }
+  ],
+  selector: "app-ol-adaptor-landmarks",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLAdaptorLandmarksComponent implements Adaptor {
   // 👇 pass thru LandmarkProperties

@@ -23,18 +23,18 @@ import OLModify from "ol/interaction/Modify";
 //    align with those of the edge parcels and we want to clean them up
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLInteractionRedrawBoundaryComponent)
-        },
-        DestroyService
-    ],
-    selector: "app-ol-interaction-redrawboundary",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLInteractionRedrawBoundaryComponent)
+    },
+    DestroyService
+  ],
+  selector: "app-ol-interaction-redrawboundary",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLInteractionRedrawBoundaryComponent implements Mapable, OnInit {
   olModify: OLModify;

@@ -15,17 +15,17 @@ import OLImage from "ol-ext/layer/GeoImage";
 // 🔥 EXPERIMENTAL
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLLayerImageComponent)
-        }
-    ],
-    selector: "app-ol-layer-image",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: block; visibility: hidden }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLLayerImageComponent)
+    }
+  ],
+  selector: "app-ol-layer-image",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: block; visibility: hidden }"],
+  standalone: false
 })
 export class OLLayerImageComponent implements Mapable {
   id = input<string>();

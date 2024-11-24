@@ -9,11 +9,11 @@ const attribution =
   '<a href="https://www.des.nh.gov/" target="_blank">NHSADES</a>';
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-source-streamcrossings",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-source-streamcrossings",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
   // 👇 see BridgeProperties

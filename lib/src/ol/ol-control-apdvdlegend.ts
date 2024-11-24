@@ -22,16 +22,16 @@ import { input } from "@angular/core";
 import { viewChild } from "@angular/core";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLControlAPDVDLegendComponent)
-        },
-        DestroyService
-    ],
-    selector: "app-ol-control-apdvdlegend",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLControlAPDVDLegendComponent)
+    },
+    DestroyService
+  ],
+  selector: "app-ol-control-apdvdlegend",
+  template: `
     <article
       #legend
       [ngClass]="{
@@ -88,7 +88,7 @@ import { viewChild } from "@angular/core";
       </table>
     </article>
   `,
-    standalone: false
+  standalone: false
 })
 export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent

@@ -11,17 +11,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: AdaptorComponent,
-            useExisting: forwardRef(() => OLAdaptorStoneWallsComponent)
-        }
-    ],
-    selector: "app-ol-adaptor-stonewalls",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorStoneWallsComponent)
+    }
+  ],
+  selector: "app-ol-adaptor-stonewalls",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLAdaptorStoneWallsComponent implements Adaptor {
   pattern = input<OLStrokePatternType>("rocks");

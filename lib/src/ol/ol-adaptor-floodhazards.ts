@@ -10,17 +10,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: AdaptorComponent,
-            useExisting: forwardRef(() => OLAdaptorFloodHazardsComponent)
-        }
-    ],
-    selector: "app-ol-adaptor-floodhazards",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorFloodHazardsComponent)
+    }
+  ],
+  selector: "app-ol-adaptor-floodhazards",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLAdaptorFloodHazardsComponent implements Adaptor {
   floodHazardWidth = input(36);

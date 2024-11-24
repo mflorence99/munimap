@@ -13,17 +13,17 @@ import { input } from "@angular/core";
 // 🔥 highly experimental -- would like to show some reflection at least!
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: AdaptorComponent,
-            useExisting: forwardRef(() => OLAdaptorWaterbodiesAtNightComponent)
-        }
-    ],
-    selector: "app-ol-adaptor-waterbodiesatnight",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: AdaptorComponent,
+      useExisting: forwardRef(() => OLAdaptorWaterbodiesAtNightComponent)
+    }
+  ],
+  selector: "app-ol-adaptor-waterbodiesatnight",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLAdaptorWaterbodiesAtNightComponent implements Adaptor {
   fillOpacity = input(1);

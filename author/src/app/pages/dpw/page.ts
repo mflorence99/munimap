@@ -29,10 +29,10 @@ import { toLonLat } from "ol/proj";
 // 🔥 only culverts are supported for now
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DestroyService],
-    selector: "app-dpw",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
+  selector: "app-dpw",
+  template: `
 
     @let sink = {
       mapState: root.mapState$ | async,
@@ -431,7 +431,7 @@ import { toLonLat } from "ol/proj";
       </nav>
     </ng-template>
   `,
-    standalone: false
+  standalone: false
 })
 export class DPWPage extends AbstractMapPage implements OnInit {
   contextMenu = viewChild(ContextMenuComponent);

@@ -28,11 +28,11 @@ type Operation =
   | "sepia";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-filter-colorize",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-filter-colorize",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLFilterColorizeComponent implements AfterContentInit, OnDestroy {
   color = input<ColorLike>("#000000");

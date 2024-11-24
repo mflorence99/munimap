@@ -17,16 +17,16 @@ import { area } from "@turf/area";
 import { convertArea } from "@turf/helpers";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLControlParcelsLegendComponent)
-        },
-        DestroyService
-    ],
-    selector: "app-ol-control-parcelslegend",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLControlParcelsLegendComponent)
+    },
+    DestroyService
+  ],
+  selector: "app-ol-control-parcelslegend",
+  template: `
     <article
       #legend
       [ngClass]="{
@@ -137,7 +137,7 @@ import { convertArea } from "@turf/helpers";
       </table>
     </article>
   `,
-    standalone: false
+  standalone: false
 })
 export class OLControlParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent

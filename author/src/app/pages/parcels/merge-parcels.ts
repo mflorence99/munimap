@@ -22,9 +22,9 @@ interface MergeRecord {
 }
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-merge-parcels",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-merge-parcels",
+  template: `
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fad', 'object-group']" size="2x"></fa-icon>
@@ -72,16 +72,16 @@ interface MergeRecord {
       </button>
     </article>
   `,
-    styles: [
-        `
+  styles: [
+    `
       .ids {
         display: grid;
         gap: 1rem;
         grid-template-columns: 33.3% 33.3% 33.3%;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class MergeParcelsComponent implements SidebarComponent {
   drawer: MatDrawer;

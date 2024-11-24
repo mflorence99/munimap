@@ -14,11 +14,11 @@ const attribution =
 //    LOT more data -- we just need to adapt the properties to match
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-source-rivers",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-source-rivers",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLSourceRiversComponent extends OLSourceArcGISComponent {
   // 👇 see PlaceProperties

@@ -14,11 +14,11 @@ import OLProjection from "ol/proj/Projection";
 import OLVector from "ol/source/Vector";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-source-boundarygrid",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-source-boundarygrid",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLSourceBoundaryGridComponent {
   olVector: OLVector<any>;

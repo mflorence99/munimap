@@ -29,10 +29,10 @@ import { mergeMap } from "rxjs/operators";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DestroyService],
-    selector: "app-list",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService],
+  selector: "app-list",
+  template: `
     <table matSort mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="name">
         <th mat-header-cell mat-sort-header *matHeaderCellDef>Map Name</th>
@@ -84,8 +84,8 @@ import { takeUntil } from "rxjs/operators";
       </button>
     </article>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         height: 100%;
@@ -156,8 +156,8 @@ import { takeUntil } from "rxjs/operators";
         }
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class ListPage implements OnInit {
   columns = ["name", "id", "owner", "type", "path"];

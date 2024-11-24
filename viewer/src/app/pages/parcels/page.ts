@@ -9,9 +9,9 @@ import { inject } from "@angular/core";
 import { environment } from "@lib/environment";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-parcels",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-parcels",
+  template: `
 
     @let sink = {
       gps: root.gps$ | async,
@@ -500,7 +500,7 @@ import { environment } from "@lib/environment";
       </app-ol-map>
     }
   `,
-    standalone: false
+  standalone: false
 })
 export class ParcelsPage {
   env = environment;

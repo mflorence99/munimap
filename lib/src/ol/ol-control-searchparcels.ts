@@ -40,16 +40,16 @@ interface SearchTarget {
 }
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: SearcherComponent,
-            useExisting: forwardRef(() => OLControlSearchParcelsComponent)
-        },
-        DestroyService
-    ],
-    selector: "app-ol-control-searchparcels",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: SearcherComponent,
+      useExisting: forwardRef(() => OLControlSearchParcelsComponent)
+    },
+    DestroyService
+  ],
+  selector: "app-ol-control-searchparcels",
+  template: `
     <article class="control">
       <fa-icon [icon]="['fas', 'search']"></fa-icon>
 
@@ -81,8 +81,8 @@ interface SearchTarget {
       }
     </ul>
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: block;
         pointer-events: auto;
@@ -141,8 +141,8 @@ interface SearchTarget {
         height: 100%;
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class OLControlSearchParcelsComponent implements OnInit, Searcher {
   filterFn = input<(feature) => boolean>();

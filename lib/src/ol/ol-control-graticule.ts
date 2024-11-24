@@ -17,17 +17,17 @@ import { input } from "@angular/core";
 import OLGraticule from "ol-ext/control/Graticule";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLControlGraticuleComponent)
-        }
-    ],
-    selector: "app-ol-control-graticule",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLControlGraticuleComponent)
+    }
+  ],
+  selector: "app-ol-control-graticule",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLControlGraticuleComponent implements Mapable, OnInit {
   borderPixels = input<number>();
@@ -43,8 +43,8 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
 
   constructor() {
     effect(() => {
-      // 👇 ol-ext/control/graticule is special in that it can take only a single
-      //    style, so in this logic, the last one wins
+      // 👇 ol-ext/control/graticule is special in that it can take
+      //    only a single style, so in this logic, the last one wins
       this.stylers().forEach((styler) =>
         this.olControl.setStyle(styler.style())
       );
@@ -52,7 +52,10 @@ export class OLControlGraticuleComponent implements Mapable, OnInit {
   }
 
   addToMap(): void {
-    this.#map.olMap.addControl(this.olControl);
+    // 🔥 due to special ngOnInit, this might be called
+    //    out of sequence ???
+    if (this.olControl) 
+      this.#map.olMap.addControl(this.olControl);
   }
 
   ngOnInit(): void {

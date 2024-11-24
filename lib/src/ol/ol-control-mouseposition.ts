@@ -11,17 +11,17 @@ import { inject } from "@angular/core";
 import OLMousePosition from "ol/control/MousePosition";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLControlMousePositionComponent)
-        }
-    ],
-    selector: "app-ol-control-mouseposition",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLControlMousePositionComponent)
+    }
+  ],
+  selector: "app-ol-control-mouseposition",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLControlMousePositionComponent implements Mapable {
   olControl: OLMousePosition;

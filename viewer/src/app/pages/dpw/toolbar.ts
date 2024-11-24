@@ -12,9 +12,9 @@ import { inject } from "@angular/core";
 import { map } from "rxjs";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-dpw-toolbar",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-dpw-toolbar",
+  template: `
     @if (canPickStreetFilter()) {
 
       @let sink = {
@@ -45,8 +45,8 @@ import { map } from "rxjs";
       </mat-button-toggle>
     }
   `,
-    styles: [
-        `
+  styles: [
+    `
       :host {
         display: inline-block;
       }
@@ -56,8 +56,8 @@ import { map } from "rxjs";
         color: var(--text-color);
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class DPWToolbarComponent {
   landmarks$: Observable<Landmark[]>;

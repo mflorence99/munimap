@@ -16,9 +16,9 @@ import { updatePassword } from "@angular/fire/auth";
 import copy from "fast-copy";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-profile",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-profile",
+  template: `
     <header class="header">
       <app-avatar [name]="userCopy().displayName" class="icon"></app-avatar>
       <p class="title">{{ userCopy().displayName || '&nbsp;' }}</p>
@@ -109,7 +109,7 @@ import copy from "fast-copy";
       </button>
     </article>
   `,
-    standalone: false
+  standalone: false
 })
 export class ProfileComponent {
   errorMessage = "";

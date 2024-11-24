@@ -11,17 +11,17 @@ import { inject } from "@angular/core";
 import OLScaleLine from "ol/control/ScaleLine";
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLControlScaleLineComponent)
-        }
-    ],
-    selector: "app-ol-control-scaleline",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLControlScaleLineComponent)
+    }
+  ],
+  selector: "app-ol-control-scaleline",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLControlScaleLineComponent implements Mapable {
   olControl: OLScaleLine;

@@ -19,11 +19,11 @@ const attribution =
   '<a href="carto.nationalmap.gov/" target="_blank">National Map</a>';
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-ol-source-contours",
-    template: "<ng-content></ng-content>",
-    styles: [":host { display: none }"],
-    standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-ol-source-contours",
+  template: "<ng-content></ng-content>",
+  styles: [":host { display: none }"],
+  standalone: false
 })
 export class OLSourceContoursComponent {
   // 👉 the fallback contours are WAAY to heavy

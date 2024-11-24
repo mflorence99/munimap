@@ -24,15 +24,15 @@ class Scalebar extends OLControl {
 }
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: MapableComponent,
-            useExisting: forwardRef(() => OLControlScaleBarComponent)
-        }
-    ],
-    selector: "app-ol-control-scalebar",
-    template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MapableComponent,
+      useExisting: forwardRef(() => OLControlScaleBarComponent)
+    }
+  ],
+  selector: "app-ol-control-scalebar",
+  template: `
     <article
       #barRef
       [ngStyle]="{ 'bottom.px': bottom, 'gap.px': height / 4, 'left.px': left }"
@@ -74,8 +74,8 @@ class Scalebar extends OLControl {
       </div>
     </article>
   `,
-    styles: [
-        `
+  styles: [
+    `
       .scalebar {
         color: var(--background-color);
         display: grid;
@@ -115,8 +115,8 @@ class Scalebar extends OLControl {
         }
       }
     `
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class OLControlScaleBarComponent implements Mapable, OnInit {
   barRef = viewChild<ElementRef>("barRef");
