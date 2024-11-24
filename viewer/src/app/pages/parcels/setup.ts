@@ -18,9 +18,9 @@ import { takeUntil } from "rxjs/operators";
 import copy from "fast-copy";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-parcels-setup",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-parcels-setup",
+    template: `
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fas', 'cog']" size="2x"></fa-icon>
@@ -148,7 +148,8 @@ import copy from "fast-copy";
         SAVE
       </button>
     </article>
-  `
+  `,
+    standalone: false
 })
 export class ParcelsSetupComponent implements OnInit {
   record: Partial<ViewStateModel> = {

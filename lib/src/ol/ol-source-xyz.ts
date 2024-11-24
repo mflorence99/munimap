@@ -15,10 +15,11 @@ import { input } from "@angular/core";
 import OLXYZ from "ol/source/XYZ";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-xyz",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-source-xyz",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLSourceXYZComponent implements OnInit {
   attributions = contentChildren(OLAttributionComponent);

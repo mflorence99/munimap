@@ -26,20 +26,21 @@ import OLSelect from "ol/interaction/Select";
 export type FilterFunction = (name: number | string) => boolean;
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
-    },
-    {
-      provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
-    }
-  ],
-  selector: "app-ol-interaction-selectgeojson",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
+        },
+        {
+            provide: SelectorComponent,
+            useExisting: forwardRef(() => OLInteractionSelectGeoJSONComponent)
+        }
+    ],
+    selector: "app-ol-interaction-selectgeojson",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLInteractionSelectGeoJSONComponent
   implements Mapable, OnDestroy, OnInit, Selector

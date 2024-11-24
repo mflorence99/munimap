@@ -23,16 +23,15 @@ class Credits extends OLControl {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlCreditsComponent)
-    }
-  ],
-  selector: "app-ol-control-credits",
-
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLControlCreditsComponent)
+        }
+    ],
+    selector: "app-ol-control-credits",
+    template: `
     <article
       #creditsRef
       [ngStyle]="{ 'bottom.px': bottom, 'right.px': right }"
@@ -50,8 +49,8 @@ class Credits extends OLControl {
       </footer>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .credits {
         position: absolute;
 
@@ -85,7 +84,8 @@ class Credits extends OLControl {
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlCreditsComponent implements Mapable, OnInit {
   attributions: string[] = [];

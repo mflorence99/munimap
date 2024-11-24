@@ -4,7 +4,8 @@ import { ElementRef } from "@angular/core";
 import { inject } from "@angular/core";
 
 @Directive({
-  selector: "img[appPattern]"
+    selector: "img[appPattern]",
+    standalone: false
 })
 export class OLStylePatternDirective {
   // 👇 must be public!

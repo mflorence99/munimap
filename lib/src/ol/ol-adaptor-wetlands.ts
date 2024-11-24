@@ -12,16 +12,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorWetlandsComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-wetlands",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorWetlandsComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-wetlands",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorWetlandsComponent implements Adaptor {
   riverbank = input<OLFillPatternType>("rocks");

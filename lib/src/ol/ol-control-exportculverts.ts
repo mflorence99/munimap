@@ -9,21 +9,22 @@ import { input } from "@angular/core";
 import { saveAs } from "file-saver";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-exportculverts",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-control-exportculverts",
+    template: `
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         pointer-events: auto;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlExportCulvertsComponent {
   fileName = input<string>();

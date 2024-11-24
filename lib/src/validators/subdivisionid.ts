@@ -40,14 +40,15 @@ function subdivisionIDValidatorFactory(
 }
 
 @Directive({
-  providers: [
-    {
-      provide: NG_VALIDATORS,
-      useExisting: SubdivisionIDValidator,
-      multi: true
-    }
-  ],
-  selector: "[appSubdivisionID][ngModel]"
+    providers: [
+        {
+            provide: NG_VALIDATORS,
+            useExisting: SubdivisionIDValidator,
+            multi: true
+        }
+    ],
+    selector: "[appSubdivisionID][ngModel]",
+    standalone: false
 })
 export class SubdivisionIDValidator implements OnInit, Validator {
   appSubdivisionID = input<[Subdivision[], number]>();

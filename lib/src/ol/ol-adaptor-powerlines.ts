@@ -19,16 +19,17 @@ import OLStroke from "ol/style/Stroke";
 import OLStyle from "ol/style/Style";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorPowerlinesComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-powerlines",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorPowerlinesComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-powerlines",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorPowerlinesComponent implements Adaptor {
   iconSize = input(15);

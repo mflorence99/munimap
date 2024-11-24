@@ -9,9 +9,9 @@ export interface MessageDialogData {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-message-dialog",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-message-dialog",
+    template: `
     <p mat-dialog-content>{{ data.message }}</p>
 
     <article mat-dialog-actions>
@@ -20,14 +20,15 @@ export interface MessageDialogData {
       </button>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         width: 30rem;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class MessageDialogComponent {
   data: MessageDialogData = inject(MAT_DIALOG_DATA);

@@ -11,16 +11,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorStreamCrossingsComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-streamcrossings",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorStreamCrossingsComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-streamcrossings",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorStreamCrossingsComponent implements Adaptor {
   streamCrossingWidth = input(36);

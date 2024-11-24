@@ -14,9 +14,9 @@ import { isAPDVDExcluded } from "@lib/ol/ol-apdvd2";
 import { isAPDVDIncluded } from "@lib/ol/ol-apdvd2";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-parcels-legend",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-parcels-legend",
+    template: `
 
       @let sink = {
         mapState: root.mapState$ | async,
@@ -294,8 +294,8 @@ import { isAPDVDIncluded } from "@lib/ol/ol-apdvd2";
 
     <ng-container></ng-container>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .legend {
         border-collapse: collapse;
         width: 100%;
@@ -388,7 +388,8 @@ import { isAPDVDIncluded } from "@lib/ol/ol-apdvd2";
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class ParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent

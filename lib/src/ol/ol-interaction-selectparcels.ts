@@ -34,20 +34,21 @@ import OLGeoJSON from "ol/format/GeoJSON";
 import OLSelect from "ol/interaction/Select";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
-    },
-    {
-      provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
-    }
-  ],
-  selector: "app-ol-interaction-selectparcels",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
+        },
+        {
+            provide: SelectorComponent,
+            useExisting: forwardRef(() => OLInteractionSelectParcelsComponent)
+        }
+    ],
+    selector: "app-ol-interaction-selectparcels",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLInteractionSelectParcelsComponent
   implements Mapable, OnDestroy, OnInit, Selector

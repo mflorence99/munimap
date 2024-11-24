@@ -9,9 +9,9 @@ import { isAPDVDExisting } from "@lib/ol/ol-apdvd";
 import { isAPDVDProposed } from "@lib/ol/ol-apdvd";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-apdvd",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-apdvd",
+    template: `
 
     @let sink = {
       gps: root.gps$ | async,
@@ -318,7 +318,8 @@ import { isAPDVDProposed } from "@lib/ol/ol-apdvd";
         }
       </app-ol-map>
     }
-  `
+  `,
+    standalone: false
 })
 export class APDVDPage {
   env = environment;

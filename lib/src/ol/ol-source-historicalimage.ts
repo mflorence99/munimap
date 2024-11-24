@@ -17,10 +17,11 @@ import Feature from "ol/Feature";
 import Polygon from "ol/geom/Polygon";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-historicalimage",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-source-historicalimage",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLSourceHistoricalImageComponent {
   historicalMap = input.required<HistoricalMap>();

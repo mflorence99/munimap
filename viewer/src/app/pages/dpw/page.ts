@@ -7,9 +7,9 @@ import { inject } from "@angular/core";
 import { environment } from "@lib/environment";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-dpw",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-dpw",
+    template: `
 
     @let sink = {
       gps: root.gps$ | async,
@@ -301,7 +301,8 @@ import { environment } from "@lib/environment";
         }
       </app-ol-map>
     }
-  `
+  `,
+    standalone: false
 })
 export class DPWPage {
   env = environment;

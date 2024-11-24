@@ -27,11 +27,10 @@ import { mergeMap } from "rxjs/operators";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-navigator",
-
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-navigator",
+    template: `
     <nav class="form navigator">
       <ul>
         <li (click)="close()" routerLink="/create" class="item">
@@ -92,8 +91,8 @@ import { takeUntil } from "rxjs/operators";
       </ul>
     </nav>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .navigator {
         .item {
           align-items: center;
@@ -132,7 +131,8 @@ import { takeUntil } from "rxjs/operators";
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NavigatorComponent implements OnInit {
   profile$: Observable<Profile>;

@@ -21,23 +21,24 @@ import { unByKey } from "ol/Observable";
 import html2canvas from "html2canvas";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-print",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-control-print",
+    template: `
     <button (click)="print()" mat-icon-button>
       <fa-icon [icon]="['fas', 'print']" size="2x"></fa-icon>
     </button>
 
     <canvas #canvas hidden></canvas>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         pointer-events: auto;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlPrintComponent {
   canvas = viewChild<ElementRef<HTMLCanvasElement>>("canvas");

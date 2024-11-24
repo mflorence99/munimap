@@ -14,9 +14,9 @@ import { sendPasswordResetEmail } from "@angular/fire/auth";
 import { signInWithEmailAndPassword } from "@angular/fire/auth";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-login",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-login",
+    template: `
     <!-- 📦 INITIAL STATE - REQUEST EMAIL -->
 
     @if (state === 'initial') {
@@ -231,8 +231,8 @@ import { signInWithEmailAndPassword } from "@angular/fire/auth";
       </mat-card>
     }
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         align-items: flex-start;
         display: flex;
@@ -268,7 +268,8 @@ import { signInWithEmailAndPassword } from "@angular/fire/auth";
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class LoginPage {
   errorMessage = "";

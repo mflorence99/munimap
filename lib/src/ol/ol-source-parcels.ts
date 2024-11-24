@@ -40,11 +40,12 @@ const attribution =
   '<a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-ol-source-parcels",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-ol-source-parcels",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLSourceParcelsComponent implements OnInit {
   olVector: OLVector<any>;

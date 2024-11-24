@@ -32,9 +32,9 @@ interface Coordinate {
 //    when created via openFromTemplate
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-popup-landmarkproperties",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-popup-landmarkproperties",
+    template: `
     <button (click)="onClose()" class="closer" mat-icon-button>
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
     </button>
@@ -97,7 +97,8 @@ interface Coordinate {
         }
       </table>
     }
-  `
+  `,
+    standalone: false
 })
 export class OLPopupLandmarkPropertiesComponent {
   landmark: Landmark;

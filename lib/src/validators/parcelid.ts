@@ -36,10 +36,11 @@ function parcelIDValidatorFactory(
 }
 
 @Directive({
-  providers: [
-    { provide: NG_VALIDATORS, useExisting: ParcelIDValidator, multi: true }
-  ],
-  selector: "[appParcelID][ngModel]"
+    providers: [
+        { provide: NG_VALIDATORS, useExisting: ParcelIDValidator, multi: true }
+    ],
+    selector: "[appParcelID][ngModel]",
+    standalone: false
 })
 export class ParcelIDValidator implements OnInit, Validator {
   appParcelID = input<[OLControlSearchParcelsComponent, any]>();

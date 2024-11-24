@@ -28,11 +28,12 @@ import OLProjection from "ol/proj/Projection";
 import OLVector from "ol/source/Vector";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-ol-source-landmarks",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-ol-source-landmarks",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLSourceLandmarksComponent implements OnInit {
   filterFn = input<(value) => (landmark) => boolean>();

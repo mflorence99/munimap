@@ -3,7 +3,10 @@ import { PipeTransform } from "@angular/core";
 
 // 👀  https://stackoverflow.com/questions/36535629/repeat-html-element-multiple-times-using-ngfor-based-on-a-number
 
-@Pipe({ name: "times" })
+@Pipe({
+    name: "times",
+    standalone: false
+})
 export class TimesPipe implements PipeTransform {
   transform(value: number): any {
     const iterable = <Iterable<any>>{};

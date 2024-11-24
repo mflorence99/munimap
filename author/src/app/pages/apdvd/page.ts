@@ -10,10 +10,10 @@ import { MapType } from "@lib/state/map";
 import { viewChild } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-apdvd",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-apdvd",
+    template: `
 
     @let sink = {
       mapState: root.mapState$ | async,
@@ -297,7 +297,8 @@ import { viewChild } from "@angular/core";
         }
       </app-ol-map>
     }
-  `
+  `,
+    standalone: false
 })
 export class APDVDPage extends AbstractMapPage implements OnInit {
   contextMenuHost = null;

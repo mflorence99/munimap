@@ -105,16 +105,17 @@ const ICONS: {
 };
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorPlacesComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-places",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorPlacesComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-places",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorPlacesComponent implements Adaptor {
   // 👇 construct LandmarkProperties

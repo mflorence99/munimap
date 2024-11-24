@@ -34,10 +34,10 @@ interface Statistics {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-dpw-legend",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-dpw-legend",
+    template: `
     <button (click)="export()" class="exporter" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="lg"></fa-icon>
     </button>
@@ -105,8 +105,8 @@ interface Statistics {
       }
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .exporter {
         position: absolute;
         right: 1rem;
@@ -149,7 +149,8 @@ interface Statistics {
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class DPWLegendComponent implements OnInit {
   allConditions = culvertConditions;

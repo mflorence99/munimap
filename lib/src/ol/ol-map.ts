@@ -52,9 +52,9 @@ import OLView from "ol/View";
 const nominalDPI = 96;
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-map",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-map",
+    template: `
     <section class="controls">
       <article class="panels">
         <ng-content select="[mapControlPanel1]"></ng-content>
@@ -80,8 +80,8 @@ const nominalDPI = 96;
 
     <canvas #canvas hidden></canvas>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         background: white;
         display: block;
@@ -144,7 +144,8 @@ const nominalDPI = 96;
         justify-content: flex-start;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLMapComponent implements OnDestroy, OnInit, Searcher, Selector {
   // 👉 proxy this from the real selector (if any) to ensure safe access

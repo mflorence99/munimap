@@ -40,10 +40,11 @@ function workgroupValidatorFactory(): ValidatorFn {
 }
 
 @Directive({
-  providers: [
-    { provide: NG_VALIDATORS, useExisting: WorkgroupValidator, multi: true }
-  ],
-  selector: "[appWorkgroup][ngModel]"
+    providers: [
+        { provide: NG_VALIDATORS, useExisting: WorkgroupValidator, multi: true }
+    ],
+    selector: "[appWorkgroup][ngModel]",
+    standalone: false
 })
 export class WorkgroupValidator implements Validator {
   validator: ValidatorFn = workgroupValidatorFactory();

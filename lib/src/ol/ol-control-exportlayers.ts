@@ -10,21 +10,22 @@ import { saveAs } from "file-saver";
 import OLGeoJSON from "ol/format/GeoJSON";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-exportlayers",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-control-exportlayers",
+    template: `
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         pointer-events: auto;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlExportLayersComponent {
   fileName = input<string>();

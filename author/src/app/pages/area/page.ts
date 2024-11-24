@@ -12,10 +12,10 @@ import { viewChild } from "@angular/core";
 // 🔥 we only expect "area" maps to be printed, never viewed in the viewer
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-area",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-area",
+    template: `
 
     @let sink = {
       mapState: root.mapState$ | async,
@@ -299,7 +299,8 @@ import { viewChild } from "@angular/core";
         }
       </app-ol-map>
     }
-  `
+  `,
+    standalone: false
 })
 export class AreaPage extends AbstractMapPage implements OnInit {
   contextMenuHost = null;

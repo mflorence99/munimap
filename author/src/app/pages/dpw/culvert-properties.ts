@@ -24,9 +24,9 @@ import copy from "fast-copy";
 import OLFeature from "ol/Feature";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-culvert-properties",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-culvert-properties",
+    template: `
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fad', 'tasks']" size="2x"></fa-icon>
@@ -233,7 +233,8 @@ import OLFeature from "ol/Feature";
         SAVE
       </button>
     </article>
-  `
+  `,
+    standalone: false
 })
 export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
   allConditions = culvertConditions;

@@ -18,16 +18,17 @@ import OLSwipe from "ol-ext/control/Swipe";
 //    good job because that's what we need for now
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlSplitScreenComponent)
-    }
-  ],
-  selector: "app-ol-control-splitscreen",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLControlSplitScreenComponent)
+        }
+    ],
+    selector: "app-ol-control-splitscreen",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLControlSplitScreenComponent implements Mapable {
   olControl: OLSwipe;

@@ -10,10 +10,9 @@ import { input } from "@angular/core";
 import { model } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Default,
-  selector: "app-ol-control-zoom",
-
-  template: `
+    changeDetection: ChangeDetectionStrategy.Default,
+    selector: "app-ol-control-zoom",
+    template: `
     <p class="annotation">{{ resolution() | number: '1.0-2' }}</p>
 
     <div class="slider-wrapper">
@@ -30,8 +29,8 @@ import { model } from "@angular/core";
 
     <p class="annotation">{{ zoom() | number: '1.0-2' }}</p>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: grid;
         grid-template-rows: auto 1fr auto;
@@ -65,7 +64,8 @@ import { model } from "@angular/core";
         width: 3rem;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlZoomComponent implements OnInit {
   resolution = model<number>();

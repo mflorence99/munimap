@@ -17,10 +17,11 @@ import Polygon from "ol/geom/Polygon";
 import OLFill from "ol/style/Fill";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-filter-mask2boundary",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-filter-mask2boundary",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLFilterMask2BoundaryComponent
   implements AfterContentInit, OnDestroy

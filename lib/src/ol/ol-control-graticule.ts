@@ -17,16 +17,17 @@ import { input } from "@angular/core";
 import OLGraticule from "ol-ext/control/Graticule";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlGraticuleComponent)
-    }
-  ],
-  selector: "app-ol-control-graticule",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLControlGraticuleComponent)
+        }
+    ],
+    selector: "app-ol-control-graticule",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLControlGraticuleComponent implements Mapable, OnInit {
   borderPixels = input<number>();

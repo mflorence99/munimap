@@ -20,10 +20,11 @@ import Crop from "ol-ext/filter/Crop";
 import OLGeoJSON from "ol/format/GeoJSON";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-filter-crop2selectedparcels",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-filter-crop2selectedparcels",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLFilterCrop2SelectedParcelsComponent
   implements AfterContentInit, OnDestroy, OnInit

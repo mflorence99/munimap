@@ -36,10 +36,10 @@ interface LandmarkConversion {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-property",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-property",
+    template: `
 
     @let sink = {
       mapState: root.mapState$ | async,
@@ -534,8 +534,8 @@ interface LandmarkConversion {
       </nav>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         height: 1.5rem;
         width: 1.5rem;
@@ -560,7 +560,8 @@ interface LandmarkConversion {
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class PropertyPage extends AbstractMapPage implements OnInit {
   contextMenu = viewChild(ContextMenuComponent);

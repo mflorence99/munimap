@@ -10,16 +10,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBackgroundComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-background",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorBackgroundComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-background",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorBackgroundComponent implements Adaptor {
   fillColor = input("--rgb-gray-900");

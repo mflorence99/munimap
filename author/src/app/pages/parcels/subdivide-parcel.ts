@@ -27,9 +27,9 @@ interface Subdivision {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-subdivide-parcel",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-subdivide-parcel",
+    template: `
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fad', 'object-ungroup']" size="2x"></fa-icon>
@@ -116,8 +116,8 @@ interface Subdivision {
       </button>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .filler {
         flex-grow: 1;
       }
@@ -132,7 +132,8 @@ interface Subdivision {
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class SubdivideParcelComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;

@@ -11,16 +11,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorCulvertsComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-culverts",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorCulvertsComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-culverts",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorCulvertsComponent implements Adaptor {
   culvertWidth = input(48);

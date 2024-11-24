@@ -42,9 +42,9 @@ const PRINT_SIZES = {
 };
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-create-propertymap",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-create-propertymap",
+    template: `
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fad', 'location-plus']" size="2x"></fa-icon>
@@ -161,8 +161,8 @@ const PRINT_SIZES = {
       </button>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .map-format {
         display: grid;
         gap: 0.5rem;
@@ -177,7 +177,8 @@ const PRINT_SIZES = {
         margin-bottom: 1rem;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class CreatePropertyMapComponent implements SidebarComponent {
   border = input(100);

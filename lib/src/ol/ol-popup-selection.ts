@@ -15,10 +15,11 @@ import { inject } from "@angular/core";
 import { viewChild } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-popup-selection",
-  template: "<ng-template #popup><ng-content></ng-content></ng-template>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-popup-selection",
+    template: "<ng-template #popup><ng-content></ng-content></ng-template>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLPopupSelectionComponent implements OnInit {
   popup = viewChild<TemplateRef<any>>("popup");

@@ -25,10 +25,11 @@ function emailAddressValidatorFactory(): ValidatorFn {
 }
 
 @Directive({
-  providers: [
-    { provide: NG_VALIDATORS, useExisting: EmailAddressValidator, multi: true }
-  ],
-  selector: "[appEmailAddress][ngModel]"
+    providers: [
+        { provide: NG_VALIDATORS, useExisting: EmailAddressValidator, multi: true }
+    ],
+    selector: "[appEmailAddress][ngModel]",
+    standalone: false
 })
 export class EmailAddressValidator implements Validator {
   validator: ValidatorFn = emailAddressValidatorFactory();

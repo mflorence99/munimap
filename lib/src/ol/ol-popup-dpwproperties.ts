@@ -24,9 +24,9 @@ export type Schema = Array<
 //    when created via openFromTemplate
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-popup-dpwproperties",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-popup-dpwproperties",
+    template: `
     <button (click)="onClose()" class="closer" mat-icon-button>
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
     </button>
@@ -63,7 +63,8 @@ export type Schema = Array<
         }
       }
     </section>
-  `
+  `,
+    standalone: false
 })
 export class OLPopupDPWPropertiesComponent {
   geometry: any /* 👈 in practice will be a Point */;

@@ -25,16 +25,17 @@ import { input } from "@angular/core";
 //    FloodHazardProperties and StreamCrossingProperties
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorDPWLandmarksComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-dpwlandmarks",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorDPWLandmarksComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-dpwlandmarks",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorDPWLandmarksComponent implements Adaptor {
   dpwLandmarkWidth = input(36);

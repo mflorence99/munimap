@@ -23,15 +23,15 @@ import OLFeature from "ol/Feature";
 import OLOverlay from "ol/Overlay";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-overlay-parcellabel",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-overlay-parcellabel",
+    template: `
     <div #label (cdkDragEnded)="onDragEnd($event)" cdkDrag>
       <fa-icon [icon]="['fas', 'crosshairs']" class="icon" size="2x"></fa-icon>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         cursor: pointer;
         display: block;
@@ -42,7 +42,8 @@ import OLOverlay from "ol/Overlay";
         color: var(--background-color);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLOverlayParcelLabelComponent implements OnInit {
   label = viewChild<ElementRef<HTMLDivElement>>("label");

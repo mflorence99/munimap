@@ -8,9 +8,9 @@ import { Store } from "@ngxs/store";
 import { inject } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-parcels-toolbar",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-parcels-toolbar",
+    template: `
 
     @let sink = {
       historicalMapLeft: root.historicalMapLeft$ | async,
@@ -42,8 +42,8 @@ import { inject } from "@angular/core";
       <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
     </button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         align-items: baseline;
         display: inline-flex;
@@ -55,7 +55,8 @@ import { inject } from "@angular/core";
         color: var(--text-color);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class ParcelsToolbarComponent {
   root = inject(RootPage);

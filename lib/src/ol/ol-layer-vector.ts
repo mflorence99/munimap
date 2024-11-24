@@ -18,16 +18,17 @@ import OLVector from "ol/layer/Vector";
 import OLStyle from "ol/style/Style";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLLayerVectorComponent)
-    }
-  ],
-  selector: "app-ol-layer-vector",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: block; visibility: hidden }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLLayerVectorComponent)
+        }
+    ],
+    selector: "app-ol-layer-vector",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: block; visibility: hidden }"],
+    standalone: false
 })
 export class OLLayerVectorComponent implements Mapable {
   id = input<string>();

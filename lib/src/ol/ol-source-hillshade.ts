@@ -16,10 +16,11 @@ import OLTileWMS from "ol/source/TileWMS";
 const attribution = '<a href="https://www.usgs.gov/" target="_blank">USGS</a>';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-hillshade",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-source-hillshade",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLSourceHillshadeComponent {
   colorize = input(false);

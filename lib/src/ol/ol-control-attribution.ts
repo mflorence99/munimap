@@ -10,9 +10,9 @@ import { inject } from "@angular/core";
 import OLLayer from "ol/layer/Layer";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-attribution",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-control-attribution",
+    template: `
     <article class="control">
       <ul #attribution class="attribution" [class.collapsed]="collapsed">
         <header class="header">For Information Only</header>
@@ -33,8 +33,8 @@ import OLLayer from "ol/layer/Layer";
       </button>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         pointer-events: auto;
@@ -70,7 +70,8 @@ import OLLayer from "ol/layer/Layer";
         font-weight: bold;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlAttributionComponent {
   attributions: string[] = [];

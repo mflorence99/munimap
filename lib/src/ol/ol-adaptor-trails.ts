@@ -11,16 +11,17 @@ import { forwardRef } from "@angular/core";
 import { input } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorTrailsComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-trails",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorTrailsComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-trails",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorTrailsComponent implements Adaptor {
   accentuate = input(false);

@@ -18,9 +18,9 @@ import { environment } from "@lib/environment";
 import OLFeature from "ol/Feature";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-create",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-create",
+    template: `
     <app-ol-map #map [fitToBounds]="true" [path]="path" [minZoom]="0">
       <app-builder
         (pathChanged)="onPathChanged($event)"
@@ -89,7 +89,8 @@ import OLFeature from "ol/Feature";
         }
       }
     </app-ol-map>
-  `
+  `,
+    standalone: false
 })
 export class CreatePage {
   env = environment;

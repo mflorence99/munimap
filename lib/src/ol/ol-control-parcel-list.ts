@@ -26,9 +26,9 @@ import { takeUntil } from "rxjs/operators";
 import copy from "fast-copy";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-parcel-list",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-control-parcel-list",
+    template: `
     <article class="control">
       <section #list class="list" [class.collapsed]="collapsed">
 
@@ -76,8 +76,8 @@ import copy from "fast-copy";
       </button>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         pointer-events: auto;
@@ -149,7 +149,8 @@ import copy from "fast-copy";
         width: 320px;
       }
    `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlParcelListComponent implements OnInit {
   categories = [

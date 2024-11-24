@@ -10,10 +10,9 @@ import { input } from "@angular/core";
 import { model } from "@angular/core";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Default,
-  selector: "app-ol-control-plusminus",
-
-  template: `
+    changeDetection: ChangeDetectionStrategy.Default,
+    selector: "app-ol-control-plusminus",
+    template: `
     <button
       (click)="onZoomChange(zoom() + 1)"
       [disabled]="zoom() >= maxZoom()"
@@ -30,8 +29,8 @@ import { model } from "@angular/core";
 
     <p class="annotation">{{ zoom() | number: '1.0-2' }}</p>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: grid;
         grid-template-rows: auto auto auto;
@@ -47,7 +46,8 @@ import { model } from "@angular/core";
         text-align: center;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlPlusMinusComponent implements OnInit {
   zoom = model<number>();

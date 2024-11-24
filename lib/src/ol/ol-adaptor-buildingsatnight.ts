@@ -12,16 +12,17 @@ import { input } from "@angular/core";
 // 🔥 highly experimental
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AdaptorComponent,
-      useExisting: forwardRef(() => OLAdaptorBuildingsAtNightComponent)
-    }
-  ],
-  selector: "app-ol-adaptor-buildingsatnight",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: AdaptorComponent,
+            useExisting: forwardRef(() => OLAdaptorBuildingsAtNightComponent)
+        }
+    ],
+    selector: "app-ol-adaptor-buildingsatnight",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLAdaptorBuildingsAtNightComponent implements Adaptor {
   fillOpacity = input(1);

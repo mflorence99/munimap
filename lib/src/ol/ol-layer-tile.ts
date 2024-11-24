@@ -13,16 +13,17 @@ import { input } from "@angular/core";
 import OLTile from "ol/layer/Tile";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLLayerTileComponent)
-    }
-  ],
-  selector: "app-ol-layer-tile",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: block; visibility: hidden }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLLayerTileComponent)
+        }
+    ],
+    selector: "app-ol-layer-tile",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: block; visibility: hidden }"],
+    standalone: false
 })
 export class OLLayerTileComponent implements Mapable {
   id = input<string>();

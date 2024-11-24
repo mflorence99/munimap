@@ -14,10 +14,10 @@ import { filter } from "rxjs/operators";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-contextmenu",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-contextmenu",
+    template: `
     @if (contextMenu) {
       <div
         #trigger
@@ -30,14 +30,15 @@ import { takeUntil } from "rxjs/operators";
 
     <ng-content select="[mapContextMenu]"></ng-content>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .trigger {
         position: absolute;
         visibility: fixed;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class ContextMenuComponent implements OnInit {
   contextMenu = contentChild(MatMenu);

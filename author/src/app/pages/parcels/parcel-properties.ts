@@ -34,10 +34,10 @@ interface Value {
 type ValueRecord = Record<string, Value>;
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ValuesPipe],
-  selector: "app-parcel-properties",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ValuesPipe],
+    selector: "app-parcel-properties",
+    template: `
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fad', 'tasks']" size="2x"></fa-icon>
@@ -130,7 +130,8 @@ type ValueRecord = Record<string, Value>;
         SAVE
       </button>
     </article>
-  `
+  `,
+    standalone: false
 })
 export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;

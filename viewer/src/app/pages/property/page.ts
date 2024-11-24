@@ -7,9 +7,9 @@ import { inject } from "@angular/core";
 import { environment } from "@lib/environment";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-property",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-property",
+    template: `
 
     @let sink = {
       gps: root.gps$ | async,
@@ -255,7 +255,8 @@ import { environment } from "@lib/environment";
         }
       </app-ol-map>
     }
-  `
+  `,
+    standalone: false
 })
 export class PropertyPage {
   env = environment;

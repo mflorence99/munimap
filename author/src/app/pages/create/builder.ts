@@ -12,9 +12,9 @@ import { output } from "@angular/core";
 import { isIndex } from "@lib/common";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-builder",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-builder",
+    template: `
     <mat-card appearance="outlined" class="card">
       <mat-card-header>
         <img src="assets/favicon.svg" mat-card-avatar />
@@ -87,8 +87,8 @@ import { isIndex } from "@lib/common";
       </mat-card-actions>
     </mat-card>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         pointer-events: auto;
       }
@@ -114,7 +114,8 @@ import { isIndex } from "@lib/common";
         gap: 1rem;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class BuilderComponent {
   index: Index;

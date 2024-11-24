@@ -12,10 +12,11 @@ import { inject } from "@angular/core";
 import PencilSketch from "ol-ext/filter/PencilSketch";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-filter-pencil",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-filter-pencil",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLFilterPencilComponent implements AfterContentInit, OnDestroy {
   olFilter: PencilSketch;

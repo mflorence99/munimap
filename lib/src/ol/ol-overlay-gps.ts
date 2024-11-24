@@ -24,10 +24,10 @@ const backoffInitialInterval = 100;
 const backoffMaxInterval = 1000;
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-ol-overlay-gps",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-ol-overlay-gps",
+    template: `
     <div #tracker class="tracker">
       <svg viewPort="0 0 96 96" [attr.width]="96" [attr.height]="96">
         <g transform="translate(48, 48)">
@@ -37,8 +37,8 @@ const backoffMaxInterval = 1000;
       </svg>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         position: absolute;
@@ -80,7 +80,8 @@ const backoffMaxInterval = 1000;
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLOverlayGPSComponent implements OnDestroy, OnInit {
   olOverlay: OLOverlay;

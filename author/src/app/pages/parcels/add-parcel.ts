@@ -25,9 +25,9 @@ interface Addition {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-add-parcel",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-add-parcel",
+    template: `
     <header class="header">
       <figure class="icon">
         <fa-icon [icon]="['fad', 'plus-square']" size="2x"></fa-icon>
@@ -105,8 +105,8 @@ interface Addition {
       </button>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .addition {
         display: grid;
         grid-template-columns: auto auto;
@@ -117,7 +117,8 @@ interface Addition {
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class AddParcelComponent implements SidebarComponent {
   addition: Addition = {} as Addition;

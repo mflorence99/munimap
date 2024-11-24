@@ -22,16 +22,15 @@ class Title extends OLControl {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLControlTitleComponent)
-    }
-  ],
-  selector: "app-ol-control-title",
-
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLControlTitleComponent)
+        }
+    ],
+    selector: "app-ol-control-title",
+    template: `
     <article
       #titleRef
       [ngStyle]="{ 'top.px': top }"
@@ -44,8 +43,8 @@ class Title extends OLControl {
       </header>
     </article>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .title {
         left: 0;
         position: absolute;
@@ -66,7 +65,8 @@ class Title extends OLControl {
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlTitleComponent implements Mapable, OnInit {
   olControl: OLControl;

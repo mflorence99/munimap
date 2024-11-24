@@ -21,16 +21,16 @@ import OLOverlay from "ol/Overlay";
 import OLPoint from "ol/geom/Point";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroyService],
-  selector: "app-ol-overlay-landmarklabel",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DestroyService],
+    selector: "app-ol-overlay-landmarklabel",
+    template: `
     <div #label (cdkDragEnded)="onDragEnd($event)" cdkDrag>
       <fa-icon [icon]="['fas', 'crosshairs']" class="icon" size="2x"></fa-icon>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         cursor: pointer;
         display: block;
@@ -41,7 +41,8 @@ import OLPoint from "ol/geom/Point";
         color: var(--background-color);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLOverlayLandmarkLabelComponent implements OnInit {
   label = viewChild<ElementRef>("label");

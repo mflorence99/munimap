@@ -27,9 +27,10 @@ import hash from "object-hash";
 import Feature from "ol/Feature";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-import-landmarks",
-  templateUrl: "../abstract-import.html"
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-import-landmarks",
+    templateUrl: "../abstract-import.html",
+    standalone: false
 })
 export class ImportLandmarksComponent implements SidebarComponent {
   cancelling = false;

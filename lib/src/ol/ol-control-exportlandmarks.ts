@@ -8,21 +8,22 @@ import { input } from "@angular/core";
 import { saveAs } from "file-saver";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-exportlandmarks",
-  template: `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-ol-control-exportlandmarks",
+    template: `
     <button (click)="export()" mat-icon-button>
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         display: block;
         pointer-events: auto;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class OLControlExportLandmarksComponent {
   fileName = input<string>();

@@ -35,20 +35,21 @@ import OLLayer from "ol/layer/Layer";
 import OLStyle from "ol/style/Style";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: MapableComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
-    },
-    {
-      provide: SelectorComponent,
-      useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
-    }
-  ],
-  selector: "app-ol-interaction-selectlandmarks",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: MapableComponent,
+            useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
+        },
+        {
+            provide: SelectorComponent,
+            useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
+        }
+    ],
+    selector: "app-ol-interaction-selectlandmarks",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLInteractionSelectLandmarksComponent
   implements Mapable, OnDestroy, OnInit, Selector

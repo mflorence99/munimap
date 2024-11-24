@@ -18,16 +18,17 @@ import OLText from "ol/style/Text";
 // 👇 styles ol-ext/control/graticule
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: StylerComponent,
-      useExisting: forwardRef(() => OLStyleGraticuleComponent)
-    }
-  ],
-  selector: "app-ol-style-graticule",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: StylerComponent,
+            useExisting: forwardRef(() => OLStyleGraticuleComponent)
+        }
+    ],
+    selector: "app-ol-style-graticule",
+    template: "<ng-content></ng-content>",
+    styles: [":host { display: none }"],
+    standalone: false
 })
 export class OLStyleGraticuleComponent implements Styler {
   fontFamily = input("Roboto");

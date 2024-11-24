@@ -26,9 +26,10 @@ import hash from "object-hash";
 // 🔥 only "Point" features are supported and they are assumed to be  culverts
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-import-culverts",
-  templateUrl: "../abstract-import.html"
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-import-culverts",
+    templateUrl: "../abstract-import.html",
+    standalone: false
 })
 export class ImportCulvertsComponent extends ImportLandmarksComponent {
   #authState = inject(AuthState);
