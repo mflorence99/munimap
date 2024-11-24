@@ -97,6 +97,7 @@ $dark-app-theme: mat.m2-define-dark-theme(
 
   // 👉 bridge from Angular Material variables to CSS variables
 
+  &{
   --primary-color: var(--mat-blue-a200);
   --accent-color: var(--mat-amber-a200);
   --warn-color: var(--mat-red-a200);
@@ -110,6 +111,8 @@ $dark-app-theme: mat.m2-define-dark-theme(
 
   --fa-primary-opacity: 1;
   --fa-secondary-opacity: 1;
+  }
+
 }
 
 // 👉 base styles

@@ -1,4 +1,0 @@
-{
-  "extends": "angular-tsconfig.json",
-  "include": ["**/author/**/*.ts", "**/viewer/**/*.ts"]
-}

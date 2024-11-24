@@ -21,6 +21,7 @@
     "function-no-unknown": null,
     "keyframes-name-pattern": "[A-Z0-9_]*",
     "no-descending-specificity": null,
+    "no-duplicate-selectors": null,
     "no-empty-source": null,
     "no-invalid-position-at-import-rule": null,
     "order/order": ["custom-properties", "declarations"],
