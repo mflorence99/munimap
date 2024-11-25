@@ -64,6 +64,7 @@ import { OLAdaptorTrailsComponent } from "@lib/ol/ol-adaptor-trails";
 import { OLAdaptorWaterbodiesComponent } from "@lib/ol/ol-adaptor-waterbodies";
 import { OLAdaptorWetlandsComponent } from "@lib/ol/ol-adaptor-wetlands";
 import { OLAttributionComponent } from "@lib/ol/ol-attribution";
+import { OLControlAccessibilityComponent } from "@lib/ol/ol-control-accessibility";
 import { OLControlAttributionComponent } from "@lib/ol/ol-control-attribution";
 import { OLControlGraticuleComponent } from "@lib/ol/ol-control-graticule";
 import { OLControlParcelListComponent } from "@lib/ol/ol-control-parcel-list";
@@ -161,6 +162,7 @@ import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faUniversalAccess } from "@fortawesome/free-solid-svg-icons";
 import { faCircleNotch } from "@fortawesome/pro-duotone-svg-icons";
 import { faGlobeAmericas } from "@fortawesome/pro-duotone-svg-icons";
 import { faMap } from "@fortawesome/pro-duotone-svg-icons";
@@ -208,6 +210,7 @@ const COMPONENTS = [
   OLAdaptorWaterbodiesComponent,
   OLAdaptorWetlandsComponent,
   OLAttributionComponent,
+  OLControlAccessibilityComponent,
   OLControlAttributionComponent,
   OLControlGraticuleComponent,
   OLControlParcelListComponent,
@@ -464,7 +467,8 @@ export class RootModule {
       faRoad,
       faSearch,
       faSync,
-      faTimes
+      faTimes,
+      faUniversalAccess
     );
   }
 }

@@ -19,22 +19,22 @@ import OLLayer from "ol/layer/Layer";
         (click)="toggleAttributions()" 
         mat-icon-button 
         title="Show/hide attributions">
-        <fa-icon [icon]="['fas', 'info-circle']" class="info-circle" size="2x"></fa-icon>
+        <fa-icon [icon]="['fas', 'info-circle']" size="2x"></fa-icon>
       </button>
  
-       <ul #attribution class="attribution" [class.collapsed]="collapsed">
+       <nav #attribution class="attribution" [class.collapsed]="collapsed">
         <header class="header">For Information Only</header>
-        <li class="item">Version {{ env.package.version }}</li>
-        <li class="item">
+        <div class="item">Version {{ env.package.version }}</div>
+        <div class="item">
           Build {{ env.build.id }} {{ env.build.date | date }}
-        </li>
+        </div>
 
         <header class="header">Credits</header>
 
         @for (attribution of attributions; track attribution) {
-          <li [outerHTML]="attribution" class="item"></li>
+          <div [outerHTML]="attribution" class="item"></div>
         }
-      </ul>
+      </nav>
 
     </article>
   `,
@@ -75,10 +75,6 @@ import OLLayer from "ol/layer/Layer";
 
       .header {
         font-weight: bold;
-      }
-
-      .info-circle {
-        color: rgba(33, 150, 243, 100%);
       }
     `
   ],

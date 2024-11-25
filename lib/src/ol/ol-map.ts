@@ -66,6 +66,7 @@ const nominalDPI = 96;
         <ng-content select="[mapControlSearch]"></ng-content>
         <div class="filler"></div>
         <div class="lower">
+          <ng-content select="[mapControlAccessibility]"></ng-content>
           <ng-content select="[mapControlZoom]"></ng-content>
           <ng-content select="[mapControlZoomToExtent]"></ng-content>
           <ng-content select="[mapControlExport]"></ng-content>

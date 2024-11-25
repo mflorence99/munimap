@@ -22,6 +22,11 @@ export type Path = string;
 const ACTION_SCOPE = "View";
 
 export namespace ViewActions {
+  export class SetAccessibilityFilter {
+    static readonly type = `[${ACTION_SCOPE}] SetAccessibilityFilter`;
+    constructor(public accessibilityFilter: string) {}
+  }
+
   export class SetGPS {
     static readonly type = `[${ACTION_SCOPE}] SetGPS`;
     constructor(public gps: boolean) {}
@@ -77,6 +82,7 @@ export interface View {
 }
 
 export interface ViewStateModel {
+  accessibilityFilter: string;
   gps: boolean;
   historicalMapLeft: string;
   historicalMapRight: string;
@@ -92,6 +98,7 @@ export interface ViewStateModel {
 @State<ViewStateModel>({
   name: "view",
   defaults: {
+    accessibilityFilter: "",
     gps: false,
     historicalMapLeft: "",
     historicalMapRight: "",
@@ -109,6 +116,10 @@ export interface ViewStateModel {
 @Injectable()
 export class ViewState {
   #store = inject(Store);
+
+  @Selector() static accessibilityFilter(state: ViewStateModel): string {
+    return state.accessibilityFilter;
+  }
 
   @Selector() static gps(state: ViewStateModel): boolean {
     return state.gps;
@@ -155,6 +166,13 @@ export class ViewState {
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
+  @Action(ViewActions.SetAccessibilityFilter) setAccessibilityFilter(
+    ctx: StateContext<ViewStateModel>,
+    action: ViewActions.SetAccessibilityFilter
+  ): void {
+    ctx.setState(patch({ accessibilityFilter: action.accessibilityFilter }));
+  }
+
   @Action(ViewActions.SetGPS) setGPS(
     ctx: StateContext<ViewStateModel>,
     action: ViewActions.SetGPS

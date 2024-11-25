@@ -46,6 +46,9 @@ import { environment } from "@lib/environment";
             mapControlSearch></app-ol-control-searchparcels>
         }
 
+        <app-ol-control-accessibility
+          mapControlAccessibility></app-ol-control-accessibility>
+
         <app-ol-control-plusminus mapControlZoom></app-ol-control-plusminus>
 
         <app-ol-control-parcel-list
