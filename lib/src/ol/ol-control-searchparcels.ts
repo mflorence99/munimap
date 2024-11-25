@@ -63,7 +63,8 @@ interface SearchTarget {
       <button
         (click)="(theSearcher.value = '') || theSearcher.focus()"
         [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
-        mat-icon-button>
+        mat-icon-button
+        title="Clear search">
         <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>
       </button>
     </article>
@@ -72,7 +73,8 @@ interface SearchTarget {
       [class.hidden]="matches.length === 0 || !theSearcher.value"
       class="matcher">
       @for (match of matches; track match.key) {
-        <a (click)="onSearch(match.key)" class="match" href="javascript: void(0);">
+        <a (click)="onSearch(match.key)" class="match" 
+           href="javascript: void(0)">
           <div class="key">{{ match.key }}</div>
           @if (match.count > 1) {
             <div class="count">({{ match.count }})</div>

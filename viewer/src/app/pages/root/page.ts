@@ -43,7 +43,10 @@ import urlParse from "url-parse";
     <main class="page">
       <mat-toolbar class="toolbar">
         @if (hasLeftSidebar) {
-          <button (click)="leftSidebar.toggle()" mat-icon-button>
+          <button 
+            (click)="leftSidebar.toggle()" 
+            mat-icon-button 
+            title="Show/hide legend">
             <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
           </button>
         }
@@ -61,17 +64,21 @@ import urlParse from "url-parse";
         <button
           mat-icon-button
           (click)="onGPSToggle(!sink.gps)"
-          [ngClass]="{ 'mat-icon-button-checked': sink.gps }">
+          [ngClass]="{ 'mat-icon-button-checked': sink.gps }"
+          title="Toggle GPS">
           <fa-icon [icon]="['fad', 'map-marker-alt']" size="lg"></fa-icon>
         </button>
 
         @if (hasRightSidebar) {
-          <button (click)="rightSidebar.toggle()" mat-icon-button>
+          <button 
+            (click)="rightSidebar.toggle()" 
+            mat-icon-button 
+            title="Show/hide map settings">
             <fa-icon [icon]="['fas', 'cog']" size="lg"></fa-icon>
           </button>
         }
 
-        <button (click)="reset()" mat-icon-button>
+        <button (click)="reset()" mat-icon-button title="Reset MuniMap">
           <fa-icon [icon]="['fas', 'sync']" size="lg"></fa-icon>
         </button>
       </mat-toolbar>

@@ -16,14 +16,16 @@ import { model } from "@angular/core";
     <button
       (click)="onZoomChange(zoom() + 1)"
       [disabled]="zoom() >= maxZoom()"
-      mat-icon-button>
+      mat-icon-button
+      title="Zoom in">
       <fa-icon [icon]="['fal', 'plus']" size="2x"></fa-icon>
     </button>
 
     <button
       (click)="onZoomChange(zoom() - 1)"
       [disabled]="zoom() <= minZoom()"
-      mat-icon-button>
+      mat-icon-button
+      title="Zoom out">
       <fa-icon [icon]="['fal', 'minus']" size="2x"></fa-icon>
     </button>
 
@@ -35,9 +37,7 @@ import { model } from "@angular/core";
         display: grid;
         grid-template-rows: auto auto auto;
         justify-content: center;
-        padding: 0.25rem;
         pointer-events: auto;
-        width: 3rem;
       }
 
       .annotation {

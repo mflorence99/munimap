@@ -9,7 +9,7 @@ import { inject } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-control-zoom2extent",
   template: `
-    <button (click)="zoom2extent()" mat-icon-button>
+    <button (click)="zoom2extent()" mat-icon-button title="Zoom out">
       <fa-icon [icon]="['fas', 'expand-arrows']" size="2x"></fa-icon>
     </button>
   `,

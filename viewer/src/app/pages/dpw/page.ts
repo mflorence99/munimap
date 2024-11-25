@@ -26,7 +26,8 @@ import { environment } from "@lib/environment";
         [minZoom]="13"
         [maxZoom]="20"
         [path]="sink.mapState.path"
-        class="content">
+        class="content"
+        tabindex="0">
 
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->

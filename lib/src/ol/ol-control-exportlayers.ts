@@ -13,7 +13,7 @@ import OLGeoJSON from "ol/format/GeoJSON";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-control-exportlayers",
   template: `
-    <button (click)="export()" mat-icon-button>
+    <button (click)="export()" mat-icon-button title="Export layers">
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
   `,

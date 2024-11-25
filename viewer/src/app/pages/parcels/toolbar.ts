@@ -38,7 +38,8 @@ import { inject } from "@angular/core";
     <button
       mat-icon-button
       (click)="onSatelliteViewToggle(!sink.satelliteView)"
-      [ngClass]="{ 'mat-icon-button-checked': sink.satelliteView }">
+      [ngClass]="{ 'mat-icon-button-checked': sink.satelliteView }"
+      title="Toggle satellite view">
       <fa-icon [icon]="['fad', 'globe-americas']" size="lg"></fa-icon>
     </button>
   `,

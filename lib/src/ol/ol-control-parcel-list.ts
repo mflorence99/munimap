@@ -30,6 +30,11 @@ import copy from "fast-copy";
   selector: "app-ol-control-parcel-list",
   template: `
     <article class="control">
+  
+      <button (click)="toggleList()" mat-icon-button title="Show/hide lists">
+        <fa-icon [icon]="['fal', 'list-ol']" size="2x"></fa-icon>
+      </button>
+
       <section #list class="list" [class.collapsed]="collapsed">
 
         <section class="simlist">
@@ -59,7 +64,7 @@ import copy from "fast-copy";
                 <tr>
                   <td class="index">{{ ix + 1 }}.</td>
                   <td>
-                    <a (click)="onSelect(parcel)">{{ parcel.id }}</a>
+                    <a (click)="onSelect(parcel)" href="javascript: void(0)">{{ parcel.id }}></a>
                   </td>
                   <td class="address">{{ parcel.properties.address }}</td>
                 </tr>
@@ -70,10 +75,6 @@ import copy from "fast-copy";
         </aside>
 
       </section>
-
-      <button (click)="toggleList()" mat-icon-button>
-        <fa-icon [icon]="['fal', 'list-ol']" size="2x"></fa-icon>
-      </button>
     </article>
   `,
   styles: [
@@ -110,12 +111,12 @@ import copy from "fast-copy";
         padding: 0.5rem;
         position: absolute;
         right: 4rem;
-        transition: opacity 0.25s ease-in-out;
+        transition: display 0.25s ease allow-discrete, opacity 0.25s ease;
       }
 
       .list.collapsed {
+        display: none;
         opacity: 0;
-        pointer-events: none;
       }
 
       .properties {

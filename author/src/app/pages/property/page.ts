@@ -56,7 +56,8 @@ interface LandmarkConversion {
             [loadingStrategy]="'all'"
             [minZoom]="13"
             [maxZoom]="22"
-            [path]="sink.mapState.path">
+            [path]="sink.mapState.path"
+            tabindex="0">
 
             <!-- ---------------------------------------------------------- -->
             <!-- 🗺️ Context menu                                            -->
@@ -458,7 +459,8 @@ interface LandmarkConversion {
                   canRenameLandmark($event) &&
                     onContextMenu('rename-landmark', newName.value)
                 "
-                mat-icon-button>
+                mat-icon-button
+                title="Rename landmark">
                 <fa-icon
                   [icon]="['fas', 'check']"
                   [fixedWidth]="true"

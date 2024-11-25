@@ -320,6 +320,16 @@ app-culvert-properties {
   width: 50rem;
 }
 
+// 👇 the map itself  
+
+app-ol-map {
+  border: 3px solid var(--mat-gray-900);
+
+  &:focus {
+    border-color: var(--mat-gray-50);
+  }
+}
+
 // 👇 all these are popups
 
 app-ol-popup-bridgeproperties,
@@ -335,14 +345,14 @@ app-ol-popup-streamcrossingproperties {
   .clipboard {
     position: absolute;
     right: 2rem;
-    top: 0;
+    top: -0.5rem;
     z-index: 2;
   }
 
   .closer {
     position: absolute;
     right: 0;
-    top: 0;
+    top: -0.5rem;
     z-index: 2;
   }
 

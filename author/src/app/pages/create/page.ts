@@ -21,7 +21,8 @@ import OLFeature from "ol/Feature";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-create",
   template: `
-    <app-ol-map #map [fitToBounds]="true" [path]="path" [minZoom]="0">
+    <app-ol-map #map [fitToBounds]="true" [path]="path" [minZoom]="0"
+        tabindex="0">
       <app-builder
         (pathChanged)="onPathChanged($event)"
         (pathSelected)="onPathSelected($event)"

@@ -79,7 +79,8 @@ import { takeUntil } from "rxjs/operators";
       <button
         (click)="(theSearcher.value = '') || onSearch('')"
         [ngStyle]="{ visibility: theSearcher.value ? 'visible' : 'hidden' }"
-        mat-icon-button>
+        mat-icon-button
+        title="Clear search">
         <fa-icon [icon]="['fas', 'times']" class="closer"></fa-icon>
       </button>
     </article>
@@ -100,7 +101,6 @@ import { takeUntil } from "rxjs/operators";
         column-gap: 0.5rem;
         display: grid;
         grid-template-columns: auto 1fr auto;
-        height: 3rem;
         padding: 0 0.5rem;
         position: absolute;
         right: 0.5rem;

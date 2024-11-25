@@ -56,7 +56,8 @@ import OLMultiPolygon from "ol/geom/MultiPolygon";
             [loadingStrategy]="'bbox'"
             [minZoom]="15"
             [maxZoom]="22"
-            [path]="sink.mapState.path">
+            [path]="sink.mapState.path"
+            tabindex="0">
             
             <!-- ---------------------------------------------------------- -->
             <!-- 🗺️ Context menu                                            -->

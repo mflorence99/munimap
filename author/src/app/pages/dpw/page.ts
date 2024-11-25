@@ -48,7 +48,8 @@ import { toLonLat } from "ol/proj";
             [loadingStrategy]="'bbox'"
             [minZoom]="13"
             [maxZoom]="20"
-            [path]="sink.mapState.path">
+            [path]="sink.mapState.path"
+            tabindex="0">
 
             <!-- ---------------------------------------------------------- -->
             <!-- 🗺️ Context menu                                            -->

@@ -27,12 +27,21 @@ export type Schema = Array<
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-popup-dpwproperties",
   template: `
-    <button (click)="onClose()" class="closer" mat-icon-button>
+    <button 
+      (click)="onClose()" 
+      [appAutoFocus]="focussed"
+      class="closer" 
+      mat-icon-button
+      title="Close popup">
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
     </button>
 
     @if (canClipboard()) {
-      <button (click)="onClipboard()" class="clipboard" mat-icon-button>
+      <button 
+        (click)="onClipboard()" 
+        class="clipboard" 
+        mat-icon-button
+        title="Copy to clipboard">
         <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
       </button>
     }
@@ -67,6 +76,7 @@ export type Schema = Array<
   standalone: false
 })
 export class OLPopupDPWPropertiesComponent {
+  focussed = false;
   geometry: any /* 👈 in practice will be a Point */;
   properties: any /* 👈 could be bridge, stream crossing etc etc */;
   table = viewChild<ElementRef>("table");
@@ -130,7 +140,11 @@ export class OLPopupDPWPropertiesComponent {
         this.properties = properties;
         this.geometry = geometry;
         if (!this.properties) this.onClose();
-        else this.#cdf.markForCheck();
+        else {
+          this.focussed = false;
+          this.#cdf.markForCheck();
+          setTimeout(() => (this.focussed = true), 0);
+        }
       });
   }
 }

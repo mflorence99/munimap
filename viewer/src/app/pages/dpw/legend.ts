@@ -38,7 +38,11 @@ interface Statistics {
   providers: [DestroyService],
   selector: "app-dpw-legend",
   template: `
-    <button (click)="export()" class="exporter" mat-icon-button>
+    <button 
+      (click)="export()" 
+      class="exporter" 
+      mat-icon-button 
+      title="Export to spreadsheet">
       <fa-icon [icon]="['fas', 'download']" size="lg"></fa-icon>
     </button>
 

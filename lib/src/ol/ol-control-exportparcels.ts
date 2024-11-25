@@ -21,7 +21,7 @@ import OLProjection from "ol/proj/Projection";
   providers: [DestroyService],
   selector: "app-ol-control-exportparcels",
   template: `
-    <button (click)="export()" mat-icon-button>
+    <button (click)="export()" mat-icon-button title="Export parcels">
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
   `,

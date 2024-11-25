@@ -28,7 +28,8 @@ import { isAPDVDProposed } from "@lib/ol/ol-apdvd";
         [minZoom]="13"
         [maxZoom]="22"
         [path]="sink.mapState.path"
-        class="content">
+        class="content"
+        tabindex="0">
 
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->

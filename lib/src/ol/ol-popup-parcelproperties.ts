@@ -37,13 +37,22 @@ interface Abutter {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-popup-parcelproperties",
   template: `
-    <button (click)="onClose()" class="closer" mat-icon-button>
-      <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
+    <button 
+      (click)="onClose()" 
+      [appAutoFocus]="focussed"
+      class="closer" 
+      mat-icon-button
+      title="Close popup">
+      <fa-icon [icon]="['fas', 'times']" size="sm"></fa-icon>
     </button>
 
     @if (canClipboard()) {
-      <button (click)="onClipboard()" class="clipboard" mat-icon-button>
-        <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
+      <button 
+        (click)="onClipboard()" 
+        class="clipboard" 
+        mat-icon-button
+        title="Copy to clipboard">
+        <fa-icon [icon]="['far', 'clipboard']" size="sm"></fa-icon>
       </button>
     }
 
@@ -186,7 +195,8 @@ interface Abutter {
               @for (abutter of abutters; track abutter.id) {
                 <tr>
                   <td>
-                    <a (click)="onSelect(abutter.id)">{{ abutter.id }}</a>
+                    <a (click)="onSelect(abutter.id)" 
+                       href="javascript: void(0)">{{ abutter.id }}</a>
                   </td>
                   <td>{{ abutter.owner ?? abutter.address }}</td>
                 </tr>
@@ -279,6 +289,7 @@ interface Abutter {
 })
 export class OLPopupParcelPropertiesComponent {
   abutters: Abutter[] = [];
+  focussed = false;
   maxNumProperties = input(3);
   parcelPropertiesUsage = parcelPropertiesUsage;
   parcelPropertiesUse = parcelPropertiesUse;
@@ -320,6 +331,7 @@ export class OLPopupParcelPropertiesComponent {
   }
 
   onClose(): void {
+    this.focussed = false;
     this.#snackBar.dismiss();
     // 👉 the selector MAY not be present and may not be for parcels
     const selector =
@@ -395,7 +407,9 @@ export class OLPopupParcelPropertiesComponent {
           // 👉 split depending on # of parcels
           this.splitHorizontally = this.properties.length > 1;
           this.splitVertically = this.properties.length === 1;
+          this.focussed = false;
           this.#cdf.markForCheck();
+          setTimeout(() => (this.focussed = true), 0);
         }
       });
   }

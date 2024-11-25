@@ -71,7 +71,8 @@ import { takeUntil } from "rxjs/operators";
           mat-icon-button 
           (click)="redo()" 
           [disabled]="!canRedo" 
-          [ngClass]="{ 'mat-icon-button-checked': canRedo }">
+          [ngClass]="{ 'mat-icon-button-checked': canRedo }"
+          title="Redo last action">
           <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
         </button>
 
@@ -79,7 +80,8 @@ import { takeUntil } from "rxjs/operators";
           mat-icon-button 
           (click)="undo()" 
           [disabled]="!canUndo" 
-          [ngClass]="{ 'mat-icon-button-checked': canUndo }">
+          [ngClass]="{ 'mat-icon-button-checked': canUndo }"
+          title="Undo last action">
           <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>
         </button>
 

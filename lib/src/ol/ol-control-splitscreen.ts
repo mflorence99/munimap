@@ -57,6 +57,40 @@ export class OLControlSplitScreenComponent implements Mapable {
       else if (onRight.length === 0) position = 1;
       else if (onLeft.length === 0) position = 0;
       this.olControl.set("position", position);
+
+      // 🔥 experimental - add accessibility
+
+      const button: any = document.querySelector(".ol-swipe button");
+      if (!button.hasAttribute("title")) {
+        console.log("🔥 experimental");
+
+        button.setAttribute("title", "Swipe left or right");
+
+        button.addEventListener("blur", (e: any) => {
+          button.style.outline = "none";
+        });
+
+        button.addEventListener("focus", (e: any) => {
+          button.style.outline = "3px solid black";
+        });
+
+        button.addEventListener("keydown", (e: any) => {
+          const rect = button.getBoundingClientRect();
+          const center = rect.x + rect.width / 2;
+          switch (e.key) {
+            case "ArrowLeft":
+              this.olControl.move({ type: "mousedown", pageX: center });
+              this.olControl.move({ type: "mousemove", pageX: center - 10 });
+              this.olControl.move({ type: "mouseup" });
+              break;
+            case "ArrowRight":
+              this.olControl.move({ type: "mousedown", pageX: center });
+              this.olControl.move({ type: "mousemove", pageX: center + 10 });
+              this.olControl.move({ type: "mouseup" });
+              break;
+          }
+        });
+      }
     });
   }
 

@@ -24,7 +24,7 @@ import html2canvas from "html2canvas";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-control-print",
   template: `
-    <button (click)="print()" mat-icon-button>
+    <button (click)="print()" mat-icon-button title="Print map">
       <fa-icon [icon]="['fas', 'print']" size="2x"></fa-icon>
     </button>
 

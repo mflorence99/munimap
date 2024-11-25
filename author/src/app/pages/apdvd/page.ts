@@ -28,7 +28,8 @@ import { viewChild } from "@angular/core";
         [loadingStrategy]="'bbox'"
         [minZoom]="15"
         [maxZoom]="20"
-        [path]="sink.mapState.path">
+        [path]="sink.mapState.path"
+        tabindex="0">
 
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->

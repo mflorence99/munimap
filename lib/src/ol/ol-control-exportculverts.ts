@@ -12,7 +12,7 @@ import { saveAs } from "file-saver";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-control-exportculverts",
   template: `
-    <button (click)="export()" mat-icon-button>
+    <button (click)="export()" mat-icon-button title="Export culverts">
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
     </button>
   `,

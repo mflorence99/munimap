@@ -35,12 +35,21 @@ interface Coordinate {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "app-ol-popup-landmarkproperties",
   template: `
-    <button (click)="onClose()" class="closer" mat-icon-button>
+    <button 
+      (click)="onClose()" 
+      [appAutoFocus]="focussed"
+      class="closer" 
+      mat-icon-button
+      title="Close popup">
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
     </button>
 
     @if (canClipboard()) {
-      <button (click)="onClipboard()" class="clipboard" mat-icon-button>
+      <button 
+        (click)="onClipboard()" 
+        class="clipboard" 
+        mat-icon-button
+        title="Copy to clipboard">
         <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
       </button>
     }
@@ -101,6 +110,7 @@ interface Coordinate {
   standalone: false
 })
 export class OLPopupLandmarkPropertiesComponent {
+  focussed = false;
   landmark: Landmark;
   table = viewChild<ElementRef>("table");
 
@@ -169,7 +179,11 @@ export class OLPopupLandmarkPropertiesComponent {
       .subscribe((landmark: Landmark) => {
         this.landmark = landmark;
         if (!this.landmark) this.onClose();
-        else this.#cdf.markForCheck();
+        else {
+          this.focussed = false;
+          this.#cdf.markForCheck();
+          setTimeout(() => (this.focussed = true), 0);
+        }
       });
   }
 }

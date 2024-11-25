@@ -14,7 +14,15 @@ import OLLayer from "ol/layer/Layer";
   selector: "app-ol-control-attribution",
   template: `
     <article class="control">
-      <ul #attribution class="attribution" [class.collapsed]="collapsed">
+
+      <button 
+        (click)="toggleAttributions()" 
+        mat-icon-button 
+        title="Show/hide attributions">
+        <fa-icon [icon]="['fas', 'info-circle']" class="info-circle" size="2x"></fa-icon>
+      </button>
+ 
+       <ul #attribution class="attribution" [class.collapsed]="collapsed">
         <header class="header">For Information Only</header>
         <li class="item">Version {{ env.package.version }}</li>
         <li class="item">
@@ -24,13 +32,10 @@ import OLLayer from "ol/layer/Layer";
         <header class="header">Credits</header>
 
         @for (attribution of attributions; track attribution) {
-          <li [innerHTML]="attribution" class="item"></li>
+          <li [outerHTML]="attribution" class="item"></li>
         }
       </ul>
 
-      <button (click)="toggleAttributions()" mat-icon-button>
-        <fa-icon [icon]="['fas', 'info-circle']" size="2x"></fa-icon>
-      </button>
     </article>
   `,
   styles: [
@@ -43,11 +48,13 @@ import OLLayer from "ol/layer/Layer";
       .attribution {
         background-color: rgba(var(--rgb-gray-100), 0.75);
         bottom: -0.25rem;
+        display: flex;
+        flex-direction: column;
         opacity: 1;
         padding: 0.5rem;
         position: absolute;
         right: 4rem;
-        transition: opacity 0.25s ease-in-out;
+        transition: display 0.25s ease allow-discrete, opacity 0.25s ease;
         width: auto;
 
         .item {
@@ -56,8 +63,8 @@ import OLLayer from "ol/layer/Layer";
       }
 
       .attribution.collapsed {
+        display: none;
         opacity: 0;
-        pointer-events: none;
       }
 
       .control {
@@ -68,6 +75,10 @@ import OLLayer from "ol/layer/Layer";
 
       .header {
         font-weight: bold;
+      }
+
+      .info-circle {
+        color: rgba(33, 150, 243, 100%);
       }
     `
   ],
