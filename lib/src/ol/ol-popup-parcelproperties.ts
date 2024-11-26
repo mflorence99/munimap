@@ -1,6 +1,7 @@
 import { Parcel } from "../common";
 import { ParcelID } from "../common";
 import { ParcelProperties } from "../common";
+import { DestroyService } from "../services/destroy";
 import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
 import { OLMapComponent } from "./ol-map";
 import { OLPopupSelectionComponent } from "./ol-popup-selection";
@@ -18,6 +19,7 @@ import { inject } from "@angular/core";
 import { input } from "@angular/core";
 import { viewChild } from "@angular/core";
 import { outputToObservable } from "@angular/core/rxjs-interop";
+import { takeUntil } from "rxjs/operators";
 import { map } from "rxjs/operators";
 
 import OLFeature from "ol/Feature";
@@ -302,6 +304,7 @@ export class OLPopupParcelPropertiesComponent {
   tables = viewChild<ElementRef>("tables");
 
   #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
   #map = inject(OLMapComponent);
   #popper = inject(OLPopupSelectionComponent);
   #snackBar = inject(MatSnackBar);
@@ -309,6 +312,7 @@ export class OLPopupParcelPropertiesComponent {
   constructor() {
     // 👉 see above, no ngOnInit where we'd normally do this
     this.#handleAbuttersFound$();
+    this.#handleEscape$();
     this.#handleFeaturesSelected$();
   }
 
@@ -372,6 +376,12 @@ export class OLPopupParcelPropertiesComponent {
         this.abutters = abutters;
         this.#cdf.markForCheck();
       });
+  }
+
+  #handleEscape$(): void {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
+      this.onClose();
+    });
   }
 
   #handleFeaturesSelected$(): void {
