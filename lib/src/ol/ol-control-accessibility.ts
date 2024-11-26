@@ -56,10 +56,10 @@ import { takeUntil } from "rxjs/operators";
 
       .accessibility {
         background-color: rgba(var(--rgb-gray-100), 0.75);
+        border: 0.5rem solid transparent;
         border-collapse: collapse;
         bottom: -0.25rem;
         opacity: 1;
-        padding: 0.5rem;
         position: absolute;
         right: 4rem;
         transition: display 0.25s ease allow-discrete, opacity 0.25s ease;

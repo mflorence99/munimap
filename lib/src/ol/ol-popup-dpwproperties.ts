@@ -1,3 +1,4 @@
+import { DestroyService } from "../services/destroy";
 import { OLInteractionSelectLandmarksComponent } from "./ol-interaction-selectlandmarks";
 import { OLMapComponent } from "./ol-map";
 import { OLPopupSelectionComponent } from "./ol-popup-selection";
@@ -11,6 +12,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { inject } from "@angular/core";
 import { viewChild } from "@angular/core";
 import { outputToObservable } from "@angular/core/rxjs-interop";
+import { takeUntil } from "rxjs/operators";
 import { map } from "rxjs/operators";
 
 import OLFeature from "ol/Feature";
@@ -82,12 +84,14 @@ export class OLPopupDPWPropertiesComponent {
   table = viewChild<ElementRef>("table");
 
   #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
   #map = inject(OLMapComponent);
   #popper = inject(OLPopupSelectionComponent);
   #snackBar = inject(MatSnackBar);
 
   constructor() {
     // 👉 see above, no ngOnInit where we'd normally do this
+    this.#handleEscape$();
     this.#handleFeatureSelected$();
   }
 
@@ -122,6 +126,12 @@ export class OLPopupDPWPropertiesComponent {
     const selector =
       this.#map.selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
+  }
+
+  #handleEscape$(): void {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
+      this.onClose();
+    });
   }
 
   #handleFeatureSelected$(): void {

@@ -1,4 +1,5 @@
 import { Landmark } from "../common";
+import { DestroyService } from "../services/destroy";
 import { OLInteractionSelectLandmarksComponent } from "./ol-interaction-selectlandmarks";
 import { OLMapComponent } from "./ol-map";
 import { OLPopupSelectionComponent } from "./ol-popup-selection";
@@ -17,6 +18,7 @@ import { convertArea } from "@turf/helpers";
 import { convertLength } from "@turf/helpers";
 import { length } from "@turf/length";
 import { map } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 
 import OLFeature from "ol/Feature";
 import OLGeoJSON from "ol/format/GeoJSON";
@@ -115,6 +117,7 @@ export class OLPopupLandmarkPropertiesComponent {
   table = viewChild<ElementRef>("table");
 
   #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
   #format: OLGeoJSON;
   #map = inject(OLMapComponent);
   #popper = inject(OLPopupSelectionComponent);
@@ -126,6 +129,7 @@ export class OLPopupLandmarkPropertiesComponent {
       featureProjection: this.#map.projection
     });
     // 👉 see above, no ngOnInit where we'd normally do this
+    this.#handleEscape$();
     this.#handleFeatureSelected$();
   }
 
@@ -161,6 +165,12 @@ export class OLPopupLandmarkPropertiesComponent {
       latitude: raw[1],
       longitude: raw[0]
     };
+  }
+
+  #handleEscape$(): void {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
+      this.onClose();
+    });
   }
 
   // 👇 note only single selection is supported
