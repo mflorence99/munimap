@@ -1,30 +1,30 @@
-import { SidebarComponent } from "../components/sidebar-component";
-import { ContextMenuHostDirective } from "../directives//contextmenu-host";
-import { RootPage } from "./root/page";
+import { ContextMenuHostDirective } from '../directives//contextmenu-host';
+import { RootPage } from './root/page';
+import { SidebarComponent } from '../components/sidebar-component';
 
-import { ComponentRef } from "@angular/core";
-import { Signal } from "@angular/core";
-import { Type } from "@angular/core";
-import { MatDrawer } from "@angular/material/sidenav";
-import { ActivatedRoute } from "@angular/router";
-import { Router } from "@angular/router";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { DestroyService } from "@lib/services/destroy";
-import { AuthState } from "@lib/state/auth";
-import { Map } from "@lib/state/map";
-import { MapActions } from "@lib/state/map";
-import { MapType } from "@lib/state/map";
-import { ViewState } from "@lib/state/view";
-import { Actions } from "@ngxs/store";
-import { Store } from "@ngxs/store";
+import { Actions } from '@ngxs/store';
+import { ActivatedRoute } from '@angular/router';
+import { AuthState } from '@lib/state/auth';
+import { ComponentRef } from '@angular/core';
+import { DestroyService } from '@lib/services/destroy';
+import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
+import { MapType } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { Router } from '@angular/router';
+import { Signal } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { Type } from '@angular/core';
+import { ViewState } from '@lib/state/view';
 
-import { inject } from "@angular/core";
-import { environment } from "@lib/environment";
-import { ofActionSuccessful } from "@ngxs/store";
-import { unByKey } from "ol/Observable";
-import { takeUntil } from "rxjs/operators";
+import { environment } from '@lib/environment';
+import { inject } from '@angular/core';
+import { ofActionSuccessful } from '@ngxs/store';
+import { takeUntil } from 'rxjs/operators';
+import { unByKey } from 'ol/Observable';
 
-import OLGeoJSON from "ol/format/GeoJSON";
+import OLGeoJSON from 'ol/format/GeoJSON';
 
 export abstract class AbstractMapPage {
   actions$ = inject(Actions);
@@ -72,7 +72,7 @@ export abstract class AbstractMapPage {
       comp.selectedIDs = selector.selectedIDs;
       comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
       // 👉 watch for delta in features
-      key = source.on("featuresloadend", () => {
+      key = source.on('featuresloadend', () => {
         comp.features = comp.selectedIDs.map((id) => source.getFeatureById(id));
         comp.refresh();
       });
@@ -99,9 +99,9 @@ export abstract class AbstractMapPage {
         //    we could be loading the "last used" map
         //    which we aren't authorized to see
         const profile = this.authState.currentProfile();
-        const workgroup = profile.email + " " + (profile.workgroup ?? "");
+        const workgroup = profile.email + ' ' + (profile.workgroup ?? '');
         if (!workgroup.includes(action.map.owner))
-          this.router.navigate(["/create"]);
+          this.router.navigate(['/create']);
         // 👉 if we were creating a new map, once that's done rewrite the
         //    URL to the map ID so if we reload we don't enter another
         //    creating state
@@ -118,11 +118,11 @@ export abstract class AbstractMapPage {
   // 👁️ root.ts
 
   #loadMap(): void {
-    const id = this.route.snapshot.params["id"];
+    const id = this.route.snapshot.params['id'];
     // 👉 an ID of '0' signals that we need to create a new map
-    this.creating = id === "0";
+    this.creating = id === '0';
     const owner = this.authState.currentProfile().email;
-    const path = this.route.snapshot.queryParamMap.get("path");
+    const path = this.route.snapshot.queryParamMap.get('path');
     const recentPath = this.viewState.recentPath();
     // 👉 this is a default map for the case when we are creating
     //    but it is also used if the map we try to load has been deleted

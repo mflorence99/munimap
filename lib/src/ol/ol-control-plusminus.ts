@@ -1,17 +1,17 @@
-import { OLMapComponent } from "./ol-map";
+import { OLMapComponent } from './ol-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { model } from "@angular/core";
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { model } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
-  selector: "app-ol-control-plusminus",
+  selector: 'app-ol-control-plusminus',
   template: `
     <button
       (click)="onZoomChange(zoom() + 1)"

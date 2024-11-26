@@ -1,23 +1,23 @@
-import { ImportLandmarksComponent } from "../property/import-landmarks";
+import { ImportLandmarksComponent } from '../property/import-landmarks';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { CulvertProperties } from "@lib/common";
-import { Landmark } from "@lib/common";
-import { AuthState } from "@lib/state/auth";
-import { LandmarksActions } from "@lib/state/landmarks";
-import { Store } from "@ngxs/store";
+import { AuthState } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { CulvertProperties } from '@lib/common';
+import { Landmark } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { culvertConditions } from "@lib/common";
-import { culvertFloodHazards } from "@lib/common";
-import { culvertHeadwalls } from "@lib/common";
-import { culvertMaterials } from "@lib/common";
-import { makeLandmarkID } from "@lib/common";
-import { firstValueFrom } from "rxjs";
+import { culvertConditions } from '@lib/common';
+import { culvertFloodHazards } from '@lib/common';
+import { culvertHeadwalls } from '@lib/common';
+import { culvertMaterials } from '@lib/common';
+import { firstValueFrom } from 'rxjs';
+import { inject } from '@angular/core';
+import { makeLandmarkID } from '@lib/common';
 
-import hash from "object-hash";
+import hash from 'object-hash';
 
 // 🔥 this is a stripped down version of the more generalized
 //    implementation in property/import-landmarks.ts and is designed
@@ -27,8 +27,8 @@ import hash from "object-hash";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-import-culverts",
-  templateUrl: "../abstract-import.html",
+  selector: 'app-import-culverts',
+  templateUrl: '../abstract-import.html',
   standalone: false
 })
 export class ImportCulvertsComponent extends ImportLandmarksComponent {
@@ -41,9 +41,9 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
   ): Promise<void> {
     for (const geojson of geojsons) {
       // 🔥 non-standard GeoJSON field for convenience
-      const filename = geojson["filename"]
+      const filename = geojson['filename']
         .toUpperCase()
-        .substring(0, geojson["filename"].indexOf("."));
+        .substring(0, geojson['filename'].indexOf('.'));
       // 👇 cancel??
       if (this.cancelling) break;
       // 👇 for each feature imported
@@ -60,12 +60,12 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
             geometry: feature.geometry,
             owner: this.#authState.currentProfile().email,
             path: this.map.path(),
-            type: "Feature"
+            type: 'Feature'
           };
           let properties;
           // 👇 only import waypoints
           switch (feature.geometry?.type) {
-            case "Point":
+            case 'Point':
               properties = {
                 metadata: this.#makeCulvertProperties(
                   feature.properties.keywords ?? filename,
@@ -93,14 +93,14 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
   #makeCulvertProperties(
     location: string,
     props: string,
-    description = ""
+    description = ''
   ): Partial<CulvertProperties> {
     // 👇 split props and eliminate decoration and smart quotes
     const parts = props
-      .replace(/<div>/g, "\n")
-      .replace(/<\/div>/g, "")
-      .replace(/<\./g, "")
-      .replace(/<br>/g, "")
+      .replace(/<div>/g, '\n')
+      .replace(/<\/div>/g, '')
+      .replace(/<\./g, '')
+      .replace(/<br>/g, '')
       .replace(/&apos;/g, "'")
       .replace(/&quot;/g, '"')
       .replace(/[\u2018\u2019]/g, "'")
@@ -112,9 +112,9 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       condition: culvertConditions[0],
       count: 1,
       description: description
-        .replace(/<div>/g, "")
-        .replace(/<\/div>/g, "")
-        .replace(/&nbsp;/g, " "),
+        .replace(/<div>/g, '')
+        .replace(/<\/div>/g, '')
+        .replace(/&nbsp;/g, ' '),
       diameter: 0,
       floodHazard: culvertFloodHazards[0],
       headwall: culvertHeadwalls[0],
@@ -122,7 +122,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       length: 0,
       location,
       material: culvertMaterials[0],
-      type: "culvert",
+      type: 'culvert',
       width: 0,
       year: null
     };
@@ -138,7 +138,7 @@ export class ImportCulvertsComponent extends ImportLandmarksComponent {
       if (/^[\d]+"$/.test(part))
         properties.diameter = Number(part.substring(0, part.length - 1));
       if (/^[\d]+["']?x[\d]+["']?$/.test(part)) {
-        const dims = part.replaceAll(/["']/g, "").split("x");
+        const dims = part.replaceAll(/["']/g, '').split('x');
         properties.height = Number(dims[1]);
         properties.width = Number(dims[0]);
         // 👇 convert to inches if in feet

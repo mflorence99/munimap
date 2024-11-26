@@ -1,20 +1,20 @@
 // 👀  https://github.com/ng-web-apis/geolocation/blob/master/projects/geolocation/src/services/geolocation.service.ts
 
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Subscriber } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Subscriber } from 'rxjs';
 
-import { bearing } from "@turf/bearing";
-import { point } from "@turf/helpers";
-import { combineLatest } from "rxjs";
-import { timer } from "rxjs";
-import { finalize } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { shareReplay } from "rxjs/operators";
+import { bearing } from '@turf/bearing';
+import { combineLatest } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { point } from '@turf/helpers';
+import { shareReplay } from 'rxjs/operators';
+import { timer } from 'rxjs';
 
 const maxIntervalBetweenPositions = 100;
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class GeolocationService extends Observable<GeolocationPosition> {
   constructor() {
     let lastPosition: any;
@@ -51,7 +51,7 @@ export class GeolocationService extends Observable<GeolocationPosition> {
           subscriber.next(thisPosition as any);
         },
         (error: GeolocationPositionError) => {
-          console.error("🔥 Geolocation position error", error);
+          console.error('🔥 Geolocation position error', error);
           subscriber.error(error);
         }
       );

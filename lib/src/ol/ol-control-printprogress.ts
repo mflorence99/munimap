@@ -1,19 +1,19 @@
-import { OLMapComponent } from "./ol-map";
+import { OLMapComponent } from './ol-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnDestroy } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { EventsKey as OLEventsKey } from "ol/events";
-import { TileSourceEvent as OLTileSourceEvent } from "ol/source/Tile";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { EventsKey as OLEventsKey } from 'ol/events';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { TileSourceEvent as OLTileSourceEvent } from 'ol/source/Tile';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { unByKey } from "ol/Observable";
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { unByKey } from 'ol/Observable';
 
-import OLUrlTile from "ol/source/UrlTile";
+import OLUrlTile from 'ol/source/UrlTile';
 
 export interface PrintProgressData {
   map: OLMapComponent;
@@ -23,7 +23,7 @@ export interface PrintProgressData {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "ol-control-printprogress",
+  selector: 'ol-control-printprogress',
   template: `
     <h1 mat-dialog-title>Print Progress</h1>
 
@@ -102,8 +102,8 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
       .filter((layer: any) => layer.getSource() instanceof OLUrlTile)
       .map((layer: any) => layer.getSource());
     this.#eventKeys = sources.flatMap((olSource) => [
-      olSource.on("tileloadstart", this.#progress.bind(this)),
-      olSource.on("tileloadend", this.#progress.bind(this))
+      olSource.on('tileloadstart', this.#progress.bind(this)),
+      olSource.on('tileloadend', this.#progress.bind(this))
     ]);
   }
 
@@ -121,14 +121,14 @@ export class OLControlPrintProgressComponent implements OnDestroy, OnInit {
         this.#timestamp + this.giveUpAfter() < Date.now()
       ) {
         clearInterval(this.#interval);
-        this.#data.map.olMap.dispatchEvent("rendercomplete");
+        this.#data.map.olMap.dispatchEvent('rendercomplete');
       }
     }, 1000);
   }
 
   #progress(event: OLTileSourceEvent): void {
-    if (event.type === "tileloadstart") this.numLoading += 1;
-    else if (event.type === "tileloadend") this.numLoaded += 1;
+    if (event.type === 'tileloadstart') this.numLoading += 1;
+    else if (event.type === 'tileloadend') this.numLoaded += 1;
     this.#timestamp = Date.now();
     this.#cdf.markForCheck();
   }

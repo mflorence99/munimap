@@ -188,12 +188,12 @@ function convertRingsToGeoJSON(rings) {
 
   if (outerRings.length === 1) {
     return {
-      type: "Polygon",
+      type: 'Polygon',
       coordinates: outerRings[0]
     };
   } else {
     return {
-      type: "MultiPolygon",
+      type: 'MultiPolygon',
       coordinates: outerRings
     };
   }
@@ -255,51 +255,51 @@ function shallowClone(obj) {
 
 function getId(attributes, idAttribute) {
   var keys = idAttribute
-    ? [idAttribute, "OBJECTID", "FID"]
-    : ["OBJECTID", "FID"];
+    ? [idAttribute, 'OBJECTID', 'FID']
+    : ['OBJECTID', 'FID'];
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
     if (
       key in attributes &&
-      (typeof attributes[key] === "string" ||
-        typeof attributes[key] === "number")
+      (typeof attributes[key] === 'string' ||
+        typeof attributes[key] === 'number')
     ) {
       return attributes[key];
     }
   }
-  throw Error("No valid id attribute found");
+  throw Error('No valid id attribute found');
 }
 
 export function arcgisToGeoJSON(arcgis, idAttribute) {
   var geojson = {};
 
   if (arcgis.features) {
-    geojson.type = "FeatureCollection";
+    geojson.type = 'FeatureCollection';
     geojson.features = [];
     for (var i = 0; i < arcgis.features.length; i++) {
       geojson.features.push(arcgisToGeoJSON(arcgis.features[i], idAttribute));
     }
   }
 
-  if (typeof arcgis.x === "number" && typeof arcgis.y === "number") {
-    geojson.type = "Point";
+  if (typeof arcgis.x === 'number' && typeof arcgis.y === 'number') {
+    geojson.type = 'Point';
     geojson.coordinates = [arcgis.x, arcgis.y];
-    if (typeof arcgis.z === "number") {
+    if (typeof arcgis.z === 'number') {
       geojson.coordinates.push(arcgis.z);
     }
   }
 
   if (arcgis.points) {
-    geojson.type = "MultiPoint";
+    geojson.type = 'MultiPoint';
     geojson.coordinates = arcgis.points.slice(0);
   }
 
   if (arcgis.paths) {
     if (arcgis.paths.length === 1) {
-      geojson.type = "LineString";
+      geojson.type = 'LineString';
       geojson.coordinates = arcgis.paths[0].slice(0);
     } else {
-      geojson.type = "MultiLineString";
+      geojson.type = 'MultiLineString';
       geojson.coordinates = arcgis.paths.slice(0);
     }
   }
@@ -309,12 +309,12 @@ export function arcgisToGeoJSON(arcgis, idAttribute) {
   }
 
   if (
-    typeof arcgis.xmin === "number" &&
-    typeof arcgis.ymin === "number" &&
-    typeof arcgis.xmax === "number" &&
-    typeof arcgis.ymax === "number"
+    typeof arcgis.xmin === 'number' &&
+    typeof arcgis.ymin === 'number' &&
+    typeof arcgis.xmax === 'number' &&
+    typeof arcgis.ymax === 'number'
   ) {
-    geojson.type = "Polygon";
+    geojson.type = 'Polygon';
     geojson.coordinates = [
       [
         [arcgis.xmax, arcgis.ymax],
@@ -327,7 +327,7 @@ export function arcgisToGeoJSON(arcgis, idAttribute) {
   }
 
   if (arcgis.geometry || arcgis.attributes) {
-    geojson.type = "Feature";
+    geojson.type = 'Feature';
     geojson.geometry = arcgis.geometry
       ? arcgisToGeoJSON(arcgis.geometry)
       : null;
@@ -363,38 +363,38 @@ export function arcgisToGeoJSON(arcgis, idAttribute) {
 }
 
 export function geojsonToArcGIS(geojson, idAttribute) {
-  idAttribute = idAttribute || "OBJECTID";
+  idAttribute = idAttribute || 'OBJECTID';
   var spatialReference = { wkid: 4326 };
   var result = {};
   var i;
 
   switch (geojson.type) {
-    case "Point":
+    case 'Point':
       result.x = geojson.coordinates[0];
       result.y = geojson.coordinates[1];
       result.spatialReference = spatialReference;
       break;
-    case "MultiPoint":
+    case 'MultiPoint':
       result.points = geojson.coordinates.slice(0);
       result.spatialReference = spatialReference;
       break;
-    case "LineString":
+    case 'LineString':
       result.paths = [geojson.coordinates.slice(0)];
       result.spatialReference = spatialReference;
       break;
-    case "MultiLineString":
+    case 'MultiLineString':
       result.paths = geojson.coordinates.slice(0);
       result.spatialReference = spatialReference;
       break;
-    case "Polygon":
+    case 'Polygon':
       result.rings = orientRings(geojson.coordinates.slice(0));
       result.spatialReference = spatialReference;
       break;
-    case "MultiPolygon":
+    case 'MultiPolygon':
       result.rings = flattenMultiPolygonRings(geojson.coordinates.slice(0));
       result.spatialReference = spatialReference;
       break;
-    case "Feature":
+    case 'Feature':
       if (geojson.geometry) {
         result.geometry = geojsonToArcGIS(geojson.geometry, idAttribute);
       }
@@ -405,13 +405,13 @@ export function geojsonToArcGIS(geojson, idAttribute) {
         result.attributes[idAttribute] = geojson.id;
       }
       break;
-    case "FeatureCollection":
+    case 'FeatureCollection':
       result = [];
       for (i = 0; i < geojson.features.length; i++) {
         result.push(geojsonToArcGIS(geojson.features[i], idAttribute));
       }
       break;
-    case "GeometryCollection":
+    case 'GeometryCollection':
       result = [];
       for (i = 0; i < geojson.geometries.length; i++) {
         result.push(geojsonToArcGIS(geojson.geometries[i], idAttribute));

@@ -1,59 +1,59 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Event } from "@angular/router";
-import { NavigationCancel } from "@angular/router";
-import { NavigationEnd } from "@angular/router";
-import { NavigationError } from "@angular/router";
-import { NavigationStart } from "@angular/router";
-import { Router } from "@angular/router";
-import { RouterOutlet } from "@angular/router";
-import { MessageDialogComponent } from "@lib/components/message-dialog";
-import { MessageDialogData } from "@lib/components/message-dialog";
-import { DestroyService } from "@lib/services/destroy";
-import { VersionService } from "@lib/services/version";
-import { AuthState } from "@lib/state/auth";
-import { Profile } from "@lib/state/auth";
-import { User } from "@lib/state/auth";
-import { Map } from "@lib/state/map";
-import { MapActions } from "@lib/state/map";
-import { MapState } from "@lib/state/map";
-import { CanDo } from "@lib/state/undo";
-import { ClearStacks } from "@lib/state/undo";
-import { Redo } from "@lib/state/undo";
-import { Undo } from "@lib/state/undo";
-import { ViewState } from "@lib/state/view";
-import { Working } from "@lib/state/working";
-import { Actions } from "@ngxs/store";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Actions } from '@ngxs/store';
+import { AuthState } from '@lib/state/auth';
+import { CanDo } from '@lib/state/undo';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { ClearStacks } from '@lib/state/undo';
+import { Component } from '@angular/core';
+import { DestroyService } from '@lib/services/destroy';
+import { Event } from '@angular/router';
+import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
+import { MessageDialogData } from '@lib/components/message-dialog';
+import { NavigationCancel } from '@angular/router';
+import { NavigationEnd } from '@angular/router';
+import { NavigationError } from '@angular/router';
+import { NavigationStart } from '@angular/router';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Profile } from '@lib/state/auth';
+import { Redo } from '@lib/state/undo';
+import { Router } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { Undo } from '@lib/state/undo';
+import { User } from '@lib/state/auth';
+import { VersionService } from '@lib/services/version';
+import { ViewState } from '@lib/state/view';
+import { Working } from '@lib/state/working';
 
-import { transition } from "@angular/animations";
-import { trigger } from "@angular/animations";
-import { useAnimation } from "@angular/animations";
-import { inject } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { ofActionSuccessful } from "@ngxs/store";
-import { moveFromLeftFade } from "ngx-router-animations";
-import { takeUntil } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { moveFromLeftFade } from 'ngx-router-animations';
+import { ofActionSuccessful } from '@ngxs/store';
+import { takeUntil } from 'rxjs/operators';
+import { transition } from '@angular/animations';
+import { trigger } from '@angular/animations';
+import { useAnimation } from '@angular/animations';
+import { viewChild } from '@angular/core';
 
 @Component({
   animations: [
-    trigger("moveFromLeftFade", [
-      transition("* => *", useAnimation(moveFromLeftFade))
+    trigger('moveFromLeftFade', [
+      transition('* => *', useAnimation(moveFromLeftFade))
     ])
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-root",
+  selector: 'app-root',
   template: `
-
-    @let sink = {
-      profile: profile$ | async,
-      user: user$ | async
-    };
+    @let sink =
+      {
+        profile: profile$ | async,
+        user: user$ | async
+      };
 
     <main class="page">
       <mat-toolbar class="toolbar">
@@ -67,19 +67,19 @@ import { takeUntil } from "rxjs/operators";
           }
         </h1>
 
-        <button 
-          mat-icon-button 
-          (click)="redo()" 
-          [disabled]="!canRedo" 
+        <button
+          mat-icon-button
+          (click)="redo()"
+          [disabled]="!canRedo"
           [ngClass]="{ 'mat-icon-button-checked': canRedo }"
           title="Redo last action">
           <fa-icon [icon]="['fad', 'redo']" size="2x"></fa-icon>
         </button>
 
-        <button 
-          mat-icon-button 
-          (click)="undo()" 
-          [disabled]="!canUndo" 
+        <button
+          mat-icon-button
+          (click)="undo()"
+          [disabled]="!canUndo"
           [ngClass]="{ 'mat-icon-button-checked': canUndo }"
           title="Undo last action">
           <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>

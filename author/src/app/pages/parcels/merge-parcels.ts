@@ -1,21 +1,21 @@
-import { SidebarComponent } from "../../components/sidebar-component";
+import { SidebarComponent } from '../../components/sidebar-component';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { MatDrawer } from "@angular/material/sidenav";
-import { Parcel } from "@lib/common";
-import { ParcelID } from "@lib/common";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { AuthState } from "@lib/state/auth";
-import { ParcelsActions } from "@lib/state/parcels";
-import { Store } from "@ngxs/store";
+import { AuthState } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { Parcel } from '@lib/common';
+import { ParcelID } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { featureCollection } from "@turf/helpers";
-import { union } from "@turf/union";
+import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
+import { union } from '@turf/union';
 
-import OLFeature from "ol/Feature";
-import OLGeoJSON from "ol/format/GeoJSON";
+import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
 
 interface MergeRecord {
   mergedID: string;
@@ -23,7 +23,7 @@ interface MergeRecord {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-merge-parcels",
+  selector: 'app-merge-parcels',
   template: `
     <header class="header">
       <figure class="icon">
@@ -106,22 +106,22 @@ export class MergeParcelsComponent implements SidebarComponent {
     // 👉 these are the parcels that will be removed after the merge
     const removedParcels: Parcel[] = removedIDs.map((removedID) => {
       return {
-        action: "removed",
+        action: 'removed',
         id: removedID,
         owner: this.#authState.currentProfile().email,
         path: this.map.path(),
-        type: "Feature"
+        type: 'Feature'
       };
     });
     // 👉 this is a model for the parcel that will remain
     //    details filled in later
     const mergedParcel: Parcel = {
-      action: "modified",
+      action: 'modified',
       id: record.mergedID,
       owner: this.#authState.currentProfile().email,
       path: this.map.path(),
       properties: {},
-      type: "Feature"
+      type: 'Feature'
     };
     // 👉 the new area will be the sum of the merged parcels
     mergedParcel.properties.area = this.features.reduce(

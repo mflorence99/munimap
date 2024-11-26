@@ -1,17 +1,17 @@
-import { OLLayersComponent } from "./ol-layers";
-import { OLMapComponent } from "./ol-map";
-import { Mapable } from "./ol-mapable";
-import { MapableComponent } from "./ol-mapable";
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
+import { OLLayersComponent } from './ol-layers';
+import { OLMapComponent } from './ol-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { contentChild } from "@angular/core";
-import { effect } from "@angular/core";
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
+import { contentChild } from '@angular/core';
+import { effect } from '@angular/core';
+import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
 
-import OLSwipe from "ol-ext/control/Swipe";
+import OLSwipe from 'ol-ext/control/Swipe';
 
 // ⚠️ this is a very simple implementation that assumes one layer
 //    on the left and one on the right, and those layers never change
@@ -25,15 +25,15 @@ import OLSwipe from "ol-ext/control/Swipe";
       useExisting: forwardRef(() => OLControlSplitScreenComponent)
     }
   ],
-  selector: "app-ol-control-splitscreen",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-control-splitscreen',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLControlSplitScreenComponent implements Mapable {
   olControl: OLSwipe;
-  onLeft = contentChild<OLLayersComponent>("left");
-  onRight = contentChild<OLLayersComponent>("right");
+  onLeft = contentChild<OLLayersComponent>('left');
+  onRight = contentChild<OLLayersComponent>('right');
 
   #map = inject(OLMapComponent);
 
@@ -56,29 +56,29 @@ export class OLControlSplitScreenComponent implements Mapable {
       if (onLeft.length > 0 && onRight.length > 0) position = 0.5;
       else if (onRight.length === 0) position = 1;
       else if (onLeft.length === 0) position = 0;
-      this.olControl.set("position", position);
+      this.olControl.set('position', position);
 
       // 🔥 experimental - add accessibility
 
-      const button: any = document.querySelector(".ol-swipe button");
-      if (!button.hasAttribute("title")) {
-        console.log("🔥 experimental");
+      const button: any = document.querySelector('.ol-swipe button');
+      if (!button.hasAttribute('title')) {
+        console.log('🔥 experimental');
 
-        button.setAttribute("title", "Swipe left or right");
+        button.setAttribute('title', 'Swipe left or right');
 
-        button.addEventListener("keydown", (e: any) => {
+        button.addEventListener('keydown', (e: any) => {
           const rect = button.getBoundingClientRect();
           const center = rect.x + rect.width / 2;
           switch (e.key) {
-            case "ArrowLeft":
-              this.olControl.move({ type: "mousedown", pageX: center });
-              this.olControl.move({ type: "mousemove", pageX: center - 10 });
-              this.olControl.move({ type: "mouseup" });
+            case 'ArrowLeft':
+              this.olControl.move({ type: 'mousedown', pageX: center });
+              this.olControl.move({ type: 'mousemove', pageX: center - 10 });
+              this.olControl.move({ type: 'mouseup' });
               break;
-            case "ArrowRight":
-              this.olControl.move({ type: "mousedown", pageX: center });
-              this.olControl.move({ type: "mousemove", pageX: center + 10 });
-              this.olControl.move({ type: "mouseup" });
+            case 'ArrowRight':
+              this.olControl.move({ type: 'mousedown', pageX: center });
+              this.olControl.move({ type: 'mousemove', pageX: center + 10 });
+              this.olControl.move({ type: 'mouseup' });
               break;
           }
         });

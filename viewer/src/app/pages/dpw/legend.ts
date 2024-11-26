@@ -1,26 +1,26 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { CulvertProperties } from "@lib/common";
-import { Landmark } from "@lib/common";
-import { DestroyService } from "@lib/services/destroy";
-import { LandmarksState } from "@lib/state/landmarks";
-import { ViewState } from "@lib/state/view";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { CulvertProperties } from '@lib/common';
+import { DestroyService } from '@lib/services/destroy';
+import { Landmark } from '@lib/common';
+import { LandmarksState } from '@lib/state/landmarks';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { ViewState } from '@lib/state/view';
 
-import { inject } from "@angular/core";
-import { culvertConditions } from "@lib/common";
-import { culvertFloodHazards } from "@lib/common";
-import { culvertHeadwalls } from "@lib/common";
-import { culvertMaterials } from "@lib/common";
-import { saveAs } from "file-saver";
-import { combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
-import { takeUntil } from "rxjs/operators";
+import { combineLatest } from 'rxjs';
+import { culvertConditions } from '@lib/common';
+import { culvertFloodHazards } from '@lib/common';
+import { culvertHeadwalls } from '@lib/common';
+import { culvertMaterials } from '@lib/common';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { saveAs } from 'file-saver';
+import { takeUntil } from 'rxjs/operators';
 
-import copy from "fast-copy";
+import copy from 'fast-copy';
 
 interface Metric {
   enum: () => string[];
@@ -36,12 +36,12 @@ interface Statistics {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-dpw-legend",
+  selector: 'app-dpw-legend',
   template: `
-    <button 
-      (click)="export()" 
-      class="exporter" 
-      mat-icon-button 
+    <button
+      (click)="export()"
+      class="exporter"
+      mat-icon-button
       title="Export to spreadsheet">
       <fa-icon [icon]="['fas', 'download']" size="lg"></fa-icon>
     </button>
@@ -162,41 +162,41 @@ export class DPWLegendComponent implements OnInit {
   allMetrics: Metric[] = [
     {
       enum: (): string[] => {
-        return ["-"];
+        return ['-'];
       },
-      key: () => "-" /* 👈 fakeroo field in every row */,
-      tag: "All"
+      key: () => '-' /* 👈 fakeroo field in every row */,
+      tag: 'All'
     },
     {
       enum: (): string[] => {
-        return Object.keys(this.breakdowns["Opening"] ?? {}).sort();
+        return Object.keys(this.breakdowns['Opening'] ?? {}).sort();
       },
       key: (culvert) =>
         culvert.diameter
-          ? String(culvert.diameter).padStart(2, " ")
+          ? String(culvert.diameter).padStart(2, ' ')
           : `${culvert.width}x${culvert.height}`,
-      tag: "Opening"
+      tag: 'Opening'
     },
     {
       enum: (): string[] => {
         return culvertMaterials as any;
       },
       key: (culvert) => culvert.material,
-      tag: "Material"
+      tag: 'Material'
     },
     {
       enum: (): string[] => {
         return culvertHeadwalls as any;
       },
       key: (culvert) => culvert.headwall,
-      tag: "Headwall"
+      tag: 'Headwall'
     },
     {
       enum: (): string[] => {
         return culvertFloodHazards as any;
       },
       key: (culvert) => culvert.floodHazard,
-      tag: "Hazard"
+      tag: 'Hazard'
     }
   ];
 
@@ -225,16 +225,16 @@ export class DPWLegendComponent implements OnInit {
     );
     this.#snapshot.forEach((culvert) => {
       const c = copy(culvert);
-      Object.keys(c).forEach((k) => (c[k] = c[k] || ""));
+      Object.keys(c).forEach((k) => (c[k] = c[k] || ''));
       lines.push(
         `${c.location}\t${c.condition}\t${c.count}\t${c.diameter}\t${c.width}\t${c.height}\t${c.length}\t${c.headwall}\t${c.material}\t${c.floodHazard}\t${c.year}\t${c.description}\t`
       );
     });
     // 👇 emit the data
-    const blob = new Blob([lines.join("\n")], {
-      type: "text/tab-separated-values; charset=UTF-8"
+    const blob = new Blob([lines.join('\n')], {
+      type: 'text/tab-separated-values; charset=UTF-8'
     });
-    saveAs(blob, `${this.filteredBy ?? "ALL STREETS"} culverts.tsv`);
+    saveAs(blob, `${this.filteredBy ?? 'ALL STREETS'} culverts.tsv`);
   }
 
   ngOnInit(): void {
@@ -265,7 +265,7 @@ export class DPWLegendComponent implements OnInit {
         takeUntil(this.#destroy$),
         map(([landmarks, street]): [CulvertProperties[], string] => {
           const culverts = landmarks.filter(
-            (landmark) => landmark.properties.metadata?.type === "culvert"
+            (landmark) => landmark.properties.metadata?.type === 'culvert'
           );
           const filteredCulverts = culverts.filter(
             (culvert) =>

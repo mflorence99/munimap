@@ -1,9 +1,9 @@
-import { Directive } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
-import { NG_VALIDATORS } from "@angular/forms";
-import { ValidationErrors } from "@angular/forms";
-import { Validator } from "@angular/forms";
-import { ValidatorFn } from "@angular/forms";
+import { AbstractControl } from '@angular/forms';
+import { Directive } from '@angular/core';
+import { NG_VALIDATORS } from '@angular/forms';
+import { ValidationErrors } from '@angular/forms';
+import { Validator } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 
 function workgroupValidatorFactory(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
@@ -43,7 +43,7 @@ function workgroupValidatorFactory(): ValidatorFn {
   providers: [
     { provide: NG_VALIDATORS, useExisting: WorkgroupValidator, multi: true }
   ],
-  selector: "[appWorkgroup][ngModel]",
+  selector: '[appWorkgroup][ngModel]',
   standalone: false
 })
 export class WorkgroupValidator implements Validator {

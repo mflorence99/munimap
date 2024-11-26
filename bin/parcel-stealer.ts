@@ -1,20 +1,20 @@
-import { Parcel } from "../lib/src/common";
-import { Parcels } from "../lib/src/common";
+import { Parcel } from '../lib/src/common';
+import { Parcels } from '../lib/src/common';
 
-import { calculateParcel } from "../lib/src/common";
-import { normalizeParcel } from "../lib/src/common";
-import { serializeParcel } from "../lib/src/common";
+import { calculateParcel } from '../lib/src/common';
+import { normalizeParcel } from '../lib/src/common';
+import { serializeParcel } from '../lib/src/common';
 
-import * as firebase from "firebase-admin/app";
-import * as firestore from "firebase-admin/firestore";
-import * as inquirer from "inquirer";
-import * as yargs from "yargs";
+import * as firebase from 'firebase-admin/app';
+import * as firestore from 'firebase-admin/firestore';
+import * as inquirer from 'inquirer';
+import * as yargs from 'yargs';
 
-import { readFileSync } from "fs";
+import { readFileSync } from 'fs';
 
-import chalk from "chalk";
+import chalk from 'chalk';
 
-const dist = "./data";
+const dist = './data';
 
 interface StolenParcel {
   geometry?: any;
@@ -31,12 +31,12 @@ interface Steal {
 
 const STEALS: Steal[] = [
   {
-    fromPath: "NEW HAMPSHIRE:MERRIMACK:BRADFORD",
-    owner: "mflo999@gmail.com",
+    fromPath: 'NEW HAMPSHIRE:MERRIMACK:BRADFORD',
+    owner: 'mflo999@gmail.com',
     stolen: [
       {
         geometry: {
-          type: "Polygon",
+          type: 'Polygon',
           coordinates: [
             [
               [-72.02144540842676, 43.209150876779745],
@@ -50,19 +50,19 @@ const STEALS: Steal[] = [
             ]
           ]
         },
-        parcelID: "12-4"
+        parcelID: '12-4'
       }
     ],
-    toPath: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
+    toPath: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
     uid: 1
   },
   {
-    fromPath: "NEW HAMPSHIRE:HILLSBOROUGH:DEERING",
-    owner: "mflo999@gmail.com",
+    fromPath: 'NEW HAMPSHIRE:HILLSBOROUGH:DEERING',
+    owner: 'mflo999@gmail.com',
     stolen: [
       {
         geometry: {
-          type: "Polygon",
+          type: 'Polygon',
           coordinates: [
             [
               [-71.80956883291732, 43.12370311524194],
@@ -76,19 +76,19 @@ const STEALS: Steal[] = [
             ]
           ]
         },
-        parcelID: "202-6"
+        parcelID: '202-6'
       }
     ],
-    toPath: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
+    toPath: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
     uid: 2
   },
   {
-    fromPath: "NEW HAMPSHIRE:HILLSBOROUGH:WEARE",
-    owner: "mflo999@gmail.com",
+    fromPath: 'NEW HAMPSHIRE:HILLSBOROUGH:WEARE',
+    owner: 'mflo999@gmail.com',
     stolen: [
       {
         geometry: {
-          type: "Polygon",
+          type: 'Polygon',
           coordinates: [
             [
               [-71.80501, 43.12517999999997],
@@ -129,32 +129,32 @@ const STEALS: Steal[] = [
             ]
           ]
         },
-        parcelID: "401-36"
+        parcelID: '401-36'
       }
     ],
-    toPath: "NEW HAMPSHIRE:MERRIMACK:HENNIKER",
+    toPath: 'NEW HAMPSHIRE:MERRIMACK:HENNIKER',
     uid: 3
   }
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv["useEmulator"];
+const useEmulator = yargs.argv['useEmulator'];
 
-if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
+if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
 
 // 👇 https://stackoverflow.com/questions/49691215/cloud-functions-how-to-copy-firestore-collection-to-a-new-document
 
 firebase.initializeApp({
-  credential: firebase.cert("./firebase-admin.json"),
-  databaseURL: "https://washington-app-319514.firebaseio.com"
+  credential: firebase.cert('./firebase-admin.json'),
+  databaseURL: 'https://washington-app-319514.firebaseio.com'
 });
 
 const db = firestore.getFirestore();
-const parcels = db.collection("parcels");
+const parcels = db.collection('parcels');
 
 function loadGeoJSON(path: string): Parcels {
-  const [state, county, town] = path.split(":");
+  const [state, county, town] = path.split(':');
   const fn = `${dist}/${state}/${county}/${town}/parcels.geojson`;
   return JSON.parse(readFileSync(fn).toString());
 }
@@ -163,17 +163,17 @@ async function main(): Promise<void> {
   if (!useEmulator) {
     const response = await inquirer.prompt([
       {
-        type: "input",
-        name: "proceed",
-        choices: ["y", "n"],
-        message: "WARNING: running on live Firestore. Proceed? (y/N)"
+        type: 'input',
+        name: 'proceed',
+        choices: ['y', 'n'],
+        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
       }
     ]);
-    if (response.proceed.toLowerCase() !== "y") return;
+    if (response.proceed.toLowerCase() !== 'y') return;
   }
 
   for (const steal of STEALS) {
-    const [, county, town] = steal.toPath.split(":");
+    const [, county, town] = steal.toPath.split(':');
 
     console.log(
       chalk.green(
@@ -200,24 +200,24 @@ async function main(): Promise<void> {
 
       // 👉 construct the new parcel
       const parcel: Parcel = {
-        action: "added",
+        action: 'added',
         geometry: stolen.geometry ?? feature.geometry,
         id: `(${stolen.parcelID})`,
         owner: steal.owner,
         path: steal.toPath,
         properties: {
-          address: feature.properties.address ?? "UNKNOWN",
+          address: feature.properties.address ?? 'UNKNOWN',
           area: feature.properties.area ?? 0,
           county: county,
           id: `(${stolen.parcelID})`,
-          neighborhood: "",
-          owner: feature.properties.owner ?? "UNKNOWN",
+          neighborhood: '',
+          owner: feature.properties.owner ?? 'UNKNOWN',
           town: town,
-          usage: feature.properties.usage ?? "110",
-          use: feature.properties.use ?? "",
-          zone: ""
+          usage: feature.properties.usage ?? '110',
+          use: feature.properties.use ?? '',
+          zone: ''
         },
-        type: "Feature"
+        type: 'Feature'
       };
 
       // 👉 normalize the parcel

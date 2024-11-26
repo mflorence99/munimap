@@ -1,19 +1,19 @@
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
-import shp from "shpjs";
+import chalk from 'chalk';
+import shp from 'shpjs';
 
 const url =
-  "https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Cultural_Society_and_Demographic/d-gnis/GNIS_2008";
+  'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Cultural_Society_and_Demographic/d-gnis/GNIS_2008';
 
-const dist = "./data";
+const dist = './data';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()
@@ -27,7 +27,7 @@ async function main(): Promise<void> {
 
   lakes.features.forEach((feature: GeoJSON.Feature<any>) => {
     const county = feature.properties.COUNTY.toUpperCase();
-    if (county && county !== "UNDETERMINED") {
+    if (county && county !== 'UNDETERMINED') {
       // 👇 the data doesn't have the town, so lets see if turf can
       //    find it from the dataset of all towns
       const town = allTowns.features.find((townFeature) =>
@@ -77,11 +77,11 @@ main();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sample = {
-  FEATURE: "865 Second Street Shopping Center",
-  FEATYPE: "locale",
-  COUNTY: "Hillsborough",
+  FEATURE: '865 Second Street Shopping Center',
+  FEATYPE: 'locale',
+  COUNTY: 'Hillsborough',
   STCODE: 33,
   COCODE: 11,
-  QUAD: "Manchester South",
+  QUAD: 'Manchester South',
   FeatID: 1915859
 };

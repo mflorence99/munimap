@@ -1,23 +1,23 @@
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
-import { booleanIntersects } from "@turf/boolean-intersects";
+import { booleanIntersects } from '@turf/boolean-intersects';
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
-import copy from "fast-copy";
+import chalk from 'chalk';
+import copy from 'fast-copy';
 
 // 🔥 you need to run powerlines-prepare.ts at least once first
 
-const dist = "./data";
+const dist = './data';
 
 const powerlines = JSON.parse(
   readFileSync(
-    "./bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson"
+    './bin/assets/New_Hampshire_Electric_Power_Transmission_Lines.geojson'
   ).toString()
 );
 
@@ -91,20 +91,20 @@ Object.keys(linesByCountyByTown).forEach((county) => {
 
 const sample = {
   OBJECTID: 1,
-  ID: "212144",
-  TYPE: "AC; OVERHEAD",
-  STATUS: "IN SERVICE",
-  NAICS_CODE: "221121",
-  NAICS_DESC: "ELECTRIC BULK POWER TRANSMISSION AND CONTROL",
-  SOURCE: "IMAGERY",
-  SOURCEDATE: "2020-03-04T00:00:00Z",
-  VAL_METHOD: "IMAGERY",
-  VAL_DATE: "2020-03-04T00:00:00Z",
-  OWNER: "BONNEVILLE POWER ADMINISTRATION",
+  ID: '212144',
+  TYPE: 'AC; OVERHEAD',
+  STATUS: 'IN SERVICE',
+  NAICS_CODE: '221121',
+  NAICS_DESC: 'ELECTRIC BULK POWER TRANSMISSION AND CONTROL',
+  SOURCE: 'IMAGERY',
+  SOURCEDATE: '2020-03-04T00:00:00Z',
+  VAL_METHOD: 'IMAGERY',
+  VAL_DATE: '2020-03-04T00:00:00Z',
+  OWNER: 'BONNEVILLE POWER ADMINISTRATION',
   VOLTAGE: 69,
-  VOLT_CLASS: "UNDER 100",
-  INFERRED: "Y",
-  SUB_1: "EAST ARLINGTON",
-  SUB_2: "TAP209798",
+  VOLT_CLASS: 'UNDER 100',
+  INFERRED: 'Y',
+  SUB_1: 'EAST ARLINGTON',
+  SUB_2: 'TAP209798',
   SHAPE_Length: 0.09014889071718463
 };

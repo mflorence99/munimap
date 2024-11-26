@@ -1,17 +1,17 @@
-import { HistoricalMap } from "../common";
-import { HistoricalMapIndex } from "../common";
-import { Path } from "../state/view";
+import { HistoricalMap } from '../common';
+import { HistoricalMapIndex } from '../common';
+import { Path } from '../state/view';
 
-import { environment } from "../environment";
+import { environment } from '../environment';
 
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { inject } from "@angular/core";
-import { tap } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { tap } from 'rxjs/operators';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class HistoricalsService {
   historicals: HistoricalMapIndex;
 

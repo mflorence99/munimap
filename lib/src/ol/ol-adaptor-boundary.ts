@@ -1,14 +1,14 @@
-import { LandmarkProperties } from "../common";
-import { LandmarkPropertiesClass } from "../common";
-import { Adaptor } from "./ol-adaptor";
-import { AdaptorComponent } from "./ol-adaptor";
-import { OLFillPatternType } from "./ol-styler";
+import { Adaptor } from './ol-adaptor';
+import { AdaptorComponent } from './ol-adaptor';
+import { LandmarkProperties } from '../common';
+import { LandmarkPropertiesClass } from '../common';
+import { OLFillPatternType } from './ol-styler';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { forwardRef } from "@angular/core";
-import { input } from "@angular/core";
+import { forwardRef } from '@angular/core';
+import { input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,36 +18,36 @@ import { input } from "@angular/core";
       useExisting: forwardRef(() => OLAdaptorBoundaryComponent)
     }
   ],
-  selector: "app-ol-adaptor-boundary",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-adaptor-boundary',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLAdaptorBoundaryComponent implements Adaptor {
   borderOpacity = input(0.5);
   borderPixels = input(5);
   fillOpacity = input(1);
-  fillPattern = input<OLFillPatternType>("gravel");
+  fillPattern = input<OLFillPatternType>('gravel');
 
   // 👇 construct LandmarkProperties
   adapt(): LandmarkProperties[] {
     return [
       new LandmarkPropertiesClass({
-        fillColor: "--map-boundary-fill",
+        fillColor: '--map-boundary-fill',
         fillOpacity: this.fillOpacity(),
         zIndex: 1
       }),
       new LandmarkPropertiesClass({
-        fillColor: "--map-boundary-pattern",
+        fillColor: '--map-boundary-pattern',
         fillOpacity: this.fillOpacity(),
         fillPattern: this.fillPattern(),
         zIndex: 2
       }),
       new LandmarkPropertiesClass({
-        strokeColor: "--map-boundary-outline",
+        strokeColor: '--map-boundary-outline',
         strokeOpacity: this.borderOpacity(),
         strokePixels: this.borderPixels(),
-        strokeStyle: "solid",
+        strokeStyle: 'solid',
         zIndex: 3
       })
     ];

@@ -1,9 +1,9 @@
-import { Directive } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
-import { NG_VALIDATORS } from "@angular/forms";
-import { ValidationErrors } from "@angular/forms";
-import { Validator } from "@angular/forms";
-import { ValidatorFn } from "@angular/forms";
+import { AbstractControl } from '@angular/forms';
+import { Directive } from '@angular/core';
+import { NG_VALIDATORS } from '@angular/forms';
+import { ValidationErrors } from '@angular/forms';
+import { Validator } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 
 function emailAddressValidatorFactory(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
@@ -28,7 +28,7 @@ function emailAddressValidatorFactory(): ValidatorFn {
   providers: [
     { provide: NG_VALIDATORS, useExisting: EmailAddressValidator, multi: true }
   ],
-  selector: "[appEmailAddress][ngModel]",
+  selector: '[appEmailAddress][ngModel]',
   standalone: false
 })
 export class EmailAddressValidator implements Validator {

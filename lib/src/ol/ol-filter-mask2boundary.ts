@@ -1,26 +1,26 @@
-import { OLLayerImageComponent } from "./ol-layer-image";
-import { OLLayerTileComponent } from "./ol-layer-tile";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
+import { OLLayerImageComponent } from './ol-layer-image';
+import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 
-import { AfterContentInit } from "@angular/core";
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnDestroy } from "@angular/core";
+import { AfterContentInit } from '@angular/core';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 
-import { inject } from "@angular/core";
+import { inject } from '@angular/core';
 
-import copy from "fast-copy";
-import Mask from "ol-ext/filter/Mask";
-import Feature from "ol/Feature";
-import Polygon from "ol/geom/Polygon";
-import OLFill from "ol/style/Fill";
+import copy from 'fast-copy';
+import Feature from 'ol/Feature';
+import Mask from 'ol-ext/filter/Mask';
+import OLFill from 'ol/style/Fill';
+import Polygon from 'ol/geom/Polygon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-filter-mask2boundary",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-filter-mask2boundary',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLFilterMask2BoundaryComponent
@@ -53,11 +53,11 @@ export class OLFilterMask2BoundaryComponent
 
   ngAfterContentInit(): void {
     // 👇 ol-ext has monkey-patched addFilter
-    this.#layer?.olLayer["addFilter"](this.olFilter);
+    this.#layer?.olLayer['addFilter'](this.olFilter);
   }
 
   ngOnDestroy(): void {
     // 👇 ol-ext has monkey-patched removeFilter
-    this.#layer?.olLayer["removeFilter"](this.olFilter);
+    this.#layer?.olLayer['removeFilter'](this.olFilter);
   }
 }

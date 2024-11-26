@@ -1,24 +1,24 @@
-import { CountyIndex } from "../common";
-import { Index } from "../common";
-import { StateIndex } from "../common";
-import { TownIndex } from "../common";
-import { CacheService } from "../services/cache";
-import { Path } from "../state/view";
-import { GeoJSONService } from "./geojson";
+import { CacheService } from '../services/cache';
+import { CountyIndex } from '../common';
+import { GeoJSONService } from './geojson';
+import { Index } from '../common';
+import { Path } from '../state/view';
+import { StateIndex } from '../common';
+import { TownIndex } from '../common';
 
-import { environment } from "../environment";
+import { environment } from '../environment';
 
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
-import { Observable } from "rxjs";
+import { Coordinate } from 'ol/coordinate';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { inject } from "@angular/core";
-import { of } from "rxjs";
-import { catchError } from "rxjs/operators";
-import { delay } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { tap } from "rxjs/operators";
+import { catchError } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 // 👇 this implementation of GeoJSONService has access to the entire
 //    catalog of geojson data for authoring
@@ -52,7 +52,7 @@ export class GeoJSONAuthorService extends GeoJSONService {
     base: Index,
     path: Path
   ): StateIndex | CountyIndex | TownIndex {
-    const parts = path.split(":");
+    const parts = path.split(':');
     let index: any = base;
     parts.forEach((part) => (index = index[part]));
     return index;

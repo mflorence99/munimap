@@ -1,29 +1,29 @@
-import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
-import { OLLayerImageComponent } from "./ol-layer-image";
-import { OLLayerTileComponent } from "./ol-layer-tile";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
+import { OLLayerImageComponent } from './ol-layer-image';
+import { OLLayerTileComponent } from './ol-layer-tile';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 
-import * as Sentry from "@sentry/angular-ivy";
+import * as Sentry from '@sentry/angular-ivy';
 
-import { AfterContentInit } from "@angular/core";
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnDestroy } from "@angular/core";
-import { OnInit } from "@angular/core";
+import { AfterContentInit } from '@angular/core';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
 
-import { inject } from "@angular/core";
-import { featureCollection } from "@turf/helpers";
-import { union } from "@turf/union";
+import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
+import { union } from '@turf/union';
 
-import Crop from "ol-ext/filter/Crop";
-import OLGeoJSON from "ol/format/GeoJSON";
+import Crop from 'ol-ext/filter/Crop';
+import OLGeoJSON from 'ol/format/GeoJSON';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-filter-crop2selectedparcels",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-filter-crop2selectedparcels',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLFilterCrop2SelectedParcelsComponent
@@ -53,7 +53,7 @@ export class OLFilterCrop2SelectedParcelsComponent
 
   ngOnDestroy(): void {
     // 👇 ol-ext has monkey-patched removeFilter
-    this.#layer?.olLayer["removeFilter"](this.olFilter);
+    this.#layer?.olLayer['removeFilter'](this.olFilter);
   }
 
   ngOnInit(): void {
@@ -62,7 +62,7 @@ export class OLFilterCrop2SelectedParcelsComponent
 
   #addFilter(): void {
     // 👉 remove prior filter
-    if (this.olFilter) this.#layer?.olLayer["removeFilter"](this.olFilter);
+    if (this.olFilter) this.#layer?.olLayer['removeFilter'](this.olFilter);
     this.olFilter = null;
     // 👉 the selector MAY not be present
     const selector =
@@ -77,7 +77,7 @@ export class OLFilterCrop2SelectedParcelsComponent
           union(featureCollection([acc, geojson]))
         ).geometry,
         properties: {},
-        type: "Feature"
+        type: 'Feature'
       };
       // 👇 this may fail!
       try {
@@ -92,7 +92,7 @@ export class OLFilterCrop2SelectedParcelsComponent
       }
     }
     // 👇 ol-ext has monkey-patched addFilter
-    if (this.olFilter) this.#layer?.olLayer["addFilter"](this.olFilter);
+    if (this.olFilter) this.#layer?.olLayer['addFilter'](this.olFilter);
   }
 
   #handleFeaturesSelected$(): void {

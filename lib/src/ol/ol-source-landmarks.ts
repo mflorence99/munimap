@@ -1,38 +1,38 @@
-import { Landmark } from "../common";
-import { DestroyService } from "../services/destroy";
-import { LandmarksState } from "../state/landmarks";
-import { OLInteractionSelectLandmarksComponent } from "./ol-interaction-selectlandmarks";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
+import { DestroyService } from '../services/destroy';
+import { Landmark } from '../common';
+import { LandmarksState } from '../state/landmarks';
+import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Coordinate } from "ol/coordinate";
-import { Observable } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { toObservable } from "@angular/core/rxjs-interop";
-import { bbox } from "@turf/bbox";
-import { featureCollection } from "@turf/helpers";
-import { all as allStrategy } from "ol/loadingstrategy";
-import { transformExtent } from "ol/proj";
-import { combineLatest } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { all as allStrategy } from 'ol/loadingstrategy';
+import { bbox } from '@turf/bbox';
+import { combineLatest } from 'rxjs';
+import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { transformExtent } from 'ol/proj';
 
-import OLFeature from "ol/Feature";
-import GeoJSON from "ol/format/GeoJSON";
-import OLProjection from "ol/proj/Projection";
-import OLVector from "ol/source/Vector";
+import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
+import OLVector from 'ol/source/Vector';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-ol-source-landmarks",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-landmarks',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceLandmarksComponent implements OnInit {

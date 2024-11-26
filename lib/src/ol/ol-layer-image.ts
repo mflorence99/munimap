@@ -1,16 +1,16 @@
-import { OLMapComponent } from "./ol-map";
-import { Mapable } from "./ol-mapable";
-import { MapableComponent } from "./ol-mapable";
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
+import { OLMapComponent } from './ol-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { effect } from "@angular/core";
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
+import { effect } from '@angular/core';
+import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
-import OLImage from "ol-ext/layer/GeoImage";
+import OLImage from 'ol-ext/layer/GeoImage';
 
 // 🔥 EXPERIMENTAL
 
@@ -22,9 +22,9 @@ import OLImage from "ol-ext/layer/GeoImage";
       useExisting: forwardRef(() => OLLayerImageComponent)
     }
   ],
-  selector: "app-ol-layer-image",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: block; visibility: hidden }"],
+  selector: 'app-ol-layer-image',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: block; visibility: hidden }'],
   standalone: false
 })
 export class OLLayerImageComponent implements Mapable {
@@ -39,7 +39,7 @@ export class OLLayerImageComponent implements Mapable {
     this.olLayer = new OLImage();
     this.olLayer.setProperties({ component: this }, true);
     // 👇 side effects
-    effect(() => this.olLayer.set("id", this.id()));
+    effect(() => this.olLayer.set('id', this.id()));
     effect(() => this.olLayer.setMaxZoom(this.maxZoom()));
     effect(() => this.olLayer.setOpacity(this.opacity()));
   }

@@ -1,14 +1,14 @@
-import { OLControlSearchParcelsComponent } from "../ol/ol-control-searchparcels";
+import { OLControlSearchParcelsComponent } from '../ol/ol-control-searchparcels';
 
-import { Directive } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
-import { NG_VALIDATORS } from "@angular/forms";
-import { ValidationErrors } from "@angular/forms";
-import { Validator } from "@angular/forms";
-import { ValidatorFn } from "@angular/forms";
+import { AbstractControl } from '@angular/forms';
+import { Directive } from '@angular/core';
+import { NG_VALIDATORS } from '@angular/forms';
+import { OnInit } from '@angular/core';
+import { ValidationErrors } from '@angular/forms';
+import { Validator } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 
-import { input } from "@angular/core";
+import { input } from '@angular/core';
 
 function parcelIDValidatorFactory(
   searcher: OLControlSearchParcelsComponent,
@@ -39,7 +39,7 @@ function parcelIDValidatorFactory(
   providers: [
     { provide: NG_VALIDATORS, useExisting: ParcelIDValidator, multi: true }
   ],
-  selector: "[appParcelID][ngModel]",
+  selector: '[appParcelID][ngModel]',
   standalone: false
 })
 export class ParcelIDValidator implements OnInit, Validator {

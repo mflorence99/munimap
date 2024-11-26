@@ -1,25 +1,25 @@
-import { Location } from "@angular/common";
-import { Injectable } from "@angular/core";
-import { Auth } from "@angular/fire/auth";
-import { User as FirebaseUser } from "@angular/fire/auth";
-import { Firestore } from "@angular/fire/firestore";
-import { Router } from "@angular/router";
-import { Action } from "@ngxs/store";
-import { NgxsOnInit } from "@ngxs/store";
-import { Selector } from "@ngxs/store";
-import { State } from "@ngxs/store";
-import { StateContext } from "@ngxs/store";
-import { Store } from "@ngxs/store";
+import { Action } from '@ngxs/store';
+import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
+import { NgxsOnInit } from '@ngxs/store';
+import { Router } from '@angular/router';
+import { Selector } from '@ngxs/store';
+import { State } from '@ngxs/store';
+import { StateContext } from '@ngxs/store';
+import { Store } from '@ngxs/store';
+import { User as FirebaseUser } from '@angular/fire/auth';
 
-import { inject } from "@angular/core";
-import { signOut } from "@angular/fire/auth";
-import { updateProfile } from "@angular/fire/auth";
-import { user } from "@angular/fire/auth";
-import { doc } from "@angular/fire/firestore";
-import { getDoc } from "@angular/fire/firestore";
-import { setDoc } from "@angular/fire/firestore";
+import { doc } from '@angular/fire/firestore';
+import { getDoc } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
+import { setDoc } from '@angular/fire/firestore';
+import { signOut } from '@angular/fire/auth';
+import { updateProfile } from '@angular/fire/auth';
+import { user } from '@angular/fire/auth';
 
-const ACTION_SCOPE = "Auth";
+const ACTION_SCOPE = 'Auth';
 
 export namespace AuthActions {
   export class Logout {
@@ -76,7 +76,7 @@ export function userProps(obj: any): any {
   return {
     displayName: obj.displayName,
     email: obj.email,
-    photoURL: obj.photoURL ?? "",
+    photoURL: obj.photoURL ?? '',
     uid: obj.uid
   };
 }
@@ -91,7 +91,7 @@ export function workgroup(profile: Profile): string[] {
 }
 
 @State<AuthStateModel>({
-  name: "auth",
+  name: 'auth',
   defaults: {
     profile: null,
     user: null
@@ -146,9 +146,9 @@ export class AuthState implements NgxsOnInit {
       `%cFirestore set: profiles ${user.email} ${JSON.stringify(
         action.profile
       )}`,
-      "color: chocolate"
+      'color: chocolate'
     );
-    const docRef = doc(this.#firestore, "profiles", user.email);
+    const docRef = doc(this.#firestore, 'profiles', user.email);
     setDoc(docRef, profileProps(action.profile), {
       merge: true
     }).then(() => ctx.dispatch(new AuthActions.SetProfile(action.profile)));
@@ -180,18 +180,18 @@ export class AuthState implements NgxsOnInit {
     const lastRoute = this.#store.snapshot().router?.state.url;
     // 👇 don't try to use ?? here, because deepLink and lastRoute
     //    are blank when empty, not null or undefined
-    const forwardTo = deepLink || lastRoute || "/create";
+    const forwardTo = deepLink || lastRoute || '/create';
     // 👉 the user will be NULL on logout!
     user(this.#fireauth).subscribe((user) => {
       ctx.dispatch(new AuthActions.SetUser(user));
       if (user) {
         console.log(
           `%cFirestore get: profiles ${user.email}`,
-          "color: goldenrod"
+          'color: goldenrod'
         );
         // 👉 set the profile corresponding to the User
         //    or an empty one if none found
-        const docRef = doc(this.#firestore, "profiles", user.email);
+        const docRef = doc(this.#firestore, 'profiles', user.email);
         getDoc(docRef).then((doc) => {
           if (doc.exists())
             ctx.dispatch(new AuthActions.SetProfile(doc.data() as Profile));
@@ -199,13 +199,13 @@ export class AuthState implements NgxsOnInit {
             ctx.dispatch(
               new AuthActions.UpdateProfile({
                 email: user.email,
-                workgroup: ""
+                workgroup: ''
               })
             );
         });
         // 👉 no point in going to login if we're logged in!
         this.#router.navigateByUrl(
-          forwardTo === "/login" ? "/create" : forwardTo
+          forwardTo === '/login' ? '/create' : forwardTo
         );
       }
     });

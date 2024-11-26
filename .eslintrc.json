@@ -1,0 +1,67 @@
+{
+  "extends": [
+    "eslint-config-mflorence99",
+    "eslint-config-prettier"
+  ],
+  "parserOptions": {
+    "project": [
+      "author/src/tsconfig.json",
+      "bin/tsconfig.json",
+      "viewer/src/tsconfig.json"
+    ]
+  },
+  "plugins": [
+    "eslint-plugin-import",
+    "eslint-plugin-import-splitnsort",
+    "eslint-plugin-prefer-arrow",
+    "eslint-plugin-prettier"
+  ],
+  "root": true,
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "format": [
+          "camelCase",
+          "UPPER_CASE",
+          "snake_case",
+          "PascalCase"
+        ],
+        "leadingUnderscore": "allow",
+        "selector": "default"
+      },
+      {
+        "format": null,
+        "modifiers": [
+          "requiresQuotes"
+        ],
+        "selector": "property"
+      },
+      {
+        "format": [
+          "PascalCase"
+        ],
+        "selector": "typeLike"
+      }
+    ],
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": false
+      }
+    ],
+    "@typescript-eslint/no-duplicate-type-constituents": "off",
+    "@typescript-eslint/no-empty-object-type": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-unsafe-function-type": "off",
+    "@typescript-eslint/unbound-method": "off",
+    "no-constant-condition": [
+      "error",
+      {
+        "checkLoops": false
+      }
+    ],
+    "no-unused-private-class-members": "error"
+  }
+}

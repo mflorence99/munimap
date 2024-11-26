@@ -1,19 +1,19 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Index } from "@lib/common";
-import { TownIndex } from "@lib/common";
-import { GeoJSONService } from "@lib/services/geojson";
-import { Path } from "@lib/state/view";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { GeoJSONService } from '@lib/services/geojson';
+import { Index } from '@lib/common';
+import { Path } from '@lib/state/view';
+import { TownIndex } from '@lib/common';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { model } from "@angular/core";
-import { output } from "@angular/core";
-import { isIndex } from "@lib/common";
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { isIndex } from '@lib/common';
+import { model } from '@angular/core';
+import { output } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-builder",
+  selector: 'app-builder',
   template: `
     <mat-card appearance="outlined" class="card">
       <mat-card-header>
@@ -150,7 +150,7 @@ export class BuilderComponent {
         .filter((town) => {
           const townIndex = this.index[state][county][town] as TownIndex;
           return (
-            this.type() !== "parcels" || townIndex.layers.parcels.available
+            this.type() !== 'parcels' || townIndex.layers.parcels.available
           );
         })
         .sort()
@@ -158,15 +158,15 @@ export class BuilderComponent {
   }
 
   currentCounty(): string {
-    return this.path()?.split(":")[1];
+    return this.path()?.split(':')[1];
   }
 
   currentState(): string {
-    return this.path()?.split(":")[0];
+    return this.path()?.split(':')[0];
   }
 
   currentTown(): string {
-    return this.path()?.split(":")[2];
+    return this.path()?.split(':')[2];
   }
 
   currentType(): string {

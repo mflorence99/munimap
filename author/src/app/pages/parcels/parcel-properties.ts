@@ -1,25 +1,25 @@
-import { SidebarComponent } from "../../components/sidebar-component";
+import { SidebarComponent } from '../../components/sidebar-component';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { MatDrawer } from "@angular/material/sidenav";
-import { Parcel } from "@lib/common";
-import { ParcelID } from "@lib/common";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { AuthState } from "@lib/state/auth";
-import { ParcelsActions } from "@lib/state/parcels";
-import { Store } from "@ngxs/store";
-import { ValuesPipe } from "ngx-pipes";
+import { AuthState } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { OnInit } from '@angular/core';
+import { Parcel } from '@lib/common';
+import { ParcelID } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
+import { Store } from '@ngxs/store';
+import { ValuesPipe } from 'ngx-pipes';
 
-import { inject } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { parcelPropertiesUsage } from "@lib/common";
-import { parcelPropertiesUse } from "@lib/common";
+import { inject } from '@angular/core';
+import { parcelPropertiesUsage } from '@lib/common';
+import { parcelPropertiesUse } from '@lib/common';
+import { viewChild } from '@angular/core';
 
-import OLFeature from "ol/Feature";
+import OLFeature from 'ol/Feature';
 
 interface Value {
   conflict: boolean;
@@ -36,7 +36,7 @@ type ValueRecord = Record<string, Value>;
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ValuesPipe],
-  selector: "app-parcel-properties",
+  selector: 'app-parcel-properties',
   template: `
     <header class="header">
       <figure class="icon">
@@ -136,21 +136,21 @@ type ValueRecord = Record<string, Value>;
 export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;
   editables = [
-    { prop: "address", label: "Parcel Address", type: "text" },
-    { prop: "owner", label: "Parcel Owner", type: "text" },
-    { prop: "addressOfOwner", label: "Owner Address", type: "text" },
-    { prop: "area", label: "Acreage", type: "number", step: 0.01 },
-    { prop: "usage", label: "Land Use", list: parcelPropertiesUsage },
-    { prop: "use", label: "Current Use", list: parcelPropertiesUse },
-    { prop: "neighborhood", label: "Neighborhood" },
-    { prop: "building$", label: "Building", type: "number" },
-    { prop: "land$", label: "Land", type: "number" },
-    { prop: "other$", label: "Other", type: "number" },
-    { prop: "taxed$", label: "Total", type: "number" }
+    { prop: 'address', label: 'Parcel Address', type: 'text' },
+    { prop: 'owner', label: 'Parcel Owner', type: 'text' },
+    { prop: 'addressOfOwner', label: 'Owner Address', type: 'text' },
+    { prop: 'area', label: 'Acreage', type: 'number', step: 0.01 },
+    { prop: 'usage', label: 'Land Use', list: parcelPropertiesUsage },
+    { prop: 'use', label: 'Current Use', list: parcelPropertiesUse },
+    { prop: 'neighborhood', label: 'Neighborhood' },
+    { prop: 'building$', label: 'Building', type: 'number' },
+    { prop: 'land$', label: 'Land', type: 'number' },
+    { prop: 'other$', label: 'Other', type: 'number' },
+    { prop: 'taxed$', label: 'Total', type: 'number' }
   ];
   features: OLFeature<any>[];
   map: OLMapComponent;
-  ngForm = viewChild<NgForm>("propertiesForm");
+  ngForm = viewChild<NgForm>('propertiesForm');
   record: ValueRecord = {};
   selectedIDs: ParcelID[];
 
@@ -181,12 +181,12 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
     // 👇 we'll potentially save a parcel override per feature
     this.features.forEach((feature) => {
       const parcel: Parcel = {
-        action: "modified",
+        action: 'modified',
         id: feature.getId(),
         owner: this.#authState.currentProfile().email,
         path: this.map.path(),
         properties: {},
-        type: "Feature"
+        type: 'Feature'
       };
       // 👇 some controls are conditional so they may no longer be
       //    in the form, in which case we don't record a value
@@ -196,7 +196,7 @@ export class ParcelPropertiesComponent implements SidebarComponent, OnInit {
         const value = record[prop].value;
         if (control?.dirty && value) {
           parcel.properties[prop] =
-            editable.type === "number" ? Number(value) : value;
+            editable.type === 'number' ? Number(value) : value;
         }
       });
       // 👉 only save if at least one property override

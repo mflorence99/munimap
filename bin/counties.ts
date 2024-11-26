@@ -1,20 +1,20 @@
-import { bboxByAspectRatio } from "../lib/src/common";
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { bboxByAspectRatio } from '../lib/src/common';
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
+import chalk from 'chalk';
 
-const dist = "./data";
+const dist = './data';
 
 const counties = JSON.parse(
   readFileSync(
-    "./bin/assets/New_Hampshire_County_Boundaries.geojson"
+    './bin/assets/New_Hampshire_County_Boundaries.geojson'
   ).toString()
 );
 
@@ -39,8 +39,8 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   };
 
   // 👉 ouch! the source data uses MultiPolygon, we need Polygon
-  if (feature.geometry.type === "MultiPolygon") {
-    feature.geometry.type = "Polygon";
+  if (feature.geometry.type === 'MultiPolygon') {
+    feature.geometry.type = 'Polygon';
     feature.geometry.coordinates = feature.geometry.coordinates.flat(1);
   }
 

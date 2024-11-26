@@ -1,28 +1,28 @@
-import { LabelProperties } from "../common";
-import { OLSourceArcGISComponent } from "./ol-source-arcgis";
+import { LabelProperties } from '../common';
+import { OLSourceArcGISComponent } from './ol-source-arcgis';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 
-import { input } from "@angular/core";
+import { input } from '@angular/core';
 
-import copy from "fast-copy";
+import copy from 'fast-copy';
 
-type LabelLayerType = "conservation" | "stream";
+type LabelLayerType = 'conservation' | 'stream';
 
 const LABELS: {
   [key in LabelLayerType]?: { place: string; url: string };
 } = {
   conservation: {
-    url: "https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_Labels/MapServer/21/query",
-    place: "park"
+    url: 'https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_Labels/MapServer/21/query',
+    place: 'park'
   },
   // 🔥 stream labels are really promising but the data coverage
   //    is too limited -- ol-source-rivers is much better
   stream: {
-    url: "https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_ExtractDataLayers/MapServer/17/query",
-    place: "stream"
+    url: 'https://nhgeodata.unh.edu/nhgeodata/rest/services/Topical/GV_ExtractDataLayers/MapServer/17/query',
+    place: 'stream'
   }
 };
 
@@ -31,9 +31,9 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-labels",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-labels',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceLabelsComponent extends OLSourceArcGISComponent {

@@ -1,28 +1,28 @@
-import { OLLayerTileComponent } from "./ol-layer-tile";
+import { OLLayerTileComponent } from './ol-layer-tile';
 
-import { environment } from "../environment";
+import { environment } from '../environment';
 
-import { HttpClient } from "@angular/common/http";
-import { HttpResponse } from "@angular/common/http";
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { catchError } from "rxjs/operators";
-import { map } from "rxjs/operators";
+import { catchError } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { map } from 'rxjs/operators';
 
-import OLImageTile from "ol/ImageTile";
-import OLTileWMS from "ol/source/TileWMS";
+import OLImageTile from 'ol/ImageTile';
+import OLTileWMS from 'ol/source/TileWMS';
 
 const attribution =
   '<a href="carto.nationalmap.gov/" target="_blank">National Map</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-contours",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-contours',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceContoursComponent {
@@ -44,10 +44,10 @@ export class OLSourceContoursComponent {
   //    often throwing 503 or 504 errors
 
   urlFallback =
-    "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256&version=VVVVVV";
+    'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=image&format=jpgpng&renderingRule=YYYYYY&bbox=XXXXXX&imageSR=102100&bboxSR=102100&size=256,256&version=VVVVVV';
 
   urlPreferred =
-    "https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer/export?bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&dpi=96&format=png32&transparent=true&layers=show:ZZZZZZ&f=image&version=VVVVVV";
+    'https://carto.nationalmap.gov/arcgis/rest/services/contours/MapServer/export?bbox=XXXXXX&bboxSR=102100&imageSR=102100&size=256,256&dpi=96&format=png32&transparent=true&layers=show:ZZZZZZ&f=image&version=VVVVVV';
 
   #http = inject(HttpClient);
   #layer = inject(OLLayerTileComponent);
@@ -56,10 +56,10 @@ export class OLSourceContoursComponent {
   constructor() {
     this.olTileWMS = new OLTileWMS({
       attributions: [attribution],
-      crossOrigin: "anonymous",
-      params: { LAYERS: "dummy" },
+      crossOrigin: 'anonymous',
+      params: { LAYERS: 'dummy' },
       tileLoadFunction: this.#loader.bind(this),
-      url: "http://dummy.com"
+      url: 'http://dummy.com'
     });
     this.olTileWMS.setProperties({ component: this }, true);
     this.#layer.olLayer.setSource(this.olTileWMS);
@@ -74,15 +74,15 @@ export class OLSourceContoursComponent {
     const img = tile.getImage() as HTMLImageElement;
     const url = this.#makeURL(src, this.urlPreferred);
     this.#http
-      .get(url, { observe: "response", responseType: "blob" })
+      .get(url, { observe: 'response', responseType: 'blob' })
       .pipe(
         catchError(() => {
           // 👉 the fallback contours are WAAY to heavy
           this.#layer.olLayer.setOpacity(this.fallbackOpacity());
           const url = this.#makeURL(src, this.urlFallback);
           return this.#http.get(url, {
-            observe: "response",
-            responseType: "blob"
+            observe: 'response',
+            responseType: 'blob'
           });
         }),
         map((response: HttpResponse<Blob>) =>
@@ -96,19 +96,19 @@ export class OLSourceContoursComponent {
 
   #makeURL(src: string, model: string): string {
     const parsed = new URL(src);
-    const bbox = parsed.searchParams.get("BBOX");
+    const bbox = parsed.searchParams.get('BBOX');
     const renderingRule = {
-      rasterFunction: "Contour 25",
+      rasterFunction: 'Contour 25',
       rasterFunctionArguments: {}
     };
     return `${
       environment.endpoints.proxy
     }/proxy/contours?url=${encodeURIComponent(
       model
-        .replace("VVVVVV", environment.package.version)
-        .replace("XXXXXX", bbox)
-        .replace("YYYYYY", JSON.stringify(renderingRule))
-        .replace("ZZZZZZ", this.layers().join(","))
+        .replace('VVVVVV', environment.package.version)
+        .replace('XXXXXX', bbox)
+        .replace('YYYYYY', JSON.stringify(renderingRule))
+        .replace('ZZZZZZ', this.layers().join(','))
     )}`;
   }
 }

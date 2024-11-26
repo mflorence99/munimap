@@ -1,33 +1,33 @@
-import { CacheService } from "../services/cache";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
+import { CacheService } from '../services/cache';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 
-import { dedupe } from "../common";
-import { environment } from "../environment";
+import { dedupe } from '../common';
+import { environment } from '../environment';
 
-import { HttpClient } from "@angular/common/http";
-import { Coordinate } from "ol/coordinate";
+import { Coordinate } from 'ol/coordinate';
+import { HttpClient } from '@angular/common/http';
 
-import { inject } from "@angular/core";
-import { arcgisToGeoJSON } from "@esri/arcgis-to-geojson-utils";
-import { bbox } from "@turf/bbox";
-import { bboxPolygon } from "@turf/bbox-polygon";
-import { booleanIntersects } from "@turf/boolean-intersects";
-import { all as allStrategy } from "ol/loadingstrategy";
-import { bbox as bboxStrategy } from "ol/loadingstrategy";
-import { transformExtent } from "ol/proj";
-import { merge } from "rxjs";
-import { of } from "rxjs";
-import { catchError } from "rxjs/operators";
-import { delay } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { tap } from "rxjs/operators";
-import { toArray } from "rxjs/operators";
+import { all as allStrategy } from 'ol/loadingstrategy';
+import { arcgisToGeoJSON } from '@esri/arcgis-to-geojson-utils';
+import { bbox } from '@turf/bbox';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+import { bboxPolygon } from '@turf/bbox-polygon';
+import { booleanIntersects } from '@turf/boolean-intersects';
+import { catchError } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { toArray } from 'rxjs/operators';
+import { transformExtent } from 'ol/proj';
 
-import OLFeature from "ol/Feature";
-import GeoJSON from "ol/format/GeoJSON";
-import OLProjection from "ol/proj/Projection";
-import OLVector from "ol/source/Vector";
+import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
+import OLVector from 'ol/source/Vector';
 
 // 👇 we don't care about the ArcGIS schema as defined in
 //    @arcgis/core because we immediately convert it to GeoJSON
@@ -44,8 +44,8 @@ export abstract class OLSourceArcGISComponent {
 
   constructor() {
     let strategy;
-    if (this.#map.loadingStrategy() === "all") strategy = allStrategy;
-    else if (this.#map.loadingStrategy() === "bbox") strategy = bboxStrategy;
+    if (this.#map.loadingStrategy() === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy() === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [this.getAttribution()],
       format: new GeoJSON(),
@@ -102,11 +102,11 @@ export abstract class OLSourceArcGISComponent {
   ): void {
     let grids: Coordinate[];
     // 👇 get everyrhing at once
-    if (this.#map.loadingStrategy() === "all")
+    if (this.#map.loadingStrategy() === 'all')
       grids = this.#gridsFromBBox(projection);
     // 👇 one URL for each grid square covered by the extent
     //    this way requests are repeatable and cachable
-    else if (this.#map.loadingStrategy() === "bbox")
+    else if (this.#map.loadingStrategy() === 'bbox')
       grids = this.#gridsFromExtent(extent, projection);
     const urls = grids.map(
       (grid) =>
@@ -173,25 +173,25 @@ export abstract class OLSourceArcGISComponent {
       const js = fields.map((field) => {
         let type;
         switch (field.type) {
-          case "esriFieldTypeBoolean":
-            type = "boolean";
+          case 'esriFieldTypeBoolean':
+            type = 'boolean';
             break;
-          case "esriFieldTypeDate":
-            type = "Date";
+          case 'esriFieldTypeDate':
+            type = 'Date';
             break;
-          case "esriFieldTypeDouble":
-          case "esriFieldTypeInteger":
-            type = "number";
+          case 'esriFieldTypeDouble':
+          case 'esriFieldTypeInteger':
+            type = 'number';
             break;
           default:
-            type = "string";
+            type = 'string';
             break;
         }
         return `${field.name}: ${type} /* 👈 ${field.alias.trim()} */;`;
       });
       js.unshift(`// 👇 original ${this.getProxyPath()} schema`);
       js.push(`// 👇 translated ${this.getProxyPath()} schema`);
-      console.log(`${js.join("\n")}\n`);
+      console.log(`${js.join('\n')}\n`);
     }
   }
 

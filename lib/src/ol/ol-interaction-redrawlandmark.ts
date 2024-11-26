@@ -1,27 +1,27 @@
-import { Landmark } from "../common";
-import { ConfirmDialogComponent } from "../components/confirm-dialog";
-import { ConfirmDialogData } from "../components/confirm-dialog";
-import { DestroyService } from "../services/destroy";
-import { LandmarksActions } from "../state/landmarks";
-import { OLInteractionAbstractRedrawComponent } from "./ol-interaction-abstractredraw";
+import { ConfirmDialogComponent } from '../components/confirm-dialog';
+import { ConfirmDialogData } from '../components/confirm-dialog';
+import { DestroyService } from '../services/destroy';
+import { Landmark } from '../common';
+import { LandmarksActions } from '../state/landmarks';
+import { OLInteractionAbstractRedrawComponent } from './ol-interaction-abstractredraw';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnDestroy } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { tap } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { tap } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-ol-interaction-redrawlandmark",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-interaction-redrawlandmark',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLInteractionRedrawLandmarkComponent
@@ -32,7 +32,7 @@ export class OLInteractionRedrawLandmarkComponent
   #store = inject(Store);
 
   ngOnDestroy(): void {
-    this.onDestroy;
+    this.onDestroy();
   }
 
   ngOnInit(): void {
@@ -42,9 +42,9 @@ export class OLInteractionRedrawLandmarkComponent
   saveRedraw(geojson: GeoJSON.Feature<any>): Observable<boolean> {
     const data: ConfirmDialogData = {
       content: `Do you want to save the new landmark alignment for ${this.feature.get(
-        "name"
+        'name'
       )}?`,
-      title: "Please confirm new alignment"
+      title: 'Please confirm new alignment'
     };
     return this.#dialog
       .open(ConfirmDialogComponent, { data })
@@ -56,7 +56,7 @@ export class OLInteractionRedrawLandmarkComponent
             const landmark: Partial<Landmark> = {
               id: this.feature.getId() as string,
               geometry: geojson.geometry,
-              type: "Feature"
+              type: 'Feature'
             };
             this.#store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
           }

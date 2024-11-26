@@ -1,58 +1,58 @@
-import { Parcel } from "../common";
-import { ParcelAction } from "../common";
-import { ParcelID } from "../common";
-import { AnonState } from "./anon";
-import { AuthState } from "./auth";
-import { Profile } from "./auth";
-import { Map } from "./map";
-import { MapState } from "./map";
-import { CanDo } from "./undo";
-import { ClearStacks } from "./undo";
-import { Redo } from "./undo";
-import { Undo } from "./undo";
-import { Working } from "./working";
+import { AnonState } from './anon';
+import { AuthState } from './auth';
+import { CanDo } from './undo';
+import { ClearStacks } from './undo';
+import { Map } from './map';
+import { MapState } from './map';
+import { Parcel } from '../common';
+import { ParcelAction } from '../common';
+import { ParcelID } from '../common';
+import { Profile } from './auth';
+import { Redo } from './undo';
+import { Undo } from './undo';
+import { Working } from './working';
 
-import { calculateParcel } from "../common";
-import { deserializeParcel } from "../common";
-import { normalizeParcel } from "../common";
-import { serializeParcel } from "../common";
-import { timestampParcel } from "../common";
-import { workgroup } from "./auth";
+import { calculateParcel } from '../common';
+import { deserializeParcel } from '../common';
+import { normalizeParcel } from '../common';
+import { serializeParcel } from '../common';
+import { timestampParcel } from '../common';
+import { workgroup } from './auth';
 
-import { Injectable } from "@angular/core";
-import { CollectionReference } from "@angular/fire/firestore";
-import { Firestore } from "@angular/fire/firestore";
-import { Action } from "@ngxs/store";
-import { Actions } from "@ngxs/store";
-import { NgxsOnInit } from "@ngxs/store";
-import { Selector } from "@ngxs/store";
-import { State } from "@ngxs/store";
-import { StateContext } from "@ngxs/store";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Action } from '@ngxs/store';
+import { Actions } from '@ngxs/store';
+import { CollectionReference } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
+import { NgxsOnInit } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { Selector } from '@ngxs/store';
+import { State } from '@ngxs/store';
+import { StateContext } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { addDoc } from "@angular/fire/firestore";
-import { collection } from "@angular/fire/firestore";
-import { collectionData } from "@angular/fire/firestore";
-import { deleteDoc } from "@angular/fire/firestore";
-import { doc } from "@angular/fire/firestore";
-import { orderBy } from "@angular/fire/firestore";
-import { query } from "@angular/fire/firestore";
-import { where } from "@angular/fire/firestore";
-import { writeBatch } from "@angular/fire/firestore";
-import { ofActionSuccessful } from "@ngxs/store";
-import { combineLatest } from "rxjs";
-import { merge } from "rxjs";
-import { of } from "rxjs";
-import { distinctUntilChanged } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { mergeMap } from "rxjs/operators";
+import { addDoc } from '@angular/fire/firestore';
+import { collection } from '@angular/fire/firestore';
+import { collectionData } from '@angular/fire/firestore';
+import { combineLatest } from 'rxjs';
+import { deleteDoc } from '@angular/fire/firestore';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { doc } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { ofActionSuccessful } from '@ngxs/store';
+import { orderBy } from '@angular/fire/firestore';
+import { query } from '@angular/fire/firestore';
+import { where } from '@angular/fire/firestore';
+import { writeBatch } from '@angular/fire/firestore';
 
-import copy from "fast-copy";
-import hash from "object-hash";
+import copy from 'fast-copy';
+import hash from 'object-hash';
 
-const ACTION_SCOPE = "Parcels";
+const ACTION_SCOPE = 'Parcels';
 
 export namespace ParcelsActions {
   export class AddParcels {
@@ -90,7 +90,7 @@ const redoStack: Parcel[][] = [];
 const undoStack: Parcel[][] = [];
 
 @State<ParcelsStateModel>({
-  name: "parcels",
+  name: 'parcels',
   defaults: []
 })
 @Injectable()
@@ -116,6 +116,7 @@ export class ParcelsState implements NgxsOnInit {
     return state;
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @Action(ParcelsActions.AddParcels) addParcels(
     ctx: StateContext<ParcelsStateModel>,
     action: ParcelsActions.AddParcels
@@ -133,9 +134,9 @@ export class ParcelsState implements NgxsOnInit {
       const normalized = this.#normalize(parcel);
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(normalized)}`,
-        "color: chocolate"
+        'color: chocolate'
       );
-      const collectionRef = collection(this.#firestore, "parcels");
+      const collectionRef = collection(this.#firestore, 'parcels');
       return addDoc(collectionRef, normalized).then((ref) =>
         undos.push({ ...(normalized as Parcel), $id: ref.id })
       );
@@ -177,25 +178,25 @@ export class ParcelsState implements NgxsOnInit {
     // 🔥 batch has 500 limit
     const batch = writeBatch(this.#firestore);
     const promises = redos.map((parcel) => {
-      const collectionRef = collection(this.#firestore, "parcels");
+      const collectionRef = collection(this.#firestore, 'parcels');
       let promise;
       switch (parcel.action) {
-        case "added":
+        case 'added':
           delete parcel.$id;
-          parcel.action = "removed";
+          parcel.action = 'removed';
           promise = addDoc(collectionRef, parcel).then(() =>
             undos.push(parcel)
           );
           break;
-        case "modified":
+        case 'modified':
           delete parcel.$id;
           promise = addDoc(collectionRef, parcel).then((ref) =>
             undos.push({ ...copy(parcel), $id: ref.id })
           );
           break;
-        case "removed":
+        case 'removed':
           delete parcel.$id;
-          parcel.action = "added";
+          parcel.action = 'added';
           promise = addDoc(collectionRef, parcel).then(() =>
             undos.push(parcel)
           );
@@ -203,7 +204,7 @@ export class ParcelsState implements NgxsOnInit {
       }
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
-        "color: chocolate"
+        'color: chocolate'
       );
       return promise;
     });
@@ -242,23 +243,23 @@ export class ParcelsState implements NgxsOnInit {
     // 🔥 batch has 500 limit
     const batch = writeBatch(this.#firestore);
     const promises = undos.map((parcel) => {
-      const collectionRef = collection(this.#firestore, "parcels");
+      const collectionRef = collection(this.#firestore, 'parcels');
       let docRef, promise;
       switch (parcel.action) {
-        case "added":
+        case 'added':
           delete parcel.$id;
-          parcel.action = "removed";
+          parcel.action = 'removed';
           promise = addDoc(collectionRef, parcel).then(() =>
             redos.push(parcel)
           );
           break;
-        case "modified":
-          docRef = doc(this.#firestore, "parcels", parcel.$id);
+        case 'modified':
+          docRef = doc(this.#firestore, 'parcels', parcel.$id);
           promise = deleteDoc(docRef).then(() => redos.push(parcel));
           break;
-        case "removed":
+        case 'removed':
           delete parcel.$id;
-          parcel.action = "added";
+          parcel.action = 'added';
           promise = addDoc(collectionRef, parcel).then(() =>
             redos.push(parcel)
           );
@@ -266,7 +267,7 @@ export class ParcelsState implements NgxsOnInit {
       }
       console.log(
         `%cFirestore add: parcels ${JSON.stringify(parcel)}`,
-        "color: chocolate"
+        'color: chocolate'
       );
       return promise;
     });
@@ -289,7 +290,7 @@ export class ParcelsState implements NgxsOnInit {
 
   parcelsAdded(parcels: Parcel[]): Set<ParcelID> {
     const hash = this.#lastActionByParcelID(parcels);
-    return new Set(Object.keys(hash).filter((id) => hash[id] === "added"));
+    return new Set(Object.keys(hash).filter((id) => hash[id] === 'added'));
   }
 
   // 👉 consider the entire stream of parcels, in reverse timestamp order
@@ -298,7 +299,7 @@ export class ParcelsState implements NgxsOnInit {
   parcelsModified(parcels: Parcel[]): Record<ParcelID, Parcel[]> {
     const removedIDs = new Set<ParcelID>();
     return parcels.reduce((acc, parcel) => {
-      if (parcel.action === "removed") removedIDs.add(parcel.id);
+      if (parcel.action === 'removed') removedIDs.add(parcel.id);
       if (!removedIDs.has(parcel.id)) {
         if (!acc[parcel.id]) acc[parcel.id] = [];
         acc[parcel.id].push(parcel);
@@ -309,7 +310,7 @@ export class ParcelsState implements NgxsOnInit {
 
   parcelsRemoved(parcels: Parcel[]): Set<ParcelID> {
     const hash = this.#lastActionByParcelID(parcels);
-    return new Set(Object.keys(hash).filter((id) => hash[id] === "removed"));
+    return new Set(Object.keys(hash).filter((id) => hash[id] === 'removed'));
   }
 
   // 👇 listen for "undo" actions directed at the proxy
@@ -341,19 +342,19 @@ export class ParcelsState implements NgxsOnInit {
               `%cFirestore query: parcels where owner in ${JSON.stringify(
                 workgroup(profile)
               )} and path == "${map.path}" orderBy timestamp desc`,
-              "color: goldenrod"
+              'color: goldenrod'
             );
             return collectionData<Parcel>(
               query(
                 collection(
                   this.#firestore,
-                  "parcels"
+                  'parcels'
                 ) as CollectionReference<Parcel>,
-                where("owner", "in", workgroup(profile)),
-                where("path", "==", map.path),
-                orderBy("timestamp", "desc")
+                where('owner', 'in', workgroup(profile)),
+                where('path', '==', map.path),
+                orderBy('timestamp', 'desc')
               ),
-              { idField: "$id" }
+              { idField: '$id' }
             );
           }
         }),
@@ -375,7 +376,7 @@ export class ParcelsState implements NgxsOnInit {
   //    "modified" actions, was the last action "add" or "remove"?
   #lastActionByParcelID(parcels: Parcel[]): Record<ParcelID, ParcelAction> {
     return parcels
-      .filter((parcel) => parcel.action !== "modified")
+      .filter((parcel) => parcel.action !== 'modified')
       .reduce((acc, parcel) => {
         if (!acc[parcel.id]) acc[parcel.id] = parcel.action;
         return acc;

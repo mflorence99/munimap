@@ -33,35 +33,34 @@
   </p>
 
   @if (files.length > 0) {
-    <fieldset class="list">
-      @for (file of files; track file) {
-        <mat-checkbox [(ngModel)]="record[file.name]" [name]="file.name">
-          {{ file.name }}
-        </mat-checkbox>
-      }
-    </fieldset>
+  <fieldset class="list">
+    @for (file of files; track file) {
+    <mat-checkbox [(ngModel)]="record[file.name]" [name]="file.name">
+      {{ file.name }}
+    </mat-checkbox>
+    }
+  </fieldset>
 
-    <p class="instructions">
-      Double-check the files to be imported from the list above then hit
-      <em>IMPORT</em>
-      . Landmarks previously imported won't be re-imported.
-    </p>
-  }
-  @for (errorMessage of errorMessages; track errorMessage) {
-    <mat-error>{{ errorMessage }}</mat-error>
+  <p class="instructions">
+    Double-check the files to be imported from the list above then hit
+    <em>IMPORT</em>
+    . Landmarks previously imported won't be re-imported.
+  </p>
+  } @for (errorMessage of errorMessages; track errorMessage) {
+  <mat-error>{{ errorMessage }}</mat-error>
   }
 </form>
 
 @if (importing && numImporting > 0) {
-  <article class="progress">
-    <p>Imported {{ numImported }} of {{ numImporting }} landmarks &hellip;</p>
+<article class="progress">
+  <p>Imported {{ numImported }} of {{ numImporting }} landmarks &hellip;</p>
 
-    <br />
+  <br />
 
-    <mat-progress-bar
-      [mode]="'determinate'"
-      [value]="(numImported / numImporting) * 100"></mat-progress-bar>
-  </article>
+  <mat-progress-bar
+    [mode]="'determinate'"
+    [value]="(numImported / numImporting) * 100"></mat-progress-bar>
+</article>
 }
 
 <article class="actions">
@@ -74,10 +73,9 @@
     mat-flat-button
     type="submit">
     @if (importing) {
-      <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-    }
-    @if (!importing) {
-      <span>IMPORT</span>
+    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+    } @if (!importing) {
+    <span>IMPORT</span>
     }
   </button>
 </article>

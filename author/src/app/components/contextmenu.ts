@@ -1,22 +1,22 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MatMenu } from "@angular/material/menu";
-import { MatMenuTrigger } from "@angular/material/menu";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { DestroyService } from "@lib/services/destroy";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { DestroyService } from '@lib/services/destroy';
+import { MatMenu } from '@angular/material/menu';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { OnInit } from '@angular/core';
 
-import { contentChild } from "@angular/core";
-import { inject } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { filter } from "rxjs/operators";
-import { takeUntil } from "rxjs/operators";
+import { contentChild } from '@angular/core';
+import { filter } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-contextmenu",
+  selector: 'app-contextmenu',
   template: `
     @if (contextMenu) {
       <div
@@ -76,7 +76,7 @@ export class ContextMenuComponent implements OnInit {
         if (this.contextMenu()) {
           // 👉 need to hack the Y offset by the height of the toolbar
           const style = getComputedStyle(document.documentElement);
-          const hack = style.getPropertyValue("--map-cy-toolbar");
+          const hack = style.getPropertyValue('--map-cy-toolbar');
           const pixel = [event.clientX, event.clientY - Number(hack)];
           // 👉 position the menu
           this.menuPosition.x = pixel[0] + 8;

@@ -1,19 +1,19 @@
-import { Building } from "../lib/src/common";
-import { Buildings } from "../lib/src/common";
+import { Building } from '../lib/src/common';
+import { Buildings } from '../lib/src/common';
 
-import { calculateOrientation } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { calculateOrientation } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
-import { angle } from "@turf/angle";
-import { bbox } from "@turf/bbox";
-import { bboxPolygon } from "@turf/bbox-polygon";
-import { getCoords } from "@turf/invariant";
-import { transformRotate } from "@turf/transform-rotate";
+import { angle } from '@turf/angle';
+import { bbox } from '@turf/bbox';
+import { bboxPolygon } from '@turf/bbox-polygon';
+import { getCoords } from '@turf/invariant';
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { transformRotate } from '@turf/transform-rotate';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
+import chalk from 'chalk';
 
 const loadem = (fn): Buildings => JSON.parse(readFileSync(fn).toString());
 
@@ -25,11 +25,11 @@ const loadem = (fn): Buildings => JSON.parse(readFileSync(fn).toString());
 
 const curated = {
   SULLIVAN: {
-    WASHINGTON: loadem("./bin/assets/washington-buildings.geojson")
+    WASHINGTON: loadem('./bin/assets/washington-buildings.geojson')
   }
 };
 
-const dist = "./data";
+const dist = './data';
 
 // const testFeature = {
 //   type: 'Feature',
@@ -51,7 +51,7 @@ const dist = "./data";
 
 function isHandDrawn(feature: Building): boolean {
   return (
-    feature.geometry.type === "Polygon" &&
+    feature.geometry.type === 'Polygon' &&
     feature.geometry.coordinates[0].length >= 5 &&
     feature.geometry.coordinates[0].length <= 16
   );

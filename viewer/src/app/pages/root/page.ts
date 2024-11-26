@@ -1,51 +1,51 @@
-import { Location } from "@angular/common";
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Title } from "@angular/platform-browser";
-import { Router } from "@angular/router";
-import { MessageDialogComponent } from "@lib/components/message-dialog";
-import { MessageDialogData } from "@lib/components/message-dialog";
-import { DestroyService } from "@lib/services/destroy";
-import { VersionService } from "@lib/services/version";
-import { AnonActions } from "@lib/state/anon";
-import { AnonState } from "@lib/state/anon";
-import { User } from "@lib/state/auth";
-import { Map } from "@lib/state/map";
-import { MapActions } from "@lib/state/map";
-import { MapState } from "@lib/state/map";
-import { ParcelCoding } from "@lib/state/view";
-import { ViewActions } from "@lib/state/view";
-import { ViewState } from "@lib/state/view";
-import { ViewStateModel } from "@lib/state/view";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { AnonActions } from '@lib/state/anon';
+import { AnonState } from '@lib/state/anon';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { DestroyService } from '@lib/services/destroy';
+import { Location } from '@angular/common';
+import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
+import { MapState } from '@lib/state/map';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
+import { MessageDialogData } from '@lib/components/message-dialog';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { ParcelCoding } from '@lib/state/view';
+import { Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { Title } from '@angular/platform-browser';
+import { User } from '@lib/state/auth';
+import { VersionService } from '@lib/services/version';
+import { ViewActions } from '@lib/state/view';
+import { ViewState } from '@lib/state/view';
+import { ViewStateModel } from '@lib/state/view';
 
-import { inject } from "@angular/core";
-import { combineLatest } from "rxjs";
-import { filter } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { takeUntil } from "rxjs/operators";
+import { combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
-import urlParse from "url-parse";
+import urlParse from 'url-parse';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-root",
+  selector: 'app-root',
   template: `
-
-    @let sink = {
-      gps: gps$ | async
-    };
+    @let sink =
+      {
+        gps: gps$ | async
+      };
 
     <main class="page">
       <mat-toolbar class="toolbar">
         @if (hasLeftSidebar) {
-          <button 
-            (click)="leftSidebar.toggle()" 
-            mat-icon-button 
+          <button
+            (click)="leftSidebar.toggle()"
+            mat-icon-button
             title="Show/hide legend">
             <fa-icon [icon]="['fas', 'bars']" size="2x"></fa-icon>
           </button>
@@ -70,9 +70,9 @@ import urlParse from "url-parse";
         </button>
 
         @if (hasRightSidebar) {
-          <button 
-            (click)="rightSidebar.toggle()" 
-            mat-icon-button 
+          <button
+            (click)="rightSidebar.toggle()"
+            mat-icon-button
             title="Show/hide map settings">
             <fa-icon [icon]="['fas', 'cog']" size="lg"></fa-icon>
           </button>
@@ -227,7 +227,7 @@ export class RootPage implements OnInit {
         // 👉 if the LoadMap fails, the default will be set
         if (mapState.isDflt) {
           const data: MessageDialogData = {
-            message: "The requested app is no longer available"
+            message: 'The requested app is no longer available'
           };
           this.#dialog.open(MessageDialogComponent, { data });
         } else {
@@ -257,7 +257,7 @@ export class RootPage implements OnInit {
       .subscribe(() => {
         let fromDomain;
         const fromParams = this.#url.query.id;
-        const parts = this.#url.hostname.split(".");
+        const parts = this.#url.hostname.split('.');
         if (parts.length === 3) fromDomain = parts[0];
         // 👇 take the map ID from the params first, so that we can
         //    override it with the domain if necessary
@@ -280,7 +280,7 @@ export class RootPage implements OnInit {
     // 👉 is there a left sidebar?
     route = this.#router.config[0].children.find(
       (route) =>
-        route.path.startsWith(`${map.type}-`) && route.outlet === "leftSidebar"
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'leftSidebar'
     );
     if (route) {
       inner.push(`leftSidebar:${route.path}`);
@@ -289,7 +289,7 @@ export class RootPage implements OnInit {
     // 👉 is there a right sidebar?
     route = this.#router.config[0].children.find(
       (route) =>
-        route.path.startsWith(`${map.type}-`) && route.outlet === "rightSidebar"
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'rightSidebar'
     );
     if (route) {
       inner.push(`rightSidebar:${route.path}`);
@@ -298,15 +298,15 @@ export class RootPage implements OnInit {
     // 👉 is there a toolbar?
     route = this.#router.config[0].children.find(
       (route) =>
-        route.path.startsWith(`${map.type}-`) && route.outlet === "toolbar"
+        route.path.startsWith(`${map.type}-`) && route.outlet === 'toolbar'
     );
     if (route) {
       inner.push(`toolbar:${route.path}`);
       this.hasToolbar = true;
     }
     // 👉 maybe no sidebars at all?
-    if (inner.length > 0) parts.push(`(${inner.join("//")})`);
+    if (inner.length > 0) parts.push(`(${inner.join('//')})`);
     parts.push(`?id=${map.id}`);
-    return parts.join("");
+    return parts.join('');
   }
 }

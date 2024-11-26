@@ -35,7 +35,7 @@ For a live demo, please see [washington.munimap.online](https://washington.munim
    1. Correct any errors
 7. Commit all changes
 8. `npm run deploy:aws:author`
-9.  `npm run deploy:aws:viewer:washington`
+9. `npm run deploy:aws:viewer:washington`
 10. Sanity test on live author and viewer
 11. `npm run firebase:live:backup`
 12. `npm run firebase:live:clean` to remove parcel deltas

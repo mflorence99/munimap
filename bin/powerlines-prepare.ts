@@ -1,11 +1,11 @@
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
-import { booleanIntersects } from "@turf/boolean-intersects";
+import { booleanIntersects } from '@turf/boolean-intersects';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
 // 🔥 this is NOT the code to create the powerlines.geojson files
 //    it simply extracts the NH data from the national dataset
@@ -19,11 +19,11 @@ import { booleanIntersects } from "@turf/boolean-intersects";
 
 const powerlines = JSON.parse(
   readFileSync(
-    "/home/mflo/Downloads/Electric_Power_Transmission_Lines.geojson"
+    '/home/mflo/Downloads/Electric_Power_Transmission_Lines.geojson'
   ).toString()
 );
 
-const dist = "./data";
+const dist = './data';
 
 const boundary = JSON.parse(
   readFileSync(`${dist}/${theState}/boundary.geojson`).toString()

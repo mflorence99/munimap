@@ -1,20 +1,20 @@
-import { AnonState } from "../state/anon";
-import { AuthState } from "../state/auth";
-import { Profile } from "../state/auth";
+import { AnonState } from '../state/anon';
+import { AuthState } from '../state/auth';
+import { Profile } from '../state/auth';
 
-import { Injectable } from "@angular/core";
-import { Resolve } from "@angular/router";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Resolve } from '@angular/router';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { merge } from "rxjs";
-import { filter } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { take } from "rxjs/operators";
-import { tap } from "rxjs/operators";
+import { filter } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class ReadyResolver implements Resolve<boolean> {
   profile1$: Observable<Profile>;
   profile2$: Observable<Profile>;
@@ -35,8 +35,8 @@ export class ReadyResolver implements Resolve<boolean> {
       map((profile) => !!profile),
       filter((ready) => ready),
       tap(() => {
-        const root = document.querySelector("app-root");
-        root.classList.add("ready");
+        const root = document.querySelector('app-root');
+        root.classList.add('ready');
       }),
       take(1)
     );

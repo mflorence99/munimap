@@ -1,28 +1,28 @@
-import { SidebarComponent } from "../../components/sidebar-component";
+import { SidebarComponent } from '../../components/sidebar-component';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { MatDrawer } from "@angular/material/sidenav";
-import { Landmark } from "@lib/common";
-import { LandmarkID } from "@lib/common";
-import { LandmarkProperties } from "@lib/common";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { LandmarksActions } from "@lib/state/landmarks";
-import { Store } from "@ngxs/store";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { Landmark } from '@lib/common';
+import { LandmarkID } from '@lib/common';
+import { LandmarkProperties } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
+import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { landmarkProperties } from "@lib/common";
+import { inject } from '@angular/core';
+import { landmarkProperties } from '@lib/common';
+import { viewChild } from '@angular/core';
 
-import copy from "fast-copy";
-import OLFeature from "ol/Feature";
+import copy from 'fast-copy';
+import OLFeature from 'ol/Feature';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-landmark-properties",
+  selector: 'app-landmark-properties',
   template: `
     <header class="header">
       <figure class="icon">
@@ -84,7 +84,7 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
   features: OLFeature<any>[];
   geometryType: string;
   map: OLMapComponent;
-  ngForm = viewChild<NgForm>("propertiesForm");
+  ngForm = viewChild<NgForm>('propertiesForm');
   record: Partial<LandmarkProperties> = {};
   selectedIDs: LandmarkID[];
 
@@ -108,7 +108,7 @@ export class LandmarkPropertiesComponent implements SidebarComponent, OnInit {
     const landmark: Partial<Landmark> = {
       id: this.features[0].getId() as string,
       properties: record,
-      type: "Feature"
+      type: 'Feature'
     };
     this.#store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
     // 👉 this resets the dirty flag, disabling SAVE until

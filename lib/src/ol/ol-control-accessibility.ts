@@ -1,50 +1,49 @@
-import { DestroyService } from "../services/destroy";
-import { ViewActions } from "../state/view";
-import { ViewState } from "../state/view";
-import { OLMapComponent } from "./ol-map";
+import { DestroyService } from '../services/destroy';
+import { OLMapComponent } from './ol-map';
+import { ViewActions } from '../state/view';
+import { ViewState } from '../state/view';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { takeUntil } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-accessibility",
+  selector: 'app-ol-control-accessibility',
   template: `
     <article class="control">
-
-      <button 
-        (click)="toggleAccessibility()" 
-        mat-icon-button 
+      <button
+        (click)="toggleAccessibility()"
+        mat-icon-button
         title="Show/hide accessibility">
-        <fa-icon [icon]="['fas', 'universal-access']" class="universal-access" size="2x"></fa-icon>
+        <fa-icon
+          [icon]="['fas', 'universal-access']"
+          class="universal-access"
+          size="2x"></fa-icon>
       </button>
- 
+
       <table class="accessibility" [class.collapsed]="collapsed">
         @for (filter of filters; track filter.tag) {
           <tr>
-            <td>            
+            <td>
               @if (filter.filter === accessibilityFilter) {
                 &check;
               }
             </td>
-            <td class="filter" >
-              <a 
-                (click)="onFilter(filter.filter)" 
-                href="javascript: void(0)">
+            <td class="filter">
+              <a (click)="onFilter(filter.filter)" href="javascript: void(0)">
                 {{ filter.tag }}
               </a>
             </td>
           </tr>
         }
       </table>
-
     </article>
   `,
   styles: [
@@ -62,7 +61,9 @@ import { takeUntil } from "rxjs/operators";
         opacity: 1;
         position: absolute;
         right: 4rem;
-        transition: display 0.25s ease allow-discrete, opacity 0.25s ease;
+        transition:
+          display 0.25s ease allow-discrete,
+          opacity 0.25s ease;
 
         td {
           padding-right: 0.25rem;
@@ -97,11 +98,11 @@ export class OLControlAccessibilityComponent implements OnInit {
   accessibilityFilter$: Observable<string>;
   collapsed = true;
   filters = [
-    { filter: "none", tag: "Normal" },
-    { filter: "grayscale()", tag: "Grayscale" },
-    { filter: "invert(100%)", tag: "Inverted" },
-    { filter: "contrast(175%)", tag: "High contrast" },
-    { filter: "saturate(500%)", tag: "Color blindness" }
+    { filter: 'none', tag: 'Normal' },
+    { filter: 'grayscale()', tag: 'Grayscale' },
+    { filter: 'invert(100%)', tag: 'Inverted' },
+    { filter: 'contrast(175%)', tag: 'High contrast' },
+    { filter: 'saturate(500%)', tag: 'Color blindness' }
   ];
 
   #cdf = inject(ChangeDetectorRef);
@@ -133,8 +134,8 @@ export class OLControlAccessibilityComponent implements OnInit {
       .pipe(takeUntil(this.#destroy$))
       .subscribe((accessibilityFilter) => {
         this.accessibilityFilter = accessibilityFilter;
-        const viewport: any = document.querySelector(".ol-viewport");
-        viewport.style.filter = accessibilityFilter || "none";
+        const viewport: any = document.querySelector('.ol-viewport');
+        viewport.style.filter = accessibilityFilter || 'none';
       });
   }
 

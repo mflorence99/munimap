@@ -1,16 +1,16 @@
-import { readFileSync } from "fs";
+import { readFileSync } from 'fs';
 
-import jsome from "jsome";
+import jsome from 'jsome';
 
 const geojson = JSON.parse(
-  readFileSync("./bin/assets/washington-parcels.geojson").toString()
+  readFileSync('./bin/assets/washington-parcels.geojson').toString()
 );
 
 const keyOf = (addressOfOwner: string): string => {
   if (addressOfOwner) {
-    const parts = addressOfOwner.split(" ");
+    const parts = addressOfOwner.split(' ');
     return `${parts.at(-3)}-${parts.at(-2)}-${parts.at(-1)}`;
-  } else return "NONE";
+  } else return 'NONE';
 };
 
 const countByOwner: Record<string, number> = geojson.features.reduce(
@@ -23,7 +23,7 @@ const countByOwner: Record<string, number> = geojson.features.reduce(
   {}
 );
 
-jsome(["NONE", countByOwner["NONE"]]);
+jsome(['NONE', countByOwner['NONE']]);
 
 const descending = Object.entries(countByOwner)
   .sort((p, q) => q[1] - p[1])
@@ -32,7 +32,7 @@ const descending = Object.entries(countByOwner)
 jsome(descending);
 
 geojson.features
-  .filter((feature) => [" ", "X"].includes(feature.properties.ownership))
+  .filter((feature) => [' ', 'X'].includes(feature.properties.ownership))
   .forEach((feature) =>
     jsome([
       feature.id,

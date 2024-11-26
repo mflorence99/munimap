@@ -1,28 +1,28 @@
-import { Parcel } from "../common";
-import { ParcelID } from "../common";
-import { ParcelProperties } from "../common";
-import { DestroyService } from "../services/destroy";
-import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
-import { OLMapComponent } from "./ol-map";
-import { OLPopupSelectionComponent } from "./ol-popup-selection";
+import { DestroyService } from '../services/destroy';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
+import { OLMapComponent } from './ol-map';
+import { OLPopupSelectionComponent } from './ol-popup-selection';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { ParcelProperties } from '../common';
 
-import { parcelPropertiesUsage } from "../common";
-import { parcelPropertiesUse } from "../common";
+import { parcelPropertiesUsage } from '../common';
+import { parcelPropertiesUse } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { ElementRef } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { outputToObservable } from "@angular/core/rxjs-interop";
-import { takeUntil } from "rxjs/operators";
-import { map } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { outputToObservable } from '@angular/core/rxjs-interop';
+import { takeUntil } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
-import OLFeature from "ol/Feature";
+import OLFeature from 'ol/Feature';
 
 // 👇 we can't use the normal DestroyService protocol here
 //    as snackbar popups don't have a standard lifecycle
@@ -37,21 +37,21 @@ interface Abutter {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-popup-parcelproperties",
+  selector: 'app-ol-popup-parcelproperties',
   template: `
-    <button 
-      (click)="onClose()" 
+    <button
+      (click)="onClose()"
       [appAutoFocus]="focussed"
-      class="closer" 
+      class="closer"
       mat-icon-button
       title="Close popup">
       <fa-icon [icon]="['fas', 'times']" size="sm"></fa-icon>
     </button>
 
     @if (canClipboard()) {
-      <button 
-        (click)="onClipboard()" 
-        class="clipboard" 
+      <button
+        (click)="onClipboard()"
+        class="clipboard"
         mat-icon-button
         title="Copy to clipboard">
         <fa-icon [icon]="['far', 'clipboard']" size="sm"></fa-icon>
@@ -197,8 +197,11 @@ interface Abutter {
               @for (abutter of abutters; track abutter.id) {
                 <tr>
                   <td>
-                    <a (click)="onSelect(abutter.id)" 
-                       href="javascript: void(0)">{{ abutter.id }}</a>
+                    <a
+                      (click)="onSelect(abutter.id)"
+                      href="javascript: void(0)">
+                      {{ abutter.id }}
+                    </a>
                   </td>
                   <td>{{ abutter.owner ?? abutter.address }}</td>
                 </tr>
@@ -301,7 +304,7 @@ export class OLPopupParcelPropertiesComponent {
   sameUsage: boolean;
   splitHorizontally = false;
   splitVertically = true;
-  tables = viewChild<ElementRef>("tables");
+  tables = viewChild<ElementRef>('tables');
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);

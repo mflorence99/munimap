@@ -1,27 +1,27 @@
-import { Landmark } from "../common";
-import { DestroyService } from "../services/destroy";
-import { OLInteractionSelectLandmarksComponent } from "./ol-interaction-selectlandmarks";
-import { OLMapComponent } from "./ol-map";
-import { OLPopupSelectionComponent } from "./ol-popup-selection";
+import { DestroyService } from '../services/destroy';
+import { Landmark } from '../common';
+import { OLInteractionSelectLandmarksComponent } from './ol-interaction-selectlandmarks';
+import { OLMapComponent } from './ol-map';
+import { OLPopupSelectionComponent } from './ol-popup-selection';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { ElementRef } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { inject } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { outputToObservable } from "@angular/core/rxjs-interop";
-import { area } from "@turf/area";
-import { convertArea } from "@turf/helpers";
-import { convertLength } from "@turf/helpers";
-import { length } from "@turf/length";
-import { map } from "rxjs/operators";
-import { takeUntil } from "rxjs/operators";
+import { area } from '@turf/area';
+import { convertArea } from '@turf/helpers';
+import { convertLength } from '@turf/helpers';
+import { inject } from '@angular/core';
+import { length } from '@turf/length';
+import { map } from 'rxjs/operators';
+import { outputToObservable } from '@angular/core/rxjs-interop';
+import { takeUntil } from 'rxjs/operators';
+import { viewChild } from '@angular/core';
 
-import OLFeature from "ol/Feature";
-import OLGeoJSON from "ol/format/GeoJSON";
+import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
 
 interface Coordinate {
   elevation: number;
@@ -35,21 +35,21 @@ interface Coordinate {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-popup-landmarkproperties",
+  selector: 'app-ol-popup-landmarkproperties',
   template: `
-    <button 
-      (click)="onClose()" 
+    <button
+      (click)="onClose()"
       [appAutoFocus]="focussed"
-      class="closer" 
+      class="closer"
       mat-icon-button
       title="Close popup">
       <fa-icon [icon]="['fas', 'times']" size="lg"></fa-icon>
     </button>
 
     @if (canClipboard()) {
-      <button 
-        (click)="onClipboard()" 
-        class="clipboard" 
+      <button
+        (click)="onClipboard()"
+        class="clipboard"
         mat-icon-button
         title="Copy to clipboard">
         <fa-icon [icon]="['far', 'clipboard']" size="lg"></fa-icon>
@@ -114,7 +114,7 @@ interface Coordinate {
 export class OLPopupLandmarkPropertiesComponent {
   focussed = false;
   landmark: Landmark;
-  table = viewChild<ElementRef>("table");
+  table = viewChild<ElementRef>('table');
 
   #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
@@ -134,7 +134,7 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   area(): number {
-    return convertArea(area(this.landmark), "meters", "acres");
+    return convertArea(area(this.landmark), 'meters', 'acres');
   }
 
   canClipboard(): boolean {
@@ -142,7 +142,7 @@ export class OLPopupLandmarkPropertiesComponent {
   }
 
   length(): number {
-    return length(this.landmark, { units: "feet" });
+    return length(this.landmark, { units: 'feet' });
   }
 
   onClipboard(): void {
@@ -160,7 +160,7 @@ export class OLPopupLandmarkPropertiesComponent {
   toCoordinate(raw: any[]): Coordinate {
     return {
       elevation: raw[2]
-        ? convertLength(Number(raw[2]), "meters", "feet")
+        ? convertLength(Number(raw[2]), 'meters', 'feet')
         : null,
       latitude: raw[1],
       longitude: raw[0]

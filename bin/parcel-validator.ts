@@ -1,6 +1,6 @@
-import { readFileSync } from "fs";
+import { readFileSync } from 'fs';
 
-import chalk from "chalk";
+import chalk from 'chalk';
 
 type FeatureCollection = GeoJSON.FeatureCollection<any, any>;
 
@@ -17,10 +17,10 @@ const loadem = (fn: string): FeatureCollection => {
 // 👇 validate the parcels
 // ////////////////////////////////////////////////////////////////////
 
-const allParcels = loadem("./bin/assets/washington-parcels.geojson");
+const allParcels = loadem('./bin/assets/washington-parcels.geojson');
 
 allParcels.features
-  .filter((parcel) => parcel.geometry.type === "MultiPolygon")
+  .filter((parcel) => parcel.geometry.type === 'MultiPolygon')
   .forEach((multi) => {
     console.log(`${multi.id} ... ${multi.geometry.coordinates[0].length}`);
   });

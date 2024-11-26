@@ -1,16 +1,16 @@
-import { Parcels } from "../lib/src/common";
+import { Parcels } from '../lib/src/common';
 
-import { normalizeParcel } from "../lib/src/common";
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { normalizeParcel } from '../lib/src/common';
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import { GeoJSON } from "geojson";
+import { GeoJSON } from 'geojson';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
+import chalk from 'chalk';
 
 const loadem = (fn): Parcels => JSON.parse(readFileSync(fn).toString());
 
@@ -18,14 +18,14 @@ const loadem = (fn): Parcels => JSON.parse(readFileSync(fn).toString());
 
 const curated = {
   MERRIMACK: {
-    HENNIKER: loadem("./bin/assets/henniker-parcels.geojson")
+    HENNIKER: loadem('./bin/assets/henniker-parcels.geojson')
   },
   SULLIVAN: {
-    WASHINGTON: loadem("./bin/assets/washington-parcels.geojson")
+    WASHINGTON: loadem('./bin/assets/washington-parcels.geojson')
   }
 };
 
-const dist = "./data";
+const dist = './data';
 
 // 👇 for each curated county, town
 
@@ -68,9 +68,9 @@ Object.keys(curated).forEach((county) => {
           id: feature.properties.id,
           owner: feature.properties.owner
         },
-        type: "Feature"
+        type: 'Feature'
       })),
-      type: "FeatureCollection"
+      type: 'FeatureCollection'
     };
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/searchables.geojson`,
@@ -98,9 +98,9 @@ Object.keys(curated).forEach((county) => {
           usage: feature.properties.usage,
           use: feature.properties.use
         },
-        type: "Feature"
+        type: 'Feature'
       })),
-      type: "FeatureCollection"
+      type: 'FeatureCollection'
     };
     writeFileSync(
       `${dist}/${theState}/${county}/${town}/countables.geojson`,

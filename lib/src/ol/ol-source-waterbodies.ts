@@ -1,13 +1,13 @@
-import { WaterbodyProperties } from "../common";
-import { OLSourceArcGISComponent } from "./ol-source-arcgis";
+import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { WaterbodyProperties } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 
-import { input } from "@angular/core";
+import { input } from '@angular/core';
 
-import copy from "fast-copy";
+import copy from 'fast-copy';
 
 // 👇 we replaced lakes.geojson with this data source
 //    as it has a LOT more data
@@ -17,9 +17,9 @@ const attribution =
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-waterbodies",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-waterbodies',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
@@ -45,7 +45,7 @@ export class OLSourceWaterbodiesComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return "waterbodies";
+    return 'waterbodies';
   }
 
   getURL(extent: Coordinate): string {

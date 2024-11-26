@@ -1,25 +1,25 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MatDrawer } from "@angular/material/sidenav";
-import { DestroyService } from "@lib/services/destroy";
-import { HistoricalsService } from "@lib/services/historicals";
-import { ViewActions } from "@lib/state/view";
-import { ViewState } from "@lib/state/view";
-import { ViewStateModel } from "@lib/state/view";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { DestroyService } from '@lib/services/destroy';
+import { HistoricalsService } from '@lib/services/historicals';
+import { MatDrawer } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { ViewActions } from '@lib/state/view';
+import { ViewState } from '@lib/state/view';
+import { ViewStateModel } from '@lib/state/view';
 
-import { inject } from "@angular/core";
-import { satelliteYears } from "@lib/ol/ol-source-satellite";
-import { takeUntil } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { satelliteYears } from '@lib/ol/ol-source-satellite';
+import { takeUntil } from 'rxjs/operators';
 
-import copy from "fast-copy";
+import copy from 'fast-copy';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-parcels-setup",
+  selector: 'app-parcels-setup',
   template: `
     <header class="header">
       <figure class="icon">
@@ -154,11 +154,11 @@ import copy from "fast-copy";
 })
 export class ParcelsSetupComponent implements OnInit {
   record: Partial<ViewStateModel> = {
-    historicalMapLeft: "",
-    historicalMapRight: "",
-    parcelCoding: "usage",
-    recentPath: "",
-    satelliteYear: ""
+    historicalMapLeft: '',
+    historicalMapRight: '',
+    parcelCoding: 'usage',
+    recentPath: '',
+    satelliteYear: ''
   };
 
   view$: Observable<ViewStateModel>;
@@ -175,7 +175,7 @@ export class ParcelsSetupComponent implements OnInit {
 
   get historicalMaps(): string[] {
     return [
-      "",
+      '',
       ...this.#historicals
         .historicalsFor(this.record.recentPath)
         .map((historical) => historical.name)
@@ -185,7 +185,7 @@ export class ParcelsSetupComponent implements OnInit {
   }
 
   get satelliteYears(): string[] {
-    return ["", ...satelliteYears.slice().reverse()];
+    return ['', ...satelliteYears.slice().reverse()];
   }
 
   cancel(): void {

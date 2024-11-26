@@ -1,9 +1,9 @@
-import { LandmarkProperties } from "../common";
+import { LandmarkProperties } from '../common';
 
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-import OLFeature from "ol/Feature";
-import OLStyle from "ol/style/Style";
+import OLFeature from 'ol/Feature';
+import OLStyle from 'ol/style/Style';
 
 // 👇 https://sambleckley.com/writing/angular-mixed-type-contentchildren-that-share-an-interface.html
 

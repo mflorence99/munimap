@@ -1,18 +1,18 @@
-import { StreamCrossingProperties } from "../common";
-import { OLSourceArcGISComponent } from "./ol-source-arcgis";
+import { OLSourceArcGISComponent } from './ol-source-arcgis';
+import { StreamCrossingProperties } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 
 const attribution =
   '<a href="https://www.des.nh.gov/" target="_blank">NHSADES</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-streamcrossings",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-streamcrossings',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
@@ -22,7 +22,7 @@ export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: StreamCrossingProperties = feature.attributes;
-        properties.type = "stream crossing";
+        properties.type = 'stream crossing';
       });
       return arcgis;
     } else return super.filter(arcgis);
@@ -37,7 +37,7 @@ export class OLSourceStreamCrossingsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return "streamcrossings";
+    return 'streamcrossings';
   }
 
   getURL(extent: Coordinate): string {

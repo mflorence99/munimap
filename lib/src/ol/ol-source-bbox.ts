@@ -1,25 +1,25 @@
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 
-import { inject } from "@angular/core";
-import { bboxPolygon } from "@turf/bbox-polygon";
-import { featureCollection } from "@turf/helpers";
-import { all as allStrategy } from "ol/loadingstrategy";
+import { all as allStrategy } from 'ol/loadingstrategy';
+import { bboxPolygon } from '@turf/bbox-polygon';
+import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
 
-import OLFeature from "ol/Feature";
-import GeoJSON from "ol/format/GeoJSON";
-import OLProjection from "ol/proj/Projection";
-import OLVector from "ol/source/Vector";
+import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
+import OLVector from 'ol/source/Vector';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-bbox",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-bbox',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceBBoxComponent {

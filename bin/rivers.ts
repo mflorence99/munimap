@@ -1,21 +1,21 @@
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
-import { booleanIntersects } from "@turf/boolean-intersects";
+import { booleanIntersects } from '@turf/boolean-intersects';
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
-import copy from "fast-copy";
-import shp from "shpjs";
+import chalk from 'chalk';
+import copy from 'fast-copy';
+import shp from 'shpjs';
 
 const url =
-  "https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Inland_Water_Resources/d-designatedrivers/Designated_Rivers_24k";
+  'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Inland_Water_Resources/d-designatedrivers/Designated_Rivers_24k';
 
-const dist = "./data";
+const dist = './data';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()
@@ -100,10 +100,10 @@ const sample = {
   GRANITID: 14501858,
   HYA: 6,
   ACODE: 22,
-  Class: "Rural",
+  Class: 'Rural',
   LENGTH_MI: 0.0339205980753,
-  SWQPAExmpt: "",
-  River_Sect: "Ashuelot River",
-  River_Name: "Ashuelot River",
-  LAC: "Ashuelot River"
+  SWQPAExmpt: '',
+  River_Sect: 'Ashuelot River',
+  River_Name: 'Ashuelot River',
+  LAC: 'Ashuelot River'
 };

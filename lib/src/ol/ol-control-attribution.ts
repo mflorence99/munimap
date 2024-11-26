@@ -1,32 +1,31 @@
-import { DestroyService } from "../services/destroy";
-import { OLMapComponent } from "./ol-map";
+import { DestroyService } from '../services/destroy';
+import { OLMapComponent } from './ol-map';
 
-import { environment } from "../environment";
+import { environment } from '../environment';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { OnInit } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
 
-import { inject } from "@angular/core";
-import { takeUntil } from "rxjs/operators";
+import { inject } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
-import OLLayer from "ol/layer/Layer";
+import OLLayer from 'ol/layer/Layer';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-attribution",
+  selector: 'app-ol-control-attribution',
   template: `
     <article class="control">
-
-      <button 
-        (click)="toggleAttributions()" 
-        mat-icon-button 
+      <button
+        (click)="toggleAttributions()"
+        mat-icon-button
         title="Show/hide attributions">
         <fa-icon [icon]="['fas', 'info-circle']" size="2x"></fa-icon>
       </button>
- 
-       <nav #attribution class="attribution" [class.collapsed]="collapsed">
+
+      <nav #attribution class="attribution" [class.collapsed]="collapsed">
         <header class="header">For Information Only</header>
         <div class="item">Version {{ env.package.version }}</div>
         <div class="item">
@@ -39,7 +38,6 @@ import OLLayer from "ol/layer/Layer";
           <div [outerHTML]="attribution" class="item"></div>
         }
       </nav>
-
     </article>
   `,
   styles: [
@@ -58,7 +56,9 @@ import OLLayer from "ol/layer/Layer";
         padding: 0.5rem;
         position: absolute;
         right: 4rem;
-        transition: display 0.25s ease allow-discrete, opacity 0.25s ease;
+        transition:
+          display 0.25s ease allow-discrete,
+          opacity 0.25s ease;
         width: auto;
 
         .item {

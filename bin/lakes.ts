@@ -1,23 +1,23 @@
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
-import copy from "fast-copy";
-import hash from "object-hash";
-import shp from "shpjs";
+import chalk from 'chalk';
+import copy from 'fast-copy';
+import hash from 'object-hash';
+import shp from 'shpjs';
 
-const dist = "./data";
+const dist = './data';
 
 const index = JSON.parse(readFileSync(`${dist}/index.json`).toString());
 
 const url =
-  "https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Elevation_and_Derived_Products/d-bathymetry/Bathymetry_Lakes_polygons";
+  'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Elevation_and_Derived_Products/d-bathymetry/Bathymetry_Lakes_polygons';
 
 const lakesByCountyByTown = {};
 
@@ -36,7 +36,7 @@ async function main(): Promise<void> {
     const townList = (feature.properties.TOWN as string)?.toUpperCase();
 
     if (townList) {
-      const towns = townList.split("/");
+      const towns = townList.split('/');
       towns.forEach((town) => {
         const county = lookupCounty(town);
         if (county) {
@@ -85,8 +85,8 @@ main();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sample = {
-  AU_ID: "NHLAK700061102-02",
-  TOWN: "SALEM/WINDHAM",
+  AU_ID: 'NHLAK700061102-02',
+  TOWN: 'SALEM/WINDHAM',
   AREA: 23385.9046882,
   ACRES: 0.537,
   SQKM: 0.0022,
@@ -94,7 +94,7 @@ const sample = {
   PERIMETER: 699.61609,
   DEPTHMIN: 0,
   DEPTHMAX: 0,
-  COUNTY: "ROCKINGHAM",
-  LAKE: "CANOBIE LAKE",
-  SOURCE: "NHDES"
+  COUNTY: 'ROCKINGHAM',
+  LAKE: 'CANOBIE LAKE',
+  SOURCE: 'NHDES'
 };

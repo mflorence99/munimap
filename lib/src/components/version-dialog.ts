@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-version-dialog",
+  selector: 'app-version-dialog',
   template: `
     <h1 mat-dialog-title>New version detected</h1>
 

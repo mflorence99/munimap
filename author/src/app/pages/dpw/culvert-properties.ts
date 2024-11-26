@@ -1,31 +1,31 @@
-import { SidebarComponent } from "../../components/sidebar-component";
+import { SidebarComponent } from '../../components/sidebar-component';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { MatDrawer } from "@angular/material/sidenav";
-import { CulvertProperties } from "@lib/common";
-import { Landmark } from "@lib/common";
-import { LandmarkID } from "@lib/common";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { LandmarksActions } from "@lib/state/landmarks";
-import { Store } from "@ngxs/store";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { CulvertProperties } from '@lib/common';
+import { Landmark } from '@lib/common';
+import { LandmarkID } from '@lib/common';
+import { LandmarksActions } from '@lib/state/landmarks';
+import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { viewChild } from "@angular/core";
-import { culvertConditions } from "@lib/common";
-import { culvertFloodHazards } from "@lib/common";
-import { culvertHeadwalls } from "@lib/common";
-import { culvertMaterials } from "@lib/common";
+import { culvertConditions } from '@lib/common';
+import { culvertFloodHazards } from '@lib/common';
+import { culvertHeadwalls } from '@lib/common';
+import { culvertMaterials } from '@lib/common';
+import { inject } from '@angular/core';
+import { viewChild } from '@angular/core';
 
-import copy from "fast-copy";
-import OLFeature from "ol/Feature";
+import copy from 'fast-copy';
+import OLFeature from 'ol/Feature';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-culvert-properties",
+  selector: 'app-culvert-properties',
   template: `
     <header class="header">
       <figure class="icon">
@@ -244,10 +244,10 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
   drawer: MatDrawer;
   features: OLFeature<any>[];
   map: OLMapComponent;
-  ngForm = viewChild<NgForm>("propertiesForm");
+  ngForm = viewChild<NgForm>('propertiesForm');
   record: Partial<CulvertProperties> = {};
   selectedIDs: LandmarkID[];
-  shape: "circular" | "elliptical";
+  shape: 'circular' | 'elliptical';
 
   #cdf = inject(ChangeDetectorRef);
   #store = inject(Store);
@@ -266,14 +266,14 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
   }
 
   save(record: Partial<CulvertProperties>): void {
-    if (this.shape === "circular") record.height = record.width = 0;
-    else if (this.shape === "elliptical") record.diameter = 0;
+    if (this.shape === 'circular') record.height = record.width = 0;
+    else if (this.shape === 'elliptical') record.diameter = 0;
     const landmark: Partial<Landmark> = {
       id: this.features[0].getId() as string,
       properties: {
         metadata: record
       },
-      type: "Feature"
+      type: 'Feature'
     };
     this.#store.dispatch(new LandmarksActions.UpdateLandmark(landmark));
     // 👉 this resets the dirty flag, disabling SAVE until
@@ -282,9 +282,9 @@ export class CulvertPropertiesComponent implements SidebarComponent, OnInit {
   }
 
   #makeRecord(): void {
-    this.record = copy(this.features[0].get("metadata"));
-    if (this.record.diameter > 0) this.shape = "circular";
+    this.record = copy(this.features[0].get('metadata'));
+    if (this.record.diameter > 0) this.shape = 'circular';
     if (this.record.width > 0 && this.record.height > 0)
-      this.shape = "elliptical";
+      this.shape = 'elliptical';
   }
 }

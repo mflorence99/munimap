@@ -1,10 +1,10 @@
-import { Pipe } from "@angular/core";
-import { PipeTransform } from "@angular/core";
+import { Pipe } from '@angular/core';
+import { PipeTransform } from '@angular/core';
 
 // 👀  https://stackoverflow.com/questions/36535629/repeat-html-element-multiple-times-using-ngfor-based-on-a-number
 
 @Pipe({
-  name: "times",
+  name: 'times',
   standalone: false
 })
 export class TimesPipe implements PipeTransform {

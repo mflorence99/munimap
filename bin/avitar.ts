@@ -1,30 +1,30 @@
-import { isParcelStollen } from "../lib/src/common";
+import { isParcelStollen } from '../lib/src/common';
 
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
-import DBFParser from "node-dbf";
+import chalk from 'chalk';
+import DBFParser from 'node-dbf';
 
 // 🔥 only washington has an avitar.dbf
 //    we'll have to change this a lot for others
 
 const avitarByID: Record<string, any> = {};
 
-const parser = new DBFParser("./bin/assets/washington-avitar.dbf");
+const parser = new DBFParser('./bin/assets/washington-avitar.dbf');
 
-parser.on("record", (record) => {
+parser.on('record', (record) => {
   let id = `${parseInt(record.MAP, 10)}-${parseInt(record.LOT, 10)}`;
-  if ("000000" !== record.SUB) {
+  if ('000000' !== record.SUB) {
     let sub = record.SUB;
-    while (sub.length > 2 && sub[0] === "0") sub = sub.slice(1);
+    while (sub.length > 2 && sub[0] === '0') sub = sub.slice(1);
     id = `${id}-${sub}`;
   }
   avitarByID[id] = record;
   // if (record.OWNER.startsWith("NONNO")) jsome(record);
 });
 
-parser.on("end", () => {
+parser.on('end', () => {
   console.log(chalk.blue(`DBF parse of AVITAR.DBF complete`));
   main();
 });
@@ -34,7 +34,7 @@ parser.parse();
 // 👇 load base geojson
 
 const featureByID = JSON.parse(
-  readFileSync("./bin/assets/washington-parcels.geojson").toString()
+  readFileSync('./bin/assets/washington-parcels.geojson').toString()
 ).features.reduce((acc, feature) => {
   acc[feature.id] = feature;
   return acc;
@@ -63,11 +63,11 @@ function eliminateStolenParcels(): void {
 
 function saveGeoJSON(): void {
   const geojson = {
-    type: "FeatureCollection",
+    type: 'FeatureCollection',
     features: Object.values(featureByID)
   };
   writeFileSync(
-    "./bin/assets/washington-parcels.geojson",
+    './bin/assets/washington-parcels.geojson',
     JSON.stringify(geojson)
   );
 }
@@ -123,7 +123,7 @@ function updateFromAvitar(): void {
       // 👇 other data
       feature.properties.addressOfOwner =
         `${avitar.ADDRESS} ${avitar.ADDRESS2} ${avitar.CITY} ${avitar.STATE} ${avitar.ZIP}`
-          .replace(/\s\s+/g, " ")
+          .replace(/\s\s+/g, ' ')
           .trim();
       feature.properties.neighborhood = avitar.NGHBRHD;
     });
@@ -131,60 +131,60 @@ function updateFromAvitar(): void {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sample = {
-  PID: "000000000001000000",
-  MAP: "000000",
-  LOT: "000001",
-  SUB: "000000",
+  PID: '000000000001000000',
+  MAP: '000000',
+  LOT: '000001',
+  SUB: '000000',
   CARDS: 1,
-  LOCNUMB: "",
-  LOCNAME: "AP UTILITY PROPERTY",
-  OWNER: "NH ELECTRIC COOP",
-  COOWNER: "",
-  ADDRESS: "579 TENNEY MT HWY",
-  ADDRESS2: "",
-  CITY: "PLYMOUTH",
-  STATE: "NH",
-  ZIP: "03264",
-  ZIP4: "3147",
+  LOCNUMB: '',
+  LOCNAME: 'AP UTILITY PROPERTY',
+  OWNER: 'NH ELECTRIC COOP',
+  COOWNER: '',
+  ADDRESS: '579 TENNEY MT HWY',
+  ADDRESS2: '',
+  CITY: 'PLYMOUTH',
+  STATE: 'NH',
+  ZIP: '03264',
+  ZIP4: '3147',
   ACRES: 0,
-  LANDUSE: "UTILITY-ELEC",
-  ZONE: "RESIDENTIAL",
-  MODEL: "",
+  LANDUSE: 'UTILITY-ELEC',
+  ZONE: 'RESIDENTIAL',
+  MODEL: '',
   BEDRMS: 0,
   BTHRMS: 0,
   YRBUILT: 0,
-  SALEDATE: "",
-  SALEBK: "",
-  SALEPG: "",
-  SALEGRNT: "",
+  SALEDATE: '',
+  SALEBK: '',
+  SALEPG: '',
+  SALEGRNT: '',
   LNDMKVAL: 0,
   CUSECRED: 0,
-  CURRENTUSE: "N",
+  CURRENTUSE: 'N',
   LNDTXVAL: 0,
   BLDTXVAL: 0,
   FEATXVAL: 866700,
   TOTTXVAL: 866700,
   FN: 0,
   SALEPRICE: null,
-  SALEQUAL: "",
-  SALEIMPR: "",
+  SALEQUAL: '',
+  SALEIMPR: '',
   AREA: 0,
   CARDTOTAL: 866700,
   CARDTOTALO: 0,
-  BLDGGRADE: "",
-  BLDGSTORIE: "",
-  BLDGCONDIT: "",
-  NGHBRHD: "N-E",
-  NGHBRHDDES: "AVG",
+  BLDGGRADE: '',
+  BLDGSTORIE: '',
+  BLDGCONDIT: '',
+  NGHBRHD: 'N-E',
+  NGHBRHDDES: 'AVG',
   BLDGDEPREC: 0,
   BLDGADJBAS: 0,
   XSFRONTAGE: 0,
   WATERFRONT: 0,
-  VIEWFACTOR: "N",
+  VIEWFACTOR: 'N',
   PRIORLNDTX: 0,
   PRIORBLDTX: 0,
   PRIORFEATX: 0,
   PRIORTOTTX: 0,
-  TOWNNAME: "WASHINGTON",
-  PARCELNOTE: ""
+  TOWNNAME: 'WASHINGTON',
+  PARCELNOTE: ''
 };

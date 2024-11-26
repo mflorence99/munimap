@@ -1,10 +1,10 @@
-import { Index } from "../common";
+import { Index } from '../common';
 
-import { Coordinate } from "ol/coordinate";
-import { Observable } from "rxjs";
+import { Coordinate } from 'ol/coordinate';
+import { Observable } from 'rxjs';
 
-import { bbox } from "@turf/bbox";
-import { featureCollection } from "@turf/helpers";
+import { bbox } from '@turf/bbox';
+import { featureCollection } from '@turf/helpers';
 
 export abstract class GeoJSONService {
   empty = featureCollection([]);

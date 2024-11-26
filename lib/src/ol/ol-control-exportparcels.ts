@@ -1,25 +1,25 @@
-import { DestroyService } from "../services/destroy";
-import { OLMapComponent } from "./ol-map";
-import { OLSourceParcelsComponent } from "./ol-source-parcels";
+import { DestroyService } from '../services/destroy';
+import { OLMapComponent } from './ol-map';
+import { OLSourceParcelsComponent } from './ol-source-parcels';
 
-import { simplify } from "../common";
+import { simplify } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { bbox } from "@turf/bbox";
-import { saveAs } from "file-saver";
+import { bbox } from '@turf/bbox';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { saveAs } from 'file-saver';
 
-import OLFeature from "ol/Feature";
-import OLGeoJSON from "ol/format/GeoJSON";
-import OLProjection from "ol/proj/Projection";
+import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
+import OLProjection from 'ol/proj/Projection';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-ol-control-exportparcels",
+  selector: 'app-ol-control-exportparcels',
   template: `
     <button (click)="export()" mat-icon-button title="Export parcels">
       <fa-icon [icon]="['fas', 'download']" size="2x"></fa-icon>
@@ -67,7 +67,7 @@ export class OLControlExportParcelsComponent {
       return feature;
     });
     const blob = new Blob([JSON.stringify(simplify(geojson))], {
-      type: "text/plain;charset=utf-8"
+      type: 'text/plain;charset=utf-8'
     });
     saveAs(blob, `${this.fileName()}.geojson`);
   }

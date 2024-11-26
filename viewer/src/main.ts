@@ -1,10 +1,10 @@
-import { RootModule } from "./app/module";
+import { RootModule } from './app/module';
 
-import * as Sentry from "@sentry/angular-ivy";
+import * as Sentry from '@sentry/angular-ivy';
 
-import { enableProdMode } from "@angular/core";
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-import { environment } from "@lib/environment";
+import { enableProdMode } from '@angular/core';
+import { environment } from '@lib/environment';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 if (environment.production) enableProdMode();
 

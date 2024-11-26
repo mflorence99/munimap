@@ -1,25 +1,25 @@
-import { theState } from "../common";
+import { theState } from '../common';
 
-import { Injectable } from "@angular/core";
-import { Action } from "@ngxs/store";
-import { Selector } from "@ngxs/store";
-import { State } from "@ngxs/store";
-import { StateContext } from "@ngxs/store";
-import { Store } from "@ngxs/store";
+import { Action } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { Selector } from '@ngxs/store';
+import { State } from '@ngxs/store';
+import { StateContext } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { patch } from "@ngxs/store/operators";
+import { inject } from '@angular/core';
+import { patch } from '@ngxs/store/operators';
 
 export type ParcelCoding =
-  | "conformity"
-  | "history"
-  | "ownership"
-  | "topography"
-  | "usage";
+  | 'conformity'
+  | 'history'
+  | 'ownership'
+  | 'topography'
+  | 'usage';
 
 export type Path = string;
 
-const ACTION_SCOPE = "View";
+const ACTION_SCOPE = 'View';
 
 export namespace ViewActions {
   export class SetAccessibilityFilter {
@@ -96,18 +96,18 @@ export interface ViewStateModel {
 }
 
 @State<ViewStateModel>({
-  name: "view",
+  name: 'view',
   defaults: {
-    accessibilityFilter: "",
+    accessibilityFilter: '',
     gps: false,
-    historicalMapLeft: "",
-    historicalMapRight: "",
-    parcelCoding: "usage",
+    historicalMapLeft: '',
+    historicalMapRight: '',
+    parcelCoding: 'usage',
     recentPath: null,
     satelliteView: false,
-    satelliteYear: "",
+    satelliteYear: '',
     sideBySideView: false,
-    streetFilter: "",
+    streetFilter: '',
     viewByPath: {
       [theState]: { center: null, zoom: null }
     }
@@ -128,20 +128,20 @@ export class ViewState {
   @Selector() static historicalMapLeft(state: ViewStateModel): string {
     return (
       state.historicalMapLeft ||
-      "" /* 👈 b/c historicalMapLeft was added later */
+      '' /* 👈 b/c historicalMapLeft was added later */
     );
   }
 
   @Selector() static historicalMapRight(state: ViewStateModel): string {
     return (
       state.historicalMapRight ||
-      "" /* 👈 b/c historicalMapRight was added later */
+      '' /* 👈 b/c historicalMapRight was added later */
     );
   }
 
   @Selector() static parcelCoding(state: ViewStateModel): ParcelCoding {
     return (
-      state.parcelCoding || "usage" /* 👈 b/c parcelCoding was added later */
+      state.parcelCoding || 'usage' /* 👈 b/c parcelCoding was added later */
     );
   }
 
@@ -150,7 +150,7 @@ export class ViewState {
   }
 
   @Selector() static satelliteYear(state: ViewStateModel): string {
-    return state.satelliteYear || "" /* 👈 b/c satelliteYear was added later */;
+    return state.satelliteYear || '' /* 👈 b/c satelliteYear was added later */;
   }
 
   @Selector() static sideBySideView(state: ViewStateModel): boolean {
@@ -158,7 +158,7 @@ export class ViewState {
   }
 
   @Selector() static streetFilter(state: ViewStateModel): string {
-    return state.streetFilter || "" /* 👈 b/c streetFilter was added later */;
+    return state.streetFilter || '' /* 👈 b/c streetFilter was added later */;
   }
 
   @Selector() static view(state: ViewStateModel): ViewStateModel {

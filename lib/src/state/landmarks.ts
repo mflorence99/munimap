@@ -1,54 +1,54 @@
-import { Landmark } from "../common";
-import { LandmarkID } from "../common";
-import { Landmarks } from "../common";
-import { AnonState } from "./anon";
-import { AuthState } from "./auth";
-import { Profile } from "./auth";
-import { Map } from "./map";
-import { MapState } from "./map";
-import { CanDo } from "./undo";
-import { ClearStacks } from "./undo";
-import { Redo } from "./undo";
-import { Undo } from "./undo";
-import { Working } from "./working";
+import { AnonState } from './anon';
+import { AuthState } from './auth';
+import { CanDo } from './undo';
+import { ClearStacks } from './undo';
+import { Landmark } from '../common';
+import { LandmarkID } from '../common';
+import { Landmarks } from '../common';
+import { Map } from './map';
+import { MapState } from './map';
+import { Profile } from './auth';
+import { Redo } from './undo';
+import { Undo } from './undo';
+import { Working } from './working';
 
-import { calculateLandmark } from "../common";
-import { deserializeLandmark } from "../common";
-import { makeLandmarkID } from "../common";
-import { serializeLandmark } from "../common";
-import { workgroup } from "./auth";
+import { calculateLandmark } from '../common';
+import { deserializeLandmark } from '../common';
+import { makeLandmarkID } from '../common';
+import { serializeLandmark } from '../common';
+import { workgroup } from './auth';
 
-import { Injectable } from "@angular/core";
-import { CollectionReference } from "@angular/fire/firestore";
-import { Firestore } from "@angular/fire/firestore";
-import { Action } from "@ngxs/store";
-import { Actions } from "@ngxs/store";
-import { NgxsOnInit } from "@ngxs/store";
-import { Selector } from "@ngxs/store";
-import { State } from "@ngxs/store";
-import { StateContext } from "@ngxs/store";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { Action } from '@ngxs/store';
+import { Actions } from '@ngxs/store';
+import { CollectionReference } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
+import { NgxsOnInit } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { Selector } from '@ngxs/store';
+import { State } from '@ngxs/store';
+import { StateContext } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { collection } from "@angular/fire/firestore";
-import { collectionData } from "@angular/fire/firestore";
-import { deleteDoc } from "@angular/fire/firestore";
-import { doc } from "@angular/fire/firestore";
-import { query } from "@angular/fire/firestore";
-import { setDoc } from "@angular/fire/firestore";
-import { where } from "@angular/fire/firestore";
-import { ofActionSuccessful } from "@ngxs/store";
-import { featureCollection } from "@turf/helpers";
-import { combineLatest } from "rxjs";
-import { merge } from "rxjs";
-import { of } from "rxjs";
-import { distinctUntilChanged } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { mergeMap } from "rxjs/operators";
+import { collection } from '@angular/fire/firestore';
+import { collectionData } from '@angular/fire/firestore';
+import { combineLatest } from 'rxjs';
+import { deleteDoc } from '@angular/fire/firestore';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { doc } from '@angular/fire/firestore';
+import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { ofActionSuccessful } from '@ngxs/store';
+import { query } from '@angular/fire/firestore';
+import { setDoc } from '@angular/fire/firestore';
+import { where } from '@angular/fire/firestore';
 
-import copy from "fast-copy";
-import hash from "object-hash";
+import copy from 'fast-copy';
+import hash from 'object-hash';
 
 class Undoable {
   redoneBy: typeof Undoable;
@@ -59,7 +59,7 @@ class Undoable {
   ) {}
 }
 
-const ACTION_SCOPE = "Landmarks";
+const ACTION_SCOPE = 'Landmarks';
 
 export namespace LandmarksActions {
   export class AddLandmark extends Undoable {
@@ -131,7 +131,7 @@ const redoStack: RedoableAction[] = [];
 const undoStack: UndoableAction[] = [];
 
 @State<LandmarksStateModel>({
-  name: "landmarks",
+  name: 'landmarks',
   defaults: []
 })
 @Injectable()
@@ -157,6 +157,7 @@ export class LandmarksState implements NgxsOnInit {
     return state;
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @Action(LandmarksActions.AddLandmark) addLandmark(
     ctx: StateContext<LandmarksStateModel>,
     action: LandmarksActions.AddLandmark
@@ -170,10 +171,10 @@ export class LandmarksState implements NgxsOnInit {
       `%cFirestore add: landmarks ${normalized.id} ${JSON.stringify(
         normalized
       )}`,
-      "color: crimson"
+      'color: crimson'
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.#firestore, "landmarks", normalized.id);
+    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
     return setDoc(docRef, normalized).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
@@ -196,10 +197,10 @@ export class LandmarksState implements NgxsOnInit {
     // 👇 delete the landmark
     console.log(
       `%cFirestore delete: landmarks ${normalized.id}`,
-      "color: crimson"
+      'color: crimson'
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.#firestore, "landmarks", normalized.id);
+    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
     return deleteDoc(docRef).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
@@ -278,10 +279,10 @@ export class LandmarksState implements NgxsOnInit {
       `%cFirestore set: landmarks ${normalized.id} ${JSON.stringify(
         normalized
       )}`,
-      "color: chocolate"
+      'color: chocolate'
     );
     const undoAction = this.#makeUndoAction(ctx, action, normalized.id);
-    const docRef = doc(this.#firestore, "landmarks", normalized.id);
+    const docRef = doc(this.#firestore, 'landmarks', normalized.id);
     return setDoc(docRef, normalized, { merge: true }).then(() => {
       if (undoAction) undoStack.push(undoAction);
       ctx.dispatch([
@@ -332,18 +333,18 @@ export class LandmarksState implements NgxsOnInit {
               `%cFirestore query: landmarks where owner in ${JSON.stringify(
                 workgroup(profile)
               )} and path == "${map.path}"`,
-              "color: goldenrod"
+              'color: goldenrod'
             );
             return collectionData<Landmark>(
               query(
                 collection(
                   this.#firestore,
-                  "landmarks"
+                  'landmarks'
                 ) as CollectionReference<Landmark>,
-                where("owner", "in", workgroup(profile)),
-                where("path", "==", map.path)
+                where('owner', 'in', workgroup(profile)),
+                where('path', '==', map.path)
               ),
-              { idField: "$id" }
+              { idField: '$id' }
             );
           }
         }),

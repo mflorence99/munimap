@@ -1,23 +1,23 @@
-import { SidebarComponent } from "../../components/sidebar-component";
+import { SidebarComponent } from '../../components/sidebar-component';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { MatDrawer } from "@angular/material/sidenav";
-import { ParcelID } from "@lib/common";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { AuthState } from "@lib/state/auth";
-import { Map } from "@lib/state/map";
-import { MapActions } from "@lib/state/map";
-import { Store } from "@ngxs/store";
+import { AuthState } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Map } from '@lib/state/map';
+import { MapActions } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { ParcelID } from '@lib/common';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { bboxByAspectRatio } from "@lib/common";
-import { featureCollection } from "@turf/helpers";
-import { union } from "@turf/union";
+import { bboxByAspectRatio } from '@lib/common';
+import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { union } from '@turf/union';
 
-import OLFeature from "ol/Feature";
-import OLGeoJSON from "ol/format/GeoJSON";
+import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
 
 interface PropertyMapRecord {
   contours2ft: boolean;
@@ -43,7 +43,7 @@ const PRINT_SIZES = {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-create-propertymap",
+  selector: 'app-create-propertymap',
   template: `
     <header class="header">
       <figure class="icon">
@@ -221,7 +221,7 @@ export class CreatePropertyMapComponent implements SidebarComponent {
         union(featureCollection([acc, geojson]))
       ).geometry,
       properties: {},
-      type: "Feature"
+      type: 'Feature'
     };
     // 👉 the bbox has a nominal Nft border
     const border = this.border() * 0.0003048; /* 👈 feet to kilometers */
@@ -238,7 +238,7 @@ export class CreatePropertyMapComponent implements SidebarComponent {
       parcelIDs: this.selectedIDs,
       path: this.map.path(),
       printSize: printSize,
-      type: "property"
+      type: 'property'
     };
     this.#store.dispatch(new MapActions.CreateMap(map));
     this.drawer.close();

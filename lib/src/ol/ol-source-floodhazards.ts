@@ -1,18 +1,18 @@
-import { FloodHazardProperties } from "../common";
-import { OLSourceArcGISComponent } from "./ol-source-arcgis";
+import { FloodHazardProperties } from '../common';
+import { OLSourceArcGISComponent } from './ol-source-arcgis';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 
 const attribution =
   '<a href="https://www.des.nh.gov/" target="_blank">NHSADES</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-floodhazards",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-floodhazards',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
@@ -22,8 +22,8 @@ export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: FloodHazardProperties = feature.attributes;
-        properties.name = "" /* 👈 ??? */;
-        properties.type = "flood hazard";
+        properties.name = '' /* 👈 ??? */;
+        properties.type = 'flood hazard';
       });
       return arcgis;
     } else return super.filter(arcgis);
@@ -38,7 +38,7 @@ export class OLSourceFloodHazardsComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return "floodhazards";
+    return 'floodhazards';
   }
 
   getURL(extent: Coordinate): string {

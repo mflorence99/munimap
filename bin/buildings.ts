@@ -1,44 +1,44 @@
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
-import copy from "fast-copy";
-import hash from "object-hash";
-import request from "request";
-import unzipper from "unzipper";
+import chalk from 'chalk';
+import copy from 'fast-copy';
+import hash from 'object-hash';
+import request from 'request';
+import unzipper from 'unzipper';
 
 // 👉 https://github.com/microsoft/USBuildingFootprints
 
-const dist = "./data";
+const dist = './data';
 
 // 👇 we won't even bother to look at these towns as we know they're
 //    too big and analyzing them can cause out-of-memory conditions
 //    NOTE: we exclude WASHINGTON because we already have its legacy data
 // 👉 https://www.newhampshire-demographics.com/cities_by_population
 const exclusions = [
-  "CONCORD",
-  "DERRY",
-  "DOVER",
-  "HUDSON",
-  "LONDONDERRY",
-  "MANCHESTER",
-  "MERRIMACK",
-  "NASHUA",
-  "ROCHESTER",
-  "SALEM",
-  "WASHINGTON"
+  'CONCORD',
+  'DERRY',
+  'DOVER',
+  'HUDSON',
+  'LONDONDERRY',
+  'MANCHESTER',
+  'MERRIMACK',
+  'NASHUA',
+  'ROCHESTER',
+  'SALEM',
+  'WASHINGTON'
 ];
 
 // 👉 we SHOULD be reading from this URL
 const url =
-  "https://usbuildingdata.blob.core.windows.net/usbuildings-v2/NewHampshire.geojson.zip";
-const fileName = "NewHampshire.geojson";
+  'https://usbuildingdata.blob.core.windows.net/usbuildings-v2/NewHampshire.geojson.zip';
+const fileName = 'NewHampshire.geojson';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()
@@ -105,7 +105,7 @@ async function main(): Promise<void> {
     // 👉 we already have legacy Washington data
     towns
       .map((town) => town.id)
-      .filter((town) => town !== "WASHINGTON")
+      .filter((town) => town !== 'WASHINGTON')
       .forEach((town) => {
         const county = lookupCounty(town);
         if (county) {
@@ -147,9 +147,9 @@ main();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sample = {
-  type: "Feature",
+  type: 'Feature',
   geometry: {
-    type: "Polygon",
+    type: 'Polygon',
     coordinates: [
       [
         [-70.875614, 43.197566],
@@ -162,6 +162,6 @@ const sample = {
   },
   properties: {
     release: 1,
-    capture_dates_range: ""
+    capture_dates_range: ''
   }
 };

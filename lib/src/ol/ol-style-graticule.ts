@@ -1,19 +1,19 @@
-import { OLControlGraticuleComponent } from "./ol-control-graticule";
-import { OLMapComponent } from "./ol-map";
-import { Styler } from "./ol-styler";
-import { StylerComponent } from "./ol-styler";
+import { OLControlGraticuleComponent } from './ol-control-graticule';
+import { OLMapComponent } from './ol-map';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
+import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
-import OLFill from "ol/style/Fill";
-import OLStroke from "ol/style/Stroke";
-import OLStyle from "ol/style/Style";
-import OLText from "ol/style/Text";
+import OLFill from 'ol/style/Fill';
+import OLStroke from 'ol/style/Stroke';
+import OLStyle from 'ol/style/Style';
+import OLText from 'ol/style/Text';
 
 // 👇 styles ol-ext/control/graticule
 
@@ -25,15 +25,15 @@ import OLText from "ol/style/Text";
       useExisting: forwardRef(() => OLStyleGraticuleComponent)
     }
   ],
-  selector: "app-ol-style-graticule",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-style-graticule',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLStyleGraticuleComponent implements Styler {
-  fontFamily = input("Roboto");
+  fontFamily = input('Roboto');
   fontSize = input(10);
-  fontWeight = input<"bold" | "normal">("normal");
+  fontWeight = input<'bold' | 'normal'>('normal');
   lineDash = input([2, 2]);
   lineWidth = input(0.25);
   printing = input<boolean>();
@@ -53,13 +53,13 @@ export class OLStyleGraticuleComponent implements Styler {
   #border(): OLFill {
     // 👉 this is the part of the border that isn't the same
     //    color as the lines
-    const color = this.#map.vars["--map-graticule-border-color"];
+    const color = this.#map.vars['--map-graticule-border-color'];
     return new OLFill({ color: `rgba(${color}, 1)` });
   }
 
   #coords(): OLText {
-    const color = this.#map.vars["--map-graticule-text-color"];
-    const outline = this.#map.vars["--map-graticule-text-inverse"];
+    const color = this.#map.vars['--map-graticule-text-color'];
+    const outline = this.#map.vars['--map-graticule-text-inverse'];
     let fontSize = this.fontSize();
     // 👇 when we are printing, we want the lat/lon to be visible
     if (this.printing()) {
@@ -77,10 +77,10 @@ export class OLStyleGraticuleComponent implements Styler {
   }
 
   #line(): OLStroke {
-    const color = this.#map.vars["--map-graticule-line-color"];
+    const color = this.#map.vars['--map-graticule-line-color'];
     return new OLStroke({
       color: `rgba(${color},  1)`,
-      lineCap: "square",
+      lineCap: 'square',
       lineDash: this.lineDash(),
       width: this.lineWidth()
     });

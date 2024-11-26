@@ -1,38 +1,38 @@
-import { LandmarkID } from "../common";
-import { Parcel } from "../common";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
-import { Mapable } from "./ol-mapable";
-import { MapableComponent } from "./ol-mapable";
-import { Selector } from "./ol-selector";
-import { SelectorComponent } from "./ol-selector";
+import { LandmarkID } from '../common';
+import { Mapable } from './ol-mapable';
+import { MapableComponent } from './ol-mapable';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { Selector } from './ol-selector';
+import { SelectorComponent } from './ol-selector';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnDestroy } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { EventsKey as OLEventsKey } from "ol/events";
-import { SelectEvent as OLSelectEvent } from "ol/interaction/Select";
-import { StyleFunction as OLStyleFunction } from "ol/style/Style";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { EventsKey as OLEventsKey } from 'ol/events';
+import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { SelectEvent as OLSelectEvent } from 'ol/interaction/Select';
+import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { output } from "@angular/core";
-import { unByKey } from "ol/Observable";
-import { click } from "ol/events/condition";
-import { never } from "ol/events/condition";
-import { platformModifierKeyOnly } from "ol/events/condition";
-import { pointerMove } from "ol/events/condition";
-import { shiftKeyOnly } from "ol/events/condition";
-import { extend } from "ol/extent";
-import { transformExtent } from "ol/proj";
+import { click } from 'ol/events/condition';
+import { extend } from 'ol/extent';
+import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { never } from 'ol/events/condition';
+import { output } from '@angular/core';
+import { platformModifierKeyOnly } from 'ol/events/condition';
+import { pointerMove } from 'ol/events/condition';
+import { shiftKeyOnly } from 'ol/events/condition';
+import { transformExtent } from 'ol/proj';
+import { unByKey } from 'ol/Observable';
 
-import Debounce from "debounce-decorator";
-import OLFeature from "ol/Feature";
-import OLSelect from "ol/interaction/Select";
-import OLLayer from "ol/layer/Layer";
-import OLStyle from "ol/style/Style";
+import Debounce from 'debounce-decorator';
+import OLFeature from 'ol/Feature';
+import OLLayer from 'ol/layer/Layer';
+import OLSelect from 'ol/interaction/Select';
+import OLStyle from 'ol/style/Style';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,9 +46,9 @@ import OLStyle from "ol/style/Style";
       useExisting: forwardRef(() => OLInteractionSelectLandmarksComponent)
     }
   ],
-  selector: "app-ol-interaction-selectlandmarks",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-interaction-selectlandmarks',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLInteractionSelectLandmarksComponent
@@ -157,7 +157,7 @@ export class OLInteractionSelectLandmarksComponent
   }
 
   ngOnInit(): void {
-    this.#selectKey = this.olSelect.on("select", this.#onSelect.bind(this));
+    this.#selectKey = this.olSelect.on('select', this.#onSelect.bind(this));
   }
 
   reselectLandmarks(ids: LandmarkID[]): void {
@@ -192,8 +192,8 @@ export class OLInteractionSelectLandmarksComponent
   }
 
   #onSelect(_event?: OLSelectEvent): void {
-    const names = this.selected.map((selected) => selected.getId()).join(", ");
-    console.log(`%cSelected landmarks`, "color: lightcoral", `[${names}]`);
+    const names = this.selected.map((selected) => selected.getId()).join(', ');
+    console.log(`%cSelected landmarks`, 'color: lightcoral', `[${names}]`);
     this.featuresSelected.emit(this.selected);
   }
 
@@ -201,7 +201,7 @@ export class OLInteractionSelectLandmarksComponent
     return (feature: any, resolution: number): OLStyle[] => {
       const layer: OLLayerVectorComponent = this.olHover
         .getLayer(feature)
-        .get("component");
+        .get('component');
       return layer?.styleWhenHovering?.()(feature, resolution) as OLStyle[];
     };
   }
@@ -210,7 +210,7 @@ export class OLInteractionSelectLandmarksComponent
     return (feature: any, resolution: number): OLStyle[] => {
       const layer: OLLayerVectorComponent = this.olSelect
         .getLayer(feature)
-        .get("component");
+        .get('component');
       return layer?.styleWhenSelected?.()(feature, resolution) as OLStyle[];
     };
   }

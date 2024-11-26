@@ -1,18 +1,18 @@
-import { BridgeProperties } from "../common";
-import { OLSourceArcGISComponent } from "./ol-source-arcgis";
+import { BridgeProperties } from '../common';
+import { OLSourceArcGISComponent } from './ol-source-arcgis';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 
 const attribution =
   '<a href="https://granitview.unh.edu/html5viewer/index.html?viewer=granit_view" target="_blank">GRANIT<i>View</i></a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-bridges",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-bridges',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceBridgesComponent extends OLSourceArcGISComponent {
@@ -22,8 +22,8 @@ export class OLSourceBridgesComponent extends OLSourceArcGISComponent {
     if (arcgis) {
       arcgis.features.forEach((feature) => {
         const properties: BridgeProperties = feature.attributes;
-        properties.name = "" /* 👈 ??? */;
-        properties.type = "bridge";
+        properties.name = '' /* 👈 ??? */;
+        properties.type = 'bridge';
       });
       return arcgis;
     } else return super.filter(arcgis);
@@ -38,7 +38,7 @@ export class OLSourceBridgesComponent extends OLSourceArcGISComponent {
   }
 
   getProxyPath(): string {
-    return "bridges";
+    return 'bridges';
   }
 
   getURL(extent: Coordinate): string {

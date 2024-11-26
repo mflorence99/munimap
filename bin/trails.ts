@@ -1,22 +1,22 @@
-import { simplify } from "../lib/src/common";
-import { theState } from "../lib/src/common";
+import { simplify } from '../lib/src/common';
+import { theState } from '../lib/src/common';
 
-import * as turf from "@turf/turf";
+import * as turf from '@turf/turf';
 
-import { mkdirSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
-import { booleanIntersects } from "@turf/boolean-intersects";
+import { booleanIntersects } from '@turf/boolean-intersects';
+import { mkdirSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
-import copy from "fast-copy";
-import hash from "object-hash";
-import shp from "shpjs";
+import chalk from 'chalk';
+import copy from 'fast-copy';
+import hash from 'object-hash';
+import shp from 'shpjs';
 
 const url =
-  "https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-trails/nhtrails";
+  'https://ftp.granit.sr.unh.edu/GRANIT_Data/Vector_Data/Transportation_Networks/d-trails/nhtrails';
 
-const dist = "./data";
+const dist = './data';
 
 const allTowns = JSON.parse(
   readFileSync(`${dist}/${theState}/towns.geojson`).toString()
@@ -123,31 +123,31 @@ main();
 
 const sample = {
   OBJECTID: 1,
-  TRAIL: "Y",
-  TRAILNAME: "48T",
-  TRAILSYS: "Drummer Hill and Goose Pond",
-  COMMUNITY: "Keene",
+  TRAIL: 'Y',
+  TRAILNAME: '48T',
+  TRAILSYS: 'Drummer Hill and Goose Pond',
+  COMMUNITY: 'Keene',
   MILES: 0.454302189672,
-  BLAZE: "",
+  BLAZE: '',
   MAINTORG: 0,
-  NOTES: "",
-  PED: "1",
-  MTNBIKE: "1",
-  ROADBIKE: "",
-  XCSKI: "1",
-  SNOWMBL: "",
-  ATV: "",
-  DIRTBIKE: "",
-  HORSE: "",
-  PADDLE: "",
-  PAVED: "",
-  GROOMED: "",
-  ADA: "",
-  WIDE: "",
-  SEP_PATH: "",
-  ALPINESKI: "",
+  NOTES: '',
+  PED: '1',
+  MTNBIKE: '1',
+  ROADBIKE: '',
+  XCSKI: '1',
+  SNOWMBL: '',
+  ATV: '',
+  DIRTBIKE: '',
+  HORSE: '',
+  PADDLE: '',
+  PAVED: '',
+  GROOMED: '',
+  ADA: '',
+  WIDE: '',
+  SEP_PATH: '',
+  ALPINESKI: '',
   ACCURACY: 1,
   MAPURL:
-    "https://www.trailfinder.info/trails/trail/drummer-hill-and-goose-pond",
+    'https://www.trailfinder.info/trails/trail/drummer-hill-and-goose-pond',
   SHAPE_Leng: 2398.71556147
 };

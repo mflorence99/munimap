@@ -1,12 +1,12 @@
-import { Directive } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
-import { NG_VALIDATORS } from "@angular/forms";
-import { ValidationErrors } from "@angular/forms";
-import { Validator } from "@angular/forms";
-import { ValidatorFn } from "@angular/forms";
+import { AbstractControl } from '@angular/forms';
+import { Directive } from '@angular/core';
+import { NG_VALIDATORS } from '@angular/forms';
+import { OnInit } from '@angular/core';
+import { ValidationErrors } from '@angular/forms';
+import { Validator } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 
-import { input } from "@angular/core";
+import { input } from '@angular/core';
 
 interface Subdivision {
   area: number;
@@ -47,7 +47,7 @@ function subdivisionIDValidatorFactory(
       multi: true
     }
   ],
-  selector: "[appSubdivisionID][ngModel]",
+  selector: '[appSubdivisionID][ngModel]',
   standalone: false
 })
 export class SubdivisionIDValidator implements OnInit, Validator {

@@ -1,21 +1,21 @@
-import { Index } from "../lib/src/common";
-import { Layer } from "../lib/src/common";
+import { Index } from '../lib/src/common';
+import { Layer } from '../lib/src/common';
 
-import { theState } from "../lib/src/common";
+import { theState } from '../lib/src/common';
 
-import { existsSync } from "fs";
-import { readFileSync } from "fs";
-import { writeFileSync } from "fs";
+import { existsSync } from 'fs';
+import { readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
-import chalk from "chalk";
+import chalk from 'chalk';
 
 const towns = JSON.parse(
   readFileSync(
-    "./bin/assets/New_Hampshire_Political_Boundaries.geojson"
+    './bin/assets/New_Hampshire_Political_Boundaries.geojson'
   ).toString()
 );
 
-const dist = "./data";
+const dist = './data';
 
 function available({ name, url }): Layer {
   return {
@@ -29,23 +29,23 @@ const index: Index = {
   [theState]: {
     layers: {
       boundary: available({
-        name: "New Hampshire State Boundary",
+        name: 'New Hampshire State Boundary',
         url: `/${theState}/boundary.geojson`
       }),
       counties: available({
-        name: "New Hampshire County Boundaries",
+        name: 'New Hampshire County Boundaries',
         url: `/${theState}/counties.geojson`
       }),
       railroads: available({
-        name: "New Hampshire Railroads",
+        name: 'New Hampshire Railroads',
         url: `/${theState}/railroads.geojson`
       }),
       selectables: available({
-        name: "New Hampshire County Boundaries",
+        name: 'New Hampshire County Boundaries',
         url: `/${theState}/counties.geojson`
       }),
       towns: available({
-        name: "New Hampshire Town Boundaries",
+        name: 'New Hampshire Town Boundaries',
         url: `/${theState}/towns.geojson`
       })
     }

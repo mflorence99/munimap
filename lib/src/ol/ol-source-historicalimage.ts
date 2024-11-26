@@ -1,26 +1,26 @@
-import { HistoricalMap } from "../common";
-import { OLLayerImageComponent } from "./ol-layer-image";
-import { OLMapComponent } from "./ol-map";
+import { HistoricalMap } from '../common';
+import { OLLayerImageComponent } from './ol-layer-image';
+import { OLMapComponent } from './ol-map';
 
-import OLImage from "./ol-source-geoimage";
+import OLImage from './ol-source-geoimage';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { effect } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { buffer } from "@turf/buffer";
+import { buffer } from '@turf/buffer';
+import { effect } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
-import copy from "fast-copy";
-import Feature from "ol/Feature";
-import Polygon from "ol/geom/Polygon";
+import copy from 'fast-copy';
+import Feature from 'ol/Feature';
+import Polygon from 'ol/geom/Polygon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-historicalimage",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-historicalimage',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceHistoricalImageComponent {
@@ -34,7 +34,7 @@ export class OLSourceHistoricalImageComponent {
   constructor() {
     effect(() => {
       const historicalMap = this.historicalMap();
-      if (historicalMap.type === "image") {
+      if (historicalMap.type === 'image') {
         // 👇 this is the boundary we will clip to
         const coords: any = copy(
           this.#map.boundary().features[0].geometry.coordinates
@@ -72,7 +72,7 @@ export class OLSourceHistoricalImageComponent {
           imageFilter: historicalMap.filter,
           imageRotate: historicalMap.rotate,
           imageScale: historicalMap.scale,
-          projection: "EPSG:3857",
+          projection: 'EPSG:3857',
           url: historicalMap.url
         });
         this.olImage.setProperties({ component: this }, true);

@@ -1,19 +1,19 @@
-import { OLLayerTileComponent } from "./ol-layer-tile";
+import { OLLayerTileComponent } from './ol-layer-tile';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
 
-import OLOSM from "ol/source/OSM";
+import OLOSM from 'ol/source/OSM';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-osm",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-osm',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceOSMComponent implements OnInit {

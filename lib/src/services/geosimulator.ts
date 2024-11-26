@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Subscriber } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Subscriber } from 'rxjs';
 
-import { bearing } from "@turf/bearing";
-import { point } from "@turf/helpers";
-import { finalize } from "rxjs/operators";
-import { shareReplay } from "rxjs/operators";
+import { bearing } from '@turf/bearing';
+import { finalize } from 'rxjs/operators';
+import { point } from '@turf/helpers';
+import { shareReplay } from 'rxjs/operators';
 
 const maxIntervalBetweenPositions = 500;
 
@@ -59,7 +59,7 @@ const simulated = [
   [-72.103011, 43.174412]
 ];
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class GeosimulatorService extends Observable<GeolocationPosition> {
   constructor() {
     let counter = 0;

@@ -1,25 +1,25 @@
-import { AbstractMapPage } from "../abstract-map";
+import { AbstractMapPage } from '../abstract-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { DestroyService } from "@lib/services/destroy";
-import { MapType } from "@lib/state/map";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { DestroyService } from '@lib/services/destroy';
+import { MapType } from '@lib/state/map';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { OnInit } from '@angular/core';
 
-import { viewChild } from "@angular/core";
+import { viewChild } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-apdvd",
+  selector: 'app-apdvd',
   template: `
-
-    @let sink = {
-      mapState: root.mapState$ | async,
-      profile: root.profile$ | async,
-      user: root.user$ | async
-    };
+    @let sink =
+      {
+        mapState: root.mapState$ | async,
+        profile: root.profile$ | async,
+        user: root.user$ | async
+      };
 
     @if (sink.mapState) {
       <app-ol-map
@@ -30,7 +30,6 @@ import { viewChild } from "@angular/core";
         [maxZoom]="20"
         [path]="sink.mapState.path"
         tabindex="0">
-
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->
         <!-- ---------------------------------------------------------- -->
@@ -53,7 +52,6 @@ import { viewChild } from "@angular/core";
           mapControlAttribution></app-ol-control-attribution>
 
         @if (map.initialized) {
-          
           <!-- ---------------------------------------------------------- -->
           <!-- 🗺️ Internal control panels                                 -->
           <!-- ---------------------------------------------------------- -->
@@ -307,7 +305,7 @@ export class APDVDPage extends AbstractMapPage implements OnInit {
   map = viewChild(OLMapComponent);
 
   getType(): MapType {
-    return "apdvd";
+    return 'apdvd';
   }
 
   ngOnInit(): void {

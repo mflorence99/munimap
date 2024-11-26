@@ -1,25 +1,25 @@
-import { RootPage } from "../root/page";
+import { RootPage } from '../root/page';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { ViewActions } from "@lib/state/view";
-import { Store } from "@ngxs/store";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { ViewActions } from '@lib/state/view';
 
-import { inject } from "@angular/core";
+import { inject } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-parcels-toolbar",
+  selector: 'app-parcels-toolbar',
   template: `
-
-    @let sink = {
-      historicalMapLeft: root.historicalMapLeft$ | async,
-      historicalMapRight: root.historicalMapRight$ | async,
-      mapState: root.mapState$ | async,
-      parcelCoding: root.parcelCoding$ | async,
-      satelliteView: root.satelliteView$ | async,
-      satelliteYear: root.satelliteYear$ | async
-    };
+    @let sink =
+      {
+        historicalMapLeft: root.historicalMapLeft$ | async,
+        historicalMapRight: root.historicalMapRight$ | async,
+        mapState: root.mapState$ | async,
+        parcelCoding: root.parcelCoding$ | async,
+        satelliteView: root.satelliteView$ | async,
+        satelliteYear: root.satelliteYear$ | async
+      };
 
     <article>
       @if (sink.satelliteView && sink.satelliteYear) {

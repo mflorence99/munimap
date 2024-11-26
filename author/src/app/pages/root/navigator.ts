@@ -1,35 +1,35 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { CollectionReference } from "@angular/fire/firestore";
-import { Firestore } from "@angular/fire/firestore";
-import { MatDrawer } from "@angular/material/sidenav";
-import { DestroyService } from "@lib/services/destroy";
-import { VersionService } from "@lib/services/version";
-import { AuthState } from "@lib/state/auth";
-import { Profile } from "@lib/state/auth";
-import { Map } from "@lib/state/map";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
+import { AuthState } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { CollectionReference } from '@angular/fire/firestore';
+import { Component } from '@angular/core';
+import { DestroyService } from '@lib/services/destroy';
+import { Firestore } from '@angular/fire/firestore';
+import { Map } from '@lib/state/map';
+import { MatDrawer } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Profile } from '@lib/state/auth';
+import { Store } from '@ngxs/store';
+import { VersionService } from '@lib/services/version';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { collection } from "@angular/fire/firestore";
-import { collectionData } from "@angular/fire/firestore";
-import { limit } from "@angular/fire/firestore";
-import { orderBy } from "@angular/fire/firestore";
-import { query } from "@angular/fire/firestore";
-import { where } from "@angular/fire/firestore";
-import { theState } from "@lib/common";
-import { workgroup } from "@lib/state/auth";
-import { of } from "rxjs";
-import { mergeMap } from "rxjs/operators";
-import { takeUntil } from "rxjs/operators";
+import { collection } from '@angular/fire/firestore';
+import { collectionData } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { limit } from '@angular/fire/firestore';
+import { mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { orderBy } from '@angular/fire/firestore';
+import { query } from '@angular/fire/firestore';
+import { takeUntil } from 'rxjs/operators';
+import { theState } from '@lib/common';
+import { where } from '@angular/fire/firestore';
+import { workgroup } from '@lib/state/auth';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-navigator",
+  selector: 'app-navigator',
   template: `
     <nav class="form navigator">
       <ul>
@@ -135,9 +135,8 @@ import { takeUntil } from "rxjs/operators";
   standalone: false
 })
 export class NavigatorComponent implements OnInit {
-  profile$: Observable<Profile>;
-
   maxMapCount = input(5);
+  profile$: Observable<Profile>;
   state = theState;
   title = input<string>();
   topMaps$: Observable<Map[]>;
@@ -175,13 +174,13 @@ export class NavigatorComponent implements OnInit {
             `%cFirestore query: maps where owner in ${JSON.stringify(
               workgroup(profile)
             )} orderBy timestamp desc`,
-            "color: goldenrod"
+            'color: goldenrod'
           );
           return collectionData<Map>(
             query(
-              collection(this.#firestore, "maps") as CollectionReference<Map>,
-              where("owner", "in", workgroup(profile)),
-              orderBy("timestamp", "desc"),
+              collection(this.#firestore, 'maps') as CollectionReference<Map>,
+              where('owner', 'in', workgroup(profile)),
+              orderBy('timestamp', 'desc'),
               limit(this.maxMapCount())
             )
           );

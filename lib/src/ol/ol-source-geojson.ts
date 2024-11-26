@@ -1,32 +1,32 @@
-import { GeoJSONService } from "../services/geojson";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
+import { GeoJSONService } from '../services/geojson';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { all as allStrategy } from "ol/loadingstrategy";
-import { bbox as bboxStrategy } from "ol/loadingstrategy";
-import { transformExtent } from "ol/proj";
-import { map } from "rxjs/operators";
+import { all as allStrategy } from 'ol/loadingstrategy';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { transformExtent } from 'ol/proj';
 
-import copy from "fast-copy";
-import OLFeature from "ol/Feature";
-import GeoJSON from "ol/format/GeoJSON";
-import OLProjection from "ol/proj/Projection";
-import OLVector from "ol/source/Vector";
+import copy from 'fast-copy';
+import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
+import OLVector from 'ol/source/Vector';
 
 const attribution =
   '<a href="https://www.granit.unh.edu/data/downloadfreedata/alphabetical/databyalpha.html" target="_blank">NH GRANIT</a>';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-source-geojson",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-geojson',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceGeoJSONComponent {
@@ -41,8 +41,8 @@ export class OLSourceGeoJSONComponent {
 
   constructor() {
     let strategy;
-    if (this.#map.loadingStrategy() === "all") strategy = allStrategy;
-    else if (this.#map.loadingStrategy() === "bbox") strategy = bboxStrategy;
+    if (this.#map.loadingStrategy() === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy() === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
@@ -61,9 +61,9 @@ export class OLSourceGeoJSONComponent {
   ): void {
     let bbox;
     // 👉 get everything at once
-    if (this.#map.loadingStrategy() === "all") bbox = this.#map.bbox();
+    if (this.#map.loadingStrategy() === 'all') bbox = this.#map.bbox();
     // 👉 or just get what's visible
-    else if (this.#map.loadingStrategy() === "bbox")
+    else if (this.#map.loadingStrategy() === 'bbox')
       bbox = transformExtent(extent, projection, this.#map.featureProjection);
     this.#geoJSON
       .loadByIndex(this.path() ?? this.#map.path(), this.layerKey(), bbox)

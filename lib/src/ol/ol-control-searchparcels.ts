@@ -1,32 +1,32 @@
-import { Parcel } from "../common";
-import { ParcelID } from "../common";
-import { SearchableParcel } from "../common";
-import { SearchableParcels } from "../common";
-import { DestroyService } from "../services/destroy";
-import { GeoJSONService } from "../services/geojson";
-import { ParcelsState } from "../state/parcels";
-import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
-import { OLMapComponent } from "./ol-map";
-import { Searcher } from "./ol-searcher";
-import { SearcherComponent } from "./ol-searcher";
+import { DestroyService } from '../services/destroy';
+import { GeoJSONService } from '../services/geojson';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { ParcelsState } from '../state/parcels';
+import { SearchableParcel } from '../common';
+import { SearchableParcels } from '../common';
+import { Searcher } from './ol-searcher';
+import { SearcherComponent } from './ol-searcher';
 
-import { isParcelStollen } from "../common";
+import { isParcelStollen } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { Subject } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { Subject } from 'rxjs';
 
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { combineLatest } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { combineLatest } from 'rxjs';
+import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
-import copy from "fast-copy";
-import fuzzysort from "fuzzysort";
+import copy from 'fast-copy';
+import fuzzysort from 'fuzzysort';
 
 interface Override {
   address?: string;
@@ -48,7 +48,7 @@ interface SearchTarget {
     },
     DestroyService
   ],
-  selector: "app-ol-control-searchparcels",
+  selector: 'app-ol-control-searchparcels',
   template: `
     <article class="control">
       <fa-icon [icon]="['fas', 'search']"></fa-icon>
@@ -73,8 +73,10 @@ interface SearchTarget {
       [class.hidden]="matches.length === 0 || !theSearcher.value"
       class="matcher">
       @for (match of matches; track match.key) {
-        <a (click)="onSearch(match.key)" class="match" 
-           href="javascript: void(0)">
+        <a
+          (click)="onSearch(match.key)"
+          class="match"
+          href="javascript: void(0)">
           <div class="key">{{ match.key }}</div>
           @if (match.count > 1) {
             <div class="count">({{ match.count }})</div>
@@ -186,8 +188,8 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
     if (searchables) {
       // 👉 we have a hit, tell the selector
       this.matches = [];
-      const ids = searchables.map((searchable) => searchable.id).join(", ");
-      console.log(`%cFound parcels`, "color: indianred", `[${ids}]`);
+      const ids = searchables.map((searchable) => searchable.id).join(', ');
+      console.log(`%cFound parcels`, 'color: indianred', `[${ids}]`);
       // 👉 the selector MAY not be present
       const selector =
         this.#map.selector() as OLInteractionSelectParcelsComponent;
@@ -202,7 +204,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
       // 👉 no hit, but enough characters to go for a fuzzy match
       this.matches = fuzzysort
         .go(searchFor, this.#searchTargets, {
-          key: "key",
+          key: 'key',
           limit: this.fuzzyMaxResults(),
           threshold: this.fuzzyThreshold()
         })
@@ -245,7 +247,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
 
   #handleGeoJSON$(): void {
     this.#geoJSON
-      .loadByIndex(this.#map.path(), "searchables")
+      .loadByIndex(this.#map.path(), 'searchables')
       .subscribe((geojson: SearchableParcels) => this.#geojson$.next(geojson));
   }
 
@@ -267,15 +269,15 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
         );
         this.searchablesByAddress = this.#groupSearchablesByProperty(
           geojson.features,
-          "address"
+          'address'
         );
         this.searchablesByID = this.#groupSearchablesByProperty(
           geojson.features,
-          "id"
+          'id'
         );
         this.searchablesByOwner = this.#groupSearchablesByProperty(
           geojson.features,
-          "owner"
+          'owner'
         );
       });
   }
@@ -288,7 +290,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
         geometry: undefined,
         id: id,
         properties: {},
-        type: "Feature"
+        type: 'Feature'
       });
     });
   }
@@ -304,7 +306,7 @@ export class OLControlSearchParcelsComponent implements OnInit, Searcher {
           override.bbox = parcel.bbox;
         const props = parcel.properties;
         if (props) {
-          ["address", "id", "owner"].forEach((prop) => {
+          ['address', 'id', 'owner'].forEach((prop) => {
             if (props[prop] !== undefined && override[prop] === undefined)
               override[prop] = props[prop];
           });

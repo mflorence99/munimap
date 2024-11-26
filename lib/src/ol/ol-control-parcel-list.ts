@@ -1,42 +1,40 @@
-import { Parcel } from "../common";
-import { ParcelID } from "../common";
-import { Parcels } from "../common";
-import { DestroyService } from "../services/destroy";
-import { GeoJSONService } from "../services/geojson";
-import { MapState } from "../state/map";
-import { ParcelsState } from "../state/parcels";
-import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
-import { OLMapComponent } from "./ol-map";
+import { DestroyService } from '../services/destroy';
+import { GeoJSONService } from '../services/geojson';
+import { MapState } from '../state/map';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelID } from '../common';
+import { Parcels } from '../common';
+import { ParcelsState } from '../state/parcels';
 
-import { isParcelStollen } from "../common";
-import { parcelProperties } from "../common";
+import { isParcelStollen } from '../common';
+import { parcelProperties } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { Subject } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { Subject } from 'rxjs';
 
-import { inject } from "@angular/core";
-import { combineLatest } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { combineLatest } from 'rxjs';
+import { inject } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
-import copy from "fast-copy";
+import copy from 'fast-copy';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-ol-control-parcel-list",
+  selector: 'app-ol-control-parcel-list',
   template: `
     <article class="control">
-  
       <button (click)="toggleList()" mat-icon-button title="Show/hide lists">
         <fa-icon [icon]="['fal', 'list-ol']" size="2x"></fa-icon>
       </button>
 
       <section #list class="list" [class.collapsed]="collapsed">
-
         <section class="simlist">
           @let listSize = parcels.length ? 1 : categories.length;
 
@@ -44,7 +42,7 @@ import copy from "fast-copy";
             &#9660;
           }
 
-          <select 
+          <select
             (change)="onFilterCategory($any($event.target).value)"
             [size]="listSize"
             class="categories">
@@ -58,22 +56,21 @@ import copy from "fast-copy";
 
         <aside class="wrapper">
           <table class="properties">
-
             <tbody>
               @for (parcel of parcels; track parcel.id; let ix = $index) {
                 <tr>
                   <td class="index">{{ ix + 1 }}.</td>
                   <td>
-                    <a (click)="onSelect(parcel)" href="javascript: void(0)">{{ parcel.id }}</a>
+                    <a (click)="onSelect(parcel)" href="javascript: void(0)">
+                      {{ parcel.id }}
+                    </a>
                   </td>
                   <td class="address">{{ parcel.properties.address }}</td>
                 </tr>
               }
             </tbody>
-
           </table>
         </aside>
-
       </section>
     </article>
   `,
@@ -89,7 +86,7 @@ import copy from "fast-copy";
           display: none;
         }
       }
- 
+
       .category {
         color: var(--text-color);
       }
@@ -111,7 +108,9 @@ import copy from "fast-copy";
         padding: 0.5rem;
         position: absolute;
         right: 4rem;
-        transition: display 0.25s ease allow-discrete, opacity 0.25s ease;
+        transition:
+          display 0.25s ease allow-discrete,
+          opacity 0.25s ease;
       }
 
       .list.collapsed {
@@ -149,18 +148,18 @@ import copy from "fast-copy";
         overflow-y: auto;
         width: 320px;
       }
-   `
+    `
   ],
   standalone: false
 })
 export class OLControlParcelListComponent implements OnInit {
   categories = [
-    ["deed", "Deeded Properties"],
-    ["300", "Town Properties"],
-    ["400", "State Properties"],
-    ["500", "State Parks"],
-    ["501", "Town Forests"],
-    ["502", "Conservation Lands"]
+    ['deed', 'Deeded Properties'],
+    ['300', 'Town Properties'],
+    ['400', 'State Properties'],
+    ['500', 'State Parks'],
+    ['501', 'Town Forests'],
+    ['502', 'Conservation Lands']
   ];
   collapsed = true;
   parcels: Parcel[] = [];
@@ -224,7 +223,7 @@ export class OLControlParcelListComponent implements OnInit {
 
   #handleGeoJSON$(): void {
     this.#geoJSON
-      .loadByIndex(this.#mapState.currentMap().path, "parcels")
+      .loadByIndex(this.#mapState.currentMap().path, 'parcels')
       .subscribe((geojson: Parcels) => this.#geojson$.next(geojson));
   }
 
@@ -251,12 +250,12 @@ export class OLControlParcelListComponent implements OnInit {
             };
           })
           .filter((feature) => {
-            if (category !== "deed")
+            if (category !== 'deed')
               return feature.properties?.usage === category;
             else
               return (
-                feature.properties.owner?.endsWith(" TC DEED") ||
-                feature.properties.owner?.endsWith(" TC - DEED")
+                feature.properties.owner?.endsWith(' TC DEED') ||
+                feature.properties.owner?.endsWith(' TC - DEED')
               );
           });
         this.#cdf.markForCheck();
@@ -271,7 +270,7 @@ export class OLControlParcelListComponent implements OnInit {
         geometry: undefined,
         id: id,
         properties: {},
-        type: "Feature"
+        type: 'Feature'
       });
     });
   }

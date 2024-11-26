@@ -1,25 +1,25 @@
-import { SidebarComponent } from "../../components/sidebar-component";
+import { SidebarComponent } from '../../components/sidebar-component';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { MatDrawer } from "@angular/material/sidenav";
-import { Parcel } from "@lib/common";
-import { ParcelID } from "@lib/common";
-import { OLMapComponent } from "@lib/ol/ol-map";
-import { AuthState } from "@lib/state/auth";
-import { ParcelsActions } from "@lib/state/parcels";
-import { Store } from "@ngxs/store";
+import { AuthState } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
+import { OLMapComponent } from '@lib/ol/ol-map';
+import { OnInit } from '@angular/core';
+import { Parcel } from '@lib/common';
+import { ParcelID } from '@lib/common';
+import { ParcelsActions } from '@lib/state/parcels';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { featureCollection } from "@turf/helpers";
-import { intersect } from "@turf/intersect";
-import { randomPoint } from "@turf/random";
-import { voronoi } from "@turf/voronoi";
-import { transformExtent } from "ol/proj";
+import { featureCollection } from '@turf/helpers';
+import { inject } from '@angular/core';
+import { intersect } from '@turf/intersect';
+import { randomPoint } from '@turf/random';
+import { transformExtent } from 'ol/proj';
+import { voronoi } from '@turf/voronoi';
 
-import OLFeature from "ol/Feature";
-import OLGeoJSON from "ol/format/GeoJSON";
+import OLFeature from 'ol/Feature';
+import OLGeoJSON from 'ol/format/GeoJSON';
 
 interface Subdivision {
   area: number;
@@ -28,7 +28,7 @@ interface Subdivision {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-subdivide-parcel",
+  selector: 'app-subdivide-parcel',
   template: `
     <header class="header">
       <figure class="icon">
@@ -210,11 +210,11 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
       subdivisions.every((subdivision) => subdivision.id !== source.getId())
     ) {
       removedParcels.push({
-        action: "removed",
+        action: 'removed',
         id: source.getId(),
         owner: this.#authState.currentProfile().email,
         path: this.map.path(),
-        type: "Feature"
+        type: 'Feature'
       });
     }
     // 👉 create a new geometry for each subdivision
@@ -222,7 +222,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
       const props = source.getProperties();
       const subdivision = subdivisions[ix];
       return {
-        action: subdivision.id !== source.getId() ? "added" : "modified",
+        action: subdivision.id !== source.getId() ? 'added' : 'modified',
         geometry: geojson.geometry,
         id: subdivision.id,
         owner: this.#authState.currentProfile().email,
@@ -239,7 +239,7 @@ export class SubdivideParcelComponent implements SidebarComponent, OnInit {
           use: props.use,
           zone: props.zone
         },
-        type: "Feature"
+        type: 'Feature'
       };
     });
     // that's it!

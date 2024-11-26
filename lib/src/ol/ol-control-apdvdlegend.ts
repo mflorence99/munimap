@@ -1,25 +1,25 @@
-import { ParcelProperties } from "../common";
-import { DestroyService } from "../services/destroy";
-import { Legend } from "./ol-control-abstractparcelslegend";
-import { OLControlAbstractParcelsLegendComponent } from "./ol-control-abstractparcelslegend";
-import { OLMapComponent } from "./ol-map";
-import { MapableComponent } from "./ol-mapable";
+import { DestroyService } from '../services/destroy';
+import { Legend } from './ol-control-abstractparcelslegend';
+import { MapableComponent } from './ol-mapable';
+import { OLControlAbstractParcelsLegendComponent } from './ol-control-abstractparcelslegend';
+import { OLMapComponent } from './ol-map';
+import { ParcelProperties } from '../common';
 
-import { colorOfAPDVDExcluded } from "./ol-apdvd2";
-import { colorOfAPDVDIncluded } from "./ol-apdvd2";
-import { isAPDVDExcluded } from "./ol-apdvd2";
-import { isAPDVDIncluded } from "./ol-apdvd2";
+import { colorOfAPDVDExcluded } from './ol-apdvd2';
+import { colorOfAPDVDIncluded } from './ol-apdvd2';
+import { isAPDVDExcluded } from './ol-apdvd2';
+import { isAPDVDIncluded } from './ol-apdvd2';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { ElementRef } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { Signal } from "@angular/core";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Signal } from '@angular/core';
 
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { viewChild } from "@angular/core";
+import { forwardRef } from '@angular/core';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { viewChild } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,7 +30,7 @@ import { viewChild } from "@angular/core";
     },
     DestroyService
   ],
-  selector: "app-ol-control-apdvdlegend",
+  selector: 'app-ol-control-apdvdlegend',
   template: `
     <article
       #legend
@@ -102,7 +102,7 @@ export class OLControlAPDVDLegendComponent
   countOfIncluded: number;
   county: Signal<string>;
   id: Signal<string>;
-  legend = viewChild<ElementRef>("legend");
+  legend = viewChild<ElementRef>('legend');
   printing = input<boolean>();
   state: Signal<string>;
   title = input<string>();

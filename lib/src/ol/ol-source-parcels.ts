@@ -1,38 +1,38 @@
-import { Parcel } from "../common";
-import { ParcelID } from "../common";
-import { Parcels } from "../common";
-import { DestroyService } from "../services/destroy";
-import { GeoJSONService } from "../services/geojson";
-import { ParcelsState } from "../state/parcels";
-import { ParcelCoding } from "../state/view";
-import { ViewState } from "../state/view";
-import { OLInteractionSelectParcelsComponent } from "./ol-interaction-selectparcels";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
+import { DestroyService } from '../services/destroy';
+import { GeoJSONService } from '../services/geojson';
+import { OLInteractionSelectParcelsComponent } from './ol-interaction-selectparcels';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
+import { Parcel } from '../common';
+import { ParcelCoding } from '../state/view';
+import { ParcelID } from '../common';
+import { Parcels } from '../common';
+import { ParcelsState } from '../state/parcels';
+import { ViewState } from '../state/view';
 
-import { parcelProperties } from "../common";
+import { parcelProperties } from '../common';
 
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { OnInit } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Coordinate } from "ol/coordinate";
-import { Observable } from "rxjs";
-import { Subject } from "rxjs";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Coordinate } from 'ol/coordinate';
+import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { Subject } from 'rxjs';
 
-import { inject } from "@angular/core";
-import { input } from "@angular/core";
-import { all as allStrategy } from "ol/loadingstrategy";
-import { bbox as bboxStrategy } from "ol/loadingstrategy";
-import { transformExtent } from "ol/proj";
-import { combineLatest } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { all as allStrategy } from 'ol/loadingstrategy';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+import { combineLatest } from 'rxjs';
+import { inject } from '@angular/core';
+import { input } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { transformExtent } from 'ol/proj';
 
-import copy from "fast-copy";
-import OLFeature from "ol/Feature";
-import GeoJSON from "ol/format/GeoJSON";
-import OLProjection from "ol/proj/Projection";
-import OLVector from "ol/source/Vector";
+import copy from 'fast-copy';
+import GeoJSON from 'ol/format/GeoJSON';
+import OLFeature from 'ol/Feature';
+import OLProjection from 'ol/proj/Projection';
+import OLVector from 'ol/source/Vector';
 
 // 👇 parcels are different because they can be overridden by the user
 
@@ -42,9 +42,9 @@ const attribution =
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService],
-  selector: "app-ol-source-parcels",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-source-parcels',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLSourceParcelsComponent implements OnInit {
@@ -67,8 +67,8 @@ export class OLSourceParcelsComponent implements OnInit {
 
   constructor() {
     let strategy;
-    if (this.#map.loadingStrategy() === "all") strategy = allStrategy;
-    else if (this.#map.loadingStrategy() === "bbox") strategy = bboxStrategy;
+    if (this.#map.loadingStrategy() === 'all') strategy = allStrategy;
+    else if (this.#map.loadingStrategy() === 'bbox') strategy = bboxStrategy;
     this.olVector = new OLVector({
       attributions: [attribution],
       format: new GeoJSON(),
@@ -165,7 +165,7 @@ export class OLSourceParcelsComponent implements OnInit {
         geometry: undefined,
         id: id,
         properties: {},
-        type: "Feature"
+        type: 'Feature'
       });
     });
     return added;
@@ -179,12 +179,12 @@ export class OLSourceParcelsComponent implements OnInit {
   ): void {
     let bbox;
     // 👉 get everything at once
-    if (this.#map.loadingStrategy() === "all") bbox = this.#map.bbox();
+    if (this.#map.loadingStrategy() === 'all') bbox = this.#map.bbox();
     // 👉 or just get what's visible
-    else if (this.#map.loadingStrategy() === "bbox")
+    else if (this.#map.loadingStrategy() === 'bbox')
       bbox = transformExtent(extent, projection, this.#map.featureProjection);
     this.#geoJSON
-      .loadByIndex(this.path() ?? this.#map.path(), "parcels", bbox)
+      .loadByIndex(this.path() ?? this.#map.path(), 'parcels', bbox)
       .subscribe((geojson: Parcels) => {
         this.#success = success;
         this.#geojson$.next(geojson);

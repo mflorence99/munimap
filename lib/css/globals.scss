@@ -97,22 +97,21 @@ $dark-app-theme: mat.m2-define-dark-theme(
 
   // 👉 bridge from Angular Material variables to CSS variables
 
-  &{
-  --primary-color: var(--google-blue-700);
-  --accent-color: var(--google-yellow-700);
-  --warn-color: var(--google-red-700);
+  & {
+    --primary-color: var(--google-blue-700);
+    --accent-color: var(--google-yellow-700);
+    --warn-color: var(--google-red-700);
 
-  --text-color: var(--mat-gray-100);
-  --disabled-color: var(--mat-gray-500);
-  --background-color: var(--mat-gray-900);
+    --text-color: var(--mat-gray-100);
+    --disabled-color: var(--mat-gray-500);
+    --background-color: var(--mat-gray-900);
 
-  --fa-primary-color: var(--text-color);
-  --fa-secondary-color: var(--accent-color);
+    --fa-primary-color: var(--text-color);
+    --fa-secondary-color: var(--accent-color);
 
-  --fa-primary-opacity: 1;
-  --fa-secondary-opacity: 1;
+    --fa-primary-opacity: 1;
+    --fa-secondary-opacity: 1;
   }
-
 }
 
 // 👉 base styles

@@ -1,43 +1,43 @@
-import { LandmarkProperties } from "../common";
-import { Adaptor } from "./ol-adaptor";
-import { AdaptorComponent } from "./ol-adaptor";
-import { OLLayerVectorComponent } from "./ol-layer-vector";
-import { OLMapComponent } from "./ol-map";
-import { Styler } from "./ol-styler";
-import { StylerComponent } from "./ol-styler";
+import { Adaptor } from './ol-adaptor';
+import { AdaptorComponent } from './ol-adaptor';
+import { LandmarkProperties } from '../common';
+import { OLLayerVectorComponent } from './ol-layer-vector';
+import { OLMapComponent } from './ol-map';
+import { Styler } from './ol-styler';
+import { StylerComponent } from './ol-styler';
 
-import { DecimalPipe } from "@angular/common";
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Input } from "@angular/core";
-import { OnChanges } from "@angular/core";
-import { SimpleChanges } from "@angular/core";
-import { StyleFunction as OLStyleFunction } from "ol/style/Style";
+import { ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { Input } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
+import { StyleFunction as OLStyleFunction } from 'ol/style/Style';
 
-import { forwardRef } from "@angular/core";
-import { inject } from "@angular/core";
-import { area } from "@turf/area";
-import { combine } from "@turf/combine";
-import { convertArea } from "@turf/helpers";
-import { convertLength } from "@turf/helpers";
-import { length } from "@turf/length";
-import { lineChunk } from "@turf/line-chunk";
-import { getCenter } from "ol/extent";
-import { fromLonLat } from "ol/proj";
+import { area } from '@turf/area';
+import { combine } from '@turf/combine';
+import { convertArea } from '@turf/helpers';
+import { convertLength } from '@turf/helpers';
+import { forwardRef } from '@angular/core';
+import { fromLonLat } from 'ol/proj';
+import { getCenter } from 'ol/extent';
+import { inject } from '@angular/core';
+import { length } from '@turf/length';
+import { lineChunk } from '@turf/line-chunk';
 
-import cspline from "ol-ext/render/Cspline";
-import OLFillPattern from "ol-ext/style/FillPattern";
-import OLFontSymbol from "ol-ext/style/FontSymbol";
-import OLStrokePattern from "ol-ext/style/StrokePattern";
-import OLFeature from "ol/Feature";
-import OLGeoJSON from "ol/format/GeoJSON";
-import OLLineString from "ol/geom/LineString";
-import OLPoint from "ol/geom/Point";
-import OLPolygon from "ol/geom/Polygon";
-import OLFill from "ol/style/Fill";
-import OLStroke from "ol/style/Stroke";
-import OLStyle from "ol/style/Style";
-import OLText from "ol/style/Text";
+import cspline from 'ol-ext/render/Cspline';
+import OLFeature from 'ol/Feature';
+import OLFill from 'ol/style/Fill';
+import OLFillPattern from 'ol-ext/style/FillPattern';
+import OLFontSymbol from 'ol-ext/style/FontSymbol';
+import OLGeoJSON from 'ol/format/GeoJSON';
+import OLLineString from 'ol/geom/LineString';
+import OLPoint from 'ol/geom/Point';
+import OLPolygon from 'ol/geom/Polygon';
+import OLStroke from 'ol/style/Stroke';
+import OLStrokePattern from 'ol-ext/style/StrokePattern';
+import OLStyle from 'ol/style/Style';
+import OLText from 'ol/style/Text';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,9 +47,9 @@ import OLText from "ol/style/Text";
       useExisting: forwardRef(() => OLStyleUniversalComponent)
     }
   ],
-  selector: "app-ol-style-universal",
-  template: "<ng-content></ng-content>",
-  styles: [":host { display: none }"],
+  selector: 'app-ol-style-universal',
+  template: '<ng-content></ng-content>',
+  styles: [':host { display: none }'],
   standalone: false
 })
 export class OLStyleUniversalComponent implements OnChanges, Styler {
@@ -57,8 +57,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   /* eslint-disable @typescript-eslint/naming-convention */
 
-  @Input() contrast: "blackOnWhite" | "whiteOnBlack" | "normal" = "normal";
-  @Input() fontFamily = "Roboto";
+  @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
+  @Input() fontFamily = 'Roboto';
   @Input() fontOutlineRatio = 0.1 /* 👈 outline width : fontSize */;
   @Input() fontSize_huge = 32 /* 👈 pixels */;
   @Input() fontSize_large = 16 /* 👈 pixels */;
@@ -66,9 +66,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() fontSize_small = 12 /* 👈 pixels */;
   @Input() fontSize_tiny = 8 /* 👈 pixels */;
   @Input() iconOutlineRatio = 0.1 /* 👈 outline width : fontSize */;
-  @Input() lineCap: CanvasLineCap = "butt";
+  @Input() lineCap: CanvasLineCap = 'butt';
   @Input() lineChunkRatio = 5 /* 👈 size of chunk : length of text */;
-  @Input() lineJoin: CanvasLineJoin = "bevel";
+  @Input() lineJoin: CanvasLineJoin = 'bevel';
   @Input() maxFontPixels = 32 /* 👈 pixels */;
   @Input() minFontPixels = 6 /* 👈 pixels */;
   @Input() overlaySelectable = false;
@@ -166,7 +166,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   #calcPixelsForFeet(feet: number, resolution: number): number {
     // 👇 resolution is meters per pixel
-    return feet / convertLength(resolution, "meters", "feet");
+    return feet / convertLength(resolution, 'meters', 'feet');
   }
 
   #calcStrokePixels(props: LandmarkProperties, resolution: number): number {
@@ -197,25 +197,25 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
     whenSelected = false,
     whenRedrawing = false
   ): string {
-    if (this.contrast === "blackOnWhite") {
-      if (whenHovering) colorKey = "--rgb-indigo-a700";
-      else if (whenRedrawing) colorKey = "--rgb-blue-a200";
-      else if (whenSelected) colorKey = "--rgb-red-a700";
-      else colorKey = "--rgb-gray-900";
-    } else if (this.contrast === "whiteOnBlack") {
-      if (whenHovering) colorKey = "--rgb-indigo-a100";
-      else if (whenRedrawing) colorKey = "--rgb-blue-a200";
-      else if (whenSelected) colorKey = "--rgb-red-a100";
-      else colorKey = "--rgb-gray-50";
-    } else if (this.contrast === "normal") {
-      if (whenRedrawing) colorKey = "--rgb-blue-a200";
+    if (this.contrast === 'blackOnWhite') {
+      if (whenHovering) colorKey = '--rgb-indigo-a700';
+      else if (whenRedrawing) colorKey = '--rgb-blue-a200';
+      else if (whenSelected) colorKey = '--rgb-red-a700';
+      else colorKey = '--rgb-gray-900';
+    } else if (this.contrast === 'whiteOnBlack') {
+      if (whenHovering) colorKey = '--rgb-indigo-a100';
+      else if (whenRedrawing) colorKey = '--rgb-blue-a200';
+      else if (whenSelected) colorKey = '--rgb-red-a100';
+      else colorKey = '--rgb-gray-50';
+    } else if (this.contrast === 'normal') {
+      if (whenRedrawing) colorKey = '--rgb-blue-a200';
     }
     return this.#map.vars[colorKey];
   }
 
   #colorOfOpposite(colorKey: string): string {
-    if (this.contrast === "whiteOnBlack") colorKey = "--rgb-gray-900";
-    else if (this.contrast === "blackOnWhite") colorKey = "--rgb-gray-50";
+    if (this.contrast === 'whiteOnBlack') colorKey = '--rgb-gray-900';
+    else if (this.contrast === 'blackOnWhite') colorKey = '--rgb-gray-50';
     return this.#map.vars[colorKey];
   }
 
@@ -366,7 +366,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       (props.strokeFeet || props.strokePixels || props.strokeWidth)
     ) {
       // 🔥 pretty hack back door -- see ol-interaction-redraw*
-      const whenRedrawing = feature.get("ol-interaction-redraw");
+      const whenRedrawing = feature.get('ol-interaction-redraw');
       const strokeColor = this.#colorOf(
         props.strokeColor,
         whenHovering,
@@ -410,7 +410,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       }
       // 👇 develop the lineDash
       let lineDash = null;
-      if (props.strokeStyle === "dashed" && props.lineDash)
+      if (props.strokeStyle === 'dashed' && props.lineDash)
         lineDash = [
           strokePixels * props.lineDash[0],
           strokePixels * props.lineDash[1]
@@ -432,7 +432,9 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
             pattern: props.strokePattern as any,
             scale: props.strokePatternScale
           });
-        } catch (ignored) {}
+        } catch (ignored) {
+          console.error(ignored.getMessage());
+        }
       }
       // 👇 here's the style
       const style = new OLStyle({
@@ -458,8 +460,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
       .forEach((props) => {
         if (this.#map.olView.getZoom() >= (props.minZoom ?? 0)) {
           switch (feature.getGeometry().getType()) {
-            case "Point":
-            case "MultiPoint":
+            case 'Point':
+            case 'MultiPoint':
               if (this.showAll || this.showText || whenHovering || whenSelected)
                 styles.push(
                   ...this.#textPoint(
@@ -471,8 +473,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                   )
                 );
               break;
-            case "LineString":
-            case "MultiLineString":
+            case 'LineString':
+            case 'MultiLineString':
               if (this.overlaySelectable)
                 styles.push(
                   ...this.#strokeEmptyLine(feature, props, resolution)
@@ -503,8 +505,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                   )
                 );
               break;
-            case "Polygon":
-            case "MultiPolygon":
+            case 'Polygon':
+            case 'MultiPolygon':
               if (this.overlaySelectable)
                 styles.push(
                   ...this.#fillEmptyPolygon(feature, props, resolution)
@@ -574,18 +576,18 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           whenHovering,
           whenSelected
         );
-        const dfltOutlineColor = "--rgb-gray-50";
+        const dfltOutlineColor = '--rgb-gray-50';
         const fontOutlineColor = this.#colorOfOpposite(
           props.fontOutlineColor ?? dfltOutlineColor
         );
         // 👇 calculate the length if requested
-        let text = props.name ?? "";
+        let text = props.name ?? '';
         if (props.showDimension) {
           // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           text += ` (${this.#decimal.transform(
-            length(geojson, { units: "feet" }),
-            "1.0-0"
+            length(geojson, { units: 'feet' }),
+            '1.0-0'
           )} ft)`;
         }
         // 👇 we may need to chunk the text into multiple lines
@@ -613,7 +615,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
               color: `rgba(${fontColor}, ${props.fontOpacity})`
             }),
             font: font,
-            placement: "line",
+            placement: 'line',
             stroke: props.fontOutline
               ? new OLStroke({
                   color: `rgba(${fontOutlineColor}, 1)`,
@@ -669,7 +671,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           whenHovering,
           whenSelected
         );
-        const dfltOutlineColor = "--rgb-gray-50";
+        const dfltOutlineColor = '--rgb-gray-50';
         const fontOutlineColor = this.#colorOfOpposite(
           props.fontOutlineColor ?? dfltOutlineColor
         );
@@ -680,13 +682,13 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
           props.iconOutlineColor ?? dfltOutlineColor
         );
         // 👇 calculate the acreage if requested
-        let text = props.name?.replace(/ /g, "\n") ?? "";
+        let text = props.name?.replace(/ /g, '\n') ?? '';
         if (props.showDimension) {
           // 👀 https://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
           const geojson = JSON.parse(this.#format.writeFeature(feature));
           text += `\n(${this.#decimal.transform(
-            convertArea(area(geojson), "meters", "acres"),
-            "1.0-2"
+            convertArea(area(geojson), 'meters', 'acres'),
+            '1.0-2'
           )} ac)`;
         }
         // 👇 establish the location of the text
@@ -708,11 +710,11 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
         let textRotate = props.textRotate;
         if (textRotate) {
           const longest = text
-            .split("\n")
+            .split('\n')
             .sort((a, b) => b.length - a.length)[0];
           const textLength = this.#measureText(longest, font, resolution);
           // 👉 textLength is in meters, minWidth in feet
-          if (convertLength(textLength, "meters", "feet") < props.minWidth)
+          if (convertLength(textLength, 'meters', 'feet') < props.minWidth)
             textRotate = false;
         }
         // 👇 here's the style
@@ -724,8 +726,8 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
                 color: `rgba(${iconColor}, ${props.iconOpacity})`,
                 fill: new OLFill({ color: `rgba(${iconOutlineColor}, 1)` }),
                 font: `'Font Awesome'`,
-                fontStyle: "bold",
-                form: "none",
+                fontStyle: 'bold',
+                form: 'none',
                 radius: fontPixels,
                 stroke: props.iconOutline
                   ? new OLStroke({
@@ -766,7 +768,7 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
 
   #translationOffset(feet: number): number {
     const negative = feet < 0;
-    const meters = convertLength(Math.abs(feet), "feet", "meters");
+    const meters = convertLength(Math.abs(feet), 'feet', 'meters');
     return meters * (negative ? -1 : +1);
   }
 }

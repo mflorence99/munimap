@@ -1,19 +1,19 @@
-import { DestroyService } from "../services/destroy";
-import { OLMapComponent } from "./ol-map";
+import { DestroyService } from '../services/destroy';
+import { OLMapComponent } from './ol-map';
 
-import { EventsKey as OLEventsKey } from "ol/events";
-import { Observable } from "rxjs";
+import { EventsKey as OLEventsKey } from 'ol/events';
+import { Observable } from 'rxjs';
 
-import { inject } from "@angular/core";
-import { cleanCoords } from "@turf/clean-coords";
-import { simplify } from "@turf/simplify";
-import { unByKey } from "ol/Observable";
-import { takeUntil } from "rxjs/operators";
+import { cleanCoords } from '@turf/clean-coords';
+import { inject } from '@angular/core';
+import { simplify } from '@turf/simplify';
+import { takeUntil } from 'rxjs/operators';
+import { unByKey } from 'ol/Observable';
 
-import OLGeoJSON from "ol/format/GeoJSON";
-import OLDraw from "ol/interaction/Draw";
-import OLVectorLayer from "ol/layer/Vector";
-import OLVectorSource from "ol/source/Vector";
+import OLDraw from 'ol/interaction/Draw';
+import OLGeoJSON from 'ol/format/GeoJSON';
+import OLVectorLayer from 'ol/layer/Vector';
+import OLVectorSource from 'ol/source/Vector';
 
 export abstract class OLInteractionAbstractDrawComponent {
   olDraw: OLDraw;
@@ -61,7 +61,7 @@ export abstract class OLInteractionAbstractDrawComponent {
       type: geometryType
     });
     this.#drawStartKey = this.olDraw.on(
-      "drawstart",
+      'drawstart',
       () => (this.#touched = true)
     );
     this.#map.olMap.addInteraction(this.olDraw);

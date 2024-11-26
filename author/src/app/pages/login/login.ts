@@ -1,21 +1,21 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { ChangeDetectorRef } from "@angular/core";
-import { Component } from "@angular/core";
-import { Auth } from "@angular/fire/auth";
-import { MatDialog } from "@angular/material/dialog";
-import { MessageDialogComponent } from "@lib/components/message-dialog";
-import { MessageDialogData } from "@lib/components/message-dialog";
-import { AuthActions } from "@lib/state/auth";
-import { Store } from "@ngxs/store";
+import { Auth } from '@angular/fire/auth';
+import { AuthActions } from '@lib/state/auth';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageDialogComponent } from '@lib/components/message-dialog';
+import { MessageDialogData } from '@lib/components/message-dialog';
+import { Store } from '@ngxs/store';
 
-import { inject } from "@angular/core";
-import { createUserWithEmailAndPassword } from "@angular/fire/auth";
-import { sendPasswordResetEmail } from "@angular/fire/auth";
-import { signInWithEmailAndPassword } from "@angular/fire/auth";
+import { createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { inject } from '@angular/core';
+import { sendPasswordResetEmail } from '@angular/fire/auth';
+import { signInWithEmailAndPassword } from '@angular/fire/auth';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "app-login",
+  selector: 'app-login',
   template: `
     <!-- 📦 INITIAL STATE - REQUEST EMAIL -->
 
@@ -272,15 +272,15 @@ import { signInWithEmailAndPassword } from "@angular/fire/auth";
   standalone: false
 })
 export class LoginPage {
-  errorMessage = "";
+  errorMessage = '';
 
   login = {
-    displayName: "",
-    emailAddress: "",
-    password: ""
+    displayName: '',
+    emailAddress: '',
+    password: ''
   };
 
-  state: "initial" | "login" | "signup" = "initial";
+  state: 'initial' | 'login' | 'signup' = 'initial';
 
   #cdf = inject(ChangeDetectorRef);
   #dialog = inject(MatDialog);
@@ -294,10 +294,10 @@ export class LoginPage {
       this.login.emailAddress,
       String(Math.random())
     )
-      .then(() => console.error("Should not happen!"))
+      .then(() => console.error('Should not happen!'))
       .catch((error) => {
-        if (error.code === "auth/user-not-found") this.state = "signup";
-        else this.state = "login";
+        if (error.code === 'auth/user-not-found') this.state = 'signup';
+        else this.state = 'login';
         this.#cdf.detectChanges();
       });
   }
@@ -313,13 +313,13 @@ export class LoginPage {
         const user = userCredential.user;
         console.log(
           `%cFirestore auth: login ${user.email}`,
-          "color: goldenrod"
+          'color: goldenrod'
         );
       })
       .catch(() => {
         // 👇 the Firebase error message isn't that helpful
         //    this.errorMessage = this.#extractFirebaseMessage(error.message);
-        this.errorMessage = "Email address and password invalid";
+        this.errorMessage = 'Email address and password invalid';
         this.#cdf.detectChanges();
       });
   }
@@ -344,13 +344,13 @@ export class LoginPage {
         const user = userCredential.user;
         console.log(
           `%cFirestore auth: signup ${user.email}`,
-          "color: goldenrod"
+          'color: goldenrod'
         );
         this.#store.dispatch(
           new AuthActions.UpdateUser({
             ...user,
             displayName: this.login.displayName,
-            photoURL: ""
+            photoURL: ''
           })
         );
       })
@@ -362,7 +362,7 @@ export class LoginPage {
 
   startOver(): void {
     this.errorMessage = null;
-    this.state = "initial";
+    this.state = 'initial';
   }
 
   #extractFirebaseMessage(message: any): string {

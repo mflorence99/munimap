@@ -1,20 +1,20 @@
-import { Index } from "../common";
-import { CacheService } from "../services/cache";
-import { GeoJSONService } from "./geojson";
+import { CacheService } from '../services/cache';
+import { GeoJSONService } from './geojson';
+import { Index } from '../common';
 
-import { environment } from "../environment";
+import { environment } from '../environment';
 
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Coordinate } from "ol/coordinate";
-import { Observable } from "rxjs";
+import { Coordinate } from 'ol/coordinate';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { inject } from "@angular/core";
-import { of } from "rxjs";
-import { catchError } from "rxjs/operators";
-import { delay } from "rxjs/operators";
-import { map } from "rxjs/operators";
-import { tap } from "rxjs/operators";
+import { catchError } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 // 👇 this implementation of GeoJSONService is used by the viewer
 //    and only has access to the geojson in one town, as transferred

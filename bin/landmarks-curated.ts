@@ -1,19 +1,19 @@
-import { Landmark } from "../lib/src/common";
-import { LandmarkPropertiesClass } from "../lib/src/common";
-import { Landmarks } from "../lib/src/common";
+import { Landmark } from '../lib/src/common';
+import { LandmarkPropertiesClass } from '../lib/src/common';
+import { Landmarks } from '../lib/src/common';
 
-import { calculateLandmark } from "../lib/src/common";
-import { makeLandmarkID } from "../lib/src/common";
-import { serializeLandmark } from "../lib/src/common";
+import { calculateLandmark } from '../lib/src/common';
+import { makeLandmarkID } from '../lib/src/common';
+import { serializeLandmark } from '../lib/src/common';
 
-import * as firebase from "firebase-admin/app";
-import * as firestore from "firebase-admin/firestore";
-import * as inquirer from "inquirer";
-import * as yargs from "yargs";
+import * as firebase from 'firebase-admin/app';
+import * as firestore from 'firebase-admin/firestore';
+import * as inquirer from 'inquirer';
+import * as yargs from 'yargs';
 
-import { readFileSync } from "fs";
+import { readFileSync } from 'fs';
 
-import chalk from "chalk";
+import chalk from 'chalk';
 
 interface Curation {
   geojson?: Landmarks;
@@ -27,9 +27,9 @@ const CURATIONS: Curation[] = [
   // 👇 Florence/Hendrickson property bootstrap data
   // ///////////////////////////////////////////////////////////////////
   {
-    owner: "mflo999+flo@gmail.com",
-    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON",
-    source: "./bin/assets/mflo-landmarks.geojson"
+    owner: 'mflo999+flo@gmail.com',
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON',
+    source: './bin/assets/mflo-landmarks.geojson'
   },
   // ///////////////////////////////////////////////////////////////////
   // 👇 Correct Wolf Way alignment
@@ -39,7 +39,7 @@ const CURATIONS: Curation[] = [
       features: [
         {
           geometry: {
-            type: "LineString",
+            type: 'LineString',
             coordinates: [
               [-72.11332918690051, 43.17637767292953],
               [-72.11329035023122, 43.176338427028924],
@@ -65,29 +65,29 @@ const CURATIONS: Curation[] = [
           },
           properties: {
             ...new LandmarkPropertiesClass({
-              fontColor: "--map-road-text-color-V",
+              fontColor: '--map-road-text-color-V',
               fontOpacity: 1,
               fontOutline: true,
-              fontSize: "medium",
-              fontStyle: "bold",
+              fontSize: 'medium',
+              fontStyle: 'bold',
               lineSpline: true,
-              strokeColor: "--map-road-lane-V",
+              strokeColor: '--map-road-lane-V',
               strokeFeet: 48 /* 👈 feet */,
               strokeOpacity: 1,
               strokeOutline: true,
-              strokeOutlineColor: "--map-road-edge-V",
-              strokeStyle: "solid",
+              strokeOutlineColor: '--map-road-edge-V',
+              strokeStyle: 'solid',
               zIndex: 1
             }),
-            name: "Wolf Way"
+            name: 'Wolf Way'
           },
-          type: "Feature"
+          type: 'Feature'
         }
       ],
-      type: "FeatureCollection"
+      type: 'FeatureCollection'
     },
-    owner: "mflo999@gmail.com",
-    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON"
+    owner: 'mflo999@gmail.com',
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
   },
   // ///////////////////////////////////////////////////////////////////
   // 👇 Tom Cross's map amendments
@@ -97,7 +97,7 @@ const CURATIONS: Curation[] = [
       features: [
         {
           geometry: {
-            type: "LineString",
+            type: 'LineString',
             coordinates: [
               [-72.15684443476792, 43.15072211573772],
               [-72.15680718420808, 43.15063152763469],
@@ -121,29 +121,29 @@ const CURATIONS: Curation[] = [
           },
           properties: {
             ...new LandmarkPropertiesClass({
-              fontColor: "--map-road-edge-VI",
+              fontColor: '--map-road-edge-VI',
               fontOpacity: 1,
               fontOutline: true,
-              fontSize: "medium",
-              fontStyle: "bold",
+              fontSize: 'medium',
+              fontStyle: 'bold',
               lineSpline: true,
-              strokeColor: "--map-road-lane-VI",
+              strokeColor: '--map-road-lane-VI',
               strokeFeet: 48 /* 👈 feet */,
               strokeOpacity: 1,
               strokeOutline: true,
-              strokeOutlineColor: "--map-road-edge-VI",
-              strokePattern: "conglomerate",
+              strokeOutlineColor: '--map-road-edge-VI',
+              strokePattern: 'conglomerate',
               strokePatternScale: 0.66,
-              strokeStyle: "solid",
+              strokeStyle: 'solid',
               zIndex: 1
             }),
-            name: "Private Way"
+            name: 'Private Way'
           },
-          type: "Feature"
+          type: 'Feature'
         },
         {
           geometry: {
-            type: "LineString",
+            type: 'LineString',
             coordinates: [
               [-72.15666439039539, 43.15076288034035],
               [-72.15670784938186, 43.15069946872458],
@@ -160,59 +160,59 @@ const CURATIONS: Curation[] = [
           },
           properties: {
             ...new LandmarkPropertiesClass({
-              fontColor: "--map-place-water-color",
+              fontColor: '--map-place-water-color',
               fontOpacity: 1,
               fontOutline: true,
-              fontSize: "large",
-              fontStyle: "bold"
+              fontSize: 'large',
+              fontStyle: 'bold'
             }),
-            name: "Ashuelot River"
+            name: 'Ashuelot River'
           },
-          type: "Feature"
+          type: 'Feature'
         }
       ],
-      type: "FeatureCollection"
+      type: 'FeatureCollection'
     },
-    owner: "mflo999@gmail.com",
-    path: "NEW HAMPSHIRE:SULLIVAN:WASHINGTON"
+    owner: 'mflo999@gmail.com',
+    path: 'NEW HAMPSHIRE:SULLIVAN:WASHINGTON'
   }
 ];
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv["useEmulator"];
+const useEmulator = yargs.argv['useEmulator'];
 
-if (useEmulator) process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
+if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
 
 // 👇 https://stackoverflow.com/questions/49691215/cloud-functions-how-to-copy-firestore-collection-to-a-new-document
 
 firebase.initializeApp({
-  credential: firebase.cert("./firebase-admin.json"),
-  databaseURL: "https://washington-app-319514.firebaseio.com"
+  credential: firebase.cert('./firebase-admin.json'),
+  databaseURL: 'https://washington-app-319514.firebaseio.com'
 });
 
 const db = firestore.getFirestore();
-const landmarks = db.collection("landmarks");
+const landmarks = db.collection('landmarks');
 
 async function main(): Promise<void> {
   if (!useEmulator) {
     const response = await inquirer.prompt([
       {
-        type: "input",
-        name: "proceed",
-        choices: ["y", "n"],
-        message: "WARNING: running on live Firestore. Proceed? (y/N)"
+        type: 'input',
+        name: 'proceed',
+        choices: ['y', 'n'],
+        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
       }
     ]);
-    if (response.proceed.toLowerCase() !== "y") return;
+    if (response.proceed.toLowerCase() !== 'y') return;
   }
 
   // 👇 delete all curated Landmarks
   let numDeleted = 0;
-  const curated = await landmarks.where("curated", "==", true).get();
+  const curated = await landmarks.where('curated', '==', true).get();
   for (const doc of curated.docs) {
     await doc.ref.delete();
-    process.stdout.write(".");
+    process.stdout.write('.');
     numDeleted += 1;
   }
 
@@ -252,7 +252,7 @@ async function main(): Promise<void> {
         owner: curation.owner,
         path: curation.path,
         properties: feature.properties,
-        type: "Feature"
+        type: 'Feature'
       };
 
       // 👇 so that they can't get duplicated
