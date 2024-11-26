@@ -66,14 +66,6 @@ export class OLControlSplitScreenComponent implements Mapable {
 
         button.setAttribute("title", "Swipe left or right");
 
-        button.addEventListener("blur", (e: any) => {
-          button.style.outline = "none";
-        });
-
-        button.addEventListener("focus", (e: any) => {
-          button.style.outline = "3px solid black";
-        });
-
         button.addEventListener("keydown", (e: any) => {
           const rect = button.getBoundingClientRect();
           const center = rect.x + rect.width / 2;

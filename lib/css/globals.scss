@@ -77,9 +77,9 @@ $dark-app-theme: mat.m2-define-dark-theme(
 .light-theme {
   // 👉 bridge from Angular Material variables to CSS variables
 
-  --primary-color: var(--mat-blue-a200);
-  --accent-color: var(--mat-amber-a200);
-  --warn-color: var(--mat-red-a200);
+  --primary-color: var(--google-blue-700);
+  --accent-color: var(--google-yellow-700);
+  --warn-color: var(--google-red-700);
 
   --text-color: var(--mat-gray-900);
   --disabled-color: var(--mat-gray-500);
@@ -98,9 +98,9 @@ $dark-app-theme: mat.m2-define-dark-theme(
   // 👉 bridge from Angular Material variables to CSS variables
 
   &{
-  --primary-color: var(--mat-blue-a200);
-  --accent-color: var(--mat-amber-a200);
-  --warn-color: var(--mat-red-a200);
+  --primary-color: var(--google-blue-700);
+  --accent-color: var(--google-yellow-700);
+  --warn-color: var(--google-red-700);
 
   --text-color: var(--mat-gray-100);
   --disabled-color: var(--mat-gray-500);
@@ -145,6 +145,11 @@ $dark-app-theme: mat.m2-define-dark-theme(
 ::-webkit-scrollbar-thumb {
   background-color: var(--mat-gray-700);
   border-radius: 0.25rem;
+}
+
+:focus {
+  box-shadow: 0 0 3px 3px var(--primary-color);
+  outline: none;
 }
 
 a {

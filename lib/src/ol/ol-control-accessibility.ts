@@ -1,10 +1,14 @@
-import { ChangeDetectionStrategy } from "@angular/core";
-import { Component } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Observable } from "rxjs";
 import { DestroyService } from "../services/destroy";
 import { ViewActions } from "../state/view";
 import { ViewState } from "../state/view";
+import { OLMapComponent } from "./ol-map";
+
+import { ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { OnInit } from "@angular/core";
+import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
 
 import { inject } from "@angular/core";
 import { takeUntil } from "rxjs/operators";
@@ -22,22 +26,24 @@ import { takeUntil } from "rxjs/operators";
         <fa-icon [icon]="['fas', 'universal-access']" class="universal-access" size="2x"></fa-icon>
       </button>
  
-       <nav class="accessibility" [class.collapsed]="collapsed">
+      <table class="accessibility" [class.collapsed]="collapsed">
         @for (filter of filters; track filter.tag) {
-          <div class="item" >
-            @if (filter.filter === accessibilityFilter) {
-              &check;
-            } @else {
-              &nbsp;
-            }
-            <a 
-              (click)="onFilter(filter.filter)" 
-              href="javascript: void(0)">
-              {{ filter.tag }}
-            </a>
-        </div>
+          <tr>
+            <td>            
+              @if (filter.filter === accessibilityFilter) {
+                &check;
+              }
+            </td>
+            <td class="filter" >
+              <a 
+                (click)="onFilter(filter.filter)" 
+                href="javascript: void(0)">
+                {{ filter.tag }}
+              </a>
+            </td>
+          </tr>
         }
-      </nav>
+      </table>
 
     </article>
   `,
@@ -50,18 +56,21 @@ import { takeUntil } from "rxjs/operators";
 
       .accessibility {
         background-color: rgba(var(--rgb-gray-100), 0.75);
+        border-collapse: collapse;
         bottom: -0.25rem;
-        display: flex;
-        flex-direction: column;
         opacity: 1;
         padding: 0.5rem;
         position: absolute;
         right: 4rem;
         transition: display 0.25s ease allow-discrete, opacity 0.25s ease;
-        width: auto;
 
-        .item {
+        td {
+          padding-right: 0.25rem;
           white-space: nowrap;
+        }
+
+        td.filter {
+          width: 100%;
         }
       }
 
@@ -77,24 +86,27 @@ import { takeUntil } from "rxjs/operators";
       }
 
       .universal-access {
-        color: rgba(33, 150, 243, 100%);
+        color: var(--primary-color);
       }
     `
   ],
   standalone: false
 })
-export class OLControlAccessibilityComponent {
+export class OLControlAccessibilityComponent implements OnInit {
   accessibilityFilter: string;
   accessibilityFilter$: Observable<string>;
   collapsed = true;
   filters = [
-    { filter: "none", tag: "Normal mode" },
+    { filter: "none", tag: "Normal" },
     { filter: "grayscale()", tag: "Grayscale" },
-    { filter: "contrast(200%)", tag: "High contrast" },
+    { filter: "invert(100%)", tag: "Inverted" },
+    { filter: "contrast(175%)", tag: "High contrast" },
     { filter: "saturate(500%)", tag: "Color blindness" }
   ];
 
+  #cdf = inject(ChangeDetectorRef);
   #destroy$ = inject(DestroyService);
+  #map = inject(OLMapComponent);
   #store = inject(Store);
 
   constructor() {
@@ -104,6 +116,7 @@ export class OLControlAccessibilityComponent {
   }
 
   ngOnInit(): void {
+    this.#handleEscape$();
     this.#handleAccessibility$();
   }
 
@@ -123,5 +136,12 @@ export class OLControlAccessibilityComponent {
         const viewport: any = document.querySelector(".ol-viewport");
         viewport.style.filter = accessibilityFilter || "none";
       });
+  }
+
+  #handleEscape$(): void {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
+      this.collapsed = true;
+      this.#cdf.markForCheck();
+    });
   }
 }

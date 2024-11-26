@@ -64,7 +64,7 @@ import copy from "fast-copy";
                 <tr>
                   <td class="index">{{ ix + 1 }}.</td>
                   <td>
-                    <a (click)="onSelect(parcel)" href="javascript: void(0)">{{ parcel.id }}></a>
+                    <a (click)="onSelect(parcel)" href="javascript: void(0)">{{ parcel.id }}</a>
                   </td>
                   <td class="address">{{ parcel.properties.address }}</td>
                 </tr>
@@ -199,6 +199,7 @@ export class OLControlParcelListComponent implements OnInit {
     this.collapsed = !this.collapsed;
     if (!this.collapsed) {
       if (!this.ready) {
+        this.#handleEscape$();
         this.#handleGeoJSON$();
         this.#handleStreams$();
         this.ready = true;
@@ -212,6 +213,13 @@ export class OLControlParcelListComponent implements OnInit {
     geojson.features = geojson.features.filter(
       (feature) => !removed.has(feature.id) && !isParcelStollen(feature.id)
     );
+  }
+
+  #handleEscape$(): void {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
+      this.collapsed = true;
+      this.#cdf.markForCheck();
+    });
   }
 
   #handleGeoJSON$(): void {

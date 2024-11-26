@@ -1,11 +1,15 @@
+import { DestroyService } from "../services/destroy";
 import { OLMapComponent } from "./ol-map";
 
 import { environment } from "../environment";
 
 import { ChangeDetectionStrategy } from "@angular/core";
 import { Component } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+import { OnInit } from "@angular/core";
 
 import { inject } from "@angular/core";
+import { takeUntil } from "rxjs/operators";
 
 import OLLayer from "ol/layer/Layer";
 
@@ -80,13 +84,18 @@ import OLLayer from "ol/layer/Layer";
   ],
   standalone: false
 })
-export class OLControlAttributionComponent {
+export class OLControlAttributionComponent implements OnInit {
   attributions: string[] = [];
   collapsed = true;
-
   env = environment;
 
+  #cdf = inject(ChangeDetectorRef);
+  #destroy$ = inject(DestroyService);
   #map = inject(OLMapComponent);
+
+  ngOnInit(): void {
+    this.#handleEscape$();
+  }
 
   toggleAttributions(): void {
     this.collapsed = !this.collapsed;
@@ -102,5 +111,12 @@ export class OLControlAttributionComponent {
           });
       });
     }
+  }
+
+  #handleEscape$(): void {
+    this.#map.escape$.pipe(takeUntil(this.#destroy$)).subscribe(() => {
+      this.collapsed = true;
+      this.#cdf.markForCheck();
+    });
   }
 }
