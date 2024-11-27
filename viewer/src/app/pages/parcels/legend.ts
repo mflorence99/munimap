@@ -19,6 +19,7 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
   template: `
     @let sink =
       {
+        accessibilityFilter: root.accessibilityFilter$ | async,
         mapState: root.mapState$ | async,
         parcelCoding: root.parcelCoding$ | async
       };
@@ -61,8 +62,9 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
               <td class="apdvd">
                 <figure
                   [style.backgroundColor]="
-                    'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
+                    'rgba(' + colorOfAPDVDIncluded + ', 0.5)'
                   "
+                  [style.filter]="sink.accessibilityFilter"
                   class="key"></figure>
               </td>
               <td class="desc">Lots added to district</td>
@@ -81,8 +83,9 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
               <td class="apdvd">
                 <figure
                   [style.backgroundColor]="
-                    'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
+                    'rgba(' + colorOfAPDVDExcluded + ', 0.5)'
                   "
+                  [style.filter]="sink.accessibilityFilter"
                   class="key"></figure>
               </td>
               <td class="desc">Lots excluded from district</td>
@@ -112,6 +115,7 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
                           quantizeConformingArea(conformity[1]) +
                           '), 0.5)'
                         "
+                        [style.filter]="sink.accessibilityFilter"
                         class="key"></figure>
                     </td>
                     <td class="desc">{{ conformity[0] }}</td>
@@ -143,6 +147,7 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
                           ownership.key +
                           '), 0.5)'
                         "
+                        [style.filter]="sink.accessibilityFilter"
                         class="key"></figure>
                     </td>
                     <td class="desc">{{ ownership.value }}</td>
@@ -175,6 +180,7 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
                         [style.backgroundColor]="
                           'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'
                         "
+                        [style.filter]="sink.accessibilityFilter"
                         class="key"></figure>
                     </td>
                     <td class="desc">{{ usage.value }}</td>
@@ -204,6 +210,7 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
                         [style.backgroundColor]="
                           'rgba(var(--map-parcel-fill-u' + usage.key + '), 0.5)'
                         "
+                        [style.filter]="sink.accessibilityFilter"
                         class="key"></figure>
                     </td>
                     <td class="desc">{{ usage.value }}</td>
@@ -348,19 +355,11 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
         .ownership,
         .usage {
           .key {
+            backdrop-filter: invert(1);
             border: 1px dashed var(--mat-blue-gray-300);
             height: 1.5rem;
             position: relative;
             width: 2rem;
-
-            &::before {
-              background-color: white;
-              content: '';
-              height: 100%;
-              position: absolute;
-              width: 100%;
-              z-index: -1;
-            }
           }
         }
 

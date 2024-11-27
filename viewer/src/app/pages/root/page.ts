@@ -153,6 +153,7 @@ import urlParse from 'url-parse';
   standalone: false
 })
 export class RootPage implements OnInit {
+  accessibilityFilter$: Observable<string>;
   gps$: Observable<boolean>;
   hasLeftSidebar: boolean;
   hasRightSidebar: boolean;
@@ -181,6 +182,9 @@ export class RootPage implements OnInit {
   #version = inject(VersionService);
 
   constructor() {
+    this.accessibilityFilter$ = this.#store.select(
+      ViewState.accessibilityFilter
+    );
     this.gps$ = this.#store.select(ViewState.gps);
     this.historicalMapLeft$ = this.#store.select(ViewState.historicalMapLeft);
     this.historicalMapRight$ = this.#store.select(ViewState.historicalMapRight);
