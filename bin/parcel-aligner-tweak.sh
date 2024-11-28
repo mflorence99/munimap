@@ -1,17 +1,19 @@
 #!/bin/bash 
 
-npm run align:parcels:test
+echo 🔥 one-timne only - do not run again!!
 
-cp ~/parcels.geojson ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/parcels.geojson 
+# npm run align:parcels:test
 
-version=${1:-patch}
-message=${2:-"Deploy with aligned parcels"}
+# cp ~/parcels.geojson ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/parcels.geojson 
 
-git add . *
-git commit -m "$message"
+# version=${1:-patch}
+# message=${2:-"Deploy with aligned parcels"}
 
-npm version $version
+# git add . *
+# git commit -m "$message"
 
-git push origin main
+# npm version $version
 
-npm run serve:author
+# git push origin main
+
+# npm run serve:author

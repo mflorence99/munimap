@@ -1,17 +1,19 @@
 #!/bin/bash 
 
-cp ~/Downloads/washington-parcels.geojson ~/mflorence99/munimap/bin/assets/washington-parcels.geojson
+echo 🔥 one-timne only - do not run again!!
 
-npm run proxy:parcels:curated
+# cp ~/Downloads/washington-parcels.geojson ~/mflorence99/munimap/bin/assets/washington-parcels.geojson
 
-version=${1:-patch}
-message=${2:-"Deploy with aligned parcels"}
+# npm run proxy:parcels:curated
 
-git add . *
-git commit -m "$message"
+# version=${1:-patch}
+# message=${2:-"Deploy with aligned parcels"}
 
-npm version $version
+# git add . *
+# git commit -m "$message"
 
-git push origin main
+# npm version $version
 
-npm run serve:author
+# git push origin main
+
+# npm run serve:author
