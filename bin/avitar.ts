@@ -1,7 +1,7 @@
-import { isParcelStollen } from '../lib/src/common';
+import { isParcelStollen } from '../lib/src/common.ts';
 
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import DBFParser from 'node-dbf';
@@ -11,7 +11,7 @@ import DBFParser from 'node-dbf';
 
 const avitarByID: Record<string, any> = {};
 
-const parser = new DBFParser('./bin/assets/washington-avitar.dbf');
+const parser = new DBFParser.default('./bin/assets/washington-avitar.dbf');
 
 parser.on('record', (record) => {
   let id = `${parseInt(record.MAP, 10)}-${parseInt(record.LOT, 10)}`;
@@ -49,8 +49,8 @@ function main(): void {
     searchForAnomalies();
     // jsome(avitarByID["15-70-01"]);
     // jsome(featureByID["9-7"]);
-    saveGeoJSON();
-  } catch (error) {
+    // saveGeoJSON();
+  } catch (error: any) {
     console.log(chalk.red(error.message));
   }
 }

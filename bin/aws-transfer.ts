@@ -4,9 +4,9 @@ import { DeleteServerCommand } from '@aws-sdk/client-transfer';
 import { DescribeServerCommand } from '@aws-sdk/client-transfer';
 import { TransferClient } from '@aws-sdk/client-transfer';
 
-import { exec } from 'child_process';
-import { readFileSync } from 'fs';
-import { stdout } from 'process';
+import { exec } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { stdout } from 'node:process';
 
 import chalk from 'chalk';
 // import jsome from 'jsome';

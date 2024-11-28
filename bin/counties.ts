@@ -1,12 +1,11 @@
-import { bboxByAspectRatio } from '../lib/src/common';
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { bboxByAspectRatio } from '../lib/src/common.ts';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 
@@ -47,7 +46,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
   // 👉 gather all the counties in one file
   wholeState.push(feature);
 
-  const geojson = turf.featureCollection([feature]);
+  const geojson = featureCollection([feature]);
 
   // 👉 one file per county
   mkdirSync(`${dist}/${theState}/${county}`, { recursive: true });
@@ -59,7 +58,7 @@ counties.features.forEach((feature: GeoJSON.Feature<any>) => {
 
 // 👉 one file for all towns
 console.log(chalk.green(`... writing ${theState}/counties.geojson`));
-const geojson = turf.featureCollection(wholeState);
+const geojson = featureCollection(wholeState);
 writeFileSync(
   `${dist}/${theState}/counties.geojson`,
   JSON.stringify(simplify(geojson))

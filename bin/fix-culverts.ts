@@ -1,11 +1,10 @@
-import * as inquirer from 'inquirer';
-
 import { XMLBuilder } from 'fast-xml-parser';
 import { XMLParser } from 'fast-xml-parser';
 
-import { exit } from 'process';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { exit } from 'node:process';
+import { input } from '@inquirer/prompts';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 // import jsome from 'jsome';
@@ -42,15 +41,13 @@ const XMLOptions = {
 
 async function main(): Promise<void> {
   // 👇 which GPX?
-  const input = await inquirer.prompt({
-    message: 'Enter path to culverts GPX:',
-    name: 'path',
-    type: 'input'
+  let response = await input({
+    message: 'Enter path to culverts GPX to read 👈:'
   });
 
   // 👇 read and parse the GPX
-  console.log(chalk.green(`👈 Reading ${input.path}`));
-  const raw = readFileSync(input.path).toString();
+  console.log(chalk.green(`👈 Reading ${response}`));
+  const raw = readFileSync(response).toString();
   const gpx: GPX = new XMLParser(XMLOptions).parse(raw);
 
   // 🔥 if not enough coordinates, bail
@@ -156,15 +153,13 @@ async function main(): Promise<void> {
   });
 
   // 👇 where to write?
-  const output = await inquirer.prompt({
-    message: 'Enter path to culverts GPX:',
-    name: 'path',
-    type: 'input'
+  response = await input({
+    message: 'Enter path to culverts GPX to write 👉:'
   });
 
   // 👇 reconstitute the GPX and save it
-  console.log(chalk.green(`👉 Writing ${output.path}`));
-  writeFileSync(output.path, new XMLBuilder(XMLOptions).build(gpx));
+  console.log(chalk.green(`👉 Writing ${response}`));
+  writeFileSync(response, new XMLBuilder(XMLOptions).build(gpx));
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -1,17 +1,17 @@
-import { Building } from '../lib/src/common';
-import { Buildings } from '../lib/src/common';
+import { Building } from '../lib/src/common.ts';
+import { Buildings } from '../lib/src/common.ts';
 
-import { calculateOrientation } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { calculateOrientation } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
 import { angle } from '@turf/angle';
 import { bbox } from '@turf/bbox';
 import { bboxPolygon } from '@turf/bbox-polygon';
 import { getCoords } from '@turf/invariant';
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { transformRotate } from '@turf/transform-rotate';
-import { writeFileSync } from 'fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 

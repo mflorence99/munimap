@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "deno.ns"],
+    "noImplicitAny": false,
+    "strictNullChecks": false
+  },
+  "fmt": {},
+  "lint": {},
+  "imports": {
+    "@aws-sdk/client-transfer": "npm:@aws-sdk/client-transfer@^3.699.0",
+    "@inquirer/prompts": "npm:@inquirer/prompts@^7.1.0",
+    "@std/cli": "jsr:@std/cli@^1.0.7",
+    "@turf/angle": "npm:@turf/angle@^7.1.0",
+    "@turf/area": "npm:@turf/area@^7.1.0",
+    "@turf/bbox": "npm:@turf/bbox@^7.1.0",
+    "@turf/bbox-polygon": "npm:@turf/bbox-polygon@^7.1.0",
+    "@turf/bearing": "npm:@turf/bearing@^7.1.0",
+    "@turf/boolean-contains": "npm:@turf/boolean-contains@^7.1.0",
+    "@turf/distance": "npm:@turf/distance@^7.1.0",
+    "@turf/helpers": "npm:@turf/helpers@^7.1.0",
+    "@turf/invariant": "npm:@turf/invariant@^7.1.0",
+    "@turf/length": "npm:@turf/length@^7.1.0",
+    "@turf/rhumb-destination": "npm:@turf/rhumb-destination@^7.1.0",
+    "@turf/rhumb-distance": "npm:@turf/rhumb-distance@^7.1.0",
+    "@turf/transform-rotate": "npm:@turf/transform-rotate@^7.1.0",
+    "@turf/truncate": "npm:@turf/truncate@^7.1.0",
+    "@turf/union": "npm:@turf/union@^7.1.0",
+    "chalk": "npm:chalk@^5.3.0",
+    "fast-copy": "npm:fast-copy@^3.0.2",
+    "fast-xml-parser": "npm:fast-xml-parser@^4.5.0",
+    "firebase": "npm:firebase@^11.0.2",
+    "firebase-admin": "npm:firebase-admin@^13.0.1",
+    "jsome": "npm:jsome@^2.5.0",
+    "node-dbf": "npm:node-dbf@^0.4.0",
+    "object-hash": "npm:object-hash@^3.0.0",
+    "polylabel": "npm:polylabel@^2.0.1",
+    "request": "npm:request@^2.88.2",
+    "unzipper": "npm:unzipper@^0.12.3"
+  },
+  "tasks": {}
+}

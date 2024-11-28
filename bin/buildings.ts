@@ -1,11 +1,11 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { booleanContains } from '@turf/boolean-contains';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import copy from 'fast-copy';
@@ -99,7 +99,7 @@ async function main(): Promise<void> {
     //    find it from the dataset of all towns
     const towns = allTownFeatures.filter((townFeature) =>
       // 👉 https://github.com/Turfjs/turf/pull/2157
-      turf.booleanContains(townFeature, feature)
+      booleanContains(townFeature, feature)
     );
 
     // 👉 we already have legacy Washington data
@@ -119,7 +119,7 @@ async function main(): Promise<void> {
           building.id = hash.MD5(building.geometry as any);
 
           buildingsByCountyByTown[county] ??= {};
-          const geojson = turf.featureCollection([]);
+          const geojson = featureCollection([]);
           buildingsByCountyByTown[county][town] ??= geojson;
           buildingsByCountyByTown[county][town].features.push(building);
         }

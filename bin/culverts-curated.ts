@@ -1,21 +1,21 @@
-import { CulvertProperties } from '../lib/src/common';
-import { Landmark } from '../lib/src/common';
+import { CulvertProperties } from '../lib/src/common.ts';
+import { Landmark } from '../lib/src/common.ts';
 
-import { culvertConditions } from '../lib/src/common';
-import { culvertFloodHazards } from '../lib/src/common';
-import { culvertHeadwalls } from '../lib/src/common';
-import { culvertMaterials } from '../lib/src/common';
-import { makeLandmarkID } from '../lib/src/common';
-import { serializeLandmark } from '../lib/src/common';
+import { culvertConditions } from '../lib/src/common.ts';
+import { culvertFloodHazards } from '../lib/src/common.ts';
+import { culvertHeadwalls } from '../lib/src/common.ts';
+import { culvertMaterials } from '../lib/src/common.ts';
+import { makeLandmarkID } from '../lib/src/common.ts';
+import { serializeLandmark } from '../lib/src/common.ts';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
-import * as inquirer from 'inquirer';
-import * as yargs from 'yargs';
 
 import { XMLParser } from 'fast-xml-parser';
 
-import { readFileSync } from 'fs';
+import { input } from '@inquirer/prompts';
+import { parseArgs } from '@std/cli/parse-args';
+import { readFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 
@@ -38,7 +38,7 @@ const CURATIONS: Curation[] = [
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv['useEmulator'];
+const useEmulator = parseArgs(Deno.args)['useEmulator'];
 
 if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
 
@@ -56,15 +56,13 @@ const landmarks = db.collection('landmarks');
 
 async function main(): Promise<void> {
   if (!useEmulator) {
-    const response = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'proceed',
-        choices: ['y', 'n'],
-        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
-      }
-    ]);
-    if (response.proceed.toLowerCase() !== 'y') return;
+    const response = await input({
+      default: 'n',
+      message: 'WARNING: running on live Firestore. Proceed? (y/N)',
+      transformer: (choice) => choice.toLowerCase(),
+      validate: (choice) => ['y', 'n'].includes(choice)
+    });
+    if (response.toLowerCase() !== 'y') return;
   }
 
   // 👇 for each curation ...

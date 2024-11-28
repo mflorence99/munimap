@@ -1,3 +1,15 @@
 {
+  "deno.codeLens.implementations": true,
+  "deno.codeLens.references": true,
+  "deno.codeLens.referencesAllFunctions": true,
+  "deno.enable": true,
+  "deno.enablePaths": [
+    "./bin"
+  ],
+  "deno.lint": false,
+  "deno.suggest.imports.autoDiscover": true,
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

@@ -1,8 +1,9 @@
 import * as fireauth from 'firebase-admin/auth';
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
-import * as inquirer from 'inquirer';
-import * as yargs from 'yargs';
+
+import { input } from '@inquirer/prompts';
+import { parseArgs } from '@std/cli/parse-args';
 
 const PROFILES = [
   {
@@ -76,7 +77,7 @@ const USERS = [
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv['useEmulator'];
+const useEmulator = parseArgs(Deno.args)['useEmulator'];
 
 if (useEmulator) {
   process.env['FIREBASE_AUTH_EMULATOR_HOST'] = 'localhost:9099';
@@ -97,15 +98,13 @@ const auth = fireauth.getAuth();
 
 async function main(): Promise<void> {
   if (!useEmulator) {
-    const response = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'proceed',
-        choices: ['y', 'n'],
-        message: 'WARNING: running on live Firestore. Proceed? (y/N)'
-      }
-    ]);
-    if (response.proceed.toLowerCase() !== 'y') return;
+    const response = await input({
+      default: 'n',
+      message: 'WARNING: running on live Firestore. Proceed? (y/N)',
+      transformer: (choice) => choice.toLowerCase(),
+      validate: (choice) => ['y', 'n'].includes(choice)
+    });
+    if (response.toLowerCase() !== 'y') return;
   }
 
   for (const user of USERS) {
