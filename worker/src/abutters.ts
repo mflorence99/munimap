@@ -2,8 +2,8 @@
 
 /// <reference lib="webworker" />
 
-import * as Sentry from '@sentry/angular-ivy';
 import * as Comlink from 'comlink';
+import * as Sentry from '@sentry/angular-ivy';
 
 import { buffer } from '@turf/buffer';
 import { featureCollection } from '@turf/helpers';
@@ -13,7 +13,7 @@ type Feature = GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>;
 
 // 👀 https://www.gencourt.state.nh.us/bill_status/pdf.aspx?id=31993&q=billVersion
 
-// 🔥 this algorithm inflates both the selected and the target lot by 50 feeet
+// 🔥 this algorithm inflates both the selected and the target lot by 50 feet
 //    it is very close to but not exactly what's in the RSA
 //    the good news is that it is more ge nerous
 

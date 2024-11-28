@@ -2,24 +2,24 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
+import { Exception } from 'serverx-ts';
+import { Handler } from 'serverx-ts';
 import { Inject } from 'injection-js';
 import { Injectable } from 'injection-js';
 import { InjectionToken } from 'injection-js';
-import { Optional } from 'injection-js';
-import { Observable } from 'rxjs';
-import { Exception } from 'serverx-ts';
-import { Handler } from 'serverx-ts';
 import { Message } from 'serverx-ts';
+import { Observable } from 'rxjs';
+import { Optional } from 'injection-js';
 
 import { bbox } from '@turf/bbox';
-import { from } from 'rxjs';
-import { of } from 'rxjs';
-import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { fromReadableStream } from 'serverx-ts';
 import { mapTo } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { fromReadableStream } from 'serverx-ts';
+import { throwError } from 'rxjs';
 
 import chalk from 'chalk';
 import copy from 'fast-copy';
