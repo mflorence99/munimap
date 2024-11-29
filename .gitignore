@@ -4,7 +4,7 @@
 /.postcss-angular/
 /data
 /dist
-/node_modules
+**/node_modules
 /viewer/assets/*.geojson
 **/*.Identifier
 **/*.log

@@ -5,6 +5,8 @@ import * as firestore from 'firebase-admin/firestore';
 import { input } from '@inquirer/prompts';
 import { parseArgs } from '@std/cli/parse-args';
 
+import chalk from 'chalk';
+
 const PROFILES = [
   {
     email: 'mflo999@gmail.com',
@@ -110,8 +112,10 @@ async function main(): Promise<void> {
   for (const user of USERS) {
     auth
       .createUser(user)
-      .then(() => console.log(`User ${user.email} created`))
-      .catch((error) => console.error(`User ${user.email} ${error.message}`));
+      .then(() => console.log(chalk.yellow(`User ${user.email} created`)))
+      .catch((error) =>
+        console.error(`🔥 User ${user.email} ${error.message}`)
+      );
   }
 
   for (const profile of PROFILES) {
