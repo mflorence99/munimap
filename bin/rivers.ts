@@ -1,12 +1,12 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
+import { bbox } from '@turf/bbox';
 import { booleanIntersects } from '@turf/boolean-intersects';
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import copy from 'fast-copy';
@@ -57,7 +57,7 @@ async function main(): Promise<void> {
           //    we aren't 1000% sure that GRANITID is unique
           river.id = `${river.properties.GRANITID}-${river.properties.DR24K_ID}`;
 
-          river.bbox = turf.bbox(river);
+          river.bbox = bbox(river);
           river.properties = {
             county: county,
             name: river.properties.River_Name ?? river.properties.LAC,
@@ -66,7 +66,7 @@ async function main(): Promise<void> {
           };
 
           riversByCountyByTown[county] ??= {};
-          const geojson = turf.featureCollection([]);
+          const geojson = featureCollection([]);
           riversByCountyByTown[county][town] ??= geojson;
           riversByCountyByTown[county][town].features.push(river);
         }

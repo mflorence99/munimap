@@ -1,10 +1,10 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
-import { mkdirSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { bbox } from '@turf/bbox';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import shp from 'shpjs';
@@ -47,7 +47,7 @@ async function main(): Promise<void> {
         //    let's hope that UNIQUE_ID is as unique as it claims to be!
         feature.id = `${feature.properties.UNIQUE_ID}`;
 
-        feature.bbox = turf.bbox(feature);
+        feature.bbox = bbox(feature);
         feature.properties = {
           class: feature.properties.LEGIS_CLAS,
           county: feature.properties.COUNTY_NAM,
@@ -58,7 +58,7 @@ async function main(): Promise<void> {
         };
 
         roadsByCountyByTown[county] ??= {};
-        const geojson = turf.featureCollection([]);
+        const geojson = featureCollection([]);
         roadsByCountyByTown[county][town] ??= geojson;
         roadsByCountyByTown[county][town].features.push(feature);
       }

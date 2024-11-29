@@ -7,6 +7,7 @@
   "fmt": {},
   "lint": {},
   "imports": {
+    "@aws-sdk/client-s3": "npm:@aws-sdk/client-s3@^3.701.0",
     "@aws-sdk/client-transfer": "npm:@aws-sdk/client-transfer@^3.699.0",
     "@inquirer/prompts": "npm:@inquirer/prompts@^7.1.0",
     "@std/cli": "jsr:@std/cli@^1.0.7",
@@ -16,6 +17,8 @@
     "@turf/bbox-polygon": "npm:@turf/bbox-polygon@^7.1.0",
     "@turf/bearing": "npm:@turf/bearing@^7.1.0",
     "@turf/boolean-contains": "npm:@turf/boolean-contains@^7.1.0",
+    "@turf/boolean-intersects": "npm:@turf/boolean-intersects@^7.1.0",
+    "@turf/boolean-point-in-polygon": "npm:@turf/boolean-point-in-polygon@^7.1.0",
     "@turf/distance": "npm:@turf/distance@^7.1.0",
     "@turf/helpers": "npm:@turf/helpers@^7.1.0",
     "@turf/invariant": "npm:@turf/invariant@^7.1.0",
@@ -30,11 +33,15 @@
     "fast-xml-parser": "npm:fast-xml-parser@^4.5.0",
     "firebase": "npm:firebase@^11.0.2",
     "firebase-admin": "npm:firebase-admin@^13.0.1",
+    "geojson": "npm:geojson@^0.5.0",
     "jsome": "npm:jsome@^2.5.0",
+    "jszip": "npm:jszip@^3.10.1",
     "node-dbf": "npm:node-dbf@^0.4.0",
     "object-hash": "npm:object-hash@^3.0.0",
     "polylabel": "npm:polylabel@^2.0.1",
+    "recursive-readdir": "npm:recursive-readdir@^2.2.3",
     "request": "npm:request@^2.88.2",
+    "shpjs": "npm:shpjs@^6.1.0",
     "unzipper": "npm:unzipper@^0.12.3"
   },
   "tasks": {}

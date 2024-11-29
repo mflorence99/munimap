@@ -1,16 +1,16 @@
-import { HistoricalMapIndex } from '../lib/src/common';
+import { HistoricalMapIndex } from '../lib/src/common.ts';
 
-import { theState } from '../lib/src/common';
+import { theState } from '../lib/src/common.ts';
 
 import { GetObjectAttributesCommand } from '@aws-sdk/client-s3';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { S3Client } from '@aws-sdk/client-s3';
 import { Units } from '@turf/helpers';
 
-import { env } from 'process';
-import { readFileSync } from 'fs';
-import { stdout } from 'process';
-import { writeFileSync } from 'fs';
+import { env } from 'node:process';
+import { readFileSync } from 'node:fs';
+import { stdout } from 'node:process';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import JSZip from 'jszip';

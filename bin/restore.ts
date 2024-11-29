@@ -1,11 +1,12 @@
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
-import * as inquirer from 'inquirer';
-import * as yargs from 'yargs';
+
+import { input } from '@inquirer/prompts';
+import { parseArgs } from '@std/cli/parse-args';
 
 // 👇 https://github.com/firebase/firebase-admin-node/issues/776
 
-const useEmulator = yargs.argv['useEmulator'];
+const useEmulator = parseArgs(Deno.args)['useEmulator'];
 
 if (useEmulator) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
 
@@ -69,15 +70,13 @@ async function restore(nm: string, key: string): Promise<void> {
 
 async function main(): Promise<void> {
   if (!useEmulator) {
-    const response = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'proceed',
-        choices: ['y', 'n'],
-        message: 'WARNING: running on backup Firestore. Proceed? (y/N)'
-      }
-    ]);
-    if (response.proceed.toLowerCase() !== 'y') return;
+    const response = await input({
+      default: 'n',
+      message: 'WARNING: running on live Firestore. Proceed? (y/N)',
+      transformer: (choice) => choice.toLowerCase(),
+      validate: (choice) => ['y', 'n'].includes(choice)
+    });
+    if (response.toLowerCase() !== 'y') return;
   }
 
   // await restore('landmarks', 'id');

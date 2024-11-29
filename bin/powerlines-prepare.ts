@@ -1,11 +1,10 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
-
-import * as turf from '@turf/turf';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
 import { booleanIntersects } from '@turf/boolean-intersects';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { featureCollection } from '@turf/helpers';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 // 🔥 this is NOT the code to create the powerlines.geojson files
 //    it simply extracts the NH data from the national dataset
@@ -29,7 +28,7 @@ const boundary = JSON.parse(
   readFileSync(`${dist}/${theState}/boundary.geojson`).toString()
 );
 
-const geojson = turf.featureCollection([]);
+const geojson = featureCollection([]);
 
 powerlines.features
   .filter((feature: GeoJSON.Feature<any, any>) =>

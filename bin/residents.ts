@@ -1,5 +1,5 @@
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 const geojson = JSON.parse(
   readFileSync('./bin/assets/washington-parcels.geojson').toString()
@@ -19,7 +19,7 @@ const lines = geojson.features
     ''
   );
 
-writeFileSync('/home/mflo/Downloads/residents.csv', lines);
+writeFileSync('/home/markf/temp/residents.csv', lines);
 
 function sortaddr(addr: string): string {
   const parts = addr.split(' ');

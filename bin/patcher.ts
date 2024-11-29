@@ -1,4 +1,4 @@
-import { copyFileSync } from 'fs';
+import { copyFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import recursive from 'recursive-readdir';

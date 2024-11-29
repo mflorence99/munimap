@@ -1,11 +1,10 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { bbox } from '@turf/bbox';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 
@@ -28,7 +27,7 @@ railroads.features.forEach((feature: GeoJSON.Feature) => {
   //    we aren't 1000% sure that RR_UID is unique
   feature.id = `${feature.properties.RRI_UID}-${feature.properties.RRI}`;
 
-  feature.bbox = turf.bbox(feature);
+  feature.bbox = bbox(feature);
   feature.properties = {
     name: feature.properties.NAME,
     status: feature.properties.STATUS

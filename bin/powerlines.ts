@@ -1,12 +1,12 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
+import { bbox } from '@turf/bbox';
 import { booleanIntersects } from '@turf/boolean-intersects';
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import copy from 'fast-copy';
@@ -56,14 +56,14 @@ powerlines.features.forEach((feature: GeoJSON.Feature) => {
         // 👉 every feature must have an ID
         powerline.id = powerline.properties.ID;
 
-        powerline.bbox = turf.bbox(powerline);
+        powerline.bbox = bbox(powerline);
         powerline.properties = {
           county: county,
           town: town
         };
 
         linesByCountyByTown[county] ??= {};
-        const geojson = turf.featureCollection([]);
+        const geojson = featureCollection([]);
         linesByCountyByTown[county][town] ??= geojson;
         linesByCountyByTown[county][town].features.push(powerline);
       }

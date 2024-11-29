@@ -1,11 +1,11 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { bbox } from '@turf/bbox';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import copy from 'fast-copy';
@@ -50,7 +50,7 @@ async function main(): Promise<void> {
           //    every time we load the same ID is used
           lake.id = hash.MD5(lake.geometry as any);
 
-          lake.bbox = turf.bbox(lake);
+          lake.bbox = bbox(lake);
           lake.properties = {
             county: county,
             name: lake.properties.LAKE,
@@ -58,7 +58,7 @@ async function main(): Promise<void> {
           };
 
           lakesByCountyByTown[county] ??= {};
-          const geojson = turf.featureCollection([]);
+          const geojson = featureCollection([]);
           lakesByCountyByTown[county][town] ??= geojson;
           lakesByCountyByTown[county][town].features.push(lake);
         }

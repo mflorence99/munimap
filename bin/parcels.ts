@@ -1,24 +1,24 @@
-import { Parcel } from '../lib/src/common';
-import { Parcels } from '../lib/src/common';
+import { Parcel } from '../lib/src/common.ts';
+import { Parcels } from '../lib/src/common.ts';
 
-import { calculateParcel } from '../lib/src/common';
-import { normalizeParcel } from '../lib/src/common';
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { calculateParcel } from '../lib/src/common.ts';
+import { normalizeParcel } from '../lib/src/common.ts';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-import * as yargs from 'yargs';
-
-import { mkdirSync } from 'fs';
-import { stat } from 'fs';
-import { unlinkSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { convertArea } from '@turf/helpers';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { parseArgs } from '@std/cli/parse-args';
+import { stat } from 'node:fs';
+import { unlinkSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import hash from 'object-hash';
 import shp from 'shpjs';
 
-const county = yargs.argv['county'];
+const county = parseArgs(Deno.args)['county'];
 
 const dist = './data';
 
@@ -120,7 +120,7 @@ async function main(): Promise<void> {
         // 👉 initialize all "by town" data structures
         countByTown[town] ??= 0;
         dupesByTown[town] ??= new Set<string>();
-        parcelsByTown[town] ??= turf.featureCollection([]);
+        parcelsByTown[town] ??= featureCollection([]);
         zeroAreaByTown[town] ??= 0;
 
         // 👉 occasionally, the data is dirty in that the same feature
@@ -141,7 +141,7 @@ async function main(): Promise<void> {
             address: makeAddress(feature),
             area:
               Math.round(
-                turf.convertArea(
+                convertArea(
                   feature.properties.Shape_Area ?? 0,
                   'feet',
                   'acres'

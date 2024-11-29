@@ -1,12 +1,12 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
+import { bbox } from '@turf/bbox';
 import { booleanIntersects } from '@turf/boolean-intersects';
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import copy from 'fast-copy';
@@ -85,7 +85,7 @@ async function main(): Promise<void> {
           //    every time we load the same ID is used
           trail.id = hash.MD5(trail.geometry as any);
 
-          trail.bbox = turf.bbox(trail);
+          trail.bbox = bbox(trail);
           trail.properties = {
             county: county,
             name: trail.properties.TRAILNAME,
@@ -94,7 +94,7 @@ async function main(): Promise<void> {
           };
 
           trailsByCountyByTown[county] ??= {};
-          const geojson = turf.featureCollection([]);
+          const geojson = featureCollection([]);
           trailsByCountyByTown[county][town] ??= geojson;
           trailsByCountyByTown[county][town].features.push(trail);
         }

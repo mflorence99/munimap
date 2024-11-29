@@ -1,11 +1,12 @@
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
-import * as turf from '@turf/turf';
-
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { bbox } from '@turf/bbox';
+import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon';
+import { featureCollection } from '@turf/helpers';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 import shp from 'shpjs';
@@ -31,7 +32,7 @@ async function main(): Promise<void> {
       // 👇 the data doesn't have the town, so lets see if turf can
       //    find it from the dataset of all towns
       const town = allTowns.features.find((townFeature) =>
-        turf.booleanPointInPolygon(feature, townFeature)
+        booleanPointInPolygon(feature, townFeature)
       )?.id;
 
       if (town) {
@@ -42,7 +43,7 @@ async function main(): Promise<void> {
         //    we aren't 1000% sure that FeatID is unique
         feature.id = `${feature.properties.FeatID}-${feature.properties.STCODE}-${feature.properties.COCODE}`;
 
-        feature.bbox = turf.bbox(feature);
+        feature.bbox = bbox(feature);
         feature.properties = {
           county: county,
           type: feature.properties.FEATYPE,
@@ -51,7 +52,7 @@ async function main(): Promise<void> {
         };
 
         placesByCountyByTown[county] ??= {};
-        const geojson = turf.featureCollection([]);
+        const geojson = featureCollection([]);
         placesByCountyByTown[county][town] ??= geojson;
         placesByCountyByTown[county][town].features.push(feature);
       }

@@ -6,10 +6,27 @@
   "configurations": [
     {
       "request": "launch",
-      "name": "Debug Deno",
+      "name": "Debug MuniMap bin code",
       "type": "node",
-      "program": "${workspaceFolder}/bin/avitar.ts",
       "cwd": "${workspaceFolder}/bin",
+      "env": {},
+      "runtimeExecutable": "/home/markf/.deno/bin/deno",
+      "runtimeArgs": [
+        "run",
+        "--unstable",
+        "--inspect-wait",
+        "--allow-all",
+        "${file}",
+        "--county=BELKNAP"
+      ],
+      "attachSimplePort": 9229
+    },
+    {
+      "request": "launch",
+      "name": "Debug eslint.config.mjs",
+      "type": "node",
+      "program": "${workspaceFolder}/eslint.config.mjs",
+      "cwd": "${workspaceFolder}",
       "env": {},
       "runtimeExecutable": "/home/markf/.deno/bin/deno",
       "runtimeArgs": [

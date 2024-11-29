@@ -1,14 +1,14 @@
-import { Parcels } from '../lib/src/common';
+import { Parcels } from '../lib/src/common.ts';
 
-import { normalizeParcel } from '../lib/src/common';
-import { simplify } from '../lib/src/common';
-import { theState } from '../lib/src/common';
+import { normalizeParcel } from '../lib/src/common.ts';
+import { simplify } from '../lib/src/common.ts';
+import { theState } from '../lib/src/common.ts';
 
 import { GeoJSON } from 'geojson';
 
-import { mkdirSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 

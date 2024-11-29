@@ -1,11 +1,11 @@
-import { Index } from '../lib/src/common';
-import { Layer } from '../lib/src/common';
+import { Index } from '../lib/src/common.ts';
+import { Layer } from '../lib/src/common.ts';
 
-import { theState } from '../lib/src/common';
+import { theState } from '../lib/src/common.ts';
 
-import { existsSync } from 'fs';
-import { readFileSync } from 'fs';
-import { writeFileSync } from 'fs';
+import { existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 import chalk from 'chalk';
 
