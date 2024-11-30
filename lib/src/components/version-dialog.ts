@@ -10,9 +10,9 @@ import { Component } from '@angular/core';
     <article mat-dialog-content>Please activate it now</article>
 
     <article mat-dialog-actions>
-      <button [mat-dialog-close]="false" mat-flat-button>LATER</button>
+      <button [mat-dialog-close]="false" mat-flat-button>Later</button>
       <button [mat-dialog-close]="true" color="primary" mat-flat-button>
-        ACTIVATE
+        Activayte
       </button>
     </article>
   `,

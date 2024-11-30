@@ -104,7 +104,7 @@ interface Subdivision {
 
       <div class="filler"></div>
 
-      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+      <button (click)="cancel()" mat-flat-button>Cancel</button>
 
       <button
         [disabled]="subdivisionForm.invalid || !subdivisionForm.dirty"
@@ -112,7 +112,7 @@ interface Subdivision {
         form="subdivisionForm"
         mat-flat-button
         type="submit">
-        SAVE
+        Save
       </button>
     </article>
   `,

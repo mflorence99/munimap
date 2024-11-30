@@ -138,7 +138,7 @@ import copy from 'fast-copy';
     </form>
 
     <article class="actions">
-      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+      <button (click)="cancel()" mat-flat-button>Cancel</button>
 
       <button
         [disabled]="!setupForm.dirty"
@@ -146,7 +146,7 @@ import copy from 'fast-copy';
         form="setupForm"
         mat-flat-button
         type="submit">
-        SAVE
+        Save
       </button>
     </article>
   `,

@@ -82,7 +82,7 @@ import { output } from '@angular/core';
           form="filterForm"
           mat-flat-button
           type="submit">
-          NEXT
+          Next
         </button>
       </mat-card-actions>
     </mat-card>

@@ -60,7 +60,7 @@ interface MergeRecord {
     </form>
 
     <article class="actions">
-      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+      <button (click)="cancel()" mat-flat-button>Cancel</button>
 
       <button
         [disabled]="!mergeForm.dirty"
@@ -68,7 +68,7 @@ interface MergeRecord {
         form="mergeForm"
         mat-flat-button
         type="submit">
-        SAVE
+        Save
       </button>
     </article>
   `,

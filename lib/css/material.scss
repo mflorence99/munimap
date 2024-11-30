@@ -56,19 +56,6 @@ button[mat-icon-button] {
   justify-content: flex-end !important;
 }
 
-.mdc-icon-button {
-  line-height: 1 !important;
-
-  &[disabled] {
-    --fa-primary-color: var(--text-color);
-    --fa-secondary-color: var(--text-color);
-    --fa-primary-opacity: 0.6;
-    --fa-secondary-opacity: 0.4;
-
-    color: var(--disabled-color) !important;
-  }
-}
-
 .mat-mdc-menu-panel {
   max-width: unset !important;
 }
@@ -82,6 +69,19 @@ button[mat-icon-button] {
 
 .mat-toolbar-single-row {
   padding: 0 !important;
+}
+
+.mdc-icon-button {
+  line-height: 1 !important;
+
+  &[disabled] {
+    --fa-primary-color: var(--text-color);
+    --fa-secondary-color: var(--text-color);
+    --fa-primary-opacity: 0.6;
+    --fa-secondary-opacity: 0.4;
+
+    color: var(--disabled-color) !important;
+  }
 }
 
 .mdc-text-field--disabled {

@@ -119,7 +119,7 @@ type ValueRecord = Record<string, Value>;
     </form>
 
     <article class="actions">
-      <button (click)="cancel()" mat-flat-button>DONE</button>
+      <button (click)="cancel()" mat-flat-button>Done</button>
 
       <button
         [disabled]="!propertiesForm.dirty"
@@ -127,7 +127,7 @@ type ValueRecord = Record<string, Value>;
         form="propertiesForm"
         mat-flat-button
         type="submit">
-        SAVE
+        Save
       </button>
     </article>
   `,

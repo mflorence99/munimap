@@ -47,7 +47,7 @@ export interface PrintProgressData {
 
     <article mat-dialog-actions>
       <button [mat-dialog-close]="true" color="primary" mat-flat-button>
-        CANCEL
+        Cancel
       </button>
     </article>
   `,

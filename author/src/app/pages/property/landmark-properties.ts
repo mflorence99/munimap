@@ -65,7 +65,7 @@ import OLFeature from 'ol/Feature';
     </form>
 
     <article class="actions">
-      <button (click)="cancel()" mat-flat-button>DONE</button>
+      <button (click)="cancel()" mat-flat-button>Done</button>
 
       <button
         [disabled]="propertiesForm.invalid || !propertiesForm.dirty"
@@ -73,7 +73,7 @@ import OLFeature from 'ol/Feature';
         form="propertiesForm"
         mat-flat-button
         type="submit">
-        SAVE
+        Save
       </button>
     </article>
   `,

@@ -97,7 +97,7 @@ import copy from 'fast-copy';
 
       <div class="filler"></div>
 
-      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+      <button (click)="cancel()" mat-flat-button>Cancel</button>
 
       <button
         [disabled]="profileForm.invalid || !profileForm.dirty"
@@ -105,7 +105,7 @@ import copy from 'fast-copy';
         form="profileForm"
         mat-flat-button
         type="submit">
-        UPDATE
+        Update
       </button>
     </article>
   `,

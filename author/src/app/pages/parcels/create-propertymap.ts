@@ -149,7 +149,7 @@ const PRINT_SIZES = {
     </form>
 
     <article class="actions">
-      <button (click)="cancel()" mat-flat-button>CANCEL</button>
+      <button (click)="cancel()" mat-flat-button>Cancel</button>
 
       <button
         [disabled]="createForm.invalid || !createForm.dirty"
@@ -157,7 +157,7 @@ const PRINT_SIZES = {
         form="createForm"
         mat-flat-button
         type="submit">
-        SAVE
+        Save
       </button>
     </article>
   `,

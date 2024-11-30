@@ -104,7 +104,7 @@ import copy from 'fast-copy';
 
         <div class="filler"></div>
 
-        <button (click)="cancel()" mat-flat-button>DONE</button>
+        <button (click)="cancel()" mat-flat-button>Done</button>
 
         <button
           [disabled]="setupForm.invalid || !setupForm.dirty"
@@ -112,7 +112,7 @@ import copy from 'fast-copy';
           form="setupForm"
           mat-flat-button
           type="submit">
-          SAVE
+          Save
         </button>
       </mat-card-actions>
     </mat-card>

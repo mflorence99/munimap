@@ -71,7 +71,7 @@ import { signInWithEmailAndPassword } from '@angular/fire/auth';
             form="loginForm"
             mat-flat-button
             type="submit">
-            NEXT
+            Next
           </button>
         </mat-card-actions>
       </mat-card>
@@ -143,7 +143,7 @@ import { signInWithEmailAndPassword } from '@angular/fire/auth';
             form="loginForm"
             mat-flat-button
             type="submit">
-            LOGIN
+            Login
           </button>
         </mat-card-actions>
       </mat-card>
@@ -225,7 +225,7 @@ import { signInWithEmailAndPassword } from '@angular/fire/auth';
             form="loginForm"
             mat-flat-button
             type="submit">
-            SIGNUP
+            Sign up
           </button>
         </mat-card-actions>
       </mat-card>
