@@ -22,9 +22,10 @@ import { input } from '@angular/core';
         border-radius: 50%;
         color: var(--mat-gray-50);
         display: flex;
-        height: 48px;
+        font-size: large;
+        height: 100%;
         justify-content: center;
-        width: 48px;
+        width: 100%;
       }
     `
   ],

@@ -5,7 +5,6 @@ import { AvatarComponent } from './components/avatar';
 import { BuilderComponent } from './pages/create/builder';
 import { ContextMenuComponent } from './components/contextmenu';
 import { ContextMenuHostDirective } from './directives/contextmenu-host';
-import { ControlPanelPropertiesComponent } from './components/controlpanel-properties';
 import { CreatePage } from './pages/create/page';
 import { CreatePropertyMapComponent } from './pages/parcels/create-propertymap';
 import { CulvertPropertiesComponent } from './pages/dpw/culvert-properties';
@@ -15,6 +14,7 @@ import { ImportLandmarksComponent } from './pages/property/import-landmarks';
 import { LandmarkPropertiesComponent } from './pages/property/landmark-properties';
 import { ListPage } from './pages/list/page';
 import { LoginPage } from './pages/login/login';
+import { MapPropertiesComponent } from './pages/root/map-properties';
 import { MergeParcelsComponent } from './pages/parcels/merge-parcels';
 import { NavigatorComponent } from './pages/root/navigator';
 import { ParcelPropertiesComponent } from './pages/parcels/parcel-properties';
@@ -246,13 +246,13 @@ const COMPONENTS = [
   BuilderComponent,
   ConfirmDialogComponent,
   ContextMenuComponent,
-  ControlPanelPropertiesComponent,
   CreatePropertyMapComponent,
   CulvertPropertiesComponent,
   EmailAddressValidator,
   ImportCulvertsComponent,
   ImportLandmarksComponent,
   LandmarkPropertiesComponent,
+  MapPropertiesComponent,
   MergeParcelsComponent,
   MessageDialogComponent,
   NavigatorComponent,

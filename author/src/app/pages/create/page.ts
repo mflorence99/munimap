@@ -33,7 +33,7 @@ import OLFeature from 'ol/Feature';
         (typeChanged)="onTypeChanged($event)"
         [path]="path"
         [type]="type"
-        mapControlPanel1></app-builder>
+        mapControlPanel></app-builder>
 
       <!-- 📦 CUSTOM CONTROLS -->
 

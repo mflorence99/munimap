@@ -57,9 +57,7 @@ const nominalDPI = 96;
   template: `
     <section class="controls">
       <article class="panels">
-        <ng-content select="[mapControlPanel1]"></ng-content>
-        <ng-content select="[mapControlPanel2]"></ng-content>
-        <ng-content select="[mapControlPanel3]"></ng-content>
+        <ng-content select="[mapControlPanel]"></ng-content>
       </article>
 
       <article class="light-theme buttons">

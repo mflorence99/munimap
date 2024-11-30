@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
+import { NgForm } from '@angular/forms';
 import { Profile } from '@lib/state/auth';
 import { Store } from '@ngxs/store';
 import { User } from '@lib/state/auth';
@@ -12,6 +13,7 @@ import { computed } from '@angular/core';
 import { inject } from '@angular/core';
 import { input } from '@angular/core';
 import { updatePassword } from '@angular/fire/auth';
+import { viewChild } from '@angular/core';
 
 import copy from 'fast-copy';
 
@@ -97,7 +99,7 @@ import copy from 'fast-copy';
 
       <div class="filler"></div>
 
-      <button (click)="cancel()" mat-flat-button>Cancel</button>
+      <button (click)="cancel()" mat-flat-button>Done</button>
 
       <button
         [disabled]="profileForm.invalid || !profileForm.dirty"
@@ -105,7 +107,7 @@ import copy from 'fast-copy';
         form="profileForm"
         mat-flat-button
         type="submit">
-        Update
+        Save
       </button>
     </article>
   `,
@@ -113,6 +115,7 @@ import copy from 'fast-copy';
 })
 export class ProfileComponent {
   errorMessage = '';
+  ngForm = viewChild<NgForm>('profileForm');
   profile = input<Profile>();
   profileCopy = computed(() => copy(this.profile()));
   user = input<User>();
@@ -147,6 +150,9 @@ export class ProfileComponent {
         }
       );
     }
+    // 👉 this resets the dirty flag, disabling SAVE until
+    //    additional data entered
+    this.ngForm().form.markAsPristine();
   }
 
   #extractFirebaseMessage(message: any): string {

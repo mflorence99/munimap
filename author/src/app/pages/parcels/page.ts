@@ -74,11 +74,6 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
             <!-- 🗺️ External control panels                                 -->
             <!-- ---------------------------------------------------------- -->
 
-            <app-controlpanel-properties
-              [mapState]="sink.mapState"
-              class="setup"
-              mapControlPanel1></app-controlpanel-properties>
-
             <app-ol-control-searchparcels
               mapControlSearch></app-ol-control-searchparcels>
 

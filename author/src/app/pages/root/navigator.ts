@@ -80,7 +80,11 @@ import { workgroup } from '@lib/state/auth';
 
         <hr />
 
-        <li (click)="reset()" class="item">
+        <li
+          (click)="reset()"
+          (keydown.enter)="reset()"
+          class="item"
+          tabindex="0">
           <fa-icon
             [icon]="['fad', 'sync']"
             class="icon selected"

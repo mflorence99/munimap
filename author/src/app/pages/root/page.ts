@@ -11,6 +11,7 @@ import { Map } from '@lib/state/map';
 import { MapActions } from '@lib/state/map';
 import { MapState } from '@lib/state/map';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDrawer } from '@angular/material/sidenav';
 import { MessageDialogComponent } from '@lib/components/message-dialog';
 import { MessageDialogData } from '@lib/components/message-dialog';
 import { NavigationCancel } from '@angular/router';
@@ -51,6 +52,7 @@ import { viewChild } from '@angular/core';
   template: `
     @let sink =
       {
+        mapState: mapState$ | async,
         profile: profile$ | async,
         user: user$ | async
       };
@@ -85,11 +87,23 @@ import { viewChild } from '@angular/core';
           <fa-icon [icon]="['fad', 'undo']" size="2x"></fa-icon>
         </button>
 
-        @if (sink.user) {
-          <app-avatar
-            (click)="setup.toggle()"
-            [name]="sink.user.displayName"
-            class="avatar"></app-avatar>
+        @if (sink.mapState && sink.profile) {
+          <button
+            mat-icon-button
+            (click)="showHideProperties(setup, 'app-map-properties')"
+            title="Map properties">
+            <img src="assets/favicon.svg" />
+          </button>
+        }
+
+        @if (sink.user && sink.profile) {
+          <button
+            mat-icon-button
+            (click)="showHideProperties(setup, 'app-profile')"
+            class="avatar"
+            title="User {{ sink.user.displayName }} profile">
+            <app-avatar [name]="sink.user.displayName"></app-avatar>
+          </button>
         }
       </mat-toolbar>
 
@@ -105,11 +119,20 @@ import { viewChild } from '@angular/core';
         </mat-drawer>
 
         <mat-drawer #setup class="sidebar" mode="over" position="end">
-          @if (sink.user) {
-            @if (sink.profile) {
-              <app-profile
-                [profile]="sink.profile"
-                [user]="sink.user"></app-profile>
+          @switch (whichProperties) {
+            @case ('app-map-properties') {
+              @if (sink.mapState && sink.profile) {
+                <app-map-properties
+                  [profile]="sink.profile"
+                  [mapState]="sink.mapState"></app-map-properties>
+              }
+            }
+            @case ('app-profile') {
+              @if (sink.user && sink.profile) {
+                <app-profile
+                  [profile]="sink.profile"
+                  [user]="sink.user"></app-profile>
+              }
             }
           }
         </mat-drawer>
@@ -129,7 +152,7 @@ import { viewChild } from '@angular/core';
       }
 
       .avatar {
-        cursor: pointer;
+        background-color: var(--primary-color);
       }
 
       .container {
@@ -181,6 +204,7 @@ export class RootPage implements OnInit {
   satelliteView$: Observable<boolean>;
   title: string;
   user$: Observable<User>;
+  whichProperties: string;
   working = 0;
 
   #actions$ = inject(Actions);
@@ -203,6 +227,7 @@ export class RootPage implements OnInit {
 
   ngOnInit(): void {
     this.#handleMapErrorActions$();
+    this.#handleMapState$();
     this.#handleRouterEvents$();
     this.#handleUndoActions$();
     this.#handleWorkingActions$();
@@ -214,6 +239,17 @@ export class RootPage implements OnInit {
 
   setTitle(title: string): void {
     this.title = title;
+  }
+
+  showHideProperties(drawer: MatDrawer, whichProperties: string): void {
+    const doOpen = whichProperties !== this.whichProperties || !drawer.opened;
+    if (doOpen) {
+      this.whichProperties = whichProperties;
+      drawer.open();
+    } else {
+      drawer.close();
+      this.whichProperties = null;
+    }
   }
 
   undo(): void {
@@ -237,6 +273,12 @@ export class RootPage implements OnInit {
           this.#dialog.open(MessageDialogComponent, { data });
         }
       );
+  }
+
+  #handleMapState$(): void {
+    this.mapState$.pipe(takeUntil(this.#destroy$)).subscribe((map: Map) => {
+      if (map?.name) this.setTitle(map.name);
+    });
   }
 
   #handleRouterEvents$(): void {
