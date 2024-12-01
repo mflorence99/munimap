@@ -56,6 +56,7 @@
     "deploy:aws:viewer:henniker": "./bin/deploy-aws-viewer-henniker.sh",
     "deploy:aws:viewer:washington": "./bin/deploy-aws-viewer-washington.sh",
     "eslint": "eslint --ext ts --fix ./author ./bin ./lib ./proxy ./viewer ./worker",
+    "eslint:inspector": "eslint --inspect-config",
     "firebase:emulators": "firebase emulators:start",
     "firebase:emulators:backup": "deno run -A bin/backup.ts --useEmulator",
     "firebase:emulators:clean": "deno run -A bin/clean.ts  --useEmulator && deno run -A bin/parcel-stealer.ts  --useEmulator",
@@ -164,6 +165,7 @@
     "@aws-sdk/client-s3": "^3",
     "@aws-sdk/client-transfer": "^3",
     "@eslint/compat": "^1.2.3",
+    "@eslint/config-inspector": "^0.5.6",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.15.0",
     "@types/file-saver": "^2",
@@ -179,7 +181,7 @@
     "@typescript-eslint/parser": "^8.16.0",
     "chalk": "^5",
     "eslint": "^9",
-    "eslint-config-mflorence99": "^1.2.5",
+    "eslint-config-mflorence99": "^3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-import-splitnsort": "^1.0.2",
@@ -199,6 +201,7 @@
     "stylelint": "^16",
     "stylelint-config-standard": "^36",
     "stylelint-order": "^6",
-    "typescript": "~5.6.3"
+    "typescript": "~5.6.3",
+    "typescript-eslint": "^8.16.0"
   }
 }
