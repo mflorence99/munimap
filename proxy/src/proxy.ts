@@ -86,7 +86,9 @@ export class ProxyServer extends Handler {
         let stat;
         try {
           stat = fs.statSync(fpath);
-        } catch (error) {}
+        } catch (error) {
+          console.error(`🔥 ${error.message}`);
+        }
         const maxAge = this.#opts.maxAge;
         // 👇 if the data is smaller than the minumum size,
         //    treat it as a cache miss

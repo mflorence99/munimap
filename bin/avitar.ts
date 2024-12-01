@@ -49,7 +49,7 @@ function main(): void {
     searchForAnomalies();
     // jsome(avitarByID["15-70-01"]);
     // jsome(featureByID["9-7"]);
-    // saveGeoJSON();
+    saveGeoJSON();
   } catch (error: any) {
     console.log(chalk.red(error.message));
   }

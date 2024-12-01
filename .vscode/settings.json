@@ -3,9 +3,7 @@
   "deno.codeLens.references": true,
   "deno.codeLens.referencesAllFunctions": true,
   "deno.enable": true,
-  "deno.enablePaths": [
-    "./bin"
-  ],
+  "deno.enablePaths": ["./bin"],
   "deno.lint": false,
   "deno.suggest.imports.autoDiscover": true,
   "deno.suggest.imports.hosts": {

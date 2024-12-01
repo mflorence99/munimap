@@ -55,8 +55,6 @@ import OLText from 'ol/style/Text';
 export class OLStyleUniversalComponent implements OnChanges, Styler {
   // 👇 @Input/OnChanges works just fine here!
 
-  /* eslint-disable @typescript-eslint/naming-convention */
-
   @Input() contrast: 'blackOnWhite' | 'whiteOnBlack' | 'normal' = 'normal';
   @Input() fontFamily = 'Roboto';
   @Input() fontOutlineRatio = 0.1 /* 👈 outline width : fontSize */;
@@ -80,8 +78,6 @@ export class OLStyleUniversalComponent implements OnChanges, Styler {
   @Input() strokeWidth_medium = 6 /* 👈 feet */;
   @Input() strokeWidth_thick = 9 /* 👈 feet */;
   @Input() strokeWidth_thin = 3 /* 👈 feet */;
-
-  /* eslint-enable @typescript-eslint/naming-convention */
 
   #adaptor = inject(AdaptorComponent, { optional: true });
   #decimal = inject(DecimalPipe);

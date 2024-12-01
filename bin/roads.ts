@@ -83,7 +83,6 @@ async function main(): Promise<void> {
 main();
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/naming-convention */
 
 const sample = {
   UNIQUE_ID: 146879,

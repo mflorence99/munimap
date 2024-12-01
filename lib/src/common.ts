@@ -24,8 +24,6 @@ import polylabel from 'polylabel';
 // 👇 we currently only support one state
 export const theState = 'NEW HAMPSHIRE';
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 export interface BridgeProperties {
   // 👇 original bridges schema
   ALT_LENGTH: number /* 👈 ALT_LENGTH */;

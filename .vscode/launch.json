@@ -29,12 +29,7 @@
       "cwd": "${workspaceFolder}",
       "env": {},
       "runtimeExecutable": "/home/markf/.deno/bin/deno",
-      "runtimeArgs": [
-        "run",
-        "--unstable",
-        "--inspect-wait",
-        "--allow-all"
-      ],
+      "runtimeArgs": ["run", "--unstable", "--inspect-wait", "--allow-all"],
       "attachSimplePort": 9229
     }
   ]
