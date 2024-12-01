@@ -904,9 +904,8 @@ function bboxByAspectRatioImpl(
     const dx = Math.max(cx - z, 0);
     const dy = (dx * x) / y;
     return bboxByDimensions(geojson, z + bx + dx, cy + by + dy);
-  }
-  // 👉 OK, must be landscape
-  else {
+  } else {
+    // 👉 OK, must be landscape
     const z = (cx * y) / x;
     // account for buffer
     const by = b;

@@ -143,7 +143,7 @@
     "ol": "^10",
     "ol-ext": "^4",
     "ol-mapbox-style": "^12",
-    "polylabel": "1.1.0",
+    "polylabel": "^2",
     "proj4": "^2",
     "request": "^2",
     "rxfire": "^6",

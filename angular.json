@@ -46,7 +46,6 @@
               "object-hash",
               "pbf",
               "polygon-clipping",
-              "polylabel",
               "rbush",
               "ts-md5",
               "turf-jsts",
