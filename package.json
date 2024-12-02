@@ -55,7 +55,7 @@
     "deploy:aws:proxy": "./bin/deploy-aws-proxy.sh",
     "deploy:aws:viewer:henniker": "./bin/deploy-aws-viewer-henniker.sh",
     "deploy:aws:viewer:washington": "./bin/deploy-aws-viewer-washington.sh",
-    "eslint": "eslint ./author ./bin ./lib ./proxy ./viewer ./worker",
+    "eslint": "eslint author/ bin/ lib/ proxy/ viewer/ worker/",
     "eslint:inspector": "eslint --inspect-config",
     "firebase:emulators": "firebase emulators:start",
     "firebase:emulators:backup": "deno run -A bin/backup.ts --useEmulator",
