@@ -3,7 +3,6 @@ import myConfig from 'eslint-config-mflorence99';
 export default [
   ...myConfig,
   {
-    ignores: ['**/*.mjs', '**/bin/**/*.ts'],
     languageOptions: {
       parserOptions: {
         project: [
@@ -14,5 +13,6 @@ export default [
         ]
       }
     }
-  }
+  },
+  { ignores: ['eslint.config.mjs', 'bin/**/*.ts'] }
 ];
