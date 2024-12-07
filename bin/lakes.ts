@@ -83,8 +83,7 @@ async function main(): Promise<void> {
 
 main();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sample = {
+const _sample = {
   AU_ID: 'NHLAK700061102-02',
   TOWN: 'SALEM/WINDHAM',
   AREA: 23385.9046882,

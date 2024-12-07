@@ -145,8 +145,7 @@ async function main(): Promise<void> {
 
 main();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sample = {
+const _sample = {
   type: 'Feature',
   geometry: {
     type: 'Polygon',

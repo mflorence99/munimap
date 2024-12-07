@@ -8,6 +8,7 @@ import { serializeLandmark } from '../lib/src/common.ts';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
+import * as process from 'node:process';
 
 import { input } from '@inquirer/prompts';
 import { parseArgs } from '@std/cli/parse-args';

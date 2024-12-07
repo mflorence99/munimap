@@ -76,8 +76,7 @@ async function main(): Promise<void> {
 
 main();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sample = {
+const _sample = {
   FEATURE: '865 Second Street Shopping Center',
   FEATYPE: 'locale',
   COUNTY: 'Hillsborough',

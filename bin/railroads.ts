@@ -41,9 +41,7 @@ writeFileSync(
   JSON.stringify(simplify(railroads))
 );
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-const sample = {
+const _sample = {
   OBJECTID: 1,
   NAME: 'Spur Boston and Maine Corp - 2a',
   SECT_LENGTH: 0.29725199,

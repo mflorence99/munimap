@@ -129,8 +129,7 @@ function updateFromAvitar(): void {
     });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sample = {
+const _sample = {
   PID: '000000000001000000',
   MAP: '000000',
   LOT: '000001',

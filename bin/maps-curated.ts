@@ -8,6 +8,7 @@ import { isParcelStollen } from '../lib/src/common.ts';
 
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
+import * as process from 'node:process';
 
 import { bboxPolygon } from '@turf/bbox-polygon';
 import { featureCollection } from '@turf/helpers';

@@ -299,9 +299,7 @@ function makeID(feature: GeoJSON.Feature): string {
   return parts.join('-');
 }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-const sample = {
+const _sample = {
   OBJECTID: 549240,
   ParcelOID: 591063,
   Name: 'ParcelID: 62-6',

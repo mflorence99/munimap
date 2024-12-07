@@ -13,7 +13,7 @@ import chalk from 'chalk';
 
 const client = new TransferClient({});
 
-async function run(cmd: string): Promise<any> {
+function run(cmd: string): Promise<any> {
   return new Promise((resolve, _reject) => {
     exec(cmd, (error, stdout, stderr) => {
       if (error) console.error(error);
@@ -22,7 +22,7 @@ async function run(cmd: string): Promise<any> {
   });
 }
 
-async function wait(ms = 1000): Promise<any> {
+function wait(ms = 1000): Promise<any> {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });

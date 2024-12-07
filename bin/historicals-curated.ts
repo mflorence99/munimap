@@ -226,7 +226,7 @@ async function main(): Promise<void> {
           const zip = await JSZip.loadAsync(
             readFileSync(`${source.dir}/tiles.zip`)
           );
-          const entries = zip.filter((path, file) => !file.dir);
+          const entries = zip.filter((_path, file) => !file.dir);
 
           // 👇 upload the map tiles to S3
           let count = 0;
@@ -242,7 +242,7 @@ async function main(): Promise<void> {
                   ObjectAttributes: ['ETag']
                 })
               );
-            } catch (e) {
+            } catch (e: any) {
               console.error(e.message);
             }
 

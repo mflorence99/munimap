@@ -1,6 +1,7 @@
 import * as fireauth from 'firebase-admin/auth';
 import * as firebase from 'firebase-admin/app';
 import * as firestore from 'firebase-admin/firestore';
+import * as process from 'node:process';
 
 import { input } from '@inquirer/prompts';
 import { parseArgs } from '@std/cli/parse-args';

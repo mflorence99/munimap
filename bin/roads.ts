@@ -82,9 +82,7 @@ async function main(): Promise<void> {
 
 main();
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-const sample = {
+const _sample = {
   UNIQUE_ID: 146879,
   SRI: 'C0990001__',
   MP_START: 0.019,

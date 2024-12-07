@@ -5,7 +5,11 @@
     "strictNullChecks": false
   },
   "fmt": {},
-  "lint": {},
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
+  },
   "imports": {
     "@aws-sdk/client-s3": "npm:@aws-sdk/client-s3@^3.701.0",
     "@aws-sdk/client-transfer": "npm:@aws-sdk/client-transfer@^3.699.0",

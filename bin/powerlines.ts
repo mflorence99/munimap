@@ -86,9 +86,7 @@ Object.keys(linesByCountyByTown).forEach((county) => {
   });
 });
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-const sample = {
+const _sample = {
   OBJECTID: 1,
   ID: '212144',
   TYPE: 'AC; OVERHEAD',

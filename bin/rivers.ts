@@ -90,9 +90,7 @@ async function main(): Promise<void> {
 
 main();
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-const sample = {
+const _sample = {
   LENGTH: 179.100757838,
   DR24K_: 569,
   DR24K_ID: 1858,

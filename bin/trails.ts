@@ -118,9 +118,7 @@ async function main(): Promise<void> {
 
 main();
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-const sample = {
+const _sample = {
   OBJECTID: 1,
   TRAIL: 'Y',
   TRAILNAME: '48T',
