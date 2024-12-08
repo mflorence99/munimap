@@ -190,7 +190,6 @@
     "postcss-angular": "^1.0.3",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.4.1",
-    "prettier-eslint": "^16.3.0",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-package": "^1.4.0",
     "recursive-readdir": "^2",
