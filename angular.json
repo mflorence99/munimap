@@ -4,7 +4,7 @@
   },
   "newProjectRoot": ".",
   "projects": {
-    "./author": {
+    "author": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser-esbuild",
@@ -89,11 +89,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "./author:build:production"
+              "buildTarget": "author:build:production"
             }
           },
           "options": {
-            "buildTarget": "./author:build"
+            "buildTarget": "author:build"
           }
         }
       },
@@ -107,7 +107,7 @@
       },
       "sourceRoot": "./author"
     },
-    "./viewer": {
+    "viewer": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser-esbuild",
@@ -193,11 +193,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "./viewer:build:production"
+              "buildTarget": "viewer:build:production"
             }
           },
           "options": {
-            "buildTarget": "./viewer:build"
+            "buildTarget": "viewer:build"
           }
         }
       },

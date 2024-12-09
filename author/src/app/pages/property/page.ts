@@ -52,12 +52,13 @@ interface LandmarkConversion {
         <mat-drawer-content class="content">
           <app-ol-map
             #map
+            [appAutoFocus]="true"
             [bounds]="sink.mapState.bbox"
             [loadingStrategy]="'all'"
             [minZoom]="13"
             [maxZoom]="22"
             [path]="sink.mapState.path"
-            tabindex="0">
+            tabindex="1">
             <!-- ---------------------------------------------------------- -->
             <!-- 🗺️ Context menu                                            -->
             <!-- ---------------------------------------------------------- -->

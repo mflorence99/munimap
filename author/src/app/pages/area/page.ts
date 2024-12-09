@@ -26,12 +26,13 @@ import { viewChild } from '@angular/core';
     @if (sink.mapState) {
       <app-ol-map
         #map
+        [appAutoFocus]="true"
         [bounds]="sink.mapState.bbox"
         [loadingStrategy]="'bbox'"
         [minZoom]="15"
         [maxZoom]="20"
         [path]="sink.mapState.path"
-        tabindex="0">
+        tabindex="1">
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->
         <!-- ---------------------------------------------------------- -->

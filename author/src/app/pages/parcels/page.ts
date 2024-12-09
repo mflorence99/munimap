@@ -53,11 +53,12 @@ import OLMultiPolygon from 'ol/geom/MultiPolygon';
         <mat-drawer-content class="content">
           <app-ol-map
             #map
+            [appAutoFocus]="true"
             [loadingStrategy]="'bbox'"
             [minZoom]="15"
             [maxZoom]="22"
             [path]="sink.mapState.path"
-            tabindex="0">
+            tabindex="1">
             <!-- ---------------------------------------------------------- -->
             <!-- 🗺️ Context menu                                            -->
             <!-- ---------------------------------------------------------- -->

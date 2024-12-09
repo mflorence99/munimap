@@ -31,7 +31,6 @@ export type Schema = Array<
   template: `
     <button
       (click)="onClose()"
-      [appAutoFocus]="focussed"
       class="closer"
       mat-icon-button
       title="Close popup">
@@ -126,6 +125,8 @@ export class OLPopupDPWPropertiesComponent {
     const selector =
       this.#map.selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
+    // @ts-ignore 🔥 total hack!!!
+    document.querySelector('app-ol-map')?.focus();
   }
 
   #handleEscape$(): void {

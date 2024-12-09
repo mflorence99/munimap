@@ -84,11 +84,21 @@ import urlParse from 'url-parse';
       </mat-toolbar>
 
       <mat-drawer-container class="container">
-        <mat-drawer #leftSidebar class="sidebar" mode="over" position="start">
+        <mat-drawer
+          #leftSidebar
+          (closedStart)="onRefocusMap()"
+          class="sidebar"
+          mode="over"
+          position="start">
           <router-outlet name="leftSidebar"></router-outlet>
         </mat-drawer>
 
-        <mat-drawer #rightSidebar class="sidebar" mode="over" position="end">
+        <mat-drawer
+          #rightSidebar
+          (closedStart)="onRefocusMap()"
+          class="sidebar"
+          mode="over"
+          position="end">
           <router-outlet name="rightSidebar"></router-outlet>
         </mat-drawer>
 
@@ -213,6 +223,11 @@ export class RootPage implements OnInit {
 
   onGPSToggle(state: boolean): void {
     this.#store.dispatch(new ViewActions.SetGPS(state));
+  }
+
+  onRefocusMap(): void {
+    // @ts-ignore 🔥 total hack!!!
+    document.querySelector('app-ol-map')?.focus();
   }
 
   reset(): void {

@@ -41,7 +41,6 @@ interface Abutter {
   template: `
     <button
       (click)="onClose()"
-      [appAutoFocus]="focussed"
       class="closer"
       mat-icon-button
       title="Close popup">
@@ -344,6 +343,8 @@ export class OLPopupParcelPropertiesComponent {
     const selector =
       this.#map.selector() as OLInteractionSelectParcelsComponent;
     selector?.unselectParcels?.();
+    // @ts-ignore 🔥 total hack!!!
+    document.querySelector('app-ol-map')?.focus();
   }
 
   onSelect(abutterID: ParcelID): void {

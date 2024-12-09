@@ -29,13 +29,14 @@ import { inject } from '@angular/core';
     @if (sink.mapState) {
       <app-ol-map
         #map
+        [appAutoFocus]="true"
         [bounds]="sink.mapState.bbox"
         [loadingStrategy]="'bbox'"
         [minZoom]="13"
         [maxZoom]="22"
         [path]="sink.mapState.path"
         class="content"
-        tabindex="0">
+        tabindex="1">
         <!-- ---------------------------------------------------------- -->
         <!-- 🗺️ External control panels                                 -->
         <!-- ---------------------------------------------------------- -->

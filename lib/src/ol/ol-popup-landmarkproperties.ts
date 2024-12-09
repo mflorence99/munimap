@@ -39,7 +39,6 @@ interface Coordinate {
   template: `
     <button
       (click)="onClose()"
-      [appAutoFocus]="focussed"
       class="closer"
       mat-icon-button
       title="Close popup">
@@ -155,6 +154,8 @@ export class OLPopupLandmarkPropertiesComponent {
     const selector =
       this.#map.selector() as OLInteractionSelectLandmarksComponent;
     selector?.unselectLandmarks?.();
+    // @ts-ignore 🔥 total hack!!!
+    document.querySelector('app-ol-map')?.focus();
   }
 
   toCoordinate(raw: any[]): Coordinate {

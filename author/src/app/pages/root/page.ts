@@ -114,11 +114,21 @@ import { viewChild } from '@angular/core';
       }
 
       <mat-drawer-container class="container">
-        <mat-drawer #nav class="sidebar" mode="over" position="start">
+        <mat-drawer
+          #nav
+          (closedStart)="refocusMap()"
+          class="sidebar"
+          mode="over"
+          position="start">
           <app-navigator [title]="title"></app-navigator>
         </mat-drawer>
 
-        <mat-drawer #setup class="sidebar" mode="over" position="end">
+        <mat-drawer
+          #setup
+          (closedStart)="refocusMap()"
+          class="sidebar"
+          mode="over"
+          position="end">
           @switch (whichProperties) {
             @case ('app-map-properties') {
               @if (sink.mapState && sink.profile) {
@@ -235,6 +245,11 @@ export class RootPage implements OnInit {
 
   redo(): void {
     this.#store.dispatch(new Redo());
+  }
+
+  refocusMap(): void {
+    // @ts-ignore 🔥 total hack!!!
+    document.querySelector('app-ol-map')?.focus();
   }
 
   setTitle(title: string): void {

@@ -45,11 +45,12 @@ import { viewChild } from '@angular/core';
         <mat-drawer-content class="content">
           <app-ol-map
             #map
+            [appAutoFocus]="true"
             [loadingStrategy]="'bbox'"
             [minZoom]="13"
             [maxZoom]="20"
             [path]="sink.mapState.path"
-            tabindex="0">
+            tabindex="1">
             <!-- ---------------------------------------------------------- -->
             <!-- 🗺️ Context menu                                            -->
             <!-- ---------------------------------------------------------- -->
