@@ -92,7 +92,7 @@ import { viewChild } from '@angular/core';
             mat-icon-button
             (click)="showHideProperties(setup, 'app-map-properties')"
             title="Map properties">
-            <img src="assets/favicon.svg" />
+            <img role="none" src="assets/favicon.svg" />
           </button>
         }
 

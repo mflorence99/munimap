@@ -17,7 +17,7 @@ import { output } from '@angular/core';
   template: `
     <mat-card appearance="outlined" class="card">
       <mat-card-header>
-        <img src="assets/favicon.svg" mat-card-avatar />
+        <img role="none" src="assets/favicon.svg" mat-card-avatar />
         <mat-card-title>Create a New Map</mat-card-title>
         <mat-card-subtitle>
           Use map or dropdowns to drill down to a town

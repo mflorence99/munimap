@@ -245,7 +245,8 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
                             <figure class="key">
                               <img
                                 [src]="'assets/legend/' + use.key + '.png'"
-                                class="icon" />
+                                class="icon"
+                                role="none" />
                               <figcaption>{{ use.value }}</figcaption>
                             </figure>
                           }
@@ -270,12 +271,18 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
               DES
 
               <figure class="key">
-                <img [src]="'assets/legend/floodplain.png'" class="icon" />
+                <img
+                  [src]="'assets/legend/floodplain.png'"
+                  role="none"
+                  class="icon" />
                 <figcaption>FEMA Floodplain</figcaption>
               </figure>
 
               <figure class="key">
-                <img [src]="'assets/legend/CUWL.png'" class="icon" />
+                <img
+                  [src]="'assets/legend/CUWL.png'"
+                  role="none"
+                  class="icon" />
                 <figcaption>Wetland</figcaption>
               </figure>
             </article>

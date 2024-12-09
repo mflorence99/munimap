@@ -23,7 +23,7 @@ import copy from 'fast-copy';
   selector: 'app-map-properties',
   template: `
     <header class="header">
-      <img class="icon" src="assets/favicon.svg" />
+      <img class="icon" role="none" src="assets/favicon.svg" />
       <p class="title">Identify Map</p>
       <p class="subtitle">Name will appear on printed version</p>
     </header>

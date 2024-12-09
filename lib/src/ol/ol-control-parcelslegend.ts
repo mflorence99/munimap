@@ -90,7 +90,8 @@ import { viewChild } from '@angular/core';
                         <figure class="key">
                           <img
                             [src]="'assets/legend/' + use.key + '.png'"
-                            class="icon" />
+                            class="icon"
+                            role="none" />
                           <figcaption>{{ use.value }}</figcaption>
                         </figure>
                       }
@@ -115,12 +116,18 @@ import { viewChild } from '@angular/core';
             <td class="des">
               <article class="keys">
                 <figure class="key">
-                  <img [src]="'assets/legend/floodplain.png'" class="icon" />
+                  <img
+                    [src]="'assets/legend/floodplain.png'"
+                    role="none"
+                    class="icon" />
                   <figcaption>FEMA Floodplain</figcaption>
                 </figure>
 
                 <figure class="key">
-                  <img [src]="'assets/legend/CUWL.png'" class="icon" />
+                  <img
+                    [src]="'assets/legend/CUWL.png'"
+                    role="none"
+                    class="icon" />
                   <figcaption>Wetland</figcaption>
                 </figure>
               </article>
