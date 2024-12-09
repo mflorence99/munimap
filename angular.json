@@ -4,7 +4,7 @@
   },
   "newProjectRoot": ".",
   "projects": {
-    "author": {
+    "./author": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser-esbuild",
@@ -53,61 +53,61 @@
               "url-parse"
             ],
             "assets": [
-              "author/assets",
+              "./author/assets",
               {
                 "glob": "**/*",
-                "input": "lib/assets",
+                "input": "./lib/assets",
                 "output": "assets"
               },
-              "author/manifest.webmanifest"
+              "./author/manifest.webmanifest"
             ],
             "buildOptimizer": false,
             "extractLicenses": false,
-            "index": "author/src/index.html",
+            "index": "./author/src/index.html",
             "inlineStyleLanguage": "scss",
-            "main": "author/src/main.ts",
+            "main": "./author/src/main.ts",
             "namedChunks": true,
             "ngswConfigPath": "./ngsw-config.json",
             "optimization": false,
-            "outputPath": "dist/author",
-            "polyfills": "author/src/polyfills.ts",
+            "outputPath": "./dist/author",
+            "polyfills": "./author/src/polyfills.ts",
             "serviceWorker": true,
             "sourceMap": true,
             "styles": [
-              "lib/css/globals.scss",
-              "lib/css/common.scss",
-              "lib/css/material.scss",
-              "lib/css/firebase.scss",
-              "lib/css/ol.scss",
-              "node_modules/ol/ol.css",
-              "node_modules/ol-ext/dist/ol-ext.css"
+              "./lib/css/globals.scss",
+              "./lib/css/common.scss",
+              "./lib/css/material.scss",
+              "./lib/css/firebase.scss",
+              "./lib/css/ol.scss",
+              "./node_modules/ol/ol.css",
+              "./node_modules/ol-ext/dist/ol-ext.css"
             ],
-            "tsConfig": "author/src/tsconfig.json"
+            "tsConfig": "./author/src/tsconfig.json"
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "author:build:production"
+              "buildTarget": "./author:build:production"
             }
           },
           "options": {
-            "buildTarget": "author:build"
+            "buildTarget": "./author:build"
           }
         }
       },
       "prefix": "app",
       "projectType": "application",
-      "root": "author",
+      "root": "./author",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "sourceRoot": "author"
+      "sourceRoot": "./author"
     },
-    "viewer": {
+    "./viewer": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser-esbuild",
@@ -157,59 +157,59 @@
               "url-parse"
             ],
             "assets": [
-              "viewer/assets",
+              "./viewer/assets",
               {
                 "glob": "**/*",
-                "input": "lib/assets",
+                "input": "./lib/assets",
                 "output": "assets"
               },
-              "viewer/manifest.webmanifest"
+              "./viewer/manifest.webmanifest"
             ],
             "buildOptimizer": false,
             "extractLicenses": false,
-            "index": "viewer/src/index.html",
+            "index": "./viewer/src/index.html",
             "inlineStyleLanguage": "scss",
-            "main": "viewer/src/main.ts",
+            "main": "./viewer/src/main.ts",
             "namedChunks": true,
             "ngswConfigPath": "./ngsw-config.json",
             "optimization": false,
-            "outputPath": "dist/viewer",
-            "polyfills": "viewer/src/polyfills.ts",
+            "outputPath": "./dist/viewer",
+            "polyfills": "./viewer/src/polyfills.ts",
             "serviceWorker": true,
             "sourceMap": true,
             "styles": [
-              "lib/css/globals.scss",
-              "lib/css/common.scss",
-              "lib/css/material.scss",
-              "lib/css/firebase.scss",
-              "lib/css/ol.scss",
-              "node_modules/ol/ol.css",
-              "node_modules/ol-ext/dist/ol-ext.css"
+              "./lib/css/globals.scss",
+              "./lib/css/common.scss",
+              "./lib/css/material.scss",
+              "./lib/css/firebase.scss",
+              "./lib/css/ol.scss",
+              "./node_modules/ol/ol.css",
+              "./node_modules/ol-ext/dist/ol-ext.css"
             ],
-            "tsConfig": "viewer/src/tsconfig.json"
+            "tsConfig": "./viewer/src/tsconfig.json"
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "viewer:build:production"
+              "buildTarget": "./viewer:build:production"
             }
           },
           "options": {
-            "buildTarget": "viewer:build"
+            "buildTarget": "./viewer:build"
           }
         }
       },
       "prefix": "app",
       "projectType": "application",
-      "root": "viewer",
+      "root": "./viewer",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "sourceRoot": "viewer"
+      "sourceRoot": "./viewer"
     }
   },
   "version": 1
