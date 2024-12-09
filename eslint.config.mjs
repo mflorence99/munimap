@@ -14,5 +14,5 @@ export default [
       }
     }
   },
-  { ignores: ['./eslint.config.mjs', './bin/**/*.ts'] }
+  { ignores: ['eslint.config.mjs', 'bin/**/*.ts'] }
 ];
