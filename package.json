@@ -164,7 +164,6 @@
     "@aws-sdk/client-s3": "^3",
     "@aws-sdk/client-transfer": "^3",
     "@eslint/compat": "^1.2.3",
-    "@eslint/config-inspector": "^0.5.6",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.15.0",
     "@types/file-saver": "^2",
