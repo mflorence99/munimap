@@ -12,7 +12,7 @@ import { StylerComponent } from './ol-styler';
 import { ViewState } from '../state/view';
 import { ViewStateModel } from '../state/view';
 
-import { getAPDVDFill } from './ol-apdvd2';
+import { getAPDVDFill } from './ol-apdvd3';
 import { isParcelStollen } from '../common';
 
 import { ChangeDetectionStrategy } from '@angular/core';

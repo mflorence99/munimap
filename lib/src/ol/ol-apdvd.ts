@@ -1,4 +1,4 @@
-// 🔥 HACK FOR APDVD
+// 🔥 THIS IS OBSOLETE!!
 
 import { ParcelID } from '../common';
 import { ParcelProperties } from '../common';

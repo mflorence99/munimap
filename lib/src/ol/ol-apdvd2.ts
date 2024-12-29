@@ -1,4 +1,4 @@
-// 🔥 KACK for APDVD
+// 🔥 HACK for APDVD
 
 import { ParcelID } from '../common';
 import { ParcelProperties } from '../common';

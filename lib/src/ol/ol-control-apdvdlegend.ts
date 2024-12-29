@@ -5,10 +5,10 @@ import { OLControlAbstractParcelsLegendComponent } from './ol-control-abstractpa
 import { OLMapComponent } from './ol-map';
 import { ParcelProperties } from '../common';
 
-import { colorOfAPDVDExcluded } from './ol-apdvd2';
-import { colorOfAPDVDIncluded } from './ol-apdvd2';
-import { isAPDVDExcluded } from './ol-apdvd2';
-import { isAPDVDIncluded } from './ol-apdvd2';
+import { colorOfAPDVDExisting } from './ol-apdvd3';
+import { colorOfAPDVDProposed } from './ol-apdvd3';
+import { isAPDVDExisting } from './ol-apdvd3';
+import { isAPDVDProposed } from './ol-apdvd3';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';
@@ -38,10 +38,10 @@ import { viewChild } from '@angular/core';
         'ol-legend-print': printing(),
         'ol-legend-screen': !printing()
       }"
-      class="legend ol-legend ol-unselectable ol-control">
+      class="legend ol-legend ol-unselectable ol-control app-ol-control-apdvdlegend">
       <header class="header">
-        <h1 class="title()">{{ title() }}</h1>
-        <h2 class="subtitle">December 9, 2023</h2>
+        <h1 class="title">{{ title() }}</h1>
+        <h2 class="subtitle">February 29, 2024</h2>
       </header>
 
       <table class="areaByUsage">
@@ -55,33 +55,33 @@ import { viewChild } from '@angular/core';
         </thead>
 
         <tbody>
-          @if (countOfIncluded) {
+          @if (countOfProposed) {
             <tr>
               <td class="usage">
                 <figure
                   [style.backgroundColor]="
-                    'rgba(' + colorOfAPDVDIncluded + ', 0.25)'
+                    'rgba(' + colorOfAPDVDProposed + ', 0.25)'
                   "
                   class="key"></figure>
               </td>
-              <td class="desc">Lots added to district</td>
-              <td class="numeric">{{ countOfIncluded | number: '1.0-0' }}</td>
-              <td class="numeric">{{ areaOfIncluded | number: '1.0-0' }}</td>
+              <td class="desc">Proposed APDVD lots</td>
+              <td class="numeric">{{ countOfProposed | number: '1.0-0' }}</td>
+              <td class="numeric">{{ areaOfProposed | number: '1.0-0' }}</td>
             </tr>
           }
 
-          @if (countOfExcluded) {
+          @if (countOfExisting) {
             <tr>
               <td class="usage">
                 <figure
                   [style.backgroundColor]="
-                    'rgba(' + colorOfAPDVDExcluded + ', 0.25)'
+                    'rgba(' + colorOfAPDVDExisting + ', 0.25)'
                   "
                   class="key"></figure>
               </td>
-              <td class="desc">Lots excluded from district</td>
-              <td class="numeric">{{ countOfExcluded | number: '1.0-0' }}</td>
-              <td class="numeric">{{ areaOfExcluded | number: '1.0-0' }}</td>
+              <td class="desc">Existing APDVD lots</td>
+              <td class="numeric">{{ countOfExisting | number: '1.0-0' }}</td>
+              <td class="numeric">{{ areaOfExisting | number: '1.0-0' }}</td>
             </tr>
           }
         </tbody>
@@ -94,12 +94,12 @@ export class OLControlAPDVDLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  areaOfExcluded: number;
-  areaOfIncluded: number;
-  colorOfAPDVDExcluded = colorOfAPDVDExcluded;
-  colorOfAPDVDIncluded = colorOfAPDVDIncluded;
-  countOfExcluded: number;
-  countOfIncluded: number;
+  areaOfExisting: number;
+  areaOfProposed: number;
+  colorOfAPDVDExisting = colorOfAPDVDExisting;
+  colorOfAPDVDProposed = colorOfAPDVDProposed;
+  countOfExisting: number;
+  countOfProposed: number;
   county: Signal<string>;
   id: Signal<string>;
   legend = viewChild<ElementRef>('legend');
@@ -114,13 +114,13 @@ export class OLControlAPDVDLegendComponent
   }
 
   override aggregateParcelImpl(props: ParcelProperties): void {
-    if (isAPDVDExcluded(props)) {
-      this.areaOfExcluded += props.area;
-      this.countOfExcluded += 1;
+    if (isAPDVDExisting(props)) {
+      this.areaOfExisting += props.area;
+      this.countOfExisting += 1;
     }
-    if (isAPDVDIncluded(props)) {
-      this.areaOfIncluded += props.area;
-      this.countOfIncluded += 1;
+    if (isAPDVDProposed(props)) {
+      this.areaOfProposed += props.area;
+      this.countOfProposed += 1;
     }
   }
 
@@ -131,9 +131,9 @@ export class OLControlAPDVDLegendComponent
   }
 
   override resetCountersImpl(): void {
-    this.areaOfExcluded = 0;
-    this.areaOfIncluded = 0;
-    this.countOfExcluded = 0;
-    this.countOfIncluded = 0;
+    this.areaOfExisting = 0;
+    this.areaOfProposed = 0;
+    this.countOfExisting = 0;
+    this.countOfProposed = 0;
   }
 }

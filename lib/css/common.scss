@@ -394,9 +394,13 @@ app-ol-popup-streamcrossingproperties {
 
 // 👇 all these are legends on printed maps
 
-app-ol-control-apdvdlegend,
-app-ol-control-parcelslegend {
+.app-ol-control-apdvdlegend,
+.app-ol-control-parcelslegend {
+  background-color: rgba(var(--rgb-gray-100), 0.75);
+  color: var(--mat-gray-900);
   display: block;
+  padding: 2rem;
+  width: 44rem;
 
   // 👇 watch out -- these styles are a little different because
   //    OL yanks .legend out of the dom and into its viewport
@@ -517,12 +521,5 @@ app-ol-control-parcelslegend {
     .subtitle {
       font-size: 3rem;
     }
-  }
-
-  .legend {
-    background-color: rgba(var(--rgb-gray-100), 0.75);
-    color: var(--background-color);
-    padding: 2rem;
-    width: 44rem;
   }
 }

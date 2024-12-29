@@ -33,9 +33,9 @@ import { viewChild } from '@angular/core';
         'ol-legend-print': printing(),
         'ol-legend-screen': !printing()
       }"
-      class="legend ol-legend ol-unselectable ol-control">
+      class="legend ol-legend ol-unselectable ol-control app-ol-control-parcelslegend">
       <header class="header">
-        <h1 class="title()">{{ title() }}</h1>
+        <h1 class="title">{{ title() }}</h1>
         <h2 class="subtitle">{{ county() }} Co</h2>
         <h2 class="subtitle">{{ state() }}</h2>
         <h3 class="link">{{ id() }}.munimap.online</h3>

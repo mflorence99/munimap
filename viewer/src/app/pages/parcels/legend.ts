@@ -7,11 +7,11 @@ import { OnInit } from '@angular/core';
 import { ParcelProperties } from '@lib/common';
 import { Signal } from '@angular/core';
 
-import { colorOfAPDVDExcluded } from '@lib/ol/ol-apdvd2';
-import { colorOfAPDVDIncluded } from '@lib/ol/ol-apdvd2';
+import { colorOfAPDVDExisting } from '@lib/ol/ol-apdvd3';
+import { colorOfAPDVDProposed } from '@lib/ol/ol-apdvd3';
 import { inject } from '@angular/core';
-import { isAPDVDExcluded } from '@lib/ol/ol-apdvd2';
-import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
+import { isAPDVDExisting } from '@lib/ol/ol-apdvd3';
+import { isAPDVDProposed } from '@lib/ol/ol-apdvd3';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,43 +57,43 @@ import { isAPDVDIncluded } from '@lib/ol/ol-apdvd2';
         <!-- 🔥 all this for APDVD hack! -->
 
         @if (sink.mapState.id === 'apdvd') {
-          @if (countOfIncluded) {
+          @if (countOfProposed) {
             <tr>
               <td class="apdvd">
                 <figure
                   [style.backgroundColor]="
-                    'rgba(' + colorOfAPDVDIncluded + ', 0.5)'
+                    'rgba(' + colorOfAPDVDProposed + ', 0.5)'
                   "
                   [style.filter]="sink.accessibilityFilter"
                   class="key"></figure>
               </td>
-              <td class="desc">Lots added to district</td>
+              <td class="desc">Proposed APDVD lots</td>
               <td class="count">
-                {{ countOfIncluded | number: '1.0-0' }}
+                {{ countOfProposed | number: '1.0-0' }}
               </td>
               <td class="count">
-                {{ areaOfIncluded | number: '1.0-0' }}
+                {{ areaOfProposed | number: '1.0-0' }}
               </td>
               <td></td>
             </tr>
           }
 
-          @if (countOfExcluded) {
+          @if (countOfExisting) {
             <tr>
               <td class="apdvd">
                 <figure
                   [style.backgroundColor]="
-                    'rgba(' + colorOfAPDVDExcluded + ', 0.5)'
+                    'rgba(' + colorOfAPDVDExisting + ', 0.5)'
                   "
                   [style.filter]="sink.accessibilityFilter"
                   class="key"></figure>
               </td>
-              <td class="desc">Lots excluded from district</td>
+              <td class="desc">Existing APDVD lots</td>
               <td class="count">
-                {{ countOfExcluded | number: '1.0-0' }}
+                {{ countOfExisting | number: '1.0-0' }}
               </td>
               <td class="count">
-                {{ areaOfExcluded | number: '1.0-0' }}
+                {{ areaOfExisting | number: '1.0-0' }}
               </td>
               <td></td>
             </tr>
@@ -401,12 +401,12 @@ export class ParcelsLegendComponent
   extends OLControlAbstractParcelsLegendComponent
   implements OnInit
 {
-  areaOfExcluded: number;
-  areaOfIncluded: number;
-  colorOfAPDVDExcluded = colorOfAPDVDExcluded;
-  colorOfAPDVDIncluded = colorOfAPDVDIncluded;
-  countOfExcluded: number;
-  countOfIncluded: number;
+  areaOfExisting: number;
+  areaOfProposed: number;
+  colorOfAPDVDExisting = colorOfAPDVDExisting;
+  colorOfAPDVDProposed = colorOfAPDVDProposed;
+  countOfExisting: number;
+  countOfProposed: number;
   county: Signal<string>;
   id: Signal<string>;
   printing: Signal<boolean>;
@@ -415,13 +415,13 @@ export class ParcelsLegendComponent
   title: Signal<string>;
 
   override aggregateParcelImpl(props: ParcelProperties): void {
-    if (isAPDVDExcluded(props)) {
-      this.areaOfExcluded += props.area;
-      this.countOfExcluded += 1;
+    if (isAPDVDExisting(props)) {
+      this.areaOfExisting += props.area;
+      this.countOfExisting += 1;
     }
-    if (isAPDVDIncluded(props)) {
-      this.areaOfIncluded += props.area;
-      this.countOfIncluded += 1;
+    if (isAPDVDProposed(props)) {
+      this.areaOfProposed += props.area;
+      this.countOfProposed += 1;
     }
   }
 
@@ -430,9 +430,9 @@ export class ParcelsLegendComponent
   }
 
   override resetCountersImpl(): void {
-    this.areaOfExcluded = 0;
-    this.areaOfIncluded = 0;
-    this.countOfExcluded = 0;
-    this.countOfIncluded = 0;
+    this.areaOfExisting = 0;
+    this.areaOfProposed = 0;
+    this.countOfExisting = 0;
+    this.countOfProposed = 0;
   }
 }
