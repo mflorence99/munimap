@@ -12,7 +12,11 @@ export default [
           'worker/src/tsconfig.json'
         ]
       }
-    }
+    },
+    name: 'MuniMap projects'
   },
-  { ignores: ['eslint.config.mjs', 'bin/**/*.ts'] }
+  {
+    ignores: ['eslint.config.mjs', 'bin/**/*.ts'],
+    name: 'MuniMap file exclusions'
+  }
 ];
