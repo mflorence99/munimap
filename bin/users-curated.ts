@@ -12,12 +12,12 @@ const PROFILES = [
   {
     email: 'mflo999@gmail.com',
     workgroup:
-      'nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com'
+      'nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com norm.bernaichec@gmail.com'
   },
   {
     email: 'mflo999+dpw@gmail.com',
     workgroup:
-      'ethayer@washingtonnh.org ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com'
+      'ethayer@washingtonnh.org ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com norm.bernaichec@gmail.com'
   },
   {
     email: 'mflo999+flo@gmail.com',
@@ -32,17 +32,17 @@ const PROFILES = [
   {
     email: 'ljg@gsinet.net',
     workgroup:
-      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com'
+      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com norm.bernaichec@gmail.com'
   },
   {
     email: 'ethayer@washingtonnh.org',
     workgroup:
-      'mflo999+dpw@gmail.com ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com'
+      'mflo999+dpw@gmail.com ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com norm.bernaichec@gmail.com'
   },
   {
     email: 'ljg@gsinet.net',
     workgroup:
-      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com'
+      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org linda+cook@gmail.com norm.bernaichec@gmail.com'
   }
 ];
 
@@ -61,6 +61,11 @@ const USERS = [
     email: 'linda+cook@gmail.com',
     password: 'password',
     displayName: 'Linda Cook'
+  },
+  {
+    email: 'norm.bernaichec@gmail.com',
+    password: 'password',
+    displayName: 'Norm Bernaichec'
   },
   {
     email: 'mflo999+flo@gmail.com',
