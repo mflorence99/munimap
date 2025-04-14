@@ -102,7 +102,7 @@ import copy from 'fast-copy';
       }
 
       .list {
-        background-color: rgba(var(--rgb-gray-100), 0.75);
+        background-color: rgb(var(--rgb-gray-100), 0.75);
         bottom: -0.25rem;
         opacity: 1;
         padding: 0.5rem;

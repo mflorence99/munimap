@@ -54,7 +54,7 @@ import { takeUntil } from 'rxjs/operators';
       }
 
       .accessibility {
-        background-color: rgba(var(--rgb-gray-100), 0.75);
+        background-color: rgb(var(--rgb-gray-100), 0.75);
         border: 0.5rem solid transparent;
         border-collapse: collapse;
         bottom: -0.25rem;

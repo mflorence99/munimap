@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
 
 import { environment } from '@lib/environment';
 import { inject } from '@angular/core';
-import { isAPDVDExisting } from '@lib/ol/ol-apdvd';
-import { isAPDVDProposed } from '@lib/ol/ol-apdvd';
+import { isAPDVDExisting } from '@lib/ol/ol-apdvd3';
+import { isAPDVDProposed } from '@lib/ol/ol-apdvd3';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

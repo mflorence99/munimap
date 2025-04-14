@@ -48,7 +48,7 @@ import OLLayer from 'ol/layer/Layer';
       }
 
       .attribution {
-        background-color: rgba(var(--rgb-gray-100), 0.75);
+        background-color: rgb(var(--rgb-gray-100), 0.75);
         bottom: -0.25rem;
         display: flex;
         flex-direction: column;

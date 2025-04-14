@@ -179,7 +179,7 @@
     "@typescript-eslint/parser": "^8.16.0",
     "chalk": "^5",
     "eslint": "^9",
-    "eslint-config-mflorence99": "^3",
+    "eslint-config-mflorence99": "^3.2.2",
     "eslint-config-prettier": "^10",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-import-splitnsort": "^1.0.2",
@@ -195,7 +195,7 @@
     "serverless-apigw-binary": "0.4.4",
     "serverless-domain-manager": "^8",
     "stylelint": "^16",
-    "stylelint-config-standard": "^37",
+    "stylelint-config-standard": "^38",
     "stylelint-order": "^6",
     "typescript": "~5.6.3",
     "typescript-eslint": "^8.16.0"

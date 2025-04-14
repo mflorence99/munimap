@@ -104,7 +104,7 @@ const nominalDPI = 96;
         }
 
         .lower {
-          background-color: rgba(var(--rgb-gray-100), 0.67);
+          background-color: rgb(var(--rgb-gray-100), 0.67);
           display: flex;
           flex-direction: column;
           gap: 0.25rem;

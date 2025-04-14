@@ -97,7 +97,7 @@ import { workgroup } from '@lib/state/auth';
 
       .filter {
         align-items: center;
-        background-color: rgba(var(--rgb-gray-100), 0.25);
+        background-color: rgb(var(--rgb-gray-100), 0.25);
         column-gap: 0.5rem;
         display: grid;
         grid-template-columns: auto 1fr auto;
@@ -118,7 +118,7 @@ import { workgroup } from '@lib/state/auth';
       }
 
       .searcher::placeholder {
-        color: rgba(var(--rgb-gray-50), 0.33);
+        color: rgb(var(--rgb-gray-50), 0.33);
       }
 
       table[mat-table] {
