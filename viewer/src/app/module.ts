@@ -9,7 +9,7 @@ import { ParcelsToolbarComponent } from './pages/parcels/toolbar';
 import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 
-import * as Sentry from '@sentry/angular-ivy';
+import * as Sentry from '@sentry/angular';
 
 import { AnonState } from '@lib/state/anon';
 import { APP_INITIALIZER } from '@angular/core';

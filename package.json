@@ -117,7 +117,7 @@
     "@ngxs/router-plugin": "^20",
     "@ngxs/storage-plugin": "^20",
     "@ngxs/store": "^20",
-    "@sentry/angular-ivy": "^7",
+    "@sentry/angular": "^9",
     "@sentry/browser": "^9",
     "@sentry/tracing": "^7",
     "@turf/turf": "^7",

@@ -1,6 +1,6 @@
 import { RootModule } from './app/module';
 
-import * as Sentry from '@sentry/angular-ivy';
+import * as Sentry from '@sentry/angular';
 
 import { enableProdMode } from '@angular/core';
 import { environment } from '@lib/environment';

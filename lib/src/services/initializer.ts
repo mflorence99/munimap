@@ -1,6 +1,6 @@
 import { environment } from '../environment';
 
-import * as Sentry from '@sentry/angular-ivy';
+import * as Sentry from '@sentry/angular';
 
 import { EMPTY } from 'rxjs';
 import { Injectable } from '@angular/core';
