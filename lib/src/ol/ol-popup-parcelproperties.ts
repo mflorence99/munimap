@@ -226,7 +226,6 @@ interface Abutter {
         width: 100%;
 
         th {
-          background-color: var(--mat-gray-900);
           border-bottom: 1px solid var(--mat-gray-500);
           font-weight: bold;
           position: sticky;

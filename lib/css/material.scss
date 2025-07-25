@@ -61,10 +61,12 @@ button[mat-icon-button] {
 }
 
 .mat-mdc-snack-bar-container {
-  --mdc-snackbar-container-color: var(--background-color) !important;
-  --mdc-snackbar-supporting-text-color: var(--text-color) !important;
-
   max-width: 99vw !important;
+}
+
+.mat-mdc-snackbar-surface {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
 }
 
 .mat-toolbar-single-row {

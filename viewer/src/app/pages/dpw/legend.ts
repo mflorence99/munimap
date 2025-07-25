@@ -61,7 +61,7 @@ interface Statistics {
     </header>
 
     <article class="form">
-      @for (metric of allMetrics; track metric.key) {
+      @for (metric of allMetrics; track metric.tag) {
         <table class="legend">
           <thead>
             <tr>
