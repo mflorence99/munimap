@@ -1,0 +1,28 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <wpt lat="43.16877" lon="-72.08677">
+    <ele>420.3192</ele>
+    <name>12&quot; 40&apos; good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.16978" lon="-72.086266">
+    <ele>422.7576</ele>
+    <name>12&quot; 30&apos; fair steel handmade</name>
+  </wpt>
+  <wpt lat="43.17028" lon="-72.08598">
+    <ele>421.5384</ele>
+    <name>8&quot; 30&apos; poor steel</name>
+  </wpt>
+  <wpt lat="43.17071" lon="-72.08568">
+    <ele>418.7952</ele>
+    <name>18&quot; 40&apos; good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.17193" lon="-72.0856">
+    <ele>0</ele>
+    <name>12&quot; 60&apos; good plastic</name>
+    <desc>Catchbasin</desc>
+  </wpt>
+</gpx>

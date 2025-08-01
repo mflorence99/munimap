@@ -1,0 +1,170 @@
+<gpx
+  xmlns="http://www.topografix.com/GPX/1/1"
+  creator="EasyTrails GPS ( http://www.easytrailsgps.com )"
+  version="1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <wpt lat="43.172287" lon="-72.08697">
+    <ele>0</ele>
+    <name>12&quot; 60&apos; good plastic</name>
+    <desc>Catchbasin</desc>
+  </wpt>
+  <wpt lat="43.175304" lon="-72.0934">
+    <ele>460.248</ele>
+    <name>12&quot; 60&apos; good plastic</name>
+    <desc>Catchbasin</desc>
+  </wpt>
+  <wpt lat="43.17515374135462" lon="-72.092854153072">
+    <ele>0</ele>
+    <name>12&quot; 30&apos; good plastic handmade</name>
+    <desc>Catchbasin</desc>
+  </wpt>
+  <wpt lat="43.17476" lon="-72.09174">
+    <ele>456.5904</ele>
+    <name>8&quot; 80&apos; steel handmade</name>
+  </wpt>
+  <wpt lat="43.17468" lon="-72.09144">
+    <ele>467.868</ele>
+    <name>8&quot; 30&apos; poor steel handmade</name>
+  </wpt>
+  <wpt lat="43.17429754830869" lon="-72.0892358258361">
+    <ele>0</ele>
+    <name>12&quot; 40&apos; poor steel handmade</name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.173206" lon="-72.08802">
+    <ele>450.1896</ele>
+    <name>12&quot; 40&apos; good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.172318" lon="-72.08707">
+    <ele>441.3504</ele>
+    <name>12&quot; 40&apos; good steel handmade</name>
+  </wpt>
+  <wpt lat="43.172295" lon="-72.085846">
+    <ele>437.6928</ele>
+    <name>12&quot; 60&apos; good plastic concrete</name>
+    <desc>Catchbasin</desc>
+  </wpt>
+  <wpt lat="43.172848" lon="-72.08595">
+    <ele>434.34</ele>
+    <name>12&quot; 40&apos; good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.1733" lon="-72.085976">
+    <ele>0</ele>
+    <name>24&quot; 50&apos; good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.17516791461159" lon="-72.08529295647452">
+    <ele>0</ele>
+    <name>12&quot; 30&apos; good steel handmade</name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.180138" lon="-72.08225">
+    <ele>446.2272</ele>
+    <name>30x48&quot; 30&apos; good steel handmade</name>
+  </wpt>
+  <wpt lat="43.18137520317896" lon="-72.08183325582034">
+    <ele>0</ele>
+    <name>12&quot; 30&apos; good plastic handmade</name>
+    <desc>Goes to catchbasin and private pipe to outfall</desc>
+  </wpt>
+  <wpt lat="43.182262" lon="-72.08122">
+    <ele>447.4464</ele>
+    <name>12&quot; 20&apos; fair steel handmade</name>
+    <desc>Should be 30&apos; long</desc>
+  </wpt>
+  <wpt lat="43.182632" lon="-72.080574">
+    <ele>440.7408</ele>
+    <name>24&quot; 40&apos; 2024 good steel handmade</name>
+  </wpt>
+  <wpt lat="43.184048" lon="-72.080475">
+    <ele>438.3024</ele>
+    <name>12&quot; 40&apos; good steel handmade</name>
+  </wpt>
+  <wpt lat="43.185715" lon="-72.08041">
+    <ele>395.6304</ele>
+    <name>15&quot; 30&apos; 2020 good steel handmade</name>
+  </wpt>
+  <wpt lat="43.18616" lon="-72.08026">
+    <ele>468.7824</ele>
+    <name>18&quot; 35&apos; 2024 good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.18895" lon="-72.079475">
+    <ele>466.03918</ele>
+    <name>18&quot; 40&apos; poor steel handmade</name>
+  </wpt>
+  <wpt lat="43.189068" lon="-72.07953">
+    <ele>493.776</ele>
+    <name>10&quot; 30&apos; fair steel handmade</name>
+  </wpt>
+  <wpt lat="43.18988" lon="-72.0791">
+    <ele>472.7448</ele>
+    <name>18&quot; 40&apos; 2024 good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.190342" lon="-72.07904">
+    <ele>469.6968</ele>
+    <name>12&quot; 30&apos; poor steel handmade moderate</name>
+  </wpt>
+  <wpt lat="43.19047" lon="-72.07898">
+    <ele>462.9912</ele>
+    <name>18&quot; 30&apos; poor steel handmade</name>
+  </wpt>
+  <wpt lat="43.19100074673696" lon="-72.07883639543664">
+    <ele>0</ele>
+    <name>12&quot; 30&apos; poor steel handmade</name>
+  </wpt>
+  <wpt lat="43.191425" lon="-72.078835">
+    <ele>418.4904</ele>
+    <name>12&quot; 20&apos; poor steel handmade</name>
+    <desc>Make longer and need to fix outlet</desc>
+  </wpt>
+  <wpt lat="43.173912" lon="-72.09774">
+    <ele>0</ele>
+    <name>6&quot; 30&apos; good steel handmade</name>
+  </wpt>
+  <wpt lat="43.198486" lon="-72.07999">
+    <ele>0</ele>
+    <name>12&quot; 30&apos; 2024 good steel handmade</name>
+  </wpt>
+  <wpt lat="43.200256" lon="-72.07939">
+    <ele>488.5944</ele>
+    <name>12&quot; 25&apos; poor steel handmade</name>
+  </wpt>
+  <wpt lat="43.20298" lon="-72.07878">
+    <ele>487.68</ele>
+    <name>12&quot; 30&apos; poor plastic handmade minor</name>
+  </wpt>
+  <wpt lat="43.20426" lon="-72.07887">
+    <ele>0</ele>
+    <name>12&quot; 35&apos; poor steel handmade</name>
+  </wpt>
+  <wpt lat="43.20513982710753" lon="-72.07875509578007">
+    <ele>0</ele>
+    <name>30&quot; 30&apos; 2021 good steel handmade</name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.2064659026990" lon="-72.078062868568">
+    <ele>0</ele>
+    <name>12&quot; 20&apos; good steel handmade</name>
+    <desc>LOCATION EXTRAPOLATED</desc>
+  </wpt>
+  <wpt lat="43.207333" lon="-72.07776">
+    <ele>490.1184</ele>
+    <name>12&quot; 30&apos; good plastic handmade</name>
+  </wpt>
+  <wpt lat="43.2078" lon="-72.07751">
+    <ele>513.8928</ele>
+    <name>12&quot; 60&apos; good plastic handmade</name>
+  </wpt>
+  <!-- <wpt lat="43.16014" lon="-72.0833">
+    <ele>0</ele>
+    <name>12&quot; 30&apos; 2024 good steel handmade</name>
+  </wpt>
+  <wpt lat="43.16014" lon="-72.0833">
+    <ele>0</ele>
+    <name>15&quot; 40&apos; good steel handmade</name>
+  </wpt>
+  <wpt lat="43.16014" lon="-72.0833">
+    <ele>0</ele>
+    <name>28&quot; 20&apos; poor steel handmade</name>
+  </wpt> -->
+</gpx>
