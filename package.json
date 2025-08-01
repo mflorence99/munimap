@@ -128,7 +128,7 @@
     "fast-copy": "^3",
     "fast-equals": "^5",
     "file-saver": "^2",
-    "firebase": "^12",
+    "firebase": "^11",
     "fontfaceobserver": "^2",
     "fuzzysort": "^3",
     "globalthis": "^1",
