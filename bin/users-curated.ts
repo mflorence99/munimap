@@ -10,87 +10,122 @@ import chalk from 'chalk';
 
 const PROFILES = [
   {
-    email: 'mflo999@gmail.com',
+    email: 'cmoskey@gmail.com'
+  },
+  {
+    email: 'ethayer@washingtonnh.org',
     workgroup:
-      'nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com norm.bernaiche@gmail.com'
+      'mflo999+dpw@gmail.com ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com lindatcook@gmail.com norm.bernaiche@gmail.com'
+  },
+  {
+    email: 'kchidester@washingtonnh.org',
+    workgroup:
+      'mflo999@gmail.com nick@mnassessing.com linda.cook@gmail.com lindatcook@gmail.com norm.bernaiche@gmail.com'
+  },
+  {
+    email: 'linda.cook@gmail.com',
+    workgroup:
+      'nick@mnassessing.com kchidester@washingtonnh.org lindatcook@gmail.com mflo999@gmail.com norm.bernaiche@gmail.com'
+  },
+  {
+    email: 'lindatcook@gmail.com',
+    workgroup:
+      'nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com  mflo999@gmail.com norm.bernaiche@gmail.com'
+  },
+  {
+    email: 'ljg@gsinet.net',
+    workgroup:
+      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com lindatcook@gmail.com norm.bernaiche@gmail.com'
+  },
+  {
+    email: 'marshal@gsinet.net'
   },
   {
     email: 'mflo999+dpw@gmail.com',
     workgroup:
-      'ethayer@washingtonnh.org ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com norm.bernaiche@gmail.com'
+      'ethayer@washingtonnh.org ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com lindatcook@gmail.com norm.bernaiche@gmail.com'
   },
   {
     email: 'mflo999+flo@gmail.com',
     workgroup: 'mflo999@gmail.com'
   },
   {
-    email: 'cmoskey@gmail.com'
-  },
-  {
-    email: 'marshal@gsinet.net'
-  },
-  {
-    email: 'ljg@gsinet.net',
+    email: 'mflo999@gmail.com',
     workgroup:
-      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com norm.bernaiche@gmail.com'
+      'nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com lindatcook@gmail.com norm.bernaiche@gmail.com'
   },
   {
-    email: 'ethayer@washingtonnh.org',
+    email: 'nick@mnassessing.com',
     workgroup:
-      'mflo999+dpw@gmail.com ljg@gsinet.net nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com norm.bernaiche@gmail.com'
+      'mflo999@gmail.com kchidester@washingtonnh.org linda.cook@gmail.com lindatcook@gmail.com norm.bernaiche@gmail.com'
   },
   {
-    email: 'ljg@gsinet.net',
+    email: 'norm.bernaiche@gmail.com',
     workgroup:
-      'mflo999+dpw@gmail.com ethayer@washingtonnh.org nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com norm.bernaiche@gmail.com'
+      'nick@mnassessing.com kchidester@washingtonnh.org linda.cook@gmail.com  lindatcook@gmail.com mflo999@gmail.com'
   }
 ];
 
 const USERS = [
   {
-    email: 'mflo999@gmail.com',
-    password: '33Buster44@@',
-    displayName: 'Mark Florence'
-  },
-  {
-    email: 'mflo999+dpw@gmail.com',
-    password: '33Buster44@@',
-    displayName: 'Mark Florence'
-  },
-  {
-    email: 'linda.cook@gmail.com',
-    password: 'password',
-    displayName: 'Linda Cook'
-  },
-  {
-    email: 'norm.bernaiche@gmail.com',
-    password: 'password',
-    displayName: 'Norm Bernaichec'
-  },
-  {
-    email: 'mflo999+flo@gmail.com',
-    password: 'password',
-    displayName: 'Marco Polo'
-  },
-  {
+    displayName: 'Carl Moskey',
     email: 'cmoskey@gmail.com',
-    password: 'password',
-    displayName: 'Carl Moskey'
+    password: 'password'
   },
   {
-    email: 'ljg@gsinet.net',
-    password: 'password',
-    displayName: 'Lawrence Gaskell'
-  },
-  {
+    displayName: 'Ed Thayer',
     email: 'ethayer@washingtonnh.org',
-    password: 'password',
-    displayName: 'Ed Thayer'
+    password: 'password'
   },
   {
+    displayName: 'Kristine Chidester',
+    email: 'kchidester@washingtonnh.org',
+    password: 'password'
+  },
+  {
+    displayName: 'Linda Cook',
+    email: 'linda.cook@gmail.com',
+    password: 'password'
+  },
+  {
+    displayName: 'Linda Cook',
+    email: 'lindatcook@gmail.com',
+    password: 'password'
+  },
+  {
+    displayName: 'Lawrence Gaskell',
+    email: 'ljg@gsinet.net',
+    password: 'password'
+  },
+  {
+    displayName: 'Tom Marshall',
     email: 'marshal@gsinet.net',
-    password: 'password',
-    displayName: 'Tom Marshall'
+    password: 'password'
+  },
+  {
+    displayName: 'Mark Florence',
+    email: 'mflo999+dpw@gmail.com',
+    password: '33Buster44@@'
+  },
+  {
+    displayName: 'Marco Polo',
+    email: 'mflo999+flo@gmail.com',
+    password: 'password'
+  },
+  {
+    displayName: 'Mark Florence',
+    email: 'mflo999@gmail.com',
+    password: '33Buster44@@'
+  },
+  {
+    displayName: 'Nick Taffee',
+    email: 'nick@mnassessing.com',
+    password: 'password'
+  },
+  {
+    displayName: 'Norm Bernaiche',
+    email: 'norm.bernaiche@gmail.com',
+    password: 'password'
   }
 ];
 
