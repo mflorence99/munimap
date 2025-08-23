@@ -34,6 +34,7 @@
           "options": {
             "allowedCommonJsDependencies": [
               "@mapbox/togeojson",
+              "@turf/jsts",
               "color-name",
               "concaveman",
               "debounce-decorator",
@@ -74,6 +75,7 @@
             "serviceWorker": true,
             "sourceMap": true,
             "styles": [
+              "./lib/css/colors.scss",
               "./lib/css/globals.scss",
               "./lib/css/common.scss",
               "./lib/css/material.scss",
@@ -137,6 +139,7 @@
           "options": {
             "allowedCommonJsDependencies": [
               "@mapbox/togeojson",
+              "@turf/jsts",
               "color-name",
               "concaveman",
               "debounce-decorator",
@@ -178,6 +181,7 @@
             "serviceWorker": true,
             "sourceMap": true,
             "styles": [
+              "./lib/css/colors.scss",
               "./lib/css/globals.scss",
               "./lib/css/common.scss",
               "./lib/css/material.scss",

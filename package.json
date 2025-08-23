@@ -2,11 +2,11 @@
   "name": "munimap",
   "version": "6.1.2",
   "description": "MuniMap",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/mflorence99/munimap.git"
   },
-  "license": "MIT",
   "author": "Mark Florence",
   "scripts": {
     "assets:viewer:henniker": "cp ./data/'NEW HAMPSHIRE'/MERRIMACK/HENNIKER/*.geojson ./viewer/assets",
