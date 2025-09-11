@@ -41,7 +41,7 @@ import { viewChild } from '@angular/core';
       class="legend ol-legend ol-unselectable ol-control app-ol-control-apdvdlegend">
       <header class="header">
         <h1 class="title">{{ title() }}</h1>
-        <h2 class="subtitle">February 29, 2024</h2>
+        <h2 class="subtitle">October, 2025</h2>
       </header>
 
       <table class="areaByUsage">
