@@ -18,7 +18,7 @@ import { viewChild } from '@angular/core';
   providers: [DestroyService],
   selector: 'app-contextmenu',
   template: `
-    @if (contextMenu) {
+    @if (contextMenu()) {
       <div
         #trigger
         class="trigger"
@@ -34,7 +34,7 @@ import { viewChild } from '@angular/core';
     `
       .trigger {
         position: absolute;
-        visibility: fixed;
+        visibility: visible;
       }
     `
   ],

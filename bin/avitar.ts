@@ -114,7 +114,7 @@ function updateFromAvitar(): void {
     .map((id) => [avitarByID[id], featureByID[id]])
     .filter(([_, feature]) => !!feature)
     .forEach(([avitar, feature]) => {
-      console.log(chalk.green(`... ${feature.id}`));
+      // console.log(chalk.green(`... ${feature.id}`));
       // 👇 assessment
       feature.properties.building$ = avitar.BLDTXVAL;
       feature.properties.land$ = avitar.LNDTXVAL;
