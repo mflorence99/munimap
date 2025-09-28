@@ -5,7 +5,7 @@ import { OLMapComponent } from './ol-map';
 import { OLSourceParcelsComponent } from './ol-source-parcels';
 import { ParcelID } from '../common';
 
-import * as Sentry from '@sentry/angular-ivy';
+import * as Sentry from '@sentry/angular';
 
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component } from '@angular/core';

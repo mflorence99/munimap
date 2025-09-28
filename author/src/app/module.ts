@@ -24,7 +24,7 @@ import { PropertyPage } from './pages/property/page';
 import { RootPage } from './pages/root/page';
 import { SubdivideParcelComponent } from './pages/parcels/subdivide-parcel';
 
-import * as Sentry from '@sentry/angular-ivy';
+import * as Sentry from '@sentry/angular';
 
 import { APP_INITIALIZER } from '@angular/core';
 import { AuthGuard } from '@angular/fire/auth-guard';
