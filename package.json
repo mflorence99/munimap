@@ -12,6 +12,7 @@
     "assets:viewer:henniker": "cp ./data/'NEW HAMPSHIRE'/MERRIMACK/HENNIKER/*.geojson ./viewer/assets",
     "assets:viewer:washington": "cp ./data/'NEW HAMPSHIRE'/SULLIVAN/WASHINGTON/*.geojson ./viewer/assets",
     "bin:all": "npm run bin:state && npm run bin:counties && npm run bin:towns && npm run bin:indexer && npm run bin:buildings && npm run bin:lakes && npm run bin:parcels && npm run bin:places && npm run bin:powerlines && npm run bin:railroads && npm run bin:rivers && npm run bin:roads && npm run bin:trails && npm run bin:indexer && npm run bin:curated",
+    "bin:apdvd:analysis": "deno run -A ./bin/apdvd-analysis.ts",
     "bin:avitar": "deno run -A ./bin/avitar.ts",
     "bin:aws:transfer": "deno run -A ./bin/aws-transfer.ts",
     "bin:buildings": "deno run -A ./bin/buildings.ts",

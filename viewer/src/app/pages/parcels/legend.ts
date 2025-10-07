@@ -67,7 +67,7 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd3';
                   [style.filter]="sink.accessibilityFilter"
                   class="key"></figure>
               </td>
-              <td class="desc">Proposed APDVD lots</td>
+              <td class="desc">Expanded APDVD lots</td>
               <td class="count">
                 {{ countOfProposed | number: '1.0-0' }}
               </td>
@@ -88,7 +88,7 @@ import { isAPDVDProposed } from '@lib/ol/ol-apdvd3';
                   [style.filter]="sink.accessibilityFilter"
                   class="key"></figure>
               </td>
-              <td class="desc">Existing APDVD lots</td>
+              <td class="desc">Original APDVD lots</td>
               <td class="count">
                 {{ countOfExisting | number: '1.0-0' }}
               </td>

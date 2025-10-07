@@ -64,7 +64,7 @@ import { viewChild } from '@angular/core';
                   "
                   class="key"></figure>
               </td>
-              <td class="desc">Proposed APDVD lots</td>
+              <td class="desc">Expanded APDVD lots</td>
               <td class="numeric">{{ countOfProposed | number: '1.0-0' }}</td>
               <td class="numeric">{{ areaOfProposed | number: '1.0-0' }}</td>
             </tr>
@@ -79,7 +79,7 @@ import { viewChild } from '@angular/core';
                   "
                   class="key"></figure>
               </td>
-              <td class="desc">Existing APDVD lots</td>
+              <td class="desc">Original APDVD lots</td>
               <td class="numeric">{{ countOfExisting | number: '1.0-0' }}</td>
               <td class="numeric">{{ areaOfExisting | number: '1.0-0' }}</td>
             </tr>
