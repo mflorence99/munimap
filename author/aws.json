@@ -1,12 +1,7 @@
 {
   "certificateName": "*.munimap.online",
   "domainName": "author.munimap.online",
-  "provider": {
-    "name": "aws",
-    "httpApi": {
-      "payload": "1.0"
-    }
-  },
+  "provider": "aws",
   "region": "us-east-1",
   "service": "munimap-author",
   "stage": "dev"
