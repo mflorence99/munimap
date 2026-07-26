@@ -1,12 +1,12 @@
 {
   "name": "munimap",
-  "version": "9.1.2",
+  "version": "9.2.0",
   "description": "MuniMap",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/mflorence99/munimap.git"
   },
+  "license": "MIT",
   "author": "Mark Florence",
   "scripts": {
     "assets:viewer:henniker": "cp ./data/'NEW HAMPSHIRE'/MERRIMACK/HENNIKER/*.geojson ./viewer/assets",
@@ -76,9 +76,9 @@
     "firebase:live:patch:culverts": "deno run -A ./bin/patch-culverts.ts",
     "firebase:live:restore": "deno run -A ./bin/restore.ts",
     "firebase:live:users:curated": "deno run -A ./bin/users-curated.ts",
+    "postinstall": "npm run patcher",
     "lint": "eslint ./author/ ./lib/ ./proxy/ ./viewer/ ./worker/ && deno lint ./bin/",
     "patcher": "deno run -A ./bin/patcher.ts",
-    "postinstall": "npm run patcher",
     "prettier": "prettier --write .",
     "serve:author": "ng serve author --port 4200",
     "serve:author:ssl": "ws -p 8100 --hostname author.lots.online --cert ./.ssh/author.lots.online.pem --key ./.ssh/author.lots.online-key.pem --https --spa index.html --directory ./dist/tmp/deploy --log.format dev",

@@ -68,7 +68,7 @@ function saveGeoJSON(): void {
   };
   writeFileSync(
     './bin/assets/washington-parcels.geojson',
-    JSON.stringify(geojson)
+    JSON.stringify(geojson, null, 2)
   );
 }
 
@@ -116,17 +116,32 @@ function updateFromAvitar(): void {
     .forEach(([avitar, feature]) => {
       // console.log(chalk.green(`... ${feature.id}`));
       // 👇 assessment
-      feature.properties.building$ = avitar.BLDTXVAL;
-      feature.properties.land$ = avitar.LNDTXVAL;
-      feature.properties.other$ = avitar.FEATXVAL;
-      feature.properties.taxed$ = avitar.TOTTXVAL;
+      updateFromAvitarImpl(feature, avitar.BLDTXVAL, 'building$');
+      updateFromAvitarImpl(feature, avitar.LNDTXVAL, 'land$');
+      updateFromAvitarImpl(feature, avitar.FEATXVAL, 'other$');
+      updateFromAvitarImpl(feature, avitar.TOTTXVAL, 'taxed$');
       // 👇 other data
+      updateFromAvitarImpl(
+        feature,
+        `${avitar.ADDRESS} ${avitar.ADDRESS2} ${avitar.CITY} ${avitar.STATE} ${avitar.ZIP}`
+          .replace(/\s\s+/g, ' ')
+          .trim(),
+        'addressOfOwner'
+      );
       feature.properties.addressOfOwner =
         `${avitar.ADDRESS} ${avitar.ADDRESS2} ${avitar.CITY} ${avitar.STATE} ${avitar.ZIP}`
           .replace(/\s\s+/g, ' ')
           .trim();
+      updateFromAvitarImpl(feature, avitar.NGHBRHD, 'neighborhood');
       feature.properties.neighborhood = avitar.NGHBRHD;
     });
+}
+
+function updateFromAvitarImpl(feature, src, fld): void {
+  if (feature.properties[fld] != src) {
+    console.log(chalk.green(`... ${feature.id}.${fld} = ${src}`));
+    feature.properties[fld] = src;
+  }
 }
 
 const _sample = {
