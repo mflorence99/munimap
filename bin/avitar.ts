@@ -47,8 +47,6 @@ function main(): void {
     eliminateStolenParcels();
     updateFromAvitar();
     searchForAnomalies();
-    // jsome(avitarByID["15-70-01"]);
-    // jsome(featureByID["9-7"]);
     saveGeoJSON();
   } catch (error: any) {
     console.log(chalk.red(error.message));
@@ -128,11 +126,14 @@ function updateFromAvitar(): void {
           .trim(),
         'addressOfOwner'
       );
-      feature.properties.addressOfOwner =
-        `${avitar.ADDRESS} ${avitar.ADDRESS2} ${avitar.CITY} ${avitar.STATE} ${avitar.ZIP}`
-          .replace(/\s\s+/g, ' ')
-          .trim();
       updateFromAvitarImpl(feature, avitar.NGHBRHD, 'neighborhood');
+      if (avitar.COOWNER)
+        updateFromAvitarImpl(
+          feature,
+          `${avitar.OWNER} + ${avitar.COOWNER}`.replace(/\s\s+/g, ' ').trim(),
+          'owner'
+        );
+      else updateFromAvitarImpl(feature, avitar.OWNER, 'owner');
       feature.properties.neighborhood = avitar.NGHBRHD;
     });
 }
