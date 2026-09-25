@@ -1949,7 +1949,7 @@
         "areas": [
           5.80757386254302
         ],
-        "building$": 277300,
+        "building$": 280000,
         "callouts": [],
         "centers": [
           [
@@ -1999,7 +1999,7 @@
         "orientations": [
           46.006966377811665
         ],
-        "other$": 43600,
+        "other$": 38600,
         "owner": "RIVOSA REVOCABLE TRUST + RIVOSA, DEBORAH J, TRUSTEE",
         "perimeters": [
           2494.8592618166945
@@ -2007,7 +2007,7 @@
         "sqarcities": [
           0.5983445172948818
         ],
-        "taxed$": 616400,
+        "taxed$": 614100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -2721,7 +2721,7 @@
         "areas": [
           1.4187085100011383
         ],
-        "building$": 194500,
+        "building$": 196500,
         "callouts": [],
         "centers": [
           [
@@ -2765,7 +2765,7 @@
         "sqarcities": [
           0.7688816277275116
         ],
-        "taxed$": 442100,
+        "taxed$": 444100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -5192,7 +5192,7 @@
         "areas": [
           1.348336179292564
         ],
-        "building$": 547900,
+        "building$": 553200,
         "callouts": [],
         "centers": [
           [
@@ -5239,7 +5239,7 @@
         "sqarcities": [
           0.4792399986223521
         ],
-        "taxed$": 787200,
+        "taxed$": 792500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -5459,7 +5459,7 @@
         "areas": [
           1.3708290580000697
         ],
-        "building$": 224100,
+        "building$": 226400,
         "callouts": [],
         "centers": [
           [
@@ -5504,7 +5504,7 @@
         "sqarcities": [
           0.5361820191659175
         ],
-        "taxed$": 460400,
+        "taxed$": 462700,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -7135,7 +7135,7 @@
         "use": "R1A",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "10-49",
       "bbox": [
@@ -8198,7 +8198,7 @@
         "use": "R1A",
         "zone": "02",
         "addressOfOwner": "PO BOX 283 WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "10-58",
       "bbox": [
@@ -9855,7 +9855,7 @@
           29.93522840756612,
           0.008035237115601421
         ],
-        "building$": 175300,
+        "building$": 177100,
         "callouts": [
           null,
           [
@@ -9928,7 +9928,7 @@
           -88.32738597671671,
           30.43839016675163
         ],
-        "other$": 35400,
+        "other$": 30400,
         "owner": "ARCHAMBAULT, AMY L",
         "perimeters": [
           5593.748669118021,
@@ -9938,7 +9938,7 @@
           0.5156855234665869,
           0.6541380706181243
         ],
-        "taxed$": 273897,
+        "taxed$": 270697,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -10268,7 +10268,7 @@
         "areas": [
           12.82306633803612
         ],
-        "building$": 583400,
+        "building$": 588900,
         "callouts": [],
         "centers": [
           [
@@ -10303,7 +10303,7 @@
         "orientations": [
           57.767730452361434
         ],
-        "other$": 32100,
+        "other$": 27100,
         "owner": "CUMMINGS, ADAM G + CUMMINGS, JANET L",
         "perimeters": [
           3684.47198007516
@@ -10311,7 +10311,7 @@
         "sqarcities": [
           0.5002127718284545
         ],
-        "taxed$": 671885,
+        "taxed$": 672385,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -11396,7 +11396,7 @@
         "areas": [
           56.48893186453432
         ],
-        "building$": 570700,
+        "building$": 576200,
         "callouts": [],
         "centers": [
           [
@@ -11470,7 +11470,7 @@
         "sqarcities": [
           0.3762100272304176
         ],
-        "taxed$": 1033448,
+        "taxed$": 1038948,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -14178,7 +14178,7 @@
         "use": "R1",
         "zone": "",
         "addressOfOwner": "232 LEMPSTER MTN RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "11-30",
       "bbox": [
@@ -17149,7 +17149,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "PO BOX 262 WASHINGBTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "11-43",
       "bbox": [
@@ -19489,7 +19489,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "PO BOX 454 WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "11-59",
       "bbox": [
@@ -22208,7 +22208,7 @@
           -8.213389632713557
         ],
         "other$": 1500,
-        "owner": "GREGG, APRIL",
+        "owner": "GREGG, APRIL TRUST + GREGG, APRIL TRUSTEE",
         "perimeters": [
           1233.943172539385
         ],
@@ -23137,7 +23137,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "10 MAIN STREET UNIT#5 PITTSFIELD NH 03263",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "11-76",
       "bbox": [
@@ -24263,7 +24263,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "59 OLD MARLOW RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "11-81",
       "bbox": [
@@ -26556,7 +26556,7 @@
         "areas": [
           0.5668147554710706
         ],
-        "building$": 235000,
+        "building$": 237300,
         "callouts": [],
         "centers": [
           [
@@ -26591,7 +26591,7 @@
         "orientations": [
           -64.22398491337297
         ],
-        "other$": 10300,
+        "other$": 5300,
         "owner": "JAFFE, JACOB D + JAFFE, IRIS Z",
         "perimeters": [
           733.645877327206
@@ -26599,7 +26599,7 @@
         "sqarcities": [
           0.5260380275693688
         ],
-        "taxed$": 501000,
+        "taxed$": 498300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -31389,7 +31389,7 @@
           -37.0601989823702
         ],
         "other$": 11900,
-        "owner": "KOWALSKI, ROY EDWARD REV LIVIN + KOWALSKI, PATRICIA ANN REV LIV",
+        "owner": "KOWALSKI, PATRICIA ANN REVC LI + KOWALSKI, PATRICIA ANN TRUSTEE",
         "perimeters": [
           2120.1259718187343
         ],
@@ -32907,7 +32907,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "632 WASHINGTON DR WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "12-141",
       "bbox": [
@@ -34873,7 +34873,7 @@
         "areas": [
           13.90659309314623
         ],
-        "building$": 1005100,
+        "building$": 1014700,
         "callouts": [],
         "centers": [
           [
@@ -34932,7 +34932,7 @@
         "sqarcities": [
           0.6623991772011357
         ],
-        "taxed$": 1421300,
+        "taxed$": 1430900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -36721,7 +36721,7 @@
         "areas": [
           1.2312471268640084
         ],
-        "building$": 131000,
+        "building$": 132400,
         "callouts": [],
         "centers": [
           [
@@ -36765,7 +36765,7 @@
         "sqarcities": [
           0.5931018163336179
         ],
-        "taxed$": 198500,
+        "taxed$": 199900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
@@ -48363,7 +48363,7 @@
           59.796573876145715
         ],
         "other$": 17900,
-        "owner": "ALLEN, PAMELA K",
+        "owner": "ALLEN, PAMELA K REVC TRUST + ALLEN, PAMELA K TRUSTEE",
         "perimeters": [
           8734.578172097788
         ],
@@ -49725,7 +49725,7 @@
           0.038915567488351954,
           1.1239288713279187
         ],
-        "building$": 174600,
+        "building$": 176400,
         "callouts": [
           null,
           [
@@ -49784,7 +49784,7 @@
           16.948606907082194,
           -5.382819860228352
         ],
-        "other$": 28000,
+        "other$": 23000,
         "owner": "LAPRADE, NORMAN & PAULINE REV + LAPRADE, NORMAN J & PAULINE C,",
         "perimeters": [
           966.5618287586217,
@@ -49794,7 +49794,7 @@
           0.33018274066874426,
           0.6019146997091249
         ],
-        "taxed$": 290000,
+        "taxed$": 286800,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
@@ -50538,7 +50538,7 @@
           -6.695520104784066
         ],
         "other$": 0,
-        "owner": "OTTERSON GEORGE M REVC TRUST + OTTERSON, SHARON R TRUSTEE",
+        "owner": "OTTERSON, KRISTOPHER + BUSHRE KATY",
         "perimeters": [
           5548.661388732012
         ],
@@ -50550,7 +50550,7 @@
         "usage": "190",
         "use": "CUUH",
         "zone": "02",
-        "addressOfOwner": "PO BOX 32 WASHINGTON NH 03280",
+        "addressOfOwner": "12 ELDRIDGE STREET CONCORD NH 03301",
         "ownership": "R"
       },
       "id": "12-42",
@@ -50637,7 +50637,7 @@
           -8.749458173530357
         ],
         "other$": 1700,
-        "owner": "OTTERSON, GEORGE M REVC TRUST + OTTERSON, SHARON R.TRUSTEE",
+        "owner": "OTTERSON, KRISTOPHER + BUSHRE KATY",
         "perimeters": [
           2932.1288702312204
         ],
@@ -50649,7 +50649,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "P. O. BOX 32 WASHINGTON NH 03280",
+        "addressOfOwner": "12 ELDRIDGE STREET CONCORD NH 03301",
         "ownership": "R"
       },
       "id": "12-43",
@@ -53563,7 +53563,7 @@
         "areas": [
           1.4418725023889296
         ],
-        "building$": 118300,
+        "building$": 119500,
         "callouts": [],
         "centers": [
           [
@@ -53593,7 +53593,7 @@
         "orientations": [
           6.518166214726307
         ],
-        "other$": 32500,
+        "other$": 27500,
         "owner": "CHAYER, MARK C + CHAYER, MILDRED ELLEN",
         "perimeters": [
           1122.5359904459792
@@ -53601,7 +53601,7 @@
         "sqarcities": [
           0.6417445669919437
         ],
-        "taxed$": 419400,
+        "taxed$": 415600,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -54870,7 +54870,7 @@
           58.76181618524413
         ],
         "other$": 15800,
-        "owner": "GAGE, KRISTINA + GAGE, GILBERT D III",
+        "owner": "FINO, ABBY J & CHRISTOPHER R",
         "perimeters": [
           2867.527701208555
         ],
@@ -54882,8 +54882,8 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "291 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "addressOfOwner": "756 BOG ROAD HILLSBOROUGH NH 03244",
+        "ownership": "R"
       },
       "id": "12-6",
       "bbox": [
@@ -58580,7 +58580,7 @@
           0.32100383520530956,
           0.0003932986802401503
         ],
-        "building$": 249500,
+        "building$": 252000,
         "callouts": [],
         "centers": [
           [
@@ -58624,7 +58624,7 @@
           22.217248580344233,
           -69.00159095892843
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "PLATER, KARL + MITTEN, COLLEEN",
         "perimeters": [
           498.3205198495528
@@ -58633,7 +58633,7 @@
           0.7028597049332129,
           0.021528854489184755
         ],
-        "taxed$": 305000,
+        "taxed$": 302500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -58709,7 +58709,7 @@
         "areas": [
           0.4479072029504907
         ],
-        "building$": 185500,
+        "building$": 187500,
         "callouts": [],
         "centers": [
           [
@@ -58751,7 +58751,7 @@
         "sqarcities": [
           0.5240518716935191
         ],
-        "taxed$": 440500,
+        "taxed$": 442500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -58851,7 +58851,7 @@
         "areas": [
           0.9447553375377011
         ],
-        "building$": 316200,
+        "building$": 319400,
         "callouts": [],
         "centers": [
           [
@@ -58899,7 +58899,7 @@
         "sqarcities": [
           0.7124240927654881
         ],
-        "taxed$": 627000,
+        "taxed$": 630200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -59172,7 +59172,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "20 WALNUT CIRCLE WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "12-83",
       "bbox": [
@@ -61405,7 +61405,7 @@
         "areas": [
           0.5286208129172103
         ],
-        "building$": 250400,
+        "building$": 252900,
         "callouts": [],
         "centers": [
           [
@@ -61451,7 +61451,7 @@
         "sqarcities": [
           0.526994734075128
         ],
-        "taxed$": 498700,
+        "taxed$": 501200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -61947,7 +61947,7 @@
           -75.90653362171857
         ],
         "other$": 0,
-        "owner": "GELATT FAMILY TRUST 2011 + GELATT MILES R. JR & JOY A. TR",
+        "owner": "GELATT FAMILY TRUST + GELATT MILES R. JR & JOY A. TR",
         "perimeters": [
           812.1111413787667
         ],
@@ -67624,7 +67624,7 @@
         "areas": [
           5.086911699724756
         ],
-        "building$": 242700,
+        "building$": 245100,
         "callouts": [],
         "centers": [
           [
@@ -67669,7 +67669,7 @@
         "sqarcities": [
           0.5408584766845947
         ],
-        "taxed$": 331700,
+        "taxed$": 334100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -68710,7 +68710,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "2667 EAST WASHINGTON ROAD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "13-9",
       "bbox": [
@@ -68830,7 +68830,7 @@
           1.8044432801764934,
           1.3360292854875107
         ],
-        "building$": 342600,
+        "building$": 346100,
         "callouts": [],
         "centers": [
           [
@@ -68882,7 +68882,7 @@
           2.8539156526150435,
           -2.676444702599184
         ],
-        "other$": 24300,
+        "other$": 19300,
         "owner": "ZUCKER, STEPHEN D REVOCABLE TR + ZUCKER, STEPHEN D & LAOR, TAL,",
         "perimeters": [
           1436.1517703460447
@@ -68891,7 +68891,7 @@
           0.522439821328903,
           0.7553082256150784
         ],
-        "taxed$": 647900,
+        "taxed$": 646400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -69529,7 +69529,7 @@
         "areas": [
           2.0117377599909307
         ],
-        "building$": 292200,
+        "building$": 295200,
         "callouts": [],
         "centers": [
           [
@@ -69574,7 +69574,7 @@
         "sqarcities": [
           0.6638744171460013
         ],
-        "taxed$": 352200,
+        "taxed$": 355200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -74111,7 +74111,7 @@
         "areas": [
           0.7202196422563426
         ],
-        "building$": 215800,
+        "building$": 217900,
         "callouts": [],
         "centers": [
           [
@@ -74152,7 +74152,7 @@
         "sqarcities": [
           0.7421509869673136
         ],
-        "taxed$": 455600,
+        "taxed$": 457700,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -74584,7 +74584,7 @@
         "areas": [
           0.7178716287144755
         ],
-        "building$": 297900,
+        "building$": 301100,
         "callouts": [],
         "centers": [
           [
@@ -74624,7 +74624,7 @@
         "sqarcities": [
           0.6902489274861738
         ],
-        "taxed$": 543300,
+        "taxed$": 546500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -75075,7 +75075,7 @@
         "areas": [
           0.6940413502708864
         ],
-        "building$": 122400,
+        "building$": 123700,
         "callouts": [],
         "centers": [
           [
@@ -75114,7 +75114,7 @@
         "sqarcities": [
           0.6445877328509053
         ],
-        "taxed$": 371500,
+        "taxed$": 372800,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -75602,7 +75602,7 @@
         "areas": [
           0.7164847217221019
         ],
-        "building$": 214600,
+        "building$": 216800,
         "callouts": [],
         "centers": [
           [
@@ -75632,7 +75632,7 @@
         "orientations": [
           -12.19654085456095
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "GRENDELL, KRISTEN M. + GRENDELL, LUCAS R.",
         "perimeters": [
           706.4967065851521
@@ -75640,7 +75640,7 @@
         "sqarcities": [
           0.7857778702753507
         ],
-        "taxed$": 274100,
+        "taxed$": 271300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -77854,7 +77854,7 @@
         "areas": [
           1.0576259193454505
         ],
-        "building$": 404200,
+        "building$": 408000,
         "callouts": [],
         "centers": [
           [
@@ -77891,7 +77891,7 @@
         "orientations": [
           -7.106078878079714
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "CALABRO, JOHN R + CALABRO, JENNIFER M",
         "perimeters": [
           1065.9386613205456
@@ -77899,7 +77899,7 @@
         "sqarcities": [
           0.4837220390670586
         ],
-        "taxed$": 576700,
+        "taxed$": 575500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -79050,7 +79050,7 @@
           78.54429226353199
         ],
         "other$": 5200,
-        "owner": "BARLOW, DAVID AND KATHY + BARRY, ANNE RUTH BARLOW",
+        "owner": "BARLOW FAMILY REVOCABLE TRUST + BARLOW, DAVID S & KATHY S TRUA",
         "perimeters": [
           847.8262407634985
         ],
@@ -79126,7 +79126,7 @@
         "areas": [
           0.7572009430178446
         ],
-        "building$": 213000,
+        "building$": 215100,
         "callouts": [],
         "centers": [
           [
@@ -79159,7 +79159,7 @@
         "orientations": [
           76.77982505217238
         ],
-        "other$": 24400,
+        "other$": 19400,
         "owner": "MILLER, TODD A + MILLER, SASCHA F",
         "perimeters": [
           786.1938437675482
@@ -79167,7 +79167,7 @@
         "sqarcities": [
           0.6706022583850862
         ],
-        "taxed$": 506300,
+        "taxed$": 503400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -80816,7 +80816,7 @@
         "areas": [
           0.9908415267992783
         ],
-        "building$": 327200,
+        "building$": 330300,
         "callouts": [],
         "centers": [
           [
@@ -80848,7 +80848,7 @@
         "orientations": [
           -8.408506577190707
         ],
-        "other$": 22900,
+        "other$": 17900,
         "owner": "WORSHAM, STEPHEN J & MEGAN F",
         "perimeters": [
           1024.5850528652015
@@ -80856,7 +80856,7 @@
         "sqarcities": [
           0.5922141195884651
         ],
-        "taxed$": 605600,
+        "taxed$": 603700,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -81098,7 +81098,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "12 BEARD LANE GRAFTON NH 03240",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "14-207",
       "bbox": [
@@ -83390,7 +83390,7 @@
         "areas": [
           1.460873187215891
         ],
-        "building$": 356600,
+        "building$": 359900,
         "callouts": [],
         "centers": [
           [
@@ -83434,7 +83434,7 @@
         "sqarcities": [
           0.540728870747539
         ],
-        "taxed$": 446700,
+        "taxed$": 450000,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -83568,7 +83568,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "P O BOX 250 WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-228",
       "bbox": [
@@ -84019,7 +84019,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "106 ANDERSON ROAD NEWPORT NH 03773",
+        "addressOfOwner": "47 HARDING ROAD WASHINGTON NH 03280",
         "ownership": "N"
       },
       "id": "14-232",
@@ -84139,7 +84139,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "14-233",
       "bbox": [
@@ -84375,7 +84375,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "96 ASHUELOT DR WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-235",
       "bbox": [
@@ -84580,7 +84580,7 @@
         "areas": [
           1.7209000000630719
         ],
-        "building$": 218600,
+        "building$": 220800,
         "callouts": [],
         "centers": [
           [
@@ -84619,7 +84619,7 @@
         "sqarcities": [
           0.7751385494984339
         ],
-        "taxed$": 307900,
+        "taxed$": 310100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -86118,7 +86118,7 @@
         "areas": [
           0.8398825544657803
         ],
-        "building$": 295600,
+        "building$": 298500,
         "callouts": [],
         "centers": [
           [
@@ -86148,7 +86148,7 @@
         "orientations": [
           62.235595247950386
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "DOMINGUEZ, JENNIFER & NATASHA",
         "perimeters": [
           820.6021240346698
@@ -86156,12 +86156,12 @@
         "sqarcities": [
           0.6827574222065105
         ],
-        "taxed$": 368600,
+        "taxed$": 366500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "129 FISHERVILLE RD UNIT 25 CONCORD NH 03303",
+        "addressOfOwner": "23 MCKINLEY DR WASHINGTON NH 03280",
         "ownership": "N"
       },
       "id": "14-253",
@@ -88305,7 +88305,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "67 LINCOLN DR WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-273",
       "bbox": [
@@ -90303,7 +90303,7 @@
           -46.149095616643095
         ],
         "other$": 34000,
-        "owner": "ZINN, SARAH + ZINN, ROBERT",
+        "owner": "ZINN, SARA + ZINN, ROBERT",
         "perimeters": [
           680.5252539642119
         ],
@@ -90942,7 +90942,7 @@
         "areas": [
           1.8221363718818318
         ],
-        "building$": 123100,
+        "building$": 124400,
         "callouts": [],
         "centers": [
           [
@@ -90986,7 +90986,7 @@
         "orientations": [
           85.21303318241533
         ],
-        "other$": 50100,
+        "other$": 45100,
         "owner": "RANKIN, JOHN A. + RANKIN, LAURE A.",
         "perimeters": [
           1169.6887656991853
@@ -90994,7 +90994,7 @@
         "sqarcities": [
           0.768832728193033
         ],
-        "taxed$": 232700,
+        "taxed$": 229000,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
@@ -92268,7 +92268,7 @@
         "areas": [
           1.0110474354018295
         ],
-        "building$": 200500,
+        "building$": 202600,
         "callouts": [],
         "centers": [
           [
@@ -92301,7 +92301,7 @@
         "orientations": [
           36.595963026020726
         ],
-        "other$": 6400,
+        "other$": 1400,
         "owner": "F ROCK TRUST + HERSKOVITZ, LINDA, TRUSTEE",
         "perimeters": [
           871.9786812067662
@@ -92309,7 +92309,7 @@
         "sqarcities": [
           0.7570729614035013
         ],
-        "taxed$": 257800,
+        "taxed$": 254900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -92377,7 +92377,7 @@
         "areas": [
           1.1483087319233367
         ],
-        "building$": 186000,
+        "building$": 187900,
         "callouts": [],
         "centers": [
           [
@@ -92417,7 +92417,7 @@
         "sqarcities": [
           0.715942128985212
         ],
-        "taxed$": 239700,
+        "taxed$": 241600,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -92500,7 +92500,7 @@
         ],
         "id": "14-311",
         "labels": [],
-        "land$": 52200,
+        "land$": 46400,
         "lengths": [
           [
             298,
@@ -92526,7 +92526,7 @@
         "sqarcities": [
           0.6302051805825198
         ],
-        "taxed$": 285700,
+        "taxed$": 279900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -92759,7 +92759,7 @@
           27.424751461948702
         ],
         "other$": 0,
-        "owner": "PELCHAT, RANDY W. & LINDA J + BUSKEY, REAGAN & KARLINE.",
+        "owner": "BUSKEY, REAGAN & KARALINE + PELCHAT, RANDY W & LINDA J",
         "perimeters": [
           890.9324219945959
         ],
@@ -93223,7 +93223,7 @@
         "areas": [
           0.8074980847540567
         ],
-        "building$": 225200,
+        "building$": 200100,
         "callouts": [],
         "centers": [
           [
@@ -93262,13 +93262,13 @@
         "sqarcities": [
           0.7746445127410354
         ],
-        "taxed$": 298400,
+        "taxed$": 273300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "116 BILLIE JOY DRIVE SOUTH POINT OH 45680",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "14-317",
       "bbox": [
@@ -93711,7 +93711,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "20 LINCOLN DR WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-322",
       "bbox": [
@@ -93931,7 +93931,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "30 ADAMS DR WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-325",
       "bbox": [
@@ -94713,7 +94713,7 @@
           -61.41696265030501
         ],
         "other$": 0,
-        "owner": "CAYER, LYNNE J + CAYER, ROY J",
+        "owner": "CAYER, LYNNE J REVC TRUST + CAYER, LYNNE J & ROY J TRUSTEE",
         "perimeters": [
           898.4429848633301
         ],
@@ -95019,7 +95019,7 @@
         "areas": [
           1.120079177303098
         ],
-        "building$": 176300,
+        "building$": 190700,
         "callouts": [],
         "centers": [
           [
@@ -95063,7 +95063,7 @@
         "sqarcities": [
           0.7989855861158639
         ],
-        "taxed$": 228800,
+        "taxed$": 243200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
@@ -96028,7 +96028,7 @@
         "areas": [
           3.351604163597185
         ],
-        "building$": 227800,
+        "building$": 230100,
         "callouts": [],
         "centers": [
           [
@@ -96062,7 +96062,7 @@
         "orientations": [
           -25.598549207668384
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "CASTO, CHARLES",
         "perimeters": [
           1663.2403412219562
@@ -96070,7 +96070,7 @@
         "sqarcities": [
           0.6632172968171434
         ],
-        "taxed$": 287400,
+        "taxed$": 284700,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -96536,7 +96536,7 @@
         "areas": [
           2.245918909118272
         ],
-        "building$": 293400,
+        "building$": 296400,
         "callouts": [],
         "centers": [
           [
@@ -96566,7 +96566,7 @@
         "orientations": [
           -39.51477545555637
         ],
-        "other$": 27400,
+        "other$": 22400,
         "owner": "TRUDELLE, FAMILY TRUST OF 2015 + TRUDELLE, MARK A & ROBIN K,TRU",
         "perimeters": [
           1393.5864356111995
@@ -96574,7 +96574,7 @@
         "sqarcities": [
           0.6330520123894596
         ],
-        "taxed$": 378900,
+        "taxed$": 376900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -99022,7 +99022,7 @@
         "areas": [
           1.0443571903009858
         ],
-        "building$": 419400,
+        "building$": 423200,
         "callouts": [],
         "centers": [
           [
@@ -99066,7 +99066,7 @@
         "orientations": [
           80.39180415312654
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "ROBERT REVOCABLE TRUST + ROBERT, NORMAND & DENISE, TTEE",
         "perimeters": [
           869.1932133353072
@@ -99074,7 +99074,7 @@
         "sqarcities": [
           0.8101938129700909
         ],
-        "taxed$": 476400,
+        "taxed$": 475200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -99874,7 +99874,7 @@
         "areas": [
           3.788650770750273
         ],
-        "building$": 242100,
+        "building$": 244400,
         "callouts": [],
         "centers": [
           [
@@ -99919,7 +99919,7 @@
         "sqarcities": [
           0.7784727055656677
         ],
-        "taxed$": 341100,
+        "taxed$": 343400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -102832,7 +102832,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "PO BOX 684 MARLOW NH 03456",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-401",
       "bbox": [
@@ -102947,7 +102947,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "PO BOX 684 MARLOW NH 03456",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-402",
       "bbox": [
@@ -105817,7 +105817,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "PO BOX 156 WASHINGTON NH 85041",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "14-425",
       "bbox": [
@@ -106229,7 +106229,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "7 PINE WOODS LANE STERLING MA 01564",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "14-43",
       "bbox": [
@@ -107051,7 +107051,7 @@
         "use": "R1A",
         "zone": "02",
         "addressOfOwner": "12 PAULL ST APT #2 TAUNTON MA 03780",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "14-435",
       "bbox": [
@@ -111143,7 +111143,7 @@
         "areas": [
           0.954070416297257
         ],
-        "building$": 167700,
+        "building$": 169400,
         "callouts": [],
         "centers": [
           [
@@ -111185,7 +111185,7 @@
         "sqarcities": [
           0.7804988284359844
         ],
-        "taxed$": 229600,
+        "taxed$": 231300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -117900,7 +117900,7 @@
           -18.69936525686974
         ],
         "other$": 0,
-        "owner": "T.E.C REVOCABLE TRUST + CROSS, THOMAS E TRUSTEE",
+        "owner": "T.E.C. REVOCABLE TRUST + CROSS, THOMAS E TRUSTEE",
         "perimeters": [
           370.649761815206
         ],
@@ -119585,7 +119585,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "14-55",
       "bbox": [
@@ -120944,7 +120944,7 @@
         "areas": [
           1.1929448070803834
         ],
-        "building$": 148800,
+        "building$": 161700,
         "callouts": [],
         "centers": [
           [
@@ -120989,7 +120989,7 @@
         "sqarcities": [
           0.7533892558414726
         ],
-        "taxed$": 201200,
+        "taxed$": 214100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -122063,7 +122063,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "107 STOWELL RD. WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "14-81",
       "bbox": [
@@ -124736,7 +124736,7 @@
         "areas": [
           4.612589494161609
         ],
-        "building$": 187200,
+        "building$": 189000,
         "callouts": [],
         "centers": [
           [
@@ -124795,7 +124795,7 @@
         "orientations": [
           -0.7687716491948464
         ],
-        "other$": 40100,
+        "other$": 35100,
         "owner": "BRIGHTON FAMILY TRUST + BRIGHTON, S, K, J & SPENCER, M",
         "perimeters": [
           2272.0345303829217,
@@ -124804,7 +124804,7 @@
         "sqarcities": [
           0.5250080656483193
         ],
-        "taxed$": 456491,
+        "taxed$": 453291,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -127857,7 +127857,7 @@
           23.579122702489357
         ],
         "other$": 400,
-        "owner": "PALMISANO, MICHAEL + PALMISANO, CHERRY",
+        "owner": "FITZMORRIS, DAVIE & TRACEY",
         "perimeters": [
           848.0767003988439
         ],
@@ -127869,7 +127869,7 @@
         "usage": "300",
         "use": "EX-M",
         "zone": "02",
-        "addressOfOwner": "15 GREY ROCK RD BEDFORD NH 03110",
+        "addressOfOwner": "176 ANDREWS ROAD WOLCOTT CT 06716",
         "ownership": "I"
       },
       "id": "15-127",
@@ -128254,7 +128254,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "861 VALLEY RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "15-13",
       "bbox": [
@@ -128341,7 +128341,7 @@
         ],
         "id": "15-131",
         "labels": [],
-        "land$": 9600,
+        "land$": 24800,
         "lengths": [
           [
             202,
@@ -128358,7 +128358,7 @@
         "minWidths": [
           160
         ],
-        "neighborhood": "N-U",
+        "neighborhood": "N-V",
         "orientations": [
           24.83497648145783
         ],
@@ -128370,7 +128370,7 @@
         "sqarcities": [
           0.6675303731004073
         ],
-        "taxed$": 9600,
+        "taxed$": 24800,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -128539,7 +128539,7 @@
         "use": "R1A",
         "zone": "02",
         "addressOfOwner": "135 ADAMS DR WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "15-132",
       "bbox": [
@@ -128661,7 +128661,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "15-135",
       "bbox": [
@@ -129949,7 +129949,7 @@
         "areas": [
           1.86261401298969
         ],
-        "building$": 375400,
+        "building$": 379000,
         "callouts": [],
         "centers": [
           [
@@ -129999,7 +129999,7 @@
         "sqarcities": [
           0.8186399038158526
         ],
-        "taxed$": 441900,
+        "taxed$": 445500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -134314,7 +134314,7 @@
         "orientations": [
           -3.763532084546952
         ],
-        "other$": 4600,
+        "other$": 4000,
         "owner": "SERNOTTI, KAYLA",
         "perimeters": [
           3654.106238378912
@@ -134322,7 +134322,7 @@
         "sqarcities": [
           0.5458573640956829
         ],
-        "taxed$": 263100,
+        "taxed$": 262500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -134710,7 +134710,7 @@
         "use": "CI",
         "zone": "",
         "addressOfOwner": "306 CROYDEN TURNPKE CROYDEN NH 03773",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "15-27",
       "bbox": [
@@ -134843,7 +134843,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "306 CROYDEN TURNPKE CROYDEN NH 03773",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "15-28",
       "bbox": [
@@ -136276,7 +136276,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "104 HARVEY ST GRETNA VA 24557",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "15-37",
       "bbox": [
@@ -137367,7 +137367,7 @@
         "use": "CUUH",
         "zone": "02",
         "addressOfOwner": "104 HARVEY ST GRETNA VA 24557",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "15-40",
       "bbox": [
@@ -137961,7 +137961,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "BOX PO BOX 528 WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "15-43",
       "bbox": [
@@ -140423,7 +140423,7 @@
         "areas": [
           146.52133159924136
         ],
-        "building$": 1234600,
+        "building$": 1238200,
         "callouts": [],
         "centers": [
           [
@@ -140591,7 +140591,7 @@
         "orientations": [
           11.935177001136026
         ],
-        "other$": 312200,
+        "other$": 318200,
         "owner": "SLAVES OF THE IMMACULATE HEART",
         "perimeters": [
           13206.217900642449
@@ -140599,7 +140599,7 @@
         "sqarcities": [
           0.4646658707994753
         ],
-        "taxed$": 2147820,
+        "taxed$": 2157420,
         "town": "WASHINGTON",
         "usage": "260",
         "use": "CI",
@@ -145542,7 +145542,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "20 PEIRCE RD WILMINGTON DE 19803",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "15-75",
       "bbox": [
@@ -145870,7 +145870,7 @@
           -66.91729990103389
         ],
         "other$": 6400,
-        "owner": "LIBBY, TYLER TRUST + LIBBY, TYLER J TRUSTEE",
+        "owner": "LIBBY, TYLER J",
         "perimeters": [
           364.9109680971867
         ],
@@ -153657,7 +153657,7 @@
         "areas": [
           0.2712943014515542
         ],
-        "building$": 309200,
+        "building$": 312200,
         "callouts": [],
         "centers": [
           [
@@ -153697,7 +153697,7 @@
         "sqarcities": [
           0.7533090147247541
         ],
-        "taxed$": 537200,
+        "taxed$": 540200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -154418,7 +154418,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "1478 SOUTH MAIN ST WASHINGTON NH 06280",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "16-126",
       "bbox": [
@@ -155799,7 +155799,7 @@
         "use": "CUUH",
         "zone": "02",
         "addressOfOwner": "1107 SO MAIN ST WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-133",
       "bbox": [
@@ -157159,7 +157159,7 @@
         "areas": [
           11.962804640975332
         ],
-        "building$": 263200,
+        "building$": 265800,
         "callouts": [],
         "centers": [
           [
@@ -157220,7 +157220,7 @@
         "orientations": [
           -35.69971267363103
         ],
-        "other$": 8000,
+        "other$": 3000,
         "owner": "MANNING, JUNE H REVOCABLE TRUS",
         "perimeters": [
           3561.1239316585734
@@ -157228,7 +157228,7 @@
         "sqarcities": [
           0.5146656995538423
         ],
-        "taxed$": 326638,
+        "taxed$": 324238,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -160084,7 +160084,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "40 TUBBS HILL ROAD DEERING NH 03244",
+        "addressOfOwner": "744 SO MAIN ST WASHINGTON NH 03280",
         "ownership": "R"
       },
       "id": "16-4",
@@ -160369,7 +160369,7 @@
         "areas": [
           2.1101946435228687
         ],
-        "building$": 309800,
+        "building$": 312900,
         "callouts": [],
         "centers": [
           [
@@ -160410,7 +160410,7 @@
         "sqarcities": [
           0.5810088187722365
         ],
-        "taxed$": 381100,
+        "taxed$": 384200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
@@ -163599,7 +163599,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-58",
       "bbox": [
@@ -164704,7 +164704,7 @@
         "use": "CUUH",
         "zone": "02",
         "addressOfOwner": "15 MERRILL RD HILLSBOROUGH NH 03244",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-64",
       "bbox": [
@@ -165266,7 +165266,7 @@
         "use": "CUUH",
         "zone": "02",
         "addressOfOwner": "15 MERRILL RD HILLSBOROUGH NH 03244",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-67",
       "bbox": [
@@ -171392,7 +171392,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "1107 SO MAIN ST WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-71",
       "bbox": [
@@ -171556,7 +171556,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "1107 SO MAIN ST WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-71-01",
       "bbox": [
@@ -171706,7 +171706,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "1107 SO MAIN ST WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-71-02",
       "bbox": [
@@ -171815,7 +171815,7 @@
         "areas": [
           14.980939470952718
         ],
-        "building$": 261100,
+        "building$": 263800,
         "callouts": [],
         "centers": [
           [
@@ -171859,7 +171859,7 @@
         "orientations": [
           -60.149223743333685
         ],
-        "other$": 35400,
+        "other$": 30400,
         "owner": "STONE, DONNA M + STONE, KYLE F",
         "perimeters": [
           3577.597251391597
@@ -171867,7 +171867,7 @@
         "sqarcities": [
           0.6477771063058827
         ],
-        "taxed$": 350869,
+        "taxed$": 348569,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -173624,7 +173624,7 @@
         "use": "CUUW",
         "zone": "02",
         "addressOfOwner": "432 ALGER STREET WINCHENDON MA 01475",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "16-77-07",
       "bbox": [
@@ -176964,7 +176964,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "22 WASHINGTON DR WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "16-92",
       "bbox": [
@@ -177036,7 +177036,7 @@
         "areas": [
           2.9264718580661566
         ],
-        "building$": 318800,
+        "building$": 321900,
         "callouts": [],
         "centers": [
           [
@@ -177078,7 +177078,7 @@
         "sqarcities": [
           0.26644149008199647
         ],
-        "taxed$": 378800,
+        "taxed$": 381900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -177156,7 +177156,7 @@
         "areas": [
           2.9523142023709337
         ],
-        "building$": 144300,
+        "building$": 146000,
         "callouts": [],
         "centers": [
           [
@@ -177190,7 +177190,7 @@
         "orientations": [
           -31.563876451769808
         ],
-        "other$": 10600,
+        "other$": 5600,
         "owner": "OFMAN, PETER + OFMAN, EKATERINA",
         "perimeters": [
           2306.062983826505
@@ -177198,7 +177198,7 @@
         "sqarcities": [
           0.3041719413529671
         ],
-        "taxed$": 214400,
+        "taxed$": 211100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -182551,7 +182551,7 @@
         "use": "CUUW",
         "zone": "02",
         "addressOfOwner": "15 MERRILL RD HILLSBOROUGH NH 03244",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "17-4",
       "bbox": [
@@ -186224,7 +186224,7 @@
           -67.93534055782129
         ],
         "other$": 0,
-        "owner": "MELOON, CHARLES HEIRS + C/O SHELIA A ANDERSON EXC",
+        "owner": "COTTER, MAURICE S",
         "perimeters": [
           403.33685212252175
         ],
@@ -186236,7 +186236,7 @@
         "usage": "190",
         "use": "CUUO",
         "zone": "02",
-        "addressOfOwner": "11 STOCKHOLM ST WORCESTER MA 01607",
+        "addressOfOwner": "99 CLINTON STREET CONCORD NH 03301",
         "ownership": "N"
       },
       "id": "18-11-14",
@@ -186621,7 +186621,7 @@
           76.90148069739672
         ],
         "other$": 0,
-        "owner": "MELOON, CHARLES HEIRS + C/O SHELIA A ANDERSON EXC",
+        "owner": "COTTER, MAURICE S",
         "perimeters": [
           10957.868752800834
         ],
@@ -186633,7 +186633,7 @@
         "usage": "190",
         "use": "CUUW",
         "zone": "02",
-        "addressOfOwner": "11 STOCKHOLM ST WORCESTER MA 01607",
+        "addressOfOwner": "99 CLINTON STREET CONCORD NH 03301",
         "ownership": "N"
       },
       "id": "18-12",
@@ -187215,7 +187215,7 @@
           56.526456162889446
         ],
         "other$": 0,
-        "owner": "MELOON, CHARLES HEIRS + C/O SHELIA A ANDERSON EXC",
+        "owner": "COTTER, MAURICE S",
         "perimeters": [
           711.9092323932881
         ],
@@ -187227,7 +187227,7 @@
         "usage": "190",
         "use": "CUUO",
         "zone": "02",
-        "addressOfOwner": "11 STOCKHOLM ST WORCESTER MA 01607",
+        "addressOfOwner": "99 CLINTON STREET CONCORD NH 03301",
         "ownership": "N"
       },
       "id": "18-19",
@@ -187718,7 +187718,7 @@
         "usage": "110",
         "use": "R1W",
         "zone": "02",
-        "addressOfOwner": "1497 ROUTE 100 A PLYMOUTH VT 05056",
+        "addressOfOwner": "771 RIST HILL RD PROCTORSVILLE VT 05153",
         "ownership": "N"
       },
       "id": "18-22",
@@ -187999,7 +187999,7 @@
           -74.78025107582343
         ],
         "other$": 0,
-        "owner": "MELOON, CHARLES HEIRS + C/O SHELIA A ANDERSON EXC",
+        "owner": "COTTER, MAURICE S",
         "perimeters": [
           1050.0463202789247
         ],
@@ -188011,7 +188011,7 @@
         "usage": "190",
         "use": "CUWL",
         "zone": "02",
-        "addressOfOwner": "11 STOCKHOLM ST WORCESTER MA 01607",
+        "addressOfOwner": "99 CLINTON STREET CONCORD NH 03301",
         "ownership": "N"
       },
       "id": "18-24",
@@ -188449,7 +188449,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "18-27",
       "bbox": [
@@ -189534,7 +189534,7 @@
           -59.392778788989574
         ],
         "other$": 3900,
-        "owner": "BELL, BRIAN + BELL, HEATHER",
+        "owner": "DESFAM HEATING & COOLING, LLC",
         "perimeters": [
           586.1090217459497
         ],
@@ -189546,7 +189546,7 @@
         "usage": "110",
         "use": "R1W",
         "zone": "02",
-        "addressOfOwner": "233 KING STREET BOSCAWEN NH 03303",
+        "addressOfOwner": "276 STATE ROUT 101 AMHERST NH 03031",
         "ownership": "N"
       },
       "id": "18-32",
@@ -189870,7 +189870,7 @@
           -57.903990472359645
         ],
         "other$": 0,
-        "owner": "STROUT, DOUGLAS",
+        "owner": "CANDIDO, CHRISTOPHER A & DOREE",
         "perimeters": [
           567.8962583288599
         ],
@@ -189882,7 +189882,7 @@
         "usage": "110",
         "use": "R1W",
         "zone": "02",
-        "addressOfOwner": "217 QUINNIPIAC ST WALLINGFORD CT 06492",
+        "addressOfOwner": "76 HANOVER STREET WALLINGFORD CT 06492",
         "ownership": "N"
       },
       "id": "18-36",
@@ -191037,7 +191037,7 @@
         "use": "CUUW",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "18-9",
       "bbox": [
@@ -197548,7 +197548,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "129 BAILEY RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "20-1",
       "bbox": [
@@ -198191,7 +198191,7 @@
           64.38052274929916
         ],
         "other$": 0,
-        "owner": "CUMMINGS, ANTHONY R + CUMMINGS, RYAN",
+        "owner": "CUMMINGS, PATRICIA",
         "perimeters": [
           852.1552245486652
         ],
@@ -199106,7 +199106,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "P.O. BOX 123 WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "20-111",
       "bbox": [
@@ -200712,7 +200712,7 @@
         "areas": [
           10.982427127490983
         ],
-        "building$": 241500,
+        "building$": 244000,
         "callouts": [],
         "centers": [
           [
@@ -200784,7 +200784,7 @@
         "sqarcities": [
           0.21312979182333833
         ],
-        "taxed$": 473952,
+        "taxed$": 476452,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -204192,7 +204192,7 @@
         "areas": [
           0.8199575603799151
         ],
-        "building$": 209100,
+        "building$": 211100,
         "callouts": [],
         "centers": [
           [
@@ -204236,7 +204236,7 @@
         "orientations": [
           -53.191569716094534
         ],
-        "other$": 10000,
+        "other$": 5000,
         "owner": "HIGINSON, DOROTHY EMMA + GRUNWALD, EILEEN",
         "perimeters": [
           774.0926659576894
@@ -204244,7 +204244,7 @@
         "sqarcities": [
           0.7811805052079169
         ],
-        "taxed$": 456000,
+        "taxed$": 453000,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -206397,7 +206397,7 @@
         "areas": [
           0.9186080624219641
         ],
-        "building$": 345100,
+        "building$": 348600,
         "callouts": [],
         "centers": [
           [
@@ -206429,7 +206429,7 @@
         "orientations": [
           -68.29519578058867
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "GOODRICH, NANCY N.",
         "perimeters": [
           874.4468787220105
@@ -206437,7 +206437,7 @@
         "sqarcities": [
           0.6704909219105338
         ],
-        "taxed$": 580500,
+        "taxed$": 579000,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -206993,7 +206993,7 @@
           20.07285429617977
         ],
         "other$": 0,
-        "owner": "RAPP, CARL D + RAPP, SANDRA D",
+        "owner": "CLARK, AUSTIN H & JEAN M",
         "perimeters": [
           385.7535144652236
         ],
@@ -207005,7 +207005,7 @@
         "usage": "110",
         "use": "R1W",
         "zone": "02",
-        "addressOfOwner": "P.O. BOX 650 BLUE BELL PA 19422",
+        "addressOfOwner": "282 HUDSON ROAD BOLTON MA 01740",
         "ownership": "N"
       },
       "id": "20-152",
@@ -207285,7 +207285,7 @@
           18.479964686590407
         ],
         "other$": 3000,
-        "owner": "RAPP, CARL D + RAPP, SANDRA D",
+        "owner": "RAPP, CARL D TRUST + RAPP, CARL D TRUSTEE",
         "perimeters": [
           1424.255802651176
         ],
@@ -209651,7 +209651,7 @@
         "use": "R1A",
         "zone": "02",
         "addressOfOwner": "17 COPPER BEECH DR KINGSTON MA 02364",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "20-171",
       "bbox": [
@@ -209933,7 +209933,7 @@
         "areas": [
           3.1860765156924513
         ],
-        "building$": 361100,
+        "building$": 364600,
         "callouts": [],
         "centers": [
           [
@@ -209975,7 +209975,7 @@
         "orientations": [
           -33.50963058030667
         ],
-        "other$": 8000,
+        "other$": 3000,
         "owner": "VOAS, CARL M REVOCABLE TRUST + VOAS, CARL M, TRUSTEE",
         "perimeters": [
           1809.752460679173
@@ -209983,7 +209983,7 @@
         "sqarcities": [
           0.542492896302952
         ],
-        "taxed$": 621700,
+        "taxed$": 620200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -214098,7 +214098,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "20-27",
       "bbox": [
@@ -215505,7 +215505,7 @@
           50.25833052819152
         ],
         "other$": 2700,
-        "owner": "KIBLIN, RODNEY",
+        "owner": "BOISSE, NORMAN A III + BOISSE-OLEARY, TRACEY",
         "perimeters": [
           696.8702453930848
         ],
@@ -215517,7 +215517,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "2251 2ND NH TPK DEERING NH 03244",
+        "addressOfOwner": "2046 WILLOW AVENUE ENGLEWOOD FL 34224",
         "ownership": "R"
       },
       "id": "20-4",
@@ -216364,7 +216364,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "80 MARY ROWE DRIVE HILLSBOROUGH NH 03244",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "20-46",
       "bbox": [
@@ -217219,7 +217219,7 @@
           61.94107896771854
         ],
         "other$": 2700,
-        "owner": "FLIPPIN THE STICKS, LLC",
+        "owner": "ROBITAILLE, LOGAN D",
         "perimeters": [
           3214.184120509073
         ],
@@ -217231,8 +217231,8 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "PO BOX 203 CLAREMONT NH 03743",
-        "ownership": "R"
+        "addressOfOwner": "482 BAILEY WASHINGTON NH 03280",
+        "ownership": "N"
       },
       "id": "20-50",
       "bbox": [
@@ -217403,7 +217403,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "651 MIDDLETOWN AVE NEW HAVEN CT 06513",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "20-51",
       "bbox": [
@@ -220339,7 +220339,7 @@
         "orientations": [
           15.232765032112567
         ],
-        "other$": 5800,
+        "other$": 0,
         "owner": "LAPLANTE, LEIGH M",
         "perimeters": [
           2079.132155444063
@@ -220347,7 +220347,7 @@
         "sqarcities": [
           0.6826722977738261
         ],
-        "taxed$": 60000,
+        "taxed$": 54200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -225901,7 +225901,7 @@
         "areas": [
           0.7265317455788229
         ],
-        "building$": 88900,
+        "building$": 89800,
         "callouts": [],
         "centers": [
           [
@@ -225945,7 +225945,7 @@
         "sqarcities": [
           0.7051364335718818
         ],
-        "taxed$": 143300,
+        "taxed$": 144200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -230616,7 +230616,7 @@
           -79.1873961493362
         ],
         "other$": 3000,
-        "owner": "LINEHAN, ALYSSA M + LINEHAN, DAVID B",
+        "owner": "ELIS, ANDREW W.B. & ANNIE R.B.",
         "perimeters": [
           1688.6290864164557
         ],
@@ -230628,7 +230628,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "32 N MAIN ST WASHINGTON NH 03280",
+        "addressOfOwner": "1002 F AVENUE VIRGINIA BEACH CITY VA 23454",
         "ownership": "R"
       },
       "id": "22-10",
@@ -230880,7 +230880,7 @@
         "areas": [
           3.208451701833747
         ],
-        "building$": 595200,
+        "building$": 601300,
         "callouts": [],
         "centers": [
           [
@@ -230922,7 +230922,7 @@
         "orientations": [
           55.08916497949886
         ],
-        "other$": 65000,
+        "other$": 50000,
         "owner": "WASHINGTON, TOWN OF",
         "perimeters": [
           1674.938221132263
@@ -230930,7 +230930,7 @@
         "sqarcities": [
           0.6450985280887074
         ],
-        "taxed$": 802900,
+        "taxed$": 794000,
         "town": "WASHINGTON",
         "usage": "300",
         "use": "EX-M",
@@ -231255,7 +231255,7 @@
           -64.32901747992894
         ],
         "other$": 0,
-        "owner": "OTTERSON, GEORGE M REVC TRUST + OTTERSON, SHARON R TRUSTEE",
+        "owner": "OTTERSON, KRISTOPHER + BUSHRE KATY",
         "perimeters": [
           832.9116085082707
         ],
@@ -231267,7 +231267,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "PO BOX 32 WASHINGTON NH 03280",
+        "addressOfOwner": "12 ELDRIDGE STREET CONCORD NH 03301",
         "ownership": "R"
       },
       "id": "22-14",
@@ -231504,7 +231504,7 @@
           18.922301956740327
         ],
         "other$": 7300,
-        "owner": "OTTERSON GEORGE M REVC TRUST + OTTERSON, SHARON R TRUSTEE",
+        "owner": "OTTERSON, KRISTOPHER + BUSHRE KATY",
         "perimeters": [
           194.55628043232434
         ],
@@ -231516,7 +231516,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "PO BOX 32 WASHINGTON NH 03280",
+        "addressOfOwner": "12 ELDRIDGE STREET CONCORD NH 03301",
         "ownership": "R"
       },
       "id": "22-17",
@@ -232352,7 +232352,7 @@
           -63.30024636158784
         ],
         "other$": 26400,
-        "owner": "WASHINGTON, TOWN OF",
+        "owner": "WASHINGTON HISTORICAL SOCIETY",
         "perimeters": [
           371.0821476886768
         ],
@@ -232493,7 +232493,7 @@
           23.124447441451366
         ],
         "other$": 0,
-        "owner": "WASHINGTON, TOWN OF",
+        "owner": "WASHINGTON HISTORICAL SOCIETY",
         "perimeters": [
           371.10658946224777
         ],
@@ -233986,7 +233986,7 @@
         "orientations": [
           82.93263452646778
         ],
-        "other$": 478500,
+        "other$": 483500,
         "owner": "GRANITE STATE TELEPHONE",
         "perimeters": [
           1521.2307039994203
@@ -233994,7 +233994,7 @@
         "sqarcities": [
           0.792111555682732
         ],
-        "taxed$": 669200,
+        "taxed$": 674200,
         "town": "WASHINGTON",
         "usage": "260",
         "use": "CI",
@@ -234082,7 +234082,7 @@
         "areas": [
           1.9047530007768634
         ],
-        "building$": 273200,
+        "building$": 276100,
         "callouts": [],
         "centers": [
           [
@@ -234119,7 +234119,7 @@
         "orientations": [
           83.06996203665051
         ],
-        "other$": 76200,
+        "other$": 71200,
         "owner": "ANDREWS, KIMBERLY M + WOHL, ERIK D",
         "perimeters": [
           1185.8063066932743
@@ -234127,12 +234127,12 @@
         "sqarcities": [
           0.6546638948670174
         ],
-        "taxed$": 400000,
+        "taxed$": 397900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "PO BOX 7 GILMANTON IRON WORKS NH 03837",
+        "addressOfOwner": "PO BOX 34 WASHINGTON NH 03280",
         "ownership": "N"
       },
       "id": "22-35",
@@ -234456,7 +234456,7 @@
         "areas": [
           0.5584129122815712
         ],
-        "building$": 238400,
+        "building$": 240900,
         "callouts": [],
         "centers": [
           [
@@ -234495,7 +234495,7 @@
         "orientations": [
           -44.40588766972218
         ],
-        "other$": 30900,
+        "other$": 25900,
         "owner": "BRONSON, ANGELA + BRONSON, CHRISTOPHER",
         "perimeters": [
           835.6054396660799
@@ -234503,7 +234503,7 @@
         "sqarcities": [
           0.7677064101207595
         ],
-        "taxed$": 316600,
+        "taxed$": 314100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -234919,7 +234919,7 @@
         "areas": [
           2.8934831336927394
         ],
-        "building$": 230500,
+        "building$": 232900,
         "callouts": [],
         "centers": [
           [
@@ -234970,13 +234970,13 @@
         "sqarcities": [
           0.7832856959951535
         ],
-        "taxed$": 282600,
+        "taxed$": 285000,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "3 FAXON HILL RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "22-38",
       "bbox": [
@@ -235105,7 +235105,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "2 FIELDING LANE HAMPTON NH 03842",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "22-39",
       "bbox": [
@@ -237659,7 +237659,7 @@
           -0.00018132516727575876
         ],
         "other$": 0,
-        "owner": "JONES, MEGAN + JONES, KATHRYN",
+        "owner": "PARENT, JOSEPH JR & ALEXANDRA",
         "perimeters": [
           475.9731574166827
         ],
@@ -237671,7 +237671,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "32 FAXON HILL ROAD WASHINGTON NH 03280",
+        "addressOfOwner": "4 WATERFORD WAY APT 206 MANCHESTER NH 03102",
         "ownership": "R"
       },
       "id": "22-51",
@@ -238268,7 +238268,7 @@
           4.127485552538801
         ],
         "other$": 0,
-        "owner": "WISNIEWSKI, DAVID + BEEDE, DANIEL",
+        "owner": "RICHARDSON, RACHEL L + PIATT, JONATHAN D",
         "perimeters": [
           1487.126744640291
         ],
@@ -238280,7 +238280,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "132 EDGEWOOD DR NEW HOLLAND PA 17557",
+        "addressOfOwner": "83 OLD MARLOW RD WASHINGTON NH 03280",
         "ownership": "N"
       },
       "id": "22-56",
@@ -239599,7 +239599,7 @@
         "areas": [
           0.25259357825351914
         ],
-        "building$": 207400,
+        "building$": 209600,
         "callouts": [
           [
             -72.10110040231521,
@@ -239646,7 +239646,7 @@
         "sqarcities": [
           0.6562893661633813
         ],
-        "taxed$": 261400,
+        "taxed$": 263600,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -239793,7 +239793,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "28 LEMPSTER MT RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "22-66",
       "bbox": [
@@ -241709,7 +241709,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "PSC 831 BOX 24 FPO AE 09902",
+        "addressOfOwner": "UNIT 7900 BOX 730 DPO AE 09213",
         "ownership": "N"
       },
       "id": "23-13",
@@ -243479,7 +243479,7 @@
         "areas": [
           1.5526559799567727
         ],
-        "building$": 226900,
+        "building$": 229200,
         "callouts": [],
         "centers": [
           [
@@ -243516,7 +243516,7 @@
         "sqarcities": [
           0.40535594789721796
         ],
-        "taxed$": 298100,
+        "taxed$": 300400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -245159,7 +245159,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "43 BRADFORD SPRINGS RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "23-4",
       "bbox": [
@@ -247990,7 +247990,7 @@
         "areas": [
           4.426426086113011
         ],
-        "building$": 217400,
+        "building$": 226300,
         "callouts": [],
         "centers": [
           [
@@ -248033,7 +248033,7 @@
         "sqarcities": [
           0.5290833604302053
         ],
-        "taxed$": 295600,
+        "taxed$": 304500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -248936,7 +248936,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "11 COVE RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "24-102",
       "bbox": [
@@ -249471,7 +249471,7 @@
         "areas": [
           0.4987631981978478
         ],
-        "building$": 192100,
+        "building$": 194000,
         "callouts": [],
         "centers": [
           [
@@ -249518,7 +249518,7 @@
         "sqarcities": [
           0.6422404320381846
         ],
-        "taxed$": 464000,
+        "taxed$": 465900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -249724,7 +249724,7 @@
         "areas": [
           0.16685267829820954
         ],
-        "building$": 185600,
+        "building$": 183700,
         "callouts": [
           [
             -72.09269168791177,
@@ -249762,14 +249762,14 @@
           -46.41534160269368
         ],
         "other$": 25000,
-        "owner": "NEHER, KIMBERLLY COOK & CHRIST",
+        "owner": "NEHER, CHRISTOPHER J + COOK, KIMBERLY",
         "perimeters": [
           372.2222956140562
         ],
         "sqarcities": [
           0.7900849361061583
         ],
-        "taxed$": 475100,
+        "taxed$": 473200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -250231,7 +250231,7 @@
         "areas": [
           0.38980234794061625
         ],
-        "building$": 255900,
+        "building$": 258700,
         "callouts": [],
         "centers": [
           [
@@ -250274,7 +250274,7 @@
         "sqarcities": [
           0.7454788387373151
         ],
-        "taxed$": 490400,
+        "taxed$": 493200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -253650,7 +253650,7 @@
         "areas": [
           0.21436817951540818
         ],
-        "building$": 227500,
+        "building$": 229800,
         "callouts": [],
         "centers": [
           [
@@ -253691,7 +253691,7 @@
         "sqarcities": [
           0.7370771734925691
         ],
-        "taxed$": 268700,
+        "taxed$": 271000,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
@@ -254361,7 +254361,7 @@
         "areas": [
           0.39197959188138143
         ],
-        "building$": 463600,
+        "building$": 468300,
         "callouts": [],
         "centers": [
           [
@@ -254397,7 +254397,7 @@
         "orientations": [
           13.37688913202183
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "MASENG, ERIK & BERYL FAMILY TR + MASENG, ERIK S & BERYL M, TRUS",
         "perimeters": [
           424.64941957878654
@@ -254405,13 +254405,13 @@
         "sqarcities": [
           0.7468481513770964
         ],
-        "taxed$": 520700,
+        "taxed$": 520400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "5 CHATFIELD DR NASHUA NH 03063",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "24-140",
       "bbox": [
@@ -254624,7 +254624,7 @@
         "use": "R1",
         "zone": "02",
         "addressOfOwner": "5 CHATFIELD DR NASHUA NH 03063",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "24-142",
       "bbox": [
@@ -256049,7 +256049,7 @@
         "use": "R1A",
         "zone": "02",
         "addressOfOwner": "7 HALFMOON POND RD WASHINGTON NH 03280",
-        "ownership": "I"
+        "ownership": "R"
       },
       "id": "24-25",
       "bbox": [
@@ -258503,7 +258503,7 @@
           -77.65245589361204
         ],
         "other$": 8900,
-        "owner": "WELKES, MORRIS + WELKES, DANA",
+        "owner": "WELKES, MORRIS & DAEA + WELKES, ANETA",
         "perimeters": [
           407.5303088656056
         ],
@@ -260063,7 +260063,7 @@
         "areas": [
           0.10035883757338415
         ],
-        "building$": 108100,
+        "building$": 109200,
         "callouts": [],
         "centers": [
           [
@@ -260102,7 +260102,7 @@
         "sqarcities": [
           0.7480238996464631
         ],
-        "taxed$": 300900,
+        "taxed$": 302000,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -260380,7 +260380,7 @@
           -79.50987919005115
         ],
         "other$": 12600,
-        "owner": "WELKES, MORRIS + WELKES, DANA",
+        "owner": "WELKES, MORRIS & DANA + WELKES, ANETA",
         "perimeters": [
           412.74176463756595
         ],
@@ -260960,7 +260960,7 @@
           0.2602046253333751,
           0.1481676067293359
         ],
-        "building$": 140500,
+        "building$": 141900,
         "callouts": [],
         "centers": [
           [
@@ -261017,7 +261017,7 @@
           -13.860463806831845,
           -12.866313870016597
         ],
-        "other$": 5700,
+        "other$": 700,
         "owner": "DEFOSSE, DAVID R + DEFOSSE, DEBORAH",
         "perimeters": [
           459.3197240259707
@@ -261026,7 +261026,7 @@
           0.6880035073746282,
           0.5387511970991875
         ],
-        "taxed$": 377100,
+        "taxed$": 373500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -262374,7 +262374,7 @@
         "use": "R1W",
         "zone": "02",
         "addressOfOwner": "5 CHATFIELD DR NASHUA NH 03063",
-        "ownership": "R"
+        "ownership": "N"
       },
       "id": "24-74",
       "bbox": [
@@ -262435,7 +262435,7 @@
         "areas": [
           0.23146970488222446
         ],
-        "building$": 206800,
+        "building$": 208800,
         "callouts": [],
         "centers": [
           [
@@ -262467,7 +262467,7 @@
         "orientations": [
           -12.21073768886383
         ],
-        "other$": 6700,
+        "other$": 1700,
         "owner": "MURRAY, FRANCIS AND RANDI",
         "perimeters": [
           521.0993531757056
@@ -262475,7 +262475,7 @@
         "sqarcities": [
           0.5007911220455389
         ],
-        "taxed$": 432500,
+        "taxed$": 429500,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -263410,7 +263410,7 @@
           -66.74797032959407
         ],
         "other$": 13300,
-        "owner": "SERRANO, SHANNON",
+        "owner": "COLUMBUS, BRENDA L",
         "perimeters": [
           1005.1550648788503
         ],
@@ -263422,7 +263422,7 @@
         "usage": "110",
         "use": "R1A",
         "zone": "02",
-        "addressOfOwner": "1238 VALLEY RD WASHINGTON NH 03280",
+        "addressOfOwner": "53 GATES ROAD SAUGUS MA 01906",
         "ownership": "R"
       },
       "id": "24-8",
@@ -265192,7 +265192,7 @@
         "areas": [
           0.7171088084381592
         ],
-        "building$": 223800,
+        "building$": 226000,
         "callouts": [],
         "centers": [
           [
@@ -265245,7 +265245,7 @@
         "orientations": [
           6.383790370045162
         ],
-        "other$": 80000,
+        "other$": 75000,
         "owner": "JONES, TODD + JONES, LINDSEY",
         "perimeters": [
           848.9491435831955
@@ -265253,7 +265253,7 @@
         "sqarcities": [
           0.4668150176945892
         ],
-        "taxed$": 728900,
+        "taxed$": 726100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -267964,7 +267964,7 @@
         "areas": [
           0.36129422172796977
         ],
-        "building$": 184400,
+        "building$": 186300,
         "callouts": [],
         "centers": [
           [
@@ -268010,7 +268010,7 @@
         "sqarcities": [
           0.46665666397473343
         ],
-        "taxed$": 440200,
+        "taxed$": 442100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -268502,7 +268502,7 @@
         "areas": [
           1.1024160361113522
         ],
-        "building$": 332700,
+        "building$": 335700,
         "callouts": [],
         "centers": [
           [
@@ -268547,7 +268547,7 @@
         "orientations": [
           -17.410451500147758
         ],
-        "other$": 58100,
+        "other$": 53100,
         "owner": "BEGLEY, NEIL + BEGLEY, CATHERINE",
         "perimeters": [
           1039.9042125505032
@@ -268555,7 +268555,7 @@
         "sqarcities": [
           0.5892273950051445
         ],
-        "taxed$": 747800,
+        "taxed$": 745800,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -268665,7 +268665,7 @@
         "areas": [
           0.45829397694862567
         ],
-        "building$": 216200,
+        "building$": 218500,
         "callouts": [],
         "centers": [
           [
@@ -268707,7 +268707,7 @@
         "orientations": [
           -13.612370260186168
         ],
-        "other$": 28900,
+        "other$": 23900,
         "owner": "DEMARCO, FRANK M JR + DEMARCO, SSAN K",
         "perimeters": [
           714.591605692639
@@ -268715,7 +268715,7 @@
         "sqarcities": [
           0.4825830384858484
         ],
-        "taxed$": 501100,
+        "taxed$": 498400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -269083,7 +269083,7 @@
         "areas": [
           1.1123568855280759
         ],
-        "building$": 126700,
+        "building$": 128000,
         "callouts": [],
         "centers": [
           [
@@ -269130,7 +269130,7 @@
         "orientations": [
           -20.49337011983529
         ],
-        "other$": 50700,
+        "other$": 45700,
         "owner": "CHICOINE, GEORGE F + CHICOINE, PRISCILLA",
         "perimeters": [
           826.1346733165027
@@ -269138,7 +269138,7 @@
         "sqarcities": [
           0.720960644068673
         ],
-        "taxed$": 234400,
+        "taxed$": 230700,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
@@ -273307,7 +273307,7 @@
         "areas": [
           0.49362654989054006
         ],
-        "building$": 141400,
+        "building$": 142900,
         "callouts": [],
         "centers": [
           [
@@ -273339,20 +273339,20 @@
         "orientations": [
           17.62658735496653
         ],
-        "other$": 6900,
-        "owner": "VOORHEES, EMILY + PALAZZOLA, MICHAEL",
+        "other$": 1900,
+        "owner": "CATANZANO, JILL M & DAVID JAME",
         "perimeters": [
           634.9767914436751
         ],
         "sqarcities": [
           0.7120910369396567
         ],
-        "taxed$": 198600,
+        "taxed$": 195100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1A",
         "zone": "02",
-        "addressOfOwner": "2194 VALLEY RD WASHINGTON NH 03280",
+        "addressOfOwner": "492 PONEMAH HILL ROAD MILFORD, NH 03055",
         "ownership": "R"
       },
       "id": "25-43",
@@ -274178,7 +274178,7 @@
         "areas": [
           0.2064609661070169
         ],
-        "building$": 188700,
+        "building$": 190600,
         "callouts": [],
         "centers": [
           [
@@ -274209,7 +274209,7 @@
         "orientations": [
           4.0712878694800025
         ],
-        "other$": 15800,
+        "other$": 10800,
         "owner": "AMARI FAMILY TRUST + AMARI, STEPHEN M. & SHELLEY A.",
         "perimeters": [
           498.53386836833175
@@ -274217,7 +274217,7 @@
         "sqarcities": [
           0.48045521463044527
         ],
-        "taxed$": 448200,
+        "taxed$": 445100,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -275798,7 +275798,7 @@
         "areas": [
           0.16740224327348294
         ],
-        "building$": 242600,
+        "building$": 245100,
         "callouts": [],
         "centers": [
           [
@@ -275830,7 +275830,7 @@
         "orientations": [
           54.64364521863516
         ],
-        "other$": 7200,
+        "other$": 2200,
         "owner": "FICO, GERALD J REVOCABLE TRUST + FICO, GERALD J & NANCY A TRUST",
         "perimeters": [
           437.5074076001432
@@ -275838,7 +275838,7 @@
         "sqarcities": [
           0.569863658037192
         ],
-        "taxed$": 397700,
+        "taxed$": 395200,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -275907,7 +275907,7 @@
         "areas": [
           0.18258007566967574
         ],
-        "building$": 110100,
+        "building$": 111300,
         "callouts": [],
         "centers": [
           [
@@ -275939,7 +275939,7 @@
         "orientations": [
           58.948818540189336
         ],
-        "other$": 6600,
+        "other$": 1600,
         "owner": "PEABODY, CHARLES L REVC TRUST + PEABODY, BARBARA M REVC TRUST",
         "perimeters": [
           425.270677414708
@@ -275947,7 +275947,7 @@
         "sqarcities": [
           0.5585616074790528
         ],
-        "taxed$": 317700,
+        "taxed$": 313900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1W",
@@ -293070,7 +293070,7 @@
           56.792644784231925
         ],
         "other$": 0,
-        "owner": "CRAIB, RICHARD E",
+        "owner": "LAKES REGION VISTAS, LLC",
         "perimeters": [
           6776.023720446723
         ],
@@ -293082,7 +293082,7 @@
         "usage": "190",
         "use": "CUUO",
         "zone": "02",
-        "addressOfOwner": "5750 SEVEN OAKS DRIVE SARASOTA FL 34241",
+        "addressOfOwner": "PO BOX 1323 ALTON NH 03809",
         "ownership": "N"
       },
       "id": "6-7",
@@ -296110,7 +296110,7 @@
           30.944407145056687
         ],
         "other$": 0,
-        "owner": "OBENAUER, SARAH & ALEXANDER",
+        "owner": "CALLDWELL-HILTON CADICE + CRAWFORD, JASPER",
         "perimeters": [
           2378.95800098324
         ],
@@ -296122,8 +296122,8 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "179 WASHINGTON HEIGHTS RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "addressOfOwner": "114 WASHINGTON STREET PENACOCK NH 03303",
+        "ownership": "R"
       },
       "id": "7-22",
       "bbox": [
@@ -296236,7 +296236,7 @@
           20.573505954956914
         ],
         "other$": 4600,
-        "owner": "OBENAUER, SARAH & ALEXANDER",
+        "owner": "CALLDWELL-HILTON CADICE + CRAWFORD, JASPER",
         "perimeters": [
           2222.775544106255
         ],
@@ -296248,8 +296248,8 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "179 WASHINGTON HEIGHTS RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "addressOfOwner": "114 WASHINGTON STREET PENACOCK NH 03303",
+        "ownership": "R"
       },
       "id": "7-23",
       "bbox": [
@@ -296915,7 +296915,7 @@
         "areas": [
           5.011381293394076
         ],
-        "building$": 252500,
+        "building$": 255100,
         "callouts": [],
         "centers": [
           [
@@ -296965,7 +296965,7 @@
         "sqarcities": [
           0.7039820474955225
         ],
-        "taxed$": 374700,
+        "taxed$": 377300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -298579,7 +298579,7 @@
         "areas": [
           7.0891056929105805
         ],
-        "building$": 342100,
+        "building$": 345500,
         "callouts": [],
         "centers": [
           [
@@ -298618,7 +298618,7 @@
         "orientations": [
           46.74670067468551
         ],
-        "other$": 34900,
+        "other$": 29900,
         "owner": "BARKER, BRUCE + BARKER, CYNTHIA",
         "perimeters": [
           2836.304949816209
@@ -298626,7 +298626,7 @@
         "sqarcities": [
           0.49744837135281844
         ],
-        "taxed$": 443500,
+        "taxed$": 441900,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -299731,7 +299731,7 @@
         "areas": [
           22.857727966621084
         ],
-        "building$": 185200,
+        "building$": 187100,
         "callouts": [],
         "centers": [
           [
@@ -299778,7 +299778,7 @@
         "orientations": [
           -71.5382514503556
         ],
-        "other$": 86800,
+        "other$": 81800,
         "owner": "BARTON, THOMAS",
         "perimeters": [
           4020.50415003049
@@ -299786,7 +299786,7 @@
         "sqarcities": [
           0.7734769225498963
         ],
-        "taxed$": 319760,
+        "taxed$": 316660,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -304956,7 +304956,7 @@
         "areas": [
           5.843314510908979
         ],
-        "building$": 269900,
+        "building$": 272600,
         "callouts": [],
         "centers": [
           [
@@ -304989,7 +304989,7 @@
         "orientations": [
           -8.104237058157636
         ],
-        "other$": 19200,
+        "other$": 14200,
         "owner": "HOWLETT, JACQUELINE C + HOWLETT, CHRISTOPHER J",
         "perimeters": [
           2658.2490049118837
@@ -304997,7 +304997,7 @@
         "sqarcities": [
           0.4568546146781679
         ],
-        "taxed$": 350900,
+        "taxed$": 348600,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -306098,7 +306098,7 @@
         "areas": [
           7.175110053307815
         ],
-        "building$": 309400,
+        "building$": 312600,
         "callouts": [],
         "centers": [
           [
@@ -306134,7 +306134,7 @@
         "orientations": [
           81.70962672340633
         ],
-        "other$": 14000,
+        "other$": 9000,
         "owner": "MILLER, DIANE M",
         "perimeters": [
           2525.2315893071614
@@ -306142,7 +306142,7 @@
         "sqarcities": [
           0.6049620793622842
         ],
-        "taxed$": 374100,
+        "taxed$": 372300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -306477,7 +306477,7 @@
         "areas": [
           7.584981691068207
         ],
-        "building$": 189000,
+        "building$": 191300,
         "callouts": [],
         "centers": [
           [
@@ -306512,7 +306512,7 @@
         "orientations": [
           81.98861798032749
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "O'DONOGHUE, PATRICK",
         "perimeters": [
           2707.7055027764404
@@ -306520,7 +306520,7 @@
         "sqarcities": [
           0.5591392208308558
         ],
-        "taxed$": 243000,
+        "taxed$": 240300,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -310822,7 +310822,7 @@
         "areas": [
           20.424364227420327
         ],
-        "building$": 387100,
+        "building$": 391000,
         "callouts": [],
         "centers": [
           [
@@ -310888,7 +310888,7 @@
         "sqarcities": [
           0.5431370403891045
         ],
-        "taxed$": 507846,
+        "taxed$": 511746,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -312024,7 +312024,7 @@
           47.01405488711226,
           8.194706604214106
         ],
-        "building$": 507800,
+        "building$": 577200,
         "callouts": [],
         "centers": [
           [
@@ -312102,7 +312102,7 @@
           0.5886544799344092,
           0.5542009947584463
         ],
-        "taxed$": 638581,
+        "taxed$": 707981,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -312902,7 +312902,7 @@
           76.74596834866571
         ],
         "other$": 1900,
-        "owner": "WASHINGTON, TOWN OF",
+        "owner": "WASHINGTON HISTORICAL SOCIETY",
         "perimeters": [
           943.573440022415
         ],
@@ -313437,7 +313437,7 @@
         "areas": [
           2.313868440463397
         ],
-        "building$": 256400,
+        "building$": 258900,
         "callouts": [],
         "centers": [
           [
@@ -313481,7 +313481,7 @@
         "sqarcities": [
           0.7171122380256527
         ],
-        "taxed$": 368900,
+        "taxed$": 371400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -314242,7 +314242,7 @@
         "areas": [
           19.036995654642833
         ],
-        "building$": 214500,
+        "building$": 216500,
         "callouts": [],
         "centers": [
           [
@@ -314296,7 +314296,7 @@
         "orientations": [
           88.23552913255344
         ],
-        "other$": 49500,
+        "other$": 44500,
         "owner": "GARVIN, MARIANNE AND JAMES",
         "perimeters": [
           4532.6604779823265
@@ -314304,7 +314304,7 @@
         "sqarcities": [
           0.49161623242414715
         ],
-        "taxed$": 316672,
+        "taxed$": 313672,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -315354,7 +315354,7 @@
           -68.95185055563607
         ],
         "other$": 0,
-        "owner": "PORTER, WILLIAM G + PORTER, DONNA",
+        "owner": "PORTER, WILLIAM  SR  REVOCABLE",
         "perimeters": [
           5529.410338167039
         ],
@@ -316287,7 +316287,7 @@
         "usage": "110",
         "use": "R1",
         "zone": "02",
-        "addressOfOwner": "663 AYERS POND ROAD WASHINGTON NH 03280",
+        "addressOfOwner": "693 AYERS POND ROAD WASHINGTON NH 03280",
         "ownership": "R"
       },
       "id": "9-29",
@@ -319267,7 +319267,7 @@
         "areas": [
           7.389217990620511
         ],
-        "building$": 158700,
+        "building$": 160400,
         "callouts": [],
         "centers": [
           [
@@ -319324,7 +319324,7 @@
         "orientations": [
           66.32828167075627
         ],
-        "other$": 34200,
+        "other$": 29200,
         "owner": "LEISCHNER, PAUL & SUELLEN REVC + LEISCHNER, PAUL & SUELLEN TRUS",
         "perimeters": [
           2111.657654041793
@@ -319332,7 +319332,7 @@
         "sqarcities": [
           0.4819477109315583
         ],
-        "taxed$": 279700,
+        "taxed$": 276400,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -322808,7 +322808,7 @@
         "areas": [
           0.1877559527187226
         ],
-        "building$": 30400,
+        "building$": 30900,
         "callouts": [],
         "centers": [
           [
@@ -322840,7 +322840,7 @@
         "orientations": [
           83.83543972034158
         ],
-        "other$": 5000,
+        "other$": 0,
         "owner": "WASHINGTON, TOWN OF",
         "perimeters": [
           376.68763507690346
@@ -322848,7 +322848,7 @@
         "sqarcities": [
           0.7589208963815639
         ],
-        "taxed$": 86500,
+        "taxed$": 82000,
         "town": "WASHINGTON",
         "usage": "300",
         "use": "EX-M",
@@ -323074,7 +323074,7 @@
           -69.97387640780636
         ],
         "other$": 0,
-        "owner": "PORTER, WILLIAM G + PORTER, DONNA",
+        "owner": "PORTER, WILLIAM  SR  REVOCABLE",
         "perimeters": [
           4977.769575111118
         ],
@@ -323590,7 +323590,7 @@
         "areas": [
           56.948221794214014
         ],
-        "building$": 444500,
+        "building$": 448800,
         "callouts": [],
         "centers": [
           [
@@ -323651,7 +323651,7 @@
         "sqarcities": [
           0.5800322780015108
         ],
-        "taxed$": 574214,
+        "taxed$": 578514,
         "town": "WASHINGTON",
         "usage": "110",
         "use": "R1",
@@ -325559,7 +325559,7 @@
         "use": "CUFL",
         "zone": "",
         "addressOfOwner": "43 BRADFORD SPRINGS RD WASHINGTON NH 03280",
-        "ownership": "N"
+        "ownership": "R"
       },
       "id": "23-1-01",
       "bbox": [
@@ -325769,9 +325769,9 @@
         "use": "CUUH",
         "zone": "",
         "building$": 241100,
-        "land$": 74100,
+        "land$": 63995,
         "other$": 0,
-        "taxed$": 315200
+        "taxed$": 305095
       },
       "id": "15-48-02",
       "bbox": [
@@ -325982,7 +325982,7 @@
           -24.03683070951176
         ],
         "owner": "WASHINGTON LAKE ASSOCIATION",
-        "ownership": "N",
+        "ownership": "R",
         "sqarcities": [
           0.6233082361076597
         ],
@@ -326118,7 +326118,7 @@
           0.7968004970408771
         ],
         "owner": "PERSECHINO, DANIEL L &  REBECC",
-        "ownership": "N",
+        "ownership": "R",
         "sqarcities": [
           0.6773358229565194
         ],
